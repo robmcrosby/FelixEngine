@@ -7,16 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
+		377B9B171BBDF10500440546 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 377B9B161BBDF10500440546 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
+		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
+		377B9B1D1BBDF51100440546 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		377B9B201BBE289600440546 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B1F1BBE289600440546 /* Images */; settings = {ASSET_TAGS = (); }; };
 		37C531C81BBCD4BB006DC58A /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 37C531C71BBCD4BB006DC58A /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		377B9B1C1BBDF50800440546 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				377B9B1D1BBDF51100440546 /* SDL2.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		377B9B041BBDF03600440546 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		377B9B0C1BBDF03600440546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		377B9B111BBDF03600440546 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		377B9B161BBDF10500440546 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/Source/main.cpp; sourceTree = "<group>"; };
+		377B9B181BBDF12600440546 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../ThirdParty/SDL2/OSX/SDL2.framework; sourceTree = "<group>"; };
+		377B9B1F1BBE289600440546 /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/HelloFelix/Resources/Images; sourceTree = "<group>"; };
 		37C531C41BBCD4BB006DC58A /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C531C71BBCD4BB006DC58A /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FelixEngine.h; path = ../../../../Source/FelixEngine/Headers/FelixEngine.h; sourceTree = "<group>"; };
 		37C531C91BBCD4BB006DC58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		377B9B011BBDF03600440546 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		37C531C01BBCD4BB006DC58A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -27,10 +59,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		377B9B051BBDF03600440546 /* HelloFelix */ = {
+			isa = PBXGroup;
+			children = (
+				377B9B1E1BBE288100440546 /* Resources */,
+				377B9B0C1BBDF03600440546 /* Assets.xcassets */,
+				377B9B111BBDF03600440546 /* Info.plist */,
+				377B9B151BBDF09000440546 /* Source */,
+			);
+			path = HelloFelix;
+			sourceTree = "<group>";
+		};
+		377B9B151BBDF09000440546 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				377B9B161BBDF10500440546 /* main.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		377B9B1E1BBE288100440546 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				377B9B1F1BBE289600440546 /* Images */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		37C531BA1BBCD4BB006DC58A = {
 			isa = PBXGroup;
 			children = (
+				377B9B181BBDF12600440546 /* SDL2.framework */,
 				37C531C61BBCD4BB006DC58A /* FelixEngine */,
+				377B9B051BBDF03600440546 /* HelloFelix */,
 				37C531C51BBCD4BB006DC58A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -39,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				37C531C41BBCD4BB006DC58A /* FelixEngine.framework */,
+				377B9B041BBDF03600440546 /* HelloFelix.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -74,6 +136,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		377B9B031BBDF03600440546 /* HelloFelix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 377B9B141BBDF03600440546 /* Build configuration list for PBXNativeTarget "HelloFelix" */;
+			buildPhases = (
+				377B9B001BBDF03600440546 /* Sources */,
+				377B9B011BBDF03600440546 /* Frameworks */,
+				377B9B021BBDF03600440546 /* Resources */,
+				377B9B1C1BBDF50800440546 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloFelix;
+			productName = HelloFelix;
+			productReference = 377B9B041BBDF03600440546 /* HelloFelix.app */;
+			productType = "com.apple.product-type.application";
+		};
 		37C531C31BBCD4BB006DC58A /* FelixEngine */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 37C531CC1BBCD4BB006DC58A /* Build configuration list for PBXNativeTarget "FelixEngine" */;
@@ -101,6 +181,9 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Robert Crosby";
 				TargetAttributes = {
+					377B9B031BBDF03600440546 = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
 					37C531C31BBCD4BB006DC58A = {
 						CreatedOnToolsVersion = 7.0.1;
 					};
@@ -112,6 +195,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 37C531BA1BBCD4BB006DC58A;
 			productRefGroup = 37C531C51BBCD4BB006DC58A /* Products */;
@@ -119,11 +203,21 @@
 			projectRoot = "";
 			targets = (
 				37C531C31BBCD4BB006DC58A /* FelixEngine */,
+				377B9B031BBDF03600440546 /* HelloFelix */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		377B9B021BBDF03600440546 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				377B9B201BBE289600440546 /* Images in Resources */,
+				377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		37C531C21BBCD4BB006DC58A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -134,6 +228,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		377B9B001BBDF03600440546 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				377B9B171BBDF10500440546 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		37C531BF1BBCD4BB006DC58A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -144,6 +246,34 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		377B9B121BBDF03600440546 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = ../../../ThirdParty/SDL2/OSX/;
+				INFOPLIST_FILE = HelloFelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		377B9B131BBDF03600440546 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = ../../../ThirdParty/SDL2/OSX/;
+				INFOPLIST_FILE = HelloFelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		37C531CA1BBCD4BB006DC58A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -266,6 +396,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		377B9B141BBDF03600440546 /* Build configuration list for PBXNativeTarget "HelloFelix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				377B9B121BBDF03600440546 /* Debug */,
+				377B9B131BBDF03600440546 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		37C531BE1BBCD4BB006DC58A /* Build configuration list for PBXProject "FelixEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -282,6 +420,7 @@
 				37C531CE1BBCD4BB006DC58A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

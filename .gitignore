@@ -21,3 +21,7 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 *.xcuserstate
+
+*.xcuserstate
+
+Projects/XCode/FelixEngine/FelixEngine.xcodeproj/project.xcworkspace/xcuserdata/rcrosby.xcuserdatad/UserInterfaceState.xcuserstate
