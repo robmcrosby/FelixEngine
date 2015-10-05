@@ -22,6 +22,9 @@ namespace fx
   public:
     GpuSystem(): System(SYSTEM_GPU) {}
     virtual ~GpuSystem() {}
+    
+    static GpuSystem* CreateOpenGLSystem();
+    static GpuSystem* CreateMetalSystem();
   };
 }
 

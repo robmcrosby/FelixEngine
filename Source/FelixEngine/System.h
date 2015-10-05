@@ -31,6 +31,8 @@ namespace fx
     System(SYSTEM_TYPE type = SYSTEM_OTHER);
     virtual ~System();
     
+    virtual void update() = 0;
+    
     SYSTEM_TYPE type() const {return mType;}
     
   protected:
