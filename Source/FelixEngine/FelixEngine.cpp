@@ -7,7 +7,7 @@
 //
 
 #include "FelixEngine.h"
-#include "GpuSystem.h"
+#include "GraphicSystem.h"
 #include <SDL2/SDL.h>
 
 using namespace fx;
@@ -20,7 +20,7 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
-FelixEngine::FelixEngine(): mGpuSystem(0)
+FelixEngine::FelixEngine(): mGraphicSystem(0)
 {
   cout << "Created Felix Engine" << endl;
 }
@@ -40,8 +40,8 @@ bool FelixEngine::init(const std::string &settingsFile)
     return false;
   }
   
-  mGpuSystem = GpuSystem::CreateOpenGLSystem();
-  if (!mGpuSystem)
+  mGraphicSystem = GraphicSystem::CreateOpenGLContext();
+  if (!mGraphicSystem)
   {
     cerr << "Error creating GpuSystem" << endl;
     return false;

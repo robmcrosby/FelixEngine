@@ -16,7 +16,7 @@ namespace fx
 {
   enum SYSTEM_TYPE
   {
-    SYSTEM_GPU = 0,
+    SYSTEM_GRAPHICS = 0,
     SYSTEM_AUDIO,
     SYSTEM_PHYSICS,
     SYSTEM_OTHER,

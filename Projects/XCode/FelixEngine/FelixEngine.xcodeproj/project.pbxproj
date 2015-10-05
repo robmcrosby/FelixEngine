@@ -10,11 +10,11 @@
 		370FEA6C1BC2EEC500440244 /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA6B1BC2EEC500440244 /* Platform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA6E1BC2F05000440244 /* Platform.cpp */; settings = {ASSET_TAGS = (); }; };
 		370FEA711BC2F11500440244 /* Platform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA701BC2F11500440244 /* Platform.mm */; settings = {ASSET_TAGS = (); }; };
-		370FEA751BC2F86400440244 /* GpuSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA741BC2F86400440244 /* GpuSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA741BC2F86400440244 /* GraphicSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA771BC2F8D900440244 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA761BC2F8D900440244 /* System.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA791BC2FD6D00440244 /* GpuSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA781BC2FD6D00440244 /* GpuSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA7E1BC2FE1100440244 /* OpenGLSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA7C1BC2FE1100440244 /* OpenGLSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA7F1BC2FE1100440244 /* OpenGLSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA7D1BC2FE1100440244 /* OpenGLSystem.h */; settings = {ASSET_TAGS = (); }; };
+		370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */; settings = {ASSET_TAGS = (); }; };
+		370FEA7E1BC2FE1100440244 /* GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA7C1BC2FE1100440244 /* GLContext.cpp */; settings = {ASSET_TAGS = (); }; };
+		370FEA7F1BC2FE1100440244 /* GLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA7D1BC2FE1100440244 /* GLContext.h */; settings = {ASSET_TAGS = (); }; };
 		371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049F41BBF3A1C003EEC37 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371049F71BBF3A4F003EEC37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049F61BBF3A4F003EEC37 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
 		371049FA1BBF3A8C003EEC37 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; };
@@ -56,11 +56,11 @@
 		370FEA6B1BC2EEC500440244 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = ../../../../Source/FelixEngine/Platform.h; sourceTree = "<group>"; };
 		370FEA6E1BC2F05000440244 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = ../../../../Source/FelixEngine/Platform.cpp; sourceTree = "<group>"; };
 		370FEA701BC2F11500440244 /* Platform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Platform.mm; path = ../../../../Source/FelixEngine/Platform.mm; sourceTree = "<group>"; };
-		370FEA741BC2F86400440244 /* GpuSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GpuSystem.h; path = ../../../../Source/FelixEngine/GpuSystem.h; sourceTree = "<group>"; };
+		370FEA741BC2F86400440244 /* GraphicSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicSystem.h; path = ../../../../Source/FelixEngine/GraphicSystem.h; sourceTree = "<group>"; };
 		370FEA761BC2F8D900440244 /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = System.cpp; path = ../../../../Source/FelixEngine/System.cpp; sourceTree = "<group>"; };
-		370FEA781BC2FD6D00440244 /* GpuSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GpuSystem.cpp; path = ../../../../Source/FelixEngine/GpuSystem.cpp; sourceTree = "<group>"; };
-		370FEA7C1BC2FE1100440244 /* OpenGLSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLSystem.cpp; path = ../../../../Source/FelixEngine/OpenGLSystem.cpp; sourceTree = "<group>"; };
-		370FEA7D1BC2FE1100440244 /* OpenGLSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLSystem.h; path = ../../../../Source/FelixEngine/OpenGLSystem.h; sourceTree = "<group>"; };
+		370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicSystem.cpp; path = ../../../../Source/FelixEngine/GraphicSystem.cpp; sourceTree = "<group>"; };
+		370FEA7C1BC2FE1100440244 /* GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLContext.cpp; path = ../../../../Source/FelixEngine/GLContext.cpp; sourceTree = "<group>"; };
+		370FEA7D1BC2FE1100440244 /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLContext.h; path = ../../../../Source/FelixEngine/GLContext.h; sourceTree = "<group>"; };
 		371049F41BBF3A1C003EEC37 /* FelixEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FelixEngine.h; path = ../../../../Source/FelixEngine/FelixEngine.h; sourceTree = "<group>"; };
 		371049F61BBF3A4F003EEC37 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/main.cpp; sourceTree = "<group>"; };
 		371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FelixEngine.cpp; path = ../../../../Source/FelixEngine/FelixEngine.cpp; sourceTree = "<group>"; };
@@ -111,27 +111,27 @@
 			children = (
 				371049FE1BBF3DB9003EEC37 /* System.h */,
 				370FEA761BC2F8D900440244 /* System.cpp */,
-				370FEA731BC2F31800440244 /* GpuSystem */,
+				370FEA731BC2F31800440244 /* GraphicsSystem */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
 		};
-		370FEA731BC2F31800440244 /* GpuSystem */ = {
+		370FEA731BC2F31800440244 /* GraphicsSystem */ = {
 			isa = PBXGroup;
 			children = (
-				370FEA741BC2F86400440244 /* GpuSystem.h */,
-				370FEA781BC2FD6D00440244 /* GpuSystem.cpp */,
+				370FEA741BC2F86400440244 /* GraphicSystem.h */,
+				370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */,
 				370FEA7A1BC2FDE800440244 /* OpenGL */,
 				370FEA7B1BC2FDEF00440244 /* Metal */,
 			);
-			name = GpuSystem;
+			name = GraphicsSystem;
 			sourceTree = "<group>";
 		};
 		370FEA7A1BC2FDE800440244 /* OpenGL */ = {
 			isa = PBXGroup;
 			children = (
-				370FEA7D1BC2FE1100440244 /* OpenGLSystem.h */,
-				370FEA7C1BC2FE1100440244 /* OpenGLSystem.cpp */,
+				370FEA7D1BC2FE1100440244 /* GLContext.h */,
+				370FEA7C1BC2FE1100440244 /* GLContext.cpp */,
 			);
 			name = OpenGL;
 			sourceTree = "<group>";
@@ -201,10 +201,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				370FEA7F1BC2FE1100440244 /* OpenGLSystem.h in Headers */,
+				370FEA7F1BC2FE1100440244 /* GLContext.h in Headers */,
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
-				370FEA751BC2F86400440244 /* GpuSystem.h in Headers */,
+				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,9 +320,9 @@
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
-				370FEA7E1BC2FE1100440244 /* OpenGLSystem.cpp in Sources */,
+				370FEA7E1BC2FE1100440244 /* GLContext.cpp in Sources */,
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
-				370FEA791BC2FD6D00440244 /* GpuSystem.cpp in Sources */,
+				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
