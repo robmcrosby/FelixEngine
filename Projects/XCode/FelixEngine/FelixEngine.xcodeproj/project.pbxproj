@@ -15,6 +15,11 @@
 		370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */; settings = {ASSET_TAGS = (); }; };
 		370FEA7E1BC2FE1100440244 /* GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA7C1BC2FE1100440244 /* GLContext.cpp */; settings = {ASSET_TAGS = (); }; };
 		370FEA7F1BC2FE1100440244 /* GLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA7D1BC2FE1100440244 /* GLContext.h */; settings = {ASSET_TAGS = (); }; };
+		370FEA861BC31C6E00440244 /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA811BC31C6E00440244 /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA871BC31C6E00440244 /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA821BC31C6E00440244 /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA881BC31C6E00440244 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA831BC31C6E00440244 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA891BC31C6E00440244 /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA841BC31C6E00440244 /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA8A1BC31C6E00440244 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA851BC31C6E00440244 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049F41BBF3A1C003EEC37 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371049F71BBF3A4F003EEC37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049F61BBF3A4F003EEC37 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
 		371049FA1BBF3A8C003EEC37 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; };
@@ -61,6 +66,11 @@
 		370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicSystem.cpp; path = ../../../../Source/FelixEngine/GraphicSystem.cpp; sourceTree = "<group>"; };
 		370FEA7C1BC2FE1100440244 /* GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLContext.cpp; path = ../../../../Source/FelixEngine/GLContext.cpp; sourceTree = "<group>"; };
 		370FEA7D1BC2FE1100440244 /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLContext.h; path = ../../../../Source/FelixEngine/GLContext.h; sourceTree = "<group>"; };
+		370FEA811BC31C6E00440244 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = ../../../../Source/FelixEngine/Matrix.h; sourceTree = "<group>"; };
+		370FEA821BC31C6E00440244 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../../../Source/FelixEngine/Quaternion.h; sourceTree = "<group>"; };
+		370FEA831BC31C6E00440244 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = ../../../../Source/FelixEngine/StringUtils.h; sourceTree = "<group>"; };
+		370FEA841BC31C6E00440244 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../../../Source/FelixEngine/Vector.h; sourceTree = "<group>"; };
+		370FEA851BC31C6E00440244 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = ../../../../Source/FelixEngine/XMLTree.h; sourceTree = "<group>"; };
 		371049F41BBF3A1C003EEC37 /* FelixEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FelixEngine.h; path = ../../../../Source/FelixEngine/FelixEngine.h; sourceTree = "<group>"; };
 		371049F61BBF3A4F003EEC37 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/main.cpp; sourceTree = "<group>"; };
 		371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FelixEngine.cpp; path = ../../../../Source/FelixEngine/FelixEngine.cpp; sourceTree = "<group>"; };
@@ -143,6 +153,18 @@
 			name = Metal;
 			sourceTree = "<group>";
 		};
+		370FEA801BC31A1B00440244 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				370FEA841BC31C6E00440244 /* Vector.h */,
+				370FEA811BC31C6E00440244 /* Matrix.h */,
+				370FEA821BC31C6E00440244 /* Quaternion.h */,
+				370FEA831BC31C6E00440244 /* StringUtils.h */,
+				370FEA851BC31C6E00440244 /* XMLTree.h */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		377B9B051BBDF03600440546 /* HelloFelix */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +210,7 @@
 				371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */,
 				370FEA721BC2F21000440244 /* Systems */,
 				370FEA6D1BC2EF5800440244 /* Platform */,
+				370FEA801BC31A1B00440244 /* Utilities */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
 				37C531C91BBCD4BB006DC58A /* Info.plist */,
 			);
@@ -201,7 +224,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				370FEA8A1BC31C6E00440244 /* XMLTree.h in Headers */,
 				370FEA7F1BC2FE1100440244 /* GLContext.h in Headers */,
+				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
+				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
+				370FEA881BC31C6E00440244 /* StringUtils.h in Headers */,
+				370FEA891BC31C6E00440244 /* Vector.h in Headers */,
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
