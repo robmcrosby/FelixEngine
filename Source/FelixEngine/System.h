@@ -15,7 +15,7 @@ namespace fx
 {
   enum SYSTEM_TYPE
   {
-    SYSTEM_GRAPHICS = 0,
+    SYSTEM_GPU = 0,
     SYSTEM_AUDIO,
     SYSTEM_PHYSICS,
     SYSTEM_OTHER,
@@ -28,8 +28,8 @@ namespace fx
   class System
   {
   public:
-    System(SYSTEM_TYPE type = SYSTEM_OTHER): mType(type) {}
-    virtual ~System() {}
+    System(SYSTEM_TYPE type = SYSTEM_OTHER);
+    virtual ~System();
     
     SYSTEM_TYPE type() const {return mType;}
     
