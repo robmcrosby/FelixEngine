@@ -7,7 +7,6 @@
 //
 
 #include "FelixEngine.h"
-
 #include <SDL2/SDL.h>
 
 using namespace fx;

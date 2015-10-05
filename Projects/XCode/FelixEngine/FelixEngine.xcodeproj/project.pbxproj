@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		370FEA6C1BC2EEC500440244 /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA6B1BC2EEC500440244 /* Platform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA6E1BC2F05000440244 /* Platform.cpp */; settings = {ASSET_TAGS = (); }; };
+		370FEA711BC2F11500440244 /* Platform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA701BC2F11500440244 /* Platform.mm */; settings = {ASSET_TAGS = (); }; };
 		371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049F41BBF3A1C003EEC37 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		371049F71BBF3A4F003EEC37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049F61BBF3A4F003EEC37 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
 		371049FA1BBF3A8C003EEC37 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; };
@@ -45,6 +48,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		370FEA6B1BC2EEC500440244 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Platform.h; path = ../../../../Source/FelixEngine/Platform.h; sourceTree = "<group>"; };
+		370FEA6E1BC2F05000440244 /* Platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Platform.cpp; path = ../../../../Source/FelixEngine/Platform.cpp; sourceTree = "<group>"; };
+		370FEA701BC2F11500440244 /* Platform.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Platform.mm; path = ../../../../Source/FelixEngine/Platform.mm; sourceTree = "<group>"; };
 		371049F41BBF3A1C003EEC37 /* FelixEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FelixEngine.h; path = ../../../../Source/FelixEngine/FelixEngine.h; sourceTree = "<group>"; };
 		371049F61BBF3A4F003EEC37 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/main.cpp; sourceTree = "<group>"; };
 		371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FelixEngine.cpp; path = ../../../../Source/FelixEngine/FelixEngine.cpp; sourceTree = "<group>"; };
@@ -80,6 +86,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		370FEA6D1BC2EF5800440244 /* Platform */ = {
+			isa = PBXGroup;
+			children = (
+				370FEA6B1BC2EEC500440244 /* Platform.h */,
+				370FEA6E1BC2F05000440244 /* Platform.cpp */,
+				370FEA701BC2F11500440244 /* Platform.mm */,
+			);
+			name = Platform;
+			sourceTree = "<group>";
+		};
+		370FEA721BC2F21000440244 /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				371049FE1BBF3DB9003EEC37 /* System.h */,
+			);
+			name = Systems;
+			sourceTree = "<group>";
+		};
 		377B9B051BBDF03600440546 /* HelloFelix */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,7 +147,8 @@
 			children = (
 				371049F41BBF3A1C003EEC37 /* FelixEngine.h */,
 				371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */,
-				371049FE1BBF3DB9003EEC37 /* System.h */,
+				370FEA721BC2F21000440244 /* Systems */,
+				370FEA6D1BC2EF5800440244 /* Platform */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
 				37C531C91BBCD4BB006DC58A /* Info.plist */,
 			);
@@ -137,6 +162,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
 			);
@@ -250,6 +276,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
+				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
