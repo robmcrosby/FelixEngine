@@ -22,8 +22,7 @@ namespace fx
   class FelixEngine
   {
   public:
-    FelixEngine();
-    ~FelixEngine();
+    static FelixEngine* Instance();
     
     bool init(const std::string &settingsFile = "");
     bool loadScene(const std::string &sceneFile);
@@ -31,6 +30,9 @@ namespace fx
     int runLoop();
     
   private:
+    FelixEngine();
+    ~FelixEngine();
+    
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
     

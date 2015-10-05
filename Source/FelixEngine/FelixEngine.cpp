@@ -13,6 +13,13 @@
 using namespace fx;
 using namespace std;
 
+
+FelixEngine* FelixEngine::Instance()
+{
+  static FelixEngine engine;
+  return &engine;
+}
+
 FelixEngine::FelixEngine(): mWindow(0)
 {
   cout << "Created Felix Engine" << endl;

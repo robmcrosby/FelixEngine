@@ -14,13 +14,13 @@ using namespace std;
 
 int main( int argc, char* args[] )
 {
-  fx::FelixEngine engine;
+  fx::FelixEngine *engine = fx::FelixEngine::Instance();
   
-  if (!engine.init())
+  if (!engine->init())
   {
     cerr << "Error Initalizing the Engine" << endl;
     return 1;
   }
   
-  return engine.runLoop();
+  return engine->runLoop();
 }
