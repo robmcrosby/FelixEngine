@@ -11,8 +11,15 @@
 
 #include "GpuSystem.h"
 
+class SDL_Window;
+
 namespace fx
 {
+  struct GLWindow: public GPUWindow
+  {
+    SDL_Window *mSdlWindow;
+  };
+  
   /**
    *
    */
@@ -21,6 +28,8 @@ namespace fx
   public:
     OpenGLSystem();
     virtual ~OpenGLSystem();
+    
+    virtual GPUWindow* createResizableWindow();
     
     virtual void update();
   };

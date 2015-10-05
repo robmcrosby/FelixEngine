@@ -7,6 +7,7 @@
 //
 
 #include "GpuSystem.h"
+#include "OpenGLSystem.h"
 
 
 using namespace fx;
@@ -14,7 +15,10 @@ using namespace std;
 
 GpuSystem* GpuSystem::CreateOpenGLSystem()
 {
-  return nullptr;
+  OpenGLSystem *system = new OpenGLSystem();
+  if (system)
+    system->createResizableWindow();
+  return system;
 }
 
 GpuSystem* GpuSystem::CreateMetalSystem()

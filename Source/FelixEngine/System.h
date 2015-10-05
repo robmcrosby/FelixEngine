@@ -9,6 +9,7 @@
 #ifndef System_h
 #define System_h
 
+#include <iostream>
 #include <istream>
 
 namespace fx

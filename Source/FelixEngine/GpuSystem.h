@@ -14,6 +14,10 @@
 
 namespace fx
 {
+  struct GPUWindow
+  {
+  };
+  
   /**
    *
    */
@@ -22,6 +26,8 @@ namespace fx
   public:
     GpuSystem(): System(SYSTEM_GPU) {}
     virtual ~GpuSystem() {}
+    
+    virtual GPUWindow* createResizableWindow() = 0;
     
     static GpuSystem* CreateOpenGLSystem();
     static GpuSystem* CreateMetalSystem();

@@ -12,10 +12,11 @@
 #include "System.h"
 #include "Scene.h"
 
-class SDL_Window;
 
 namespace fx
 {
+  class GpuSystem;
+  
   /**
    * Felix Engine Class
    */
@@ -36,6 +37,6 @@ namespace fx
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
     
-    SDL_Window* mWindow;
+    GpuSystem *mGpuSystem;
   };
 }

@@ -7,6 +7,7 @@
 //
 
 #include "FelixEngine.h"
+#include "GpuSystem.h"
 #include <SDL2/SDL.h>
 
 using namespace fx;
@@ -19,7 +20,7 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
-FelixEngine::FelixEngine(): mWindow(0)
+FelixEngine::FelixEngine(): mGpuSystem(0)
 {
   cout << "Created Felix Engine" << endl;
 }
@@ -31,24 +32,22 @@ FelixEngine::~FelixEngine()
 
 bool FelixEngine::init(const std::string &settingsFile)
 {
-  bool success = true;
+  Uint32 initFlags = SDL_INIT_VIDEO;
   
-  if (SDL_Init(SDL_INIT_VIDEO) < 0)
+  if (SDL_Init(initFlags) < 0)
   {
-    printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-    success = false;
-  }
-  else
-  {
-    mWindow = SDL_CreateWindow("Felix Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
-    if( mWindow == NULL )
-    {
-      printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-      success = false;
-    }
+    cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
+    return false;
   }
   
-  return success;
+  mGpuSystem = GpuSystem::CreateOpenGLSystem();
+  if (!mGpuSystem)
+  {
+    cerr << "Error creating GpuSystem" << endl;
+    return false;
+  }
+  
+  return true;
 }
 
 bool FelixEngine::loadScene(const std::string &sceneFile)
@@ -68,11 +67,11 @@ int FelixEngine::runLoop()
       if (event.type == SDL_QUIT)
         quit = true;
     }
-    SDL_UpdateWindowSurface(mWindow);
+    //SDL_UpdateWindowSurface(mWindow);
   }
 
-  SDL_DestroyWindow(mWindow);
-  mWindow = nullptr;
+  //SDL_DestroyWindow(mWindow);
+  //mWindow = nullptr;
   
   SDL_Quit();
   return 0;
