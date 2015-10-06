@@ -18,6 +18,7 @@ namespace fx
   struct Window
   {
     virtual ~Window() {}
+    virtual bool setToXml(const XMLTree::Node &node);
     virtual bool loadResizable(const std::string &title, ivec2 size) = 0;
     virtual bool loadResizable(const std::string &title, ivec2 size, ivec2 pos) = 0;
   };
@@ -34,6 +35,10 @@ namespace fx
     virtual Window* getWindow(const std::string &name) = 0;
     
     static GraphicSystem* CreateOpenGLContext();
+    
+  protected:
+    bool addWindows(const XMLTree::Node *node);
+    bool addWindow(const XMLTree::Node *node);
   };
 }
 

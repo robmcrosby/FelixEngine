@@ -11,6 +11,7 @@
 
 #include "System.h"
 #include "Scene.h"
+#include "XMLTree.h"
 
 
 namespace fx
@@ -34,11 +35,14 @@ namespace fx
     FelixEngine();
     ~FelixEngine();
     
+    bool loadSystems(const XMLTree::Node &node);
+    bool loasScene(const XMLTree::Node &node);
+    
+    void addSystem(System *system);
+    
     void updateFrame();
     
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
-    
-    GraphicSystem *mGraphicSystem;
   };
 }

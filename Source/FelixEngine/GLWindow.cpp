@@ -39,6 +39,7 @@ bool GLWindow::loadResizable(const std::string &title, ivec2 size, ivec2 pos)
     return false;
   }
   
+  // Check if the OpenGL Context has been created already.
   if (!mGLContext->getSDL_GLContext())
   {
     // Create and check the OpenGL Context

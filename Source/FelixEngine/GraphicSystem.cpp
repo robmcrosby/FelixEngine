@@ -23,3 +23,44 @@ GraphicSystem* GraphicSystem::CreateOpenGLContext()
   }
   return context;
 }
+
+bool GraphicSystem::addWindows(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
+      success &= addWindow(*itr);
+  }
+  
+  return success;
+}
+
+bool GraphicSystem::addWindow(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node && node->hasAttribute("name"))
+  {
+    Window *window = getWindow(node->attribute("name"));
+    success = window && window->setToXml(*node);
+  }
+  return success;
+}
+
+
+
+
+bool Window::setToXml(const XMLTree::Node &node)
+{
+  bool success = false;
+  if (node.hasAttribute("title") && node.hasSubNode("size"))
+  {
+    if (node.hasSubNode("position"))
+      success = loadResizable(node.attribute("title"), node.subContents("size"), node.subContents("position"));
+    else
+      success = loadResizable(node.attribute("title"), node.subContents("size"));
+  }
+  
+  return success;
+}

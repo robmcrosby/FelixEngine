@@ -7,7 +7,8 @@
 //
 
 #include "FelixEngine.h"
-#include "GraphicSystem.h"
+#include "System.h"
+#include "Platform.h"
 #include <SDL2/SDL.h>
 
 using namespace fx;
@@ -20,7 +21,7 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
-FelixEngine::FelixEngine(): mGraphicSystem(0)
+FelixEngine::FelixEngine()
 {
   cout << "Created Felix Engine" << endl;
 }
@@ -40,16 +41,24 @@ bool FelixEngine::init(const std::string &settingsFile)
     return false;
   }
   
-  mGraphicSystem = GraphicSystem::CreateOpenGLContext();
-  if (!mGraphicSystem)
+  XMLTree::XMLTree tree;
+  if (tree.loadFile(Platform::GetResourcePath()+settingsFile))
   {
-    cerr << "Error creating GpuSystem" << endl;
-    return false;
+    const XMLTree::Node &settingsNode = **tree.begin();
+    if (settingsNode.hasSubNode("Systems"))
+      return loadSystems(*settingsNode.subNode("Systems"));
   }
-  else
-    mSystems[SYSTEM_GRAPHICS] = mGraphicSystem;
+  return false;
   
-  return true;
+//  mGraphicSystem = GraphicSystem::CreateOpenGLContext();
+//  if (!mGraphicSystem)
+//  {
+//    cerr << "Error creating GpuSystem" << endl;
+//    return false;
+//  }
+//  else
+//    mSystems[SYSTEM_GRAPHICS] = mGraphicSystem;
+//    return true;
 }
 
 bool FelixEngine::loadScene(const std::string &sceneFile)
@@ -75,6 +84,40 @@ int FelixEngine::runLoop()
   
   SDL_Quit();
   return 0;
+}
+
+bool FelixEngine::loadSystems(const XMLTree::Node &node)
+{
+  bool success = true;
+  
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+  {
+    System *system = System::Create((*itr)->element());
+    if (system)
+    {
+      success &= system->setToXml(**itr);
+      addSystem(system);
+    }
+  }
+  
+  return success;
+}
+
+void FelixEngine::addSystem(System *system)
+{
+  if (system)
+  {
+    if (mSystems.count(system->type()))
+      delete mSystems.at(system->type());
+    mSystems[system->type()] = system;
+  }
+}
+
+bool FelixEngine::loasScene(const XMLTree::Node &node)
+{
+  bool success = true;
+  
+  return success;
 }
 
 void FelixEngine::updateFrame()

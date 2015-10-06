@@ -20,3 +20,18 @@ System::System(SYSTEM_TYPE type): mType(type)
 System::~System()
 {
 }
+
+System* System::Create(const std::string &name)
+{
+  if (GetSystemIdMap().count(name))
+    return GetSystemIdMap().at(name)->create();
+  
+  cerr << "Unknown System: " << name << endl;
+  return nullptr;
+}
+
+map<string, System::SystemId*>& System::GetSystemIdMap()
+{
+  static map<string, System::SystemId*> systems;
+  return systems;
+}

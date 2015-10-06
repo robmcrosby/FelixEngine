@@ -16,7 +16,7 @@ int main( int argc, char* args[] )
 {
   fx::FelixEngine *engine = fx::FelixEngine::Instance();
   
-  if (!engine->init())
+  if (!engine->init("GL_Settings.xml"))
   {
     cerr << "Error Initalizing the Engine" << endl;
     return 1;
