@@ -34,6 +34,8 @@ namespace fx
     FelixEngine();
     ~FelixEngine();
     
+    void updateFrame();
+    
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
     

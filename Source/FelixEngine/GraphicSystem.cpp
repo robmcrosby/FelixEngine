@@ -19,7 +19,7 @@ GraphicSystem* GraphicSystem::CreateOpenGLContext()
   if (context)
   {
     Window *window = context->getWindow("MainWindow");
-    window->loadResizable("Title", ivec2(100, 100), ivec2(640, 400));
+    window->loadResizable("Title", ivec2(640, 400), ivec2(100, 100));
   }
   return context;
 }

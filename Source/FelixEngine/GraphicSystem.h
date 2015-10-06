@@ -18,7 +18,8 @@ namespace fx
   struct Window
   {
     virtual ~Window() {}
-    virtual bool loadResizable(const std::string &title, ivec2 pos, ivec2 size) = 0;
+    virtual bool loadResizable(const std::string &title, ivec2 size) = 0;
+    virtual bool loadResizable(const std::string &title, ivec2 size, ivec2 pos) = 0;
   };
   
   /**

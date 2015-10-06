@@ -46,6 +46,8 @@ bool FelixEngine::init(const std::string &settingsFile)
     cerr << "Error creating GpuSystem" << endl;
     return false;
   }
+  else
+    mSystems[SYSTEM_GRAPHICS] = mGraphicSystem;
   
   return true;
 }
@@ -66,9 +68,17 @@ int FelixEngine::runLoop()
     {
       if (event.type == SDL_QUIT)
         quit = true;
+      else
+        updateFrame();
     }
   }
   
   SDL_Quit();
   return 0;
+}
+
+void FelixEngine::updateFrame()
+{
+  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
+    itr->second->update();
 }

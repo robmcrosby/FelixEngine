@@ -12,7 +12,8 @@
 #include "GraphicSystem.h"
 #include <map>
 
-class SDL_Window;
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 
 namespace fx
 {
@@ -30,8 +31,12 @@ namespace fx
     virtual void update();
     virtual Window* getWindow(const std::string &name);
     
+    void setSDL_GLContext(SDL_GLContext context) {mSDL_GLContext = context;}
+    SDL_GLContext getSDL_GLContext() {return mSDL_GLContext;}
+    
   private:
     std::map<std::string, GLWindow*> mWindows;
+    SDL_GLContext mSDL_GLContext;
   };
 }
 
