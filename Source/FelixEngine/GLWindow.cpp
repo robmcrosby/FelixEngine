@@ -25,14 +25,13 @@ GLWindow::~GLWindow()
     SDL_DestroyWindow(mSDLWindow);
 }
 
-bool GLWindow::loadResizable(const std::string &title, ivec2 size)
+bool GLWindow::load()
 {
-  return loadResizable(title, size, ivec2(SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED));
-}
-
-bool GLWindow::loadResizable(const std::string &title, ivec2 size, ivec2 pos)
-{
-  mSDLWindow = SDL_CreateWindow(title.c_str(), pos.x, pos.y, size.w, size.h, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+  // Get and check the SDL Window
+  mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
+                                mPos.x, mPos.y,
+                                mSize.w, mSize.h,
+                                SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
   if (!mSDLWindow)
   {
     cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
@@ -40,7 +39,7 @@ bool GLWindow::loadResizable(const std::string &title, ivec2 size, ivec2 pos)
   }
   
   // Check if the OpenGL Context has been created already.
-  if (!mGLContext->getSDL_GLContext())
+  if (!mGLContext->getContext())
   {
     // Create and check the OpenGL Context
     SDL_GLContext context = SDL_GL_CreateContext(mSDLWindow);
@@ -49,18 +48,40 @@ bool GLWindow::loadResizable(const std::string &title, ivec2 size, ivec2 pos)
       cerr << "OpenGL context could not be created! SDL Error: " << SDL_GetError() << endl;
       return false;
     }
-    mGLContext->setSDL_GLContext(context);
+    mGLContext->setContext(context);
     
     // Set to Use V-Sync
-    if (SDL_GL_SetSwapInterval( 1 ) < 0)
+    if (SDL_GL_SetSwapInterval(1) < 0)
       cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << endl;
   }
   
   return true;
 }
 
+void GLWindow::setTitle(const std::string &title)
+{
+  mTitle = title;
+  if (mSDLWindow)
+    SDL_SetWindowTitle(mSDLWindow, title.c_str());
+}
+
+void GLWindow::setPosition(const ivec2 &pos)
+{
+  mPos = pos;
+  if (mSDLWindow)
+    SDL_SetWindowPosition(mSDLWindow, pos.x, pos.y);
+}
+
+void GLWindow::setSize(const ivec2 &size)
+{
+  mSize = size;
+  if (mSDLWindow)
+    SDL_SetWindowSize(mSDLWindow, size.w, size.h);
+}
+
 void GLWindow::setActive()
 {
+  SDL_GL_MakeCurrent(mSDLWindow, mGLContext->getContext());
 }
 
 void GLWindow::swapBuffers()

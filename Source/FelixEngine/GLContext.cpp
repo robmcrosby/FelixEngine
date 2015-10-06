@@ -16,8 +16,7 @@ DEFINE_SYSTEM_ID(GLContext)
 
 GLContext::GLContext(): mSDL_GLContext(0)
 {
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+  mInitFlags |= SDL_INIT_VIDEO;
 }
 
 GLContext::~GLContext()
@@ -39,13 +38,22 @@ void GLContext::setVersion(int major, int minor)
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
 }
 
-bool GLContext::setToXml(const XMLTree::Node &node)
+bool GLContext::setToXml(const XMLTree::Node *node)
 {
-  bool success = setVersion(node.subNode("Version"));
-  
-  if (success)
-    addWindows(node.subNode("Windows"));
-  
+  if (node)
+  {
+    setVersion(node->subNode("Version"));
+    return addWindows(node->subNode("Windows"));
+  }
+  cerr << "Error: GLContext passed a NULL node." << endl;
+  return false;
+}
+
+bool GLContext::init()
+{
+  bool success = true;
+  for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    success &= itr->second->load();
   return success;
 }
 

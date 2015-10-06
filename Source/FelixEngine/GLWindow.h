@@ -28,13 +28,18 @@ namespace fx
     GLWindow(GLContext *context);
     virtual ~GLWindow();
     
-    virtual bool loadResizable(const std::string &title, ivec2 size);
-    virtual bool loadResizable(const std::string &title, ivec2 size, ivec2 pos);
+    virtual bool load();
+    
+    virtual void setTitle(const std::string &title);
+    virtual void setPosition(const ivec2 &pos);
+    virtual void setSize(const ivec2 &size);
     
     void setActive();
     void swapBuffers();
     
   private:
+    ivec2 mPos, mSize;
+    std::string mTitle;
     SDL_Window *mSDLWindow;
     GLContext  *mGLContext;
   };

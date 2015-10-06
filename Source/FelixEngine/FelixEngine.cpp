@@ -35,12 +35,6 @@ bool FelixEngine::init(const std::string &settingsFile)
 {
   Uint32 initFlags = SDL_INIT_VIDEO;
   
-  if (SDL_Init(initFlags) < 0)
-  {
-    cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
-    return false;
-  }
-  
   XMLTree::XMLTree tree;
   if (tree.loadFile(Platform::GetResourcePath()+settingsFile))
   {
@@ -48,17 +42,8 @@ bool FelixEngine::init(const std::string &settingsFile)
     if (settingsNode.hasSubNode("Systems"))
       return loadSystems(*settingsNode.subNode("Systems"));
   }
-  return false;
   
-//  mGraphicSystem = GraphicSystem::CreateOpenGLContext();
-//  if (!mGraphicSystem)
-//  {
-//    cerr << "Error creating GpuSystem" << endl;
-//    return false;
-//  }
-//  else
-//    mSystems[SYSTEM_GRAPHICS] = mGraphicSystem;
-//    return true;
+  return false;
 }
 
 bool FelixEngine::loadScene(const std::string &sceneFile)
@@ -89,16 +74,27 @@ int FelixEngine::runLoop()
 bool FelixEngine::loadSystems(const XMLTree::Node &node)
 {
   bool success = true;
+  int  initFlags = 0;
   
   for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
     System *system = System::Create((*itr)->element());
     if (system)
     {
-      success &= system->setToXml(**itr);
+      success &= system->setToXml(*itr);
+      initFlags |= system->getInitFlags();
       addSystem(system);
     }
   }
+  
+  if (success && SDL_Init(initFlags) < 0)
+  {
+    cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
+    success = false;
+  }
+  
+  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); success && itr != mSystems.end(); ++itr)
+    success &= itr->second->init();
   
   return success;
 }

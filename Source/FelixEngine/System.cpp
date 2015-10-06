@@ -13,7 +13,7 @@ using namespace fx;
 using namespace std;
 
 
-System::System(SYSTEM_TYPE type): mType(type)
+System::System(SYSTEM_TYPE type): mType(type), mInitFlags(0)
 {
 }
 

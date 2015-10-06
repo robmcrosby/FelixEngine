@@ -36,12 +36,16 @@ namespace fx
     virtual ~System();
     
     virtual void update() = 0;
-    virtual bool setToXml(const XMLTree::Node &node) = 0;
+    
+    virtual bool setToXml(const XMLTree::Node *node) = 0;
+    virtual bool init() = 0;
     
     SYSTEM_TYPE type() const {return mType;}
+    int getInitFlags() const {return mInitFlags;}
     
   protected:
     SYSTEM_TYPE mType;
+    int mInitFlags;
     
   public:
     static System* Create(const std::string &name);

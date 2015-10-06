@@ -29,12 +29,15 @@ namespace fx
     virtual ~GLContext();
     
     virtual void update();
-    virtual bool setToXml(const XMLTree::Node &node);
+    
+    virtual bool setToXml(const XMLTree::Node *node);
+    virtual bool init();
+    
     virtual void setVersion(int major, int minor);
     virtual Window* getWindow(const std::string &name);
     
-    void setSDL_GLContext(SDL_GLContext context) {mSDL_GLContext = context;}
-    SDL_GLContext getSDL_GLContext() {return mSDL_GLContext;}
+    void setContext(SDL_GLContext context) {mSDL_GLContext = context;}
+    SDL_GLContext getContext() {return mSDL_GLContext;}
     
   private:
     bool setVersion(const XMLTree::Node *node);

@@ -8,6 +8,10 @@
           <position>100, 100</position>
           <size>640, 400</size>
         </Window>
+        <Window name="SecondWindow" title="Hello Felix" type="resizable">
+          <position>800, 100</position>
+          <size>800, 600</size>
+        </Window>
       </Windows>
     </GLContext>
   </Systems>

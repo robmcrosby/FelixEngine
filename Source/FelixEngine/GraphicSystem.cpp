@@ -7,22 +7,10 @@
 //
 
 #include "GraphicSystem.h"
-#include "GLContext.h"
 
 
 using namespace fx;
 using namespace std;
-
-GraphicSystem* GraphicSystem::CreateOpenGLContext()
-{
-  GLContext *context = new GLContext();
-  if (context)
-  {
-    Window *window = context->getWindow("MainWindow");
-    window->loadResizable("Title", ivec2(640, 400), ivec2(100, 100));
-  }
-  return context;
-}
 
 bool GraphicSystem::addWindows(const XMLTree::Node *node)
 {
@@ -43,7 +31,7 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
   if (node && node->hasAttribute("name"))
   {
     Window *window = getWindow(node->attribute("name"));
-    success = window && window->setToXml(*node);
+    success = window && window->setToXml(node);
   }
   return success;
 }
@@ -51,16 +39,17 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
 
 
 
-bool Window::setToXml(const XMLTree::Node &node)
+bool Window::setToXml(const XMLTree::Node *node)
 {
-  bool success = false;
-  if (node.hasAttribute("title") && node.hasSubNode("size"))
+  bool success = true;
+  if (node)
   {
-    if (node.hasSubNode("position"))
-      success = loadResizable(node.attribute("title"), node.subContents("size"), node.subContents("position"));
-    else
-      success = loadResizable(node.attribute("title"), node.subContents("size"));
+    if (node->hasAttribute("title"))
+      setTitle(node->attribute("title"));
+    if (node->hasSubNode("position"))
+      setPosition(node->subContents("position"));
+    if (node->hasSubNode("size"))
+      setSize(node->subContents("size"));
   }
-  
   return success;
 }
