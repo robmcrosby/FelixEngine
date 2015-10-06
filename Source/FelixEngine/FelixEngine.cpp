@@ -33,8 +33,6 @@ FelixEngine::~FelixEngine()
 
 bool FelixEngine::init(const std::string &settingsFile)
 {
-  Uint32 initFlags = SDL_INIT_VIDEO;
-  
   XMLTree::XMLTree tree;
   if (tree.loadFile(Platform::GetResourcePath()+settingsFile))
   {
@@ -112,7 +110,6 @@ void FelixEngine::addSystem(System *system)
 bool FelixEngine::loasScene(const XMLTree::Node &node)
 {
   bool success = true;
-  
   return success;
 }
 

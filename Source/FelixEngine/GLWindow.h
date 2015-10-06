@@ -17,7 +17,7 @@ class SDL_Window;
 
 namespace fx
 {
-  class GLContext;
+  class GLGraphicSystem;
   
   /**
    *
@@ -25,7 +25,7 @@ namespace fx
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLContext *context);
+    GLWindow(GLGraphicSystem *system);
     virtual ~GLWindow();
     
     virtual bool load();
@@ -41,7 +41,7 @@ namespace fx
     ivec2 mPos, mSize;
     std::string mTitle;
     SDL_Window *mSDLWindow;
-    GLContext  *mGLContext;
+    GLGraphicSystem *mGLSystem;
   };
 }
 

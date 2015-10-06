@@ -1,55 +1,55 @@
 //
-//  OpenGLContext.cpp
+//  GLGraphicSystem.cpp
 //  FelixEngine
 //
 //  Created by Robert Crosby on 10/5/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#include "GLContext.h"
+#include "GLGraphicSystem.h"
 #include "GLWindow.h"
 
 using namespace fx;
 using namespace std;
 
-DEFINE_SYSTEM_ID(GLContext)
+DEFINE_SYSTEM_ID(GLGraphicSystem)
 
-GLContext::GLContext(): mSDL_GLContext(0)
+GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
   mInitFlags |= SDL_INIT_VIDEO;
 }
 
-GLContext::~GLContext()
+GLGraphicSystem::~GLGraphicSystem()
 {
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     delete itr->second;
 }
 
-Window* GLContext::getWindow(const std::string &name)
+Window* GLGraphicSystem::getWindow(const std::string &name)
 {
   if (!mWindows.count(name))
     mWindows[name] = new GLWindow(this);
   return mWindows[name];
 }
 
-void GLContext::setVersion(int major, int minor)
+void GLGraphicSystem::setVersion(int major, int minor)
 {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
 }
 
-bool GLContext::setToXml(const XMLTree::Node *node)
+bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
 {
   if (node)
   {
     setVersion(node->subNode("Version"));
     return addWindows(node->subNode("Windows"));
   }
-  cerr << "Error: GLContext passed a NULL node." << endl;
+  cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
   return false;
 }
 
-bool GLContext::init()
+bool GLGraphicSystem::init()
 {
   bool success = true;
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
@@ -57,7 +57,7 @@ bool GLContext::init()
   return success;
 }
 
-bool GLContext::setVersion(const XMLTree::Node *node)
+bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 {
   if (node && node->hasAttribute("major") && node->hasAttribute("minor"))
   {
@@ -70,7 +70,7 @@ bool GLContext::setVersion(const XMLTree::Node *node)
   return false;
 }
 
-void GLContext::update()
+void GLGraphicSystem::update()
 {
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
   {

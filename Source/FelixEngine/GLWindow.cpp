@@ -7,7 +7,7 @@
 //
 
 #include "GLWindow.h"
-#include "GLContext.h"
+#include "GLGraphicSystem.h"
 #include <SDL2/SDL.h>
 
 
@@ -15,7 +15,7 @@ using namespace fx;
 using namespace std;
 
 
-GLWindow::GLWindow(GLContext *context): mSDLWindow(0), mGLContext(context)
+GLWindow::GLWindow(GLGraphicSystem *system): mSDLWindow(0), mGLSystem(system)
 {
 }
 
@@ -39,7 +39,7 @@ bool GLWindow::load()
   }
   
   // Check if the OpenGL Context has been created already.
-  if (!mGLContext->getContext())
+  if (!mGLSystem->getContext())
   {
     // Create and check the OpenGL Context
     SDL_GLContext context = SDL_GL_CreateContext(mSDLWindow);
@@ -48,7 +48,7 @@ bool GLWindow::load()
       cerr << "OpenGL context could not be created! SDL Error: " << SDL_GetError() << endl;
       return false;
     }
-    mGLContext->setContext(context);
+    mGLSystem->setContext(context);
     
     // Set to Use V-Sync
     if (SDL_GL_SetSwapInterval(1) < 0)
@@ -81,7 +81,7 @@ void GLWindow::setSize(const ivec2 &size)
 
 void GLWindow::setActive()
 {
-  SDL_GL_MakeCurrent(mSDLWindow, mGLContext->getContext());
+  SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
 }
 
 void GLWindow::swapBuffers()
