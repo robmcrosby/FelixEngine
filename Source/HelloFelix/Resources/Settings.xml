@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Settings>
+  <Systems>
+    <GLGraphicSystem>
+      <Version major="2" minor="1"/>
+      <Windows>
+        <Window name="MainWindow" title="Hello Felix" type="resizable">
+          <position>100, 100</position>
+          <size>640, 400</size>
+        </Window>
+      </Windows>
+    </GLGraphicSystem>
+  </Systems>
+</Settings>
