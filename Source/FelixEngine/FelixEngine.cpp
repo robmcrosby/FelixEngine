@@ -67,11 +67,7 @@ int FelixEngine::runLoop()
       if (event.type == SDL_QUIT)
         quit = true;
     }
-    //SDL_UpdateWindowSurface(mWindow);
   }
-
-  //SDL_DestroyWindow(mWindow);
-  //mWindow = nullptr;
   
   SDL_Quit();
   return 0;

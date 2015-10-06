@@ -17,11 +17,9 @@ GraphicSystem* GraphicSystem::CreateOpenGLContext()
 {
   GLContext *context = new GLContext();
   if (context)
-    context->createResizableWindow();
+  {
+    Window *window = context->getWindow("MainWindow");
+    window->loadResizable("Title", ivec2(100, 100), ivec2(640, 400));
+  }
   return context;
-}
-
-GraphicSystem* GraphicSystem::CreateMetalContext()
-{
-  return nullptr;
 }

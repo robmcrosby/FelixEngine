@@ -10,15 +10,13 @@
 #define GLContext_h
 
 #include "GraphicSystem.h"
+#include <map>
 
 class SDL_Window;
 
 namespace fx
 {
-  struct GLWindow: public Window
-  {
-    SDL_Window *mWindow;
-  };
+  class GLWindow;
   
   /**
    *
@@ -30,7 +28,10 @@ namespace fx
     virtual ~GLContext();
     
     virtual void update();
-    virtual Window* createResizableWindow();
+    virtual Window* getWindow(const std::string &name);
+    
+  private:
+    std::map<std::string, GLWindow*> mWindows;
   };
 }
 

@@ -10,12 +10,15 @@
 #define GraphicSystem_h
 
 #include "System.h"
+#include "Vector.h"
 
 
 namespace fx
 {
   struct Window
   {
+    virtual ~Window() {}
+    virtual bool loadResizable(const std::string &title, ivec2 pos, ivec2 size) = 0;
   };
   
   /**
@@ -27,10 +30,9 @@ namespace fx
     GraphicSystem(): System(SYSTEM_GRAPHICS) {}
     virtual ~GraphicSystem() {}
     
-    virtual Window* createResizableWindow() = 0;
+    virtual Window* getWindow(const std::string &name) = 0;
     
     static GraphicSystem* CreateOpenGLContext();
-    static GraphicSystem* CreateMetalContext();
   };
 }
 
