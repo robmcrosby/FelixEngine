@@ -16,9 +16,13 @@ namespace fx
   class Scene
   {
   public:
-    virtual ~Scene() {}
+    Scene() {}
+    ~Scene() {}
+    
+    std::string name() const {return mName;}
     
   private:
+    std::string mName;
   };
 }
 

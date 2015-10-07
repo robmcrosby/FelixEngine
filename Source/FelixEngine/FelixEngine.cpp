@@ -8,6 +8,7 @@
 
 #include "FelixEngine.h"
 #include "System.h"
+#include "Scene.h"
 #include "Platform.h"
 #include <SDL2/SDL.h>
 
@@ -44,9 +45,34 @@ bool FelixEngine::init(const std::string &settingsFile)
   return false;
 }
 
-bool FelixEngine::loadScene(const std::string &sceneFile)
+bool FelixEngine::loadScene(const string &sceneFile)
 {
   return true;
+}
+
+void FelixEngine::addScene(Scene *scene)
+{
+  if (scene)
+  {
+    Scene *prev = getScene(scene->name());
+    if (prev && prev != scene)
+      delete prev;
+    mScenes[scene->name()] = scene;
+  }
+}
+
+void FelixEngine::deleteScene(const std::string &name)
+{
+  if (mScenes.count(name))
+  {
+    delete mScenes.at(name);
+    mScenes.erase(name);
+  }
+}
+
+Scene* FelixEngine::getScene(const std::string &name)
+{
+  return mScenes.count(name) ? mScenes.at(name) : nullptr;
 }
 
 int FelixEngine::runLoop()
@@ -105,12 +131,6 @@ void FelixEngine::addSystem(System *system)
       delete mSystems.at(system->type());
     mSystems[system->type()] = system;
   }
-}
-
-bool FelixEngine::loasScene(const XMLTree::Node &node)
-{
-  bool success = true;
-  return success;
 }
 
 void FelixEngine::updateFrame()

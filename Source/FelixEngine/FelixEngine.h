@@ -16,8 +16,6 @@
 
 namespace fx
 {
-  class GraphicSystem;
-  
   /**
    * Felix Engine Class
    */
@@ -27,7 +25,14 @@ namespace fx
     static FelixEngine* Instance();
     
     bool init(const std::string &settingsFile = "");
+    
+    void addSystem(System *system);
+    System* getSystem(SYSTEM_TYPE type);
+    
     bool loadScene(const std::string &sceneFile);
+    void addScene(Scene *scene);
+    void deleteScene(const std::string &name);
+    Scene* getScene(const std::string &name);
     
     int runLoop();
     
@@ -36,9 +41,6 @@ namespace fx
     ~FelixEngine();
     
     bool loadSystems(const XMLTree::Node &node);
-    bool loasScene(const XMLTree::Node &node);
-    
-    void addSystem(System *system);
     
     void updateFrame();
     
