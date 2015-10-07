@@ -38,6 +38,7 @@
 		377B9B201BBE289600440546 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B1F1BBE289600440546 /* Images */; settings = {ASSET_TAGS = (); }; };
 		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37CD4E211BC5C77500DAB4E3 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37CD4E201BC5C77500DAB4E3 /* Scene.xml */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		37C531C91BBCD4BB006DC58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37CD4E1B1BC5C04400DAB4E3 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
 		37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
+		37CD4E201BC5C77500DAB4E3 /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Scene.xml; path = ../../../../Source/HelloFelix/Resources/Scene.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,9 +198,10 @@
 		377B9B1E1BBE288100440546 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				37CD4E201BC5C77500DAB4E3 /* Scene.xml */,
+				370FEA941BC4638F00440244 /* Settings.xml */,
 				377B9B0C1BBDF03600440546 /* Assets.xcassets */,
 				377B9B1F1BBE289600440546 /* Images */,
-				370FEA941BC4638F00440244 /* Settings.xml */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 			files = (
 				370FEA951BC4638F00440244 /* Settings.xml in Resources */,
 				377B9B201BBE289600440546 /* Images in Resources */,
+				37CD4E211BC5C77500DAB4E3 /* Scene.xml in Resources */,
 				377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

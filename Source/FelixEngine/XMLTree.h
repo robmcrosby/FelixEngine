@@ -677,6 +677,18 @@ namespace fx
     ~XMLTree() {}
     
     /**
+     * Gets the number of Base Nodes in the Tree.
+     * @return number of Base Nodes.
+     */
+    size_t numberBaseNodes() const {return mRootNode.numberSubNodes();}
+    
+    /**
+     * Checks if the Tree is empty of Base Nodes.
+     * @return true if empty or false otherwise.
+     */
+    bool isEmpty() const {return mRootNode.numberSubNodes() == 0;}
+    
+    /**
      * Gets the begining iterator for the SubNodes in the Root Node.
      * @return iterator to the begining of the Root Node's SubNodes.
      */

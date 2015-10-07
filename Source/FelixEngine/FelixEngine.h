@@ -27,10 +27,12 @@ namespace fx
     bool init(const std::string &settingsFile = "");
     
     void addSystem(System *system);
+    void clearSystems();
     System* getSystem(SYSTEM_TYPE type);
     
     bool loadScene(const std::string &sceneFile);
     void addScene(Scene *scene);
+    void clearScenes();
     void deleteScene(const std::string &name);
     Scene* getScene(const std::string &name);
     

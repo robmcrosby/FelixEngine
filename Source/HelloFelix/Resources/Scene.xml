@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<Scene name="MainScene">
+  <Camera name="MainCamera">
+    <Transform>
+      <Position>0.0, 0.0, 4.0</Position>
+    </Transform>
+    <Projection type="frustum" left="-1.0" right="1.0" bottom="-1.0" top="1.0" near="1.0" far="100.0" aspect="auto"/>
+    <Views>
+      <View name="MainView"/>
+    </Views>
+  </Camera>
+  <Model name="Triangle">
+    <Transform>
+      <Position>0.0, 0.0, 0.0</Position>
+    </Transform>
+    <RenderSlots>
+      <Slot layer="1" view="MainView">
+        <Mesh name="TriangleMesh"/>
+        <DepthState write="true" function="less"/>
+        <Material name="ColorMaterial">
+          <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+        </Material>
+      </Slot>
+    </RenderSlots>
+  </Model>
+  <Views>
+    <View name="MainView" frame="MainWindow" layer="1" index="2">
+      <ClearState depth="1.0f">
+        <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+      </ClearState>
+    </View>
+  </Views>
+  <Resources>
+    <Mesh name="TriangleMesh" file="PlaneMesh.xml"/>
+    <Shader name="ColorShader" vertex="ColorV" fragment="ColorF"/>
+  </Resources>
+  <Materials>
+    <Material name="ColorMaterial" shader="ColorShader"/>
+  </Materials>
+</Scene>

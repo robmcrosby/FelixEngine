@@ -29,25 +29,38 @@ FelixEngine::FelixEngine()
 
 FelixEngine::~FelixEngine()
 {
-  
+  clearScenes();
+  clearSystems();
 }
 
 bool FelixEngine::init(const std::string &settingsFile)
 {
+  bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(Platform::GetResourcePath()+settingsFile))
+  if (tree.loadFile(Platform::GetResourcePath()+settingsFile) && !tree.isEmpty())
   {
-    const XMLTree::Node &settingsNode = **tree.begin();
-    if (settingsNode.hasSubNode("Systems"))
-      return loadSystems(*settingsNode.subNode("Systems"));
+    const XMLTree::Node *settingsNode = *tree.begin();
+    if (settingsNode->hasSubNode("Systems"))
+      success = loadSystems(*settingsNode->subNode("Systems"));
   }
   
-  return false;
+  return success;
 }
 
 bool FelixEngine::loadScene(const string &sceneFile)
 {
-  return true;
+  bool success = false;
+  XMLTree::XMLTree tree;
+  if (tree.loadFile(Platform::GetResourcePath()+sceneFile) && !tree.isEmpty())
+  {
+    Scene *scene = new Scene();
+    success = scene->setToXml(*tree.begin());
+    if (success)
+      addScene(scene);
+    else
+      delete scene;
+  }
+  return success;
 }
 
 void FelixEngine::addScene(Scene *scene)
@@ -59,6 +72,13 @@ void FelixEngine::addScene(Scene *scene)
       delete prev;
     mScenes[scene->name()] = scene;
   }
+}
+
+void FelixEngine::clearScenes()
+{
+  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
+    delete itr->second;
+  mScenes.clear();
 }
 
 void FelixEngine::deleteScene(const std::string &name)
@@ -131,6 +151,13 @@ void FelixEngine::addSystem(System *system)
       delete mSystems.at(system->type());
     mSystems[system->type()] = system;
   }
+}
+
+void FelixEngine::clearSystems()
+{
+  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
+    delete itr->second;
+  mSystems.clear();
 }
 
 void FelixEngine::updateFrame()
