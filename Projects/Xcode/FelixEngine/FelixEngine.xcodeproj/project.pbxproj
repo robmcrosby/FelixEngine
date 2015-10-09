@@ -39,6 +39,8 @@
 		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E211BC5C77500DAB4E3 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37CD4E201BC5C77500DAB4E3 /* Scene.xml */; settings = {ASSET_TAGS = (); }; };
+		37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37CD4E361BC83E6300DAB4E3 /* Transform.cpp */; settings = {ASSET_TAGS = (); }; };
+		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,8 @@
 		37CD4E1B1BC5C04400DAB4E3 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
 		37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
 		37CD4E201BC5C77500DAB4E3 /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Scene.xml; path = ../../../../Source/HelloFelix/Resources/Scene.xml; sourceTree = "<group>"; };
+		37CD4E361BC83E6300DAB4E3 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../../Source/FelixEngine/Transform.cpp; sourceTree = "<group>"; };
+		37CD4E371BC83E6300DAB4E3 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -244,11 +248,21 @@
 		37CD4E191BC5BFFD00DAB4E3 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				37CD4E351BC83CDF00DAB4E3 /* Components */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
 				37CD4E1B1BC5C04400DAB4E3 /* Object.h */,
-				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
 			);
 			name = Scene;
+			sourceTree = "<group>";
+		};
+		37CD4E351BC83CDF00DAB4E3 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
+				37CD4E371BC83E6300DAB4E3 /* Transform.h */,
+				37CD4E361BC83E6300DAB4E3 /* Transform.cpp */,
+			);
+			name = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +283,7 @@
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
+				37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */,
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
 			);
@@ -386,6 +401,7 @@
 			files = (
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
+				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */,
 				370FEA8D1BC3428900440244 /* GLWindow.cpp in Sources */,
