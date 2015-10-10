@@ -22,6 +22,16 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
+System* FelixEngine::GetSystem(SYSTEM_TYPE type)
+{
+  return Instance()->getSystem(type);
+}
+
+Scene* FelixEngine::GetScene(const std::string &name)
+{
+  return Instance()->getScene(name);
+}
+
 FelixEngine::FelixEngine()
 {
   cout << "Created Felix Engine" << endl;
@@ -158,6 +168,11 @@ void FelixEngine::clearSystems()
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
     delete itr->second;
   mSystems.clear();
+}
+
+System* FelixEngine::getSystem(SYSTEM_TYPE type)
+{
+  return mSystems.count(type) ? mSystems.at(type) : nullptr;
 }
 
 void FelixEngine::updateFrame()

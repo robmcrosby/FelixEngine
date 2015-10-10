@@ -1,30 +1,35 @@
 //
-//  Views.h
+//  Graphics.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 10/10/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef Views_h
-#define Views_h
+#ifndef Graphics_h
+#define Graphics_h
 
 #include "Component.h"
 
 namespace fx
 {
+  class GraphicSystem;
+  
   /**
    *
    */
-  class Views: public Component
+  class Graphics: public Component
   {
   public:
-    Views(Object *obj);
-    virtual ~Views();
+    Graphics(Object *obj);
+    virtual ~Graphics();
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    
+  private:
+    GraphicSystem *mGraphicSystem;
   };
 }
 
-#endif /* Views_h */
+#endif /* Graphics_hpp */

@@ -13,6 +13,8 @@
 
 namespace fx
 {
+  class GraphicSystem;
+  
   /**
    *
    */
@@ -24,6 +26,9 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    
+  private:
+    GraphicSystem *mGraphicSystem;
   };
 }
 

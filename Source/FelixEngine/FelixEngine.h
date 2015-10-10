@@ -23,6 +23,8 @@ namespace fx
   {
   public:
     static FelixEngine* Instance();
+    static System* GetSystem(SYSTEM_TYPE type);
+    static Scene* GetScene(const std::string &name);
     
     bool init(const std::string &settingsFile = "");
     
