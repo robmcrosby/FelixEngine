@@ -17,13 +17,15 @@
 
 namespace fx
 {
+  class Object;
+  
   /**
    *
    */
   class Component
   {
   public:
-    Component(const std::string &type): mType(type) {}
+    Component(const std::string &type): mType(type), mObject(0) {}
     virtual ~Component() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
@@ -39,11 +41,13 @@ namespace fx
       }
       return success;
     }
+    virtual bool init() {return true;}
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
     
     std::string type() const {return mType;}
+    Object* getObject() const {return mObject;}
     
     /**
      * Internal class used for reflection with xml
@@ -73,7 +77,7 @@ namespace fx
     /**
      *
      */
-    static Component* Create(const XMLTree::Node *node)
+    static Component* Create(const XMLTree::Node *node, Object *obj)
     {
       Component *comp = nullptr;
       if (node)
@@ -84,11 +88,14 @@ namespace fx
           delete comp;
           comp = nullptr;
         }
+        else
+          comp->mObject = obj;
       }
       return comp;
     }
   protected:
     std::string mName, mType;
+    Object *mObject;
   };
   
   /**

@@ -54,7 +54,7 @@ bool FelixEngine::loadScene(const string &sceneFile)
   if (tree.loadFile(Platform::GetResourcePath()+sceneFile) && !tree.isEmpty())
   {
     Scene *scene = new Scene();
-    success = scene->setToXml(*tree.begin());
+    success = scene->setToXml(*tree.begin()) && scene->init();
     if (success)
       addScene(scene);
     else

@@ -15,13 +15,14 @@
 
 namespace fx
 {
+  class Scene;
   /**
    *
    */
   class Object
   {
   public:
-    Object() {}
+    Object(Scene *scene): mScene(scene) {}
     ~Object() {clearComponents();}
     
     bool setToXml(const XMLTree::Node *node)
@@ -35,8 +36,15 @@ namespace fx
           setName(node->attribute("name"));
         
         for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-          success &= addComponent(Component::Create(*itr));
+          success &= addComponent(Component::Create(*itr, this));
       }
+      return success;
+    }
+    bool init()
+    {
+      bool success = true;
+      for (iterator itr = begin(); itr != end(); ++itr)
+        success &= (*itr)->init();
       return success;
     }
     
@@ -45,6 +53,8 @@ namespace fx
     
     void setType(const std::string &type) {mType = type;}
     std::string type() const {return mType;}
+    
+    Scene* getScene() const {return mScene;}
     
     typedef std::list<Component*>::iterator iterator;
     iterator begin() {return mComponents.begin();}
@@ -86,20 +96,10 @@ namespace fx
       return nullptr;
     }
     
-    static Object* Create(const XMLTree::Node *node)
-    {
-      Object *obj = new Object();
-      if (!obj->setToXml(node))
-      {
-        delete obj;
-        obj = nullptr;
-      }
-      return obj;
-    }
-    
   private:
     std::string mName, mType;
     std::list<Component*> mComponents;
+    Scene *mScene;
   };
 }
 

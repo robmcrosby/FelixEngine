@@ -30,8 +30,15 @@ namespace fx
         success = true;
         setName(node->attribute("name"));
         for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-          success &= addObject(Object::Create(*itr));
+          success &= addObject(createObject(*itr));
       }
+      return success;
+    }
+    bool init()
+    {
+      bool success = true;
+      for (iterator itr = mObjects.begin(); itr != mObjects.end(); ++itr)
+        success &= (*itr)->init();
       return success;
     }
     
@@ -79,6 +86,17 @@ namespace fx
     }
     
   private:
+    Object* createObject(const XMLTree::Node *node)
+    {
+      Object *obj = new Object(this);
+      if (!node || !obj->setToXml(node))
+      {
+        delete obj;
+        obj = nullptr;
+      }
+      return obj;
+    }
+    
     std::string mName;
     std::list<Object*> mObjects;
   };
