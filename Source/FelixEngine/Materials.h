@@ -1,13 +1,13 @@
 //
-//  Transform.h
+//  Materials.h
 //  FelixEngine
 //
-//  Created by Robert Crosby on 10/9/15.
+//  Created by Robert Crosby on 10/10/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef Transform_h
-#define Transform_h
+#ifndef Materials_h
+#define Materials_h
 
 #include "Component.h"
 
@@ -16,15 +16,15 @@ namespace fx
   /**
    *
    */
-  class Transform: public Component
+  class Materials: public Component
   {
   public:
-    Transform();
-    virtual ~Transform();
+    Materials();
+    virtual ~Materials();
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
   };
 }
 
-#endif /* Transform_h */
+#endif /* Materials_h */

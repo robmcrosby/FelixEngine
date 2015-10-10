@@ -17,15 +17,18 @@ DEFINE_COMPONENT_ID(Transform);
 
 Transform::Transform(): Component("Transform")
 {
-  
 }
 
 Transform::~Transform()
 {
-  
 }
 
 bool Transform::setToXml(const XMLTree::Node *node)
 {
   return Component::setToXml(node);
+}
+
+bool Transform::init()
+{
+  return Component::init();
 }

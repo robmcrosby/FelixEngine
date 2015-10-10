@@ -5,16 +5,16 @@
       <Position>0.0, 0.0, 4.0</Position>
     </Transform>
     <Projection type="frustum" left="-1.0" right="1.0" bottom="-1.0" top="1.0" near="1.0" far="100.0" aspect="auto"/>
-    <Views>
-      <View name="MainView"/>
-    </Views>
+    <RenderSlots>
+      <Slot layer="0" view="MainView"/>
+    </RenderSlots>
   </Camera>
   <Model name="Triangle">
     <Transform>
       <Position>0.0, 0.0, 0.0</Position>
     </Transform>
     <RenderSlots>
-      <Slot layer="1" view="MainView">
+      <Slot layer="0" view="MainView">
         <Mesh name="TriangleMesh"/>
         <DepthState write="true" function="less"/>
         <Material name="ColorMaterial">
