@@ -19,7 +19,7 @@ namespace fx
   class Meshes: public Component
   {
   public:
-    Meshes();
+    Meshes(Object *obj);
     virtual ~Meshes();
     
     virtual bool setToXml(const XMLTree::Node *node);

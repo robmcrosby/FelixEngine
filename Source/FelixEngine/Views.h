@@ -19,7 +19,7 @@ namespace fx
   class Views: public Component
   {
   public:
-    Views();
+    Views(Object *obj);
     virtual ~Views();
     
     virtual bool setToXml(const XMLTree::Node *node);

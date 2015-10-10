@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Projection);
 
-Projection::Projection(): Component("Projection")
+Projection::Projection(Object *obj): Component("Projection", obj)
 {
 }
 

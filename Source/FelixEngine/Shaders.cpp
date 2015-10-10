@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Shaders);
 
-Shaders::Shaders(): Component("Shaders")
+Shaders::Shaders(Object *obj): Component("Shaders", obj)
 {
 }
 

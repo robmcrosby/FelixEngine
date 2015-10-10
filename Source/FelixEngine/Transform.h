@@ -19,7 +19,7 @@ namespace fx
   class Transform: public Component
   {
   public:
-    Transform();
+    Transform(Object *obj);
     virtual ~Transform();
     
     virtual bool setToXml(const XMLTree::Node *node);

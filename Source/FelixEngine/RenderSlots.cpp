@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(RenderSlots);
 
-RenderSlots::RenderSlots(): Component("RenderSlots")
+RenderSlots::RenderSlots(Object *obj): Component("RenderSlots", obj)
 {
 }
 

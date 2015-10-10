@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Meshes);
 
-Meshes::Meshes(): Component("Meshes")
+Meshes::Meshes(Object *obj): Component("Meshes", obj)
 {
 }
 

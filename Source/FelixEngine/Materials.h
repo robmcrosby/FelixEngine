@@ -19,7 +19,7 @@ namespace fx
   class Materials: public Component
   {
   public:
-    Materials();
+    Materials(Object *obj);
     virtual ~Materials();
     
     virtual bool setToXml(const XMLTree::Node *node);

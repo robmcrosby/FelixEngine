@@ -19,7 +19,7 @@ namespace fx
   class Projection: public Component
   {
   public:
-    Projection();
+    Projection(Object *obj);
     virtual ~Projection();
     
     virtual bool setToXml(const XMLTree::Node *node);

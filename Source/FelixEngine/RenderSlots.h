@@ -19,7 +19,7 @@ namespace fx
   class RenderSlots: public Component
   {
   public:
-    RenderSlots();
+    RenderSlots(Object *obj);
     virtual ~RenderSlots();
     
     virtual bool setToXml(const XMLTree::Node *node);

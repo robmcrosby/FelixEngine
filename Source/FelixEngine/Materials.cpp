@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Materials);
 
-Materials::Materials(): Component("Materials")
+Materials::Materials(Object *obj): Component("Materials", obj)
 {
 }
 

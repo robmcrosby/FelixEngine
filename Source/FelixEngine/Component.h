@@ -25,7 +25,7 @@ namespace fx
   class Component
   {
   public:
-    Component(const std::string &type): mType(type), mObject(0) {}
+    Component(const std::string &type, Object *obj): mType(type), mObject(obj) {}
     virtual ~Component() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
@@ -55,7 +55,7 @@ namespace fx
     struct ComponentId
     {
       virtual ~ComponentId() {}
-      virtual Component* create() = 0;
+      virtual Component* create(Object *obj) = 0;
     };
     static std::map<std::string, ComponentId*>& GetComponentIdMap()
     {
@@ -66,10 +66,10 @@ namespace fx
     /**
      *
      */
-    static Component* Create(const std::string &type)
+    static Component* Create(const std::string &type, Object *obj)
     {
       if (GetComponentIdMap().count(type))
-        return GetComponentIdMap().at(type)->create();
+        return GetComponentIdMap().at(type)->create(obj);
       std::cerr << "Error: Unknown Object Component: " << type << std::endl;
       return nullptr;
     }
@@ -82,14 +82,12 @@ namespace fx
       Component *comp = nullptr;
       if (node)
       {
-        comp = Create(node->element());
+        comp = Create(node->element(), obj);
         if (!comp || !comp->setToXml(node))
         {
           delete comp;
           comp = nullptr;
         }
-        else
-          comp->mObject = obj;
       }
       return comp;
     }
@@ -105,7 +103,7 @@ namespace fx
     struct T##ID: public Component::ComponentId {\
       T##ID() {Component::GetComponentIdMap()[#T] = this;}\
       virtual ~T##ID() {}\
-      virtual Component* create() {return new T();}\
+      virtual Component* create(Object *obj) {return new T(obj);}\
       static T##ID ID;\
     };\
     T##ID T##ID::ID;

@@ -289,9 +289,9 @@
 		37CD4E191BC5BFFD00DAB4E3 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				37CD4E351BC83CDF00DAB4E3 /* Components */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
 				37CD4E1B1BC5C04400DAB4E3 /* Object.h */,
+				37CD4E351BC83CDF00DAB4E3 /* Components */,
 			);
 			name = Scene;
 			sourceTree = "<group>";

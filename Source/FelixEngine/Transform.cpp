@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Transform);
 
-Transform::Transform(): Component("Transform")
+Transform::Transform(Object *obj): Component("Transform", obj)
 {
 }
 

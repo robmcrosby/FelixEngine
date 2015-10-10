@@ -15,7 +15,7 @@ using namespace fx;
 
 DEFINE_COMPONENT_ID(Views);
 
-Views::Views(): Component("Views")
+Views::Views(Object *obj): Component("Views", obj)
 {
 }
 

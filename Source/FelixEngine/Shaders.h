@@ -19,7 +19,7 @@ namespace fx
   class Shaders: public Component
   {
   public:
-    Shaders();
+    Shaders(Object *obj);
     virtual ~Shaders();
     
     virtual bool setToXml(const XMLTree::Node *node);
