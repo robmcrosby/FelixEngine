@@ -36,12 +36,11 @@ namespace fx
         success = true;
         if (node->hasAttribute("name"))
           setName(node->attribute("name"));
-        
-        std::cout << "Created Component: " << type() << " with name: " << name() << std::endl;
       }
       return success;
     }
     virtual bool init() {return true;}
+    virtual void update() {}
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}

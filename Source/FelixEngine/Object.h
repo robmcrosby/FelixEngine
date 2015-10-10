@@ -47,6 +47,11 @@ namespace fx
         success &= (*itr)->init();
       return success;
     }
+    void update()
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        (*itr)->update();
+    }
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}

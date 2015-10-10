@@ -12,9 +12,9 @@
 #include "Platform.h"
 #include <SDL2/SDL.h>
 
+
 using namespace fx;
 using namespace std;
-
 
 FelixEngine* FelixEngine::Instance()
 {
@@ -34,7 +34,6 @@ Scene* FelixEngine::GetScene(const std::string &name)
 
 FelixEngine::FelixEngine()
 {
-  cout << "Created Felix Engine" << endl;
 }
 
 FelixEngine::~FelixEngine()
@@ -178,5 +177,7 @@ System* FelixEngine::getSystem(SYSTEM_TYPE type)
 void FelixEngine::updateFrame()
 {
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
+    itr->second->update();
+  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
     itr->second->update();
 }

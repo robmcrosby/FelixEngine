@@ -37,9 +37,14 @@ namespace fx
     bool init()
     {
       bool success = true;
-      for (iterator itr = mObjects.begin(); itr != mObjects.end(); ++itr)
+      for (iterator itr = begin(); itr != end(); ++itr)
         success &= (*itr)->init();
       return success;
+    }
+    void update()
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        (*itr)->update();
     }
     
     void setName(const std::string &name) {mName = name;}
