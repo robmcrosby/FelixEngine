@@ -7,6 +7,7 @@
 //
 
 #include "GraphicSystem.h"
+#include "UniformMap.h"
 
 
 using namespace fx;
@@ -75,5 +76,10 @@ GraphicResource* GraphicSystem::getResource(const std::string &type, const std::
       cerr << "Error: Unknown Graphic Resource: " << type << endl;
   }
   return resource;
+}
+
+InternalUniformMap* GraphicSystem::createUniformMap()
+{
+  return nullptr;
 }
 

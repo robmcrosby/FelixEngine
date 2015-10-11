@@ -16,6 +16,8 @@
 
 namespace fx
 {
+  class GraphicSystem;
+  
   /**
    * Felix Engine Class
    */
@@ -24,6 +26,7 @@ namespace fx
   public:
     static FelixEngine* Instance();
     static System* GetSystem(SYSTEM_TYPE type);
+    static GraphicSystem* GetGraphicSystem();
     static Scene* GetScene(const std::string &name);
     
     bool init(const std::string &settingsFile = "");

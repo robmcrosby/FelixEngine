@@ -15,6 +15,7 @@
 
 namespace fx
 {
+  class InternalUniformMap;
   /**
    *
    */
@@ -34,6 +35,7 @@ namespace fx
     View* getView(const std::string &name);
     
     GraphicResource* getResource(const std::string &type, const std::string &name);
+    InternalUniformMap* createUniformMap();
     
   protected:
     bool addWindows(const XMLTree::Node *node);

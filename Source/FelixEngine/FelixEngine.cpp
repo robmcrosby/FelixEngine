@@ -7,6 +7,7 @@
 //
 
 #include "FelixEngine.h"
+#include "GraphicSystem.h"
 #include "System.h"
 #include "Scene.h"
 #include "Platform.h"
@@ -25,6 +26,11 @@ FelixEngine* FelixEngine::Instance()
 System* FelixEngine::GetSystem(SYSTEM_TYPE type)
 {
   return Instance()->getSystem(type);
+}
+
+GraphicSystem* FelixEngine::GetGraphicSystem()
+{
+  return dynamic_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
 }
 
 Scene* FelixEngine::GetScene(const std::string &name)

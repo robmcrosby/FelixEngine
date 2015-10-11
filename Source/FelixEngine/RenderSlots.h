@@ -10,6 +10,7 @@
 #define RenderSlots_h
 
 #include "Component.h"
+#include "UniformMap.h"
 
 namespace fx
 {
@@ -29,6 +30,7 @@ namespace fx
     
   private:
     GraphicSystem *mGraphicSystem;
+    UniformMap mUniforms;
   };
 }
 
