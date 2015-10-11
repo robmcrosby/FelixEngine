@@ -29,7 +29,6 @@ namespace fx
   {
     virtual ~Window() {}
     virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool load() = 0;
     
     virtual void setTitle(const std::string &title) = 0;
     virtual void setPosition(const ivec2 &pos) = 0;
@@ -40,7 +39,6 @@ namespace fx
   {
     virtual ~Frame() {}
     virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool load() = 0;
     
     virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler) = 0;
     virtual void setSize(const ivec2 &size) = 0;
@@ -50,7 +48,6 @@ namespace fx
   {
     virtual ~Shader() {}
     virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool load() = 0;
     
     virtual void setVertexShaderSrc(const std::string &src) = 0;
     virtual void setFragmentShaderSrc(const std::string &src) = 0;
@@ -60,7 +57,6 @@ namespace fx
   {
     virtual ~Mesh() {}
     virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool load() = 0;
     
     virtual void setVertexBufferMap(const VertexBufferMap &map) = 0;
     virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data) = 0;
@@ -72,7 +68,6 @@ namespace fx
   {
     virtual ~Texture() {}
     virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool load() = 0;
   };
 }
 

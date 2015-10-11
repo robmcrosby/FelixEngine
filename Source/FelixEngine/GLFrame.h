@@ -25,7 +25,7 @@ namespace fx
     GLFrame(GLGraphicSystem *system);
     virtual ~GLFrame();
     
-    virtual bool load();
+    bool load();
     
     virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler);
     virtual void setSize(const ivec2 &size);

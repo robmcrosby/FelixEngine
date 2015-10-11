@@ -25,7 +25,7 @@ namespace fx
     GLShader(GLGraphicSystem *system);
     virtual ~GLShader();
     
-    virtual bool load();
+    bool load();
     
     virtual void setVertexShaderSrc(const std::string &src);
     virtual void setFragmentShaderSrc(const std::string &src);

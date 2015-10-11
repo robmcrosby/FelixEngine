@@ -25,7 +25,7 @@ namespace fx
     GLTexture(GLGraphicSystem *system);
     virtual ~GLTexture();
     
-    virtual bool load();
+    bool load();
     
   private:
     GLGraphicSystem *mGLSystem;

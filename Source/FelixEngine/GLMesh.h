@@ -25,7 +25,7 @@ namespace fx
     GLMesh(GLGraphicSystem *system);
     virtual ~GLMesh();
     
-    virtual bool load();
+    bool load();
     
     virtual void setVertexBufferMap(const VertexBufferMap &map);
     virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data);

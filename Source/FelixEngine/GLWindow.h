@@ -28,7 +28,7 @@ namespace fx
     GLWindow(GLGraphicSystem *system);
     virtual ~GLWindow();
     
-    virtual bool load();
+    bool load();
     
     virtual void setTitle(const std::string &title);
     virtual void setPosition(const ivec2 &pos);
