@@ -11,10 +11,25 @@
 
 #include "System.h"
 #include "Vector.h"
+#include "Sampler.h"
 
 
 namespace fx
 {
+  enum BUFFER_TYPE {
+    BUFFER_RGBA,
+    BUFFER_FLOAT,
+    BUFFER_DEPTH32F,
+    BUFFER_STENCIL8,
+    BUFFER_NONE,
+  };
+  
+  enum VERTEX_PRIMITIVE
+  {
+    VERTEX_TRIANGLES,
+    VERTEX_TRIANGLE_STRIP,
+  };
+  
   struct Window
   {
     virtual ~Window() {}
@@ -26,6 +41,38 @@ namespace fx
     virtual void setSize(const ivec2 &size) = 0;
   };
   
+  struct Frame
+  {
+    virtual ~Frame() {}
+    virtual bool setToXml(const XMLTree::Node *node);
+    virtual bool load() = 0;
+    
+    virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler) = 0;
+    virtual void setSize(const ivec2 &size) = 0;
+  };
+  
+  struct Shader
+  {
+    virtual ~Shader() {}
+    virtual bool setToXml(const XMLTree::Node *node);
+    virtual bool load() = 0;
+    
+    virtual void setVertexShaderSrc(const std::string &src) = 0;
+    virtual void setFragmentShaderSrc(const std::string &src) = 0;
+  };
+  
+  struct Mesh
+  {
+    virtual ~Mesh() {}
+    virtual bool setToXml(const XMLTree::Node *node);
+    virtual bool load() = 0;
+    
+    virtual bool addVertexBuffer(const std::string &name, int size, int count, const float *data) = 0;
+    virtual bool setIndexBuffer(int count, const int *data) = 0;
+    virtual void setPrimitiveType(VERTEX_PRIMITIVE type) = 0;
+  };
+  
+  
   /**
    *
    */
@@ -36,6 +83,9 @@ namespace fx
     virtual ~GraphicSystem() {}
     
     virtual Window* getWindow(const std::string &name) = 0;
+    virtual Frame* getFrame(const std::string &name) = 0;
+    virtual Shader* getShader(const std::string &name) = 0;
+    virtual Mesh* getMesh(const std::string &name) = 0;
     
   protected:
     bool addWindows(const XMLTree::Node *node);

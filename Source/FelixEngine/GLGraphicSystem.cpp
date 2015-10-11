@@ -7,12 +7,19 @@
 //
 
 #include "GLGraphicSystem.h"
+
 #include "GLWindow.h"
+#include "GLFrame.h"
+#include "GLShader.h"
+#include "GLMesh.h"
+
 
 using namespace fx;
 using namespace std;
 
+
 DEFINE_SYSTEM_ID(GLGraphicSystem)
+
 
 GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
@@ -30,6 +37,27 @@ Window* GLGraphicSystem::getWindow(const std::string &name)
   if (!mWindows.count(name))
     mWindows[name] = new GLWindow(this);
   return mWindows[name];
+}
+
+Frame* GLGraphicSystem::getFrame(const std::string &name)
+{
+  if (!mFrames.count(name))
+    mFrames[name] = new GLFrame(this);
+  return mFrames[name];
+}
+
+Shader* GLGraphicSystem::getShader(const std::string &name)
+{
+  if (!mShaders.count(name))
+    mShaders[name] = new GLShader(this);
+  return mShaders[name];
+}
+
+Mesh* GLGraphicSystem::getMesh(const std::string &name)
+{
+  if (!mMeshes.count(name))
+    mMeshes[name] = new GLMesh(this);
+  return mMeshes[name];
 }
 
 void GLGraphicSystem::setVersion(int major, int minor)

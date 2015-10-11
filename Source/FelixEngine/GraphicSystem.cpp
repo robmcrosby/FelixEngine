@@ -41,15 +41,55 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
 
 bool Window::setToXml(const XMLTree::Node *node)
 {
-  bool success = true;
+  bool success = false;
   if (node)
   {
+    success = true;
     if (node->hasAttribute("title"))
       setTitle(node->attribute("title"));
     if (node->hasSubNode("position"))
       setPosition(node->subContents("position"));
     if (node->hasSubNode("size"))
       setSize(node->subContents("size"));
+  }
+  return success;
+}
+
+
+
+bool Frame::setToXml(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    
+  }
+  return success;
+}
+
+
+
+bool Shader::setToXml(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    
+  }
+  return success;
+}
+
+
+
+bool Mesh::setToXml(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    
   }
   return success;
 }

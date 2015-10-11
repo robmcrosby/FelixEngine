@@ -18,6 +18,9 @@
 namespace fx
 {
   class GLWindow;
+  class GLFrame;
+  class GLShader;
+  class GLMesh;
   
   /**
    *
@@ -34,7 +37,11 @@ namespace fx
     virtual bool init();
     
     virtual void setVersion(int major, int minor);
+    
     virtual Window* getWindow(const std::string &name);
+    virtual Frame* getFrame(const std::string &name);
+    virtual Shader* getShader(const std::string &name);
+    virtual Mesh* getMesh(const std::string &name);
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
@@ -43,6 +50,10 @@ namespace fx
     bool setVersion(const XMLTree::Node *node);
     
     std::map<std::string, GLWindow*> mWindows;
+    std::map<std::string, GLFrame*>  mFrames;
+    std::map<std::string, GLShader*> mShaders;
+    std::map<std::string, GLMesh*>   mMeshes;
+    
     SDL_GLContext mContext;
   };
 }
