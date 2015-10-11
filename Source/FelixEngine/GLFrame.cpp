@@ -23,9 +23,20 @@ GLFrame::~GLFrame()
 {
 }
 
+void GLFrame::reload()
+{
+  GraphicResource::reload();
+  if (mGLSystem)
+    mGLSystem->loadOnNextUpdate();
+}
+
 bool GLFrame::load()
 {
-  return true;
+  if (!mLoaded)
+  {
+    mLoaded = true;
+  }
+  return mLoaded;
 }
 
 void GLFrame::addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler)

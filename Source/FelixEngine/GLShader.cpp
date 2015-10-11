@@ -23,9 +23,11 @@ GLShader::~GLShader()
 {
 }
 
-bool GLShader::load()
+void GLShader::reload()
 {
-  return true;
+  GraphicResource::reload();
+  if (mGLSystem)
+    mGLSystem->loadOnNextUpdate();
 }
 
 void GLShader::setVertexShaderSrc(const std::string &src)
@@ -34,4 +36,13 @@ void GLShader::setVertexShaderSrc(const std::string &src)
 
 void GLShader::setFragmentShaderSrc(const std::string &src)
 {
+}
+
+bool GLShader::load()
+{
+  if (!mLoaded)
+  {
+    mLoaded = true;
+  }
+  return mLoaded;
 }

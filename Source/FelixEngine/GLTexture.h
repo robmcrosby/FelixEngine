@@ -9,13 +9,11 @@
 #ifndef GLTexture_h
 #define GLTexture_h
 
-#include "GraphicSystem.h"
+#include "GLGraphicSystem.h"
 
 
 namespace fx
 {
-  class GLGraphicSystem;
-  
   /**
    *
    */
@@ -24,6 +22,8 @@ namespace fx
   public:
     GLTexture(GLGraphicSystem *system);
     virtual ~GLTexture();
+    
+    virtual void reload();
     
     bool load();
     

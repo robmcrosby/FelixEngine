@@ -99,9 +99,9 @@ namespace fx
     const_iterator begin() const {return mMap.begin();}
     const_iterator end() const {return mMap.end();}
     
-    void clear() {mMap.clear(); mRanges.clear();}
+    void clear() {mMap.clear(); mSubMeshes.clear();}
     
-    void addRange(const Range &range) {mRanges.push_back(range);}
+    void addSubMesh(const Range &range) {mSubMeshes.push_back(range);}
     void setPrimitiveType(VERTEX_PRIMITIVE type) {mPrimitiveType = type;}
     void setPrimitiveType(const std::string &type) {mPrimitiveType = GetPrimitiveType(type);}
     
@@ -111,7 +111,9 @@ namespace fx
     
     IndexBuffer& indexBuffer() {return mIndexBuffer;}
     
-    const Ranges& ranges() const {return mRanges;}
+    int count() const {return mIndexBuffer.size() ? (int)mIndexBuffer.size() : mMap.size() ? mMap.begin()->second.count() : 0;}
+    
+    const Ranges& subMeshes() const {return mSubMeshes;}
     const IndexBuffer& indexBuffer() const {return mIndexBuffer;}
     
     static VERTEX_PRIMITIVE GetPrimitiveType(const std::string &type)
@@ -130,7 +132,7 @@ namespace fx
     std::map<std::string, VertexBuffer> mMap;
     VERTEX_PRIMITIVE mPrimitiveType;
     
-    Ranges      mRanges;
+    Ranges      mSubMeshes;
     IndexBuffer mIndexBuffer;
   };
 }

@@ -10,15 +10,13 @@
 #define GLWindow_hpp
 
 
-#include "GraphicSystem.h"
+#include "GLGraphicSystem.h"
 
 
 class SDL_Window;
 
 namespace fx
 {
-  class GLGraphicSystem;
-  
   /**
    *
    */
@@ -28,12 +26,13 @@ namespace fx
     GLWindow(GLGraphicSystem *system);
     virtual ~GLWindow();
     
-    bool load();
+    virtual void reload();
     
     virtual void setTitle(const std::string &title);
     virtual void setPosition(const ivec2 &pos);
     virtual void setSize(const ivec2 &size);
     
+    bool load();
     void setActive();
     void swapBuffers();
     

@@ -27,35 +27,45 @@ GLWindow::~GLWindow()
 
 bool GLWindow::load()
 {
-  // Get and check the SDL Window
-  mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
-                                mPos.x, mPos.y,
-                                mSize.w, mSize.h,
-                                SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-  if (!mSDLWindow)
+  if (!mLoaded)
   {
-    cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
-    return false;
-  }
-  
-  // Check if the OpenGL Context has been created already.
-  if (!mGLSystem->getContext())
-  {
-    // Create and check the OpenGL Context
-    SDL_GLContext context = SDL_GL_CreateContext(mSDLWindow);
-    if (!context)
+    // Get and check the SDL Window
+    mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
+                                  mPos.x, mPos.y,
+                                  mSize.w, mSize.h,
+                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if (!mSDLWindow)
     {
-      cerr << "OpenGL context could not be created! SDL Error: " << SDL_GetError() << endl;
+      cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << endl;
       return false;
     }
-    mGLSystem->setContext(context);
     
-    // Set to Use V-Sync
-    if (SDL_GL_SetSwapInterval(1) < 0)
-      cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << endl;
+    // Check if the OpenGL Context has been created already.
+    if (!mGLSystem->getContext())
+    {
+      // Create and check the OpenGL Context
+      SDL_GLContext context = SDL_GL_CreateContext(mSDLWindow);
+      if (!context)
+      {
+        cerr << "OpenGL context could not be created! SDL Error: " << SDL_GetError() << endl;
+        return false;
+      }
+      mGLSystem->setContext(context);
+      
+      // Set to Use V-Sync
+      if (SDL_GL_SetSwapInterval(1) < 0)
+        cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << endl;
+    }
+    mLoaded = true;
   }
-  
-  return true;
+  return mLoaded;
+}
+
+void GLWindow::reload()
+{
+  GraphicResource::reload();
+  if (mGLSystem)
+    mGLSystem->loadOnNextUpdate();
 }
 
 void GLWindow::setTitle(const std::string &title)

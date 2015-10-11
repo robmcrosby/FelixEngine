@@ -110,7 +110,7 @@ bool MeshLoader::LoadMeshPlane(VertexBufferMap &bufferMap, const vec2 &size, con
   VertexBuffer *buffer;
   
   bufferMap.clear();
-  bufferMap.addRange(Range(0, 4));
+  bufferMap.addSubMesh(Range(0, 4));
   bufferMap.setPrimitiveType(VERTEX_TRIANGLE_STRIP);
   
   // Set Positions
@@ -147,7 +147,7 @@ bool MeshLoader::AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node *nod
     Range range;
     range.start = node->attributeAsInt("start");
     range.end   = node->attributeAsInt("end");
-    bufferMap.addRange(range);
+    bufferMap.addSubMesh(range);
     success = true;
   }
   return success;
@@ -184,7 +184,7 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
     {
       Range range;
       success = Platform::ReadInt(range.start, is) == sizeof(int) && Platform::ReadInt(range.end, is) == sizeof(int);
-      bufferMap.addRange(range);
+      bufferMap.addSubMesh(range);
     }
     
     int numVertices, numBuffers;

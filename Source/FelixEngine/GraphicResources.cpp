@@ -7,6 +7,7 @@
 //
 
 #include "GraphicResources.h"
+#include "MeshLoader.h"
 
 
 using namespace fx;
@@ -61,8 +62,9 @@ bool Mesh::setToXml(const XMLTree::Node *node)
   bool success = false;
   if (node)
   {
-    success = true;
-    
+    success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
+    if (success)
+      setToReload();
   }
   return success;
 }

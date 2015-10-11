@@ -50,6 +50,7 @@ bool Graphics::init()
 
 void Graphics::addResource(fx::GraphicResource *resource)
 {
+  // TODO: Retain Resources when Resource counting is implemented.
   if (resource)
     mResources.push_back(resource);
 }

@@ -9,13 +9,11 @@
 #ifndef GLShader_h
 #define GLShader_h
 
-#include "GraphicSystem.h"
+#include "GLGraphicSystem.h"
 
 
 namespace fx
 {
-  class GLGraphicSystem;
-  
   /**
    *
    */
@@ -25,10 +23,12 @@ namespace fx
     GLShader(GLGraphicSystem *system);
     virtual ~GLShader();
     
-    bool load();
+    virtual void reload();
     
     virtual void setVertexShaderSrc(const std::string &src);
     virtual void setFragmentShaderSrc(const std::string &src);
+    
+    bool load();
     
   private:
     GLGraphicSystem *mGLSystem;

@@ -9,13 +9,11 @@
 #ifndef GLFrame_h
 #define GLFrame_h
 
-#include "GraphicSystem.h"
+#include "GLGraphicSystem.h"
 
 
 namespace fx
 {
-  class GLGraphicSystem;
-  
   /**
    *
    */
@@ -25,10 +23,12 @@ namespace fx
     GLFrame(GLGraphicSystem *system);
     virtual ~GLFrame();
     
-    bool load();
+    virtual void reload();
     
     virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler);
     virtual void setSize(const ivec2 &size);
+    
+    bool load();
     
   private:
     GLGraphicSystem *mGLSystem;

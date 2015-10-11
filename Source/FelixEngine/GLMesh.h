@@ -9,13 +9,13 @@
 #ifndef GLMesh_h
 #define GLMesh_h
 
-#include "GraphicSystem.h"
-
+#include "GLGraphicSystem.h"
+#include "GLShader.h"
+#include <vector>
+#include <map>
 
 namespace fx
 {
-  class GLGraphicSystem;
-  
   /**
    *
    */
@@ -25,16 +25,45 @@ namespace fx
     GLMesh(GLGraphicSystem *system);
     virtual ~GLMesh();
     
-    bool load();
+    virtual void reload();
     
-    virtual void setVertexBufferMap(const VertexBufferMap &map);
+    virtual void setToReload() {reload();}
     virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data);
     virtual void setIndexBuffer(int count, const int *data);
     virtual void setPrimitiveType(VERTEX_PRIMITIVE type);
     
+    bool load();
+    void draw(const GLShader *shader, int instances, int index) const
+    {
+    }
+    
   private:
+    struct GLRange
+    {
+      GLRange(): start(0), end(0) {}
+      GLuint start, end;
+    };
+    typedef std::vector<GLRange> GLRanges;
+    
+    struct GLBuffer
+    {
+      GLBuffer(): components(0), count(0), bufferId(0) {}
+      GLuint components, count, bufferId;
+    };
+    typedef std::map<std::string, GLBuffer> GLBufferMap;
+    
+  private:
+    void clearBuffers();
+    bool loadVertexBuffer(const std::string &name, const VertexBuffer &buffer);
+    bool loadIndexBuffer(const IndexBuffer &buffer);
+    void setGLPrimitiveType(VERTEX_PRIMITIVE type);
+    
     GLGraphicSystem *mGLSystem;
-    VertexBufferMap mVertexBuffMap;
+    
+    GLBufferMap mVertexBuffers;
+    GLuint      mIndexBuffer;
+    GLenum      mPrimitiveType;
+    GLRanges    mSubMeshes;
   };
 }
 

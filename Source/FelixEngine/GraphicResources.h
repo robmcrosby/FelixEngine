@@ -27,10 +27,19 @@ namespace fx
     BUFFER_NONE,
   };
   
-  struct GraphicResource
+  class GraphicResource
   {
+  public:
+    GraphicResource(): mLoaded(0) {}
     virtual ~GraphicResource() {}
+    
     virtual bool setToXml(const XMLTree::Node *node) = 0;
+    virtual void reload() {mLoaded = false;}
+    
+    bool loaded() const {return mLoaded;}
+    
+  protected:
+    bool mLoaded;
   };
   
   struct Window: GraphicResource
@@ -61,15 +70,19 @@ namespace fx
     virtual void setFragmentShaderSrc(const std::string &src) = 0;
   };
   
-  struct Mesh: GraphicResource
+  class Mesh: public GraphicResource
   {
+  public:
     virtual ~Mesh() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
-    virtual void setVertexBufferMap(const VertexBufferMap &map) = 0;
+    virtual void setToReload() = 0;
     virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data) = 0;
     virtual void setIndexBuffer(int count, const int *data) = 0;
     virtual void setPrimitiveType(VERTEX_PRIMITIVE type) = 0;
+    
+  protected:
+    VertexBufferMap mBufferMap;
   };
   
   struct Texture: GraphicResource

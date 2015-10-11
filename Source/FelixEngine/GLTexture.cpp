@@ -23,7 +23,18 @@ GLTexture::~GLTexture()
 {
 }
 
+void GLTexture::reload()
+{
+  GraphicResource::reload();
+  if (mGLSystem)
+    mGLSystem->loadOnNextUpdate();
+}
+
 bool GLTexture::load()
 {
-  return true;
+  if (!mLoaded)
+  {
+    mLoaded = true;
+  }
+  return mLoaded;
 }
