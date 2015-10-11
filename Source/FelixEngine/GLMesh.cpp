@@ -28,16 +28,27 @@ bool GLMesh::load()
   return true;
 }
 
-bool GLMesh::addVertexBuffer(const std::string &name, int size, int count, const float *data)
+void GLMesh::setVertexBufferMap(const VertexBufferMap &map)
 {
-  return true;
+  mVertexBuffMap = map;
 }
 
-bool GLMesh::setIndexBuffer(int count, const int *data)
+void GLMesh::addVertexBuffer(const std::string &name, int components, int count, const float *data)
 {
-  return true;
+  VertexBuffer &buffer = mVertexBuffMap[name];
+  buffer.setComponents(components);
+  buffer.resize(count);
+  memcpy(buffer.ptr(), data, sizeof(float)*components*count);
+}
+
+void GLMesh::setIndexBuffer(int count, const int *data)
+{
+  IndexBuffer &buffer = mVertexBuffMap.indexBuffer();
+  buffer.resize(count);
+  memcpy(&buffer.at(0), data, sizeof(int)*count);
 }
 
 void GLMesh::setPrimitiveType(VERTEX_PRIMITIVE type)
 {
+  mVertexBuffMap.setPrimitiveType(type);
 }

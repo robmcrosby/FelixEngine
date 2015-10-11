@@ -62,8 +62,9 @@ namespace fx
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool load() = 0;
     
-    virtual bool addVertexBuffer(const std::string &name, int size, int count, const float *data) = 0;
-    virtual bool setIndexBuffer(int count, const int *data) = 0;
+    virtual void setVertexBufferMap(const VertexBufferMap &map) = 0;
+    virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data) = 0;
+    virtual void setIndexBuffer(int count, const int *data) = 0;
     virtual void setPrimitiveType(VERTEX_PRIMITIVE type) = 0;
   };
   

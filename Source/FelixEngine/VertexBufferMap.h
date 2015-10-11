@@ -121,7 +121,7 @@ namespace fx
       if (type == "strip")
         return VERTEX_TRIANGLE_STRIP;
       
-      std::cerr << "Unknown Primitive Type: " << type << std::endl;
+      std::cerr << "Warning: Unknown Mesh Primitive Type: " << type << std::endl;
       std::cerr << "Using Triangles Primitive for now" <<  std::endl;
       return VERTEX_TRIANGLES;
     }

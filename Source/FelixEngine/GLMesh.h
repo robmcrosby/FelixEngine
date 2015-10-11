@@ -27,12 +27,14 @@ namespace fx
     
     virtual bool load();
     
-    virtual bool addVertexBuffer(const std::string &name, int size, int count, const float *data);
-    virtual bool setIndexBuffer(int count, const int *data);
+    virtual void setVertexBufferMap(const VertexBufferMap &map);
+    virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data);
+    virtual void setIndexBuffer(int count, const int *data);
     virtual void setPrimitiveType(VERTEX_PRIMITIVE type);
     
   private:
     GLGraphicSystem *mGLSystem;
+    VertexBufferMap mVertexBuffMap;
   };
 }
 
