@@ -21,6 +21,7 @@ namespace fx
   class GLFrame;
   class GLShader;
   class GLMesh;
+  class GLTexture;
   
   /**
    *
@@ -42,6 +43,7 @@ namespace fx
     virtual Frame* getFrame(const std::string &name);
     virtual Shader* getShader(const std::string &name);
     virtual Mesh* getMesh(const std::string &name);
+    virtual Texture* getTexture(const std::string &name);
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
@@ -49,10 +51,11 @@ namespace fx
   private:
     bool setVersion(const XMLTree::Node *node);
     
-    std::map<std::string, GLWindow*> mWindows;
-    std::map<std::string, GLFrame*>  mFrames;
-    std::map<std::string, GLShader*> mShaders;
-    std::map<std::string, GLMesh*>   mMeshes;
+    std::map<std::string, GLWindow*>  mWindows;
+    std::map<std::string, GLFrame*>   mFrames;
+    std::map<std::string, GLShader*>  mShaders;
+    std::map<std::string, GLMesh*>    mMeshes;
+    std::map<std::string, GLTexture*> mTextures;
     
     SDL_GLContext mContext;
   };

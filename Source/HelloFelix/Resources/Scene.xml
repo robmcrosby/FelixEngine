@@ -26,10 +26,25 @@
   <Resources>
     <Graphics>
       <Meshes>
-        <Mesh name="TriangleMesh" file="PlaneMesh.xml"/>
+        <Mesh name="TriangleMesh" primitive="triangles">
+          <Buffer attribute="Position" components="4">
+            -0.5, -0.5, 0.0, 1.0,
+             0.5, -0.5, 0.0, 1.0,
+             0.0,  0.8, 0.0, 1.0
+          </Buffer>
+        </Mesh>
       </Meshes>
       <Shaders>
-        <Shader name="ColorShader" vertex="ColorV" fragment="ColorF"/>
+        <Shader name="ColorShader" type="GLSL">
+          <Vertex>
+            attribute vec4 Position;
+            void main(void) {gl_Position = Position;}
+          </Vertex>
+          <Fragment>
+            uniform vec4 Color;
+            void main(void) {gl_FragColor = Color;}
+          </Fragment>
+        </Shader>
       </Shaders>
       <Materials>
         <Material name="ColorMaterial" shader="ColorShader"/>

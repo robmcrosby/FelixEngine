@@ -93,3 +93,14 @@ bool Mesh::setToXml(const XMLTree::Node *node)
   }
   return success;
 }
+
+bool Texture::setToXml(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    
+  }
+  return success;
+}

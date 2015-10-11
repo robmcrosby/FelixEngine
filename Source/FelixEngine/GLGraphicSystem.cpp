@@ -12,6 +12,7 @@
 #include "GLFrame.h"
 #include "GLShader.h"
 #include "GLMesh.h"
+#include "GLTexture.h"
 
 
 using namespace fx;
@@ -58,6 +59,13 @@ Mesh* GLGraphicSystem::getMesh(const std::string &name)
   if (!mMeshes.count(name))
     mMeshes[name] = new GLMesh(this);
   return mMeshes[name];
+}
+
+Texture* GLGraphicSystem::getTexture(const std::string &name)
+{
+  if (!mTextures.count(name))
+    mTextures[name] = new GLTexture(this);
+  return mTextures[name];
 }
 
 void GLGraphicSystem::setVersion(int major, int minor)
