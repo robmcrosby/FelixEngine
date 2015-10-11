@@ -9,6 +9,7 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
+#include "VertexBufferMap.h"
 #include "XMLTree.h"
 #include "Vector.h"
 #include "Sampler.h"
@@ -22,12 +23,6 @@ namespace fx
     BUFFER_DEPTH32F,
     BUFFER_STENCIL8,
     BUFFER_NONE,
-  };
-  
-  enum VERTEX_PRIMITIVE
-  {
-    VERTEX_TRIANGLES,
-    VERTEX_TRIANGLE_STRIP,
   };
   
   struct Window
