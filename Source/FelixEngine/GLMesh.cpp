@@ -62,29 +62,6 @@ bool GLMesh::load()
   return mLoaded;
 }
 
-void GLMesh::addVertexBuffer(const std::string &name, int components, int count, const float *data)
-{
-  VertexBuffer &buffer = mBufferMap[name];
-  buffer.setComponents(components);
-  buffer.resize(count);
-  memcpy(buffer.ptr(), data, sizeof(float)*components*count);
-  reload();
-}
-
-void GLMesh::setIndexBuffer(int count, const int *data)
-{
-  IndexBuffer &buffer = mBufferMap.indexBuffer();
-  buffer.resize(count);
-  memcpy(&buffer.at(0), data, sizeof(int)*count);
-  reload();
-}
-
-void GLMesh::setPrimitiveType(VERTEX_PRIMITIVE type)
-{
-  mBufferMap.setPrimitiveType(type);
-  reload();
-}
-
 void GLMesh::clearBuffers()
 {
   // Clear the Vertex Buffers

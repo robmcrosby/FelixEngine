@@ -11,6 +11,8 @@
 
 #include "GLGraphicSystem.h"
 
+#define MAX_TEXTURES 8
+
 
 namespace fx
 {
@@ -25,13 +27,26 @@ namespace fx
     
     virtual void reload();
     
-    virtual void setVertexShaderSrc(const std::string &src);
-    virtual void setFragmentShaderSrc(const std::string &src);
-    
     bool load();
+    static GLenum GetGLShaderPart(SHADER_PART part);
+    
+  private:
+    void unload();
+    
+    bool compilePart(GLenum type, const char *src, GLuint *partId);
+    bool checkPart(GLuint partId, const char *src);
+    void attachParts(GLuint programId, GLuint *partIds);
+    void detachParts(GLuint programId, GLuint *partIds);
+    void deleteParts(GLuint *partIds);
+    void setupTextures();
+    
+    bool checkProgram();
     
   private:
     GLGraphicSystem *mGLSystem;
+    GLuint mProgramId;
+    GLint  mTextureLocs[MAX_TEXTURES];
+    int    mNumTextureLocs;
   };
 }
 

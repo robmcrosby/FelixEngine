@@ -27,6 +27,19 @@ namespace fx
     BUFFER_NONE,
   };
   
+  enum SHADER_PART {
+    SHADER_VERTEX = 0,
+    SHADER_FRAGMENT,
+    SHADER_COUNT,
+  };
+  
+  enum SHADER_TYPE {
+    SHADER_EMPTY,
+    SHADER_SOURCE,
+    SHADER_FILE,
+    SHADER_FUNCTION,
+  };
+  
   class GraphicResource
   {
   public:
@@ -61,13 +74,23 @@ namespace fx
     virtual void setSize(const ivec2 &size) = 0;
   };
   
-  struct Shader: GraphicResource
+  class Shader: public GraphicResource
   {
+  public:
+    Shader() {clearParts();}
     virtual ~Shader() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
-    virtual void setVertexShaderSrc(const std::string &src) = 0;
-    virtual void setFragmentShaderSrc(const std::string &src) = 0;
+    void clearParts();
+    void setSourceToPart(const std::string &src, SHADER_PART part);
+    void setFileToPart(const std::string &file, SHADER_PART part);
+    void setFunctionToPart(const std::string &func, SHADER_PART part);
+    
+    static SHADER_PART ParseShaderPart(const std::string &partStr);
+    
+  protected:
+    std::string mParts[SHADER_COUNT];
+    SHADER_TYPE mPartTypes[SHADER_COUNT];
   };
   
   class Mesh: public GraphicResource
@@ -76,10 +99,10 @@ namespace fx
     virtual ~Mesh() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
-    virtual void setToReload() = 0;
-    virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data) = 0;
-    virtual void setIndexBuffer(int count, const int *data) = 0;
-    virtual void setPrimitiveType(VERTEX_PRIMITIVE type) = 0;
+    VertexBufferMap& getVertexBufferMap() {return mBufferMap;}
+    void addVertexBuffer(const std::string &name, int components, int count, const float *data);
+    void setIndexBuffer(int count, const int *data);
+    void setPrimitiveType(VERTEX_PRIMITIVE type);
     
   protected:
     VertexBufferMap mBufferMap;

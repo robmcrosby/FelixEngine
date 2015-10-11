@@ -27,11 +27,6 @@ namespace fx
     
     virtual void reload();
     
-    virtual void setToReload() {reload();}
-    virtual void addVertexBuffer(const std::string &name, int components, int count, const float *data);
-    virtual void setIndexBuffer(int count, const int *data);
-    virtual void setPrimitiveType(VERTEX_PRIMITIVE type);
-    
     bool load();
     void draw(const GLShader *shader, int instances, int index) const
     {
