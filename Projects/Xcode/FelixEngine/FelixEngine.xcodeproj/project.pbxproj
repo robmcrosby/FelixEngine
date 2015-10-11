@@ -55,6 +55,7 @@
 		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; settings = {ASSET_TAGS = (); }; };
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; settings = {ASSET_TAGS = (); }; };
+		37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490141BCA02F900FC97A5 /* GraphicResources.cpp */; settings = {ASSET_TAGS = (); }; };
 		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E211BC5C77500DAB4E3 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37CD4E201BC5C77500DAB4E3 /* Scene.xml */; settings = {ASSET_TAGS = (); }; };
@@ -134,6 +135,7 @@
 		37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferMap.h; path = ../../../../Source/FelixEngine/VertexBufferMap.h; sourceTree = "<group>"; };
 		37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = ../../../../Source/FelixEngine/MeshLoader.cpp; sourceTree = "<group>"; };
 		37B490111BC9EB9F00FC97A5 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = ../../../../Source/FelixEngine/MeshLoader.h; sourceTree = "<group>"; };
+		37B490141BCA02F900FC97A5 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = ../../../../Source/FelixEngine/GraphicResources.cpp; sourceTree = "<group>"; };
 		37C531C41BBCD4BB006DC58A /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C531C91BBCD4BB006DC58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37CD4E1B1BC5C04400DAB4E3 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				370FEA741BC2F86400440244 /* GraphicSystem.h */,
 				370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */,
 				37B490071BC9DEE000FC97A5 /* GraphicResources.h */,
+				37B490141BCA02F900FC97A5 /* GraphicResources.cpp */,
 				37B48FF81BC9D57200FC97A5 /* Sampler.h */,
 				370FEA7A1BC2FDE800440244 /* OpenGL */,
 				370FEA7B1BC2FDEF00440244 /* Metal */,
@@ -495,6 +498,7 @@
 				370FEA8D1BC3428900440244 /* GLWindow.cpp in Sources */,
 				37B48FFC1BC9D73D00FC97A5 /* GLFrame.cpp in Sources */,
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
+				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
 				37B48FF61BC9CA3800FC97A5 /* Graphics.cpp in Sources */,

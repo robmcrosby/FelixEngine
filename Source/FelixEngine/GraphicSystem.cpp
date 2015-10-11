@@ -36,71 +36,44 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
   return success;
 }
 
-
-
-
-bool Window::setToXml(const XMLTree::Node *node)
+Material* GraphicSystem::getMaterial(const std::string &name)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("title"))
-      setTitle(node->attribute("title"));
-    if (node->hasSubNode("position"))
-      setPosition(node->subContents("position"));
-    if (node->hasSubNode("size"))
-      setSize(node->subContents("size"));
-  }
-  return success;
+  if (!mMaterials.count(name))
+    mMaterials[name] = new Material(this);
+  return mMaterials.at(name);
 }
 
-
-
-bool Frame::setToXml(const XMLTree::Node *node)
+View* GraphicSystem::getView(const std::string &name)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    
-  }
-  return success;
+  if (!mViews.count(name))
+    mViews[name] = new View(this);
+  return mViews.at(name);
 }
 
-
-
-bool Shader::setToXml(const XMLTree::Node *node)
+GraphicResource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
-  bool success = false;
-  if (node)
+  GraphicResource *resource = nullptr;
+  if (name == "")
+    cerr << "Error: Blank name for Graphic Resource: " << type << endl;
+  else
   {
-    success = true;
-    
+    if (type == "Window")
+      resource = getWindow(name);
+    else if (type == "Frame")
+      resource = getFrame(name);
+    else if (type == "Mesh")
+      resource = getMesh(name);
+    else if (type == "Shader")
+      resource = getShader(name);
+    else if (type == "Texture")
+      resource = getTexture(name);
+    else if (type == "Material")
+      resource = getMaterial(name);
+    else if (type == "View")
+      resource = getView(name);
+    else
+      cerr << "Error: Unknown Graphic Resource: " << type << endl;
   }
-  return success;
+  return resource;
 }
 
-
-
-bool Mesh::setToXml(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    
-  }
-  return success;
-}
-
-bool Texture::setToXml(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    
-  }
-  return success;
-}

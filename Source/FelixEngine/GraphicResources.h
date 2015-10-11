@@ -17,6 +17,8 @@
 
 namespace fx
 {
+  class GraphicSystem;
+  
   enum BUFFER_TYPE {
     BUFFER_RGBA,
     BUFFER_FLOAT,
@@ -25,7 +27,13 @@ namespace fx
     BUFFER_NONE,
   };
   
-  struct Window
+  struct GraphicResource
+  {
+    virtual ~GraphicResource() {}
+    virtual bool setToXml(const XMLTree::Node *node) = 0;
+  };
+  
+  struct Window: GraphicResource
   {
     virtual ~Window() {}
     virtual bool setToXml(const XMLTree::Node *node);
@@ -35,7 +43,7 @@ namespace fx
     virtual void setSize(const ivec2 &size) = 0;
   };
   
-  struct Frame
+  struct Frame: GraphicResource
   {
     virtual ~Frame() {}
     virtual bool setToXml(const XMLTree::Node *node);
@@ -44,7 +52,7 @@ namespace fx
     virtual void setSize(const ivec2 &size) = 0;
   };
   
-  struct Shader
+  struct Shader: GraphicResource
   {
     virtual ~Shader() {}
     virtual bool setToXml(const XMLTree::Node *node);
@@ -53,7 +61,7 @@ namespace fx
     virtual void setFragmentShaderSrc(const std::string &src) = 0;
   };
   
-  struct Mesh
+  struct Mesh: GraphicResource
   {
     virtual ~Mesh() {}
     virtual bool setToXml(const XMLTree::Node *node);
@@ -64,10 +72,32 @@ namespace fx
     virtual void setPrimitiveType(VERTEX_PRIMITIVE type) = 0;
   };
   
-  struct Texture
+  struct Texture: GraphicResource
   {
     virtual ~Texture() {}
     virtual bool setToXml(const XMLTree::Node *node);
+  };
+  
+  class Material: public GraphicResource
+  {
+  public:
+    Material(GraphicSystem *system);
+    virtual ~Material();
+    
+    virtual bool setToXml(const XMLTree::Node *node);
+  private:
+    GraphicSystem *mSystem;
+  };
+  
+  class View: public GraphicResource
+  {
+  public:
+    View(GraphicSystem *system);
+    virtual ~View();
+    
+    virtual bool setToXml(const XMLTree::Node *node);
+  private:
+    GraphicSystem *mSystem;
   };
 }
 

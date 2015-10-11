@@ -23,15 +23,33 @@ Graphics::Graphics(Object *obj): Component("Graphics", obj)
 
 Graphics::~Graphics()
 {
+  // TODO: Release Resources when Resource counting is implemented.
 }
 
 bool Graphics::setToXml(const XMLTree::Node *node)
 {
-  return Component::setToXml(node);
+  bool success = false;
+  if (Component::setToXml(node) && mGraphicSystem)
+  {
+    success = true;
+    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+    {
+      GraphicResource *resource = mGraphicSystem->getResource((*itr)->element(), (*itr)->attribute("name"));
+      success &= resource && resource->setToXml(*itr);
+      addResource(resource);
+    }
+  }
+  return success;
 }
 
 bool Graphics::init()
 {
   bool success = Component::init();
   return success;
+}
+
+void Graphics::addResource(fx::GraphicResource *resource)
+{
+  if (resource)
+    mResources.push_back(resource);
 }

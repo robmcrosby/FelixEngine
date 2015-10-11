@@ -9,11 +9,13 @@
 #ifndef Graphics_h
 #define Graphics_h
 
+#include <list>
 #include "Component.h"
 
 namespace fx
 {
   class GraphicSystem;
+  class GraphicResource;
   
   /**
    *
@@ -27,8 +29,11 @@ namespace fx
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
     
+    void addResource(GraphicResource *resource);
+    
   private:
     GraphicSystem *mGraphicSystem;
+    std::list<GraphicResource*> mResources;
   };
 }
 
