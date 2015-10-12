@@ -32,9 +32,6 @@ namespace fx
     virtual Mesh* getMesh(const std::string &name) = 0;
     virtual Texture* getTexture(const std::string &name) = 0;
     
-    Material* getMaterial(const std::string &name);
-    View* getView(const std::string &name);
-    
     GraphicResource* getResource(const std::string &type, const std::string &name);
     InternalUniformMap* createUniformMap();
     
@@ -78,10 +75,6 @@ namespace fx
   protected:
     bool addWindows(const XMLTree::Node *node);
     bool addWindow(const XMLTree::Node *node);
-    
-  private:
-    std::map<std::string, Material*> mMaterials;
-    std::map<std::string, View*> mViews;
   };
 }
 

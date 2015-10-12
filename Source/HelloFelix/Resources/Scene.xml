@@ -17,8 +17,10 @@
       <Slot layer="0" view="MainView">
         <Mesh name="TriangleMesh"/>
         <DepthState write="true" function="less"/>
-        <Material name="ColorMaterial">
-          <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+        <Material shader="ColorShader">
+          <UniformMap>
+            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+          </UniformMap>
         </Material>
       </Slot>
     </RenderSlots>
@@ -42,7 +44,6 @@
           void main(void) {gl_FragColor = Color;}
         </Fragment>
       </Shader>
-      <Material name="ColorMaterial" shader="ColorShader"/>
       <View name="MainView" frame="MainWindow" layer="1" index="2">
         <ClearState depth="1.0f">
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>

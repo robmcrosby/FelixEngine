@@ -17,7 +17,7 @@ namespace fx
   {
   public:
     Semephore(unsigned int count = 0) {setup(count);}
-    Semephore(const ResourceLock &other) {setup(other.mCount);}
+    Semephore(const Semephore &other) {setup(other.mCount);}
     ~Semephore()
     {
       SDL_DestroyMutex(mLockMutex);

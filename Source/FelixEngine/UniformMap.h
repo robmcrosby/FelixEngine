@@ -10,7 +10,7 @@
 #define UniformMap_h
 
 #include "Variant.h"
-#include "GraphicSystem.h"
+#include "FelixEngine.h"
 #include "XMLTree.h"
 
 

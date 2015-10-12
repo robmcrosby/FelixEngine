@@ -37,20 +37,6 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
   return success;
 }
 
-Material* GraphicSystem::getMaterial(const std::string &name)
-{
-  if (!mMaterials.count(name))
-    mMaterials[name] = new Material(this);
-  return mMaterials.at(name);
-}
-
-View* GraphicSystem::getView(const std::string &name)
-{
-  if (!mViews.count(name))
-    mViews[name] = new View(this);
-  return mViews.at(name);
-}
-
 GraphicResource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
   GraphicResource *resource = nullptr;
@@ -68,10 +54,6 @@ GraphicResource* GraphicSystem::getResource(const std::string &type, const std::
       resource = getShader(name);
     else if (type == "Texture")
       resource = getTexture(name);
-    else if (type == "Material")
-      resource = getMaterial(name);
-    else if (type == "View")
-      resource = getView(name);
     else
       cerr << "Error: Unknown Graphic Resource: " << type << endl;
   }

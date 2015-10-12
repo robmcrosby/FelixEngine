@@ -8,15 +8,18 @@
 
 #include <iostream>
 #include <map>
-
 #include "System.h"
-#include "Scene.h"
 #include "XMLTree.h"
 
+
+#ifndef FelixEngine_h
+#define FelixEngine_h
 
 namespace fx
 {
   class GraphicSystem;
+  class System;
+  class Scene;
   
   /**
    * Felix Engine Class
@@ -55,3 +58,5 @@ namespace fx
     std::map<std::string, Scene*>  mScenes;
   };
 }
+
+#endif /* FelixEngine_h */

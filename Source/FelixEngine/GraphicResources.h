@@ -126,28 +126,6 @@ namespace fx
     virtual ~Texture() {}
     virtual bool setToXml(const XMLTree::Node *node);
   };
-  
-  class Material: public GraphicResource
-  {
-  public:
-    Material(GraphicSystem *system);
-    virtual ~Material();
-    
-    virtual bool setToXml(const XMLTree::Node *node);
-  private:
-    GraphicSystem *mSystem;
-  };
-  
-  class View: public GraphicResource
-  {
-  public:
-    View(GraphicSystem *system);
-    virtual ~View();
-    
-    virtual bool setToXml(const XMLTree::Node *node);
-  private:
-    GraphicSystem *mSystem;
-  };
 }
 
 #endif /* GraphicResources_h */

@@ -9,11 +9,12 @@
 #ifndef System_h
 #define System_h
 
+#include "XMLTree.h"
+
 #include <iostream>
 #include <istream>
 #include <map>
 
-#include "XMLTree.h"
 
 namespace fx
 {

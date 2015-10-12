@@ -13,6 +13,8 @@
 #include <list>
 #include "XMLTree.h"
 #include "Object.h"
+#include "View.h"
+#include "Material.h"
 
 namespace fx
 {
