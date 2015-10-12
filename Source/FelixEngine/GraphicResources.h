@@ -55,23 +55,36 @@ namespace fx
     bool mLoaded;
   };
   
-  struct Window: GraphicResource
+  class Window: public GraphicResource
   {
+  public:
     virtual ~Window() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
     virtual void setTitle(const std::string &title) = 0;
     virtual void setPosition(const ivec2 &pos) = 0;
     virtual void setSize(const ivec2 &size) = 0;
+    
+    ivec2 position() const {return mPosition;}
+    ivec2 size() const {return mSize;}
+    
+  protected:
+    ivec2 mPosition, mSize;
   };
   
-  struct Frame: GraphicResource
+  class Frame: public GraphicResource
   {
+  public:
     virtual ~Frame() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
     virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler) = 0;
     virtual void setSize(const ivec2 &size) = 0;
+    
+    ivec2 size() const {return mSize;}
+    
+  protected:
+    ivec2 mSize;
   };
   
   class Shader: public GraphicResource

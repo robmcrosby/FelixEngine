@@ -179,29 +179,6 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
   }
 }
 
-void GLGraphicSystem::clearTaskSlots()
-{
-  for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
-    itr->clear();
-}
-
-void GLGraphicSystem::loadTaskSlots()
-{
-  mTasks.sort();
-  for (list<GraphicTask>::iterator itr = mTasks.begin(); itr != mTasks.end(); ++itr)
-  {
-    if (itr->isViewTask())
-      mTaskSlots.at(0).push_back(*itr);
-    else
-    {
-      if (itr->mViewIndex >= (int)mTaskSlots.size())
-        mTaskSlots.resize(itr->mViewIndex+1);
-      mTaskSlots.at(itr->mViewIndex).push_back(*itr);
-    }
-  }
-  mTasks.clear();
-}
-
 void GLGraphicSystem::checkForUnloaded()
 {
   if (mCheckForUnloaded)

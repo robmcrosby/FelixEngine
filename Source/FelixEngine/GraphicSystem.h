@@ -41,15 +41,43 @@ namespace fx
     void addGraphicTask(const GraphicTask &task)
     {
       // TODO: make this work with multiple threads.
-      mTasks.push_back(task);
+      mTaskList.push_back(task);
     }
+    
+  protected:
+    typedef std::list<GraphicTask> TaskList;
+    typedef std::vector<GraphicTask> TaskSlot;
+    typedef std::vector<TaskSlot> TaskSlots;
+    
+    void clearTaskSlots()
+    {
+      for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
+        itr->clear();
+    }
+    
+    void loadTaskSlots()
+    {
+      mTaskList.sort();
+      for (TaskList::iterator itr = mTaskList.begin(); itr != mTaskList.end(); ++itr)
+      {
+        if (itr->isViewTask())
+          mTaskSlots.at(0).push_back(*itr);
+        else
+        {
+          if (itr->mViewIndex >= (int)mTaskSlots.size())
+            mTaskSlots.resize(itr->mViewIndex+1);
+          mTaskSlots.at(itr->mViewIndex).push_back(*itr);
+        }
+      }
+      mTaskList.clear();
+    }
+    
+    TaskList  mTaskList;
+    TaskSlots mTaskSlots;
     
   protected:
     bool addWindows(const XMLTree::Node *node);
     bool addWindow(const XMLTree::Node *node);
-    
-  protected:
-    std::list<GraphicTask> mTasks;
     
   private:
     std::map<std::string, Material*> mMaterials;

@@ -37,7 +37,6 @@ namespace fx
     void swapBuffers();
     
   private:
-    ivec2 mPos, mSize;
     std::string mTitle;
     SDL_Window *mSDLWindow;
     GLGraphicSystem *mGLSystem;

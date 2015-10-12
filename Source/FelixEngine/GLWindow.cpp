@@ -31,7 +31,7 @@ bool GLWindow::load()
   {
     // Get and check the SDL Window
     mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
-                                  mPos.x, mPos.y,
+                                  mPosition.x, mPosition.y,
                                   mSize.w, mSize.h,
                                   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     if (!mSDLWindow)
@@ -77,7 +77,7 @@ void GLWindow::setTitle(const std::string &title)
 
 void GLWindow::setPosition(const ivec2 &pos)
 {
-  mPos = pos;
+  mPosition = pos;
   if (mSDLWindow)
     SDL_SetWindowPosition(mSDLWindow, pos.x, pos.y);
 }

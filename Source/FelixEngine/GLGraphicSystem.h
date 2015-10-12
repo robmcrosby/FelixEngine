@@ -49,16 +49,11 @@ namespace fx
     SDL_GLContext getContext() {return mContext;}
     
     void loadOnNextUpdate() {mCheckForUnloaded = true;}
-  private:
-    typedef std::vector<GraphicTask> TaskSlot;
-    typedef std::vector<TaskSlot> TaskSlots;
     
+  private:
     void processTasks();
     void processTaskSlot(const TaskSlot &slot);
     void processTask(const GraphicTask &task);
-    
-    void clearTaskSlots();
-    void loadTaskSlots();
     
     void checkForUnloaded();
     bool setVersion(const XMLTree::Node *node);
@@ -71,8 +66,6 @@ namespace fx
     
     SDL_GLContext mContext;
     bool mCheckForUnloaded;
-    
-    TaskSlots mTaskSlots;
   };
 }
 
