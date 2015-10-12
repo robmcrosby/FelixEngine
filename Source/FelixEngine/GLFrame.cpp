@@ -15,7 +15,7 @@ using namespace fx;
 using namespace std;
 
 
-GLFrame::GLFrame(GLGraphicSystem *system): mGLSystem(system)
+GLFrame::GLFrame(GLGraphicSystem *system): mGLSystem(system), mGLWindow(0)
 {
 }
 

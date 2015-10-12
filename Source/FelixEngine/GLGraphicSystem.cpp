@@ -108,16 +108,98 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 
 void GLGraphicSystem::update()
 {
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-  {
-    itr->second->setActive();
-    
-    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    itr->second->swapBuffers();
-  }
+  loadTaskSlots();
+  
+  
+//  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+//  {
+//    itr->second->setActive();
+//    
+//    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    
+//    itr->second->swapBuffers();
+//  }
   checkForUnloaded();
+}
+
+void GLGraphicSystem::processTasks()
+{
+  clearTaskSlots();
+  loadTaskSlots();
+  processTaskSlot(mTaskSlots.at(0));
+}
+
+void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+{
+  for (TaskSlot::const_iterator itr = slot.begin(); itr != slot.end(); ++itr)
+    processTask(*itr);
+}
+
+void GLGraphicSystem::processTask(const GraphicTask &task)
+{
+  if (task.isViewTask() && task.mViewIndex < (int)mTaskSlots.size())
+  {
+    const TaskSlot &slot = mTaskSlots.at(task.mViewIndex);
+    if (slot.size())
+    {
+      const GLFrame *frame = static_cast<const GLFrame*>(task.mFrame);
+      frame->use();
+      if (task.isClearTask())
+        frame->clear(task.mClearState);
+      processTaskSlot(slot);
+    }
+  }
+  else if (task.isDrawTask())
+  {
+    const GLFrame  *frame  = static_cast<const GLFrame*>(task.mFrame);
+    const GLShader *shader = static_cast<const GLShader*>(task.mShader);
+    const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mMesh);
+    
+    // Set the state for the Frame
+    frame->use();
+    if (task.isClearTask())
+      frame->clear(task.mClearState);
+    frame->setDepthState(task.mDepthState);
+    frame->setBlendState(task.mBlendState);
+    
+    // Set the state for the Shader
+    shader->use();
+    if (task.mLocalUniforms)
+      shader->applyUniformMap(task.mLocalUniforms);
+    if (task.mViewUniforms)
+      shader->applyUniformMap(task.mViewUniforms);
+    if (task.mMaterialUniforms)
+      shader->applyUniformMap(task.mMaterialUniforms);
+    if (task.mTextureMap)
+      shader->applyTextureMap(task.mTextureMap);
+    
+    // Draw the Mesh
+    mesh->draw(shader, task.mInstances, task.mSubMesh);
+  }
+}
+
+void GLGraphicSystem::clearTaskSlots()
+{
+  for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
+    itr->clear();
+}
+
+void GLGraphicSystem::loadTaskSlots()
+{
+  mTasks.sort();
+  for (list<GraphicTask>::iterator itr = mTasks.begin(); itr != mTasks.end(); ++itr)
+  {
+    if (itr->isViewTask())
+      mTaskSlots.at(0).push_back(*itr);
+    else
+    {
+      if (itr->mViewIndex >= (int)mTaskSlots.size())
+        mTaskSlots.resize(itr->mViewIndex+1);
+      mTaskSlots.at(itr->mViewIndex).push_back(*itr);
+    }
+  }
+  mTasks.clear();
 }
 
 void GLGraphicSystem::checkForUnloaded()

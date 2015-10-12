@@ -11,6 +11,7 @@
 
 #include "System.h"
 #include "GraphicResources.h"
+#include "GraphicTask.h"
 
 
 namespace fx
@@ -37,9 +38,18 @@ namespace fx
     GraphicResource* getResource(const std::string &type, const std::string &name);
     InternalUniformMap* createUniformMap();
     
+    void addGraphicTask(const GraphicTask &task)
+    {
+      // TODO: make this work with multiple threads.
+      mTasks.push_back(task);
+    }
+    
   protected:
     bool addWindows(const XMLTree::Node *node);
     bool addWindow(const XMLTree::Node *node);
+    
+  protected:
+    std::list<GraphicTask> mTasks;
     
   private:
     std::map<std::string, Material*> mMaterials;

@@ -21,17 +21,6 @@ namespace fx
    */
   class GLMesh: public Mesh
   {
-  public:
-    GLMesh(GLGraphicSystem *system);
-    virtual ~GLMesh();
-    
-    virtual void reload();
-    
-    bool load();
-    void draw(const GLShader *shader, int instances, int index) const
-    {
-    }
-    
   private:
     struct GLRange
     {
@@ -46,6 +35,58 @@ namespace fx
       GLuint components, count, bufferId;
     };
     typedef std::map<std::string, GLBuffer> GLBufferMap;
+    
+  public:
+    GLMesh(GLGraphicSystem *system);
+    virtual ~GLMesh();
+    
+    virtual void reload();
+    
+    bool load();
+    void draw(const GLShader *shader, int instances, int index) const
+    {
+      if (shader && index < (int)mSubMeshes.size())
+      {
+        const GLRange &subMesh = mSubMeshes.at(index);
+        for (GLBufferMap::const_iterator itr = mVertexBuffers.begin(); itr != mVertexBuffers.end(); ++itr)
+        {
+          GLint index = shader->getAttributeIndex(itr->first);
+          if (index >= 0)
+          {
+            glBindBuffer(GL_ARRAY_BUFFER, itr->second.bufferId);
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(index, itr->second.components, GL_FLOAT, GL_FALSE, 0, 0);
+          }
+        }
+        if (mIndexBuffer)
+        {
+          // TODO: get instancing working
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+          GLsizei size = (GLsizei)subMesh.end;
+          GLvoid* ptr = (GLvoid*)(subMesh.start*sizeof(GLuint));
+          glDrawElements(mPrimitiveType, size, GL_UNSIGNED_INT, ptr);
+          
+//          #ifdef GL_ES_VERSION_3_0
+//          glDrawElementsInstanced(mPrimitiveType, mNumIndices, GL_UNSIGNED_INT, 0, (GLsizei)instances);
+//          #else
+//          glDrawElementsInstancedEXT(mPrimitiveType, mNumIndices, GL_UNSIGNED_INT, 0, (GLsizei)instances);
+//          #endif
+        }
+        else
+        {
+          // TODO: get instancing working
+          GLint first = (GLint)subMesh.start;
+          GLsizei count = (GLsizei)(subMesh.end - subMesh.start);
+          glDrawArrays(mPrimitiveType, first, count);
+          
+//          #ifdef GL_ES_VERSION_3_0
+//          glDrawArraysInstanced(mPrimitiveType, 0, mNumVertices, (GLsizei)instances);
+//          #else
+//          glDrawArraysInstancedEXT(mPrimitiveType, 0, mNumVertices, (GLsizei)instances);
+//          #endif
+        }
+      }
+    }
     
   private:
     void clearBuffers();
