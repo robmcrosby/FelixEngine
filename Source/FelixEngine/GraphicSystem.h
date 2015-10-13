@@ -61,9 +61,9 @@ namespace fx
           mTaskSlots.at(0).push_back(*itr);
         else
         {
-          if (itr->mViewIndex >= (int)mTaskSlots.size())
-            mTaskSlots.resize(itr->mViewIndex+1);
-          mTaskSlots.at(itr->mViewIndex).push_back(*itr);
+          if (itr->viewIndex >= (int)mTaskSlots.size())
+            mTaskSlots.resize(itr->viewIndex+1);
+          mTaskSlots.at(itr->viewIndex).push_back(*itr);
         }
       }
       mTaskList.clear();

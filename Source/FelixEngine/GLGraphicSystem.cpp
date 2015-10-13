@@ -145,42 +145,42 @@ void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
 
 void GLGraphicSystem::processTask(const GraphicTask &task)
 {
-  if (task.isViewTask() && task.mViewIndex < (int)mTaskSlots.size())
+  if (task.isViewTask() && task.viewIndex < (int)mTaskSlots.size())
   {
-    const TaskSlot &slot = mTaskSlots.at(task.mViewIndex);
+    const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
     if (slot.size())
     {
-      const GLFrame *frame = static_cast<const GLFrame*>(task.mFrame);
+      const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
       frame->use();
       if (task.isClearTask())
-        frame->clear(task.mClearState);
+        frame->clear(task.clearState);
       processTaskSlot(slot);
     }
   }
   else if (task.isDrawTask())
   {
-    const GLFrame  *frame  = static_cast<const GLFrame*>(task.mFrame);
-    const GLShader *shader = static_cast<const GLShader*>(task.mShader);
-    const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mMesh);
+    const GLFrame  *frame  = static_cast<const GLFrame*>(task.frame);
+    const GLShader *shader = static_cast<const GLShader*>(task.shader);
+    const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mesh);
     
     // Set the state for the Frame
     frame->use();
     if (task.isClearTask())
-      frame->clear(task.mClearState);
-    frame->setDepthState(task.mDepthState);
-    frame->setBlendState(task.mBlendState);
+      frame->clear(task.clearState);
+    frame->setDepthState(task.depthState);
+    frame->setBlendState(task.blendState);
     
     // Set the state for the Shader
     shader->use();
-    if (task.mViewUniforms)
-      static_cast<const GLUniformMap*>(task.mViewUniforms)->applyToShader(shader);
-    if (task.mMaterialUniforms)
-      static_cast<const GLUniformMap*>(task.mMaterialUniforms)->applyToShader(shader);
-    if (task.mLocalUniforms)
-      static_cast<const GLUniformMap*>(task.mLocalUniforms)->applyToShader(shader);
+    if (task.viewUniforms)
+      static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
+    if (task.materialUniforms)
+      static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
+    if (task.localUniforms)
+      static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
     
     // Draw the Mesh
-    mesh->draw(shader, task.mInstances, task.mSubMesh);
+    mesh->draw(shader, task.instances, task.subMesh);
   }
 }
 

@@ -48,21 +48,21 @@ namespace fx
     {
       GLbitfield clearFlags = 0;
       // TODO: update this to clear individual attachments.
-      if (clearState.mClearFlags & CLEAR_COLOR)
+      if (clearState.flags & CLEAR_COLOR)
       {
-        RGBAf color = clearState.mClearColors[0];
+        RGBAf color = clearState.colors[0];
         glClearColor(color.red, color.green, color.blue, color.alpha);
         clearFlags = GL_COLOR_BUFFER_BIT;
       }
-      if (clearState.mClearFlags & CLEAR_DEPTH)
+      if (clearState.flags & CLEAR_DEPTH)
       {
         glDepthMask(GL_TRUE);
-        glClearDepth(clearState.mClearDepth);
+        glClearDepth(clearState.depth);
         clearFlags |= GL_DEPTH_BUFFER_BIT;
       }
-      if (clearState.mClearFlags & CLEAR_STENCEIL)
+      if (clearState.flags & CLEAR_STENCEIL)
       {
-        glClearStencil(clearState.mClearStenceil);
+        glClearStencil(clearState.stenceil);
         clearFlags |= GL_STENCIL_BUFFER_BIT;
       }
       if (clearFlags)

@@ -38,10 +38,10 @@ namespace fx
     void setClearState(const ClearState &state) {mClearState = state;}
     ClearState clearState() const {return mClearState;}
     
-    UniformMap& uniforms() {return mUniforms;}
-    const UniformMap& uniforms() const {return mUniforms;}
+    UniformMap& uniformMap() {return mUniformMap;}
+    const UniformMap& uniformMap() const {return mUniformMap;}
     
-    Variant& operator[](const std::string &key) {return mUniforms[key];}
+    Uniform& operator[](const std::string &key) {return mUniformMap[key];}
     
     int index() const {return mIndex;}
     
@@ -50,12 +50,22 @@ namespace fx
       if (mSystem)
       {
         GraphicTask task;
-        task.mFrame = mFrame;
-        task.mLayer = mLayer;
-        task.mClearState = mClearState;
-        task.mViewIndex = mIndex;
+        task.frame = mFrame;
+        task.layer = mLayer;
+        task.clearState = mClearState;
+        task.viewIndex = mIndex;
         mSystem->addGraphicTask(task);
       }
+    }
+    
+    bool applyToTask(GraphicTask &task) const
+    {
+      if (!mFrame || mIndex < 0)
+        return false;
+      task.frame = mFrame;
+      task.viewIndex = mIndex;
+      task.viewUniforms = mUniformMap.getInternalMap();
+      return true;
     }
     
     bool setToXml(const XMLTree::Node &node)
@@ -84,7 +94,7 @@ namespace fx
     int mIndex, mLayer;
     Frame *mFrame;
     ClearState mClearState;
-    UniformMap mUniforms;
+    UniformMap mUniformMap;
     GraphicSystem *mSystem;
   };
 }

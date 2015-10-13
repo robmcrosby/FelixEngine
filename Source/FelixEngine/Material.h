@@ -28,15 +28,15 @@ namespace fx
       if (mSystem)
         setShader(mSystem->getShader(name));
     }
-    
-    Shader* shader() {return mShader;}
     const Shader* shader() const {return mShader;}
     
-    UniformMap& uniformMap() {return mUniformMap;}
     //TextureMap& textureMap() {return mTextureMap;}
-    
-    const UniformMap& uniforms() const {return mUniformMap;}
     //const TextureMap& textures() const {return mTextureMap;}
+    
+    UniformMap& uniformMap() {return mUniformMap;}
+    const UniformMap& uniforms() const {return mUniformMap;}
+    
+    Uniform& operator[](const std::string &key) {return mUniformMap[key];}
     
     bool setToXml(const XMLTree::Node &node)
     {
@@ -51,11 +51,20 @@ namespace fx
 
       return success;
     }
+    bool applyToTask(GraphicTask &task) const
+    {
+      if (!mShader)
+        return false;
+      task.shader = mShader;
+      //task.textureMap = &mTextureMap;
+      task.materialUniforms = mUniformMap.getInternalMap();
+      return true;
+    }
     
   private:
     Shader *mShader;
-    UniformMap mUniformMap;
     //TextureMap mTextureMap;
+    UniformMap mUniformMap;
     GraphicSystem *mSystem;
   };
 }
