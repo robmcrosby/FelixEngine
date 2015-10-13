@@ -7,13 +7,15 @@
 //
 
 #include "FelixEngine.h"
+#include "GraphicSystem.h"
 #include "System.h"
+#include "Scene.h"
 #include "Platform.h"
 #include <SDL2/SDL.h>
 
+
 using namespace fx;
 using namespace std;
-
 
 FelixEngine* FelixEngine::Instance()
 {
@@ -21,32 +23,91 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
+System* FelixEngine::GetSystem(SYSTEM_TYPE type)
+{
+  return Instance()->getSystem(type);
+}
+
+GraphicSystem* FelixEngine::GetGraphicSystem()
+{
+  return dynamic_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
+}
+
+Scene* FelixEngine::GetScene(const std::string &name)
+{
+  return Instance()->getScene(name);
+}
+
 FelixEngine::FelixEngine()
 {
-  cout << "Created Felix Engine" << endl;
 }
 
 FelixEngine::~FelixEngine()
 {
-  
+  clearScenes();
+  clearSystems();
 }
 
 bool FelixEngine::init(const std::string &settingsFile)
 {
+  bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(Platform::GetResourcePath()+settingsFile))
+  if (tree.loadFile(Platform::GetResourcePath()+settingsFile) && !tree.isEmpty())
   {
-    const XMLTree::Node &settingsNode = **tree.begin();
-    if (settingsNode.hasSubNode("Systems"))
-      return loadSystems(*settingsNode.subNode("Systems"));
+    const XMLTree::Node *settingsNode = *tree.begin();
+    if (settingsNode->hasSubNode("Systems"))
+      success = loadSystems(*settingsNode->subNode("Systems"));
   }
   
-  return false;
+  return success;
 }
 
-bool FelixEngine::loadScene(const std::string &sceneFile)
+bool FelixEngine::loadScene(const string &sceneFile)
 {
-  return true;
+  bool success = false;
+  XMLTree::XMLTree tree;
+  if (tree.loadFile(Platform::GetResourcePath()+sceneFile) && !tree.isEmpty())
+  {
+    Scene *scene = new Scene();
+    success = scene->setToXml(*tree.begin()) && scene->init();
+    if (success)
+      addScene(scene);
+    else
+      delete scene;
+  }
+  return success;
+}
+
+void FelixEngine::addScene(Scene *scene)
+{
+  if (scene)
+  {
+    Scene *prev = getScene(scene->name());
+    if (prev && prev != scene)
+      delete prev;
+    mScenes[scene->name()] = scene;
+  }
+}
+
+void FelixEngine::clearScenes()
+{
+  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
+    delete itr->second;
+  mScenes.clear();
+}
+
+void FelixEngine::deleteScene(const std::string &name)
+{
+  if (mScenes.count(name))
+  {
+    delete mScenes.at(name);
+    mScenes.erase(name);
+  }
+}
+
+Scene* FelixEngine::getScene(const std::string &name)
+{
+  return mScenes.count(name) ? mScenes.at(name) : nullptr;
 }
 
 int FelixEngine::runLoop()
@@ -107,14 +168,22 @@ void FelixEngine::addSystem(System *system)
   }
 }
 
-bool FelixEngine::loasScene(const XMLTree::Node &node)
+void FelixEngine::clearSystems()
 {
-  bool success = true;
-  return success;
+  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
+    delete itr->second;
+  mSystems.clear();
+}
+
+System* FelixEngine::getSystem(SYSTEM_TYPE type)
+{
+  return mSystems.count(type) ? mSystems.at(type) : nullptr;
 }
 
 void FelixEngine::updateFrame()
 {
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
+    itr->second->update();
+  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
     itr->second->update();
 }

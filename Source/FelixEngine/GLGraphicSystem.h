@@ -18,6 +18,10 @@
 namespace fx
 {
   class GLWindow;
+  class GLFrame;
+  class GLShader;
+  class GLMesh;
+  class GLTexture;
   
   /**
    *
@@ -34,16 +38,36 @@ namespace fx
     virtual bool init();
     
     virtual void setVersion(int major, int minor);
+    
     virtual Window* getWindow(const std::string &name);
+    virtual Frame* getFrame(const std::string &name);
+    virtual Shader* getShader(const std::string &name);
+    virtual Mesh* getMesh(const std::string &name);
+    virtual Texture* getTexture(const std::string &name);
+    
+    virtual InternalUniformMap* createUniformMap();
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     
+    void loadOnNextUpdate() {mCheckForUnloaded = true;}
+    
   private:
+    void processTasks();
+    void processTaskSlot(const TaskSlot &slot);
+    void processTask(const GraphicTask &task);
+    
+    void checkForUnloaded();
     bool setVersion(const XMLTree::Node *node);
     
-    std::map<std::string, GLWindow*> mWindows;
+    std::map<std::string, GLWindow*>  mWindows;
+    std::map<std::string, GLFrame*>   mFrames;
+    std::map<std::string, GLShader*>  mShaders;
+    std::map<std::string, GLMesh*>    mMeshes;
+    std::map<std::string, GLTexture*> mTextures;
+    
     SDL_GLContext mContext;
+    bool mCheckForUnloaded;
   };
 }
 

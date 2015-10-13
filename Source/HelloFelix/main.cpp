@@ -22,5 +22,11 @@ int main( int argc, char* args[] )
     return 1;
   }
   
+  if (!engine->loadScene("Scene.xml"))
+  {
+    cerr << "Error Loading the Scene" << endl;
+    //return 1;
+  }
+  
   return engine->runLoop();
 }
