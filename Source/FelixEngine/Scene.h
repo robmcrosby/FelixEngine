@@ -22,7 +22,12 @@ namespace fx
   {
   public:
     Scene() {}
-    ~Scene() {clearObjects();}
+    ~Scene()
+    {
+      clearObjects();
+      clearViews();
+      clearMaterials();
+    }
     
     bool setToXml(const XMLTree::Node *node)
     {
@@ -92,6 +97,32 @@ namespace fx
       return nullptr;
     }
     
+    View* getView(const std::string &name)
+    {
+      if (!mViewMap.count(name))
+        mViewMap[name] = new View();
+      return mViewMap.at(name);
+    }
+    void clearViews()
+    {
+      for (std::map<std::string, View*>::iterator itr = mViewMap.begin(); itr != mViewMap.end(); ++itr)
+        delete itr->second;
+      mViewMap.clear();
+    }
+    
+    Material* getMaterial(const std::string &name)
+    {
+      if (!mMaterialMap.count(name))
+        mMaterialMap[name] = new Material();
+      return mMaterialMap.at(name);
+    }
+    void clearMaterials()
+    {
+      for (std::map<std::string, Material*>::iterator itr = mMaterialMap.begin(); itr != mMaterialMap.end(); ++itr)
+        delete itr->second;
+      mMaterialMap.clear();
+    }
+    
   private:
     Object* createObject(const XMLTree::Node *node)
     {
@@ -106,6 +137,9 @@ namespace fx
     
     std::string mName;
     std::list<Object*> mObjects;
+    
+    std::map<std::string, View*>     mViewMap;
+    std::map<std::string, Material*> mMaterialMap;
   };
 }
 
