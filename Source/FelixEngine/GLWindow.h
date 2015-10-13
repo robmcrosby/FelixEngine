@@ -17,13 +17,15 @@ class SDL_Window;
 
 namespace fx
 {
+  class GLFrame;
+  
   /**
    *
    */
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLGraphicSystem *system);
+    GLWindow(GLGraphicSystem *system, const std::string &name);
     virtual ~GLWindow();
     
     virtual void reload();
@@ -37,8 +39,9 @@ namespace fx
     void swapBuffers();
     
   private:
-    std::string mTitle;
+    std::string mName, mTitle;
     SDL_Window *mSDLWindow;
+    GLFrame    *mGLFrame;
     GLGraphicSystem *mGLSystem;
   };
 }

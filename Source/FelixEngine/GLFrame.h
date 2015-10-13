@@ -10,6 +10,7 @@
 #define GLFrame_h
 
 #include "GLGraphicSystem.h"
+#include "GLWindow.h"
 
 
 namespace fx
@@ -26,15 +27,21 @@ namespace fx
     
     virtual void reload();
     
-    virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler);
+    virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler);
     virtual void setSize(const ivec2 &size);
     
+    void setToWindow(GLWindow *window) {mGLWindow = window;}
     bool load();
     
     void use() const
     {
-      //glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-      //glViewport(0, 0, mSize.w, mSize.h);
+      if (mGLWindow)
+        mGLWindow->setActive();
+      else
+      {
+        //glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        //glViewport(0, 0, mSize.w, mSize.h);
+      }
     }
     
     void clear(const ClearState &clearState) const

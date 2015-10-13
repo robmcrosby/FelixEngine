@@ -38,7 +38,7 @@ GLGraphicSystem::~GLGraphicSystem()
 Window* GLGraphicSystem::getWindow(const std::string &name)
 {
   if (!mWindows.count(name))
-    mWindows[name] = new GLWindow(this);
+    mWindows[name] = new GLWindow(this, name);
   return mWindows[name];
 }
 

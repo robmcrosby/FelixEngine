@@ -8,6 +8,7 @@
 
 #include "GLWindow.h"
 #include "GLGraphicSystem.h"
+#include "GLFrame.h"
 #include <SDL2/SDL.h>
 
 
@@ -15,8 +16,10 @@ using namespace fx;
 using namespace std;
 
 
-GLWindow::GLWindow(GLGraphicSystem *system): mSDLWindow(0), mGLSystem(system)
+GLWindow::GLWindow(GLGraphicSystem *system, const std::string &name): mName(name), mSDLWindow(0), mGLSystem(system)
 {
+  mGLFrame = static_cast<GLFrame*>(system->getFrame(name));
+  mGLFrame->setToWindow(this);
 }
 
 GLWindow::~GLWindow()

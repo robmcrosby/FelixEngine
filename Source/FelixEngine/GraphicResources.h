@@ -12,20 +12,13 @@
 #include "VertexBufferMap.h"
 #include "XMLTree.h"
 #include "Vector.h"
+#include "Color.h"
 #include "Sampler.h"
 
 
 namespace fx
 {
   class GraphicSystem;
-  
-  enum BUFFER_TYPE {
-    BUFFER_RGBA,
-    BUFFER_FLOAT,
-    BUFFER_DEPTH32F,
-    BUFFER_STENCIL8,
-    BUFFER_NONE,
-  };
   
   enum SHADER_PART {
     SHADER_VERTEX = 0,
@@ -78,7 +71,7 @@ namespace fx
     virtual ~Frame() {}
     virtual bool setToXml(const XMLTree::Node *node);
     
-    virtual void addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler) = 0;
+    virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler) = 0;
     virtual void setSize(const ivec2 &size) = 0;
     
     ivec2 size() const {return mSize;}

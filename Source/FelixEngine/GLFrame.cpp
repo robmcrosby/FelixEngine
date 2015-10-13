@@ -39,7 +39,7 @@ bool GLFrame::load()
   return mLoaded;
 }
 
-void GLFrame::addBuffer(BUFFER_TYPE type, const std::string &name, const Sampler &sampler)
+void GLFrame::addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler)
 {
 }
 
