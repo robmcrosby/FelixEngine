@@ -3,9 +3,6 @@
   <Model name="Triangle">
     <RenderSlots>
       <Slot layer="0">
-        <ClearState>
-          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
-        </ClearState>
         <Mesh name="TriangleMesh" primitive="triangles">
           <Buffer attribute="Position" components="4">
             -0.5, -0.5, 0.0, 1.0,
@@ -13,7 +10,11 @@
             0.0,  0.8, 0.0, 1.0
           </Buffer>
         </Mesh>
-        <View frame="MainWindow" index="0"/>
+        <View frame="MainWindow">
+          <ClearState>
+            <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+          </ClearState>
+        </View>
         <Material>
           <Shader name="ColorShader" type="GLSL">
             <Vertex>

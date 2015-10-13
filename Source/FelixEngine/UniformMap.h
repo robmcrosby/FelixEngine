@@ -55,7 +55,7 @@ namespace fx
     const_iterator begin() const {return mMap.begin();}
     const_iterator end()   const {return mMap.end();}
     
-    void update()
+    void update() const
     {
       if (mInternalMap)
         mInternalMap->update(mMap);

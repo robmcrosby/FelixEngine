@@ -50,7 +50,7 @@ bool RenderSlots::init()
 void RenderSlots::update()
 {
   for (iterator itr = begin(); itr != end(); ++itr)
-    (*itr)->render();
+    (*itr)->update();
 }
 
 void RenderSlots::addSlot()
@@ -140,6 +140,7 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
     if (node->hasAttribute("instances"))
       setInstances(node->attributeAsInt("instances"));
     
+    // Set the States
     if (node->hasSubNode("DepthState"))
       success &= mDepthState.setToXml(*node->subNode("DepthState"));
     if (node->hasSubNode("BlendState"))
@@ -147,30 +148,35 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
     if (node->hasSubNode("ClearState"))
       success &= mClearState.setToXml(*node->subNode("ClearState"));
     
+    // Set the Mesh
     if (node->hasAttribute("mesh"))
       setMesh(node->attribute("mesh"));
     else if (node->hasSubNode("Mesh"))
       success &= setMesh(*node->subNode("Mesh"));
     
+    // Set the View
     if (node->hasAttribute("view"))
       setView(node->attribute("view"));
     else if (node->hasSubNode("View"))
       setView(*node->subNode("View"));
     
+    // Set the Material
     if (node->hasAttribute("material"))
       setMaterial(node->attribute("material"));
     else if (node->hasSubNode("Material"))
       setMaterial(*node->subNode("Material"));
   }
-  
   return success;
 }
 
-void RenderSlot::render() const
+void RenderSlot::update() const
 {
   GraphicTask task;
   if (mSystem && applyToTask(task))
     mSystem->addGraphicTask(task);
+  
+  mView.update();
+  mMaterial.update();
 }
 
 bool RenderSlot::applyToTask(GraphicTask &task) const

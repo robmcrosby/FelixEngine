@@ -57,14 +57,14 @@ namespace fx
       mTaskList.sort();
       for (TaskList::iterator itr = mTaskList.begin(); itr != mTaskList.end(); ++itr)
       {
-//        if (itr->isViewTask())
-//          mTaskSlots.at(0).push_back(*itr);
-//        else
-//        {
+        if (itr->isViewTask())
+          mTaskSlots.at(0).push_back(*itr);
+        else
+        {
           if (itr->viewIndex >= (int)mTaskSlots.size())
             mTaskSlots.resize(itr->viewIndex+1);
           mTaskSlots.at(itr->viewIndex).push_back(*itr);
-//        }
+        }
       }
       mTaskList.clear();
     }

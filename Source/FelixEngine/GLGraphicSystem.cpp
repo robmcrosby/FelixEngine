@@ -111,19 +111,8 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 void GLGraphicSystem::update()
 {
   processTasks();
-  
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
-  
-//  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-//  {
-//    itr->second->setActive();
-//    
-//    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    
-//    itr->second->swapBuffers();
-//  }
   checkForUnloaded();
 }
 
