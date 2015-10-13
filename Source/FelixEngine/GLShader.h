@@ -33,10 +33,11 @@ namespace fx
     void use() const
     {
       glUseProgram(mProgramId);
-      for (int i = 0; i < mNumTextureLocs; ++i)
-        glUniform1i(mTextureLocs[i], i);
+      //for (int i = 0; i < mNumTextureLocs; ++i)
+      //  glUniform1i(mTextureLocs[i], i);
     }
     GLint getAttributeIndex(const std::string &name) const {return glGetAttribLocation(mProgramId, name.c_str());}
+    GLint getUniformLocation(const std::string &name) const {return glGetUniformLocation(mProgramId, name.c_str());}
     
     void applyTexture(int index, const GLTexture *texture, const Sampler &sampler) const
     {

@@ -33,7 +33,7 @@ namespace fx
   private:
     void applyUniformToShader(const std::string &name, const Uniform &uniform, const GLShader *shader) const
     {
-      GLint loc = shader->getAttributeIndex(name);
+      GLint loc = shader->getUniformLocation(name);
       if (loc != -1)
       {
         switch (uniform.type())

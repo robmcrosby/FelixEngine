@@ -1,23 +1,30 @@
 <?xml version="1.0"?>
 <Scene name="MainScene">
-  <Camera name="MainCamera">
-    <Transform>
-      <Position>0.0, 0.0, 4.0</Position>
-    </Transform>
-    <Projection type="frustum" left="-1.0" right="1.0" bottom="-1.0" top="1.0" near="1.0" far="100.0" aspect="auto"/>
-    <RenderSlots>
-      <Slot layer="0" view="MainView"/>
-    </RenderSlots>
-  </Camera>
   <Model name="Triangle">
-    <Transform>
-      <Position>0.0, 0.0, 0.0</Position>
-    </Transform>
     <RenderSlots>
-      <Slot layer="0" view="MainView">
-        <Mesh name="TriangleMesh"/>
-        <DepthState write="true" function="less"/>
-        <Material shader="ColorShader">
+      <Slot layer="0">
+        <ClearState>
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+        <Mesh name="TriangleMesh" primitive="triangles">
+          <Buffer attribute="Position" components="4">
+            -0.5, -0.5, 0.0, 1.0,
+            0.5, -0.5, 0.0, 1.0,
+            0.0,  0.8, 0.0, 1.0
+          </Buffer>
+        </Mesh>
+        <View frame="MainWindow" index="0"/>
+        <Material>
+          <Shader name="ColorShader" type="GLSL">
+            <Vertex>
+              attribute vec4 Position;
+              void main(void) {gl_Position = Position;}
+            </Vertex>
+            <Fragment>
+              uniform vec4 Color;
+              void main(void) {gl_FragColor = Color;}
+            </Fragment>
+          </Shader>
           <UniformMap>
             <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
           </UniformMap>
@@ -25,30 +32,4 @@
       </Slot>
     </RenderSlots>
   </Model>
-  <Resources>
-    <Graphics>
-      <Mesh name="TriangleMesh" primitive="triangles">
-        <Buffer attribute="Position" components="4">
-          -0.5, -0.5, 0.0, 1.0,
-          0.5, -0.5, 0.0, 1.0,
-          0.0,  0.8, 0.0, 1.0
-        </Buffer>
-      </Mesh>
-      <Shader name="ColorShader" type="GLSL">
-        <Vertex>
-          attribute vec4 Position;
-          void main(void) {gl_Position = Position;}
-        </Vertex>
-        <Fragment>
-          uniform vec4 Color;
-          void main(void) {gl_FragColor = Color;}
-        </Fragment>
-      </Shader>
-      <View name="MainView" frame="MainWindow" layer="1" index="2">
-        <ClearState depth="1.0f">
-          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
-        </ClearState>
-      </View>
-    </Graphics>
-  </Resources>
 </Scene>

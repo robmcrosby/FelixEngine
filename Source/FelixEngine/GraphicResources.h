@@ -69,6 +69,8 @@ namespace fx
   {
   public:
     virtual ~Frame() {}
+    
+    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
     virtual bool setToXml(const XMLTree::Node *node);
     
     virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler) = 0;
@@ -85,6 +87,8 @@ namespace fx
   public:
     Shader() {clearParts();}
     virtual ~Shader() {}
+    
+    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
     virtual bool setToXml(const XMLTree::Node *node);
     
     void clearParts();
@@ -103,6 +107,8 @@ namespace fx
   {
   public:
     virtual ~Mesh() {}
+    
+    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
     virtual bool setToXml(const XMLTree::Node *node);
     
     VertexBufferMap& getVertexBufferMap() {return mBufferMap;}

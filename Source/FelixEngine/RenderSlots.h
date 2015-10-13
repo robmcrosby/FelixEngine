@@ -11,6 +11,7 @@
 
 #include "Component.h"
 #include "UniformMap.h"
+#include "View.h"
 #include "Material.h"
 
 namespace fx
@@ -25,6 +26,8 @@ namespace fx
     ~RenderSlot();
     
     bool setToXml(const XMLTree::Node *node);
+    
+    void render() const;
     bool applyToTask(GraphicTask &task) const;
     
     void setVisible() {mVisible = true;}
@@ -49,16 +52,21 @@ namespace fx
     BlendState& blendState() {return mBlendState;}
     const BlendState& blendState() const {return mBlendState;}
     
+    ClearState& clearState() {return mClearState;}
+    const ClearState& clearState() const {return mClearState;}
+    
+    bool setMesh(const XMLTree::Node &node);
+    bool setView(const XMLTree::Node &node);
+    bool setMaterial(const XMLTree::Node &node);
+    
     void setMesh(const std::string &name);
     void setMesh(Mesh *mesh) {mMesh = mesh;}
     Mesh* mesh() const {return mMesh;}
     
     void setView(const std::string &name);
-    void setView(View *view) {mView = view;}
-    View* view() const {return mView;}
-    
-    Material& material() {return mMaterial;}
-    const Material& material() const {return mMaterial;}
+    void setView(View *view) {mViewPtr = view;}
+    void setToInternalView() {mViewPtr = &mView;}
+    View* viewPointer() const {return mViewPtr;}
     
     void setMaterial(const std::string &name);
     void setMaterial(Material *material) {mMaterialPtr = material;}
@@ -73,9 +81,10 @@ namespace fx
     int mLayer, mSubMesh, mViewIndex, mInstances;
     DepthState mDepthState;
     BlendState mBlendState;
+    ClearState mClearState;
     
     Mesh *mMesh;
-    View *mView;
+    View mView, *mViewPtr;
     Material mMaterial, *mMaterialPtr;
     
     UniformMap *mUniformMapPtr;
@@ -95,9 +104,23 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    virtual void update();
+    
+  public:
+    typedef std::vector<RenderSlot*>::const_iterator iterator;
+    iterator begin() const {return mSlots.begin();}
+    iterator end() const {return mSlots.end();}
+    
+    RenderSlot* operator[](int i) const {return i < (int)mSlots.size() ? mSlots[i] : nullptr;}
+    RenderSlot* back() const {return mSlots.size() ? mSlots.back() : nullptr;}
+    RenderSlot* front() const {return mSlots.size() ? mSlots.front() : nullptr;}
+    
+    void addSlot();
+    void clear();
     
   private:
     GraphicSystem *mGraphicSystem;
+    std::vector<RenderSlot*> mSlots;
   };
 }
 

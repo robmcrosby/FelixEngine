@@ -78,6 +78,7 @@ namespace fx
           success = false;
         }
       }
+      update();
       return success;
     }
     

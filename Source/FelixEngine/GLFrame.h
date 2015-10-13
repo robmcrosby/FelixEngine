@@ -36,7 +36,10 @@ namespace fx
     void use() const
     {
       if (mGLWindow)
+      {
         mGLWindow->setActive();
+        glViewport(0, 0, 640, 400);
+      }
       else
       {
         //glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);

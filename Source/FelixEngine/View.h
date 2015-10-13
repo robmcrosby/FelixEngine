@@ -22,6 +22,17 @@ namespace fx
     View(): mIndex(1), mLayer(0), mFrame(0), mSystem(FelixEngine::GetGraphicSystem()) {}
     ~View() {}
     
+    bool setFrame(const XMLTree::Node &node)
+    {
+      bool success = false;
+      if (node.hasAttribute("name"))
+      {
+        setFrame(node.attribute("name"));
+        success = mFrame->setToXml(node);
+      }
+      return success;
+    }
+    
     void setFrame(Frame *frame) {mFrame = frame;}
     void setFrame(const std::string &name)
     {
@@ -32,18 +43,19 @@ namespace fx
     Frame* frame() {return mFrame;}
     const Frame* frame() const {return mFrame;}
     
-    int layer() const {return mLayer;}
-    void setLayer(int layer) {mLayer = layer;}
+    void setIndex(int index) {mIndex = index;}
+    int index() const {return mIndex;}
     
-    void setClearState(const ClearState &state) {mClearState = state;}
-    ClearState clearState() const {return mClearState;}
+    void setLayer(int layer) {mLayer = layer;}
+    int layer() const {return mLayer;}
+    
+    ClearState& clearState() {return mClearState;}
+    const ClearState& clearState() const {return mClearState;}
     
     UniformMap& uniformMap() {return mUniformMap;}
     const UniformMap& uniformMap() const {return mUniformMap;}
     
     Uniform& operator[](const std::string &key) {return mUniformMap[key];}
-    
-    int index() const {return mIndex;}
     
     void render() const
     {
@@ -68,24 +80,24 @@ namespace fx
       return true;
     }
     
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
-      bool success = mIndex = node.attributeAsInt("index");
+      bool success = true;
+      if (node.hasAttribute("index"))
+        setIndex(node.attributeAsInt("index"));
+      if (node.hasAttribute("layer"))
+        setLayer(node.attributeAsInt("layer"));
       
-      std::string frame = node.attribute("frame");
-      if (frame == "")
-      {
-        std::cerr << "ClearState Node missing frame attribute" << std::endl;
-        success = false;
-      }
-      else
-        setFrame(frame);
+      if (node.hasAttribute("frame"))
+        setFrame(node.attribute("frame"));
+      else if (node.hasSubNode("Frame"))
+        success &= setFrame(*node.subNode("Frame"));
       
       if (node.hasSubNode("ClearState"))
         success &= mClearState.setToXml(*node.subNode("ClearState"));
-      
-      if (node.hasAttribute("layer"))
-        setLayer(node.attributeAsInt("layer"));
+      if (node.hasSubNode("UniformMap"))
+        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
       
       return success;
     }

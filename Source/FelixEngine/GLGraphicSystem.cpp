@@ -110,8 +110,10 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 
 void GLGraphicSystem::update()
 {
-  loadTaskSlots();
+  processTasks();
   
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->swapBuffers();
   
 //  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
 //  {
@@ -134,7 +136,9 @@ void GLGraphicSystem::processTasks()
 {
   clearTaskSlots();
   loadTaskSlots();
-  processTaskSlot(mTaskSlots.at(0));
+  
+  if (mTaskSlots.size())
+    processTaskSlot(mTaskSlots.at(0));
 }
 
 void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
