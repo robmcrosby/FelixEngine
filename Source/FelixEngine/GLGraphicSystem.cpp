@@ -8,6 +8,8 @@
 
 #include "GLGraphicSystem.h"
 
+#include "GLUniformMap.h"
+
 #include "GLWindow.h"
 #include "GLFrame.h"
 #include "GLShader.h"
@@ -123,6 +125,11 @@ void GLGraphicSystem::update()
   checkForUnloaded();
 }
 
+InternalUniformMap* GLGraphicSystem::createUniformMap()
+{
+  return new GLUniformMap();
+}
+
 void GLGraphicSystem::processTasks()
 {
   clearTaskSlots();
@@ -165,14 +172,12 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
     
     // Set the state for the Shader
     shader->use();
-    if (task.mLocalUniforms)
-      shader->applyUniformMap(task.mLocalUniforms);
     if (task.mViewUniforms)
-      shader->applyUniformMap(task.mViewUniforms);
+      static_cast<const GLUniformMap*>(task.mViewUniforms)->applyToShader(shader);
     if (task.mMaterialUniforms)
-      shader->applyUniformMap(task.mMaterialUniforms);
-    if (task.mTextureMap)
-      shader->applyTextureMap(task.mTextureMap);
+      static_cast<const GLUniformMap*>(task.mMaterialUniforms)->applyToShader(shader);
+    if (task.mLocalUniforms)
+      static_cast<const GLUniformMap*>(task.mLocalUniforms)->applyToShader(shader);
     
     // Draw the Mesh
     mesh->draw(shader, task.mInstances, task.mSubMesh);

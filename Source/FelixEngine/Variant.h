@@ -115,6 +115,8 @@ namespace fx
   public:
     Variant(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): mType(VAR_UNKNOWN) {resize(type, size);}
     Variant(const std::string &type, const std::string &str): mType(VAR_UNKNOWN) {parse(type, str);}
+    Variant(const XMLTree::Node *node): mType(VAR_UNKNOWN) {setToXml(node);}
+    Variant(const XMLTree::Node &node): mType(VAR_UNKNOWN) {setToXml(node);}
     
     void resize(size_t size) {mData.resize(mTypeSize * size);}
     void resize(VAR_TYPE type, size_t size)
@@ -158,6 +160,9 @@ namespace fx
     Variant& operator=(const mat2 &value) {setValues(&value); return *this;}
     Variant& operator=(const mat3 &value) {setValues(&value); return *this;}
     Variant& operator=(const mat4 &value) {setValues(&value); return *this;}
+    
+    Variant& operator=(const XMLTree::Node *node) {setToXml(node); return *this;}
+    Variant& operator=(const XMLTree::Node &node) {setToXml(node); return *this;}
     
     VAR_TYPE type() const {return mType;}
     bool isIntType() const {return mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4;}
@@ -226,6 +231,13 @@ namespace fx
     operator mat2() const {return mat2Value();}
     operator mat3() const {return mat3Value();}
     operator mat4() const {return mat4Value();}
+    
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    bool setToXml(const XMLTree::Node &node)
+    {
+      // TODO: Update to handle arrays.
+      return parse(node.attribute("type"), node.contents());
+    }
     
     bool parse(const std::string &type, const std::string &str) {return parse(GetVariantType(type), str);}
     bool parse(VAR_TYPE type, const std::string &str)

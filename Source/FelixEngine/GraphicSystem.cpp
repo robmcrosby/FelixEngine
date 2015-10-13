@@ -59,9 +59,3 @@ GraphicResource* GraphicSystem::getResource(const std::string &type, const std::
   }
   return resource;
 }
-
-InternalUniformMap* GraphicSystem::createUniformMap()
-{
-  return nullptr;
-}
-

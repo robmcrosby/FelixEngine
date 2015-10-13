@@ -11,21 +11,19 @@
 
 #include "Variant.h"
 #include "FelixEngine.h"
+#include "GraphicSystem.h"
 #include "XMLTree.h"
 
 
 namespace fx
 {
-  class UniformMap;
-  
-  typedef Variant Uniform;
-  
   struct InternalUniformMap
   {
     virtual ~InternalUniformMap() {}
     virtual void update(const VariantMap &map) = 0;
   };
   
+  typedef Variant Uniform;
   class UniformMap
   {
   public:
@@ -43,69 +41,55 @@ namespace fx
     
     UniformMap& operator=(const UniformMap &that)
     {
-      mNextMap = that.mNextMap;
-      mCurrMap = that.mCurrMap;
-      if (mInternalMap)
-        mInternalMap->update(mCurrMap);
+      mMap = that.mMap;
       return *this;
     }
     
-    Variant& operator[](const std::string &key) {return mNextMap[key];}
-    void erase(const std::string &key) {mNextMap.erase(key);}
-    void clear() {mNextMap.clear();}
+    Variant& operator[](const std::string &key) {return mMap[key];}
+    void erase(const std::string &key) {mMap.erase(key);}
+    void clear() {mMap.clear();}
     
-    iterator begin() {return mNextMap.begin();}
-    iterator end()   {return mNextMap.end();}
+    iterator begin() {return mMap.begin();}
+    iterator end()   {return mMap.end();}
     
-    const_iterator begin() const {return mCurrMap.begin();}
-    const_iterator end()   const {return mCurrMap.end();}
+    const_iterator begin() const {return mMap.begin();}
+    const_iterator end()   const {return mMap.end();}
     
-    void sync()
+    void update()
     {
-      mCurrMap = mNextMap;
       if (mInternalMap)
-        mInternalMap->update(mCurrMap);
+        mInternalMap->update(mMap);
     }
     
     InternalUniformMap* getInternalMap() const {return mInternalMap;}
     
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
-      Uniform uniform;
-      
-      if (node != "Uniforms")
-      {
-        std::cerr << "Invalid Uniforms Node" << std::endl;
-        return false;
-      }
-      
+      bool success = true;
       for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
       {
-        const XMLTree::Node &subNode = **itr;
-        std::string name = subNode.attribute("name");
-        if (subNode == "Uniform" && name != "")
+        if (*itr && (*itr)->hasAttribute("name") && (*itr)->hasAttribute("type"))
+          mMap[(*itr)->attribute("name")] = *itr;
+        else
         {
-          uniform.parse(subNode.attribute("type"), subNode.contents());
-          if (uniform.type() != VAR_UNKNOWN)
-            mNextMap[name] = uniform;
+          std::cerr << "Error reading Uniform Node: " << std::endl;
+          std::cerr << **itr;
+          success = false;
         }
       }
-      
-      sync();
-      return true;
+      return success;
     }
     
   protected:
     void setInternalMap()
     {
-      //GraphicSystem *system = FelixEngine::GetGraphicSystem();
-      //if (system)
-      //  mInternalMap = system->createUniformMap();
+      GraphicSystem *system = FelixEngine::GetGraphicSystem();
+      if (system)
+        mInternalMap = system->createUniformMap();
     }
     
-    VariantMap mNextMap;
-    VariantMap mCurrMap;
-    
+    VariantMap mMap;
     InternalUniformMap *mInternalMap;
   };
 }

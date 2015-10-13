@@ -45,6 +45,8 @@ namespace fx
     virtual Mesh* getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
+    virtual InternalUniformMap* createUniformMap();
+    
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     

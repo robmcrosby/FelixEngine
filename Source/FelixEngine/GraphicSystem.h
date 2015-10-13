@@ -33,7 +33,7 @@ namespace fx
     virtual Texture* getTexture(const std::string &name) = 0;
     
     GraphicResource* getResource(const std::string &type, const std::string &name);
-    InternalUniformMap* createUniformMap();
+    virtual InternalUniformMap* createUniformMap() = 0;
     
     void addGraphicTask(const GraphicTask &task)
     {

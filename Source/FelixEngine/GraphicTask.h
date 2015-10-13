@@ -17,8 +17,9 @@ namespace fx
   class Frame;
   class Shader;
   class Mesh;
-  class UniformMap;
   class TextureMap;
+  
+  class InternalUniformMap;
   
   
   enum COLOR_ATTACHMENTS
@@ -296,9 +297,9 @@ namespace fx
     const Shader *mShader;
     const Mesh   *mMesh;
     
-    const UniformMap *mLocalUniforms;
-    const UniformMap *mViewUniforms;
-    const UniformMap *mMaterialUniforms;
+    const InternalUniformMap *mLocalUniforms;
+    const InternalUniformMap *mViewUniforms;
+    const InternalUniformMap *mMaterialUniforms;
     
     const TextureMap *mTextureMap;
     
