@@ -38,7 +38,7 @@ Scene* FelixEngine::GetScene(const std::string &name)
   return Instance()->getScene(name);
 }
 
-FelixEngine::FelixEngine()
+FelixEngine::FelixEngine(): mRefreshRate(16)
 {
 }
 
@@ -121,9 +121,8 @@ int FelixEngine::runLoop()
     {
       if (event.type == SDL_QUIT)
         quit = true;
-      else
-        updateFrame();
     }
+    updateFrame();
   }
   
   SDL_Quit();

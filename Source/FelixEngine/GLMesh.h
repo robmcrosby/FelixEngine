@@ -48,6 +48,7 @@ namespace fx
       if (shader && index < (int)mSubMeshes.size())
       {
         const GLRange &subMesh = mSubMeshes.at(index);
+        glBindVertexArray(mVertexArray);
         for (GLBufferMap::const_iterator itr = mVertexBuffers.begin(); itr != mVertexBuffers.end(); ++itr)
         {
           GLint index = shader->getAttributeIndex(itr->first);
@@ -60,31 +61,20 @@ namespace fx
         }
         if (mIndexBuffer)
         {
-          // TODO: get instancing working
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-          GLsizei size = (GLsizei)subMesh.end;
+          GLsizei count = (GLsizei)(subMesh.end - subMesh.start);
           GLvoid* ptr = (GLvoid*)(subMesh.start*sizeof(GLuint));
-          glDrawElements(mPrimitiveType, size, GL_UNSIGNED_INT, ptr);
-          
-//          #ifdef GL_ES_VERSION_3_0
-//          glDrawElementsInstanced(mPrimitiveType, mNumIndices, GL_UNSIGNED_INT, 0, (GLsizei)instances);
-//          #else
-//          glDrawElementsInstancedEXT(mPrimitiveType, mNumIndices, GL_UNSIGNED_INT, 0, (GLsizei)instances);
-//          #endif
+          GLsizei primCount = (GLsizei)instances;
+          glDrawElementsInstanced(mPrimitiveType, count, GL_UNSIGNED_INT, ptr, primCount);
         }
         else
         {
-          // TODO: get instancing working
           GLint first = (GLint)subMesh.start;
           GLsizei count = (GLsizei)(subMesh.end - subMesh.start);
-          glDrawArrays(mPrimitiveType, first, count);
-          
-//          #ifdef GL_ES_VERSION_3_0
-//          glDrawArraysInstanced(mPrimitiveType, 0, mNumVertices, (GLsizei)instances);
-//          #else
-//          glDrawArraysInstancedEXT(mPrimitiveType, 0, mNumVertices, (GLsizei)instances);
-//          #endif
+          GLsizei primCount = (GLsizei)instances;
+          glDrawArraysInstanced(mPrimitiveType, first, count, primCount);
         }
+        glBindVertexArray(0);
       }
     }
     
@@ -94,10 +84,13 @@ namespace fx
     bool loadIndexBuffer(const IndexBuffer &buffer);
     void setGLPrimitiveType(VERTEX_PRIMITIVE type);
     
+    void createVertexArray();
+    
     GLGraphicSystem *mGLSystem;
     
     GLBufferMap mVertexBuffers;
     GLuint      mIndexBuffer;
+    GLuint      mVertexArray;
     GLenum      mPrimitiveType;
     GLRanges    mSubMeshes;
   };

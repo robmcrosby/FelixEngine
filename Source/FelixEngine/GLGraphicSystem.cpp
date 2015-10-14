@@ -72,8 +72,8 @@ Texture* GLGraphicSystem::getTexture(const std::string &name)
 
 void GLGraphicSystem::setVersion(int major, int minor)
 {
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
+  mMajorVersion = major;
+  mMinorVersion = minor;
 }
 
 bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
@@ -90,8 +90,19 @@ bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
 bool GLGraphicSystem::init()
 {
   bool success = true;
+  
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, mMajorVersion);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, mMinorVersion);
+  
+  // Should be Apple Only.
+  if (mMajorVersion > 2)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     success &= itr->second->load();
+  
+  cout << glGetString(GL_VERSION) << endl;
+  
   return success;
 }
 
@@ -99,12 +110,11 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 {
   if (node && node->hasAttribute("major") && node->hasAttribute("minor"))
   {
-    setVersion(node->attributeAsInt("major"), node->attributeAsInt("minor"));
+    mMajorVersion = node->attributeAsInt("major");
+    mMinorVersion = node->attributeAsInt("minor");
     return true;
   }
-  
   cerr << "Warning: Unable to determine OpenGL Version from settings, using 2.1 for now." << endl;
-  setVersion(2, 1);
   return false;
 }
 

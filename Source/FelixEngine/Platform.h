@@ -30,7 +30,7 @@ namespace fx
     static long ReadFloats(float *buffer, long size, std::istream &is) {return ReadUints((unsigned int*)buffer, size, is);}
     static long ReadFloat(float &f, std::istream &is) {return ReadUints((unsigned int*)&f, 1, is);}
     
-    static uint GetTimeStamp();
+    static unsigned int GetTimeStamp();
   };
 }
 

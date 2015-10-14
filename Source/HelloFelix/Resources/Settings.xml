@@ -2,7 +2,7 @@
 <Settings>
   <Systems>
     <GLGraphicSystem>
-      <Version major="2" minor="1"/>
+      <Version major="4" minor="1"/>
       <Windows>
         <Window name="MainWindow" title="Hello Felix" type="resizable">
           <position>100, 100</position>

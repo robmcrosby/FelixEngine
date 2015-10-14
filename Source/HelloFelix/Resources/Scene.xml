@@ -18,12 +18,15 @@
         <Material>
           <Shader name="ColorShader" type="GLSL">
             <Vertex>
-              attribute vec4 Position;
-              void main(void) {gl_Position = Position;}
+              #version 410
+              in vec4 Position;
+              void main() {gl_Position = Position;}
             </Vertex>
             <Fragment>
+              #version 410
               uniform vec4 Color;
-              void main(void) {gl_FragColor = Color;}
+              out vec4 FragColor;
+              void main() {FragColor = Color;}
             </Fragment>
           </Shader>
           <UniformMap>
