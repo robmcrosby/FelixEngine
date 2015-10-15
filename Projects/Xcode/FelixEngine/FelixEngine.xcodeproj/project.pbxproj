@@ -72,7 +72,12 @@
 		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FD61BCF2CB40018BA15 /* TriangleSceneGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37E22FD51BCF2CB40018BA15 /* TriangleSceneGL41.xml */; settings = {ASSET_TAGS = (); }; };
 		37E22FD81BCF2D370018BA15 /* TextureSceneGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37E22FD71BCF2D370018BA15 /* TextureSceneGL41.xml */; settings = {ASSET_TAGS = (); }; };
-		37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FD91BCF319A0018BA15 /* TextureMap.h */; settings = {ASSET_TAGS = (); }; };
+		37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FD91BCF319A0018BA15 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37E22FDC1BCF38D40018BA15 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDB1BCF38D40018BA15 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37E22FDD1BCF39080018BA15 /* ImageLoader.cpp */; settings = {ASSET_TAGS = (); }; };
+		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +172,11 @@
 		37E22FD51BCF2CB40018BA15 /* TriangleSceneGL41.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TriangleSceneGL41.xml; path = ../../../../Source/HelloFelix/Resources/TriangleSceneGL41.xml; sourceTree = "<group>"; };
 		37E22FD71BCF2D370018BA15 /* TextureSceneGL41.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextureSceneGL41.xml; path = ../../../../Source/HelloFelix/Resources/TextureSceneGL41.xml; sourceTree = "<group>"; };
 		37E22FD91BCF319A0018BA15 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
+		37E22FDB1BCF38D40018BA15 /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageLoader.h; path = ../../../../Source/FelixEngine/ImageLoader.h; sourceTree = "<group>"; };
+		37E22FDD1BCF39080018BA15 /* ImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageLoader.cpp; path = ../../../../Source/FelixEngine/ImageLoader.cpp; sourceTree = "<group>"; };
+		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
+		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
+		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */,
 				370FEA931BC35B0600440244 /* Cocoa.framework in Frameworks */,
 				370FEA901BC35A5600440244 /* OpenGL.framework in Frameworks */,
 				37104A021BBF457F003EEC37 /* SDL2.framework in Frameworks */,
@@ -256,6 +267,7 @@
 				370FEA851BC31C6E00440244 /* XMLTree.h */,
 				37B490161BCB10B900FC97A5 /* Semephore.h */,
 				37B490181BCB119300FC97A5 /* Mutex.h */,
+				37E22FDF1BCF3A120018BA15 /* Image.h */,
 				37B4901A1BCB11F200FC97A5 /* IndexedMap.h */,
 				37B4901C1BCB127500FC97A5 /* Variant.h */,
 			);
@@ -307,6 +319,8 @@
 				37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */,
 				37B490111BC9EB9F00FC97A5 /* MeshLoader.h */,
 				37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */,
+				37E22FDB1BCF38D40018BA15 /* ImageLoader.h */,
+				37E22FDD1BCF39080018BA15 /* ImageLoader.cpp */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -314,9 +328,7 @@
 		37C531BA1BBCD4BB006DC58A = {
 			isa = PBXGroup;
 			children = (
-				370FEA921BC35B0600440244 /* Cocoa.framework */,
-				370FEA8F1BC35A5600440244 /* OpenGL.framework */,
-				377B9B181BBDF12600440546 /* SDL2.framework */,
+				37E22FE11BCF43A30018BA15 /* FrameWorks */,
 				37C531C61BBCD4BB006DC58A /* FelixEngine */,
 				377B9B051BBDF03600440546 /* HelloFelix */,
 				37C531C51BBCD4BB006DC58A /* Products */,
@@ -377,6 +389,26 @@
 			name = Components;
 			sourceTree = "<group>";
 		};
+		37E22FE11BCF43A30018BA15 /* FrameWorks */ = {
+			isa = PBXGroup;
+			children = (
+				37E22FE21BCF43B30018BA15 /* Freeimage */,
+				370FEA921BC35B0600440244 /* Cocoa.framework */,
+				370FEA8F1BC35A5600440244 /* OpenGL.framework */,
+				377B9B181BBDF12600440546 /* SDL2.framework */,
+			);
+			name = FrameWorks;
+			sourceTree = "<group>";
+		};
+		37E22FE21BCF43B30018BA15 /* Freeimage */ = {
+			isa = PBXGroup;
+			children = (
+				37E22FE31BCF43D10018BA15 /* FreeImage.h */,
+				37E22FE51BCF43F50018BA15 /* libfreeimage.a */,
+			);
+			name = Freeimage;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -390,6 +422,7 @@
 				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
 				37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */,
 				37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */,
+				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
 				370FEA881BC31C6E00440244 /* StringUtils.h in Headers */,
@@ -404,6 +437,7 @@
 				37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
+				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
 				37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */,
@@ -416,6 +450,7 @@
 				37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */,
 				37B490211BCB13F900FC97A5 /* Color.h in Headers */,
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,
+				37E22FDC1BCF38D40018BA15 /* ImageLoader.h in Headers */,
 				37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */,
 				37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
@@ -548,6 +583,7 @@
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
+				37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
 				37B48FF61BC9CA3800FC97A5 /* Graphics.cpp in Sources */,
 				37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */,
@@ -689,6 +725,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/FelixEngine/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = ../../../ThirdParty/Freeimage/OSX/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -708,6 +745,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/FelixEngine/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = ../../../ThirdParty/Freeimage/OSX/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

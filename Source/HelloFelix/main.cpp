@@ -10,6 +10,8 @@
 #include <FelixEngine/FelixEngine.h>
 #include <stdio.h>
 
+#include <FelixEngine/ImageLoader.h>
+
 using namespace std;
 
 int main( int argc, char* args[] )
@@ -25,7 +27,7 @@ int main( int argc, char* args[] )
   if (!engine->loadScene("TextureSceneGL41.xml"))
   {
     cerr << "Error Loading the Scene" << endl;
-    //return 1;
+    return 1;
   }
   
   return engine->runLoop();
