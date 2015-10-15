@@ -37,8 +37,9 @@ namespace fx
     {
       if (mGLWindow)
       {
+        ivec2 size = mGLWindow->size();
         mGLWindow->setActive();
-        glViewport(0, 0, 640, 400);
+        glViewport(0, 0, size.w, size.h);
       }
       else
       {

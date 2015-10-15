@@ -14,56 +14,46 @@
 using namespace fx;
 using namespace std;
 
-bool Window::setToXml(const XMLTree::Node *node)
+
+
+bool Window::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("title"))
-      setTitle(node->attribute("title"));
-    if (node->hasSubNode("position"))
-      setPosition(node->subContents("position"));
-    if (node->hasSubNode("size"))
-      setSize(node->subContents("size"));
-  }
+  bool success = true;
+  if (node.hasAttribute("title"))
+    setTitle(node.attribute("title"));
+  if (node.hasSubNode("position"))
+    setPosition(node.subContents("position"));
+  if (node.hasSubNode("size"))
+    setSize(node.subContents("size"));
   return success;
 }
 
 
 
-bool Frame::setToXml(const XMLTree::Node *node)
+bool Frame::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    
-  }
+  // TODO: Implement this method.
+  bool success = true;
   return success;
 }
 
 
 
-bool Shader::setToXml(const XMLTree::Node *node)
+bool Shader::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
+  bool success = true;
+  clearParts();
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
-    success = true;
-    clearParts();
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-    {
-      SHADER_PART part = ParseShaderPart((*itr)->element());
-      if ((*itr)->hasAttribute("file"))
-        setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
-      else if ((*itr)->hasAttribute("function"))
-        setFunctionToPart((*itr)->attribute("function"), part);
-      else
-        setSourceToPart((*itr)->contents(), part);
-    }
-    reload();
+    SHADER_PART part = ParseShaderPart((*itr)->element());
+    if ((*itr)->hasAttribute("file"))
+      setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
+    else if ((*itr)->hasAttribute("function"))
+      setFunctionToPart((*itr)->attribute("function"), part);
+    else
+      setSourceToPart((*itr)->contents(), part);
   }
+  reload();
   return success;
 }
 
@@ -117,15 +107,11 @@ SHADER_PART Shader::ParseShaderPart(const std::string &partStr)
 
 
 
-bool Mesh::setToXml(const XMLTree::Node *node)
+bool Mesh::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
-    if (success)
-      reload();
-  }
+  bool success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
+  if (success)
+    reload();
   return success;
 }
 
@@ -151,13 +137,8 @@ void Mesh::setPrimitiveType(VERTEX_PRIMITIVE type)
 
 
 
-bool Texture::setToXml(const XMLTree::Node *node)
+bool Texture::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    
-  }
+  bool success = true;
   return success;
 }

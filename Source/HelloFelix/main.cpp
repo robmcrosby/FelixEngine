@@ -16,13 +16,13 @@ int main( int argc, char* args[] )
 {
   fx::FelixEngine *engine = fx::FelixEngine::Instance();
   
-  if (!engine->init("Settings.xml"))
+  if (!engine->init("SettingsGL41.xml"))
   {
     cerr << "Error Initalizing the Engine" << endl;
     return 1;
   }
   
-  if (!engine->loadScene("Scene.xml"))
+  if (!engine->loadScene("TextureSceneGL41.xml"))
   {
     cerr << "Error Loading the Scene" << endl;
     //return 1;

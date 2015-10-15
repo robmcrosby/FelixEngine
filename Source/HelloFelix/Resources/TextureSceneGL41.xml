@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Scene name="TextureScene">
+  <Model name="Quad">
+    <RenderSlots>
+      <Slot layer="0">
+        <Mesh name="QuadMesh" primitive="strip">
+          <Buffer attribute="Position" components="4" index="0">
+            -0.8,  0.8, 0.0, 1.0,
+             0.8,  0.8, 0.0, 1.0,
+            -0.8, -0.8, 0.0, 1.0,
+             0.8, -0.8, 0.0, 1.0,
+          </Buffer>
+          <Buffer attribute="UV_0" components="2" index="1">
+            0.0, 1.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+          </Buffer>
+        </Mesh>
+        <View frame="MainWindow">
+          <ClearState>
+            <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+          </ClearState>
+        </View>
+        <Material>
+          <Shader name="ColorShader" type="GLSL">
+            <Vertex>
+              #version 410
+              in vec4 Position;
+              in vec2 UV_0;
+              out vec2 UV;
+              void main() {
+                gl_Position = Position;
+                UV = UV_0;
+              }
+            </Vertex>
+            <Fragment>
+              #version 410
+              in vec2 UV;
+              out vec4 FragColor;
+              void main() {FragColor = vec4(UV, 0.0, 1.0);}
+            </Fragment>
+          </Shader>
+          <UniformMap>
+            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+          </UniformMap>
+          <TextureMap>
+            <Texture name="Icon" file="HelloFelixIcon.png" min="linear" mag="linear"/>
+          </TextureMap>
+        </Material>
+      </Slot>
+    </RenderSlots>
+  </Model>
+</Scene>

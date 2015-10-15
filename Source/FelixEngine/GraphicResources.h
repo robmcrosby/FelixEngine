@@ -52,7 +52,9 @@ namespace fx
   {
   public:
     virtual ~Window() {}
-    virtual bool setToXml(const XMLTree::Node *node);
+    
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    virtual bool setToXml(const XMLTree::Node &node);
     
     virtual void setTitle(const std::string &title) = 0;
     virtual void setPosition(const ivec2 &pos) = 0;
@@ -70,8 +72,8 @@ namespace fx
   public:
     virtual ~Frame() {}
     
-    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
-    virtual bool setToXml(const XMLTree::Node *node);
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    virtual bool setToXml(const XMLTree::Node &node);
     
     virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler) = 0;
     virtual void setSize(const ivec2 &size) = 0;
@@ -88,8 +90,8 @@ namespace fx
     Shader() {clearParts();}
     virtual ~Shader() {}
     
-    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
-    virtual bool setToXml(const XMLTree::Node *node);
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    virtual bool setToXml(const XMLTree::Node &node);
     
     void clearParts();
     void setSourceToPart(const std::string &src, SHADER_PART part);
@@ -108,8 +110,8 @@ namespace fx
   public:
     virtual ~Mesh() {}
     
-    bool setToXml(const XMLTree::Node &node) {return setToXml(&node);}
-    virtual bool setToXml(const XMLTree::Node *node);
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    virtual bool setToXml(const XMLTree::Node &node);
     
     VertexBufferMap& getVertexBufferMap() {return mBufferMap;}
     void addVertexBuffer(const std::string &name, int components, int count, const float *data);
@@ -120,10 +122,16 @@ namespace fx
     VertexBufferMap mBufferMap;
   };
   
-  struct Texture: GraphicResource
+  class Texture: public GraphicResource
   {
+  public:
     virtual ~Texture() {}
-    virtual bool setToXml(const XMLTree::Node *node);
+    
+    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
+    virtual bool setToXml(const XMLTree::Node &node);
+    
+  protected:
+    std::string mFile;
   };
 }
 
