@@ -181,6 +181,7 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
       static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
     if (task.localUniforms)
       static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
+    shader->applyTextureMap(task.textureMap);
     
     // Draw the Mesh
     mesh->draw(shader, task.instances, task.subMesh);

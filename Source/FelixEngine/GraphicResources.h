@@ -130,8 +130,12 @@ namespace fx
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     virtual bool setToXml(const XMLTree::Node &node);
     
+    ivec2 size() const {return mSize;}
+    
   protected:
     std::string mFile;
+    Sampler mSampler;
+    ivec2 mSize;
   };
 }
 

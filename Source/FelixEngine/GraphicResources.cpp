@@ -139,6 +139,15 @@ void Mesh::setPrimitiveType(VERTEX_PRIMITIVE type)
 
 bool Texture::setToXml(const XMLTree::Node &node)
 {
-  bool success = true;
+  bool success = false;
+  if (node.hasAttribute("file"))
+  {
+    mFile = node.attribute("file");
+    if (mSampler.setToXml(node))
+    {
+      success = true;
+      reload();
+    }
+  }
   return success;
 }

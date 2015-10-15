@@ -37,15 +37,16 @@
             <Fragment>
               #version 410
               in vec2 UV;
+              uniform sampler2D tex2D;
               out vec4 FragColor;
-              void main() {FragColor = vec4(UV, 0.0, 1.0);}
+              void main() {FragColor = texture(tex2D, UV);}
             </Fragment>
           </Shader>
           <UniformMap>
             <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
           </UniformMap>
           <TextureMap>
-            <Texture name="Icon" file="HelloFelixIcon.png" min="linear" mag="linear"/>
+            <Texture name="Icon" file="Images/HelloFelixIcon.png" min="linear" mag="linear"/>
           </TextureMap>
         </Material>
       </Slot>

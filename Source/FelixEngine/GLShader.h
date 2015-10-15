@@ -10,7 +10,9 @@
 #define GLShader_h
 
 #include "GLGraphicSystem.h"
+#include "GLTexture.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
 
 #define MAX_TEXTURES 8
 
@@ -33,25 +35,25 @@ namespace fx
     void use() const
     {
       glUseProgram(mProgramId);
-      //for (int i = 0; i < mNumTextureLocs; ++i)
-      //  glUniform1i(mTextureLocs[i], i);
+      for (int i = 0; i < mNumTextureLocs; ++i)
+        glUniform1i(mTextureLocs[i], i);
     }
     GLint getAttributeIndex(const std::string &name) const {return glGetAttribLocation(mProgramId, name.c_str());}
     GLint getUniformLocation(const std::string &name) const {return glGetUniformLocation(mProgramId, name.c_str());}
     
     void applyTexture(int index, const GLTexture *texture, const Sampler &sampler) const
     {
-//      if (texture)
-//        texture->use(index, sampler);
+      if (texture)
+        texture->use(index, sampler);
     }
     void applyTextureMap(const TextureMap *textures) const
     {
-//      if (textures)
-//      {
-//        int index = 0;
-//        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
-//          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
-//      }
+      if (textures)
+      {
+        int index = 0;
+        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
+          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
+      }
     }
     
     static GLenum GetGLShaderPart(SHADER_PART part);
