@@ -6,7 +6,7 @@
       <Windows>
         <Window name="MainWindow" title="Hello Felix" type="resizable">
           <position>100, 100</position>
-          <size>640, 400</size>
+          <size>512, 512</size>
         </Window>
       </Windows>
     </GLGraphicSystem>

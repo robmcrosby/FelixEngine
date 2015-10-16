@@ -35,17 +35,15 @@ namespace fx
       setFilters(sampler);
     }
     
-//    GLuint useWithBuffer(int width, int height)
-//    {
-//      if (!mTextureId)
-//        glGenTextures(1, &mTextureId);
-//      
-//      mWidth = width;
-//      mHeight = height;
-//      mBuffer = true;
-//      
-//      return mTextureId;
-//    }
+    GLuint useWithBuffer(const ivec2 &size)
+    {
+      if (!mTextureId)
+        glGenTextures(1, &mTextureId);
+      mSize = size;
+      mFBOTexture = true;
+      mLoaded = true;
+      return mTextureId;
+    }
     GLuint textureId() const {return mTextureId;}
     
   private:
@@ -85,6 +83,7 @@ namespace fx
   private:
     GLuint mTextureId;
     bool   mMipMapped;
+    bool   mFBOTexture;
     GLGraphicSystem *mGLSystem;
   };
 }

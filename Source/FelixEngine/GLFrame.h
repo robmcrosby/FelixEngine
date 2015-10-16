@@ -16,6 +16,7 @@
 namespace fx
 {
   class GLWindow;
+  
   /**
    *
    */
@@ -27,25 +28,24 @@ namespace fx
     
     virtual void reload();
     
-    virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler);
-    virtual void setSize(const ivec2 &size);
-    
-    void setToWindow(GLWindow *window) {mGLWindow = window;}
+    void setToWindow(GLWindow *window)
+    {
+      mGLWindow = window;
+      mFrameBufferId = 0;
+      mLoaded = true;
+    }
     bool load();
     
     void use() const
     {
+      ivec2 size = mSize;
       if (mGLWindow)
       {
-        ivec2 size = mGLWindow->size();
+        size = mGLWindow->size();
         mGLWindow->setActive();
-        glViewport(0, 0, size.w, size.h);
       }
-      else
-      {
-        //glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-        //glViewport(0, 0, mSize.w, mSize.h);
-      }
+      glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+      glViewport(0, 0, size.w, size.h);
     }
     
     void clear(const ClearState &clearState) const
@@ -98,12 +98,36 @@ namespace fx
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       }
       else
-      {
         glDisable(GL_BLEND);
-      }
     }
     
   private:
+    class GLBuffer
+    {
+    public:
+      GLBuffer(): mIndex(0), mBufferId(0), mFormat(COLOR_NONE), mTexture(0) {}
+      
+      void setIndex(GLint index) {mIndex = index;}
+      void setFormat(COLOR_TYPE format) {mFormat = format;}
+      void setTexture(GLTexture *texture) {mTexture = texture;}
+      
+      bool load(const ivec2 &size);
+      void unload();
+      
+    private:
+      bool loadRenderBuffer(const ivec2 &size);
+      bool loadTextureBuffer(const ivec2 &size);
+      
+      GLuint mIndex, mBufferId;
+      COLOR_TYPE mFormat;
+      GLTexture *mTexture;
+    };
+    
+  private:
+    void clearGLBuffers();
+    bool loadGLBuffers();
+    void setTexture(GLBuffer &buffer, const std::string &name);
+    
     GLenum getGLDepthFunction(int function) const
     {
       switch (function)
@@ -119,8 +143,13 @@ namespace fx
     }
     
   private:
+    GLuint mFrameBufferId;
     GLGraphicSystem *mGLSystem;
     GLWindow *mGLWindow;
+    
+    std::list<GLBuffer> mColorBuffers;
+    GLBuffer mDepthBuffer;
+    GLBuffer mStencilBuffer;
   };
 }
 

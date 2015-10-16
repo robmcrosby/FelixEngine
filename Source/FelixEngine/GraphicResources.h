@@ -70,18 +70,44 @@ namespace fx
   class Frame: public GraphicResource
   {
   public:
+    struct Buffer
+    {
+      COLOR_TYPE format;
+      std::string name;
+      Sampler sampler;
+    };
+    
+  public:
     virtual ~Frame() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     virtual bool setToXml(const XMLTree::Node &node);
     
-    virtual void addBuffer(COLOR_TYPE type, const std::string &name, const Sampler &sampler) = 0;
-    virtual void setSize(const ivec2 &size) = 0;
+    void clearBuffers() {mBuffers.clear();}
+    void addBuffer(COLOR_TYPE format = COLOR_RGBA, const std::string &name = "", const Sampler &sampler = Sampler())
+    {
+      Buffer buffer;
+      buffer.format = format;
+      buffer.name = name;
+      buffer.sampler = sampler;
+      addBuffer(buffer);
+    }
+    void addBuffer(const Buffer &buffer) {mBuffers.push_back(buffer);}
     
+    void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
+    
+    void setScale(const vec2 &scale) {mScale = scale;}
+    vec2 scale() const {return mScale;}
+    
+    void setRefrenceFrame(const std::string &name) {mRefFrame = name;}
+    std::string refrenceFrame() const {return mRefFrame;}
     
   protected:
     ivec2 mSize;
+    vec2 mScale;
+    std::string mRefFrame;
+    std::list<Buffer> mBuffers;
   };
   
   class Shader: public GraphicResource

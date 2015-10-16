@@ -15,7 +15,7 @@ using namespace fx;
 using namespace std;
 
 
-GLTexture::GLTexture(GLGraphicSystem *system): mGLSystem(system), mMipMapped(0)
+GLTexture::GLTexture(GLGraphicSystem *system): mGLSystem(system), mMipMapped(0), mFBOTexture(0)
 {
 }
 
@@ -32,7 +32,7 @@ void GLTexture::reload()
 
 bool GLTexture::load()
 {
-  if (!mLoaded)
+  if (!mLoaded && !mFBOTexture)
     mLoaded = loadImageFile(mFile);
   return mLoaded;
 }

@@ -78,6 +78,7 @@
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
+		37E22FE81BCF77EE0018BA15 /* FrameSceneGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37E22FE71BCF77EE0018BA15 /* FrameSceneGL41.xml */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
+		37E22FE71BCF77EE0018BA15 /* FrameSceneGL41.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = FrameSceneGL41.xml; path = ../../../../Source/HelloFelix/Resources/FrameSceneGL41.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,6 +291,7 @@
 			children = (
 				37E22FD51BCF2CB40018BA15 /* TriangleSceneGL41.xml */,
 				37E22FD71BCF2D370018BA15 /* TextureSceneGL41.xml */,
+				37E22FE71BCF77EE0018BA15 /* FrameSceneGL41.xml */,
 				370FEA941BC4638F00440244 /* SettingsGL41.xml */,
 				377B9B0C1BBDF03600440546 /* Assets.xcassets */,
 				377B9B1F1BBE289600440546 /* Images */,
@@ -543,6 +546,7 @@
 				37E22FD81BCF2D370018BA15 /* TextureSceneGL41.xml in Resources */,
 				370FEA951BC4638F00440244 /* SettingsGL41.xml in Resources */,
 				377B9B201BBE289600440546 /* Images in Resources */,
+				37E22FE81BCF77EE0018BA15 /* FrameSceneGL41.xml in Resources */,
 				377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

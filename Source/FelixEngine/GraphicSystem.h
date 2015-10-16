@@ -23,7 +23,7 @@ namespace fx
   class GraphicSystem: public System
   {
   public:
-    GraphicSystem(): System(SYSTEM_GRAPHICS) {}
+    GraphicSystem(): System(SYSTEM_GRAPHICS) {mTaskSlots.push_back(TaskSlot());}
     virtual ~GraphicSystem() {}
     
     virtual Window* getWindow(const std::string &name) = 0;

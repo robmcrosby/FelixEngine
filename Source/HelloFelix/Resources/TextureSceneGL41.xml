@@ -4,13 +4,13 @@
     <RenderSlots>
       <Slot layer="0">
         <Mesh name="QuadMesh" primitive="strip">
-          <Buffer attribute="Position" components="4" index="0">
+          <Buffer attribute="Position" components="4">
             -0.8,  0.8, 0.0, 1.0,
              0.8,  0.8, 0.0, 1.0,
             -0.8, -0.8, 0.0, 1.0,
              0.8, -0.8, 0.0, 1.0,
           </Buffer>
-          <Buffer attribute="UV_0" components="2" index="1">
+          <Buffer attribute="UV_0" components="2">
             0.0, 1.0,
             1.0, 1.0,
             0.0, 0.0,
@@ -23,7 +23,7 @@
           </ClearState>
         </View>
         <Material>
-          <Shader name="ColorShader" type="GLSL">
+          <Shader name="TextureShader" type="GLSL">
             <Vertex>
               #version 410
               in vec4 Position;
@@ -42,9 +42,6 @@
               void main() {FragColor = texture(tex2D, UV);}
             </Fragment>
           </Shader>
-          <UniformMap>
-            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
-          </UniformMap>
           <TextureMap>
             <Texture name="Icon" file="Images/HelloFelixIcon.png" min="linear" mag="linear"/>
           </TextureMap>
