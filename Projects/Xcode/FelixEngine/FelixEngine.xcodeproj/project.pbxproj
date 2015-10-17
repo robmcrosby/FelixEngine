@@ -20,7 +20,6 @@
 		370FEA881BC31C6E00440244 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA831BC31C6E00440244 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA891BC31C6E00440244 /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA841BC31C6E00440244 /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA8A1BC31C6E00440244 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA851BC31C6E00440244 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		370FEA8D1BC3428900440244 /* GLWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA8B1BC3428900440244 /* GLWindow.cpp */; settings = {ASSET_TAGS = (); }; };
 		370FEA8E1BC3428900440244 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA8C1BC3428900440244 /* GLWindow.h */; settings = {ASSET_TAGS = (); }; };
 		370FEA901BC35A5600440244 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370FEA8F1BC35A5600440244 /* OpenGL.framework */; };
 		370FEA931BC35B0600440244 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370FEA921BC35B0600440244 /* Cocoa.framework */; };
@@ -42,14 +41,10 @@
 		37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FE01BC984B500FC97A5 /* RenderSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FF81BC9D57200FC97A5 /* Sampler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B48FFC1BC9D73D00FC97A5 /* GLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FFA1BC9D73D00FC97A5 /* GLFrame.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */; settings = {ASSET_TAGS = (); }; };
-		37B490001BC9D75900FC97A5 /* GLMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FFE1BC9D75900FC97A5 /* GLMesh.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFF1BC9D75900FC97A5 /* GLMesh.h */; settings = {ASSET_TAGS = (); }; };
-		37B490041BC9D77A00FC97A5 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490021BC9D77A00FC97A5 /* GLShader.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490031BC9D77A00FC97A5 /* GLShader.h */; settings = {ASSET_TAGS = (); }; };
 		37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490071BC9DEE000FC97A5 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B4900B1BC9E0A900FC97A5 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490091BC9E0A900FC97A5 /* GLTexture.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; settings = {ASSET_TAGS = (); }; };
 		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; settings = {ASSET_TAGS = (); }; };
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; settings = {ASSET_TAGS = (); }; };
@@ -118,7 +113,6 @@
 		370FEA831BC31C6E00440244 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = ../../../../Source/FelixEngine/StringUtils.h; sourceTree = "<group>"; };
 		370FEA841BC31C6E00440244 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../../../Source/FelixEngine/Vector.h; sourceTree = "<group>"; };
 		370FEA851BC31C6E00440244 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = ../../../../Source/FelixEngine/XMLTree.h; sourceTree = "<group>"; };
-		370FEA8B1BC3428900440244 /* GLWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLWindow.cpp; path = ../../../../Source/FelixEngine/GLWindow.cpp; sourceTree = "<group>"; };
 		370FEA8C1BC3428900440244 /* GLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLWindow.h; path = ../../../../Source/FelixEngine/GLWindow.h; sourceTree = "<group>"; };
 		370FEA8F1BC35A5600440244 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		370FEA921BC35B0600440244 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -139,14 +133,10 @@
 		37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderSlots.cpp; path = ../../../../Source/FelixEngine/RenderSlots.cpp; sourceTree = "<group>"; };
 		37B48FE01BC984B500FC97A5 /* RenderSlots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderSlots.h; path = ../../../../Source/FelixEngine/RenderSlots.h; sourceTree = "<group>"; };
 		37B48FF81BC9D57200FC97A5 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = ../../../../Source/FelixEngine/Sampler.h; sourceTree = "<group>"; };
-		37B48FFA1BC9D73D00FC97A5 /* GLFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLFrame.cpp; path = ../../../../Source/FelixEngine/GLFrame.cpp; sourceTree = "<group>"; };
 		37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFrame.h; path = ../../../../Source/FelixEngine/GLFrame.h; sourceTree = "<group>"; };
-		37B48FFE1BC9D75900FC97A5 /* GLMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLMesh.cpp; path = ../../../../Source/FelixEngine/GLMesh.cpp; sourceTree = "<group>"; };
 		37B48FFF1BC9D75900FC97A5 /* GLMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLMesh.h; path = ../../../../Source/FelixEngine/GLMesh.h; sourceTree = "<group>"; };
-		37B490021BC9D77A00FC97A5 /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLShader.cpp; path = ../../../../Source/FelixEngine/GLShader.cpp; sourceTree = "<group>"; };
 		37B490031BC9D77A00FC97A5 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLShader.h; path = ../../../../Source/FelixEngine/GLShader.h; sourceTree = "<group>"; };
 		37B490071BC9DEE000FC97A5 /* GraphicResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicResources.h; path = ../../../../Source/FelixEngine/GraphicResources.h; sourceTree = "<group>"; };
-		37B490091BC9E0A900FC97A5 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLTexture.cpp; path = ../../../../Source/FelixEngine/GLTexture.cpp; sourceTree = "<group>"; };
 		37B4900A1BC9E0A900FC97A5 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture.h; path = ../../../../Source/FelixEngine/GLTexture.h; sourceTree = "<group>"; };
 		37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferMap.h; path = ../../../../Source/FelixEngine/VertexBufferMap.h; sourceTree = "<group>"; };
 		37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = ../../../../Source/FelixEngine/MeshLoader.cpp; sourceTree = "<group>"; };
@@ -302,15 +292,10 @@
 			isa = PBXGroup;
 			children = (
 				370FEA8C1BC3428900440244 /* GLWindow.h */,
-				370FEA8B1BC3428900440244 /* GLWindow.cpp */,
 				37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */,
-				37B48FFA1BC9D73D00FC97A5 /* GLFrame.cpp */,
 				37B490031BC9D77A00FC97A5 /* GLShader.h */,
-				37B490021BC9D77A00FC97A5 /* GLShader.cpp */,
 				37B48FFF1BC9D75900FC97A5 /* GLMesh.h */,
-				37B48FFE1BC9D75900FC97A5 /* GLMesh.cpp */,
 				37B4900A1BC9E0A900FC97A5 /* GLTexture.h */,
-				37B490091BC9E0A900FC97A5 /* GLTexture.cpp */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -570,17 +555,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37B4900B1BC9E0A900FC97A5 /* GLTexture.cpp in Sources */,
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
-				37B490041BC9D77A00FC97A5 /* GLShader.cpp in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
 				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */,
-				37B490001BC9D75900FC97A5 /* GLMesh.cpp in Sources */,
-				370FEA8D1BC3428900440244 /* GLWindow.cpp in Sources */,
-				37B48FFC1BC9D73D00FC97A5 /* GLFrame.cpp in Sources */,
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,

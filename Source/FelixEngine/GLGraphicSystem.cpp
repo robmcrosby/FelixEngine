@@ -38,7 +38,14 @@ GLGraphicSystem::~GLGraphicSystem()
 Window* GLGraphicSystem::getWindow(const std::string &name)
 {
   if (!mWindows.count(name))
-    mWindows[name] = new GLWindow(this, name);
+  {
+    GLWindow *window = new GLWindow(this);
+    mWindows[name] = window;
+    
+    GLFrame *frame = static_cast<GLFrame*>(getFrame(name));
+    frame->retain();
+    frame->setToWindow(window);
+  }
   return mWindows[name];
 }
 

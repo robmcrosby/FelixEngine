@@ -42,14 +42,15 @@ namespace fx
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node);
     
-    virtual void setTitle(const std::string &title) = 0;
-    virtual void setPosition(const ivec2 &pos) = 0;
-    virtual void setSize(const ivec2 &size) = 0;
+    void setTitle(const std::string &title) {mTitle = title;}
+    void setPosition(const ivec2 &pos) {mPosition = pos;}
+    void setSize(const ivec2 &size) {mSize = size;}
     
     ivec2 position() const {return mPosition;}
     ivec2 size() const {return mSize;}
     
   protected:
+    std::string mTitle;
     ivec2 mPosition, mSize;
   };
   

@@ -10,7 +10,7 @@
 #define GLTexture_h
 
 #include "GLGraphicSystem.h"
-#include "Image.h"
+#include "ImageLoader.h"
 
 
 namespace fx
@@ -21,8 +21,8 @@ namespace fx
   class GLTexture: public Texture
   {
   public:
-    GLTexture(GLGraphicSystem *system);
-    virtual ~GLTexture();
+    GLTexture(GLGraphicSystem *system): mGLSystem(system), mMipMapped(0), mFBOTexture(0) {}
+    virtual ~GLTexture() {}
     
     void update()
     {
@@ -54,9 +54,53 @@ namespace fx
     GLuint textureId() const {return mTextureId;}
     
   private:
-    bool load();
-    bool loadImageFile(const std::string &file);
-    bool loadImage(const ImageRGBA &image);
+    bool load()
+    {
+      if (!isLoaded() && !mFBOTexture)
+        return loadImageFile(mFile);
+      return false;
+    }
+    
+    bool loadImageFile(const std::string &file)
+    {
+      ImageRGBA image;
+      return ImageLoader::LoadImageFromFile(image, file) && loadImage(image);
+    }
+    
+    bool loadImage(const ImageRGBA &image)
+    {
+      if (!mTextureId)
+      {
+        glGenTextures(1, &mTextureId);
+        if (!mTextureId)
+        {
+          std::cerr << "failed to create GLTexture" << std::endl;
+          return false;
+        }
+      }
+      
+      mSize.w = image.width();
+      mSize.h = image.height();
+      
+      glBindTexture(GL_TEXTURE_2D, mTextureId);
+      
+      setFilters(mSampler);
+      
+      // Load the Image to the Texture
+      const GLvoid *pixels = image.ptr();
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLint)mSize.w, (GLint)mSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+      
+      // Generate the Mipmaps
+      if (mSampler.mipMappingEnabled())
+      {
+        mMipMapped = true;
+        glGenerateMipmap(GL_TEXTURE_2D);
+      }
+      glBindTexture(GL_TEXTURE_2D, 0);
+      
+      return true;
+    }
+    
     void  setFilters(const Sampler &sampler) const
     {
       if (isPowerOfTwo())

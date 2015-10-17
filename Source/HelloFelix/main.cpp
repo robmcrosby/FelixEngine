@@ -24,7 +24,7 @@ int main( int argc, char* args[] )
     return 1;
   }
   
-  if (!engine->loadScene("FrameSceneGL41.xml"))
+  if (!engine->loadScene("TextureSceneGL41.xml"))
   {
     cerr << "Error Loading the Scene" << endl;
     return 1;
