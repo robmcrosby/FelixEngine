@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Scene name="TriangleScene">
+  <Model name="Triangle">
+    <RenderSlots>
+      <Slot layer="0">
+        <Mesh name="TriangleMesh" primitive="triangles">
+          <Buffer attribute="Position" components="4">
+            -0.8, -0.6, 0.0, 1.0,
+            0.8, -0.6, 0.0, 1.0,
+            0.0,  0.8, 0.0, 1.0
+          </Buffer>
+        </Mesh>
+        <View frame="MainWindow">
+          <ClearState>
+            <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+          </ClearState>
+        </View>
+        <Material>
+          <Shader name="ColorShader" type="Metal">
+            <Vertex>
+              using namespace metal;
+              struct VertexOutput {
+                float4 m_Position [[position]];
+              };
+              vertex VertexOutput SimpleVertex(device float4 *Pos [[buffer(0)]], uint vid [[vertex_id]]) {
+                VertexOutput outVertices;
+                outVertices.m_Position = Pos[vid];
+                return outVertices;
+              }
+            </Vertex>
+            <Fragment>
+              using namespace metal;
+              fragment half4 SimpleColor(constant float4 *Color [[buffer(1)]]) {
+                return half4(*Color);
+              }
+            </Fragment>
+          </Shader>
+          <UniformMap>
+            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+          </UniformMap>
+        </Material>
+      </Slot>
+    </RenderSlots>
+  </Model>
+</Scene>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<Settings>
+  <Systems>
+    <MetalGraphicSystem>
+      <Windows>
+        <Window name="MainWindow" title="Hello Felix" type="resizable">
+          <position>100, 100</position>
+          <size>512, 512</size>
+        </Window>
+      </Windows>
+    </MetalGraphicSystem>
+  </Systems>
+</Settings>

@@ -118,7 +118,17 @@ namespace fx
       
       void setIndex(GLint index) {mIndex = index;}
       void setFormat(COLOR_TYPE format) {mFormat = format;}
-      void setTexture(GLTexture *texture) {mTexture = texture;}
+      void setTexture(GLTexture *texture)
+      {
+        if (mTexture != texture)
+        {
+          if (mTexture)
+            mTexture->release();
+          if (texture)
+            texture->retain();
+          mTexture = texture;
+        }
+      }
       
       bool load(const ivec2 &size)
       {

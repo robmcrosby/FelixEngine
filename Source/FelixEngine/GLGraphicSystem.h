@@ -40,10 +40,10 @@ namespace fx
     
     virtual void setVersion(int major, int minor);
     
-    virtual Window* getWindow(const std::string &name);
-    virtual Frame* getFrame(const std::string &name);
-    virtual Shader* getShader(const std::string &name);
-    virtual Mesh* getMesh(const std::string &name);
+    virtual Window*  getWindow(const std::string &name);
+    virtual Frame*   getFrame(const std::string &name);
+    virtual Shader*  getShader(const std::string &name);
+    virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
     virtual InternalUniformMap* createUniformMap();
