@@ -41,8 +41,6 @@
 		37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FDC1BC9837B00FC97A5 /* Projection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FE01BC984B500FC97A5 /* RenderSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B48FF61BC9CA3800FC97A5 /* Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FF41BC9CA3800FC97A5 /* Graphics.cpp */; settings = {ASSET_TAGS = (); }; };
-		37B48FF71BC9CA3800FC97A5 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FF51BC9CA3800FC97A5 /* Graphics.h */; settings = {ASSET_TAGS = (); }; };
 		37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FF81BC9D57200FC97A5 /* Sampler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B48FFC1BC9D73D00FC97A5 /* GLFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FFA1BC9D73D00FC97A5 /* GLFrame.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */; settings = {ASSET_TAGS = (); }; };
@@ -140,8 +138,6 @@
 		37B48FDC1BC9837B00FC97A5 /* Projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Projection.h; path = ../../../../Source/FelixEngine/Projection.h; sourceTree = "<group>"; };
 		37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderSlots.cpp; path = ../../../../Source/FelixEngine/RenderSlots.cpp; sourceTree = "<group>"; };
 		37B48FE01BC984B500FC97A5 /* RenderSlots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderSlots.h; path = ../../../../Source/FelixEngine/RenderSlots.h; sourceTree = "<group>"; };
-		37B48FF41BC9CA3800FC97A5 /* Graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Graphics.cpp; path = ../../../../Source/FelixEngine/Graphics.cpp; sourceTree = "<group>"; };
-		37B48FF51BC9CA3800FC97A5 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = ../../../../Source/FelixEngine/Graphics.h; sourceTree = "<group>"; };
 		37B48FF81BC9D57200FC97A5 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = ../../../../Source/FelixEngine/Sampler.h; sourceTree = "<group>"; };
 		37B48FFA1BC9D73D00FC97A5 /* GLFrame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLFrame.cpp; path = ../../../../Source/FelixEngine/GLFrame.cpp; sourceTree = "<group>"; };
 		37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFrame.h; path = ../../../../Source/FelixEngine/GLFrame.h; sourceTree = "<group>"; };
@@ -387,8 +383,6 @@
 				37CD4E361BC83E6300DAB4E3 /* Transform.cpp */,
 				37B48FDC1BC9837B00FC97A5 /* Projection.h */,
 				37B48FDB1BC9837B00FC97A5 /* Projection.cpp */,
-				37B48FF51BC9CA3800FC97A5 /* Graphics.h */,
-				37B48FF41BC9CA3800FC97A5 /* Graphics.cpp */,
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
 				37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */,
 			);
@@ -449,7 +443,6 @@
 				37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */,
 				37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */,
 				37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */,
-				37B48FF71BC9CA3800FC97A5 /* Graphics.h in Headers */,
 				37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */,
 				37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */,
 				37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */,
@@ -593,7 +586,6 @@
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
 				37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
-				37B48FF61BC9CA3800FC97A5 /* Graphics.cpp in Sources */,
 				37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
