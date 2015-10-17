@@ -30,7 +30,8 @@ GLWindow::~GLWindow()
 
 bool GLWindow::load()
 {
-  if (!mLoaded)
+  bool success = false;
+  if (!isLoaded())
   {
     // Get and check the SDL Window
     mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
@@ -59,16 +60,9 @@ bool GLWindow::load()
       if (SDL_GL_SetSwapInterval(1) < 0)
         cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << endl;
     }
-    mLoaded = true;
+    success = true;
   }
-  return mLoaded;
-}
-
-void GLWindow::reload()
-{
-  GraphicResource::reload();
-  if (mGLSystem)
-    mGLSystem->loadOnNextUpdate();
+  return success;
 }
 
 void GLWindow::setTitle(const std::string &title)

@@ -60,7 +60,7 @@ bool Frame::setToXml(const XMLTree::Node &node)
     int height = node.attributeAsInt("height");
     setSize(ivec2(width, height));
   }
-  reload();
+  setToLoad();
   return success;
 }
 
@@ -80,7 +80,7 @@ bool Shader::setToXml(const XMLTree::Node &node)
     else
       setSourceToPart((*itr)->contents(), part);
   }
-  reload();
+  setToLoad();
   return success;
 }
 
@@ -138,7 +138,7 @@ bool Mesh::setToXml(const XMLTree::Node &node)
 {
   bool success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
   if (success)
-    reload();
+    setToLoad();
   return success;
 }
 
@@ -173,7 +173,7 @@ bool Texture::setToXml(const XMLTree::Node &node)
     if (mSampler.setToXml(node))
     {
       success = true;
-      reload();
+      setToLoad();
     }
   }
   return success;

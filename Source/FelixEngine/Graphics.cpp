@@ -29,16 +29,16 @@ Graphics::~Graphics()
 bool Graphics::setToXml(const XMLTree::Node *node)
 {
   bool success = false;
-  if (Component::setToXml(node) && mGraphicSystem)
-  {
-    success = true;
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-    {
-      GraphicResource *resource = mGraphicSystem->getResource((*itr)->element(), (*itr)->attribute("name"));
-      success &= resource && resource->setToXml(*itr);
-      addResource(resource);
-    }
-  }
+//  if (Component::setToXml(node) && mGraphicSystem)
+//  {
+//    success = true;
+//    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+//    {
+//      Resource *resource = mGraphicSystem->getResource((*itr)->element(), (*itr)->attribute("name"));
+//      success &= resource && resource->setToXml(*itr);
+//      addResource(resource);
+//    }
+//  }
   return success;
 }
 

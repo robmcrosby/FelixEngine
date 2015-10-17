@@ -23,18 +23,11 @@ GLTexture::~GLTexture()
 {
 }
 
-void GLTexture::reload()
-{
-  GraphicResource::reload();
-  if (mGLSystem)
-    mGLSystem->loadOnNextUpdate();
-}
-
 bool GLTexture::load()
 {
-  if (!mLoaded && !mFBOTexture)
-    mLoaded = loadImageFile(mFile);
-  return mLoaded;
+  if (!isLoaded() && !mFBOTexture)
+    return loadImageFile(mFile);
+  return false;
 }
 
 bool GLTexture::loadImageFile(const std::string &file)

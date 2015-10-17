@@ -25,16 +25,10 @@ GLFrame::~GLFrame()
   clearGLBuffers();
 }
 
-void GLFrame::reload()
-{
-  GraphicResource::reload();
-  if (mGLSystem)
-    mGLSystem->loadOnNextUpdate();
-}
-
 bool GLFrame::load()
 {
-  if (!mLoaded)
+  bool success = false;
+  if (!isLoaded())
   {
     GLint curFrameBuffer;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
@@ -45,11 +39,11 @@ bool GLFrame::load()
     else
     {
       glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-      mLoaded = loadGLBuffers();
+      success = loadGLBuffers();
       glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
     }
   }
-  return mLoaded;
+  return success;
 }
 
 void GLFrame::clearGLBuffers()

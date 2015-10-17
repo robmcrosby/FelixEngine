@@ -9,6 +9,7 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
+#include "Resource.h"
 #include "VertexBufferMap.h"
 #include "XMLTree.h"
 #include "Vector.h"
@@ -33,28 +34,13 @@ namespace fx
     SHADER_FUNCTION,
   };
   
-  class GraphicResource
-  {
-  public:
-    GraphicResource(): mLoaded(0) {}
-    virtual ~GraphicResource() {}
-    
-    virtual bool setToXml(const XMLTree::Node *node) = 0;
-    virtual void reload() {mLoaded = false;}
-    
-    bool loaded() const {return mLoaded;}
-    
-  protected:
-    bool mLoaded;
-  };
-  
-  class Window: public GraphicResource
+  class Window: public Resource
   {
   public:
     virtual ~Window() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     virtual void setTitle(const std::string &title) = 0;
     virtual void setPosition(const ivec2 &pos) = 0;
@@ -67,7 +53,7 @@ namespace fx
     ivec2 mPosition, mSize;
   };
   
-  class Frame: public GraphicResource
+  class Frame: public Resource
   {
   public:
     struct Buffer
@@ -81,7 +67,7 @@ namespace fx
     virtual ~Frame() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     void clearBuffers() {mBuffers.clear();}
     void addBuffer(COLOR_TYPE format = COLOR_RGBA, const std::string &name = "", const Sampler &sampler = Sampler())
@@ -110,14 +96,14 @@ namespace fx
     std::list<Buffer> mBuffers;
   };
   
-  class Shader: public GraphicResource
+  class Shader: public Resource
   {
   public:
     Shader() {clearParts();}
     virtual ~Shader() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     void clearParts();
     void setSourceToPart(const std::string &src, SHADER_PART part);
@@ -131,13 +117,13 @@ namespace fx
     SHADER_TYPE mPartTypes[SHADER_COUNT];
   };
   
-  class Mesh: public GraphicResource
+  class Mesh: public Resource
   {
   public:
     virtual ~Mesh() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     VertexBufferMap& getVertexBufferMap() {return mBufferMap;}
     void addVertexBuffer(const std::string &name, int components, int count, const float *data);
@@ -148,13 +134,13 @@ namespace fx
     VertexBufferMap mBufferMap;
   };
   
-  class Texture: public GraphicResource
+  class Texture: public Resource
   {
   public:
     virtual ~Texture() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     ivec2 size() const {return mSize;}
     

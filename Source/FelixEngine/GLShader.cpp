@@ -24,31 +24,25 @@ GLShader::~GLShader()
 {
 }
 
-void GLShader::reload()
-{
-  GraphicResource::reload();
-  if (mGLSystem)
-    mGLSystem->loadOnNextUpdate();
-}
-
 bool GLShader::load()
 {
-  if (!mLoaded)
+  bool success = false;
+  if (!isLoaded())
   {
     GLuint shaderParts[SHADER_COUNT];
-    mLoaded = true;
-    for (int i = 0; mLoaded && i < (int)SHADER_COUNT; ++i)
+    success = true;
+    for (int i = 0; success && i < (int)SHADER_COUNT; ++i)
     {
       GLenum glPart = GetGLShaderPart((SHADER_PART)i);
       if (mPartTypes[i] == SHADER_FILE)
-        mLoaded &= compilePart(glPart, Platform::LoadTextFile(mParts[i]).c_str(), shaderParts+i);
+        success &= compilePart(glPart, Platform::LoadTextFile(mParts[i]).c_str(), shaderParts+i);
       else if (mPartTypes[i] == SHADER_SOURCE)
-        mLoaded &= compilePart(glPart, mParts[i].c_str(), shaderParts+i);
+        success &= compilePart(glPart, mParts[i].c_str(), shaderParts+i);
       else
         shaderParts[i] = 0;
     }
     
-    if (mLoaded)
+    if (success)
     {
       mProgramId = glCreateProgram();
       if (mProgramId) {
@@ -58,7 +52,7 @@ bool GLShader::load()
         {
           glDeleteProgram(mProgramId);
           mProgramId = 0;
-          mLoaded = false;
+          success = false;
         }
         else
           setupTextures();
@@ -67,7 +61,7 @@ bool GLShader::load()
     }
     deleteParts(shaderParts);
   }
-  return mLoaded;
+  return success;
 }
 
 GLenum GLShader::GetGLShaderPart(SHADER_PART part)

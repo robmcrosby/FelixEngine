@@ -28,9 +28,16 @@ namespace fx
     GLShader(GLGraphicSystem *system);
     virtual ~GLShader();
     
-    virtual void reload();
-    
-    bool load();
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
     
     void use() const
     {
@@ -59,6 +66,7 @@ namespace fx
     static GLenum GetGLShaderPart(SHADER_PART part);
     
   private:
+    bool load();
     void unload();
     
     bool compilePart(GLenum type, const char *src, GLuint *partId);

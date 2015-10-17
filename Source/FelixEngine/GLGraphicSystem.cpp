@@ -24,7 +24,7 @@ using namespace std;
 DEFINE_SYSTEM_ID(GLGraphicSystem)
 
 
-GLGraphicSystem::GLGraphicSystem(): mContext(0), mCheckForUnloaded(0)
+GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
   mInitFlags |= SDL_INIT_VIDEO;
 }
@@ -99,7 +99,7 @@ bool GLGraphicSystem::init()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    success &= itr->second->load();
+    success &= itr->second->init();
   
   cout << glGetString(GL_VERSION) << endl;
   
@@ -120,10 +120,10 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 
 void GLGraphicSystem::update()
 {
+  updateResources();
   processTasks();
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
-  checkForUnloaded();
 }
 
 InternalUniformMap* GLGraphicSystem::createUniformMap()
@@ -188,21 +188,16 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
   }
 }
 
-void GLGraphicSystem::checkForUnloaded()
+void GLGraphicSystem::updateResources()
 {
-  if (mCheckForUnloaded)
-  {
-    cout << "Check for Unloaded" << endl;
-    for (std::map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
-      itr->second->load();
-    mCheckForUnloaded = false;
-  }
+  for (std::map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->update();
+  for (std::map<std::string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
+    itr->second->update();
+  for (std::map<std::string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
+    itr->second->update();
+  for (std::map<std::string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
+    itr->second->update();
+  for (std::map<std::string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
+    itr->second->update();
 }

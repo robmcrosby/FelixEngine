@@ -32,7 +32,7 @@ namespace fx
     virtual Mesh* getMesh(const std::string &name) = 0;
     virtual Texture* getTexture(const std::string &name) = 0;
     
-    GraphicResource* getResource(const std::string &type, const std::string &name);
+    //Resource* getResource(const std::string &type, const std::string &name);
     virtual InternalUniformMap* createUniformMap() = 0;
     
     void addGraphicTask(const GraphicTask &task)

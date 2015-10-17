@@ -51,14 +51,12 @@ namespace fx
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     
-    void loadOnNextUpdate() {mCheckForUnloaded = true;}
-    
   private:
     void processTasks();
     void processTaskSlot(const TaskSlot &slot);
     void processTask(const GraphicTask &task);
     
-    void checkForUnloaded();
+    void updateResources();
     bool setVersion(const XMLTree::Node *node);
     
     std::map<std::string, GLWindow*>  mWindows;
@@ -68,7 +66,6 @@ namespace fx
     std::map<std::string, GLTexture*> mTextures;
     
     SDL_GLContext mContext;
-    bool mCheckForUnloaded;
     int mMajorVersion;
     int mMinorVersion;
   };

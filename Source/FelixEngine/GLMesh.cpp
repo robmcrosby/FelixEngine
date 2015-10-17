@@ -22,26 +22,20 @@ GLMesh::~GLMesh()
   clearBuffers();
 }
 
-void GLMesh::reload()
-{
-  GraphicResource::reload();
-  if (mGLSystem)
-    mGLSystem->loadOnNextUpdate();
-}
-
 bool GLMesh::load()
 {
-  if (!mLoaded)
+  bool success = false;
+  if (!isLoaded())
   {
-    mLoaded = true;
+    success = true;
     clearBuffers();
     
     glGenVertexArrays(1, &mVertexArray);
     glBindVertexArray(mVertexArray);
     for (VertexBufferMap::const_iterator buffer = mBufferMap.begin(); buffer != mBufferMap.end(); ++buffer)
-      mLoaded &= loadVertexBuffer(buffer->first, buffer->second);
+      success &= loadVertexBuffer(buffer->first, buffer->second);
     if (mBufferMap.indexBuffer().size())
-      mLoaded &= loadIndexBuffer(mBufferMap.indexBuffer());
+      success &= loadIndexBuffer(mBufferMap.indexBuffer());
     glBindVertexArray(0);
     
     const Ranges &subMeshes = mBufferMap.subMeshes();
@@ -61,7 +55,7 @@ bool GLMesh::load()
     }
     setGLPrimitiveType(mBufferMap.primitiveType());
   }
-  return mLoaded;
+  return success;
 }
 
 void GLMesh::clearBuffers()

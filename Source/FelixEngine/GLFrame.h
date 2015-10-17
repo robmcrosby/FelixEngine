@@ -26,15 +26,23 @@ namespace fx
     GLFrame(GLGraphicSystem *system);
     virtual ~GLFrame();
     
-    virtual void reload();
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
     
     void setToWindow(GLWindow *window)
     {
       mGLWindow = window;
       mFrameBufferId = 0;
-      mLoaded = true;
+      setLoaded();
     }
-    bool load();
     
     void use() const
     {
@@ -124,6 +132,7 @@ namespace fx
     };
     
   private:
+    bool load();
     void clearGLBuffers();
     bool loadGLBuffers();
     void setTexture(GLBuffer &buffer, const std::string &name);

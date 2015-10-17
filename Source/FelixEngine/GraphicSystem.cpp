@@ -37,25 +37,25 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
   return success;
 }
 
-GraphicResource* GraphicSystem::getResource(const std::string &type, const std::string &name)
-{
-  GraphicResource *resource = nullptr;
-  if (name == "")
-    cerr << "Error: Blank name for Graphic Resource: " << type << endl;
-  else
-  {
-    if (type == "Window")
-      resource = getWindow(name);
-    else if (type == "Frame")
-      resource = getFrame(name);
-    else if (type == "Mesh")
-      resource = getMesh(name);
-    else if (type == "Shader")
-      resource = getShader(name);
-    else if (type == "Texture")
-      resource = getTexture(name);
-    else
-      cerr << "Error: Unknown Graphic Resource: " << type << endl;
-  }
-  return resource;
-}
+//Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
+//{
+//  Resource *resource = nullptr;
+//  if (name == "")
+//    cerr << "Error: Blank name for Graphic Resource: " << type << endl;
+//  else
+//  {
+//    if (type == "Window")
+//      resource = getWindow(name);
+//    else if (type == "Frame")
+//      resource = getFrame(name);
+//    else if (type == "Mesh")
+//      resource = getMesh(name);
+//    else if (type == "Shader")
+//      resource = getShader(name);
+//    else if (type == "Texture")
+//      resource = getTexture(name);
+//    else
+//      cerr << "Error: Unknown Graphic Resource: " << type << endl;
+//  }
+//  return resource;
+//}

@@ -24,9 +24,16 @@ namespace fx
     GLTexture(GLGraphicSystem *system);
     virtual ~GLTexture();
     
-    virtual void reload();
-    
-    bool load();
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
     
     void use(GLint index, const Sampler &sampler) const
     {
@@ -41,12 +48,13 @@ namespace fx
         glGenTextures(1, &mTextureId);
       mSize = size;
       mFBOTexture = true;
-      mLoaded = true;
+      setLoaded();
       return mTextureId;
     }
     GLuint textureId() const {return mTextureId;}
     
   private:
+    bool load();
     bool loadImageFile(const std::string &file);
     bool loadImage(const ImageRGBA &image);
     void  setFilters(const Sampler &sampler) const

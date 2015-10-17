@@ -40,9 +40,17 @@ namespace fx
     GLMesh(GLGraphicSystem *system);
     virtual ~GLMesh();
     
-    virtual void reload();
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
     
-    bool load();
     void draw(const GLShader *shader, int instances, int index) const
     {
       if (shader && index < (int)mSubMeshes.size())
@@ -79,6 +87,7 @@ namespace fx
     }
     
   private:
+    bool load();
     void clearBuffers();
     bool loadVertexBuffer(const std::string &name, const VertexBuffer &buffer);
     bool loadIndexBuffer(const IndexBuffer &buffer);

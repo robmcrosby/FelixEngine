@@ -9,6 +9,7 @@
 #ifndef System_h
 #define System_h
 
+#include "Resource.h"
 #include "XMLTree.h"
 
 #include <iostream>
