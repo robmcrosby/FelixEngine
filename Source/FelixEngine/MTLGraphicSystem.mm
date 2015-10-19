@@ -66,13 +66,20 @@
 
 namespace fx
 {
-  class MTLUniformMap: public InternalUniformMap
+  struct MTLContextInfo
   {
-  public:
-    MTLUniformMap() {}
-    virtual ~MTLUniformMap() {}
+    MTLViewport   mViewport;
     
-    virtual void update(const VariantMap &map) {}
+    id <MTLDevice>       mDevice;
+    id <MTLCommandQueue> mCommandQueue;
+    id <MTLLibrary>      mDefaultLibrary;
+    
+    id <MTLCommandBuffer>     mCommandBuffer;
+    
+    NSMutableDictionary *mDepthStencilStates;
+    
+    //MTLPipelineKey *mPipelineKey;
+    //MTLDescriptorKey *mDescriptorKey;
   };
   
   class MTLWindowInterface: public Window
@@ -163,6 +170,23 @@ namespace fx
     
   private:
     MTLGraphicSystem *mSystem;
+  };
+  
+  struct MTLSamplerInterface
+  {
+    MTLSamplerInterface() {mSampler = nil;}
+    ~MTLSamplerInterface() {mSampler = nil;}
+    
+    id <MTLSamplerState> mSampler;
+  };
+  
+  class MTLUniformMap: public InternalUniformMap
+  {
+  public:
+    MTLUniformMap() {}
+    virtual ~MTLUniformMap() {}
+    
+    virtual void update(const VariantMap &map) {}
   };
 }
 

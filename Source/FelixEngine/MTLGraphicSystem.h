@@ -14,11 +14,13 @@
 
 namespace fx
 {
+  class MTLContextInfo;
   class MTLWindowInterface;
   class MTLFrameInterface;
   class MTLShaderInterface;
   class MTLMeshInterface;
   class MTLTextureInterface;
+  class MTLSamplerInterface;
   
   /**
    *
@@ -42,6 +44,8 @@ namespace fx
     
     virtual InternalUniformMap* createUniformMap();
     
+    MTLContextInfo* getContextInfo() const {return mContextInfo;}
+    
   private:
     void processTasks();
     void processTaskSlot(const TaskSlot &slot);
@@ -49,11 +53,15 @@ namespace fx
     
     void updateResources();
     
+    MTLContextInfo *mContextInfo;
+    
     std::map<std::string, MTLWindowInterface*>  mWindows;
     std::map<std::string, MTLFrameInterface*>   mFrames;
     std::map<std::string, MTLShaderInterface*>  mShaders;
     std::map<std::string, MTLMeshInterface*>    mMeshes;
     std::map<std::string, MTLTextureInterface*> mTextures;
+    
+    mutable std::map<Sampler, MTLSamplerInterface*> mSamplers;
   };
 }
 
