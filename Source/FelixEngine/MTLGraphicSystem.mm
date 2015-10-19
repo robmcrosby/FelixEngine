@@ -11,57 +11,55 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
-#import <Cocoa/Cocoa.h>
-#import <Metal/Metal.h>
-#import <QuartzCore/CAMetalLayer.h>
+#import "MTLGraphicResources.h"
 
 
 
-@interface MetalView : NSView
-@property (nonatomic) CAMetalLayer *metalLayer;
-@end
-
-@implementation MetalView
-+ (Class)layerClass
-{
-  return [CAMetalLayer class];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-  if ((self = [super initWithFrame:frame])) {
-    /* Resize properly when rotated. */
-    //self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
-    /* Use the screen's native scale (retina resolution, when available.) */
-    //self.contentScaleFactor = [UIScreen mainScreen].nativeScale;
-    
-    _metalLayer = (CAMetalLayer *) self.layer;
-    _metalLayer.opaque = YES;
-    _metalLayer.device = MTLCreateSystemDefaultDevice();
-    
-    [self updateDrawableSize];
-  }
-  
-  return self;
-}
-
-/* Set the size of the metal drawables when the view is resized. */
-//- (void)layoutSubviews
+//@interface MetalView : NSView
+//@property (nonatomic) CAMetalLayer *metalLayer;
+//@end
+//
+//@implementation MetalView
+//+ (Class)layerClass
 //{
-//  [super layoutSubviews];
-//  [self updateDrawableSize];
+//  return [CAMetalLayer class];
 //}
-
-- (void)updateDrawableSize
-{
-  CGSize size  = self.bounds.size;
-//  size.width  *= self.contentScaleFactor;
-//  size.height *= self.contentScaleFactor;
-  _metalLayer.drawableSize = size;
-}
-
-@end
+//
+//- (instancetype)initWithFrame:(CGRect)frame
+//{
+//  if ((self = [super initWithFrame:frame])) {
+//    /* Resize properly when rotated. */
+//    //self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    
+//    /* Use the screen's native scale (retina resolution, when available.) */
+//    //self.contentScaleFactor = [UIScreen mainScreen].nativeScale;
+//    
+//    _metalLayer = (CAMetalLayer *) self.layer;
+//    _metalLayer.opaque = YES;
+//    _metalLayer.device = MTLCreateSystemDefaultDevice();
+//    
+//    [self updateDrawableSize];
+//  }
+//  
+//  return self;
+//}
+//
+///* Set the size of the metal drawables when the view is resized. */
+////- (void)layoutSubviews
+////{
+////  [super layoutSubviews];
+////  [self updateDrawableSize];
+////}
+//
+//- (void)updateDrawableSize
+//{
+//  CGSize size  = self.bounds.size;
+////  size.width  *= self.contentScaleFactor;
+////  size.height *= self.contentScaleFactor;
+//  _metalLayer.drawableSize = size;
+//}
+//
+//@end
 
 
 namespace fx
@@ -85,8 +83,11 @@ namespace fx
   class MTLWindowInterface: public Window
   {
   public:
-    MTLWindowInterface(MTLGraphicSystem *system): mSystem(system), mSDLWindow(0) {}
-    virtual ~MTLWindowInterface() {}
+    MTLWindowInterface(MTLGraphicSystem *system): mSystem(system), mSDLWindow(0)
+    {
+      mMTLWindow = [[MTLWindow alloc] init];
+    }
+    virtual ~MTLWindowInterface() {mMTLWindow = nil;}
     
     bool init()
     {
@@ -99,20 +100,23 @@ namespace fx
       SDL_SysWMinfo *info = (SDL_SysWMinfo*)malloc(sizeof(SDL_SysWMinfo));
       SDL_VERSION(&info->version);
       SDL_GetWindowWMInfo(mSDLWindow, info);
-      mSDLView = info->info.cocoa.window.contentViewController.view;
-      free(info);
       
-      mMTLView = [[MetalView alloc] initWithFrame:mSDLView.frame];
-      [mSDLView addSubview:mMTLView];
+      success = [mMTLWindow setNSView:info->info.cocoa.window.contentViewController.view];
+      free(info);
+
+      //mMTLView = [[MetalView alloc] initWithFrame:mSDLView.frame];
+      //[mSDLView addSubview:mMTLView];
       
       return success;
     }
     void update() {}
     
+    MTLWindow *mMTLWindow;
+    
   private:
-    NSView     *mSDLView;
+    //NSView     *mSDLView;
     SDL_Window *mSDLWindow;
-    MetalView  *mMTLView;
+    //MetalView  *mMTLView;
     MTLGraphicSystem *mSystem;
   };
   
@@ -135,12 +139,17 @@ namespace fx
   class MTLShaderInterface: public Shader
   {
   public:
-    MTLShaderInterface(MTLGraphicSystem *system): mSystem(system) {}
-    virtual ~MTLShaderInterface() {}
+    MTLShaderInterface(MTLGraphicSystem *system): mSystem(system)
+    {
+      MTLContextInfo *info = mSystem->getContextInfo();
+      mMTLShader = [[MTLShader alloc] initWithDevice:info->mDevice andLibrary:info->mDefaultLibrary];
+    }
+    virtual ~MTLShaderInterface() {mMTLShader = nil;}
     
     void update() {}
     
   private:
+    MTLShader *mMTLShader;
     MTLGraphicSystem *mSystem;
   };
   
@@ -200,11 +209,13 @@ DEFINE_SYSTEM_ID(MTLGraphicSystem)
 
 MTLGraphicSystem::MTLGraphicSystem()
 {
+  mContextInfo = new MTLContextInfo();
   mInitFlags |= SDL_INIT_VIDEO;
 }
 
 MTLGraphicSystem::~MTLGraphicSystem()
 {
+  delete mContextInfo;
 }
 
 Window* MTLGraphicSystem::getWindow(const std::string &name)
@@ -254,9 +265,12 @@ bool MTLGraphicSystem::init()
 {
   bool success = true;
   
+  mContextInfo->mDevice = MTLCreateSystemDefaultDevice();
   for (map<std::string, MTLWindowInterface*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  {
+    [itr->second->mMTLWindow setMetalDevice: mContextInfo->mDevice];
     success &= itr->second->init();
-  
+  }
   return success;
 }
 

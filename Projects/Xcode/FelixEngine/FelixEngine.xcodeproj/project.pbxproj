@@ -64,6 +64,13 @@
 		37BA17B31BD30BF9009478B0 /* TriangleSceneMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37BA17B21BD30BF9009478B0 /* TriangleSceneMetal.xml */; settings = {ASSET_TAGS = (); }; };
 		37CBA85A1BD4CA67002A358A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CBA8591BD4CA67002A358A /* QuartzCore.framework */; };
 		37CBA85C1BD4CA7A002A358A /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CBA85B1BD4CA7A002A358A /* Metal.framework */; };
+		37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA85F1BD5752B002A358A /* MTLDescriptorKey.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8601BD5752B002A358A /* MTLFrame.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8611BD5752B002A358A /* MTLMesh.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8621BD5752B002A358A /* MTLPipelineKey.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8631BD5752B002A358A /* MTLShader.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8641BD5752B002A358A /* MTLTexture.mm */; settings = {ASSET_TAGS = (); }; };
+		37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8651BD5752B002A358A /* MTLWindow.mm */; settings = {ASSET_TAGS = (); }; };
 		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37CD4E361BC83E6300DAB4E3 /* Transform.cpp */; settings = {ASSET_TAGS = (); }; };
@@ -164,6 +171,14 @@
 		37C531C91BBCD4BB006DC58A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37CBA8591BD4CA67002A358A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		37CBA85B1BD4CA7A002A358A /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		37CBA85D1BD56561002A358A /* MTLGraphicResources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MTLGraphicResources.h; path = ../../../../Source/FelixEngine/MTLGraphicResources.h; sourceTree = "<group>"; };
+		37CBA85F1BD5752B002A358A /* MTLDescriptorKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLDescriptorKey.mm; path = ../../../../Source/FelixEngine/MTLDescriptorKey.mm; sourceTree = "<group>"; };
+		37CBA8601BD5752B002A358A /* MTLFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLFrame.mm; path = ../../../../Source/FelixEngine/MTLFrame.mm; sourceTree = "<group>"; };
+		37CBA8611BD5752B002A358A /* MTLMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLMesh.mm; path = ../../../../Source/FelixEngine/MTLMesh.mm; sourceTree = "<group>"; };
+		37CBA8621BD5752B002A358A /* MTLPipelineKey.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLPipelineKey.mm; path = ../../../../Source/FelixEngine/MTLPipelineKey.mm; sourceTree = "<group>"; };
+		37CBA8631BD5752B002A358A /* MTLShader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLShader.mm; path = ../../../../Source/FelixEngine/MTLShader.mm; sourceTree = "<group>"; };
+		37CBA8641BD5752B002A358A /* MTLTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLTexture.mm; path = ../../../../Source/FelixEngine/MTLTexture.mm; sourceTree = "<group>"; };
+		37CBA8651BD5752B002A358A /* MTLWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLWindow.mm; path = ../../../../Source/FelixEngine/MTLWindow.mm; sourceTree = "<group>"; };
 		37CD4E1B1BC5C04400DAB4E3 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
 		37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
 		37CD4E361BC83E6300DAB4E3 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../../Source/FelixEngine/Transform.cpp; sourceTree = "<group>"; };
@@ -259,6 +274,7 @@
 			children = (
 				37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */,
 				37DCCD941BD3C563003D9081 /* MTLGraphicSystem.mm */,
+				37CBA85E1BD569C4002A358A /* Resources */,
 			);
 			name = Metal;
 			sourceTree = "<group>";
@@ -362,6 +378,21 @@
 				37C531C91BBCD4BB006DC58A /* Info.plist */,
 			);
 			path = FelixEngine;
+			sourceTree = "<group>";
+		};
+		37CBA85E1BD569C4002A358A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				37CBA85D1BD56561002A358A /* MTLGraphicResources.h */,
+				37CBA85F1BD5752B002A358A /* MTLDescriptorKey.mm */,
+				37CBA8601BD5752B002A358A /* MTLFrame.mm */,
+				37CBA8611BD5752B002A358A /* MTLMesh.mm */,
+				37CBA8621BD5752B002A358A /* MTLPipelineKey.mm */,
+				37CBA8631BD5752B002A358A /* MTLShader.mm */,
+				37CBA8641BD5752B002A358A /* MTLTexture.mm */,
+				37CBA8651BD5752B002A358A /* MTLWindow.mm */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		37CD4E191BC5BFFD00DAB4E3 /* Scene */ = {
@@ -579,15 +610,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
+				37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
 				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */,
+				37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */,
+				37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */,
 				370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */,
 				371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */,
+				37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
+				37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */,
+				37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
+				37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */,
 				37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
 				37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */,
