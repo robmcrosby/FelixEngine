@@ -7,21 +7,105 @@
 //
 
 #include "MTLGraphicSystem.h"
+#include "UniformMap.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_syswm.h>
+
+#import <Cocoa/Cocoa.h>
+#import <Metal/Metal.h>
+#import <QuartzCore/CAMetalLayer.h>
+
+
+
+@interface MetalView : NSView
+@property (nonatomic) CAMetalLayer *metalLayer;
+@end
+
+@implementation MetalView
++ (Class)layerClass
+{
+  return [CAMetalLayer class];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+  if ((self = [super initWithFrame:frame])) {
+    /* Resize properly when rotated. */
+    //self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+    /* Use the screen's native scale (retina resolution, when available.) */
+    //self.contentScaleFactor = [UIScreen mainScreen].nativeScale;
+    
+    _metalLayer = (CAMetalLayer *) self.layer;
+    _metalLayer.opaque = YES;
+    _metalLayer.device = MTLCreateSystemDefaultDevice();
+    
+    [self updateDrawableSize];
+  }
+  
+  return self;
+}
+
+/* Set the size of the metal drawables when the view is resized. */
+//- (void)layoutSubviews
+//{
+//  [super layoutSubviews];
+//  [self updateDrawableSize];
+//}
+
+- (void)updateDrawableSize
+{
+  CGSize size  = self.bounds.size;
+//  size.width  *= self.contentScaleFactor;
+//  size.height *= self.contentScaleFactor;
+  _metalLayer.drawableSize = size;
+}
+
+@end
 
 
 namespace fx
 {
+  class MTLUniformMap: public InternalUniformMap
+  {
+  public:
+    MTLUniformMap() {}
+    virtual ~MTLUniformMap() {}
+    
+    virtual void update(const VariantMap &map) {}
+  };
   
   class MTLWindowInterface: public Window
   {
   public:
-    MTLWindowInterface(MTLGraphicSystem *system): mSystem(system) {}
+    MTLWindowInterface(MTLGraphicSystem *system): mSystem(system), mSDLWindow(0) {}
     virtual ~MTLWindowInterface() {}
     
+    bool init()
+    {
+      bool success = true;
+      
+      // Create the window with SDL
+      mSDLWindow = SDL_CreateWindow("", mPosition.x, mPosition.y, mSize.w, mSize.h, SDL_WINDOW_RESIZABLE);
+      
+      // Get the NSView of the Window
+      SDL_SysWMinfo *info = (SDL_SysWMinfo*)malloc(sizeof(SDL_SysWMinfo));
+      SDL_VERSION(&info->version);
+      SDL_GetWindowWMInfo(mSDLWindow, info);
+      mSDLView = info->info.cocoa.window.contentViewController.view;
+      free(info);
+      
+      mMTLView = [[MetalView alloc] initWithFrame:mSDLView.frame];
+      [mSDLView addSubview:mMTLView];
+      
+      return success;
+    }
     void update() {}
     
   private:
+    NSView     *mSDLView;
+    SDL_Window *mSDLWindow;
+    MetalView  *mMTLView;
     MTLGraphicSystem *mSystem;
   };
   
@@ -136,21 +220,19 @@ Texture* MTLGraphicSystem::getTexture(const std::string &name)
 
 bool MTLGraphicSystem::setToXml(const XMLTree::Node *node)
 {
-//  if (node)
-//  {
-//    setVersion(node->subNode("Version"));
-//    return addWindows(node->subNode("Windows"));
-//  }
-//  cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
-//  return false;
-  
-  bool success = true;
-  return success;
+  if (node)
+    return addWindows(node->subNode("Windows"));
+  cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
+  return false;
 }
 
 bool MTLGraphicSystem::init()
 {
   bool success = true;
+  
+  for (map<std::string, MTLWindowInterface*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    success &= itr->second->init();
+  
   return success;
 }
 
@@ -164,7 +246,7 @@ void MTLGraphicSystem::update()
 
 InternalUniformMap* MTLGraphicSystem::createUniformMap()
 {
-  return nullptr;
+  return new MTLUniformMap();
 }
 
 void MTLGraphicSystem::processTasks()

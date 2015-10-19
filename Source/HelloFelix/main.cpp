@@ -18,13 +18,13 @@ int main( int argc, char* args[] )
 {
   fx::FelixEngine *engine = fx::FelixEngine::Instance();
   
-  if (!engine->init("SettingsGL41.xml"))
+  if (!engine->init("SettingsMetal.xml"))
   {
     cerr << "Error Initalizing the Engine" << endl;
     return 1;
   }
   
-  if (!engine->loadScene("TriangleSceneGL41.xml"))
+  if (!engine->loadScene("TriangleSceneMetal.xml"))
   {
     cerr << "Error Loading the Scene" << endl;
     return 1;
