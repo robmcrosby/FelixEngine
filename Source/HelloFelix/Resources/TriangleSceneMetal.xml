@@ -24,9 +24,6 @@
             <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
           </UniformMap>
         </Material>
-        <ClearState>
-          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
-        </ClearState>
       </Slot>
     </RenderSlots>
   </Model>

@@ -107,11 +107,23 @@ namespace fx
   struct ClearState
   {
     ClearState() {reset();}
+    ClearState(const ClearState &other) {*this = other;}
     ClearState(const XMLTree::Node &node)
     {
       reset();
       setToXml(node);
     }
+    
+    ClearState& operator=(const ClearState &other)
+    {
+      flags = other.flags;
+      depth = other.depth;
+      stenceil = other.stenceil;
+      for (int i = 0; i < COLOR_ATTACHMENT_MAX; ++i)
+        colors[i] = other.colors[i];
+      return *this;
+    }
+    
     void setClearColor(const RGBAf &color, unsigned int index = 0)
     {
       if (index < COLOR_ATTACHMENT_MAX)

@@ -367,9 +367,15 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
 {
   if (task.isViewTask() && task.viewIndex < (int)mTaskSlots.size())
   {
-    const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
+    TaskSlot &slot = mTaskSlots.at(task.viewIndex);
     if (slot.size())
+    {
+      // TODO: Fix this when Compute tasks are introduced
+      if (task.isClearTask() && !slot.at(0).isClearTask())
+        slot.at(0).clearState = task.clearState;
+      
       processTaskSlot(slot);
+    }
   }
   else if (task.isDrawTask())
   {
