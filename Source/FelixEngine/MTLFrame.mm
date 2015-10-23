@@ -80,14 +80,13 @@
 
 -(void)updateWindowBuffer
 {
-  for (MTLTexture *buffer in _colorBuffers)
-  {
-    _width = buffer.width;
-    _height = buffer.height;
-    
-    if (_depthBuffer != nil)
-      [_depthBuffer resizeToWidth:_width andHeight:_height];
-  }
+//  for (MTLTexture *buffer in _colorBuffers)
+//  {
+//    _width = buffer.width;
+//    _height = buffer.height;
+//  }
+//  if (_depthBuffer != nil)
+//    [_depthBuffer resizeToWidth:_width andHeight:_height];
   
   [_descriptors removeAllObjects];
 }
@@ -114,8 +113,6 @@
         //pipelineDesc.colorAttachments[index].sourceAlphaBlendFactor = MTLBlendFactorOne;
         pipelineDesc.colorAttachments[index].destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
         //pipelineDesc.colorAttachments[index].destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
-        
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       }
       ++index;
     }
@@ -203,11 +200,11 @@
 {
   [_colorBuffers addObject:texture];
   
-  // Clear the pipelines dictionary for changes.
+  // Clear the pipeline and descriptor dictionaries for the changes
   [_pipelines removeAllObjects];
   [_descriptors removeAllObjects];
   
-  [texture resizeToWidth:_width andHeight:_height];
+  //[texture resizeToWidth:_width andHeight:_height];
 }
 
 -(void)setDepthBuffer:(MTLTexture*)texture

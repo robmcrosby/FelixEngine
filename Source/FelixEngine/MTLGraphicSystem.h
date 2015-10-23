@@ -47,6 +47,9 @@ namespace fx
     MTLContextInfo* getContextInfo() const {return mContextInfo;}
     
   private:
+    void setNextWindowDrawables() const;
+    void presentWindowDrawables() const;
+    
     void processTasks();
     void processTaskSlot(const TaskSlot &slot);
     void processTask(const GraphicTask &task);
@@ -54,6 +57,7 @@ namespace fx
     void updateResources();
     
     MTLContextInfo *mContextInfo;
+    MTLWindowInterface *mMainWindow;
     
     std::map<std::string, MTLWindowInterface*>  mWindows;
     std::map<std::string, MTLFrameInterface*>   mFrames;

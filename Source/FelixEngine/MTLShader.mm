@@ -54,13 +54,13 @@
   _fragmentFunction = nil;
 }
 
--(BOOL)setVertexFunctionToName:(NSString*)name
+-(BOOL)setVertexFunction:(NSString*)name
 {
   _vertexFunction = [_mtlLibrary newFunctionWithName:name];
   return self.vertexFunction != nil;
 }
 
--(BOOL)setFragmentFunctionToName:(NSString*)name
+-(BOOL)setFragmentFunction:(NSString*)name
 {
   _fragmentFunction = [_mtlLibrary newFunctionWithName:name];
   return self.fragmentFunction!= nil;

@@ -22,8 +22,8 @@
 
 -(id)initWithDevice:(id <MTLDevice>)device andLibrary:(id <MTLLibrary>)library;
 
--(BOOL)setVertexFunctionToName:(NSString*)name;
--(BOOL)setFragmentFunctionToName:(NSString*)name;
+-(BOOL)setVertexFunction:(NSString*)name;
+-(BOOL)setFragmentFunction:(NSString*)name;
 
 -(BOOL)hasReflection;
 -(void)setReflection:(MTLRenderPipelineReflection*)reflection;
@@ -43,7 +43,7 @@
 
 -(id)initWithDevice:(id <MTLDevice>)device;
 
--(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements;
+-(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements forName:(NSString*)name;
 -(BOOL)setIndexBuffer:(const void*)buffer withNumIndices:(NSUInteger)numIndices;
 -(void)setPrimitiveType:(MTLPrimitiveType)type;
 
@@ -130,14 +130,12 @@
 
 @interface MTLWindow : NSObject
 
-@property (nonatomic, readonly)  id <MTLCommandBuffer> commandBuffer;
-
-
 -(void)setMetalDevice:(id <MTLDevice>)device;
 -(void)setMetalFrame:(MTLFrame*)frame;
 
--(BOOL)setNSView:(NSView*)view;
--(BOOL)setupCommandBufferWithQueue:(id <MTLCommandQueue>)queue;
--(void)queueCommandBuffer;
+-(BOOL)setNSWindow:(NSWindow*)window;
+
+-(void)setNextDrawable;
+-(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer;
 
 @end
