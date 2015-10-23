@@ -42,7 +42,7 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* createUniformMap();
+    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
     
     MTLContextInfo* getContextInfo() const {return mContextInfo;}
     

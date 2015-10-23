@@ -128,14 +128,17 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 void GLGraphicSystem::update()
 {
   updateResources();
+  updateUniforms();
   processTasks();
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
 }
 
-InternalUniformMap* GLGraphicSystem::createUniformMap()
+InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
-  return new GLUniformMap();
+  GLUniformMap *internalMap = new GLUniformMap(map);
+  mGLUniforms.push_back(internalMap);
+  return internalMap;
 }
 
 void GLGraphicSystem::processTasks()
@@ -197,14 +200,31 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
 
 void GLGraphicSystem::updateResources()
 {
-  for (std::map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->update();
-  for (std::map<std::string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
+  for (map<string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
     itr->second->update();
-  for (std::map<std::string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
+  for (map<string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
     itr->second->update();
-  for (std::map<std::string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
+  for (map<string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
     itr->second->update();
-  for (std::map<std::string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
+  for (map<string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
     itr->second->update();
+}
+
+void GLGraphicSystem::updateUniforms()
+{
+  for (list<GLUniformMap*>::iterator itr = mGLUniforms.begin(); itr != mGLUniforms.end();)
+  {
+    if ((*itr)->inUse())
+    {
+      (*itr)->update();
+      ++itr;
+    }
+    else
+    {
+      delete *itr;
+      itr = mGLUniforms.erase(itr);
+    }
+  }
 }

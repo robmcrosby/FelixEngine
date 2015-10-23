@@ -176,7 +176,6 @@ void RenderSlot::update() const
     mSystem->addGraphicTask(task);
   
   mView.update();
-  mMaterial.update();
 }
 
 bool RenderSlot::applyToTask(GraphicTask &task) const

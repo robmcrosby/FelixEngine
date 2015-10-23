@@ -53,7 +53,6 @@ namespace fx
       for (iterator itr = begin(); itr != end(); ++itr)
         (*itr)->update();
       updateViews();
-      updateMaterials();
     }
     
     void setName(const std::string &name) {mName = name;}
@@ -129,11 +128,6 @@ namespace fx
     void updateViews()
     {
       for (std::map<std::string, View*>::iterator itr = mViewMap.begin(); itr != mViewMap.end(); ++itr)
-        itr->second->update();
-    }
-    void updateMaterials()
-    {
-      for (std::map<std::string, Material*>::iterator itr = mMaterialMap.begin(); itr != mMaterialMap.end(); ++itr)
         itr->second->update();
     }
     Object* createObject(const XMLTree::Node *node)

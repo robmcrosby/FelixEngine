@@ -23,6 +23,7 @@ namespace fx
   class GLShader;
   class GLMesh;
   class GLTexture;
+  class GLUniformMap;
   
   /**
    *
@@ -46,7 +47,7 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* createUniformMap();
+    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
@@ -57,6 +58,7 @@ namespace fx
     void processTask(const GraphicTask &task);
     
     void updateResources();
+    void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
     
     std::map<std::string, GLWindow*>  mWindows;
@@ -64,6 +66,8 @@ namespace fx
     std::map<std::string, GLShader*>  mShaders;
     std::map<std::string, GLMesh*>    mMeshes;
     std::map<std::string, GLTexture*> mTextures;
+    
+    std::list<GLUniformMap*> mGLUniforms;
     
     SDL_GLContext mContext;
     int mMajorVersion;

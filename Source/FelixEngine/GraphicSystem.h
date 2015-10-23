@@ -16,7 +16,9 @@
 
 namespace fx
 {
+  class UniformMap;
   class InternalUniformMap;
+  
   /**
    *
    */
@@ -33,7 +35,8 @@ namespace fx
     virtual Texture* getTexture(const std::string &name) = 0;
     
     //Resource* getResource(const std::string &type, const std::string &name);
-    virtual InternalUniformMap* createUniformMap() = 0;
+    //virtual InternalUniformMap* createUniformMap() = 0;
+    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map) = 0;
     
     void addGraphicTask(const GraphicTask &task)
     {

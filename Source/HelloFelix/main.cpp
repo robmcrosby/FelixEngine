@@ -12,19 +12,26 @@
 
 #include <FelixEngine/ImageLoader.h>
 
+//#define SETTINGS_FILE "SettingsMetal.xml"
+//#define SCENE_FILE "TriangleSceneMetal.xml"
+
+#define SETTINGS_FILE "SettingsGL41.xml"
+#define SCENE_FILE "TriangleSceneGL41.xml"
+
+
 using namespace std;
 
 int main( int argc, char* args[] )
 {
   fx::FelixEngine *engine = fx::FelixEngine::Instance();
   
-  if (!engine->init("SettingsMetal.xml"))
+  if (!engine->init(SETTINGS_FILE))
   {
     cerr << "Error Initalizing the Engine" << endl;
     return 1;
   }
   
-  if (!engine->loadScene("TriangleSceneMetal.xml"))
+  if (!engine->loadScene(SCENE_FILE))
   {
     cerr << "Error Loading the Scene" << endl;
     return 1;

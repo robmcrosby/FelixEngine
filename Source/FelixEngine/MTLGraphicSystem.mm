@@ -201,7 +201,7 @@ namespace fx
     MTLUniformMap() {}
     virtual ~MTLUniformMap() {}
     
-    virtual void update(const VariantMap &map) {}
+    virtual void release() {delete this;}
   };
 }
 
@@ -311,7 +311,7 @@ void MTLGraphicSystem::update()
   processTasks();
 }
 
-InternalUniformMap* MTLGraphicSystem::createUniformMap()
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   return new MTLUniformMap();
 }

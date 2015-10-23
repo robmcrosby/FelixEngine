@@ -70,10 +70,6 @@ namespace fx
       return success;
     }
     
-    void update() const
-    {
-      mUniformMap.update();
-    }
     bool applyToTask(GraphicTask &task) const
     {
       if (!mShader)

@@ -17,10 +17,17 @@ namespace fx
   class GLUniformMap: public InternalUniformMap
   {
   public:
-    GLUniformMap() {}
+    GLUniformMap(UniformMap *map): mUniformMap(map) {}
     virtual ~GLUniformMap() {}
     
-    virtual void update(const VariantMap &map) {mMap = map;}
+    virtual void release() {mUniformMap = nullptr;}
+    
+    void update()
+    {
+      if (inUse())
+        mMap = mUniformMap->getVariantMap();
+    }
+    bool inUse() const {return mUniformMap;}
     void applyToShader(const GLShader *shader) const
     {
       if (shader)
@@ -76,8 +83,9 @@ namespace fx
         }
       }
     }
-
-    VariantMap mMap;
+    
+    UniformMap *mUniformMap;
+    VariantMap  mMap;
   };
 }
 
