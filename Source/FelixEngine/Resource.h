@@ -34,7 +34,6 @@ namespace fx
     void setToLoad() {mLoading = true;}
     void setToUnload() {mUnloading = true;}
     
-  protected:
     void setLoaded()
     {
       mLoaded = true;
@@ -45,6 +44,8 @@ namespace fx
       mLoaded = false;
       mUnloading = false;
     }
+    
+  protected:
     void setNotLoading() {mLoading = false;}
     void setNotUnloading() {mUnloading = false;}
     

@@ -38,6 +38,41 @@ namespace fx
   
   
   
+  struct MTLTextureInterface: Texture
+  {
+    MTLTextureInterface(MTLGraphicSystem *system): mSystem(system)
+    {
+      MTLContextInfo *info = mSystem->getContextInfo();
+      mMTLTexture = [[MTLTexture alloc] initWithDevice:info->mDevice];
+    }
+    virtual ~MTLTextureInterface() {mMTLTexture = nil;}
+    
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
+    bool load()
+    {
+      bool success = true;
+      
+      ImageRGBA image;
+      if (ImageLoader::LoadImageFromFile(image, mFile))
+        success = [mMTLTexture loadImage:image.ptr() Width:image.width() Height:image.height()];
+      
+      return success;
+    }
+    
+    MTLTexture *mMTLTexture;
+    MTLGraphicSystem *mSystem;
+  };
+  
+  
   
   struct MTLFrameInterface: Frame
   {
@@ -48,10 +83,58 @@ namespace fx
     }
     virtual ~MTLFrameInterface() {mMTLFrame = nil;}
     
-    void update() {}
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
+    bool load()
+    {
+      bool success = true;
+      
+      for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
+      {
+        if (itr->format == COLOR_RGBA)
+          success &= addColorBuffer(*itr);
+        else if (itr->format == COLOR_DEPTH32F)
+          success &= setDepthBuffer(*itr);
+      }
+      [mMTLFrame resizeToWidth:mSize.w Height:mSize.h];
+      
+      return success;
+    }
+    bool addColorBuffer(const Buffer &buffer)
+    {
+      if (buffer.name != "")
+      {
+        MTLTextureInterface *texture = static_cast<MTLTextureInterface*>(mSystem->getTexture(buffer.name));
+        texture->retain();
+        texture->setLoaded();
+        texture->setSampler(buffer.sampler);
+        mTextures.push_back(texture);
+        
+        [texture->mMTLTexture setFormat:MTLPixelFormatRGBA8Unorm];
+        [mMTLFrame addColorBuffer:texture->mMTLTexture];
+      }
+      //else
+      //  // TODO: implement color buffers without textures.
+      
+      return true;
+    }
+    bool setDepthBuffer(const Buffer &buffer)
+    {
+      // TODO: implement the Depth Buffer
+      return true;
+    }
     
     MTLFrame *mMTLFrame;
     MTLGraphicSystem *mSystem;
+    std::list<MTLTextureInterface*> mTextures;
   };
   
   
@@ -179,42 +262,6 @@ namespace fx
     }
     
     MTLMesh *mMTLMesh;
-    MTLGraphicSystem *mSystem;
-  };
-  
-  
-  
-  struct MTLTextureInterface: Texture
-  {
-    MTLTextureInterface(MTLGraphicSystem *system): mSystem(system)
-    {
-      MTLContextInfo *info = mSystem->getContextInfo();
-      mMTLTexture = [[MTLTexture alloc] initWithDevice:info->mDevice];
-    }
-    virtual ~MTLTextureInterface() {mMTLTexture = nil;}
-    
-    void update()
-    {
-      if (isLoading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-    }
-    bool load()
-    {
-      bool success = true;
-      
-      ImageRGBA image;
-      if (ImageLoader::LoadImageFromFile(image, mFile))
-        success = [mMTLTexture loadImage:image.ptr() Width:image.width() Height:image.height()];
-      
-      return success;
-    }
-    
-    MTLTexture *mMTLTexture;
     MTLGraphicSystem *mSystem;
   };
   
@@ -500,8 +547,8 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
     }
     
     MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-    viewport.width = 512; //(double)frame->mFrame.width;
-    viewport.height = 512; //(double)frame->mFrame.height;
+    viewport.width  = [frame->mMTLFrame width];
+    viewport.height = [frame->mMTLFrame height];
     
     if (pipelineState && renderPassDesc && depthState && mContextInfo->mCommandBuffer != nil)
     {

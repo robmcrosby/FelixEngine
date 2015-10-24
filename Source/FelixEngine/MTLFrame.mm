@@ -55,7 +55,7 @@
   _depthBuffer = nil;
 }
 
--(void)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height
+-(void)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height
 {
   if (_width != width || _height != height)
   {
@@ -72,22 +72,18 @@
   }
 }
 
--(void)setWidth:(NSUInteger)width andHeight:(NSUInteger)height
+-(void)setWidth:(NSUInteger)width Height:(NSUInteger)height
 {
   _width = width;
   _height = height;
 }
 
--(void)updateWindowBuffer
+-(void)updateWindowBufferAtWidth:(NSUInteger)width Height:(NSUInteger)height
 {
-//  for (MTLTexture *buffer in _colorBuffers)
-//  {
-//    _width = buffer.width;
-//    _height = buffer.height;
-//  }
-//  if (_depthBuffer != nil)
-//    [_depthBuffer resizeToWidth:_width andHeight:_height];
-  
+  _width = width;
+  _height = height;
+  //  if (_depthBuffer != nil)
+  //    [_depthBuffer resizeToWidth:_width andHeight:_height];
   [_descriptors removeAllObjects];
 }
 
@@ -200,11 +196,8 @@
 {
   [_colorBuffers addObject:texture];
   
-  // Clear the pipeline and descriptor dictionaries for the changes
   [_pipelines removeAllObjects];
   [_descriptors removeAllObjects];
-  
-  //[texture resizeToWidth:_width andHeight:_height];
 }
 
 -(void)setDepthBuffer:(MTLTexture*)texture
@@ -213,9 +206,6 @@
   
   [_pipelines removeAllObjects];
   [_descriptors removeAllObjects];
-  
-  if (_depthBuffer != nil)
-    [_depthBuffer resizeToWidth:_width Height:_height];
 }
 
 

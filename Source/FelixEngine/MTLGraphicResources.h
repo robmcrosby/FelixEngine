@@ -112,9 +112,9 @@
 
 -(void)setMetalDevice:(id <MTLDevice>)device;
 
--(void)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height;
--(void)setWidth:(NSUInteger)width andHeight:(NSUInteger)height;
--(void)updateWindowBuffer;
+-(void)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height;
+-(void)setWidth:(NSUInteger)width Height:(NSUInteger)height;
+-(void)updateWindowBufferAtWidth:(NSUInteger)width Height:(NSUInteger)height;
 
 -(void)addColorBuffer:(MTLTexture*)texture;
 -(void)setDepthBuffer:(MTLTexture*)texture;

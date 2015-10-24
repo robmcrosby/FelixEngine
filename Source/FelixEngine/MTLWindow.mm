@@ -89,8 +89,11 @@
 -(void)setNextDrawable
 {
   _drawable = [_layer nextDrawable];
+  NSUInteger width = [[_drawable texture] width];
+  NSUInteger height = [[_drawable texture] height];
+  
   [_colorTexture setTexture:_drawable.texture Format:MTLPixelFormatBGRA8Unorm];
-  [_mtlFrame updateWindowBuffer];
+  [_mtlFrame updateWindowBufferAtWidth:width Height:height];
 }
 
 -(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer

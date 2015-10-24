@@ -169,7 +169,7 @@ bool Texture::setToXml(const XMLTree::Node &node)
   bool success = false;
   if (node.hasAttribute("file"))
   {
-    mFile = node.attribute("file");
+    setImageFile(node.attribute("file"));
     if (mSampler.setToXml(node))
     {
       success = true;

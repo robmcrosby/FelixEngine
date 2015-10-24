@@ -143,6 +143,13 @@ namespace fx
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node);
     
+    void setImageFile(const std::string &file) {mFile = file;}
+    std::string imageFile() const {return mFile;}
+    
+    void setSampler(const Sampler &sampler) {mSampler = sampler;}
+    Sampler sampler() const {return mSampler;}
+    
+    void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
     
   protected:
