@@ -23,13 +23,12 @@ vertex VertexOutput SimpleVertex(device float4 *Position [[ buffer(0) ]],
   return outVertices;
 }
 
-//fragment half4 SimpleColor(constant float4 *Color [[ buffer(1) ]])
-//{
-//  return half4(*Color);
-//  //return half4(1.0, 1.0, 1.0, 1.0);
-//}
-
-fragment half4 SimpleColor()
+fragment half4 SimpleColor(constant float4 *Color [[ buffer(1) ]])
 {
-  return half4(1.0, 1.0, 1.0, 1.0);
+  return half4(*Color);
 }
+
+//fragment half4 SimpleColor()
+//{
+//  return half4(1.0, 1.0, 1.0, 1.0);
+//}

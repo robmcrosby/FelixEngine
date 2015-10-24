@@ -196,12 +196,44 @@ namespace fx
   
   
   
-  struct MTLUniformMap: InternalUniformMap
+  struct MTLUniformMapInterface: InternalUniformMap
   {
-    MTLUniformMap() {}
-    virtual ~MTLUniformMap() {}
+    MTLUniformMapInterface(UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
+    virtual ~MTLUniformMapInterface() {mMTLUniformMap = nil;}
     
-    virtual void release() {delete this;}
+    virtual void release() {mUniformMap = nullptr;}
+    
+    void update()
+    {
+      if (inUse() && mMTLUniformMap != nil)
+      {
+        [mMTLUniformMap setUniformsSize:mUniformMap->size()];
+        [mMTLUniformMap setBufferSize:mUniformMap->sizeInBytes()];
+        
+        if (mMTLUniformMap.buffer != nil)
+        {
+          NSUInteger offset = 0;
+          char *buffer = (char*)[mMTLUniformMap.buffer contents];
+          UniformMap::const_iterator itr = mUniformMap->begin();
+          for (MTLUniform *uniform in mMTLUniformMap.uniforms)
+          {
+            // Set the Uniform information
+            [uniform setName:[NSString stringWithUTF8String:itr->first.c_str()]];
+            [uniform setOffset:offset];
+            
+            // Copy the data to the buffer
+            size_t size = itr->second.sizeInBytes();
+            void *ptr = (void*)(buffer + offset);
+            memcpy(ptr, itr->second.ptr(), size);
+            offset += (NSUInteger)size;
+          }
+        }
+      }
+    }
+    bool inUse() const {return mUniformMap;}
+    
+    UniformMap    *mUniformMap;
+    MTLUniformMap *mMTLUniformMap;
   };
 }
 
@@ -308,12 +340,16 @@ bool MTLGraphicSystem::init()
 void MTLGraphicSystem::update()
 {
   updateResources();
+  updateUniforms();
   processTasks();
 }
 
 InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
-  return new MTLUniformMap();
+  MTLUniformMapInterface *internalUniformMap = new MTLUniformMapInterface(map);
+  internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
+  mMTLUniforms.push_back(internalUniformMap);
+  return internalUniformMap;
 }
 
 void MTLGraphicSystem::setNextWindowDrawables() const
@@ -444,27 +480,24 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
       [renderEncoder setDepthStencilState:depthState];
       [renderEncoder setRenderPipelineState:pipelineState];
       
-//      if (task.mLocalUniforms && task.mLocalUniforms->getInternalMap())
-//      {
-//        const MTLInternalUniformMap *uniformMap = static_cast<const MTLInternalUniformMap*>(task.mLocalUniforms->getInternalMap());
-//        for (MTLUniform *uniform in uniformMap->mUniforms)
-//          [uniform appyToShader:shader->mShader withEncoder:renderEncoder];
-//      }
-//      
-//      if (task.mViewUniforms && task.mViewUniforms->getInternalMap())
-//      {
-//        const MTLInternalUniformMap *uniformMap = static_cast<const MTLInternalUniformMap*>(task.mViewUniforms->getInternalMap());
-//        for (MTLUniform *uniform in uniformMap->mUniforms)
-//          [uniform appyToShader:shader->mShader withEncoder:renderEncoder];
-//      }
-//      
-//      if (task.mMaterialUniforms && task.mMaterialUniforms->getInternalMap())
-//      {
-//        const MTLInternalUniformMap *uniformMap = static_cast<const MTLInternalUniformMap*>(task.mMaterialUniforms->getInternalMap());
-//        for (MTLUniform *uniform in uniformMap->mUniforms)
-//          [uniform appyToShader:shader->mShader withEncoder:renderEncoder];
-//      }
-//      
+      if (task.localUniforms)
+      {
+        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.localUniforms);
+        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+      }
+      
+      if (task.viewUniforms)
+      {
+        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.viewUniforms);
+        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+      }
+      
+      if (task.materialUniforms)
+      {
+        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.materialUniforms);
+        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+      }
+//
 //      if (task.mTextureMap)
 //      {
 //        NSUInteger index = 0;
@@ -499,4 +532,21 @@ void MTLGraphicSystem::updateResources()
     itr->second->update();
   for (std::map<std::string, MTLTextureInterface*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
     itr->second->update();
+}
+
+void MTLGraphicSystem::updateUniforms()
+{
+  for (list<MTLUniformMapInterface*>::iterator itr = mMTLUniforms.begin(); itr != mMTLUniforms.end();)
+  {
+    if ((*itr)->inUse())
+    {
+      (*itr)->update();
+      ++itr;
+    }
+    else
+    {
+      delete *itr;
+      itr = mMTLUniforms.erase(itr);
+    }
+  }
 }

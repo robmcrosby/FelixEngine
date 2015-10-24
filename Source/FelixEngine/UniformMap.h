@@ -55,6 +55,15 @@ namespace fx
     const_iterator begin() const {return mMap.begin();}
     const_iterator end()   const {return mMap.end();}
     
+    size_t size() const {return mMap.size();}
+    size_t sizeInBytes() const
+    {
+      size_t totalSize = 0;
+      for (const_iterator itr = begin(); itr != end(); ++itr)
+        totalSize += itr->second.sizeInBytes();
+      return totalSize;
+    }
+    
     InternalUniformMap* getInternalMap() const {return mInternalMap;}
     const VariantMap& getVariantMap() const {return mMap;}
     

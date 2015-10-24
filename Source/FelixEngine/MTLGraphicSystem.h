@@ -21,6 +21,7 @@ namespace fx
   class MTLMeshInterface;
   class MTLTextureInterface;
   class MTLSamplerInterface;
+  class MTLUniformMapInterface;
   
   /**
    *
@@ -55,6 +56,7 @@ namespace fx
     void processTask(const GraphicTask &task);
     
     void updateResources();
+    void updateUniforms();
     
     MTLContextInfo *mContextInfo;
     MTLWindowInterface *mMainWindow;
@@ -66,6 +68,7 @@ namespace fx
     std::map<std::string, MTLTextureInterface*> mTextures;
     
     mutable std::map<Sampler, MTLSamplerInterface*> mSamplers;
+    std::list<MTLUniformMapInterface*> mMTLUniforms;
   };
 }
 

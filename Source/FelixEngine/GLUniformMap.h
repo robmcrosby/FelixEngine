@@ -25,14 +25,20 @@ namespace fx
     void update()
     {
       if (inUse())
-        mMap = mUniformMap->getVariantMap();
+      {
+        mList.resize(mUniformMap->size());
+        UniformMap::iterator mapItr = mUniformMap->begin();
+        VariantList::iterator listItr = mList.begin();
+        while (mapItr != mUniformMap->end())
+          *(listItr++) = *(mapItr++);
+      }
     }
     bool inUse() const {return mUniformMap;}
     void applyToShader(const GLShader *shader) const
     {
       if (shader)
       {
-        for (VariantMap::const_iterator itr = mMap.begin(); itr != mMap.end(); ++itr)
+        for (VariantList::const_iterator itr = mList.begin(); itr != mList.end(); ++itr)
           applyUniformToShader(itr->first, itr->second, shader);
       }
     }
@@ -85,7 +91,7 @@ namespace fx
     }
     
     UniformMap *mUniformMap;
-    VariantMap  mMap;
+    VariantList mList;
   };
 }
 

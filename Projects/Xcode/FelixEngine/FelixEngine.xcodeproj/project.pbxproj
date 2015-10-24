@@ -31,6 +31,7 @@
 		371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */; settings = {ASSET_TAGS = (); }; };
 		371049FF1BBF3DCA003EEC37 /* System.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049FE1BBF3DB9003EEC37 /* System.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37104A021BBF457F003EEC37 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
+		3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */; settings = {ASSET_TAGS = (); }; };
 		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; settings = {ASSET_TAGS = (); }; };
 		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
 		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -137,6 +138,7 @@
 		371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FelixEngine.cpp; path = ../../../../Source/FelixEngine/FelixEngine.cpp; sourceTree = "<group>"; };
 		371049FE1BBF3DB9003EEC37 /* System.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = System.h; path = ../../../../Source/FelixEngine/System.h; sourceTree = "<group>"; };
 		37104A001BBF4056003EEC37 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Scene.h; path = ../../../../Source/FelixEngine/Scene.h; sourceTree = "<group>"; };
+		3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTLUniformMap.m; path = ../../../../Source/FelixEngine/MTLUniformMap.m; sourceTree = "<group>"; };
 		374A4E2B1BD1EBB300DDF87E /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resource.h; path = ../../../../Source/FelixEngine/Resource.h; sourceTree = "<group>"; };
 		377B9B041BBDF03600440546 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		377B9B0C1BBDF03600440546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				37CBA8631BD5752B002A358A /* MTLShader.mm */,
 				37CBA8641BD5752B002A358A /* MTLTexture.mm */,
 				37CBA8651BD5752B002A358A /* MTLWindow.mm */,
+				3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
+				3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */,
 				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */,

@@ -102,7 +102,6 @@
 
 
 
-
 @interface MTLFrame : NSObject
 
 @property (nonatomic, readonly) NSUInteger width;
@@ -137,5 +136,30 @@
 
 -(void)setNextDrawable;
 -(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer;
+
+@end
+
+
+
+@interface MTLUniform : NSObject<NSCopying>
+
+@property (nonatomic, readwrite) NSString *name;
+@property (nonatomic, readwrite) NSUInteger offset;
+
+@end
+
+
+
+@interface MTLUniformMap : NSObject
+
+@property (nonatomic, readwrite) NSArray *uniforms;
+@property (nonatomic, readwrite) id <MTLBuffer> buffer;
+
+-(id)initWithDevice:(id <MTLDevice>)device;
+
+-(void)setUniformsSize:(NSUInteger)size;
+-(void)setBufferSize:(NSUInteger)size;
+
+-(void)applyToShader:(MTLShader*)shader withEncoder:(id <MTLRenderCommandEncoder>)encoder;
 
 @end

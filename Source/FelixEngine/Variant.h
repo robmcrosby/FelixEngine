@@ -170,6 +170,7 @@ namespace fx
     
     size_t typeSize() const {return mTypeSize;}
     size_t size() const {return mData.size()/mTypeSize;}
+    size_t sizeInBytes() const {return mData.size();}
     
     void* ptr() {return mData.size() ? &mData.at(0) : nullptr;}
     const void* ptr() const {return mData.size() ? &mData.at(0) : nullptr;}
@@ -303,6 +304,7 @@ namespace fx
   };
   
   typedef std::map<std::string, Variant> VariantMap;
+  typedef std::list<std::pair<std::string, Variant> > VariantList;
 }
 
 #endif /* Variant_h */
