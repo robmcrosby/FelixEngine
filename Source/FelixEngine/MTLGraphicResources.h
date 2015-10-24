@@ -64,13 +64,13 @@
 
 -(id)initWithDevice:(id <MTLDevice>)device;
 
--(BOOL)loadImage2d:(const void*)image withWidth:(NSUInteger)width andHeight:(NSUInteger)height;
--(BOOL)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height;
--(BOOL)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height withFormat:(MTLPixelFormat)format;
+-(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height;
+-(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height;
+-(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height Format:(MTLPixelFormat)format;
 -(BOOL)setFormat:(MTLPixelFormat)format;
 
--(void)setTexture:(id<MTLTexture>)texture withFormat:(MTLPixelFormat)format;
--(void)setToEncoder:(id <MTLRenderCommandEncoder>)encoder atIndex:(NSUInteger)index;
+-(void)setTexture:(id<MTLTexture>)texture Format:(MTLPixelFormat)format;
+-(void)applyToEncoder:(id <MTLRenderCommandEncoder>)encoder atIndex:(NSUInteger)index;
 
 @end
 

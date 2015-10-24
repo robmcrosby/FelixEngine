@@ -8,6 +8,8 @@
 
 #include "MTLGraphicSystem.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
+#include "ImageLoader.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
@@ -191,7 +193,26 @@ namespace fx
     }
     virtual ~MTLTextureInterface() {mMTLTexture = nil;}
     
-    void update() {}
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
+    bool load()
+    {
+      bool success = true;
+      
+      ImageRGBA image;
+      if (ImageLoader::LoadImageFromFile(image, mFile))
+        success = [mMTLTexture loadImage:image.ptr() Width:image.width() Height:image.height()];
+      
+      return success;
+    }
     
     MTLTexture *mMTLTexture;
     MTLGraphicSystem *mSystem;
@@ -510,27 +531,77 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
         const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.materialUniforms);
         [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
       }
-//
-//      if (task.mTextureMap)
-//      {
-//        NSUInteger index = 0;
-//        for (TextureMap::const_iterator itr = task.mTextureMap->begin(); itr != task.mTextureMap->end(); ++itr, ++index)
-//        {
-//          const MTLTextureInterface *texture = static_cast<const MTLTextureInterface*>(itr->texture());
-//          MTLSamplerInterface *sampler = getMTLSampler(itr->sampler());
-//          if (texture != nullptr && sampler != nullptr && sampler->mSampler != nil)
-//          {
-//            [texture->mTexture setToEncoder:renderEncoder atIndex:index];
-//            [renderEncoder setFragmentSamplerState:sampler->mSampler atIndex:index];
-//          }
-//        }
-//      }
+
+      if (task.textureMap)
+      {
+        NSUInteger index = 0;
+        for (TextureMap::const_iterator itr = task.textureMap->begin(); itr != task.textureMap->end(); ++itr, ++index)
+        {
+          const MTLTextureInterface *texture = static_cast<const MTLTextureInterface*>(itr->texture());
+          MTLSamplerInterface *sampler = getSampler(itr->sampler());
+          if (texture != nullptr && sampler != nullptr && sampler->mSampler != nil)
+          {
+            [texture->mMTLTexture applyToEncoder:renderEncoder atIndex:index];
+            [renderEncoder setFragmentSamplerState:sampler->mSampler atIndex:index];
+          }
+        }
+      }
       
       [mesh->mMTLMesh drawToEncoder:renderEncoder withShader:shader->mMTLShader instanceCount:task.instances];
       [renderEncoder endEncoding];
       renderEncoder = nil;
     }
   }
+}
+
+MTLSamplerInterface* MTLGraphicSystem::getSampler(const Sampler &sampler) const
+{
+  if (mSamplers.count(sampler))
+    return mSamplers.at(sampler);
+  
+  MTLSamplerDescriptor *samplerDesc = [MTLSamplerDescriptor new];
+  
+  // Set the Minimize and Magnify Filters
+  samplerDesc.minFilter = sampler.minFilter() == SAMPLER_FILTER_LINEAR ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
+  samplerDesc.magFilter = sampler.magFilter() == SAMPLER_FILTER_LINEAR ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
+  
+  // Set the Mip Mapping Filter.
+  if (sampler.mipMappingEnabled())
+    samplerDesc.mipFilter = sampler.mipFilter() == SAMPLER_FILTER_LINEAR ? MTLSamplerMipFilterLinear : MTLSamplerMipFilterNearest;
+  else
+    samplerDesc.mipFilter = MTLSamplerMipFilterNotMipmapped;
+  
+  samplerDesc.maxAnisotropy = sampler.samples();
+  
+  samplerDesc.sAddressMode = (MTLSamplerAddressMode)getSamplerAddressMode(sampler.sCoord());
+  samplerDesc.tAddressMode = (MTLSamplerAddressMode)getSamplerAddressMode(sampler.tCoord());
+  samplerDesc.rAddressMode = (MTLSamplerAddressMode)getSamplerAddressMode(sampler.rCoord());
+  
+  samplerDesc.normalizedCoordinates = sampler.isNormalized();
+  samplerDesc.lodMinClamp = sampler.lodMin();
+  samplerDesc.lodMaxClamp = sampler.lodMax();
+  
+  MTLSamplerInterface *mtlSampler = new MTLSamplerInterface();
+  mtlSampler->mSampler = [mContextInfo->mDevice newSamplerStateWithDescriptor:samplerDesc];
+  
+  if (mtlSampler->mSampler != nil)
+  {
+    mSamplers[sampler] = mtlSampler;
+    return mtlSampler;
+  }
+  delete mtlSampler;
+  return nullptr;
+}
+
+int MTLGraphicSystem::getSamplerAddressMode(SAMPLER_COORD coord) const
+{
+  if (coord == SAMPLER_COORD_REPEAT)
+    return (int)MTLSamplerAddressModeRepeat;
+  if (coord == SAMPLER_COORD_MIRROR)
+    return (int)MTLSamplerAddressModeMirrorRepeat;
+  if (coord == SAMPLER_COORD_CLAMP_ZERO)
+    return (int)MTLSamplerAddressModeClampToZero;
+  return (int)MTLSamplerAddressModeClampToEdge;
 }
 
 void MTLGraphicSystem::updateResources()

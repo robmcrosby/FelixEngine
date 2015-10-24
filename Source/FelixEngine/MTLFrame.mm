@@ -63,10 +63,10 @@
     _height = height;
     
     for (MTLTexture *buffer in _colorBuffers)
-      [buffer resizeToWidth:_width andHeight:_height];
+      [buffer resizeToWidth:_width Height:_height];
     
     if (_depthBuffer != nil)
-      [_depthBuffer resizeToWidth:_width andHeight:_height];
+      [_depthBuffer resizeToWidth:_width Height:_height];
     
     [_descriptors removeAllObjects];
   }
@@ -215,7 +215,7 @@
   [_descriptors removeAllObjects];
   
   if (_depthBuffer != nil)
-    [_depthBuffer resizeToWidth:_width andHeight:_height];
+    [_depthBuffer resizeToWidth:_width Height:_height];
 }
 
 

@@ -62,16 +62,16 @@ vertex VertexUVOutput SimpleVertexUV(device float4 *Position [[ buffer(0) ]],
   return outVertices;
 }
 
-//fragment half4 SimpleTexture(FragmentUVInput   inFrag    [[ stage_in ]],
-//                             texture2d<float>  tex2D     [[ texture(0) ]],
-//                             sampler           sampler2D [[ sampler(0) ]])
-//{
-//  float4 color = tex2D.sample(sampler2D, inFrag.m_Coordinate);
-//  return half4(color.r, color.g, color.b, color.a);
-//}
-
-fragment half4 SimpleTexture(FragmentUVInput inFrag [[ stage_in ]])
+fragment half4 SimpleTexture(FragmentUVInput   inFrag    [[ stage_in ]],
+                             texture2d<float>  tex2D     [[ texture(0) ]],
+                             sampler           sampler2D [[ sampler(0) ]])
 {
-  return half4(inFrag.m_Coordinate.x, inFrag.m_Coordinate.y, 1.0, 1.0);
+  float4 color = tex2D.sample(sampler2D, inFrag.m_Coordinate);
+  return half4(color.r, color.g, color.b, color.a);
 }
+
+//fragment half4 SimpleTexture(FragmentUVInput inFrag [[ stage_in ]])
+//{
+//  return half4(inFrag.m_Coordinate.x, inFrag.m_Coordinate.y, 1.0, 1.0);
+//}
 

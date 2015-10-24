@@ -89,7 +89,7 @@
 -(void)setNextDrawable
 {
   _drawable = [_layer nextDrawable];
-  [_colorTexture setTexture:_drawable.texture withFormat:MTLPixelFormatBGRA8Unorm];
+  [_colorTexture setTexture:_drawable.texture Format:MTLPixelFormatBGRA8Unorm];
   [_mtlFrame updateWindowBuffer];
 }
 
@@ -97,7 +97,7 @@
 {
   [cmdBuffer presentDrawable:_drawable];
   _drawable = nil;
-  [_colorTexture setTexture:nil withFormat:MTLPixelFormatBGRA8Unorm];
+  [_colorTexture setTexture:nil Format:MTLPixelFormatBGRA8Unorm];
 }
 
 @end

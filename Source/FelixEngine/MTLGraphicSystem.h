@@ -48,6 +48,9 @@ namespace fx
     MTLContextInfo* getContextInfo() const {return mContextInfo;}
     
   private:
+    MTLSamplerInterface* getSampler(const Sampler &sampler) const;
+    int getSamplerAddressMode(fx::SAMPLER_COORD coord) const;
+    
     void setNextWindowDrawables() const;
     void presentWindowDrawables() const;
     

@@ -38,7 +38,7 @@
   _texture = nil;
 }
 
--(BOOL)loadImage2d:(const void*)image withWidth:(NSUInteger)width andHeight:(NSUInteger)height
+-(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height
 {
   MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
   _type = texDesc.textureType;
@@ -66,7 +66,7 @@
   return NO;
 }
 
--(BOOL)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height
+-(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height
 {
   if (_width == width && _height == height)
     return YES;
@@ -98,21 +98,21 @@
   return NO;
 }
 
--(BOOL)resizeToWidth:(NSUInteger)width andHeight:(NSUInteger)height withFormat:(MTLPixelFormat)format
+-(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height Format:(MTLPixelFormat)format
 {
   _format = format;
   _width = _height = 0;
-  return [self resizeToWidth:width andHeight:height];
+  return [self resizeToWidth:width Height:height];
 }
 
 -(BOOL)setFormat:(MTLPixelFormat)format
 {
   if (_format != format)
-    return [self resizeToWidth:_width andHeight:_height withFormat:format];
+    return [self resizeToWidth:_width Height:_height Format:format];
   return YES;
 }
 
--(void)setTexture:(id<MTLTexture>)texture withFormat:(MTLPixelFormat)format;
+-(void)setTexture:(id<MTLTexture>)texture Format:(MTLPixelFormat)format;
 {
   _texture = texture;
   
@@ -125,7 +125,7 @@
   }
 }
 
--(void)setToEncoder:(id <MTLRenderCommandEncoder>)encoder atIndex:(NSUInteger)index
+-(void)applyToEncoder:(id <MTLRenderCommandEncoder>)encoder atIndex:(NSUInteger)index
 {
   [encoder setFragmentTexture:_texture atIndex:index];
 }
