@@ -32,3 +32,46 @@ fragment half4 SimpleColor(constant float4 *Color [[ buffer(1) ]])
 //{
 //  return half4(1.0, 1.0, 1.0, 1.0);
 //}
+
+
+
+
+
+
+struct VertexUVOutput
+{
+  float4 m_Position   [[position]];
+  float2 m_Coordinate [[user(texturecoord)]];
+};
+
+struct FragmentUVInput
+{
+  float4 m_Position   [[position]];
+  float2 m_Coordinate [[user(texturecoord)]];
+};
+
+vertex VertexUVOutput SimpleVertexUV(device float4 *Position [[ buffer(0) ]],
+                                     device float2 *UV_0     [[ buffer(1) ]],
+                                            uint    vid      [[ vertex_id ]])
+{
+  VertexUVOutput outVertices;
+  
+  outVertices.m_Position   = Position[vid];
+  outVertices.m_Coordinate = UV_0[vid];
+  
+  return outVertices;
+}
+
+//fragment half4 SimpleTexture(FragmentUVInput   inFrag    [[ stage_in ]],
+//                             texture2d<float>  tex2D     [[ texture(0) ]],
+//                             sampler           sampler2D [[ sampler(0) ]])
+//{
+//  float4 color = tex2D.sample(sampler2D, inFrag.m_Coordinate);
+//  return half4(color.r, color.g, color.b, color.a);
+//}
+
+fragment half4 SimpleTexture(FragmentUVInput inFrag [[ stage_in ]])
+{
+  return half4(inFrag.m_Coordinate.x, inFrag.m_Coordinate.y, 1.0, 1.0);
+}
+

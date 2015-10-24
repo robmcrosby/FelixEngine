@@ -150,6 +150,8 @@ namespace fx
     bool load()
     {
       bool success = true;
+      
+      // Set the Vertex Buffers
       for (VertexBufferMap::iterator itr = mBufferMap.begin(); itr != mBufferMap.end(); ++itr)
       {
         success &= [mMTLMesh addVertexBuffer:itr->second.ptr()
@@ -157,9 +159,20 @@ namespace fx
                              withNumElements:itr->second.count()
                              forName:[NSString stringWithUTF8String:itr->first.c_str()]];
       }
+      
+      // Set the Index Buffer if there is one
       if (mBufferMap.indexBuffer().size())
+      {
         success &= [mMTLMesh setIndexBuffer:&mBufferMap.indexBuffer().at(0)
                              withNumIndices:mBufferMap.indexBuffer().size()];
+      }
+      
+      // Set the Primitive Type of the mesh
+      if (mBufferMap.primitiveType() == VERTEX_TRIANGLES)
+        [mMTLMesh setPrimitiveType:MTLPrimitiveTypeTriangle];
+      else if (mBufferMap.primitiveType() == VERTEX_TRIANGLE_STRIP)
+        [mMTLMesh setPrimitiveType:MTLPrimitiveTypeTriangleStrip];
+      
       return success;
     }
     

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<Scene name="TextureScene">
+  <Model name="Quad">
+    <RenderSlots>
+      <Slot layer="0">
+        <Mesh name="QuadMesh" primitive="strip">
+          <Buffer attribute="Position" components="4">
+            -0.8,  0.8, 0.0, 1.0,
+            0.8,  0.8, 0.0, 1.0,
+            -0.8, -0.8, 0.0, 1.0,
+            0.8, -0.8, 0.0, 1.0,
+          </Buffer>
+          <Buffer attribute="UV_0" components="2">
+            0.0, 1.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+          </Buffer>
+        </Mesh>
+        <View frame="MainWindow">
+          <ClearState>
+            <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+          </ClearState>
+        </View>
+        <Material>
+          <Shader name="TextureShader" type="Metal">
+            <Vertex function="SimpleVertexUV"/>
+            <Fragment function="SimpleTexture"/>
+          </Shader>
+          <TextureMap>
+            <Texture name="Icon" file="Images/HelloFelixIcon.png" min="linear" mag="linear"/>
+          </TextureMap>
+        </Material>
+      </Slot>
+    </RenderSlots>
+  </Model>
+</Scene>

@@ -13,10 +13,12 @@
 #include <FelixEngine/ImageLoader.h>
 
 #define SETTINGS_FILE "SettingsMetal.xml"
-#define SCENE_FILE "TriangleSceneMetal.xml"
+//#define SCENE_FILE "TriangleSceneMetal.xml"
+#define SCENE_FILE "TextureSceneMetal.xml"
 
 //#define SETTINGS_FILE "SettingsGL41.xml"
 //#define SCENE_FILE "TriangleSceneGL41.xml"
+//#define SCENE_FILE "TextureSceneGL41.xml"
 
 
 using namespace std;
