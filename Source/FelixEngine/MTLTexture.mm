@@ -74,6 +74,7 @@
   if (width > 0 && height > 0)
   {
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:_format width:width height:height mipmapped:NO];
+    [texDesc setResourceOptions:MTLResourceStorageModePrivate];
     _type = texDesc.textureType;
     _texture = [_mtlDevice newTextureWithDescriptor:texDesc];
     texDesc = nil;

@@ -132,9 +132,9 @@ namespace fx
         flags |= CLEAR_COLOR;
       }
     }
-    void setClearDepth(float depth = 0.0f)
+    void setClearDepth(float value = 0.0f)
     {
-      depth = depth;
+      depth = value;
       flags |= CLEAR_DEPTH;
     }
     void setClearStencil(int value = 0)

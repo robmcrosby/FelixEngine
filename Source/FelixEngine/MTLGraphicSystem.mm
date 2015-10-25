@@ -128,7 +128,23 @@ namespace fx
     }
     bool setDepthBuffer(const Buffer &buffer)
     {
-      // TODO: implement the Depth Buffer
+      if (buffer.name != "")
+      {
+        MTLTextureInterface *texture = static_cast<MTLTextureInterface*>(mSystem->getTexture(buffer.name));
+        texture->retain();
+        texture->setLoaded();
+        texture->setSampler(buffer.sampler);
+        mTextures.push_back(texture);
+        
+        [texture->mMTLTexture setFormat:MTLPixelFormatDepth32Float];
+        [mMTLFrame setDepthBuffer:texture->mMTLTexture];
+      }
+      else
+      {
+        MTLTexture *texture = [[MTLTexture alloc] initWithDevice:mSystem->getContextInfo()->mDevice];
+        [texture setFormat:MTLPixelFormatDepth32Float];
+        [mMTLFrame setDepthBuffer:texture];
+      }
       return true;
     }
     
