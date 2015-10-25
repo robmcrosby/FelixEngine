@@ -34,6 +34,7 @@
 		3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */; settings = {ASSET_TAGS = (); }; };
 		3722FDE11BDBE74700B07476 /* TextureSceneMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE01BDBE74700B07476 /* TextureSceneMetal.xml */; settings = {ASSET_TAGS = (); }; };
 		3722FDE31BDBFB0200B07476 /* FrameSceneMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE21BDBFB0200B07476 /* FrameSceneMetal.xml */; settings = {ASSET_TAGS = (); }; };
+		3722FDE51BDC30F700B07476 /* DepthSceneGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE41BDC30F700B07476 /* DepthSceneGL41.xml */; settings = {ASSET_TAGS = (); }; };
 		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; settings = {ASSET_TAGS = (); }; };
 		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
 		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -143,6 +144,7 @@
 		3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MTLUniformMap.m; path = ../../../../Source/FelixEngine/MTLUniformMap.m; sourceTree = "<group>"; };
 		3722FDE01BDBE74700B07476 /* TextureSceneMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextureSceneMetal.xml; path = ../../../../Source/HelloFelix/Resources/TextureSceneMetal.xml; sourceTree = "<group>"; };
 		3722FDE21BDBFB0200B07476 /* FrameSceneMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = FrameSceneMetal.xml; path = ../../../../Source/HelloFelix/Resources/FrameSceneMetal.xml; sourceTree = "<group>"; };
+		3722FDE41BDC30F700B07476 /* DepthSceneGL41.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DepthSceneGL41.xml; path = ../../../../Source/HelloFelix/Resources/DepthSceneGL41.xml; sourceTree = "<group>"; };
 		374A4E2B1BD1EBB300DDF87E /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resource.h; path = ../../../../Source/FelixEngine/Resource.h; sourceTree = "<group>"; };
 		377B9B041BBDF03600440546 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		377B9B0C1BBDF03600440546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				3722FDE01BDBE74700B07476 /* TextureSceneMetal.xml */,
 				37E22FE71BCF77EE0018BA15 /* FrameSceneGL41.xml */,
 				3722FDE21BDBFB0200B07476 /* FrameSceneMetal.xml */,
+				3722FDE41BDC30F700B07476 /* DepthSceneGL41.xml */,
 				370FEA941BC4638F00440244 /* SettingsGL41.xml */,
 				37BA17B01BD30B8B009478B0 /* SettingsMetal.xml */,
 				377B9B0C1BBDF03600440546 /* Assets.xcassets */,
@@ -593,6 +596,7 @@
 				37E22FD61BCF2CB40018BA15 /* TriangleSceneGL41.xml in Resources */,
 				3722FDE11BDBE74700B07476 /* TextureSceneMetal.xml in Resources */,
 				37BA17B11BD30B8B009478B0 /* SettingsMetal.xml in Resources */,
+				3722FDE51BDC30F700B07476 /* DepthSceneGL41.xml in Resources */,
 				37E22FD81BCF2D370018BA15 /* TextureSceneGL41.xml in Resources */,
 				370FEA951BC4638F00440244 /* SettingsGL41.xml in Resources */,
 				37BA17B31BD30BF9009478B0 /* TriangleSceneMetal.xml in Resources */,

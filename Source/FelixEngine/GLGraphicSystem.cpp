@@ -158,16 +158,18 @@ void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
 
 void GLGraphicSystem::processTask(const GraphicTask &task)
 {
-  if (task.isViewTask() && task.viewIndex < (int)mTaskSlots.size())
+  if (task.isViewTask())
   {
-    const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
-    if (slot.size())
+    const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
+    frame->use();
+    if (task.isClearTask())
+      frame->clear(task.clearState);
+    
+    if (task.viewIndex < (int)mTaskSlots.size())
     {
-      const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
-      frame->use();
-      if (task.isClearTask())
-        frame->clear(task.clearState);
-      processTaskSlot(slot);
+      const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
+      if (slot.size())
+        processTaskSlot(slot);
     }
   }
   else if (task.isDrawTask())

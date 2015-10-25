@@ -104,7 +104,7 @@ bool RenderSlot::setMaterial(const XMLTree::Node &node)
   if (node.hasAttribute("name"))
     setMaterial(node.attribute("name"));
   else
-    setToInternalView();
+    setToInternalMaterial();
   return mMaterialPtr->setToXml(node);
 }
 

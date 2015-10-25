@@ -39,8 +39,7 @@ namespace fx
   public:
     virtual ~Window() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node);
+    virtual bool setToXml(const XMLTree::Node &node);
     
     void setTitle(const std::string &title) {mTitle = title;}
     void setPosition(const ivec2 &pos) {mPosition = pos;}
@@ -67,8 +66,7 @@ namespace fx
   public:
     virtual ~Frame() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node);
+    virtual bool setToXml(const XMLTree::Node &node);
     
     void clearBuffers() {mBuffers.clear();}
     void addBuffer(COLOR_TYPE format = COLOR_RGBA, const std::string &name = "", const Sampler &sampler = Sampler())
@@ -103,8 +101,7 @@ namespace fx
     Shader() {clearParts();}
     virtual ~Shader() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node);
+    virtual bool setToXml(const XMLTree::Node &node);
     
     void clearParts();
     void setSourceToPart(const std::string &src, SHADER_PART part);
@@ -123,8 +120,7 @@ namespace fx
   public:
     virtual ~Mesh() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node);
+    virtual bool setToXml(const XMLTree::Node &node);
     
     VertexBufferMap& getVertexBufferMap() {return mBufferMap;}
     void addVertexBuffer(const std::string &name, int components, int count, const float *data);
@@ -140,8 +136,7 @@ namespace fx
   public:
     virtual ~Texture() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node);
+    virtual bool setToXml(const XMLTree::Node &node);
     
     void setImageFile(const std::string &file) {mFile = file;}
     std::string imageFile() const {return mFile;}

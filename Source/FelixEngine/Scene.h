@@ -37,7 +37,12 @@ namespace fx
         success = true;
         setName(node->attribute("name"));
         for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-          success &= addObject(createObject(*itr));
+        {
+          if (**itr == "Resources")
+            success &= addResources(**itr);
+          else
+            success &= addObject(createObject(*itr));
+        }
       }
       return success;
     }
@@ -125,6 +130,40 @@ namespace fx
     }
     
   private:
+    bool addResources(const XMLTree::Node &node)
+    {
+      bool success = true;
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+        success &= addResource(**itr);
+      return success;
+    }
+    bool addResource(const XMLTree::Node &node)
+    {
+      bool success = true;
+      std::string name = node.attribute("name");
+      std::string type = node.element();
+      if (type == "View")
+      {
+        View *view = getView(name);
+        success &= view->setToXml(node);
+      }
+      else if (type == "Material")
+      {
+        Material *material = getMaterial(name);
+        success &= material->setToXml(node);
+      }
+      else
+      {
+        Resource *resource = FelixEngine::GetGraphicSystem()->getResource(type, name);
+        if (resource)
+        {
+          resource->retain();
+          success &= resource->setToXml(node);
+          mResources.push_back(resource);
+        }
+      }
+      return success;
+    }
     void updateViews()
     {
       for (std::map<std::string, View*>::iterator itr = mViewMap.begin(); itr != mViewMap.end(); ++itr)
@@ -143,6 +182,7 @@ namespace fx
     
     std::string mName;
     std::list<Object*> mObjects;
+    std::list<Resource*> mResources;
     
     std::map<std::string, View*>     mViewMap;
     std::map<std::string, Material*> mMaterialMap;
