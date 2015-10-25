@@ -22,11 +22,11 @@
         0.0,  0.8, 0.0, 1.0
       </Buffer>
     </Mesh>
-    <Shader name="ColorShader" type="Metal">
+    <Shader name="ColorShader">
       <Vertex function="SimpleVertex"/>
       <Fragment function="SimpleColor"/>
     </Shader>
-    <Shader name="TextureShader" type="Metal">
+    <Shader name="TextureShader">
       <Vertex function="SimpleVertexUV"/>
       <Fragment function="SimpleTexture"/>
     </Shader>

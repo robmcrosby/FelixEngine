@@ -19,7 +19,7 @@
           </ClearState>
         </View>
         <Material>
-          <Shader name="ColorShader" type="Metal">
+          <Shader name="ColorShader">
             <Vertex function="SimpleVertex"/>
             <Fragment function="SimpleColor"/>
           </Shader>
@@ -53,7 +53,7 @@
           </ClearState>
         </View>
         <Material>
-          <Shader name="TextureShader" type="Metal">
+          <Shader name="TextureShader">
             <Vertex function="SimpleVertexUV"/>
             <Fragment function="SimpleTexture"/>
           </Shader>

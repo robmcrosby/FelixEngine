@@ -12,22 +12,18 @@
 
 #include <FelixEngine/ImageLoader.h>
 
-//#define SETTINGS_FILE "SettingsGL41.xml"
-//#define SCENE_FILE "TriangleSceneGL41.xml"
-//#define SCENE_FILE "TextureSceneGL41.xml"
-//#define SCENE_FILE "FrameSceneGL41.xml"
-//#define SCENE_FILE "DepthSceneGL41.xml"
+#define SETTINGS_FILE "SettingsGL41.xml"
+//#define SETTINGS_FILE "SettingsMetal.xml"
 
-#define SETTINGS_FILE "SettingsMetal.xml"
-//#define SCENE_FILE "TriangleSceneMetal.xml"
-//#define SCENE_FILE "TextureSceneMetal.xml"
-//#define SCENE_FILE "FrameSceneMetal.xml"
-#define SCENE_FILE "DepthSceneMetal.xml"
+#define SCENE_FILE "TriangleScene.xml"
+//#define SCENE_FILE "TextureScene.xml"
+//#define SCENE_FILE "FrameScene.xml"
+//#define SCENE_FILE "DepthScene.xml"
 
 
 using namespace std;
 
-int main( int argc, char* args[] )
+int main(int argc, char* args[])
 {
   fx::FelixEngine *engine = fx::FelixEngine::Instance();
   

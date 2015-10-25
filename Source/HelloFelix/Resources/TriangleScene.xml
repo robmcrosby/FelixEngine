@@ -16,18 +16,9 @@
           </ClearState>
         </View>
         <Material>
-          <Shader name="ColorShader" type="GLSL">
-            <Vertex>
-              #version 410
-              in vec4 Position;
-              void main() {gl_Position = Position;}
-            </Vertex>
-            <Fragment>
-              #version 410
-              uniform vec4 Color;
-              out vec4 FragColor;
-              void main() {FragColor = Color;}
-            </Fragment>
+          <Shader name="ColorShader">
+            <Vertex function="SimpleVertex"/>
+            <Fragment function="SimpleColor"/>
           </Shader>
           <UniformMap>
             <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>

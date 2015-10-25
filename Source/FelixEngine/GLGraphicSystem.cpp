@@ -85,13 +85,16 @@ void GLGraphicSystem::setVersion(int major, int minor)
 
 bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
 {
+  bool success = false;
   if (node)
   {
-    setVersion(node->subNode("Version"));
-    return addWindows(node->subNode("Windows"));
+    success = setVersion(node->subNode("Version"));
+    success &= addWindows(node->subNode("Windows"));
+    success &= setShaderFunctions(node->subNode("ShaderFunctions"));
   }
-  cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
-  return false;
+  else
+    cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
+  return success;
 }
 
 bool GLGraphicSystem::init()
@@ -123,6 +126,21 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
   }
   cerr << "Warning: Unable to determine OpenGL Version from settings, using 2.1 for now." << endl;
   return false;
+}
+
+bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
+{
+  bool success = true;
+  if (node)
+  {
+    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+    {
+      string name = (*itr)->attribute("name");
+      if (name != "")
+        mShaderFunctions[name] = (*itr)->contents();
+    }
+  }
+  return success;
 }
 
 void GLGraphicSystem::update()

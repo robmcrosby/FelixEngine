@@ -52,6 +52,11 @@ namespace fx
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     
+    std::string getShaderFunction(std::string &name)
+    {
+      return mShaderFunctions.count(name) ? mShaderFunctions.at(name) : "";
+    }
+    
   private:
     void processTasks();
     void processTaskSlot(const TaskSlot &slot);
@@ -60,6 +65,7 @@ namespace fx
     void updateResources();
     void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
+    bool setShaderFunctions(const XMLTree::Node *node);
     
     std::map<std::string, GLWindow*>  mWindows;
     std::map<std::string, GLFrame*>   mFrames;
@@ -68,6 +74,8 @@ namespace fx
     std::map<std::string, GLTexture*> mTextures;
     
     std::list<GLUniformMap*> mGLUniforms;
+    
+    std::map<std::string, std::string> mShaderFunctions;
     
     SDL_GLContext mContext;
     int mMajorVersion;

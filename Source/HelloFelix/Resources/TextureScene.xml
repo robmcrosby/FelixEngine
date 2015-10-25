@@ -6,9 +6,9 @@
         <Mesh name="QuadMesh" primitive="strip">
           <Buffer attribute="Position" components="4">
             -0.8,  0.8, 0.0, 1.0,
-             0.8,  0.8, 0.0, 1.0,
+            0.8,  0.8, 0.0, 1.0,
             -0.8, -0.8, 0.0, 1.0,
-             0.8, -0.8, 0.0, 1.0,
+            0.8, -0.8, 0.0, 1.0,
           </Buffer>
           <Buffer attribute="UV_0" components="2">
             0.0, 1.0,
@@ -23,24 +23,9 @@
           </ClearState>
         </View>
         <Material>
-          <Shader name="TextureShader" type="GLSL">
-            <Vertex>
-              #version 410
-              in vec4 Position;
-              in vec2 UV_0;
-              out vec2 UV;
-              void main() {
-                gl_Position = Position;
-                UV = UV_0;
-              }
-            </Vertex>
-            <Fragment>
-              #version 410
-              in vec2 UV;
-              uniform sampler2D tex2D;
-              out vec4 FragColor;
-              void main() {FragColor = texture(tex2D, UV);}
-            </Fragment>
+          <Shader name="TextureShader">
+            <Vertex function="SimpleVertexUV"/>
+            <Fragment function="SimpleTexture"/>
           </Shader>
           <TextureMap>
             <Texture name="Icon" file="Images/HelloFelixIcon.png" min="linear" mag="linear"/>

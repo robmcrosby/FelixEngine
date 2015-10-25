@@ -90,6 +90,8 @@ namespace fx
             success &= compilePart(glPart, Platform::LoadTextFile(mParts[i]).c_str(), shaderParts+i);
           else if (mPartTypes[i] == SHADER_SOURCE)
             success &= compilePart(glPart, mParts[i].c_str(), shaderParts+i);
+          else if (mPartTypes[i] == SHADER_FUNCTION)
+            success &= compilePart(glPart, mGLSystem->getShaderFunction(mParts[i]).c_str(), shaderParts+i);
           else
             shaderParts[i] = 0;
         }
