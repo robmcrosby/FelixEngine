@@ -44,6 +44,7 @@
 		3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
 		3722FDFB1BDEB74B00B07476 /* SerialTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
 		3722FDFC1BDEB74B00B07476 /* SerialTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
+		3722FDFE1BDECCBD00B07476 /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFD1BDECCBD00B07476 /* Task.h */; settings = {ASSET_TAGS = (); }; };
 		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; settings = {ASSET_TAGS = (); }; };
 		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
 		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -159,6 +160,7 @@
 		3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDTaskingSystem.h; path = ../../../../Source/FelixEngine/GCDTaskingSystem.h; sourceTree = "<group>"; };
 		3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerialTaskingSystem.cpp; path = ../../../../Source/FelixEngine/SerialTaskingSystem.cpp; sourceTree = "<group>"; };
 		3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerialTaskingSystem.h; path = ../../../../Source/FelixEngine/SerialTaskingSystem.h; sourceTree = "<group>"; };
+		3722FDFD1BDECCBD00B07476 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		374A4E2B1BD1EBB300DDF87E /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resource.h; path = ../../../../Source/FelixEngine/Resource.h; sourceTree = "<group>"; };
 		377B9B041BBDF03600440546 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		377B9B0C1BBDF03600440546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 			children = (
 				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
 				3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */,
+				3722FDFD1BDECCBD00B07476 /* Task.h */,
 				3722FDF81BDEB4A100B07476 /* Serial */,
 				3722FDF71BDEB48B00B07476 /* GCD */,
 			);
@@ -542,6 +545,7 @@
 				37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */,
 				37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */,
 				37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */,
+				3722FDFE1BDECCBD00B07476 /* Task.h in Headers */,
 				37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */,
 				37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */,
 				374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */,
