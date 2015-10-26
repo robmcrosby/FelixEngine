@@ -352,7 +352,7 @@ DEFINE_SYSTEM_ID(MTLGraphicSystem)
 MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
 {
   mContextInfo = new MTLContextInfo();
-  mInitFlags |= SDL_INIT_VIDEO;
+  mSDLInitFlags |= SDL_INIT_VIDEO;
 }
 
 MTLGraphicSystem::~MTLGraphicSystem()

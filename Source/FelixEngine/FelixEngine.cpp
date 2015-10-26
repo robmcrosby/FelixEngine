@@ -7,10 +7,14 @@
 //
 
 #include "FelixEngine.h"
-#include "GraphicSystem.h"
+
 #include "System.h"
 #include "Scene.h"
 #include "Platform.h"
+
+#include "TaskingSystem.h"
+#include "GraphicSystem.h"
+
 #include <SDL2/SDL.h>
 
 
@@ -28,9 +32,14 @@ System* FelixEngine::GetSystem(SYSTEM_TYPE type)
   return Instance()->getSystem(type);
 }
 
+TaskingSystem* FelixEngine::GetTaskingSystem()
+{
+  return static_cast<TaskingSystem*>(GetSystem(SYSTEM_TASKING));
+}
+
 GraphicSystem* FelixEngine::GetGraphicSystem()
 {
-  return dynamic_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
+  return static_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
 }
 
 Scene* FelixEngine::GetScene(const std::string &name)
@@ -132,7 +141,7 @@ int FelixEngine::runLoop()
 bool FelixEngine::loadSystems(const XMLTree::Node &node)
 {
   bool success = true;
-  int  initFlags = 0;
+  int  sdlInitFlags = 0;
   
   for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
@@ -140,12 +149,12 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
     if (system)
     {
       success &= system->setToXml(*itr);
-      initFlags |= system->getInitFlags();
+      sdlInitFlags |= system->getSDLInitFlags();
       addSystem(system);
     }
   }
   
-  if (success && SDL_Init(initFlags) < 0)
+  if (success && SDL_Init(sdlInitFlags) < 0)
   {
     cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
     success = false;

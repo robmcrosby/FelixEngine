@@ -26,7 +26,7 @@ DEFINE_SYSTEM_ID(GLGraphicSystem)
 
 GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
-  mInitFlags |= SDL_INIT_VIDEO;
+  mSDLInitFlags |= SDL_INIT_VIDEO;
 }
 
 GLGraphicSystem::~GLGraphicSystem()

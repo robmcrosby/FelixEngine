@@ -22,6 +22,7 @@ namespace fx
   enum SYSTEM_TYPE
   {
     SYSTEM_GRAPHICS = 0,
+    SYSTEM_TASKING,
     SYSTEM_AUDIO,
     SYSTEM_PHYSICS,
     SYSTEM_OTHER,
@@ -43,11 +44,11 @@ namespace fx
     virtual bool init() = 0;
     
     SYSTEM_TYPE type() const {return mType;}
-    int getInitFlags() const {return mInitFlags;}
+    int getSDLInitFlags() const {return mSDLInitFlags;}
     
   protected:
     SYSTEM_TYPE mType;
-    int mInitFlags;
+    int mSDLInitFlags;
     
   public:
     static System* Create(const std::string &name);

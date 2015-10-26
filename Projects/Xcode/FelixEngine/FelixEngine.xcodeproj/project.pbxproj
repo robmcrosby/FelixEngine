@@ -38,6 +38,12 @@
 		3722FDE91BDD7C3E00B07476 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */; settings = {ASSET_TAGS = (); }; };
 		3722FDEB1BDE89E800B07476 /* FixedQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEA1BDE89E800B07476 /* FixedQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEC1BDEA1DC00B07476 /* MultiVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3722FDF11BDEAF9A00B07476 /* TaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
+		3722FDF21BDEAF9A00B07476 /* TaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3722FDF51BDEB47E00B07476 /* GCDTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF31BDEB47E00B07476 /* GCDTaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
+		3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
+		3722FDFB1BDEB74B00B07476 /* SerialTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
+		3722FDFC1BDEB74B00B07476 /* SerialTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
 		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; settings = {ASSET_TAGS = (); }; };
 		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
 		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -147,6 +153,12 @@
 		3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TriangleScene.xml; path = ../../../../Source/HelloFelix/Resources/TriangleScene.xml; sourceTree = "<group>"; };
 		3722FDEA1BDE89E800B07476 /* FixedQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FixedQueue.h; path = ../../../../Source/FelixEngine/FixedQueue.h; sourceTree = "<group>"; };
 		3722FDEC1BDEA1DC00B07476 /* MultiVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiVector.h; path = ../../../../Source/FelixEngine/MultiVector.h; sourceTree = "<group>"; };
+		3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaskingSystem.cpp; path = ../../../../Source/FelixEngine/TaskingSystem.cpp; sourceTree = "<group>"; };
+		3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskingSystem.h; path = ../../../../Source/FelixEngine/TaskingSystem.h; sourceTree = "<group>"; };
+		3722FDF31BDEB47E00B07476 /* GCDTaskingSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GCDTaskingSystem.cpp; path = ../../../../Source/FelixEngine/GCDTaskingSystem.cpp; sourceTree = "<group>"; };
+		3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDTaskingSystem.h; path = ../../../../Source/FelixEngine/GCDTaskingSystem.h; sourceTree = "<group>"; };
+		3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SerialTaskingSystem.cpp; path = ../../../../Source/FelixEngine/SerialTaskingSystem.cpp; sourceTree = "<group>"; };
+		3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerialTaskingSystem.h; path = ../../../../Source/FelixEngine/SerialTaskingSystem.h; sourceTree = "<group>"; };
 		374A4E2B1BD1EBB300DDF87E /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resource.h; path = ../../../../Source/FelixEngine/Resource.h; sourceTree = "<group>"; };
 		377B9B041BBDF03600440546 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		377B9B0C1BBDF03600440546 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -248,6 +260,7 @@
 				370FEA761BC2F8D900440244 /* System.cpp */,
 				374A4E2B1BD1EBB300DDF87E /* Resource.h */,
 				370FEA731BC2F31800440244 /* GraphicsSystem */,
+				3722FDEE1BDEAF1F00B07476 /* TaskingSystem */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -306,6 +319,35 @@
 				3722FDEC1BDEA1DC00B07476 /* MultiVector.h */,
 			);
 			name = Utilities;
+			sourceTree = "<group>";
+		};
+		3722FDEE1BDEAF1F00B07476 /* TaskingSystem */ = {
+			isa = PBXGroup;
+			children = (
+				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
+				3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */,
+				3722FDF81BDEB4A100B07476 /* Serial */,
+				3722FDF71BDEB48B00B07476 /* GCD */,
+			);
+			name = TaskingSystem;
+			sourceTree = "<group>";
+		};
+		3722FDF71BDEB48B00B07476 /* GCD */ = {
+			isa = PBXGroup;
+			children = (
+				3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */,
+				3722FDF31BDEB47E00B07476 /* GCDTaskingSystem.cpp */,
+			);
+			name = GCD;
+			sourceTree = "<group>";
+		};
+		3722FDF81BDEB4A100B07476 /* Serial */ = {
+			isa = PBXGroup;
+			children = (
+				3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */,
+				3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */,
+			);
+			name = Serial;
 			sourceTree = "<group>";
 		};
 		377B9B051BBDF03600440546 /* HelloFelix */ = {
@@ -487,13 +529,16 @@
 				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,
 				37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
+				3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */,
 				3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
+				3722FDFC1BDEB74B00B07476 /* SerialTaskingSystem.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
 				37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */,
 				37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */,
+				3722FDF21BDEAF9A00B07476 /* TaskingSystem.h in Headers */,
 				37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */,
 				37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */,
 				37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */,
@@ -632,8 +677,10 @@
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
 				3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */,
 				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
+				3722FDFB1BDEB74B00B07476 /* SerialTaskingSystem.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
 				37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */,
+				3722FDF11BDEAF9A00B07476 /* TaskingSystem.cpp in Sources */,
 				37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */,
 				37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */,
 				370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */,
@@ -646,6 +693,7 @@
 				37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */,
 				37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
+				3722FDF51BDEB47E00B07476 /* GCDTaskingSystem.cpp in Sources */,
 				37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
