@@ -12,6 +12,7 @@
 #include "System.h"
 #include "GraphicResources.h"
 #include "GraphicTask.h"
+#include "MultiVector.h"
 
 
 namespace fx
@@ -40,10 +41,13 @@ namespace fx
     void addGraphicTask(const GraphicTask &task)
     {
       // TODO: make this work with multiple threads.
-      mTaskList.push_back(task);
+      //mTaskList.push_back(task);
+      mTaskCollection.append(task);
     }
     
   protected:
+    typedef MultiVector<GraphicTask> TaskCollection;
+    
     typedef std::list<GraphicTask> TaskList;
     typedef std::vector<GraphicTask> TaskSlot;
     typedef std::vector<TaskSlot> TaskSlots;
@@ -56,8 +60,11 @@ namespace fx
     
     void loadTaskSlots()
     {
-      mTaskList.sort();
-      for (TaskList::iterator itr = mTaskList.begin(); itr != mTaskList.end(); ++itr)
+      TaskList taskList;
+      
+      mTaskCollection.dumpToList(taskList);
+      taskList.sort();
+      for (TaskList::iterator itr = taskList.begin(); itr != taskList.end(); ++itr)
       {
         if (itr->isViewTask())
           mTaskSlots.at(0).push_back(*itr);
@@ -68,10 +75,9 @@ namespace fx
           mTaskSlots.at(itr->viewIndex).push_back(*itr);
         }
       }
-      mTaskList.clear();
     }
     
-    TaskList  mTaskList;
+    TaskCollection mTaskCollection;
     TaskSlots mTaskSlots;
     
   protected:
