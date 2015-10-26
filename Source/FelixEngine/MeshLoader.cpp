@@ -18,29 +18,26 @@
 using namespace fx;
 using namespace std;
 
-bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node *node)
+bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
-  if (node)
+  if (node.hasAttribute("file"))
+    success = LoadMeshFromFile(bufferMap, node.attribute("file"));
+  else if (node.numberSubNodes() == 0)
+    success = LoadMeshPrimitive(bufferMap, node);
+  else
   {
-    if (node->hasAttribute("file"))
-      success = LoadMeshFromFile(bufferMap, node->attribute("file"));
-    else if (node->numberSubNodes() == 0)
-      success = LoadMeshPrimitive(bufferMap, node);
-    else
+    success = true;
+    bufferMap.clear();
+    bufferMap.setPrimitiveType(node.attribute("primitive"));
+    for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
     {
-      success = true;
-      bufferMap.clear();
-      bufferMap.setPrimitiveType(node->attribute("primitive"));
-      for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-      {
-        if ((*itr)->element() == "Buffer")
-          success &= AddBuffer(bufferMap, *itr);
-        else if ((*itr)->element() == "Indices")
-          StringUtils::ParseInts(bufferMap.indexBuffer(), (*itr)->contents());
-        else if ((*itr)->element() == "SubMesh")
-          success &= AddSubMesh(bufferMap, *itr);
-      }
+      if ((*itr)->element() == "Buffer")
+        success &= AddBuffer(bufferMap, **itr);
+      else if ((*itr)->element() == "Indices")
+        StringUtils::ParseInts(bufferMap.indexBuffer(), (*itr)->contents());
+      else if ((*itr)->element() == "SubMesh")
+        success &= AddSubMesh(bufferMap, **itr);
     }
   }
   return success;
@@ -58,7 +55,7 @@ bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string 
     if (tree.loadFile(filePath))
     {
       if (tree.begin() != tree.end())
-        success = LoadMeshFromXML(bufferMap, *tree.begin());
+        success = LoadMeshFromXML(bufferMap, **tree.begin());
       else
         cerr << "Mesh XML File is empty" << endl;
     }
@@ -81,27 +78,26 @@ bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string 
   return success;
 }
 
-bool MeshLoader::LoadMeshPrimitive(VertexBufferMap &bufferMap, const XMLTree::Node *node)
+bool MeshLoader::LoadMeshPrimitive(VertexBufferMap &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
-  if (node)
+  string primitive = node.attribute("primitive");
+  
+  if (primitive == "plane")
   {
-    string primitive = node->attribute("primitive");
-    if (primitive == "plane")
-    {
-      vec2 size(1.0f, 1.0f);
-      vec2 offset(0.0f, 0.0f);
-      
-      if (node->hasAttribute("size"))
-        size = node->attribute("size");
-      if (node->hasAttribute("offset"))
-        offset = node->attribute("offset");
-      
-      success = LoadMeshPlane(bufferMap, size, offset);
-    }
-    else
-      cerr << "Unknown Mesh Primitive: " << primitive << endl;
+    vec2 size(1.0f, 1.0f);
+    vec2 offset(0.0f, 0.0f);
+    
+    if (node.hasAttribute("size"))
+      size = node.attribute("size");
+    if (node.hasAttribute("offset"))
+      offset = node.attribute("offset");
+    
+    success = LoadMeshPlane(bufferMap, size, offset);
   }
+  else
+    cerr << "Unknown Mesh Primitive: " << primitive << endl;
+  
   return success;
 }
 
@@ -139,31 +135,34 @@ bool MeshLoader::LoadMeshPlane(VertexBufferMap &bufferMap, const vec2 &size, con
   return true;
 }
 
-bool MeshLoader::AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node *node)
+bool MeshLoader::AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
-  if (node && node->hasAttribute("start") && node->hasAttribute("end"))
+  if (node.hasAttribute("start") && node.hasAttribute("end"))
   {
     Range range;
-    range.start = node->attributeAsInt("start");
-    range.end   = node->attributeAsInt("end");
+    range.start = node.attributeAsInt("start");
+    range.end   = node.attributeAsInt("end");
     bufferMap.addSubMesh(range);
     success = true;
   }
   return success;
 }
 
-bool MeshLoader::AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node *node)
+bool MeshLoader::AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
-  if (node)
+  if (node.hasAttribute("attribute") && node.hasAttribute("components"))
   {
-    VertexBuffer &buffer = bufferMap[node->attribute("attribute")];
+    VertexBuffer &buffer = bufferMap[node.attribute("attribute")];
     buffer.clear();
-    buffer.setComponents(node->attributeAsInt("components"));
-    StringUtils::ParseFloats(buffer.data(), node->contents());
-    success = true;
+    buffer.setComponents(node.attributeAsInt("components"));
+    StringUtils::ParseFloats(buffer.data(), node.contents());
+    success = buffer.data().size();
   }
+  else
+    cerr << "Vertex Buffer Node missing either attribute or components attributes" << endl;
+  
   return success;
 }
 

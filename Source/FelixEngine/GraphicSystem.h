@@ -16,14 +16,16 @@
 
 namespace fx
 {
+  class UniformMap;
   class InternalUniformMap;
+  
   /**
    *
    */
   class GraphicSystem: public System
   {
   public:
-    GraphicSystem(): System(SYSTEM_GRAPHICS) {}
+    GraphicSystem(): System(SYSTEM_GRAPHICS) {mTaskSlots.push_back(TaskSlot());}
     virtual ~GraphicSystem() {}
     
     virtual Window* getWindow(const std::string &name) = 0;
@@ -32,8 +34,8 @@ namespace fx
     virtual Mesh* getMesh(const std::string &name) = 0;
     virtual Texture* getTexture(const std::string &name) = 0;
     
-    GraphicResource* getResource(const std::string &type, const std::string &name);
-    virtual InternalUniformMap* createUniformMap() = 0;
+    Resource* getResource(const std::string &type, const std::string &name);
+    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map) = 0;
     
     void addGraphicTask(const GraphicTask &task)
     {
@@ -57,14 +59,14 @@ namespace fx
       mTaskList.sort();
       for (TaskList::iterator itr = mTaskList.begin(); itr != mTaskList.end(); ++itr)
       {
-//        if (itr->isViewTask())
-//          mTaskSlots.at(0).push_back(*itr);
-//        else
-//        {
+        if (itr->isViewTask())
+          mTaskSlots.at(0).push_back(*itr);
+        else
+        {
           if (itr->viewIndex >= (int)mTaskSlots.size())
             mTaskSlots.resize(itr->viewIndex+1);
           mTaskSlots.at(itr->viewIndex).push_back(*itr);
-//        }
+        }
       }
       mTaskList.clear();
     }

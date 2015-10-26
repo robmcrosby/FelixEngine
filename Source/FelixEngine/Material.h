@@ -11,6 +11,7 @@
 
 #include "FelixEngine.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
 #include "GraphicTask.h"
 
 
@@ -40,8 +41,8 @@ namespace fx
     }
     const Shader* shader() const {return mShader;}
     
-    //TextureMap& textureMap() {return mTextureMap;}
-    //const TextureMap& textures() const {return mTextureMap;}
+    TextureMap& textureMap() {return mTextureMap;}
+    const TextureMap& textures() const {return mTextureMap;}
     
     UniformMap& uniformMap() {return mUniformMap;}
     const UniformMap& uniforms() const {return mUniformMap;}
@@ -52,6 +53,7 @@ namespace fx
     bool setToXml(const XMLTree::Node &node)
     {
       bool success = true;
+      
       // Set the Shader
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
@@ -61,22 +63,27 @@ namespace fx
       // Set the UniformMap
       if (node.hasSubNode("UniformMap"))
         success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
+      
+      // Set the TextureMap
+      if (node.hasSubNode("TextureMap"))
+        success &= mTextureMap.setToXml(*node.subNode("TextureMap"));
       return success;
     }
+    
     bool applyToTask(GraphicTask &task) const
     {
       if (!mShader)
         return false;
       task.shader = mShader;
-      //task.textureMap = &mTextureMap;
+      task.textureMap = &mTextureMap;
       task.materialUniforms = mUniformMap.getInternalMap();
       return true;
     }
     
   private:
     Shader *mShader;
-    //TextureMap mTextureMap;
     UniformMap mUniformMap;
+    TextureMap mTextureMap;
     GraphicSystem *mSystem;
   };
 }

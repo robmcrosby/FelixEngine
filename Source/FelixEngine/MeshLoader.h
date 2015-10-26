@@ -18,17 +18,17 @@ namespace fx
   class MeshLoader
   {
   public:
-    static bool LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node *node);
+    static bool LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node &node);
     static bool LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is);
     
     static bool LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &file);
     
-    static bool LoadMeshPrimitive(VertexBufferMap &bufferMap, const XMLTree::Node *node);
+    static bool LoadMeshPrimitive(VertexBufferMap &bufferMap, const XMLTree::Node &node);
     static bool LoadMeshPlane(VertexBufferMap &bufferMap, const vec2 &size, const vec2 &offset);
     
   private:
-    static bool AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node *node);
-    static bool AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node *node);
+    static bool AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node &node);
+    static bool AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node &node);
     
     static VERTEX_PRIMITIVE GetVertexPrimitive(int value);
     

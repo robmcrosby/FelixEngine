@@ -91,6 +91,9 @@ namespace fx
       return index;
     }
     
+    T& back() {return mArray.back();}
+    T& front() {return mArray.front();}
+    
     void clear()
     {
       mSemephore.lock();

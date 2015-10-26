@@ -20,7 +20,7 @@ namespace fx
   struct InternalUniformMap
   {
     virtual ~InternalUniformMap() {}
-    virtual void update(const VariantMap &map) = 0;
+    virtual void release() = 0;
   };
   
   typedef Variant Uniform;
@@ -37,7 +37,7 @@ namespace fx
       setInternalMap();
       *this = that;
     }
-    virtual ~UniformMap() {delete mInternalMap;}
+    virtual ~UniformMap() {mInternalMap->release();}
     
     UniformMap& operator=(const UniformMap &that)
     {
@@ -55,13 +55,17 @@ namespace fx
     const_iterator begin() const {return mMap.begin();}
     const_iterator end()   const {return mMap.end();}
     
-    void update()
+    size_t size() const {return mMap.size();}
+    size_t sizeInBytes() const
     {
-      if (mInternalMap)
-        mInternalMap->update(mMap);
+      size_t totalSize = 0;
+      for (const_iterator itr = begin(); itr != end(); ++itr)
+        totalSize += itr->second.sizeInBytes();
+      return totalSize;
     }
     
     InternalUniformMap* getInternalMap() const {return mInternalMap;}
+    const VariantMap& getVariantMap() const {return mMap;}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
@@ -78,7 +82,6 @@ namespace fx
           success = false;
         }
       }
-      update();
       return success;
     }
     
@@ -87,7 +90,7 @@ namespace fx
     {
       GraphicSystem *system = FelixEngine::GetGraphicSystem();
       if (system)
-        mInternalMap = system->createUniformMap();
+        mInternalMap = system->getInternalUniformMap(this);
     }
     
     VariantMap mMap;

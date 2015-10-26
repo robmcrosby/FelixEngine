@@ -17,15 +17,28 @@ namespace fx
   class GLUniformMap: public InternalUniformMap
   {
   public:
-    GLUniformMap() {}
+    GLUniformMap(UniformMap *map): mUniformMap(map) {}
     virtual ~GLUniformMap() {}
     
-    virtual void update(const VariantMap &map) {mMap = map;}
+    virtual void release() {mUniformMap = nullptr;}
+    
+    void update()
+    {
+      if (inUse())
+      {
+        mList.resize(mUniformMap->size());
+        UniformMap::iterator mapItr = mUniformMap->begin();
+        VariantList::iterator listItr = mList.begin();
+        while (mapItr != mUniformMap->end())
+          *(listItr++) = *(mapItr++);
+      }
+    }
+    bool inUse() const {return mUniformMap;}
     void applyToShader(const GLShader *shader) const
     {
       if (shader)
       {
-        for (VariantMap::const_iterator itr = mMap.begin(); itr != mMap.end(); ++itr)
+        for (VariantList::const_iterator itr = mList.begin(); itr != mList.end(); ++itr)
           applyUniformToShader(itr->first, itr->second, shader);
       }
     }
@@ -76,8 +89,9 @@ namespace fx
         }
       }
     }
-
-    VariantMap mMap;
+    
+    UniformMap *mUniformMap;
+    VariantList mList;
   };
 }
 

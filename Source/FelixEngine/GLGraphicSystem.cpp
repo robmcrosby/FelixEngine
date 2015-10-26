@@ -24,7 +24,7 @@ using namespace std;
 DEFINE_SYSTEM_ID(GLGraphicSystem)
 
 
-GLGraphicSystem::GLGraphicSystem(): mContext(0), mCheckForUnloaded(0)
+GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
   mInitFlags |= SDL_INIT_VIDEO;
 }
@@ -38,7 +38,14 @@ GLGraphicSystem::~GLGraphicSystem()
 Window* GLGraphicSystem::getWindow(const std::string &name)
 {
   if (!mWindows.count(name))
-    mWindows[name] = new GLWindow(this, name);
+  {
+    GLWindow *window = new GLWindow(this);
+    mWindows[name] = window;
+    
+    GLFrame *frame = static_cast<GLFrame*>(getFrame(name));
+    frame->retain();
+    frame->setToWindow(window);
+  }
   return mWindows[name];
 }
 
@@ -72,26 +79,40 @@ Texture* GLGraphicSystem::getTexture(const std::string &name)
 
 void GLGraphicSystem::setVersion(int major, int minor)
 {
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, major);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, minor);
+  mMajorVersion = major;
+  mMinorVersion = minor;
 }
 
 bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
 {
+  bool success = false;
   if (node)
   {
-    setVersion(node->subNode("Version"));
-    return addWindows(node->subNode("Windows"));
+    success = setVersion(node->subNode("Version"));
+    success &= addWindows(node->subNode("Windows"));
+    success &= setShaderFunctions(node->subNode("ShaderFunctions"));
   }
-  cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
-  return false;
+  else
+    cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
+  return success;
 }
 
 bool GLGraphicSystem::init()
 {
   bool success = true;
+  
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, mMajorVersion);
+  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, mMinorVersion);
+  
+  // Should be Apple Only.
+  if (mMajorVersion > 2)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    success &= itr->second->load();
+    success &= itr->second->init();
+  
+  cout << glGetString(GL_VERSION) << endl;
+  
   return success;
 }
 
@@ -99,37 +120,43 @@ bool GLGraphicSystem::setVersion(const XMLTree::Node *node)
 {
   if (node && node->hasAttribute("major") && node->hasAttribute("minor"))
   {
-    setVersion(node->attributeAsInt("major"), node->attributeAsInt("minor"));
+    mMajorVersion = node->attributeAsInt("major");
+    mMinorVersion = node->attributeAsInt("minor");
     return true;
   }
-  
   cerr << "Warning: Unable to determine OpenGL Version from settings, using 2.1 for now." << endl;
-  setVersion(2, 1);
   return false;
+}
+
+bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
+{
+  bool success = true;
+  if (node)
+  {
+    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+    {
+      string name = (*itr)->attribute("name");
+      if (name != "")
+        mShaderFunctions[name] = (*itr)->contents();
+    }
+  }
+  return success;
 }
 
 void GLGraphicSystem::update()
 {
+  updateResources();
+  updateUniforms();
   processTasks();
-  
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
-  
-//  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-//  {
-//    itr->second->setActive();
-//    
-//    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    
-//    itr->second->swapBuffers();
-//  }
-  checkForUnloaded();
 }
 
-InternalUniformMap* GLGraphicSystem::createUniformMap()
+InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
-  return new GLUniformMap();
+  GLUniformMap *internalMap = new GLUniformMap(map);
+  mGLUniforms.push_back(internalMap);
+  return internalMap;
 }
 
 void GLGraphicSystem::processTasks()
@@ -149,16 +176,18 @@ void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
 
 void GLGraphicSystem::processTask(const GraphicTask &task)
 {
-  if (task.isViewTask() && task.viewIndex < (int)mTaskSlots.size())
+  if (task.isViewTask())
   {
-    const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
-    if (slot.size())
+    const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
+    frame->use();
+    if (task.isClearTask())
+      frame->clear(task.clearState);
+    
+    if (task.viewIndex < (int)mTaskSlots.size())
     {
-      const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
-      frame->use();
-      if (task.isClearTask())
-        frame->clear(task.clearState);
-      processTaskSlot(slot);
+      const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
+      if (slot.size())
+        processTaskSlot(slot);
     }
   }
   else if (task.isDrawTask())
@@ -182,27 +211,40 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
       static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
     if (task.localUniforms)
       static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
+    shader->applyTextureMap(task.textureMap);
     
     // Draw the Mesh
     mesh->draw(shader, task.instances, task.subMesh);
   }
 }
 
-void GLGraphicSystem::checkForUnloaded()
+void GLGraphicSystem::updateResources()
 {
-  if (mCheckForUnloaded)
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->update();
+  for (map<string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
+    itr->second->update();
+  for (map<string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
+    itr->second->update();
+  for (map<string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
+    itr->second->update();
+  for (map<string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
+    itr->second->update();
+}
+
+void GLGraphicSystem::updateUniforms()
+{
+  for (list<GLUniformMap*>::iterator itr = mGLUniforms.begin(); itr != mGLUniforms.end();)
   {
-    cout << "Check for Unloaded" << endl;
-    for (std::map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
-      itr->second->load();
-    for (std::map<std::string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
-      itr->second->load();
-    mCheckForUnloaded = false;
+    if ((*itr)->inUse())
+    {
+      (*itr)->update();
+      ++itr;
+    }
+    else
+    {
+      delete *itr;
+      itr = mGLUniforms.erase(itr);
+    }
   }
 }

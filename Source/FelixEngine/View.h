@@ -57,9 +57,9 @@ namespace fx
     
     Uniform& operator[](const std::string &key) {return mUniformMap[key];}
     
-    void render() const
+    void update() const
     {
-      if (mSystem)
+      if (mSystem && mFrame && mIndex > 0)
       {
         GraphicTask task;
         task.frame = mFrame;
@@ -69,7 +69,6 @@ namespace fx
         mSystem->addGraphicTask(task);
       }
     }
-    
     bool applyToTask(GraphicTask &task) const
     {
       if (!mFrame || mIndex < 0)

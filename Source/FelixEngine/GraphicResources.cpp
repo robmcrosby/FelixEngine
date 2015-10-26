@@ -14,56 +14,73 @@
 using namespace fx;
 using namespace std;
 
-bool Window::setToXml(const XMLTree::Node *node)
+
+
+bool Window::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("title"))
-      setTitle(node->attribute("title"));
-    if (node->hasSubNode("position"))
-      setPosition(node->subContents("position"));
-    if (node->hasSubNode("size"))
-      setSize(node->subContents("size"));
-  }
+  bool success = true;
+  if (node.hasAttribute("title"))
+    setTitle(node.attribute("title"));
+  if (node.hasSubNode("position"))
+    setPosition(node.subContents("position"));
+  if (node.hasSubNode("size"))
+    setSize(node.subContents("size"));
   return success;
 }
 
 
 
-bool Frame::setToXml(const XMLTree::Node *node)
+bool Frame::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
+  bool success = true;
+  clearBuffers();
+  
+  // Add the buffers
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
-    success = true;
-    
+    Buffer buffer;
+    buffer.format = StrToColorType((*itr)->attribute("format"));
+    buffer.name = (*itr)->attribute("texture");
+    success &= buffer.sampler.setToXml(**itr);
+    addBuffer(buffer);
   }
+  
+  // Set the size
+  setSize(ivec2(0, 0));
+  setScale(vec2(1.0f, 1.0f));
+  if (node.hasAttribute("frame"))
+  {
+    mRefFrame = node.attribute("frame");
+    if (node.hasAttribute("scale"))
+      setScale(node.attribute("scale"));
+  }
+  else
+  {
+    int width  = node.attributeAsInt("width");
+    int height = node.attributeAsInt("height");
+    setSize(ivec2(width, height));
+  }
+  setToLoad();
   return success;
 }
 
 
 
-bool Shader::setToXml(const XMLTree::Node *node)
+bool Shader::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
+  bool success = true;
+  clearParts();
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
-    success = true;
-    clearParts();
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-    {
-      SHADER_PART part = ParseShaderPart((*itr)->element());
-      if ((*itr)->hasAttribute("file"))
-        setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
-      else if ((*itr)->hasAttribute("function"))
-        setFunctionToPart((*itr)->attribute("function"), part);
-      else
-        setSourceToPart((*itr)->contents(), part);
-    }
-    reload();
+    SHADER_PART part = ParseShaderPart((*itr)->element());
+    if ((*itr)->hasAttribute("file"))
+      setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
+    else if ((*itr)->hasAttribute("function"))
+      setFunctionToPart((*itr)->attribute("function"), part);
+    else
+      setSourceToPart((*itr)->contents(), part);
   }
+  setToLoad();
   return success;
 }
 
@@ -117,15 +134,11 @@ SHADER_PART Shader::ParseShaderPart(const std::string &partStr)
 
 
 
-bool Mesh::setToXml(const XMLTree::Node *node)
+bool Mesh::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
-    if (success)
-      reload();
-  }
+  bool success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
+  if (success)
+    setToLoad();
   return success;
 }
 
@@ -151,13 +164,17 @@ void Mesh::setPrimitiveType(VERTEX_PRIMITIVE type)
 
 
 
-bool Texture::setToXml(const XMLTree::Node *node)
+bool Texture::setToXml(const XMLTree::Node &node)
 {
   bool success = false;
-  if (node)
+  if (node.hasAttribute("file"))
   {
-    success = true;
-    
+    setImageFile(node.attribute("file"));
+    if (mSampler.setToXml(node))
+    {
+      success = true;
+      setToLoad();
+    }
   }
   return success;
 }

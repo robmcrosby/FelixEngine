@@ -54,6 +54,7 @@ namespace fx
     
     void updateFrame();
     
+    unsigned int mRefreshRate;
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
   };

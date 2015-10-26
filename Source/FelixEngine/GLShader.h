@@ -10,8 +10,12 @@
 #define GLShader_h
 
 #include "GLGraphicSystem.h"
+#include "GLTexture.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
+#include "Platform.h"
 
+#define BUFF_SIZE 512
 #define MAX_TEXTURES 8
 
 
@@ -23,50 +27,199 @@ namespace fx
   class GLShader: public Shader
   {
   public:
-    GLShader(GLGraphicSystem *system);
-    virtual ~GLShader();
+    GLShader(GLGraphicSystem *system): mGLSystem(system), mProgramId(0) {}
+    virtual ~GLShader() {}
     
-    virtual void reload();
-    
-    bool load();
+    void update()
+    {
+      if (isLoading())
+      {
+        if (load())
+          setLoaded();
+        else
+          setNotLoading();
+      }
+    }
     
     void use() const
     {
       glUseProgram(mProgramId);
-      //for (int i = 0; i < mNumTextureLocs; ++i)
-      //  glUniform1i(mTextureLocs[i], i);
+      for (int i = 0; i < mNumTextureLocs; ++i)
+        glUniform1i(mTextureLocs[i], i);
     }
     GLint getAttributeIndex(const std::string &name) const {return glGetAttribLocation(mProgramId, name.c_str());}
     GLint getUniformLocation(const std::string &name) const {return glGetUniformLocation(mProgramId, name.c_str());}
     
     void applyTexture(int index, const GLTexture *texture, const Sampler &sampler) const
     {
-//      if (texture)
-//        texture->use(index, sampler);
+      if (texture)
+        texture->use(index, sampler);
     }
     void applyTextureMap(const TextureMap *textures) const
     {
-//      if (textures)
-//      {
-//        int index = 0;
-//        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
-//          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
-//      }
+      if (textures)
+      {
+        int index = 0;
+        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
+          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
+      }
     }
     
-    static GLenum GetGLShaderPart(SHADER_PART part);
+    static GLenum GetGLShaderPart(SHADER_PART part)
+    {
+      if (part == SHADER_VERTEX)
+        return GL_VERTEX_SHADER;
+      if (part == SHADER_FRAGMENT)
+        return GL_FRAGMENT_SHADER;
+      return 0;
+    }
+
     
   private:
-    void unload();
+    bool load()
+    {
+      bool success = false;
+      if (!isLoaded())
+      {
+        GLuint shaderParts[SHADER_COUNT];
+        success = true;
+        for (int i = 0; success && i < (int)SHADER_COUNT; ++i)
+        {
+          GLenum glPart = GetGLShaderPart((SHADER_PART)i);
+          if (mPartTypes[i] == SHADER_FILE)
+            success &= compilePart(glPart, Platform::LoadTextFile(mParts[i]).c_str(), shaderParts+i);
+          else if (mPartTypes[i] == SHADER_SOURCE)
+            success &= compilePart(glPart, mParts[i].c_str(), shaderParts+i);
+          else if (mPartTypes[i] == SHADER_FUNCTION)
+            success &= compilePart(glPart, mGLSystem->getShaderFunction(mParts[i]).c_str(), shaderParts+i);
+          else
+            shaderParts[i] = 0;
+        }
+        
+        if (success)
+        {
+          mProgramId = glCreateProgram();
+          if (mProgramId) {
+            attachParts(mProgramId, shaderParts);
+            glLinkProgram(mProgramId);
+            if (!checkProgram())
+            {
+              glDeleteProgram(mProgramId);
+              mProgramId = 0;
+              success = false;
+            }
+            else
+              setupTextures();
+            detachParts(mProgramId, shaderParts);
+          }
+        }
+        deleteParts(shaderParts);
+      }
+      return success;
+    }
     
-    bool compilePart(GLenum type, const char *src, GLuint *partId);
-    bool checkPart(GLuint partId, const char *src);
-    void attachParts(GLuint programId, GLuint *partIds);
-    void detachParts(GLuint programId, GLuint *partIds);
-    void deleteParts(GLuint *partIds);
-    void setupTextures();
+    void unload()
+    {
+      glDeleteProgram(mProgramId);
+      mProgramId = 0;
+    }
     
-    bool checkProgram();
+    bool compilePart(GLenum type, const char *src, GLuint *partId)
+    {
+      bool compiled = true;
+      if (strlen(src) > 0) {
+        *partId = glCreateShader(type);
+        if (*partId > 0) {
+          glShaderSource(*partId, 1, &src, 0);
+          glCompileShader(*partId);
+          compiled = checkPart(*partId, src);
+        }
+        else {
+          std::cerr << "Error creating OpenGL Shader" << std::endl;
+          compiled = false;
+        }
+      }
+      return compiled;
+    }
+    
+    bool checkPart(GLuint partId, const char *src)
+    {
+      GLint compileSuccess;
+      glGetShaderiv(partId, GL_COMPILE_STATUS, &compileSuccess);
+      if (compileSuccess == GL_FALSE) {
+        GLchar messages[BUFF_SIZE];
+        glGetShaderInfoLog(partId, sizeof(messages), 0, &messages[0]);
+        std::cerr << messages << std::endl;
+        std::cerr << src << std::endl;
+        return false;
+      }
+      return true;
+    }
+    
+    void attachParts(GLuint programId, GLuint *partIds)
+    {
+      for (int i = 0; i < (int)SHADER_COUNT; ++i) {
+        if (partIds[i] > 0)
+          glAttachShader(programId, partIds[i]);
+      }
+    }
+    
+    void detachParts(GLuint programId, GLuint *partIds)
+    {
+      for (int i = 0; i < (int)SHADER_COUNT; ++i) {
+        if (partIds[i] > 0)
+          glDetachShader(programId, partIds[i]);
+      }
+    }
+    
+    void deleteParts(GLuint *partIds)
+    {
+      for (int i = 0; i < (int)SHADER_COUNT; ++i) {
+        if (partIds[i] > 0)
+          glDeleteShader(partIds[i]);
+        partIds[i] = 0;
+      }
+    }
+    
+    void setupTextures()
+    {
+      int texLoc = glGetUniformLocation(mProgramId, "tex2D");
+      if (texLoc != -1)
+      {
+        mNumTextureLocs = 1;
+        mTextureLocs[0] = 0;
+      }
+      else
+      {
+        char texStr[32];
+        mNumTextureLocs = 0;
+        for (int i = 0; i < MAX_TEXTURES; ++i)
+        {
+          sprintf(texStr, "tex2D_%i", i);
+          texLoc = glGetUniformLocation(mProgramId, texStr);
+          if (texLoc != -1)
+          {
+            mTextureLocs[i] = texLoc;
+            ++mNumTextureLocs;
+          }
+          else
+            break;
+        }
+      }
+    }
+    
+    bool checkProgram()
+    {
+      GLint linkSuccess;
+      glGetProgramiv(mProgramId, GL_LINK_STATUS, &linkSuccess);
+      if (linkSuccess == GL_FALSE) {
+        GLchar messages[BUFF_SIZE];
+        glGetProgramInfoLog(mProgramId, sizeof(messages), 0, &messages[0]);
+        std::cerr << messages << std::endl;
+        return false;
+      }
+      return true;
+    }
     
   private:
     GLGraphicSystem *mGLSystem;

@@ -27,7 +27,7 @@ namespace fx
     
     bool setToXml(const XMLTree::Node *node);
     
-    void render() const;
+    void update() const;
     bool applyToTask(GraphicTask &task) const;
     
     void setVisible() {mVisible = true;}

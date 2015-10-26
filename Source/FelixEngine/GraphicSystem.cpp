@@ -32,14 +32,14 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
   if (node && node->hasAttribute("name"))
   {
     Window *window = getWindow(node->attribute("name"));
-    success = window && window->setToXml(node);
+    success = window && window->setToXml(*node);
   }
   return success;
 }
 
-GraphicResource* GraphicSystem::getResource(const std::string &type, const std::string &name)
+Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
-  GraphicResource *resource = nullptr;
+  Resource *resource = nullptr;
   if (name == "")
     cerr << "Error: Blank name for Graphic Resource: " << type << endl;
   else
@@ -54,8 +54,7 @@ GraphicResource* GraphicSystem::getResource(const std::string &type, const std::
       resource = getShader(name);
     else if (type == "Texture")
       resource = getTexture(name);
-    else
-      cerr << "Error: Unknown Graphic Resource: " << type << endl;
   }
   return resource;
 }
+
