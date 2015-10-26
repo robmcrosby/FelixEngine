@@ -1,31 +1,31 @@
 //
-//  Semephore.h
+//  Semaphore.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 10/11/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef Semephore_h
-#define Semephore_h
+#ifndef Semaphore_h
+#define Semaphore_h
 
 #include <SDL2/SDL.h>
 
 namespace fx
 {
-  class Semephore
+  class Semaphore
   {
   public:
-    Semephore(size_t size = 0) {setup(size);}
-    Semephore(const Semephore &other) {setup(other.mSize);}
-    ~Semephore()
+    Semaphore(size_t size = 0) {setup(size);}
+    Semaphore(const Semaphore &other) {setup(other.mSize);}
+    ~Semaphore()
     {
       SDL_DestroyMutex(mLockMutex);
       SDL_DestroySemaphore(mSemaphore);
       delete [] mIndexQueue;
     }
     
-    Semephore& operator=(const Semephore &other) {return *this;}
+    Semaphore& operator=(const Semaphore &other) {return *this;}
     
     void wait() {SDL_SemWait(mSemaphore);}
     void post() {SDL_SemPost(mSemaphore);}
@@ -92,4 +92,4 @@ namespace fx
   };
 }
 
-#endif /* Semephore_h */
+#endif /* Semaphore_h */

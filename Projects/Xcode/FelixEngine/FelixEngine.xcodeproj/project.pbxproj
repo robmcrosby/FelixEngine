@@ -57,7 +57,7 @@
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; settings = {ASSET_TAGS = (); }; };
 		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; settings = {ASSET_TAGS = (); }; };
 		37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490141BCA02F900FC97A5 /* GraphicResources.cpp */; settings = {ASSET_TAGS = (); }; };
-		37B490171BCB10B900FC97A5 /* Semephore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semephore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490191BCB119300FC97A5 /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490181BCB119300FC97A5 /* Mutex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901A1BCB11F200FC97A5 /* IndexedMap.h */; settings = {ASSET_TAGS = (); }; };
 		37B4901D1BCB127500FC97A5 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901C1BCB127500FC97A5 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -167,7 +167,7 @@
 		37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = ../../../../Source/FelixEngine/MeshLoader.cpp; sourceTree = "<group>"; };
 		37B490111BC9EB9F00FC97A5 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = ../../../../Source/FelixEngine/MeshLoader.h; sourceTree = "<group>"; };
 		37B490141BCA02F900FC97A5 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = ../../../../Source/FelixEngine/GraphicResources.cpp; sourceTree = "<group>"; };
-		37B490161BCB10B900FC97A5 /* Semephore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Semephore.h; path = ../../../../Source/FelixEngine/Semephore.h; sourceTree = "<group>"; };
+		37B490161BCB10B900FC97A5 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Semaphore.h; path = ../../../../Source/FelixEngine/Semaphore.h; sourceTree = "<group>"; };
 		37B490181BCB119300FC97A5 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex.h; path = ../../../../Source/FelixEngine/Mutex.h; sourceTree = "<group>"; };
 		37B4901A1BCB11F200FC97A5 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = ../../../../Source/FelixEngine/IndexedMap.h; sourceTree = "<group>"; };
 		37B4901C1BCB127500FC97A5 /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = ../../../../Source/FelixEngine/Variant.h; sourceTree = "<group>"; };
@@ -297,7 +297,7 @@
 				37B490201BCB13F900FC97A5 /* Color.h */,
 				370FEA831BC31C6E00440244 /* StringUtils.h */,
 				370FEA851BC31C6E00440244 /* XMLTree.h */,
-				37B490161BCB10B900FC97A5 /* Semephore.h */,
+				37B490161BCB10B900FC97A5 /* Semaphore.h */,
 				37B490181BCB119300FC97A5 /* Mutex.h */,
 				37E22FDF1BCF3A120018BA15 /* Image.h */,
 				37B4901A1BCB11F200FC97A5 /* IndexedMap.h */,
@@ -484,7 +484,7 @@
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				37B4901D1BCB127500FC97A5 /* Variant.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
-				37B490171BCB10B900FC97A5 /* Semephore.h in Headers */,
+				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,
 				37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
 				3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */,

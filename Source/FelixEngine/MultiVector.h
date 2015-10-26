@@ -9,7 +9,7 @@
 #ifndef MultiVector_h
 #define MultiVector_h
 
-#include "Semephore.h"
+#include "Semaphore.h"
 #include <list>
 #include <vector>
 
@@ -73,7 +73,7 @@ namespace fx
         mVectors[i].vector.clear();
     }
     
-    Semephore mSemephore;
+    Semaphore mSemephore;
     Vector *mVectors;
   };
 }
