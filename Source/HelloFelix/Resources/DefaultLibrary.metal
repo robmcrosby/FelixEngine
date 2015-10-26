@@ -20,6 +20,7 @@ vertex VertexOutput SimpleVertex(device float4 *Position [[ buffer(0) ]],
 {
   VertexOutput outVertices;
   outVertices.m_Position = Position[vid];
+  outVertices.m_Position.z = (outVertices.m_Position.z/2.0)+0.5;
   return outVertices;
 }
 
@@ -57,8 +58,9 @@ vertex VertexUVOutput SimpleVertexUV(device float4 *Position [[ buffer(0) ]],
   VertexUVOutput outVertices;
   
   outVertices.m_Position   = Position[vid];
+  outVertices.m_Position.z = (outVertices.m_Position.z/2.0)+0.5;
   outVertices.m_Coordinate = UV_0[vid];
-  
+  outVertices.m_Coordinate.y = 1.0 - outVertices.m_Coordinate.y;
   return outVertices;
 }
 

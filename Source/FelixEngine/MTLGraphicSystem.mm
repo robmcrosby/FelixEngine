@@ -63,7 +63,10 @@ namespace fx
       
       ImageRGBA image;
       if (ImageLoader::LoadImageFromFile(image, mFile))
+      {
+        image.invert();
         success = [mMTLTexture loadImage:image.ptr() Width:image.width() Height:image.height()];
+      }
       
       return success;
     }
@@ -121,8 +124,12 @@ namespace fx
         [texture->mMTLTexture setFormat:MTLPixelFormatRGBA8Unorm];
         [mMTLFrame addColorBuffer:texture->mMTLTexture];
       }
-      //else
-      //  // TODO: implement color buffers without textures.
+      else
+      {
+        MTLTexture *texture = [[MTLTexture alloc] initWithDevice:mSystem->getContextInfo()->mDevice];
+        [texture setFormat:MTLPixelFormatRGBA8Unorm];
+        [mMTLFrame addColorBuffer:texture];
+      }
       
       return true;
     }

@@ -25,6 +25,7 @@
     
     _type   = MTLTextureType2D;
     _format = MTLPixelFormatInvalid;
+    _usage  = MTLTextureUsageShaderRead;
     _width  = 0;
     _height = 0;
   }
@@ -41,6 +42,7 @@
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height
 {
   MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
+  [texDesc setUsage:_usage];
   _type = texDesc.textureType;
   _texture = [_mtlDevice newTextureWithDescriptor:texDesc];
   texDesc = nil;
@@ -75,6 +77,7 @@
   {
     MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:_format width:width height:height mipmapped:NO];
     [texDesc setResourceOptions:MTLResourceStorageModePrivate];
+    [texDesc setUsage:_usage];
     _type = texDesc.textureType;
     _texture = [_mtlDevice newTextureWithDescriptor:texDesc];
     texDesc = nil;

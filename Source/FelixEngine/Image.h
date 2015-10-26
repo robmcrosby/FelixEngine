@@ -42,6 +42,22 @@ namespace fx
     T* ptr() {return &mData[0];}
     const T* ptr() const {return &mData[0];}
     
+    void invert()
+    {
+      size_t rowSize = mWidth * sizeof(T);
+      std::vector<char> temp(rowSize);
+      char *ptrA = (char*)&mData[0];
+      char *ptrB = (char*)&mData[(mHeight-1)*mWidth];
+      while (ptrA < ptrB)
+      {
+        memcpy(&temp[0], ptrA, rowSize);
+        memcpy(ptrA, ptrB, rowSize);
+        memcpy(ptrB, &temp[0], rowSize);
+        ptrA += rowSize;
+        ptrB -= rowSize;
+      }
+    }
+    
   private:
     unsigned int mWidth;
     unsigned int mHeight;

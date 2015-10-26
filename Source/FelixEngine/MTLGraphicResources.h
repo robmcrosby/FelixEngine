@@ -62,6 +62,8 @@
 @property (nonatomic, readonly)  NSUInteger width;
 @property (nonatomic, readonly)  NSUInteger height;
 
+@property (nonatomic, readwrite) MTLTextureUsage usage;
+
 -(id)initWithDevice:(id <MTLDevice>)device;
 
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height;

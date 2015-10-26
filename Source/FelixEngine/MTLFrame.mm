@@ -194,6 +194,7 @@
 
 -(void)addColorBuffer:(MTLTexture*)texture
 {
+  [texture setUsage:MTLTextureUsageRenderTarget];
   [_colorBuffers addObject:texture];
   
   [_pipelines removeAllObjects];
@@ -202,6 +203,7 @@
 
 -(void)setDepthBuffer:(MTLTexture*)texture
 {
+  [texture setUsage:MTLTextureUsageRenderTarget];
   _depthBuffer = texture;
   
   [_pipelines removeAllObjects];
