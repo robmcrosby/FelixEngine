@@ -20,7 +20,7 @@ namespace fx
     GCDTaskingSystem();
     virtual ~GCDTaskingSystem();
     
-    virtual void update();
+    void update(void*);
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();

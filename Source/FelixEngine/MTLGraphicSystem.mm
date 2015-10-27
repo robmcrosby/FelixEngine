@@ -353,6 +353,7 @@ MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
 {
   mContextInfo = new MTLContextInfo();
   mSDLInitFlags |= SDL_INIT_VIDEO;
+  mUpdateDelegate = UpdateDelegate::Create<MTLGraphicSystem, &MTLGraphicSystem::update>(this);
 }
 
 MTLGraphicSystem::~MTLGraphicSystem()
@@ -441,7 +442,7 @@ bool MTLGraphicSystem::init()
   return success;
 }
 
-void MTLGraphicSystem::update()
+void MTLGraphicSystem::update(void*)
 {
   updateResources();
   updateUniforms();

@@ -21,7 +21,7 @@ namespace fx
     Delegate(): objPtr(0), stubPtr(0) {}
     
     template <class T, RetType(T::*TMethod)(ParamType)>
-    static Delegate fromMethod(T *objPtr)
+    static Delegate Create(T *objPtr)
     {
       Delegate d;
       d.objPtr = objPtr;

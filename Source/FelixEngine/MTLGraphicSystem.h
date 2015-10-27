@@ -32,7 +32,7 @@ namespace fx
     MTLGraphicSystem();
     virtual ~MTLGraphicSystem();
     
-    virtual void update();
+    void update(void*);
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();

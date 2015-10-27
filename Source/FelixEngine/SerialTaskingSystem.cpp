@@ -17,7 +17,7 @@ DEFINE_SYSTEM_ID(SerialTaskingSystem)
 
 SerialTaskingSystem::SerialTaskingSystem()
 {
-  cout << "Created SerialTaskingSystem" << endl;
+  mUpdateDelegate = UpdateDelegate::Create<SerialTaskingSystem, &SerialTaskingSystem::update>(this);
 }
 
 SerialTaskingSystem::~SerialTaskingSystem()
@@ -34,6 +34,6 @@ bool SerialTaskingSystem::init()
   return true;
 }
 
-void SerialTaskingSystem::update()
+void SerialTaskingSystem::update(void*)
 {
 }

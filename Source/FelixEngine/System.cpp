@@ -15,6 +15,7 @@ using namespace std;
 
 System::System(SYSTEM_TYPE type): mType(type), mSDLInitFlags(0)
 {
+  mUpdateDelegate = UpdateDelegate::Create<System, &System::update>(this);
 }
 
 System::~System()

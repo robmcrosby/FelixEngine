@@ -11,6 +11,7 @@
 
 #include "Resource.h"
 #include "XMLTree.h"
+#include "Delegate.h"
 
 #include <iostream>
 #include <istream>
@@ -38,10 +39,13 @@ namespace fx
     System(SYSTEM_TYPE type = SYSTEM_OTHER);
     virtual ~System();
     
-    virtual void update() = 0;
+    void update(void*) {}
     
     virtual bool setToXml(const XMLTree::Node *node) = 0;
     virtual bool init() = 0;
+    
+    typedef Delegate<void, void*> UpdateDelegate;
+    UpdateDelegate& getUpdateDelegate() {return mUpdateDelegate;}
     
     SYSTEM_TYPE type() const {return mType;}
     int getSDLInitFlags() const {return mSDLInitFlags;}
@@ -49,6 +53,7 @@ namespace fx
   protected:
     SYSTEM_TYPE mType;
     int mSDLInitFlags;
+    UpdateDelegate mUpdateDelegate;
     
   public:
     static System* Create(const std::string &name);

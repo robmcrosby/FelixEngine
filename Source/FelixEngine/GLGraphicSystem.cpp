@@ -27,6 +27,7 @@ DEFINE_SYSTEM_ID(GLGraphicSystem)
 GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
   mSDLInitFlags |= SDL_INIT_VIDEO;
+  mUpdateDelegate = UpdateDelegate::Create<GLGraphicSystem, &GLGraphicSystem::update>(this);
 }
 
 GLGraphicSystem::~GLGraphicSystem()
@@ -143,7 +144,7 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
   return success;
 }
 
-void GLGraphicSystem::update()
+void GLGraphicSystem::update(void*)
 {
   updateResources();
   updateUniforms();
@@ -151,6 +152,7 @@ void GLGraphicSystem::update()
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
 }
+
 
 InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {

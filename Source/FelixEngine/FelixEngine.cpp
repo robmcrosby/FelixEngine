@@ -191,7 +191,7 @@ System* FelixEngine::getSystem(SYSTEM_TYPE type)
 void FelixEngine::updateFrame()
 {
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
-    itr->second->update();
+    itr->second->getUpdateDelegate()(nullptr);
   for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
     itr->second->update();
 }

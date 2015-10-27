@@ -17,6 +17,7 @@ DEFINE_SYSTEM_ID(GCDTaskingSystem)
 
 GCDTaskingSystem::GCDTaskingSystem()
 {
+  mUpdateDelegate = UpdateDelegate::Create<GCDTaskingSystem, &GCDTaskingSystem::update>(this);
 }
 
 GCDTaskingSystem::~GCDTaskingSystem()
@@ -33,6 +34,6 @@ bool GCDTaskingSystem::init()
   return true;
 }
 
-void GCDTaskingSystem::update()
+void GCDTaskingSystem::update(void*)
 {
 }
