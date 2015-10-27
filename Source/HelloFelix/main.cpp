@@ -8,9 +8,6 @@
 
 
 #include <FelixEngine/FelixEngine.h>
-#include <stdio.h>
-
-#include <FelixEngine/ImageLoader.h>
 
 //#define SETTINGS_FILE "SettingsGL41.xml"
 #define SETTINGS_FILE "SettingsMetal.xml"
@@ -22,6 +19,7 @@
 
 
 using namespace std;
+
 
 int main(int argc, char* args[])
 {

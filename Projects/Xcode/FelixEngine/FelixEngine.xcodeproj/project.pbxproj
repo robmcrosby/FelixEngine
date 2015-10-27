@@ -8,96 +8,97 @@
 
 /* Begin PBXBuildFile section */
 		370FEA6C1BC2EEC500440244 /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA6B1BC2EEC500440244 /* Platform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA6E1BC2F05000440244 /* Platform.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA711BC2F11500440244 /* Platform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA701BC2F11500440244 /* Platform.mm */; settings = {ASSET_TAGS = (); }; };
+		370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA6E1BC2F05000440244 /* Platform.cpp */; };
+		370FEA711BC2F11500440244 /* Platform.mm in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA701BC2F11500440244 /* Platform.mm */; };
 		370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA741BC2F86400440244 /* GraphicSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		370FEA771BC2F8D900440244 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA761BC2F8D900440244 /* System.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA7C1BC2FE1100440244 /* GLGraphicSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		370FEA7F1BC2FE1100440244 /* GLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA7D1BC2FE1100440244 /* GLGraphicSystem.h */; settings = {ASSET_TAGS = (); }; };
+		370FEA771BC2F8D900440244 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA761BC2F8D900440244 /* System.cpp */; };
+		370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA781BC2FD6D00440244 /* GraphicSystem.cpp */; };
+		370FEA7E1BC2FE1100440244 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 370FEA7C1BC2FE1100440244 /* GLGraphicSystem.cpp */; };
+		370FEA7F1BC2FE1100440244 /* GLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA7D1BC2FE1100440244 /* GLGraphicSystem.h */; };
 		370FEA861BC31C6E00440244 /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA811BC31C6E00440244 /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA871BC31C6E00440244 /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA821BC31C6E00440244 /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA881BC31C6E00440244 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA831BC31C6E00440244 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA891BC31C6E00440244 /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA841BC31C6E00440244 /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		370FEA8A1BC31C6E00440244 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA851BC31C6E00440244 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		370FEA8E1BC3428900440244 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA8C1BC3428900440244 /* GLWindow.h */; settings = {ASSET_TAGS = (); }; };
+		370FEA8E1BC3428900440244 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 370FEA8C1BC3428900440244 /* GLWindow.h */; };
 		370FEA901BC35A5600440244 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370FEA8F1BC35A5600440244 /* OpenGL.framework */; };
 		370FEA931BC35B0600440244 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 370FEA921BC35B0600440244 /* Cocoa.framework */; };
-		370FEA951BC4638F00440244 /* SettingsGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 370FEA941BC4638F00440244 /* SettingsGL41.xml */; settings = {ASSET_TAGS = (); }; };
+		370FEA951BC4638F00440244 /* SettingsGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = 370FEA941BC4638F00440244 /* SettingsGL41.xml */; };
 		371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049F41BBF3A1C003EEC37 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		371049F71BBF3A4F003EEC37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049F61BBF3A4F003EEC37 /* main.cpp */; settings = {ASSET_TAGS = (); }; };
+		371049F71BBF3A4F003EEC37 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049F61BBF3A4F003EEC37 /* main.cpp */; };
 		371049FA1BBF3A8C003EEC37 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; };
 		371049FB1BBF3A94003EEC37 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */; settings = {ASSET_TAGS = (); }; };
+		371049FD1BBF3B34003EEC37 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 371049FC1BBF3B34003EEC37 /* FelixEngine.cpp */; };
 		371049FF1BBF3DCA003EEC37 /* System.h in Headers */ = {isa = PBXBuildFile; fileRef = 371049FE1BBF3DB9003EEC37 /* System.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37104A021BBF457F003EEC37 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
-		3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */; settings = {ASSET_TAGS = (); }; };
-		3722FDE11BDBE74700B07476 /* TextureScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE01BDBE74700B07476 /* TextureScene.xml */; settings = {ASSET_TAGS = (); }; };
-		3722FDE31BDBFB0200B07476 /* FrameScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE21BDBFB0200B07476 /* FrameScene.xml */; settings = {ASSET_TAGS = (); }; };
-		3722FDE71BDD63BD00B07476 /* DepthScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE61BDD63BD00B07476 /* DepthScene.xml */; settings = {ASSET_TAGS = (); }; };
-		3722FDE91BDD7C3E00B07476 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */; settings = {ASSET_TAGS = (); }; };
+		3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDDE1BDAFFAB00B07476 /* MTLUniformMap.m */; };
+		3722FDE11BDBE74700B07476 /* TextureScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE01BDBE74700B07476 /* TextureScene.xml */; };
+		3722FDE31BDBFB0200B07476 /* FrameScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE21BDBFB0200B07476 /* FrameScene.xml */; };
+		3722FDE71BDD63BD00B07476 /* DepthScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE61BDD63BD00B07476 /* DepthScene.xml */; };
+		3722FDE91BDD7C3E00B07476 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */; };
 		3722FDEB1BDE89E800B07476 /* FixedQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEA1BDE89E800B07476 /* FixedQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEC1BDEA1DC00B07476 /* MultiVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3722FDF11BDEAF9A00B07476 /* TaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
+		3722FDF11BDEAF9A00B07476 /* TaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDEF1BDEAF9A00B07476 /* TaskingSystem.cpp */; };
 		3722FDF21BDEAF9A00B07476 /* TaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3722FDF51BDEB47E00B07476 /* GCDTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF31BDEB47E00B07476 /* GCDTaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
-		3722FDFB1BDEB74B00B07476 /* SerialTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */; settings = {ASSET_TAGS = (); }; };
-		3722FDFC1BDEB74B00B07476 /* SerialTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */; settings = {ASSET_TAGS = (); }; };
-		3722FDFE1BDECCBD00B07476 /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFD1BDECCBD00B07476 /* Task.h */; settings = {ASSET_TAGS = (); }; };
-		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; settings = {ASSET_TAGS = (); }; };
+		3722FDF51BDEB47E00B07476 /* GCDTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF31BDEB47E00B07476 /* GCDTaskingSystem.cpp */; };
+		3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */; };
+		3722FDFB1BDEB74B00B07476 /* SerialTaskingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3722FDF91BDEB74B00B07476 /* SerialTaskingSystem.cpp */; };
+		3722FDFC1BDEB74B00B07476 /* SerialTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFA1BDEB74B00B07476 /* SerialTaskingSystem.h */; };
+		3722FDFE1BDECCBD00B07476 /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDFD1BDECCBD00B07476 /* Task.h */; };
+		374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = 374A4E2B1BD1EBB300DDF87E /* Resource.h */; };
 		377B9B0D1BBDF03600440546 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B0C1BBDF03600440546 /* Assets.xcassets */; };
 		377B9B191BBDF12600440546 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
 		377B9B1D1BBDF51100440546 /* SDL2.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		377B9B201BBE289600440546 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B1F1BBE289600440546 /* Images */; settings = {ASSET_TAGS = (); }; };
-		37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDB1BC9837B00FC97A5 /* Projection.cpp */; settings = {ASSET_TAGS = (); }; };
+		377B9B201BBE289600440546 /* Images in Resources */ = {isa = PBXBuildFile; fileRef = 377B9B1F1BBE289600440546 /* Images */; };
+		37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDB1BC9837B00FC97A5 /* Projection.cpp */; };
 		37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FDC1BC9837B00FC97A5 /* Projection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */; settings = {ASSET_TAGS = (); }; };
+		37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */; };
 		37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FE01BC984B500FC97A5 /* RenderSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FF81BC9D57200FC97A5 /* Sampler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */; settings = {ASSET_TAGS = (); }; };
-		37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFF1BC9D75900FC97A5 /* GLMesh.h */; settings = {ASSET_TAGS = (); }; };
-		37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490031BC9D77A00FC97A5 /* GLShader.h */; settings = {ASSET_TAGS = (); }; };
+		37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */; };
+		37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B48FFF1BC9D75900FC97A5 /* GLMesh.h */; };
+		37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490031BC9D77A00FC97A5 /* GLShader.h */; };
 		37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490071BC9DEE000FC97A5 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; settings = {ASSET_TAGS = (); }; };
-		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; settings = {ASSET_TAGS = (); }; };
-		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; settings = {ASSET_TAGS = (); }; };
-		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; settings = {ASSET_TAGS = (); }; };
-		37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490141BCA02F900FC97A5 /* GraphicResources.cpp */; settings = {ASSET_TAGS = (); }; };
+		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; };
+		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; };
+		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; };
+		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; };
+		37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490141BCA02F900FC97A5 /* GraphicResources.cpp */; };
 		37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490191BCB119300FC97A5 /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490181BCB119300FC97A5 /* Mutex.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901A1BCB11F200FC97A5 /* IndexedMap.h */; settings = {ASSET_TAGS = (); }; };
+		37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901A1BCB11F200FC97A5 /* IndexedMap.h */; };
 		37B4901D1BCB127500FC97A5 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901C1BCB127500FC97A5 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901E1BCB12F600FC97A5 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490211BCB13F900FC97A5 /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490201BCB13F900FC97A5 /* Color.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490221BCB1C7600FC97A5 /* GraphicTask.h */; settings = {ASSET_TAGS = (); }; };
+		37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490221BCB1C7600FC97A5 /* GraphicTask.h */; };
 		37B490251BCC62F700FC97A5 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490241BCC62F700FC97A5 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490271BCC632E00FC97A5 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490261BCC632E00FC97A5 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4902A1BCC8F5400FC97A5 /* GLUniformMap.h */; settings = {ASSET_TAGS = (); }; };
-		37BA17B11BD30B8B009478B0 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37BA17B01BD30B8B009478B0 /* SettingsMetal.xml */; settings = {ASSET_TAGS = (); }; };
+		37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4902A1BCC8F5400FC97A5 /* GLUniformMap.h */; };
+		37BA17B11BD30B8B009478B0 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = 37BA17B01BD30B8B009478B0 /* SettingsMetal.xml */; };
 		37CBA85A1BD4CA67002A358A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CBA8591BD4CA67002A358A /* QuartzCore.framework */; };
 		37CBA85C1BD4CA7A002A358A /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37CBA85B1BD4CA7A002A358A /* Metal.framework */; };
-		37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA85F1BD5752B002A358A /* MTLDescriptorKey.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8601BD5752B002A358A /* MTLFrame.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8611BD5752B002A358A /* MTLMesh.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8621BD5752B002A358A /* MTLPipelineKey.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8631BD5752B002A358A /* MTLShader.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8641BD5752B002A358A /* MTLTexture.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8651BD5752B002A358A /* MTLWindow.mm */; settings = {ASSET_TAGS = (); }; };
-		37CBA86E1BD6A0F5002A358A /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */; settings = {ASSET_TAGS = (); }; };
+		37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA85F1BD5752B002A358A /* MTLDescriptorKey.mm */; };
+		37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8601BD5752B002A358A /* MTLFrame.mm */; };
+		37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8611BD5752B002A358A /* MTLMesh.mm */; };
+		37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8621BD5752B002A358A /* MTLPipelineKey.mm */; };
+		37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8631BD5752B002A358A /* MTLShader.mm */; };
+		37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8641BD5752B002A358A /* MTLTexture.mm */; };
+		37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8651BD5752B002A358A /* MTLWindow.mm */; };
+		37CBA86E1BD6A0F5002A358A /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */; };
 		37CBA86F1BD6BDEB002A358A /* DefaultLibrary.metal in Resources */ = {isa = PBXBuildFile; fileRef = 37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */; };
 		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37CD4E361BC83E6300DAB4E3 /* Transform.cpp */; settings = {ASSET_TAGS = (); }; };
+		37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37CD4E361BC83E6300DAB4E3 /* Transform.cpp */; };
 		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37DCCD941BD3C563003D9081 /* MTLGraphicSystem.mm */; settings = {ASSET_TAGS = (); }; };
-		37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */; settings = {ASSET_TAGS = (); }; };
+		37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37DCCD941BD3C563003D9081 /* MTLGraphicSystem.mm */; };
+		37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */; };
 		37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FD91BCF319A0018BA15 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FDC1BCF38D40018BA15 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDB1BCF38D40018BA15 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37E22FDD1BCF39080018BA15 /* ImageLoader.cpp */; settings = {ASSET_TAGS = (); }; };
+		37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37E22FDD1BCF39080018BA15 /* ImageLoader.cpp */; };
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
+		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -217,6 +218,7 @@
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
+		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +321,7 @@
 				37B4901C1BCB127500FC97A5 /* Variant.h */,
 				3722FDEA1BDE89E800B07476 /* FixedQueue.h */,
 				3722FDEC1BDEA1DC00B07476 /* MultiVector.h */,
+				C1A7D4241BDF52AF0064E84A /* Delegate.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -525,6 +528,7 @@
 				370FEA8E1BC3428900440244 /* GLWindow.h in Headers */,
 				37B490251BCC62F700FC97A5 /* View.h in Headers */,
 				370FEA891BC31C6E00440244 /* Vector.h in Headers */,
+				C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */,
 				37B490191BCB119300FC97A5 /* Mutex.h in Headers */,
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				37B4901D1BCB127500FC97A5 /* Variant.h in Headers */,
