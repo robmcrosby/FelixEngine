@@ -9,6 +9,7 @@
 #include "System.h"
 #include "TaskingSystem.h"
 #include "GCDTaskingSystem.h"
+#include "EventSystem.h"
 
 
 using namespace fx;
@@ -16,8 +17,10 @@ using namespace std;
 
 DEFINE_SYSTEM_ID(TaskingSystem)
 DEFINE_SYSTEM_ID(GCDTaskingSystem)
+DEFINE_SYSTEM_ID(EventSystem)
 
 TaskingSystem* TaskingSystem::sInstance = nullptr;
+EventSystem* EventSystem::sInstance = nullptr;
 
 
 System::System(SYSTEM_TYPE type): mType(type), mSDLInitFlags(0)

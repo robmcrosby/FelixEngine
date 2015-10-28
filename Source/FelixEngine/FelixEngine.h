@@ -13,7 +13,7 @@
 
 #include "TaskingSystem.h"
 #include "GraphicSystem.h"
-
+#include "EventSystem.h"
 
 #ifndef FelixEngine_h
 #define FelixEngine_h
@@ -36,6 +36,7 @@ namespace fx
     static System* GetSystem(SYSTEM_TYPE type) {return Instance()->getSystem(type);}
     static TaskingSystem* GetTaskingSystem() {return Instance()->getTaskingSystem();}
     static GraphicSystem* GetGraphicSystem() {return Instance()->getGraphicSystem();}
+    static EventSystem* GetEventSystem() {return Instance()->getEventSystem();}
     
     static Scene* GetScene(const std::string &name) {return Instance()->getScene(name);}
     
@@ -46,6 +47,7 @@ namespace fx
     System* getSystem(SYSTEM_TYPE type) {return mSystems.count(type) ? mSystems.at(type) : nullptr;}
     TaskingSystem* getTaskingSystem() {return static_cast<TaskingSystem*>(getSystem(SYSTEM_TASKING));}
     GraphicSystem* getGraphicSystem() {return static_cast<GraphicSystem*>(getSystem(SYSTEM_GRAPHICS));}
+    EventSystem* getEventSystem() {return static_cast<EventSystem*>(getSystem(SYSTEM_EVENTS));}
     
     bool loadScene(const std::string &sceneFile);
     void addScene(Scene *scene);

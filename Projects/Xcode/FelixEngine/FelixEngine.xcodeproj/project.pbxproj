@@ -96,6 +96,7 @@
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,6 +214,7 @@
 		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
 		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
+		C1A7D42B1BE078FF0064E84A /* EventSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSystem.h; path = ../../../../Source/FelixEngine/EventSystem.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +261,7 @@
 				374A4E2B1BD1EBB300DDF87E /* Resource.h */,
 				370FEA731BC2F31800440244 /* GraphicsSystem */,
 				3722FDEE1BDEAF1F00B07476 /* TaskingSystem */,
+				C1A7D42A1BE078980064E84A /* EventSystem */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -323,9 +326,9 @@
 		3722FDEE1BDEAF1F00B07476 /* TaskingSystem */ = {
 			isa = PBXGroup;
 			children = (
+				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
 				C1A7D4261BE0502D0064E84A /* Task.h */,
 				C1A7D4281BE05D970064E84A /* TaskGroup.h */,
-				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
 				3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */,
 			);
 			name = TaskingSystem;
@@ -481,6 +484,14 @@
 			name = Freeimage;
 			sourceTree = "<group>";
 		};
+		C1A7D42A1BE078980064E84A /* EventSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C1A7D42B1BE078FF0064E84A /* EventSystem.h */,
+			);
+			name = EventSystem;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -514,6 +525,7 @@
 				3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */,
 				3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */,
 				C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */,
+				C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,

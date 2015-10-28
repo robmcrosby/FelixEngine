@@ -130,6 +130,10 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
   if (!getTaskingSystem())
     addSystem(System::Create("TaskingSystem"));
   
+  // Add the default event system if there is none found.
+  if (!getEventSystem())
+    addSystem(System::Create("EventSystem"));
+  
   if (success && SDL_Init(sdlInitFlags) < 0)
   {
     cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
