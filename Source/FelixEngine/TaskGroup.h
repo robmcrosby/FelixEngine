@@ -20,7 +20,13 @@ namespace fx
   class TaskGroup
   {
   public:
-    TaskGroup(): mPtr(0) {}
+    TaskGroup(): mFunction(0), mPtr(0)
+    {
+      mDelegate = TaskDelegate::Create<TaskGroup, &TaskGroup::exec>(this);
+    }
+    virtual ~TaskGroup() {}
+    
+    virtual void execute(void*) {}
     
     bool dispatch(Task &task, void *ptr = nullptr) {return task.dispatch(ptr, this);}
     bool dispatch(TaskDelegate delegate, void *ptr = nullptr)
@@ -46,6 +52,12 @@ namespace fx
       return taskingSystem->waitOnGroup(this);
     }
     
+    bool runAfterTasks(void *ptr = nullptr)
+    {
+      if (mFunction)
+        return runAfterTasks(mFunction, ptr);
+      return runAfterTasks(mDelegate, ptr);
+    }
     bool runAfterTasks(Task &task, void *ptr = nullptr) {return task.runAfterGroup(this, ptr);}
     bool runAfterTasks(TaskDelegate delegate, void *ptr = nullptr)
     {
@@ -61,6 +73,15 @@ namespace fx
         return false;
       return taskingSystem->runAfterGroup(function, this, ptr);
     }
+    
+    void setDelegate(TaskDelegate delegate) {mDelegate = delegate;}
+    void setFunction(TaskFunction *function) {mFunction = function;}
+    
+  private:
+    void exec(void *ptr) {execute(ptr);}
+    
+    TaskDelegate mDelegate;
+    TaskFunction *mFunction;
     
   private:
     friend GCDTaskingSystem;
