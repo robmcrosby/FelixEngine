@@ -17,7 +17,6 @@
 //#define SCENE_FILE "FrameScene.xml"
 #define SCENE_FILE "DepthScene.xml"
 
-
 using namespace std;
 
 

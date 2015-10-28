@@ -17,6 +17,8 @@ using namespace std;
 DEFINE_SYSTEM_ID(TaskingSystem)
 DEFINE_SYSTEM_ID(GCDTaskingSystem)
 
+TaskingSystem* TaskingSystem::sInstance = nullptr;
+
 
 System::System(SYSTEM_TYPE type): mType(type), mSDLInitFlags(0)
 {

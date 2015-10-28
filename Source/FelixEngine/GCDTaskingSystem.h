@@ -9,7 +9,7 @@
 #ifndef GCDTaskingSystem_h
 #define GCDTaskingSystem_h
 
-#include "TaskingSystem.h"
+#include "TaskGroup.h"
 #include <dispatch/dispatch.h>
 
 
@@ -31,14 +31,16 @@ namespace fx
       __block TaskInfo i = info;
       if (info.group)
       {
-        if (!info.group->ptr)
-          info.group->ptr = (void*)dispatch_group_create();
-        dispatch_group_t group = (dispatch_group_t)info.group->ptr;
+        if (!info.group->mPtr)
+          info.group->mPtr = (void*)dispatch_group_create();
+        dispatch_group_t group = (dispatch_group_t)info.group->mPtr;
         dispatch_group_async(group, queue, ^{
           if (i.function)
             (*i.function)(i.data);
           else
             i.delegate(i.data);
+          if (i.data)
+            i.data->release();
         });
       }
       else
@@ -48,6 +50,8 @@ namespace fx
             (*i.function)(i.data);
           else
             i.delegate(i.data);
+          if (i.data)
+            i.data->release();
         });
         return true;
       }
@@ -56,12 +60,14 @@ namespace fx
     
     bool waitOnGroup(TaskInfo &info)
     {
-      if (info.group->ptr)
+      bool success = true;
+      if (info.group->mPtr)
       {
-        dispatch_group_t group = (dispatch_group_t)info.group->ptr;
-        return !dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+        dispatch_group_t group = (dispatch_group_t)info.group->mPtr;
+        success = !dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
+        info.group->mPtr = nullptr;
       }
-      return true;
+      return success;
     }
   };
 }

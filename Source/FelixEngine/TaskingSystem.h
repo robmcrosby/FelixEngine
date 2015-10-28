@@ -14,16 +14,12 @@
 
 namespace fx
 {
-  struct TaskGroup
-  {
-    TaskGroup(): ptr(0) {}
-    virtual ~TaskGroup() {}
-    void *ptr;
-  };
+  class TaskGroup;
+  
   struct TaskData
   {
     virtual ~TaskData() {}
-    virtual TaskData* copy() {return new TaskData(*this);}
+    virtual TaskData* copy() const {return new TaskData(*this);}
     virtual void release() {delete this;}
   };
   typedef void(TaskFunction)(TaskData*);
@@ -32,24 +28,27 @@ namespace fx
   class TaskingSystem: public System
   {
   public:
+    static TaskingSystem* Instance() {return sInstance;}
+    
     TaskingSystem(): System(SYSTEM_TASKING)
     {
       mDispatchTaskDelegate = Delegate<bool, TaskInfo&>::Create<TaskingSystem, &TaskingSystem::dispatchTask>(this);
       mWaitOnGroupDelegate = Delegate<bool, TaskInfo&>::Create<TaskingSystem, &TaskingSystem::waitOnGroup>(this);
+      sInstance = this;
     }
     virtual ~TaskingSystem() {}
     
     virtual bool setToXml(const XMLTree::Node *node) {return true;}
     virtual bool init() {return true;}
     
-    bool dispatchTask(TaskFunction *function) {return dispatchTask(function, nullptr, nullptr);}
-    bool dispatchTask(TaskFunction *function, TaskData &data) {return dispatchTask(function, &data, nullptr);}
-    bool dispatchTask(TaskFunction *function, TaskData *data) {return dispatchTask(function, data, nullptr);}
-    bool dispatchTask(TaskFunction *function, TaskGroup &group) {return dispatchTask(function, nullptr, &group);}
-    bool dispatchTask(TaskFunction *function, TaskGroup *group) {return dispatchTask(function, nullptr, group);}
-    bool dispatchTask(TaskFunction *function, TaskData *data, TaskGroup &group) {return dispatchTask(function, data, &group);}
-    bool dispatchTask(TaskFunction *function, TaskData &data, TaskGroup *group) {return dispatchTask(function, &data, group);}
-    bool dispatchTask(TaskFunction *function, TaskData *data, TaskGroup *group)
+    bool dispatch(TaskFunction *function) {return dispatch(function, nullptr, nullptr);}
+    bool dispatch(TaskFunction *function, TaskData &data) {return dispatch(function, &data, nullptr);}
+    bool dispatch(TaskFunction *function, TaskData *data) {return dispatch(function, data, nullptr);}
+    bool dispatch(TaskFunction *function, TaskGroup &group) {return dispatch(function, nullptr, &group);}
+    bool dispatch(TaskFunction *function, TaskGroup *group) {return dispatch(function, nullptr, group);}
+    bool dispatch(TaskFunction *function, TaskData *data, TaskGroup &group) {return dispatch(function, data, &group);}
+    bool dispatch(TaskFunction *function, TaskData &data, TaskGroup *group) {return dispatch(function, &data, group);}
+    bool dispatch(TaskFunction *function, TaskData *data, TaskGroup *group)
     {
       if (!function)
         return false;
@@ -60,14 +59,14 @@ namespace fx
       return mDispatchTaskDelegate(info);
     }
     
-    bool dispatchTask(TaskDelegate &delegate) {return dispatchTask(delegate, nullptr, nullptr);}
-    bool dispatchTask(TaskDelegate &delegate, TaskData &data) {return dispatchTask(delegate, &data, nullptr);}
-    bool dispatchTask(TaskDelegate &delegate, TaskData *data) {return dispatchTask(delegate, data, nullptr);}
-    bool dispatchTask(TaskDelegate &delegate, TaskGroup &group) {return dispatchTask(delegate, nullptr, &group);}
-    bool dispatchTask(TaskDelegate &delegate, TaskGroup *group) {return dispatchTask(delegate, nullptr, group);}
-    bool dispatchTask(TaskDelegate &delegate, TaskData *data, TaskGroup &group) {return dispatchTask(delegate, data, &group);}
-    bool dispatchTask(TaskDelegate &delegate, TaskData &data, TaskGroup *group) {return dispatchTask(delegate, &data, group);}
-    bool dispatchTask(TaskDelegate &delegate, TaskData *data, TaskGroup *group)
+    bool dispatch(TaskDelegate delegate) {return dispatch(delegate, nullptr, nullptr);}
+    bool dispatch(TaskDelegate delegate, TaskData &data) {return dispatch(delegate, &data, nullptr);}
+    bool dispatch(TaskDelegate delegate, TaskData *data) {return dispatch(delegate, data, nullptr);}
+    bool dispatch(TaskDelegate delegate, TaskGroup &group) {return dispatch(delegate, nullptr, &group);}
+    bool dispatch(TaskDelegate delegate, TaskGroup *group) {return dispatch(delegate, nullptr, group);}
+    bool dispatch(TaskDelegate delegate, TaskData *data, TaskGroup &group) {return dispatch(delegate, data, &group);}
+    bool dispatch(TaskDelegate delegate, TaskData &data, TaskGroup *group) {return dispatch(delegate, &data, group);}
+    bool dispatch(TaskDelegate delegate, TaskData *data, TaskGroup *group)
     {
       TaskInfo info;
       info.delegate = delegate;
@@ -105,6 +104,9 @@ namespace fx
       return true;
     }
     bool waitOnGroup(TaskInfo &info) {return true;}
+    
+  private:
+    static TaskingSystem *sInstance;
   };
 }
 

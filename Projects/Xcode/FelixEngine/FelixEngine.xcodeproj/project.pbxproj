@@ -94,6 +94,8 @@
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -209,6 +211,8 @@
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
 		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
+		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
+		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +323,8 @@
 		3722FDEE1BDEAF1F00B07476 /* TaskingSystem */ = {
 			isa = PBXGroup;
 			children = (
+				C1A7D4261BE0502D0064E84A /* Task.h */,
+				C1A7D4281BE05D970064E84A /* TaskGroup.h */,
 				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
 				3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */,
 			);
@@ -507,6 +513,7 @@
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
 				3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */,
 				3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */,
+				C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
@@ -517,6 +524,7 @@
 				37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */,
 				37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */,
 				37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */,
+				C1A7D4271BE0502D0064E84A /* Task.h in Headers */,
 				37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */,
 				37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */,
 				374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */,
