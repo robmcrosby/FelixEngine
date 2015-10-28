@@ -33,6 +33,17 @@ namespace fx
       return taskingSystem->dispatch(mDelegate, ptr, group);
     }
     
+    bool runAfterGroup(TaskGroup &group, void *ptr = nullptr) {return runAfterGroup(&group, ptr);}
+    bool runAfterGroup(TaskGroup *group, void *ptr = nullptr)
+    {
+      TaskingSystem *taskingSystem = TaskingSystem::Instance();
+      if (!taskingSystem)
+        return false;
+      if (mFunction)
+        return taskingSystem->runAfterGroup(mFunction, group, ptr);
+      return taskingSystem->runAfterGroup(mDelegate, group, ptr);
+    }
+    
     void setDelegate(TaskDelegate delegate) {mDelegate = delegate;}
     void setFunction(TaskFunction *function) {mFunction = function;}
     

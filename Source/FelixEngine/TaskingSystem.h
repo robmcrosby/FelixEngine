@@ -28,6 +28,7 @@ namespace fx
     {
       mDispatchTaskDelegate = Delegate<bool, TaskInfo&>::Create<TaskingSystem, &TaskingSystem::dispatchTask>(this);
       mWaitOnGroupDelegate = Delegate<bool, TaskInfo&>::Create<TaskingSystem, &TaskingSystem::waitOnGroup>(this);
+      mRunAfterGroupDelegate = Delegate<bool, TaskInfo&>::Create<TaskingSystem, &TaskingSystem::dispatchTask>(this);
       sInstance = this;
     }
     virtual ~TaskingSystem() {}
@@ -70,6 +71,32 @@ namespace fx
       return mWaitOnGroupDelegate(info);
     }
     
+    bool runAfterGroup(TaskFunction *function, TaskGroup &group) {return runAfterGroup(function, &group);}
+    bool runAfterGroup(TaskFunction *function, TaskGroup &group, void *ptr) {return runAfterGroup(function, &group, ptr);}
+    bool runAfterGroup(TaskFunction *function, TaskGroup *group, void *ptr = nullptr)
+    {
+      if (!function || !group)
+        return false;
+      TaskInfo info;
+      info.function = function;
+      info.group = group;
+      info.ptr = ptr;
+      return mRunAfterGroupDelegate(info);
+    }
+    
+    bool runAfterGroup(TaskDelegate delegate, TaskGroup &group) {return runAfterGroup(delegate, &group);}
+    bool runAfterGroup(TaskDelegate delegate, TaskGroup &group, void *ptr) {return runAfterGroup(delegate, &group, ptr);}
+    bool runAfterGroup(TaskDelegate delegate, TaskGroup *group, void *ptr = nullptr)
+    {
+      if (!group)
+        return false;
+      TaskInfo info;
+      info.delegate = delegate;
+      info.group = group;
+      info.ptr = ptr;
+      return mRunAfterGroupDelegate(info);
+    }
+    
   protected:
     struct TaskInfo
     {
@@ -82,6 +109,7 @@ namespace fx
     
     Delegate<bool, TaskInfo&> mDispatchTaskDelegate;
     Delegate<bool, TaskInfo&> mWaitOnGroupDelegate;
+    Delegate<bool, TaskInfo&> mRunAfterGroupDelegate;
     
   private:
     bool dispatchTask(TaskInfo &info)

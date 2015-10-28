@@ -97,6 +97,8 @@
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
+		C1A7D42E1BE178020064E84A /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42D1BE178020064E84A /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1A7D4301BE178200064E84A /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42F1BE178200064E84A /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -215,6 +217,8 @@
 		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
 		C1A7D42B1BE078FF0064E84A /* EventSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSystem.h; path = ../../../../Source/FelixEngine/EventSystem.h; sourceTree = "<group>"; };
+		C1A7D42D1BE178020064E84A /* EventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = ../../../../Source/FelixEngine/EventHandler.h; sourceTree = "<group>"; };
+		C1A7D42F1BE178200064E84A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../../../../Source/FelixEngine/Event.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -488,6 +492,8 @@
 			isa = PBXGroup;
 			children = (
 				C1A7D42B1BE078FF0064E84A /* EventSystem.h */,
+				C1A7D42D1BE178020064E84A /* EventHandler.h */,
+				C1A7D42F1BE178200064E84A /* Event.h */,
 			);
 			name = EventSystem;
 			sourceTree = "<group>";
@@ -536,9 +542,11 @@
 				37B48FFD1BC9D73D00FC97A5 /* GLFrame.h in Headers */,
 				37B48FDE1BC9837B00FC97A5 /* Projection.h in Headers */,
 				37B4902B1BCC8F5400FC97A5 /* GLUniformMap.h in Headers */,
+				C1A7D4301BE178200064E84A /* Event.h in Headers */,
 				C1A7D4271BE0502D0064E84A /* Task.h in Headers */,
 				37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */,
 				37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */,
+				C1A7D42E1BE178020064E84A /* EventHandler.h in Headers */,
 				374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */,
 				37B490211BCB13F900FC97A5 /* Color.h in Headers */,
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,
