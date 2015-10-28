@@ -29,20 +29,20 @@ namespace fx
         return false;
       return taskingSystem->waitOnGroup(this);
     }
-    bool dispatch(Task &task) {return task.dispatch(this);}
-    bool dispatch(TaskDelegate delegate, TaskData *data = nullptr)
+    bool dispatch(Task &task, void *ptr = nullptr) {return task.dispatch(ptr, this);}
+    bool dispatch(TaskDelegate delegate, void *ptr = nullptr)
     {
       TaskingSystem *taskingSystem = TaskingSystem::Instance();
       if (!taskingSystem)
         return false;
-      return taskingSystem->dispatch(delegate, data, this);
+      return taskingSystem->dispatch(delegate, ptr, this);
     }
-    bool dispatch(TaskFunction *function, TaskData *data = nullptr)
+    bool dispatch(TaskFunction *function, void *ptr = nullptr)
     {
       TaskingSystem *taskingSystem = TaskingSystem::Instance();
       if (!taskingSystem)
         return false;
-      return taskingSystem->dispatch(function, data, this);
+      return taskingSystem->dispatch(function, ptr, this);
     }
     
   private:

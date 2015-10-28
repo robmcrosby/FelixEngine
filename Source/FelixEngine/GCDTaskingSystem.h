@@ -36,22 +36,18 @@ namespace fx
         dispatch_group_t group = (dispatch_group_t)info.group->mPtr;
         dispatch_group_async(group, queue, ^{
           if (i.function)
-            (*i.function)(i.data);
+            (*i.function)(i.ptr);
           else
-            i.delegate(i.data);
-          if (i.data)
-            i.data->release();
+            i.delegate(i.ptr);
         });
       }
       else
       {
         dispatch_async(queue, ^{
           if (i.function)
-            (*i.function)(i.data);
+            (*i.function)(i.ptr);
           else
-            i.delegate(i.data);
-          if (i.data)
-            i.data->release();
+            i.delegate(i.ptr);
         });
         return true;
       }
