@@ -7,10 +7,15 @@
 //
 
 #include "System.h"
+#include "TaskingSystem.h"
+#include "GCDTaskingSystem.h"
 
 
 using namespace fx;
 using namespace std;
+
+DEFINE_SYSTEM_ID(TaskingSystem)
+DEFINE_SYSTEM_ID(GCDTaskingSystem)
 
 
 System::System(SYSTEM_TYPE type): mType(type), mSDLInitFlags(0)

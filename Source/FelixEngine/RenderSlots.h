@@ -104,7 +104,8 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
-    virtual void update();
+    
+    void update(void*);
     
   public:
     typedef std::vector<RenderSlot*>::const_iterator iterator;

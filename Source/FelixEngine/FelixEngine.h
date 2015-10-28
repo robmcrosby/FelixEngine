@@ -11,6 +11,9 @@
 #include "System.h"
 #include "XMLTree.h"
 
+#include "TaskingSystem.h"
+#include "GraphicSystem.h"
+
 
 #ifndef FelixEngine_h
 #define FelixEngine_h
@@ -29,22 +32,27 @@ namespace fx
   {
   public:
     static FelixEngine* Instance();
-    static System* GetSystem(SYSTEM_TYPE type);
-    static TaskingSystem* GetTaskingSystem();
-    static GraphicSystem* GetGraphicSystem();
-    static Scene* GetScene(const std::string &name);
+    
+    static System* GetSystem(SYSTEM_TYPE type) {return Instance()->getSystem(type);}
+    static TaskingSystem* GetTaskingSystem() {return Instance()->getTaskingSystem();}
+    static GraphicSystem* GetGraphicSystem() {return Instance()->getGraphicSystem();}
+    
+    static Scene* GetScene(const std::string &name) {return Instance()->getScene(name);}
     
     bool init(const std::string &settingsFile = "");
     
     void addSystem(System *system);
     void clearSystems();
-    System* getSystem(SYSTEM_TYPE type);
+    System* getSystem(SYSTEM_TYPE type) {return mSystems.count(type) ? mSystems.at(type) : nullptr;}
+    TaskingSystem* getTaskingSystem() {return static_cast<TaskingSystem*>(getSystem(SYSTEM_TASKING));}
+    GraphicSystem* getGraphicSystem() {return static_cast<GraphicSystem*>(getSystem(SYSTEM_GRAPHICS));}
     
     bool loadScene(const std::string &sceneFile);
     void addScene(Scene *scene);
     void clearScenes();
     void deleteScene(const std::string &name);
-    Scene* getScene(const std::string &name);
+    
+    Scene* getScene(const std::string &name) {return mScenes.count(name) ? mScenes.at(name) : nullptr;}
     
     int runLoop();
     

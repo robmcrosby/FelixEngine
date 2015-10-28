@@ -21,6 +21,7 @@ DEFINE_COMPONENT_ID(RenderSlots);
 RenderSlots::RenderSlots(Object *obj): Component("RenderSlots", obj)
 {
   mGraphicSystem = dynamic_cast<GraphicSystem*>(FelixEngine::GetSystem(SYSTEM_GRAPHICS));
+  mUpdateDelegate = UpdateDelegate::Create<RenderSlots, &RenderSlots::update>(this);
 }
 
 RenderSlots::~RenderSlots()
@@ -47,7 +48,7 @@ bool RenderSlots::init()
   return Component::init();
 }
 
-void RenderSlots::update()
+void RenderSlots::update(void*)
 {
   for (iterator itr = begin(); itr != end(); ++itr)
     (*itr)->update();

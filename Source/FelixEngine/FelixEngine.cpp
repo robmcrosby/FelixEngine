@@ -12,9 +12,6 @@
 #include "Scene.h"
 #include "Platform.h"
 
-#include "TaskingSystem.h"
-#include "GraphicSystem.h"
-
 #include <SDL2/SDL.h>
 
 
@@ -25,26 +22,6 @@ FelixEngine* FelixEngine::Instance()
 {
   static FelixEngine engine;
   return &engine;
-}
-
-System* FelixEngine::GetSystem(SYSTEM_TYPE type)
-{
-  return Instance()->getSystem(type);
-}
-
-TaskingSystem* FelixEngine::GetTaskingSystem()
-{
-  return static_cast<TaskingSystem*>(GetSystem(SYSTEM_TASKING));
-}
-
-GraphicSystem* FelixEngine::GetGraphicSystem()
-{
-  return static_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
-}
-
-Scene* FelixEngine::GetScene(const std::string &name)
-{
-  return Instance()->getScene(name);
 }
 
 FelixEngine::FelixEngine(): mRefreshRate(16)
@@ -114,11 +91,6 @@ void FelixEngine::deleteScene(const std::string &name)
   }
 }
 
-Scene* FelixEngine::getScene(const std::string &name)
-{
-  return mScenes.count(name) ? mScenes.at(name) : nullptr;
-}
-
 int FelixEngine::runLoop()
 {
   bool quit = false;
@@ -154,6 +126,10 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
     }
   }
   
+  // Add the default tasking system if there is none found.
+  if (!getTaskingSystem())
+    addSystem(System::Create("TaskingSystem"));
+  
   if (success && SDL_Init(sdlInitFlags) < 0)
   {
     cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
@@ -181,11 +157,6 @@ void FelixEngine::clearSystems()
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
     delete itr->second;
   mSystems.clear();
-}
-
-System* FelixEngine::getSystem(SYSTEM_TYPE type)
-{
-  return mSystems.count(type) ? mSystems.at(type) : nullptr;
 }
 
 void FelixEngine::updateFrame()
