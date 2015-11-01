@@ -8,7 +8,6 @@
 
 
 #include <FelixEngine/FelixEngine.h>
-#include <FelixEngine/TaskGroup.h>
 
 //#define SETTINGS_FILE "SettingsGL41.xml"
 #define SETTINGS_FILE "SettingsMetal.xml"

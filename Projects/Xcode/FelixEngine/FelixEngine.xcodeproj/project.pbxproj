@@ -36,7 +36,6 @@
 		3722FDE31BDBFB0200B07476 /* FrameScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE21BDBFB0200B07476 /* FrameScene.xml */; };
 		3722FDE71BDD63BD00B07476 /* DepthScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE61BDD63BD00B07476 /* DepthScene.xml */; };
 		3722FDE91BDD7C3E00B07476 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = 3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */; };
-		3722FDEB1BDE89E800B07476 /* FixedQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEA1BDE89E800B07476 /* FixedQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDEC1BDEA1DC00B07476 /* MultiVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3722FDF21BDEAF9A00B07476 /* TaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */; };
@@ -97,8 +96,8 @@
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
-		C1A7D42E1BE178020064E84A /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42D1BE178020064E84A /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4301BE178200064E84A /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42F1BE178200064E84A /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1A7D4321BE2EA360064E84A /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4311BE2EA360064E84A /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,7 +152,6 @@
 		3722FDE21BDBFB0200B07476 /* FrameScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = FrameScene.xml; path = ../../../../Source/HelloFelix/Resources/FrameScene.xml; sourceTree = "<group>"; };
 		3722FDE61BDD63BD00B07476 /* DepthScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DepthScene.xml; path = ../../../../Source/HelloFelix/Resources/DepthScene.xml; sourceTree = "<group>"; };
 		3722FDE81BDD7C3E00B07476 /* TriangleScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TriangleScene.xml; path = ../../../../Source/HelloFelix/Resources/TriangleScene.xml; sourceTree = "<group>"; };
-		3722FDEA1BDE89E800B07476 /* FixedQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FixedQueue.h; path = ../../../../Source/FelixEngine/FixedQueue.h; sourceTree = "<group>"; };
 		3722FDEC1BDEA1DC00B07476 /* MultiVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiVector.h; path = ../../../../Source/FelixEngine/MultiVector.h; sourceTree = "<group>"; };
 		3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskingSystem.h; path = ../../../../Source/FelixEngine/TaskingSystem.h; sourceTree = "<group>"; };
 		3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDTaskingSystem.h; path = ../../../../Source/FelixEngine/GCDTaskingSystem.h; sourceTree = "<group>"; };
@@ -219,6 +217,7 @@
 		C1A7D42B1BE078FF0064E84A /* EventSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSystem.h; path = ../../../../Source/FelixEngine/EventSystem.h; sourceTree = "<group>"; };
 		C1A7D42D1BE178020064E84A /* EventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = ../../../../Source/FelixEngine/EventHandler.h; sourceTree = "<group>"; };
 		C1A7D42F1BE178200064E84A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../../../../Source/FelixEngine/Event.h; sourceTree = "<group>"; };
+		C1A7D4311BE2EA360064E84A /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pool.h; path = ../../../../Source/FelixEngine/Pool.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,9 +319,9 @@
 				37E22FDF1BCF3A120018BA15 /* Image.h */,
 				37B4901A1BCB11F200FC97A5 /* IndexedMap.h */,
 				37B4901C1BCB127500FC97A5 /* Variant.h */,
-				3722FDEA1BDE89E800B07476 /* FixedQueue.h */,
 				3722FDEC1BDEA1DC00B07476 /* MultiVector.h */,
 				C1A7D4241BDF52AF0064E84A /* Delegate.h */,
+				C1A7D4311BE2EA360064E84A /* Pool.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -514,7 +513,6 @@
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
-				3722FDEB1BDE89E800B07476 /* FixedQueue.h in Headers */,
 				370FEA881BC31C6E00440244 /* StringUtils.h in Headers */,
 				37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */,
 				370FEA8E1BC3428900440244 /* GLWindow.h in Headers */,
@@ -523,6 +521,7 @@
 				C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */,
 				37B490191BCB119300FC97A5 /* Mutex.h in Headers */,
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
+				C1A7D4321BE2EA360064E84A /* Pool.h in Headers */,
 				37B4901D1BCB127500FC97A5 /* Variant.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,
@@ -546,7 +545,6 @@
 				C1A7D4271BE0502D0064E84A /* Task.h in Headers */,
 				37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */,
 				37B48FF91BC9D57200FC97A5 /* Sampler.h in Headers */,
-				C1A7D42E1BE178020064E84A /* EventHandler.h in Headers */,
 				374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */,
 				37B490211BCB13F900FC97A5 /* Color.h in Headers */,
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,

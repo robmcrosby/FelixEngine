@@ -21,8 +21,19 @@ namespace fx
     EventHandler() {}
     virtual ~EventHandler() {}
     
-  private:
+    virtual void handle(Event event) {}
     
+    void dispatchSerial(Event event) {}
+    void dispatchParrallel(Event event) {}
+    void dispatchAndWait(Event event) {}
+    
+    
+  private:
+    struct Observer
+    {
+      Observer(EventHandler *h = nullptr): handler(h) {}
+      EventHandler *handler;
+    };
   };
 }
 

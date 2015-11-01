@@ -16,7 +16,7 @@ namespace fx
   class Semaphore
   {
   public:
-    Semaphore(size_t size = 0) {setup(size);}
+    Semaphore(unsigned int size = 0) {setup(size);}
     Semaphore(const Semaphore &other) {setup(other.mSize);}
     ~Semaphore()
     {
@@ -30,16 +30,27 @@ namespace fx
     void wait() {SDL_SemWait(mSemaphore);}
     void post() {SDL_SemPost(mSemaphore);}
     
-    size_t waitForIndex()
+    bool tryWait() {return !SDL_SemTryWait(mSemaphore);}
+    
+    int waitForIndex()
     {
       wait();
-      int i = SDL_AtomicAdd(&mDequeueIndex, 1) % mSize;
+      int i = SDL_AtomicAdd(&mDequeueIndex, 1) % (int)mSize;
       return mIndexQueue[i].index;
     }
-    
-    void postIndex(size_t index)
+    int tryWaitForIndex()
     {
-      int i = SDL_AtomicAdd(&mEnqueueIndex, 1) % mSize;
+      if (tryWait())
+      {
+        int i = SDL_AtomicAdd(&mDequeueIndex, 1) % (int)mSize;
+        return mIndexQueue[i].index;
+      }
+      return -1;
+    }
+    
+    void postIndex(int index)
+    {
+      int i = SDL_AtomicAdd(&mEnqueueIndex, 1) % (int)mSize;
       mIndexQueue[i].index = index;
       post();
     }
@@ -57,21 +68,22 @@ namespace fx
       SDL_UnlockMutex(mLockMutex);
     }
     
-    size_t size() const {return mSize;}
+    unsigned int size() const {return mSize;}
+    unsigned int value() const {return SDL_SemValue(mSemaphore);}
     
   private:
     struct Index
     {
-      size_t index;
-      char buffer[SDL_CACHELINE_SIZE-sizeof(size_t)];
+      int index;
+      char buffer[SDL_CACHELINE_SIZE-sizeof(int)];
     };
     
   private:
-    void setup(size_t size)
+    void setup(unsigned int size)
     {
       // Setup the Semaphore and Lock Mutex
       mSize = size ? size : SDL_GetCPUCount();
-      mSemaphore = SDL_CreateSemaphore((unsigned int)mSize);
+      mSemaphore = SDL_CreateSemaphore(mSize);
       mLockMutex = SDL_CreateMutex();
       
       // Setup the Index Queue
@@ -82,7 +94,7 @@ namespace fx
       SDL_AtomicSet(&mEnqueueIndex, 0);
     }
     
-    size_t     mSize;
+    unsigned int mSize;
     SDL_sem   *mSemaphore;
     SDL_mutex *mLockMutex;
     

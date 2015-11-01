@@ -79,6 +79,7 @@ namespace fx
           else
             i.delegate(i.ptr);
         });
+        info.group->mPtr = nullptr;
       }
       else
       {
