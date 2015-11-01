@@ -10,7 +10,10 @@
 #define EventHandler_h
 
 #include "Event.h"
+#include "Pool.h"
+#include "MultiVector.h"
 #include "TaskGroup.h"
+#include "List.h"
 
 
 namespace fx
@@ -27,13 +30,10 @@ namespace fx
     void dispatchParrallel(Event event) {}
     void dispatchAndWait(Event event) {}
     
-    
   private:
-    struct Observer
-    {
-      Observer(EventHandler *h = nullptr): handler(h) {}
-      EventHandler *handler;
-    };
+    typedef EventHandler** Observer;
+    static Pool<Observer> ObserverPool;
+    static MultiVector<Observer*> UsedObservers;
   };
 }
 

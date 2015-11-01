@@ -19,7 +19,7 @@ namespace fx
   class MultiVector
   {
   public:
-    MultiVector(size_t size = 0): mSemephore(size) {setup();}
+    MultiVector(int size = 0): mSemephore(size) {setup();}
     MultiVector(const MultiVector &other): mSemephore(other.mSemephore.size()) {setup();}
     ~MultiVector() {delete [] mVectors;}
     
@@ -27,14 +27,15 @@ namespace fx
     
     void append(const T &value)
     {
-      size_t i = mSemephore.waitForIndex();
-      mVectors[(int)i].vector.push_back(value);
+      int i = mSemephore.waitForIndex();
+      mVectors[i].vector.push_back(value);
       mSemephore.postIndex(i);
     }
     void clear()
     {
       mSemephore.lock();
-      clearVectors();
+      for (int i = 0; i < mSemephore.size(); ++i)
+        mVectors[i].vector.clear();
       mSemephore.unlock();
     }
     void dumpToList(std::list<T> &data)
@@ -67,11 +68,6 @@ namespace fx
     
   private:
     void setup() {mVectors = new Vector[mSemephore.size()];}
-    void clearVectors()
-    {
-      for (int i = 0; i < mSemephore.size(); ++i)
-        mVectors[i].vector.clear();
-    }
     
     Semaphore mSemephore;
     Vector *mVectors;

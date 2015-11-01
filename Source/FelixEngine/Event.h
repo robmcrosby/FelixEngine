@@ -32,7 +32,7 @@ namespace fx
   class Event
   {
   public:
-    Event(EVENT_TYPE type = EVENT_NONE, EventHandler sender = 0): mSender(sender) {setTimeStamp();}
+    Event(EVENT_TYPE type = EVENT_NONE, EventHandler *sender = 0): mSender(sender) {setTimeStamp();}
     Event(const Event &other) {*this = other;}
     virtual ~Event() {}
     
@@ -49,7 +49,7 @@ namespace fx
     
     void setTimeStamp() {mTimeStamp = Platform::GetTimeStamp();}
     void setTimeStamp(unsigned int ts) {mTimeStamp = ts;}
-    unsigned in timeStamp() const {return mTimeStamp;}
+    unsigned int timeStamp() const {return mTimeStamp;}
     
     void setSender(EventHandler *sender) {mSender = sender;}
     EventHandler* sender() const {return mSender;}
