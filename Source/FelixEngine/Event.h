@@ -34,7 +34,7 @@ namespace fx
   public:
     Event(EVENT_TYPE type = EVENT_NONE, EventHandler *sender = 0): mSender(sender) {setTimeStamp();}
     Event(const Event &other) {*this = other;}
-    virtual ~Event() {}
+    ~Event() {}
     
     Event& operator=(const Event &other)
     {
@@ -53,6 +53,8 @@ namespace fx
     
     void setSender(EventHandler *sender) {mSender = sender;}
     EventHandler* sender() const {return mSender;}
+    
+    
     
   private:
     EVENT_TYPE    mType;

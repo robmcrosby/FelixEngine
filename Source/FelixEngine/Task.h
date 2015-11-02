@@ -16,10 +16,10 @@ namespace fx
   class Task
   {
   public:
-    Task(): mFunction(0) {setDelegate(TaskDelegate::Create<Task, &Task::exec>(this));}
+    Task(): mDelegate(TaskDelegate::Create<Task, &Task::exec>(this)) {}
     virtual ~Task() {}
     
-    virtual void execute(void*) {}
+    virtual void execute(void *ptr) {}
     
     bool dispatch(TaskGroup &group) {return dispatch(nullptr, &group);}
     bool dispatch(TaskGroup *group) {return dispatch(nullptr, group);}
@@ -28,8 +28,6 @@ namespace fx
       TaskingSystem *taskingSystem = TaskingSystem::Instance();
       if (!taskingSystem)
         return false;
-      if (mFunction)
-        return taskingSystem->dispatch(mFunction, ptr, group);
       return taskingSystem->dispatch(mDelegate, ptr, group);
     }
     
@@ -39,19 +37,14 @@ namespace fx
       TaskingSystem *taskingSystem = TaskingSystem::Instance();
       if (!taskingSystem)
         return false;
-      if (mFunction)
-        return taskingSystem->runAfterGroup(mFunction, group, ptr);
       return taskingSystem->runAfterGroup(mDelegate, group, ptr);
     }
     
-    void setDelegate(TaskDelegate delegate) {mDelegate = delegate;}
-    void setFunction(TaskFunction *function) {mFunction = function;}
+  protected:
+    TaskDelegate mDelegate;
     
   private:
     void exec(void *ptr) {execute(ptr);}
-    
-    TaskDelegate mDelegate;
-    TaskFunction *mFunction;
   };
 }
 

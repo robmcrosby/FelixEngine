@@ -28,6 +28,7 @@ namespace fx
     
     virtual void execute(void*) {}
     
+    bool dispatch(Task *task, void *ptr = nullptr) {return task ? dispatch(*task, ptr) : false;}
     bool dispatch(Task &task, void *ptr = nullptr) {return task.dispatch(ptr, this);}
     bool dispatch(TaskDelegate delegate, void *ptr = nullptr)
     {
@@ -58,6 +59,7 @@ namespace fx
         return runAfterTasks(mFunction, ptr);
       return runAfterTasks(mDelegate, ptr);
     }
+    bool runAfterTasks(Task *task, void *ptr = nullptr) {return task ? runAfterTasks(*task, ptr) : false;}
     bool runAfterTasks(Task &task, void *ptr = nullptr) {return task.runAfterGroup(this, ptr);}
     bool runAfterTasks(TaskDelegate delegate, void *ptr = nullptr)
     {

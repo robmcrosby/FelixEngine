@@ -10,7 +10,7 @@
 #define List_h
 
 #include "Pool.h"
-#include "Semaphore.h"
+#include <SDL2/SDL.h>
 
 
 #define DEFAULT_LIST_POOL_SIZE 64
@@ -94,8 +94,8 @@ namespace fx
     };
     
   public:
-    List() {init();}
-    List(const List &other)
+    List(): mLock(0) {init();}
+    List(const List &other): mLock(0)
     {
       init();
       *this = other;
@@ -161,11 +161,6 @@ namespace fx
     
     void popFront() {remove(begin());}
     void popBack() {remove(end());}
-    void clear()
-    {
-      while (mRoot != mRoot->next)
-        remove(mRoot->next);
-    }
     Iterator remove(const Iterator &itr)
     {
       Node *next = nullptr;
@@ -185,6 +180,29 @@ namespace fx
       return next;
     }
     
+    bool remove(const T &item)
+    {
+      bool success = false;
+      Iterator itr = begin();
+      while (itr != end())
+      {
+        if (*itr == item)
+        {
+          itr = remove(itr);
+          success = true;
+        }
+        else
+          ++itr;
+      }
+      return success;
+    }
+
+    void clear()
+    {
+      while (mRoot != mRoot->next)
+        remove(mRoot->next);
+    }
+    
     void popFrontSafe() {removeSafe(begin());}
     void popBackSafe() {removeSafe(end());}
     Iterator removeSafe(const Iterator &itr)
@@ -193,6 +211,16 @@ namespace fx
       remove(itr);
       unlock();
     }
+    
+    bool removeSafe(const T &item)
+    {
+      bool success = false;
+      lock();
+      success = remove(item);
+      unlock();
+      return success;
+    }
+    
     void clearSafe()
     {
       lock();
@@ -200,24 +228,21 @@ namespace fx
       unlock();
     }
     
-    void wait() {mSem.wait();}
-    void post() {mSem.post();}
-    
-    void lock() {mSem.lock();}
-    void unlock() {mSem.unlock();}
+    void lock() {SDL_AtomicLock(&mLock);}
+    void unlock() {SDL_AtomicUnlock(&mLock);}
     
     static void CleanUpPool() {NodePool.cleanUp();}
   private:
     void init()
     {
-      SDL_AtomicSet(mSize, 0);
+      SDL_AtomicSet(&mSize, 0);
       mRoot = NodePool.newItem();
       mRoot->next = mRoot->prev = mRoot;
     }
     
     Node *mRoot;
     SDL_atomic_t mSize;
-    Semaphore mSem;
+    SDL_SpinLock mLock;
   };
   
   template <typename T>

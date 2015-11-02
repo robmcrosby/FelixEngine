@@ -14,4 +14,4 @@ using namespace std;
 
 
 Pool<EventHandler::Observer> EventHandler::ObserverPool;
-MultiVector<EventHandler::Observer*> EventHandler::UsedObservers;
+List<EventHandler::Observer*> EventHandler::UsedObservers;
