@@ -11,7 +11,7 @@
 
 #include "Semaphore.h"
 
-#define DEFULT_BLOCK_SIZE 64
+#define DEFAULT_POOL_SIZE 64
 
 
 namespace fx
@@ -59,6 +59,7 @@ namespace fx
         delete block;
       }
     }
+    bool inUse() const {return mSem.value() != mSem.size();}
     
   private:
     T *mData;
@@ -71,7 +72,7 @@ namespace fx
   class Pool
   {
   public:
-    Pool(int size = DEFULT_BLOCK_SIZE): mHead(size) {}
+    Pool(int size = DEFAULT_POOL_SIZE): mHead(size) {}
     
     T* newItem()
     {
@@ -115,6 +116,19 @@ namespace fx
           block = block->next();
       }
       mSem.post();
+    }
+    void cleanUp()
+    {
+      mSem.lock();
+      Block<T> *block = &mHead;
+      while (block->next)
+      {
+        if (!block->next->inUse())
+          block->removeNextBlock();
+        else
+          block = block->next;
+      }
+      mSem.unlock();
     }
     
   private:
