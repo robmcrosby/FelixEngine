@@ -10,23 +10,22 @@
 #define EventSystem_h
 
 #include "System.h"
+#include "Mutex.h"
 
 
 namespace fx
 {
+  class FelixEngine;
+  
   class EventSystem: public System
   {
   public:
     static EventSystem* Instance() {return sInstance;}
     
-    EventSystem(): System(SYSTEM_EVENTS)
-    {
-      sInstance = this;
-    }
+    EventSystem(): System(SYSTEM_EVENTS) {}
     virtual ~EventSystem() {}
     
-    virtual bool setToXml(const XMLTree::Node *node) {return true;}
-    virtual bool init() {return true;}
+    virtual void pollEvents() = 0;
     
   private:
     static EventSystem *sInstance;

@@ -57,6 +57,7 @@ namespace fx
     Scene* getScene(const std::string &name) {return mScenes.count(name) ? mScenes.at(name) : nullptr;}
     
     int runLoop();
+    void exit() {mShutdown = true;}
     
   private:
     FelixEngine();
@@ -64,9 +65,7 @@ namespace fx
     
     bool loadSystems(const XMLTree::Node &node);
     
-    //void updateFrame();
-    
-    unsigned int mRefreshRate;
+    bool mShutdown;
     std::map<SYSTEM_TYPE, System*> mSystems;
     std::map<std::string, Scene*>  mScenes;
   };

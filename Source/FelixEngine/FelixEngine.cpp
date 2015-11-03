@@ -25,7 +25,7 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
-FelixEngine::FelixEngine(): mRefreshRate(16)
+FelixEngine::FelixEngine(): mShutdown(0)
 {
 }
 
@@ -95,24 +95,16 @@ void FelixEngine::deleteScene(const std::string &name)
 
 int FelixEngine::runLoop()
 {
-  bool quit = false;
-  SDL_Event event;
-  
-  while (!quit)
+  while (!mShutdown)
   {
-    while (SDL_PollEvent(&event))
-    {
-      if (event.type == SDL_QUIT)
-        quit = true;
-    }
     notify(EVENT_UPDATE);
+    EventSystem *eventSystem = GetEventSystem();
+    if (eventSystem)
+      eventSystem->pollEvents();
     
     GraphicSystem *graphicSystem = getGraphicSystem();
     if (graphicSystem)
       graphicSystem->render();
-    
-    //SDL_Delay(15);
-    //updateFrame();
   }
   
   SDL_Quit();
@@ -141,7 +133,7 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
   
   // Add the default event system if there is none found.
   if (!getEventSystem())
-    addSystem(System::Create("EventSystem"));
+    addSystem(System::Create("SDLEventSystem"));
   
   if (success && SDL_Init(sdlInitFlags) < 0)
   {
