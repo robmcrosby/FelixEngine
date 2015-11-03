@@ -10,13 +10,14 @@
 #define EventHandler_h
 
 #include "Pool.h"
-#include "TaskGroup.h"
 #include "List.h"
+#include "Delegate.h"
 
 
 namespace fx
 {
   class Event;
+  class TaskGroup;
   
   class EventHandler
   {

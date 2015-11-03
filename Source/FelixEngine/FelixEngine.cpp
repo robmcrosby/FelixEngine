@@ -11,6 +11,7 @@
 #include "System.h"
 #include "Scene.h"
 #include "Platform.h"
+#include "Event.h"
 
 #include <SDL2/SDL.h>
 
@@ -72,6 +73,7 @@ void FelixEngine::addScene(Scene *scene)
     if (prev && prev != scene)
       delete prev;
     mScenes[scene->name()] = scene;
+    addHandler(scene);
   }
 }
 
@@ -103,7 +105,14 @@ int FelixEngine::runLoop()
       if (event.type == SDL_QUIT)
         quit = true;
     }
-    updateFrame();
+    notify(EVENT_UPDATE);
+    
+    GraphicSystem *graphicSystem = getGraphicSystem();
+    if (graphicSystem)
+      graphicSystem->render();
+    
+    //SDL_Delay(15);
+    //updateFrame();
   }
   
   SDL_Quit();
@@ -153,6 +162,7 @@ void FelixEngine::addSystem(System *system)
     if (mSystems.count(system->type()))
       delete mSystems.at(system->type());
     mSystems[system->type()] = system;
+    addHandler(system);
   }
 }
 
@@ -161,12 +171,4 @@ void FelixEngine::clearSystems()
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
     delete itr->second;
   mSystems.clear();
-}
-
-void FelixEngine::updateFrame()
-{
-  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
-    itr->second->getUpdateDelegate()(nullptr);
-  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
-    itr->second->update();
 }

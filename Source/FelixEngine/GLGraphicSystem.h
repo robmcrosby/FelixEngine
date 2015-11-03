@@ -34,10 +34,10 @@ namespace fx
     GLGraphicSystem();
     virtual ~GLGraphicSystem();
     
-    void update(void*);
-    
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    
+    virtual void render();
     
     virtual void setVersion(int major, int minor);
     

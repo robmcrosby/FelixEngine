@@ -7,6 +7,7 @@
 //
 
 #include "GLGraphicSystem.h"
+#include "Event.h"
 
 #include "GLUniformMap.h"
 
@@ -27,7 +28,7 @@ DEFINE_SYSTEM_ID(GLGraphicSystem)
 GLGraphicSystem::GLGraphicSystem(): mContext(0)
 {
   mSDLInitFlags |= SDL_INIT_VIDEO;
-  mUpdateDelegate = UpdateDelegate::Create<GLGraphicSystem, &GLGraphicSystem::update>(this);
+  //mUpdateDelegate = UpdateDelegate::Create<GLGraphicSystem, &GLGraphicSystem::update>(this);
 }
 
 GLGraphicSystem::~GLGraphicSystem()
@@ -144,13 +145,12 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
   return success;
 }
 
-void GLGraphicSystem::update(void*)
+void GLGraphicSystem::render()
 {
+  processTasks();
+  
   updateResources();
   updateUniforms();
-  processTasks();
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->swapBuffers();
 }
 
 
@@ -163,11 +163,13 @@ InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 
 void GLGraphicSystem::processTasks()
 {
-  clearTaskSlots();
-  loadTaskSlots();
-  
+  mTaskSlotsMutex.lock();
   if (mTaskSlots.size())
     processTaskSlot(mTaskSlots.at(0));
+  mTaskSlotsMutex.unlock();
+  
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->swapBuffers();
 }
 
 void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)

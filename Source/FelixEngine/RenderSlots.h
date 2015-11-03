@@ -9,6 +9,7 @@
 #ifndef RenderSlots_h
 #define RenderSlots_h
 
+#include "EventHandler.h"
 #include "Component.h"
 #include "UniformMap.h"
 #include "View.h"
@@ -19,15 +20,18 @@ namespace fx
   class GraphicSystem;
   class View;
   
-  class RenderSlot
+  class RenderSlot: public EventHandler
   {
   public:
     RenderSlot(Scene *scene);
-    ~RenderSlot();
+    virtual ~RenderSlot();
+    
+    virtual void handle(const Event &event);
     
     bool setToXml(const XMLTree::Node *node);
     
     void update() const;
+    void render() const;
     bool applyToTask(GraphicTask &task) const;
     
     void setVisible() {mVisible = true;}

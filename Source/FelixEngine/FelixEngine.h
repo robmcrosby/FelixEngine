@@ -6,8 +6,8 @@
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#include <iostream>
-#include <map>
+
+#include "EventHandler.h"
 #include "System.h"
 #include "XMLTree.h"
 
@@ -28,7 +28,7 @@ namespace fx
   /**
    * Felix Engine Class
    */
-  class FelixEngine
+  class FelixEngine: public EventHandler
   {
   public:
     static FelixEngine* Instance();
@@ -64,7 +64,7 @@ namespace fx
     
     bool loadSystems(const XMLTree::Node &node);
     
-    void updateFrame();
+    //void updateFrame();
     
     unsigned int mRefreshRate;
     std::map<SYSTEM_TYPE, System*> mSystems;

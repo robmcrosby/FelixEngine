@@ -35,10 +35,27 @@ namespace fx
   class Event: public Task
   {
   public:
-    Event(EVENT_TYPE type = EVENT_NONE);
-    Event(const Event &other);
+    Event(EVENT_TYPE type = EVENT_NONE): mType(type), mSender(0), mTarget(0), mInPool(0)
+    {
+      mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
+      setTimeStamp();
+    }
+    Event(const Event &other): mInPool(0)
+    {
+      mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
+      *this = other;
+    }
     
-    Event& operator=(const Event &other);
+    Event& operator=(const Event &other)
+    {
+      mType = other.mType;
+      mTimeStamp = other.mTimeStamp;
+      mSender = other.mSender;
+      mTarget = other.mTarget;
+      return *this;
+    }
+    
+    bool operator==(EVENT_TYPE type) const {return mType == type;}
     
     void setType(EVENT_TYPE type) {mType = type;}
     EVENT_TYPE type() const {return mType;}

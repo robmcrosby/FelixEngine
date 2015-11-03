@@ -69,15 +69,27 @@ void RenderSlots::clear()
 
 
 
+
+
+
+
+
 RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1),
   mInstances(1), mMesh(0), mScene(scene), mSystem(FelixEngine::GetGraphicSystem()), mUniformMapPtr(0)
 {
   setToInternalView();
   setToInternalMaterial();
+  mSystem->addHandler(this);
 }
 
 RenderSlot::~RenderSlot()
 {
+}
+
+void RenderSlot::handle(const fx::Event &event)
+{
+  if (event == EVENT_RENDER && event.sender() == mSystem)
+    render();
 }
 
 bool RenderSlot::setMesh(const XMLTree::Node &node)
@@ -172,11 +184,14 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
 
 void RenderSlot::update() const
 {
+  mView.update();
+}
+
+void RenderSlot::render() const
+{
   GraphicTask task;
   if (mSystem && applyToTask(task))
     mSystem->addGraphicTask(task);
-  
-  mView.update();
 }
 
 bool RenderSlot::applyToTask(GraphicTask &task) const

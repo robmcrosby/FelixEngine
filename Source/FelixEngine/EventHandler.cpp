@@ -7,6 +7,7 @@
 //
 
 #include "EventHandler.h"
+#include "TaskGroup.h"
 #include "Event.h"
 
 
@@ -61,26 +62,4 @@ void EventHandler::notify(const Event &event, TaskGroup *group)
   }
   
   mObservers.unlock();
-}
-
-
-Event::Event(EVENT_TYPE type): mSender(0), mTarget(0), mInPool(0)
-{
-  mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
-  setTimeStamp();
-}
-
-Event::Event(const Event &other): mInPool(0)
-{
-  mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
-  *this = other;
-}
-
-Event& Event::operator=(const Event &other)
-{
-  mType = other.mType;
-  mTimeStamp = other.mTimeStamp;
-  mSender = other.mSender;
-  mTarget = other.mTarget;
-  return *this;
 }

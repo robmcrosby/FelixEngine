@@ -9,9 +9,8 @@
 #ifndef System_h
 #define System_h
 
-#include "Resource.h"
+#include "EventHandler.h"
 #include "XMLTree.h"
-#include "Delegate.h"
 
 #include <iostream>
 #include <istream>
@@ -34,19 +33,14 @@ namespace fx
   /**
    * Defines the base class for a System used in the Felix Engine.
    */
-  class System
+  class System: public EventHandler
   {
   public:
     System(SYSTEM_TYPE type = SYSTEM_OTHER);
     virtual ~System();
     
-    void update(void*) {}
-    
     virtual bool setToXml(const XMLTree::Node *node) = 0;
     virtual bool init() = 0;
-    
-    typedef Delegate<void, void*> UpdateDelegate;
-    UpdateDelegate& getUpdateDelegate() {return mUpdateDelegate;}
     
     SYSTEM_TYPE type() const {return mType;}
     int getSDLInitFlags() const {return mSDLInitFlags;}
@@ -54,7 +48,6 @@ namespace fx
   protected:
     SYSTEM_TYPE mType;
     int mSDLInitFlags;
-    UpdateDelegate mUpdateDelegate;
     
   public:
     static System* Create(const std::string &name);

@@ -8,6 +8,7 @@
 
 #include "GraphicSystem.h"
 #include "UniformMap.h"
+#include "Event.h"
 
 
 using namespace fx;
@@ -58,3 +59,47 @@ Resource* GraphicSystem::getResource(const std::string &type, const std::string 
   return resource;
 }
 
+void GraphicSystem::handle(const fx::Event &event)
+{
+  if (event == EVENT_UPDATE)
+    update();
+}
+
+void GraphicSystem::update()
+{
+  if (mUpdateMutex.tryLock())
+  {
+    notify(EVENT_RENDER, true);
+    
+    mTaskCollection.dump(mTaskBuffer);
+    sort(mTaskBuffer.begin(), mTaskBuffer.end());
+    loadTaskSlots();
+    
+    mUpdateMutex.unlock();
+  }
+}
+
+void GraphicSystem::clearTaskSlots()
+{
+  for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
+    itr->clear();
+}
+
+void GraphicSystem::loadTaskSlots()
+{
+  mTaskSlotsMutex.lock();
+  clearTaskSlots();
+  for (TaskBuffer::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
+  {
+    if (itr->isViewTask())
+      mTaskSlots.at(0).push_back(*itr);
+    else
+    {
+      if (itr->viewIndex >= (int)mTaskSlots.size())
+        mTaskSlots.resize(itr->viewIndex+1);
+      mTaskSlots.at(itr->viewIndex).push_back(*itr);
+    }
+  }
+  mTaskSlotsMutex.unlock();
+  mTaskBuffer.clear();
+}

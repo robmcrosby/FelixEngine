@@ -10,6 +10,8 @@
 #include "UniformMap.h"
 #include "TextureMap.h"
 #include "ImageLoader.h"
+#include "Event.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
@@ -353,7 +355,6 @@ MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
 {
   mContextInfo = new MTLContextInfo();
   mSDLInitFlags |= SDL_INIT_VIDEO;
-  mUpdateDelegate = UpdateDelegate::Create<MTLGraphicSystem, &MTLGraphicSystem::update>(this);
 }
 
 MTLGraphicSystem::~MTLGraphicSystem()
@@ -442,10 +443,11 @@ bool MTLGraphicSystem::init()
   return success;
 }
 
-void MTLGraphicSystem::update(void*)
+void MTLGraphicSystem::render()
 {
   updateResources();
   updateUniforms();
+  
   processTasks();
 }
 
@@ -471,9 +473,6 @@ void MTLGraphicSystem::presentWindowDrawables() const
 
 void MTLGraphicSystem::processTasks()
 {
-  clearTaskSlots();
-  loadTaskSlots();
-
   @autoreleasepool
   {
     // Wait on the Inflight Semaphore before creating a new Command Buffer
@@ -488,13 +487,15 @@ void MTLGraphicSystem::processTasks()
     
     setNextWindowDrawables();
     
+    mTaskSlotsMutex.lock();
     if (mTaskSlots.size())
       processTaskSlot(mTaskSlots.at(0));
-    
     presentWindowDrawables();
     
     [mContextInfo->mCommandBuffer commit];
     mContextInfo->mCommandBuffer = nil;
+    
+    mTaskSlotsMutex.unlock();
   }
 }
 

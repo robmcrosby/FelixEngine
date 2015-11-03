@@ -38,7 +38,7 @@ namespace fx
         mVectors[i].vector.clear();
       mSemephore.unlock();
     }
-    void dumpToList(std::list<T> &data)
+    void dump(std::list<T> &data)
     {
       mSemephore.lock();
       for (int i = 0; i < mSemephore.size(); ++i)
@@ -48,13 +48,13 @@ namespace fx
       }
       mSemephore.unlock();
     }
-    void dumpToVector(std::vector<T> &data)
+    void dump(std::vector<T> &data)
     {
       mSemephore.lock();
       for (int i = 0; i < mSemephore.size(); ++i)
       {
         data.insert(data.end(), mVectors[i].vector.begin(), mVectors[i].vector.end());
-        mVectors[i].clear();
+        mVectors[i].vector.clear();
       }
       mSemephore.unlock();
     }

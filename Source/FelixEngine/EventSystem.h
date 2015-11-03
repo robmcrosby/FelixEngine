@@ -22,13 +22,8 @@ namespace fx
     EventSystem(): System(SYSTEM_EVENTS)
     {
       sInstance = this;
-      mUpdateDelegate = UpdateDelegate::Create<EventSystem, &EventSystem::update>(this);
     }
     virtual ~EventSystem() {}
-    
-    void update(void*)
-    {
-    }
     
     virtual bool setToXml(const XMLTree::Node *node) {return true;}
     virtual bool init() {return true;}

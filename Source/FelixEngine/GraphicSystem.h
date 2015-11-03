@@ -13,6 +13,7 @@
 #include "GraphicResources.h"
 #include "GraphicTask.h"
 #include "MultiVector.h"
+#include "Mutex.h"
 
 
 namespace fx
@@ -29,6 +30,9 @@ namespace fx
     GraphicSystem(): System(SYSTEM_GRAPHICS) {mTaskSlots.push_back(TaskSlot());}
     virtual ~GraphicSystem() {}
     
+    virtual void handle(const Event &event);
+    virtual void render() = 0;
+    
     virtual Window* getWindow(const std::string &name) = 0;
     virtual Frame* getFrame(const std::string &name) = 0;
     virtual Shader* getShader(const std::string &name) = 0;
@@ -38,47 +42,26 @@ namespace fx
     Resource* getResource(const std::string &type, const std::string &name);
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map) = 0;
     
-    void addGraphicTask(const GraphicTask &task)
-    {
-      // TODO: make this work with multiple threads.
-      //mTaskList.push_back(task);
-      mTaskCollection.append(task);
-    }
+    void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
+    
+  private:
+    void update();
+    void clearTaskSlots();
+    void loadTaskSlots();
     
   protected:
     typedef MultiVector<GraphicTask> TaskCollection;
     
-    typedef std::list<GraphicTask> TaskList;
+    typedef std::vector<GraphicTask> TaskBuffer;
     typedef std::vector<GraphicTask> TaskSlot;
     typedef std::vector<TaskSlot> TaskSlots;
     
-    void clearTaskSlots()
-    {
-      for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
-        itr->clear();
-    }
-    
-    void loadTaskSlots()
-    {
-      TaskList taskList;
-      
-      mTaskCollection.dumpToList(taskList);
-      taskList.sort();
-      for (TaskList::iterator itr = taskList.begin(); itr != taskList.end(); ++itr)
-      {
-        if (itr->isViewTask())
-          mTaskSlots.at(0).push_back(*itr);
-        else
-        {
-          if (itr->viewIndex >= (int)mTaskSlots.size())
-            mTaskSlots.resize(itr->viewIndex+1);
-          mTaskSlots.at(itr->viewIndex).push_back(*itr);
-        }
-      }
-    }
-    
     TaskCollection mTaskCollection;
+    TaskBuffer mTaskBuffer;
+    
     TaskSlots mTaskSlots;
+    Mutex mTaskSlotsMutex;
+    Mutex mUpdateMutex;
     
   protected:
     bool addWindows(const XMLTree::Node *node);
