@@ -22,6 +22,8 @@
 
 -(id)initWithDevice:(id <MTLDevice>)device andLibrary:(id <MTLLibrary>)library;
 
+-(BOOL)loaded;
+
 -(BOOL)setVertexFunction:(NSString*)name;
 -(BOOL)setFragmentFunction:(NSString*)name;
 
@@ -42,6 +44,8 @@
 @interface MTLMesh : NSObject
 
 -(id)initWithDevice:(id <MTLDevice>)device;
+
+-(BOOL)loaded;
 
 -(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements forName:(NSString*)name;
 -(BOOL)setIndexBuffer:(const void*)buffer withNumIndices:(NSUInteger)numIndices;
@@ -65,6 +69,8 @@
 @property (nonatomic, readwrite) MTLTextureUsage usage;
 
 -(id)initWithDevice:(id <MTLDevice>)device;
+
+-(BOOL)loaded;
 
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height;
 -(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height;
@@ -111,6 +117,8 @@
 @property (nonatomic, readonly) NSUInteger frameId;
 
 -(id)initWithDevice:(id <MTLDevice>)device;
+
+-(BOOL)loaded;
 
 -(void)setMetalDevice:(id <MTLDevice>)device;
 

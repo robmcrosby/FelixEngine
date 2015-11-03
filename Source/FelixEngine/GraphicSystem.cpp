@@ -14,6 +14,17 @@
 using namespace fx;
 using namespace std;
 
+
+GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
+{
+  setEventFlags(EVENT_UPDATE);
+  mTaskSlots.push_back(TaskSlot());
+}
+
+GraphicSystem::~GraphicSystem()
+{
+}
+
 bool GraphicSystem::addWindows(const XMLTree::Node *node)
 {
   bool success = false;

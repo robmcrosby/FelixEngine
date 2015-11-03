@@ -39,6 +39,11 @@
   _texture = nil;
 }
 
+-(BOOL)loaded
+{
+  return _texture != nil;
+}
+
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height
 {
   MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];

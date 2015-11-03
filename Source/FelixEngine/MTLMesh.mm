@@ -47,6 +47,11 @@
   _indexBuffer = nil;
 }
 
+-(BOOL)loaded
+{
+  return [_vertexBuffers count] > 0;
+}
+
 -(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements forName:(NSString*)name
 {
   NSUInteger length = elementSize * numElements * sizeof(float);

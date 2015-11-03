@@ -27,8 +27,8 @@ namespace fx
   class GraphicSystem: public System
   {
   public:
-    GraphicSystem(): System(SYSTEM_GRAPHICS) {mTaskSlots.push_back(TaskSlot());}
-    virtual ~GraphicSystem() {}
+    GraphicSystem();
+    virtual ~GraphicSystem();
     
     virtual void handle(const Event &event);
     virtual void render() = 0;

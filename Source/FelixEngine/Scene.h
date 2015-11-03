@@ -25,7 +25,10 @@ namespace fx
   class Scene: public EventHandler
   {
   public:
-    Scene() {}
+    Scene()
+    {
+      setEventFlags(EVENT_UPDATE);
+    }
     ~Scene()
     {
       clearObjects();

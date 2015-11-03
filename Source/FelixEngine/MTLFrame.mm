@@ -42,6 +42,11 @@
   return self;
 }
 
+-(BOOL)loaded
+{
+  return [_colorBuffers count] > 0;
+}
+
 -(void)setMetalDevice:(id <MTLDevice>)device
 {
   _mtlDevice = device;

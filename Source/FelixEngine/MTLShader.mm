@@ -41,6 +41,11 @@
   return self;
 }
 
+-(BOOL)loaded
+{
+  return _vertexFunction != nil && _fragmentFunction != nil;
+}
+
 -(void)dealloc
 {
   _mtlDevice = nil;

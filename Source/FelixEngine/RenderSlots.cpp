@@ -79,6 +79,7 @@ RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mV
 {
   setToInternalView();
   setToInternalMaterial();
+  setEventFlags(EVENT_RENDER);
   mSystem->addHandler(this);
 }
 
