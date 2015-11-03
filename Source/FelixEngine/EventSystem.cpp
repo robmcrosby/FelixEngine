@@ -11,7 +11,3 @@
 
 using namespace fx;
 using namespace std;
-
-
-Pool<EventHandler::Observer> EventHandler::ObserverPool;
-List<EventHandler::Observer*> EventHandler::UsedObservers;

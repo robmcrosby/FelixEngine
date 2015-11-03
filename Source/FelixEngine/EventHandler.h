@@ -9,7 +9,6 @@
 #ifndef EventHandler_h
 #define EventHandler_h
 
-#include "Event.h"
 #include "Pool.h"
 #include "TaskGroup.h"
 #include "List.h"
@@ -17,17 +16,20 @@
 
 namespace fx
 {
+  class Event;
+  
   class EventHandler
   {
   public:
-    typedef Delegate<void, const Event&> HandlerDelegate;
+    typedef Delegate<void, const Event&> HandleEventDelegate;
     
   private:
+    friend Event;
     class Observer
     {
     public:
       Observer(): mPtr(0) {}
-      void setHandler(EventHandler *handler) {SDL_AtomicSetPtr(&mPtr, (void*)this);}
+      void setHandler(EventHandler *handler) {SDL_AtomicSetPtr(&mPtr, (void*)handler);}
       void clearHandler() {SDL_AtomicSetPtr(&mPtr, nullptr);}
       EventHandler* handler() {return static_cast<EventHandler*>(SDL_AtomicGetPtr(&mPtr));}
       
@@ -36,18 +38,8 @@ namespace fx
     };
     
   public:
-    EventHandler()
-    {
-      mObserver = ObserverPool.newItem();
-      mObserver->setHandler(this);
-      setEventFlags(EVENT_ALL);
-      mHandlerDelegate = HandlerDelegate::Create<EventHandler, &EventHandler::inlineHandler>(this);
-    }
-    virtual ~EventHandler()
-    {
-      mObserver->clearHandler();
-      UsedObservers.pushBackSafe(mObserver);
-    }
+    EventHandler();
+    virtual ~EventHandler();
     
     void addHandler(const EventHandler *handler)
     {
@@ -60,32 +52,10 @@ namespace fx
         mObservers.removeSafe(handler->mObserver);
     }
     
+    void notify(const Event &event, bool block = false);
     virtual void handle(const Event &event) {}
     
-    void dispatchSerial(const Event &event)
-    {
-      mObservers.lock();
-      for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
-      {
-        EventHandler *handler = (*itr)->handler();
-        if (handler)
-        {
-          if (handler->eventFlags() & (int)event.type())
-            handler->mHandlerDelegate(event);
-          ++itr;
-        }
-        else
-          itr = mObservers.remove(itr);
-      }
-      mObservers.unlock();
-    }
-    void dispatchParallel(const Event &event) {}
-    void dispatchAndWait(const Event &event)
-    {
-      TaskGroup group;
-    }
-    
-    static void ClearUnused()
+    static void Cleanup()
     {
       UsedObservers.lock();
       for (List<Observer*>::Iterator itr = UsedObservers.begin(); itr != UsedObservers.end(); ++itr)
@@ -97,11 +67,14 @@ namespace fx
     void setEventFlags(int flags) {SDL_AtomicSet(&mEventFlags, flags);}
     int eventFlags() const {return SDL_AtomicGet(&mEventFlags);}
     
+    HandleEventDelegate getHandleEventDelegate() const {return mHandleEventDelegate;}
+    
   protected:
-    HandlerDelegate mHandlerDelegate;
+    HandleEventDelegate mHandleEventDelegate;
     
   private:
-    void inlineHandler(const Event &event) {handle(event);}
+    void notify(const Event &event, TaskGroup *group);
+    void handleInline(const Event &event) {handle(event);}
     
     mutable SDL_atomic_t mEventFlags;
     Observer *mObserver;

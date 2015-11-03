@@ -17,7 +17,10 @@ namespace fx
   {
   public:
     Task(): mDelegate(TaskDelegate::Create<Task, &Task::exec>(this)) {}
+    Task(const Task &other): mDelegate(TaskDelegate::Create<Task, &Task::exec>(this)) {}
     virtual ~Task() {}
+    
+    Task& operator=(const Task &other) {return *this;}
     
     virtual void execute(void *ptr) {}
     

@@ -94,6 +94,8 @@
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
 		C197CCC51BE69A32007F68E0 /* EventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CCC41BE69A32007F68E0 /* EventSystem.cpp */; };
 		C197CCC71BE69D08007F68E0 /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CCC61BE69D08007F68E0 /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */; };
+		C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42D1BE178020064E84A /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -215,6 +217,7 @@
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
 		C197CCC41BE69A32007F68E0 /* EventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventSystem.cpp; path = ../../../../Source/FelixEngine/EventSystem.cpp; sourceTree = "<group>"; };
 		C197CCC61BE69D08007F68E0 /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = List.h; path = ../../../../Source/FelixEngine/List.h; sourceTree = "<group>"; };
+		C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = ../../../../Source/FelixEngine/EventHandler.cpp; sourceTree = "<group>"; };
 		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
 		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
@@ -495,10 +498,11 @@
 		C1A7D42A1BE078980064E84A /* EventSystem */ = {
 			isa = PBXGroup;
 			children = (
+				C1A7D42F1BE178200064E84A /* Event.h */,
 				C1A7D42B1BE078FF0064E84A /* EventSystem.h */,
 				C197CCC41BE69A32007F68E0 /* EventSystem.cpp */,
 				C1A7D42D1BE178020064E84A /* EventHandler.h */,
-				C1A7D42F1BE178200064E84A /* Event.h */,
+				C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */,
 			);
 			name = EventSystem;
 			sourceTree = "<group>";
@@ -539,6 +543,7 @@
 				C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
+				C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */,
 				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
 				C197CCC71BE69D08007F68E0 /* List.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
@@ -696,6 +701,7 @@
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */,
 				37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */,
+				C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
 				37CBA8681BD5752B002A358A /* MTLMesh.mm in Sources */,
 				37E22FDE1BCF39080018BA15 /* ImageLoader.cpp in Sources */,

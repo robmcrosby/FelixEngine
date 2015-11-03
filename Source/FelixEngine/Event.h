@@ -9,7 +9,10 @@
 #ifndef Event_h
 #define Event_h
 
+#include "EventHandler.h"
 #include "Platform.h"
+#include "Task.h"
+#include "Pool.h"
 
 
 namespace fx
@@ -29,20 +32,13 @@ namespace fx
     EVENT_ALL     = 0xFF,
   };
   
-  class Event
+  class Event: public Task
   {
   public:
-    Event(EVENT_TYPE type = EVENT_NONE, EventHandler *sender = 0): mSender(sender) {setTimeStamp();}
-    Event(const Event &other) {*this = other;}
-    ~Event() {}
+    Event(EVENT_TYPE type = EVENT_NONE);
+    Event(const Event &other);
     
-    Event& operator=(const Event &other)
-    {
-      mType      = other.mType;
-      mTimeStamp = other.mTimeStamp;
-      mSender    = other.mSender;
-      return *this;
-    }
+    Event& operator=(const Event &other);
     
     void setType(EVENT_TYPE type) {mType = type;}
     EVENT_TYPE type() const {return mType;}
@@ -54,12 +50,41 @@ namespace fx
     void setSender(EventHandler *sender) {mSender = sender;}
     EventHandler* sender() const {return mSender;}
     
+    void setTarget(EventHandler *target) {mTarget = target;}
+    EventHandler* target() const {return mTarget;}
     
+    void notify(EventHandler *target, EventHandler *sender, TaskGroup *group) const
+    {
+      Event *event = EventPool().newItem();
+      *event = *this;
+      event->mInPool = true;
+      event->mTarget = target;
+      event->mSender = sender;
+      event->dispatch(group);
+    }
     
   private:
+    void execute(void*)
+    {
+      if (mTarget)
+        mTarget->getHandleEventDelegate()(*this);
+      if (mInPool)
+        EventPool().freeItem(this);
+    }
+    
     EVENT_TYPE    mType;
     unsigned int  mTimeStamp;
+    
+    bool mInPool;
     EventHandler *mSender;
+    EventHandler *mTarget;
+    
+  private:
+    static Pool<Event>& EventPool()
+    {
+      static Pool<Event> pool;
+      return pool;
+    }
   };
 }
 
