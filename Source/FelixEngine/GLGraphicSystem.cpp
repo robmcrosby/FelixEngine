@@ -200,25 +200,28 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
     const GLShader *shader = static_cast<const GLShader*>(task.shader);
     const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mesh);
     
-    // Set the state for the Frame
-    frame->use();
-    if (task.isClearTask())
-      frame->clear(task.clearState);
-    frame->setDepthState(task.depthState);
-    frame->setBlendState(task.blendState);
-    
-    // Set the state for the Shader
-    shader->use();
-    if (task.viewUniforms)
-      static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
-    if (task.materialUniforms)
-      static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
-    if (task.localUniforms)
-      static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
-    shader->applyTextureMap(task.textureMap);
-    
-    // Draw the Mesh
-    mesh->draw(shader, task.instances, task.subMesh);
+    if (frame->isLoaded() && shader->isLoaded() && mesh->isLoaded())
+    {
+      // Set the state for the Frame
+      frame->use();
+      if (task.isClearTask())
+        frame->clear(task.clearState);
+      frame->setDepthState(task.depthState);
+      frame->setBlendState(task.blendState);
+      
+      // Set the state for the Shader
+      shader->use();
+      if (task.viewUniforms)
+        static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
+      if (task.materialUniforms)
+        static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
+      if (task.localUniforms)
+        static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
+      shader->applyTextureMap(task.textureMap);
+      
+      // Draw the Mesh
+      mesh->draw(shader, task.instances, task.subMesh);
+    }
   }
 }
 
