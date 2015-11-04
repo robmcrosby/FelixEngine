@@ -26,7 +26,7 @@ namespace fx
   public:
     Scene()
     {
-      setEventFlags(EVENT_UPDATE);
+      setEventFlags(EVENT_APP_UPDATE);
     }
     ~Scene()
     {
@@ -37,7 +37,7 @@ namespace fx
     
     virtual void handle(const Event &event)
     {
-      if (event == EVENT_UPDATE)
+      if (event == EVENT_APP_UPDATE)
         update();
     }
     

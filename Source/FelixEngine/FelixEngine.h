@@ -30,6 +30,13 @@ namespace fx
    */
   class FelixEngine: public EventHandler
   {
+  private:
+    FelixEngine();
+    ~FelixEngine();
+    
+  public:
+    virtual void handle(const Event &event);
+    
   public:
     static FelixEngine* Instance();
     
@@ -60,9 +67,6 @@ namespace fx
     void exit() {mShutdown = true;}
     
   private:
-    FelixEngine();
-    ~FelixEngine();
-    
     bool loadSystems(const XMLTree::Node &node);
     
     bool mShutdown;

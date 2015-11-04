@@ -25,44 +25,49 @@ namespace fx
    */
   enum EVENT_TYPE
   {
-    EVENT_NONE    = 0x00, /**< No event */
-    EVENT_RENDER  = 0x01, /**< Render */
-    EVENT_UPDATE  = 0x02, /**< Update */
+    EVENT_ALL              = 0xFFFFFFFF, /** All Events */
+    EVENT_NONE             = 0x00000000, /**< No Events */
     
-    EVENT_KEYBOARD        = 0x70, /**< Keyboard Event Mask */
-    EVENT_KEYBOARD_DOWN   = 0x10, /**< Key has been pressed */
-    EVENT_KEYBOARD_UP     = 0x20, /**< Key has been released */
-    EVENT_KEYBOARD_REPEAT = 0x40, /**< Key has been held down */
+    EVENT_APP_MASK         = 0x0000000F, /**< Application events Mask */
+    EVENT_APP_RENDER       = 0x00000001, /**< Application render */
+    EVENT_APP_UPDATE       = 0x00000002, /**< Application update */
+    EVENT_APP_QUIT         = 0x00000004, /**< Application quit */
     
-    EVENT_TOUCH      = 0x0380, /**< Touch Event Mask */
-    EVENT_TOUCH_DOWN = 0x0080, /**< Touch has made contact */
-    EVENT_TOUCH_UP   = 0x0100, /**< Touch has left contact */
-    EVENT_TOUCH_MOVE = 0x0200, /**< Touch have moved */
+    EVENT_TOUCH_MASK       = 0x000000F0, /**< Touch events Mask */
+    EVENT_TOUCH_DOWN       = 0x00000010, /**< Touch has made contact */
+    EVENT_TOUCH_UP         = 0x00000020, /**< Touch has left contact */
+    EVENT_TOUCH_MOVE       = 0x00000040, /**< Touch have moved */
+    EVENT_TOUCH_GESTURE    = 0x00000080, /**< Touch gesture made */
     
-    EVENT_MOUSE       = 0x3C00, /**< Mouse Event Mask */
-    EVENT_MOUSE_DOWN  = 0x0400, /**< Mouse Button has been pressed */
-    EVENT_MOUSE_UP    = 0x0800, /**< Mouse Button has been released */
-    EVENT_MOUSE_MOVE  = 0x1000, /**< Mouse has been moved */
-    EVENT_MOUSE_WHEEL = 0x2000, /**< Mouse Wheel has been moved */
+    EVENT_MOUSE_MASK       = 0x00000F00, /**< Mouse events Mask */
+    EVENT_MOUSE_DOWN       = 0x00000100, /**< Mouse button has been pressed */
+    EVENT_MOUSE_UP         = 0x00000200, /**< Mouse button has been released */
+    EVENT_MOUSE_MOVE       = 0x00000400, /**< Mouse has been moved */
+    EVENT_MOUSE_WHEEL      = 0x00000800, /**< Mouse wheel has been moved */
     
-    EVENT_WINDOW = 0x3FF00, /**< Window event mask */
+    EVENT_KEYBOARD_MASK    = 0x00007000, /**< Keyboard events Mask */
+    EVENT_KEYBOARD_DOWN    = 0x00001000, /**< Key has been pressed */
+    EVENT_KEYBOARD_UP      = 0x00002000, /**< Key has been released */
+    EVENT_KEYBOARD_REPEAT  = 0x00004000, /**< Key has been held down */
     
-    EVENT_WINDOW_SHOWN   = 0x0100, /**< Window has been shown */
-    EVENT_WINDOW_HIDE    = 0x0200, /**< Window has been hidden */
-    EVENT_WINDOW_EXPOSED = 0x0400, /**< Window has been exposed and should be redrawn */
-    EVENT_WINDOW_MOVED   = 0x0800, /**< Window has been moved */
+    EVENT_WINDOW_MASK      = 0x03FF0000, /**< Window events mask */
+    EVENT_WINDOW_SHOWN     = 0x00010000, /**< Window has been shown */
+    EVENT_WINDOW_HIDE      = 0x00020000, /**< Window has been hidden */
+    EVENT_WINDOW_EXPOSED   = 0x00040000, /**< Window has been exposed and should be redrawn */
+    EVENT_WINDOW_MOVED     = 0x00080000, /**< Window has been moved */
+    EVENT_WINDOW_RESIZED   = 0x00100000, /**< Window has been resized */
+    EVENT_WINDOW_MINIMIZED = 0x00200000, /**< Window has been minimized */
+    EVENT_WINDOW_MAXIMIZED = 0x00300000, /**< Window has been maximized */
+    EVENT_WINDOW_RESTORED  = 0x00400000, /**< Window has been restored to normal size and position */
+    EVENT_WINDOW_ENTER     = 0x00800000, /**< Window has gained mouse focus */
+    EVENT_WINDOW_LEAVE     = 0x01000000, /**< Window has lost mouse focus */
+    EVENT_WINDOW_CLOSE     = 0x02000000, /**< Window has been closed */
     
-    EVENT_WINDOW_RESIZED   = 0x1000, /**< Window has been resized */
-    EVENT_WINDOW_MINIMIZED = 0x2000, /**< Window has been minimized */
-    EVENT_WINDOW_MAXIMIZED = 0x3000, /**< Window has been maximized */
-    EVENT_WINDOW_RESTORED  = 0x4000, /**< Window has been restored to normal size and position */
-    
-    EVENT_WINDOW_ENTER = 0x08000, /**< Window has gained mouse focus */
-    EVENT_WINDOW_LEAVE = 0x10000, /**< Window has lost mouse focus */
-    EVENT_WINDOW_CLOSE = 0x20000, /**< Window has been closed */
-    
-    EVENT_OTHER   = 0xFF000000,
-    EVENT_ALL     = 0xFFFFFFFF,
+    EVENT_USER_MASK        = 0xF0000000, /**< User events mask */
+    EVENT_USER_1           = 0x10000000, /**< User event 1 */
+    EVENT_USER_2           = 0x20000000, /**< User event 2 */
+    EVENT_USER_3           = 0x40000000, /**< User event 3 */
+    EVENT_USER_4           = 0x80000000, /**< User event 4 */
   };
   
   enum DISPATCH_TYPE
@@ -71,6 +76,15 @@ namespace fx
     DISPATCH_SINGLE,   /**< Notify the listeners with a single task */
     DISPATCH_MULTIPLE, /**< Notify each listener with their own task */
     DISPATCH_BLOCK,    /**< Notify and wait for the tasks to complete */
+  };
+  
+  enum MOUSE_BUTTON
+  {
+    MOUSE_BUTTON_MASK   = 0x0f,
+    MOUSE_BUTTON_LEFT   = 0x01,
+    MOUSE_BUTTON_RIGHT  = 0x02,
+    MOUSE_BUTTON_MIDDLE = 0x04,
+    MOUSE_DOUBLE_CLICK  = 0x10,
   };
   
   class Event
@@ -131,20 +145,35 @@ namespace fx
     
     struct KeyboardData
     {
-      int window, keyCode, keyModifier, scanCode;
+      int window;
+      int keyCode;
+      int keyModifier;
+      int scanCode;
     };
     KeyboardData& keyboardData() {return *(KeyboardData*)mData;}
     const KeyboardData& keyboardData() const {return *(KeyboardData*)mData;}
     
     struct TouchData
     {
-      int index, device;
+      int index;
+      int device;
       float pressure;
       vec2 location;
       vec2 delta;
     };
     TouchData& touchData() {return *(TouchData*)mData;}
     const TouchData& touchData() const {return *(TouchData*)mData;}
+    
+    struct MouseData
+    {
+      int index;
+      int window;
+      int buttons;
+      ivec2 location;
+      ivec2 delta;
+    };
+    MouseData& mouseData() {return *(MouseData*)mData;}
+    const MouseData& mouseData() const {return *(MouseData*)mData;}
     
   private:
     EVENT_TYPE    mType;

@@ -79,7 +79,7 @@ RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mV
 {
   setToInternalView();
   setToInternalMaterial();
-  setEventFlags(EVENT_RENDER);
+  setEventFlags(EVENT_APP_RENDER);
   mSystem->addHandler(this);
 }
 
@@ -89,7 +89,7 @@ RenderSlot::~RenderSlot()
 
 void RenderSlot::handle(const fx::Event &event)
 {
-  if (event == EVENT_RENDER && event.sender() == mSystem)
+  if (event == EVENT_APP_RENDER && event.sender() == mSystem)
     render();
 }
 

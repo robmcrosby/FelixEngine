@@ -16,7 +16,7 @@ using namespace std;
 
 GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
 {
-  setEventFlags(EVENT_UPDATE);
+  setEventFlags(EVENT_APP_UPDATE);
   mTaskSlots.push_back(TaskSlot());
 }
 
@@ -71,7 +71,7 @@ Resource* GraphicSystem::getResource(const std::string &type, const std::string 
 
 void GraphicSystem::handle(const fx::Event &event)
 {
-  if (event == EVENT_UPDATE)
+  if (event == EVENT_APP_UPDATE)
     update();
 }
 
@@ -79,7 +79,7 @@ void GraphicSystem::update()
 {
   if (mUpdateMutex.tryLock())
   {
-    notify(Event(EVENT_RENDER, DISPATCH_SERIAL));
+    notify(Event(EVENT_APP_RENDER, DISPATCH_SERIAL));
     
     mTaskCollection.dump(mTaskBuffer);
     sort(mTaskBuffer.begin(), mTaskBuffer.end());

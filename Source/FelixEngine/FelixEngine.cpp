@@ -26,12 +26,19 @@ FelixEngine* FelixEngine::Instance()
 
 FelixEngine::FelixEngine(): mShutdown(0)
 {
+  setEventFlags(EVENT_APP_QUIT);
 }
 
 FelixEngine::~FelixEngine()
 {
   clearScenes();
   clearSystems();
+}
+
+void FelixEngine::handle(const Event &event)
+{
+  if (event == EVENT_APP_QUIT)
+    exit();
 }
 
 bool FelixEngine::init(const std::string &settingsFile)
@@ -96,7 +103,7 @@ int FelixEngine::runLoop()
 {
   while (!mShutdown)
   {
-    notify(Event(EVENT_UPDATE, DISPATCH_MULTIPLE));
+    notify(Event(EVENT_APP_UPDATE, DISPATCH_MULTIPLE));
     
     EventSystem *eventSystem = GetEventSystem();
     if (eventSystem)
@@ -134,6 +141,7 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
   // Add the default event system if there is none found.
   if (!getEventSystem())
     addSystem(System::Create("SDLEventSystem"));
+  getEventSystem()->addHandler(this);
   
   if (success && SDL_Init(sdlInitFlags) < 0)
   {

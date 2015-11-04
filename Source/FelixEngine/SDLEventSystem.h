@@ -14,8 +14,6 @@
 
 namespace fx
 {
-  class FelixEngine;
-  
   class SDLEventSystem: public EventSystem
   {
   public:
@@ -28,10 +26,10 @@ namespace fx
     virtual bool init();
     
   private:
+    static int processEventFilter(void *ptr, SDL_Event *event);
     void processEvent(const SDL_Event &event);
     
     void processQuitEvent(const SDL_QuitEvent &event);
-    
     void processKeyBoardEvent(const SDL_KeyboardEvent &event);
     
     void processMouseButtonEvent(const SDL_MouseButtonEvent &event);
@@ -39,12 +37,10 @@ namespace fx
     void processMouseWheelEvent(const SDL_MouseWheelEvent &event);
     
     void processTouchFingerEvent(const SDL_TouchFingerEvent &event);
-    
     void processGestureEvent(const SDL_MultiGestureEvent &event);
     
     void processWindowEvent(const SDL_WindowEvent &event);
     
-    FelixEngine *mEngine;
     Mutex mUpdateMutex;
   };
 }
