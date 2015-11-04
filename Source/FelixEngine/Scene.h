@@ -11,7 +11,6 @@
 
 
 #include "EventHandler.h"
-#include "Event.h"
 #include "XMLTree.h"
 #include "Object.h"
 #include "View.h"

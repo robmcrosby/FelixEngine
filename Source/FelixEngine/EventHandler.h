@@ -9,9 +9,9 @@
 #ifndef EventHandler_h
 #define EventHandler_h
 
+#include "Event.h"
 #include "Pool.h"
 #include "List.h"
-#include "Delegate.h"
 
 
 namespace fx
@@ -21,11 +21,7 @@ namespace fx
   
   class EventHandler
   {
-  public:
-    typedef Delegate<void, const Event&> HandleEventDelegate;
-    
   private:
-    friend Event;
     class Observer
     {
     public:
@@ -33,10 +29,11 @@ namespace fx
       void setHandler(EventHandler *handler) {SDL_AtomicSetPtr(&mPtr, (void*)handler);}
       void clearHandler() {SDL_AtomicSetPtr(&mPtr, nullptr);}
       EventHandler* handler() {return static_cast<EventHandler*>(SDL_AtomicGetPtr(&mPtr));}
-      
     private:
       void *mPtr;
     };
+    static Pool<Observer> ObserverPool;
+    static List<Observer*> UsedObservers;
     
   public:
     EventHandler();
@@ -53,8 +50,9 @@ namespace fx
         mObservers.removeSafe(handler->mObserver);
     }
     
-    void notify(const Event &event, bool block = false);
     virtual void handle(const Event &event) {}
+    
+    void notify(const Event &event);
     
     static void Cleanup()
     {
@@ -68,22 +66,17 @@ namespace fx
     void setEventFlags(int flags) {SDL_AtomicSet(&mEventFlags, flags);}
     int eventFlags() const {return SDL_AtomicGet(&mEventFlags);}
     
-    HandleEventDelegate getHandleEventDelegate() const {return mHandleEventDelegate;}
-    
-  protected:
-    HandleEventDelegate mHandleEventDelegate;
-    
   private:
-    void notify(const Event &event, TaskGroup *group);
-    void handleInline(const Event &event) {handle(event);}
+    void notifySerial(Event event);
+    void notifySingle(const Event &event);
+    void notifyMultiple(const Event &event, TaskGroup *group);
+    
+    void dispatchSingle(void *ptr);
+    void dispatchMultiple(void *ptr);
     
     mutable SDL_atomic_t mEventFlags;
     Observer *mObserver;
     List<Observer*> mObservers;
-    
-  private:
-    static Pool<Observer> ObserverPool;
-    static List<Observer*> UsedObservers;
   };
 }
 

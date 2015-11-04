@@ -9,10 +9,9 @@
 #ifndef Event_h
 #define Event_h
 
-#include "EventHandler.h"
 #include "Platform.h"
-#include "Task.h"
 #include "Pool.h"
+#include "Vector.h"
 
 #define DATA_SIZE 32
 
@@ -66,23 +65,24 @@ namespace fx
     EVENT_ALL     = 0xFFFFFFFF,
   };
   
-  class Event: public Task
+  enum DISPATCH_TYPE
+  {
+    DISPATCH_SERIAL,   /**< Notify the listeners with out tasking */
+    DISPATCH_SINGLE,   /**< Notify the listeners with a single task */
+    DISPATCH_MULTIPLE, /**< Notify each listener with their own task */
+    DISPATCH_BLOCK,    /**< Notify and wait for the tasks to complete */
+  };
+  
+  class Event
   {
   public:
-    Event(EVENT_TYPE type = EVENT_NONE): mType(type), mSender(0), mTarget(0), mInPool(0)
-    {
-      mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
-      setTimeStamp();
-    }
-    Event(const Event &other): mInPool(0)
-    {
-      mDelegate = TaskDelegate::Create<Event, &Event::execute>(this);
-      *this = other;
-    }
+    Event(EVENT_TYPE type = EVENT_NONE, DISPATCH_TYPE dispatch = DISPATCH_SINGLE): mType(type), mDispatch(dispatch), mSender(0), mTarget(0) {setTimeStamp();}
+    Event(const Event &other) {*this = other;}
     
     Event& operator=(const Event &other)
     {
       mType = other.mType;
+      mDispatch = other.mDispatch;
       mTimeStamp = other.mTimeStamp;
       mSender = other.mSender;
       mTarget = other.mTarget;
@@ -95,6 +95,9 @@ namespace fx
     void setType(EVENT_TYPE type) {mType = type;}
     EVENT_TYPE type() const {return mType;}
     
+    void setDispatchType(DISPATCH_TYPE dispatch) {mDispatch = dispatch;}
+    DISPATCH_TYPE dispatchType() const {return mDispatch;}
+    
     void setTimeStamp() {mTimeStamp = Platform::GetTimeStamp();}
     void setTimeStamp(unsigned int ts) {mTimeStamp = ts;}
     unsigned int timeStamp() const {return mTimeStamp;}
@@ -105,14 +108,16 @@ namespace fx
     void setTarget(EventHandler *target) {mTarget = target;}
     EventHandler* target() const {return mTarget;}
     
-    void notify(EventHandler *target, EventHandler *sender, TaskGroup *group) const
+    static Pool<Event>& EventPool()
+    {
+      static Pool<Event> pool;
+      return pool;
+    }
+    Event* copy() const
     {
       Event *event = EventPool().newItem();
       *event = *this;
-      event->mInPool = true;
-      event->mTarget = target;
-      event->mSender = sender;
-      event->dispatch(group);
+      return event;
     }
     
   public:
@@ -142,29 +147,14 @@ namespace fx
     const TouchData& touchData() const {return *(TouchData*)mData;}
     
   private:
-    void execute(void*)
-    {
-      if (mTarget)
-        mTarget->getHandleEventDelegate()(*this);
-      if (mInPool)
-        EventPool().freeItem(this);
-    }
-    
     EVENT_TYPE    mType;
+    DISPATCH_TYPE mDispatch;
     unsigned int  mTimeStamp;
     
-    bool mInPool;
     EventHandler *mSender;
     EventHandler *mTarget;
     
     char mData[DATA_SIZE];
-    
-  private:
-    static Pool<Event>& EventPool()
-    {
-      static Pool<Event> pool;
-      return pool;
-    }
   };
 }
 

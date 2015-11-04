@@ -10,7 +10,7 @@
 #define List_h
 
 #include "Pool.h"
-#include <SDL2/SDL.h>
+#include "Mutex.h"
 
 
 #define DEFAULT_LIST_POOL_SIZE 64
@@ -94,8 +94,8 @@ namespace fx
     };
     
   public:
-    List(): mLock(0) {init();}
-    List(const List &other): mLock(0)
+    List() {init();}
+    List(const List &other)
     {
       init();
       *this = other;
@@ -228,8 +228,8 @@ namespace fx
       unlock();
     }
     
-    void lock() {SDL_AtomicLock(&mLock);}
-    void unlock() {SDL_AtomicUnlock(&mLock);}
+    void lock() {mMutex.lock();}
+    void unlock() {mMutex.unlock();}
     
     static void CleanUpPool() {NodePool.cleanUp();}
   private:
@@ -242,7 +242,7 @@ namespace fx
     
     Node *mRoot;
     SDL_atomic_t mSize;
-    SDL_SpinLock mLock;
+    Mutex mMutex;
   };
   
   template <typename T>

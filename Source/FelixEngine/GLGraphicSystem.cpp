@@ -7,8 +7,6 @@
 //
 
 #include "GLGraphicSystem.h"
-#include "Event.h"
-
 #include "GLUniformMap.h"
 
 #include "GLWindow.h"

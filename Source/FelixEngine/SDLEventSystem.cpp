@@ -8,7 +8,6 @@
 
 #include "SDLEventSystem.h"
 #include "FelixEngine.h"
-#include "Event.h"
 
 using namespace fx;
 using namespace std;

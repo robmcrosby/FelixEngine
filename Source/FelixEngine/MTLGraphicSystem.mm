@@ -10,7 +10,6 @@
 #include "UniformMap.h"
 #include "TextureMap.h"
 #include "ImageLoader.h"
-#include "Event.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>

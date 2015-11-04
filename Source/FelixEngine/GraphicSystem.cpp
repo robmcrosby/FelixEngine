@@ -8,7 +8,6 @@
 
 #include "GraphicSystem.h"
 #include "UniformMap.h"
-#include "Event.h"
 
 
 using namespace fx;
@@ -80,7 +79,7 @@ void GraphicSystem::update()
 {
   if (mUpdateMutex.tryLock())
   {
-    notify(EVENT_RENDER, true);
+    notify(Event(EVENT_RENDER, DISPATCH_SERIAL));
     
     mTaskCollection.dump(mTaskBuffer);
     sort(mTaskBuffer.begin(), mTaskBuffer.end());

@@ -11,7 +11,6 @@
 #include "System.h"
 #include "Scene.h"
 #include "Platform.h"
-#include "Event.h"
 
 #include <SDL2/SDL.h>
 
@@ -97,7 +96,8 @@ int FelixEngine::runLoop()
 {
   while (!mShutdown)
   {
-    notify(EVENT_UPDATE);
+    notify(Event(EVENT_UPDATE, DISPATCH_MULTIPLE));
+    
     EventSystem *eventSystem = GetEventSystem();
     if (eventSystem)
       eventSystem->pollEvents();
