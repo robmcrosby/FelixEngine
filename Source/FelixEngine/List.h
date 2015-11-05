@@ -24,15 +24,50 @@ namespace fx
   class List
   {
   private:
-    struct Node
+    class Node
     {
-      void init()
+    public:
+      Node() {init();}
+      void init(const T &item = T())
       {
-        next = prev = nullptr;
+        mItem = item;
+        mCount = mRemove = 0;
+        mNext = mPrev = this;
+      }
+      bool remove()
+      {
+        if (mRemove && !mCount)
+        {
+          mPrev->mNext = mNext;
+          mNext->mPrev = mPrev;
+          return true;
+        }
+        return false;
+      }
+      void insertAfter(Node *node)
+      {
+        mNext = node->mNext;
+        mPrev = node;
+        node->mNext->mPrev = this;
+        node->mNext = this;
       }
       
-      T item;
-      Node *next, *prev;
+      const T& item() const {return mItem;}
+      
+      int operator++() {return ++mCount;}
+      int operator--() {return --mCount;}
+      int count() const {return mCount;}
+      
+      void setRemove() {mRemove = 1;}
+      bool removed() const {return mRemove;}
+      
+      Node* next() const {return mNext;}
+      Node* prev() const {return mPrev;}
+      
+    private:
+      T mItem;
+      int mCount, mRemove;
+      Node *mNext, *mPrev;
     };
     static Pool<Node> NodePool;
   
@@ -42,7 +77,11 @@ namespace fx
     public:
       Iterator(List *list, Node *node): mList(list), mNode(0) {*this = node;}
       Iterator(const Iterator &other): mList(other.mList), mNode(0) {*this = other;}
-      ~Iterator() {}
+      ~Iterator()
+      {
+        if (mList)
+          mList->releaseNode(&mNode);
+      }
       
       Iterator& operator=(const Iterator &other) {return *this = other.mNode;}
       Iterator& operator=(Node *node)
@@ -58,12 +97,16 @@ namespace fx
       bool operator!=(const Iterator &other) const {return mNode != other.mNode;}
       bool operator!=(const Node *node) const {return mNode != node;}
       
-      const T& operator*() const {return mNode->item;}
+      const T& operator*() const {return mNode->item();}
       
       Iterator& operator++()
       {
         if (mList)
-          mList->incrementNode(&mNode);
+        {
+          do {
+            mList->incrementNode(&mNode);
+          } while (mNode->removed());
+        }
         return *this;
       }
       Iterator operator++(int)
@@ -75,7 +118,11 @@ namespace fx
       Iterator& operator--()
       {
         if (mList)
-          mList->decrementNode(&mNode);
+        {
+          do {
+            mList->decrementNode(&mNode);
+          } while (mNode->removed());
+        }
         return *this;
       }
       Iterator operator--(int)
@@ -93,21 +140,20 @@ namespace fx
     };
     
   public:
-    List() {init();}
+    List(): mLock(0) {SDL_AtomicSet(&mSize, 0);}
     List(const List &other)
     {
-      init();
+      SDL_AtomicSet(&mSize, 0);
       *this = other;
     }
     ~List()
     {
-      Node *node = mRoot->next;
-      while (node != mRoot)
+      Node *node = mRoot.next();
+      while (node != &mRoot)
       {
-        node = node->next;
-        NodePool.freeItem(node->prev);
+        node = node->next();
+        NodePool.freeItem(node->prev());
       }
-      NodePool.freeItem(mRoot);
     }
     
     List& operator=(const List &other)
@@ -121,18 +167,32 @@ namespace fx
       return *this;
     }
     
-    Iterator begin() {return ++Iterator(this, mRoot);}
-    Iterator end() {return Iterator(this, mRoot);}
+    Iterator begin() {return ++Iterator(this, &mRoot);}
+    Iterator end() {return Iterator(this, &mRoot);}
     
     int size() const {return SDL_AtomicGet(&mSize);}
     
-    void pushFront(const T &item) {insert(begin(), item);}
-    void pushBack(const T &item) {insert(end(), item);}
+    void pushFront(const T &item) {insert(end(), item);}
+    void pushBack(const T &item) {insert(--end(), item);}
     void insert(const Iterator &itr, const T &item) {insertNode(itr.mNode, item);}
     
-    void popFront() {remove(begin());}
-    void popBack() {remove(end());}
-    void remove(Iterator &itr) {removeNode(&itr.mNode);}
+    void popFront()
+    {
+      Iterator itr = begin();
+      while (!removeNode(itr.mNode))
+        ++itr;
+    }
+    void popBack()
+    {
+      Iterator itr = --end();
+      while (!removeNode(itr.mNode))
+        --itr;
+    }
+    Iterator remove(Iterator itr)
+    {
+      removeNode(itr.mNode);
+      return ++itr;
+    }
     
     bool remove(const T &item)
     {
@@ -142,7 +202,7 @@ namespace fx
       {
         if (*itr == item)
         {
-          remove(itr);
+          itr = remove(itr);
           success = true;
         }
         else
@@ -153,71 +213,104 @@ namespace fx
 
     void clear()
     {
-      Iterator itr(this, mRoot->next);
+      Iterator itr = begin();
       while (itr != end())
-        remove(itr);
+        itr = remove(itr);
     }
     
     static void CleanUpPool() {NodePool.cleanUp();}
   private:
     friend Iterator;
     
+    void releaseNode(Node **ref)
+    {
+      SDL_AtomicLock(&mLock);
+      if (*ref)
+      {
+        --(**ref);
+        if ((*ref)->remove())
+          NodePool.freeItem(*ref);
+        *ref = nullptr;
+      }
+      SDL_AtomicUnlock(&mLock);
+    }
     void assignNode(Node **ref, Node *node)
     {
+      SDL_AtomicLock(&mLock);
+      if (*ref)
+      {
+        --(**ref);
+        if ((*ref)->remove())
+          NodePool.freeItem(*ref);
+      }
       *ref = node;
+      if (*ref)
+        ++(**ref);
+      SDL_AtomicUnlock(&mLock);
     }
     void incrementNode(Node **ref)
     {
+      SDL_AtomicLock(&mLock);
       if (*ref)
-        *ref = (*ref)->next;
+      {
+        Node *next = (*ref)->next();
+        --(**ref);
+        if ((*ref)->remove())
+          NodePool.freeItem(*ref);
+        *ref = next;
+        if (*ref)
+          ++(**ref);
+      }
+      SDL_AtomicUnlock(&mLock);
     }
     void decrementNode(Node **ref)
     {
+      SDL_AtomicLock(&mLock);
       if (*ref)
-        *ref = (*ref)->prev;
+      {
+        Node *prev = (*ref)->prev();
+        --(**ref);
+        if ((*ref)->remove())
+          NodePool.freeItem(*ref);
+        *ref = prev;
+        if (*ref)
+          ++(**ref);
+      }
+      SDL_AtomicUnlock(&mLock);
+    }
+    bool removeNode(Node *ptr)
+    {
+      bool success = true;
+      
+      SDL_AtomicLock(&mLock);
+      if (ptr)
+      {
+        if (ptr == &mRoot && mRoot.prev() != &mRoot)
+          ptr = mRoot.prev();
+        if (ptr != &mRoot)
+        {
+          if (ptr->removed())
+            success = false;
+          else
+            ptr->setRemove();
+        }
+      }
+      SDL_AtomicUnlock(&mLock);
+      return success;
     }
     void insertNode(Node *ptr, const T &item)
     {
       Node *node = NodePool.newItem();
-      node->item = item;
-      if (ptr == mRoot)
-      {
-        node->next = mRoot;
-        node->prev = mRoot->prev;
-        mRoot->prev->next = node;
-        mRoot->prev = node;
-      }
-      else
-      {
-        node->next = ptr->next;
-        node->prev = ptr;
-        ptr->next->prev = node;
-        ptr->next = node;
-      }
+      node->init(item);
+      
+      SDL_AtomicLock(&mLock);
+      node->insertAfter(ptr);
       SDL_AtomicAdd(&mSize, 1);
-    }
-    void removeNode(Node **ref)
-    {
-      Node *next = nullptr;
-      if (*ref && *ref != mRoot)
-      {
-        next = (*ref)->next;
-        next->prev = (*ref)->prev;
-        (*ref)->prev->next = next;
-        NodePool.freeItem(*ref);
-        *ref = next;
-        SDL_AtomicAdd(&mSize, -1);
-      }
+      SDL_AtomicUnlock(&mLock);
     }
     
-    void init()
-    {
-      SDL_AtomicSet(&mSize, 0);
-      mRoot = NodePool.newItem();
-      mRoot->next = mRoot->prev = mRoot;
-    }
-    
-    Node *mRoot;
+    Node mRoot;
+    SDL_SpinLock mLock;
     SDL_atomic_t mSize;
   };
   

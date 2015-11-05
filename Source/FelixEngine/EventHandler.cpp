@@ -62,7 +62,7 @@ void EventHandler::notifySerial(Event event)
       ++itr;
     }
     else
-      mObservers.remove(itr);
+      itr = mObservers.remove(itr);
   }
 }
 
@@ -97,7 +97,7 @@ void EventHandler::notifyMultiple(const Event &event, TaskGroup *group)
         ++itr;
       }
       else
-        mObservers.remove(itr);
+        itr = mObservers.remove(itr);
     }
   }
 }
@@ -118,7 +118,7 @@ void EventHandler::dispatchSingle(void *ptr)
       ++itr;
     }
     else
-      mObservers.remove(itr);
+      itr = mObservers.remove(itr);
   }
   
   Event::EventPool().freeItem(&event);
