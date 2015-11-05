@@ -26,6 +26,11 @@ namespace fx
   private:
     struct Node
     {
+      void init()
+      {
+        next = prev = nullptr;
+      }
+      
       T item;
       Node *next, *prev;
     };
@@ -35,18 +40,15 @@ namespace fx
     class Iterator
     {
     public:
-      Iterator(Node *node = nullptr): mNode(0) {setNode(node);}
-      Iterator(const Iterator &other): mNode(0) {*this = other;}
+      Iterator(List *list, Node *node): mList(list), mNode(0) {*this = node;}
+      Iterator(const Iterator &other): mList(other.mList), mNode(0) {*this = other;}
       ~Iterator() {}
       
-      Iterator& operator=(const Iterator &other)
-      {
-        setNode(other.mNode);
-        return *this;
-      }
+      Iterator& operator=(const Iterator &other) {return *this = other.mNode;}
       Iterator& operator=(Node *node)
       {
-        setNode(node);
+        if (mList)
+          mList->assignNode(&mNode, node);
         return *this;
       }
       
@@ -56,12 +58,12 @@ namespace fx
       bool operator!=(const Iterator &other) const {return mNode != other.mNode;}
       bool operator!=(const Node *node) const {return mNode != node;}
       
-      T& operator*() {return mNode->item;}
+      const T& operator*() const {return mNode->item;}
       
       Iterator& operator++()
       {
-        if (mNode)
-          setNode(mNode->next);
+        if (mList)
+          mList->incrementNode(&mNode);
         return *this;
       }
       Iterator operator++(int)
@@ -72,8 +74,8 @@ namespace fx
       }
       Iterator& operator--()
       {
-        if (mNode)
-          setNode(mNode->prev);
+        if (mList)
+          mList->decrementNode(&mNode);
         return *this;
       }
       Iterator operator--(int)
@@ -85,12 +87,9 @@ namespace fx
       
     private:
       friend List;
-      void setNode(Node *node)
-      {
-        mNode = node;
-      }
       
       Node *mNode;
+      List *mList;
     };
     
   public:
@@ -122,63 +121,18 @@ namespace fx
       return *this;
     }
     
-    Iterator begin() const {return mRoot->next;}
-    Iterator end() const {return mRoot;}
+    Iterator begin() {return ++Iterator(this, mRoot);}
+    Iterator end() {return Iterator(this, mRoot);}
     
     int size() const {return SDL_AtomicGet(&mSize);}
     
     void pushFront(const T &item) {insert(begin(), item);}
     void pushBack(const T &item) {insert(end(), item);}
-    void insert(const Iterator &itr, const T &item)
-    {
-      Node *node = NodePool.newItem();
-      node->item = item;
-      if (itr == mRoot)
-      {
-        node->next = mRoot;
-        node->prev = mRoot->prev;
-        mRoot->prev->next = node;
-        mRoot->prev = node;
-      }
-      else
-      {
-        node->next = itr.mNode->next;
-        node->prev = itr.mNode;
-        itr.mNode->next->prev = node;
-        itr.mNode->next = node;
-      }
-      SDL_AtomicAdd(&mSize, 1);
-    }
-    
-    void pushFrontSafe(const T &item) {insertSafe(begin(), item);}
-    void pushBackSafe(const T &item) {insertSafe(end(), item);}
-    void insertSafe(const Iterator &itr, const T &item)
-    {
-      lock();
-      insert(itr, item);
-      unlock();
-    }
+    void insert(const Iterator &itr, const T &item) {insertNode(itr.mNode, item);}
     
     void popFront() {remove(begin());}
     void popBack() {remove(end());}
-    Iterator remove(const Iterator &itr)
-    {
-      Node *next = nullptr;
-      if (itr.mNode)
-      {
-        if (itr.mNode == mRoot)
-          next = mRoot;
-        else
-        {
-          next = itr.mNode->next;
-          next->prev = itr.mNode->prev;
-          itr.mNode->prev->next = next;
-          NodePool.freeItem(itr.mNode);
-          SDL_AtomicAdd(&mSize, -1);
-        }
-      }
-      return next;
-    }
+    void remove(Iterator &itr) {removeNode(&itr.mNode);}
     
     bool remove(const T &item)
     {
@@ -188,7 +142,7 @@ namespace fx
       {
         if (*itr == item)
         {
-          itr = remove(itr);
+          remove(itr);
           success = true;
         }
         else
@@ -199,40 +153,63 @@ namespace fx
 
     void clear()
     {
-      while (mRoot != mRoot->next)
-        remove(mRoot->next);
+      Iterator itr(this, mRoot->next);
+      while (itr != end())
+        remove(itr);
     }
-    
-    void popFrontSafe() {removeSafe(begin());}
-    void popBackSafe() {removeSafe(end());}
-    Iterator removeSafe(const Iterator &itr)
-    {
-      lock();
-      remove(itr);
-      unlock();
-    }
-    
-    bool removeSafe(const T &item)
-    {
-      bool success = false;
-      lock();
-      success = remove(item);
-      unlock();
-      return success;
-    }
-    
-    void clearSafe()
-    {
-      lock();
-      clear();
-      unlock();
-    }
-    
-    void lock() {mMutex.lock();}
-    void unlock() {mMutex.unlock();}
     
     static void CleanUpPool() {NodePool.cleanUp();}
   private:
+    friend Iterator;
+    
+    void assignNode(Node **ref, Node *node)
+    {
+      *ref = node;
+    }
+    void incrementNode(Node **ref)
+    {
+      if (*ref)
+        *ref = (*ref)->next;
+    }
+    void decrementNode(Node **ref)
+    {
+      if (*ref)
+        *ref = (*ref)->prev;
+    }
+    void insertNode(Node *ptr, const T &item)
+    {
+      Node *node = NodePool.newItem();
+      node->item = item;
+      if (ptr == mRoot)
+      {
+        node->next = mRoot;
+        node->prev = mRoot->prev;
+        mRoot->prev->next = node;
+        mRoot->prev = node;
+      }
+      else
+      {
+        node->next = ptr->next;
+        node->prev = ptr;
+        ptr->next->prev = node;
+        ptr->next = node;
+      }
+      SDL_AtomicAdd(&mSize, 1);
+    }
+    void removeNode(Node **ref)
+    {
+      Node *next = nullptr;
+      if (*ref && *ref != mRoot)
+      {
+        next = (*ref)->next;
+        next->prev = (*ref)->prev;
+        (*ref)->prev->next = next;
+        NodePool.freeItem(*ref);
+        *ref = next;
+        SDL_AtomicAdd(&mSize, -1);
+      }
+    }
+    
     void init()
     {
       SDL_AtomicSet(&mSize, 0);
@@ -242,7 +219,6 @@ namespace fx
     
     Node *mRoot;
     SDL_atomic_t mSize;
-    Mutex mMutex;
   };
   
   template <typename T>

@@ -42,12 +42,12 @@ namespace fx
     void addHandler(const EventHandler *handler)
     {
       if (handler && handler != this)
-        mObservers.pushBackSafe(handler->mObserver);
+        mObservers.pushBack(handler->mObserver);
     }
     void removeHandler(const EventHandler *handler)
     {
       if (handler)
-        mObservers.removeSafe(handler->mObserver);
+        mObservers.remove(handler->mObserver);
     }
     
     virtual void handle(const Event &event) {}
@@ -56,11 +56,9 @@ namespace fx
     
     static void Cleanup()
     {
-      UsedObservers.lock();
       for (List<Observer*>::Iterator itr = UsedObservers.begin(); itr != UsedObservers.end(); ++itr)
         ObserverPool.freeItem(*itr);
       UsedObservers.clear();
-      UsedObservers.unlock();
     }
     
     void setEventFlags(int flags) {SDL_AtomicSet(&mEventFlags, flags);}

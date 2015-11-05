@@ -28,7 +28,7 @@ EventHandler::EventHandler()
 EventHandler::~EventHandler()
 {
   mObserver->clearHandler();
-  UsedObservers.pushBackSafe(mObserver);
+  UsedObservers.pushBack(mObserver);
 }
 
 
@@ -52,7 +52,6 @@ void EventHandler::notifySerial(Event event)
 {
   event.setSender(this);
   
-  mObservers.lock();
   for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
   {
     EventHandler *handler = (*itr)->handler();
@@ -63,9 +62,8 @@ void EventHandler::notifySerial(Event event)
       ++itr;
     }
     else
-      itr = mObservers.remove(itr);
+      mObservers.remove(itr);
   }
-  mObservers.unlock();
 }
 
 void EventHandler::notifySingle(const Event &event)
@@ -87,7 +85,6 @@ void EventHandler::notifyMultiple(const Event &event, TaskGroup *group)
   {
     TaskDelegate delegate = TaskDelegate::Create<EventHandler, &EventHandler::dispatchMultiple>(this);
     
-    mObservers.lock();
     for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
     {
       EventHandler *handler = (*itr)->handler();
@@ -100,9 +97,8 @@ void EventHandler::notifyMultiple(const Event &event, TaskGroup *group)
         ++itr;
       }
       else
-        itr = mObservers.remove(itr);
+        mObservers.remove(itr);
     }
-    mObservers.unlock();
   }
 }
 
@@ -112,7 +108,6 @@ void EventHandler::dispatchSingle(void *ptr)
   Event &event = *static_cast<Event*>(ptr);
   event.setSender(this);
   
-  mObservers.lock();
   for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
   {
     EventHandler *handler = (*itr)->handler();
@@ -123,9 +118,8 @@ void EventHandler::dispatchSingle(void *ptr)
       ++itr;
     }
     else
-      itr = mObservers.remove(itr);
+      mObservers.remove(itr);
   }
-  mObservers.unlock();
   
   Event::EventPool().freeItem(&event);
 }
@@ -137,54 +131,3 @@ void EventHandler::dispatchMultiple(void *ptr)
     event.target()->handle(event);
   Event::EventPool().freeItem(&event);
 }
-
-
-
-
-
-
-
-
-//EventHandler::EventHandler(): mHandleEventDelegate(HandleEventDelegate::Create<EventHandler, &EventHandler::handleInline>(this))
-//{
-//  setEventFlags(EVENT_ALL);
-//
-//  mObserver = ObserverPool.newItem();
-//  mObserver->setHandler(this);
-//}
-
-//EventHandler::~EventHandler()
-//{
-//  mObserver->clearHandler();
-//  UsedObservers.pushBackSafe(mObserver);
-//}
-//
-//void EventHandler::notify(const Event &event, bool block)
-//{
-//  if (block)
-//  {
-//    TaskGroup group;
-//    notify(event, &group);
-//    group.waitOnTasks();
-//  }
-//  else
-//    notify(event, nullptr);
-//}
-//
-//void EventHandler::notify(const Event &event, TaskGroup *group)
-//{
-//  mObservers.lock();
-//  for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
-//  {
-//    EventHandler *handler = (*itr)->handler();
-//    if (handler)
-//    {
-//      event.notify(handler, this, group);
-//      ++itr;
-//    }
-//    else
-//      itr = mObservers.remove(itr);
-//  }
-//  
-//  mObservers.unlock();
-//}
