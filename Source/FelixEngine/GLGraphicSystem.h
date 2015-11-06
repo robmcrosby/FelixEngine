@@ -11,10 +11,18 @@
 
 #include "GraphicSystem.h"
 #include <map>
-
-#define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+  #define GLES2_ENABLED 1
+  #define GLES3_ENABLED 1
+  #include <OpenGLES/ES3/gl.h>
+  #include <OpenGLES/ES3/glext.h>
+#else
+  #define GL_GLEXT_PROTOTYPES 1
+  #include <SDL2/SDL_opengl.h>
+#endif
+
 
 namespace fx
 {

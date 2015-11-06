@@ -6,11 +6,15 @@
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+  #import <UIKit/UIKit.h>
+#else
+  #import <Cocoa/Cocoa.h>
+#endif
 
 
 @interface MTLShader : NSObject

@@ -70,7 +70,7 @@ namespace fx
       if (clearState.flags & CLEAR_DEPTH)
       {
         glDepthMask(GL_TRUE);
-        glClearDepth(clearState.depth);
+        glClearDepthf(clearState.depth);
         clearFlags |= GL_DEPTH_BUFFER_BIT;
       }
       if (clearState.flags & CLEAR_STENCEIL)
