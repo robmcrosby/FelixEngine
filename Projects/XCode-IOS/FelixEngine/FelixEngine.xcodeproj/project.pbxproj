@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		C197CE231BED585C007F68E0 /* FelixEngineAg */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = C197CE241BED585C007F68E0 /* Build configuration list for PBXAggregateTarget "FelixEngineAg" */;
+			buildPhases = (
+				C197CE271BED5865007F68E0 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = FelixEngineAg;
+			productName = FelixEngineAg;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
@@ -29,6 +43,53 @@
 		C197CE011BED3489007F68E0 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE001BED3489007F68E0 /* Metal.framework */; };
 		C197CE031BED3511007F68E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE021BED3511007F68E0 /* CoreGraphics.framework */; };
 		C197CE051BED3562007F68E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE041BED3562007F68E0 /* Foundation.framework */; };
+		C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C197CE181BED57B3007F68E0 /* Assets.xcassets */; };
+		C197CE221BED580F007F68E0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CE211BED580F007F68E0 /* main.cpp */; };
+		C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8A1BED298D007F68E0 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE2B1BED5E40007F68E0 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */; };
+		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
+		C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9B1BED298D007F68E0 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE301BED5E73007F68E0 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDAF1BED298D007F68E0 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE311BED5E77007F68E0 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCC1BED298D007F68E0 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC81BED298D007F68E0 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC51BED298D007F68E0 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE351BED5E98007F68E0 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD831BED298D007F68E0 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE361BED5E9D007F68E0 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC71BED298D007F68E0 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE371BED5EA3007F68E0 /* Projection.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB51BED298D007F68E0 /* Projection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE381BED5EA8007F68E0 /* RenderSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB81BED298D007F68E0 /* RenderSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE391BED5EBA007F68E0 /* System.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC11BED298D007F68E0 /* System.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3A1BED5EBF007F68E0 /* Resource.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB91BED298D007F68E0 /* Resource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3B1BED5EFB007F68E0 /* GraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD971BED298D007F68E0 /* GraphicSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD951BED298D007F68E0 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD981BED298D007F68E0 /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBA1BED298D007F68E0 /* Sampler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE3F1BED5F13007F68E0 /* GLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8E1BED298D007F68E0 /* GLGraphicSystem.h */; };
+		C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD921BED298D007F68E0 /* GLUniformMap.h */; };
+		C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD931BED298D007F68E0 /* GLWindow.h */; };
+		C197CE421BED5F1B007F68E0 /* GLFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8C1BED298D007F68E0 /* GLFrame.h */; };
+		C197CE431BED5F1E007F68E0 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD901BED298D007F68E0 /* GLShader.h */; };
+		C197CE441BED5F20007F68E0 /* GLMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8F1BED298D007F68E0 /* GLMesh.h */; };
+		C197CE451BED5F23007F68E0 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD911BED298D007F68E0 /* GLTexture.h */; };
+		C197CE461BED5F2D007F68E0 /* MTLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA51BED298D007F68E0 /* MTLGraphicSystem.h */; };
+		C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA41BED298D007F68E0 /* MTLGraphicResources.h */; };
+		C197CE491BED5F73007F68E0 /* Platform.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB11BED298D007F68E0 /* Platform.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4A1BED5FA1007F68E0 /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCA1BED298D007F68E0 /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9F1BED298D007F68E0 /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4C1BED5FAA007F68E0 /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB61BED298D007F68E0 /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4D1BED5FAE007F68E0 /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD821BED298D007F68E0 /* Color.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4E1BED5FB3007F68E0 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBF1BED298D007F68E0 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE4F1BED5FB7007F68E0 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCD1BED298D007F68E0 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE501BED5FBB007F68E0 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBE1BED298D007F68E0 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE511BED5FC1007F68E0 /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDAE1BED298D007F68E0 /* Mutex.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE521BED5FC5007F68E0 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD991BED298D007F68E0 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE531BED5FC9007F68E0 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9C1BED298D007F68E0 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE541BED5FCD007F68E0 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC91BED298D007F68E0 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE551BED5FD2007F68E0 /* MultiVector.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDAD1BED298D007F68E0 /* MultiVector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE561BED5FD6007F68E0 /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9D1BED298D007F68E0 /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD841BED298D007F68E0 /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE581BED5FDF007F68E0 /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB31BED298D007F68E0 /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -130,6 +191,10 @@
 		C197CE001BED3489007F68E0 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C197CE021BED3511007F68E0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C197CE041BED3562007F68E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C197CE0A1BED57B3007F68E0 /* HelloFelix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloFelix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C197CE181BED57B3007F68E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C197CE1D1BED57B3007F68E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C197CE211BED580F007F68E0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +213,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C197CE071BED57B3007F68E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -156,6 +228,7 @@
 			children = (
 				C197CDF71BED2F5A007F68E0 /* FrameWorks */,
 				C197CD781BED291A007F68E0 /* FelixEngine */,
+				C197CE0B1BED57B3007F68E0 /* HelloFelix */,
 				C197CD771BED291A007F68E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -164,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				C197CD761BED291A007F68E0 /* libFelixEngine.a */,
+				C197CE0A1BED57B3007F68E0 /* HelloFelix.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -387,7 +461,72 @@
 			name = Freeimage;
 			sourceTree = "<group>";
 		};
+		C197CE0B1BED57B3007F68E0 /* HelloFelix */ = {
+			isa = PBXGroup;
+			children = (
+				C197CE211BED580F007F68E0 /* main.cpp */,
+				C197CE181BED57B3007F68E0 /* Assets.xcassets */,
+				C197CE1D1BED57B3007F68E0 /* Info.plist */,
+			);
+			path = HelloFelix;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C197CE281BED5DED007F68E0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */,
+				C197CE531BED5FC9007F68E0 /* IndexedMap.h in Headers */,
+				C197CE371BED5EA3007F68E0 /* Projection.h in Headers */,
+				C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */,
+				C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */,
+				C197CE551BED5FD2007F68E0 /* MultiVector.h in Headers */,
+				C197CE4D1BED5FAE007F68E0 /* Color.h in Headers */,
+				C197CE461BED5F2D007F68E0 /* MTLGraphicSystem.h in Headers */,
+				C197CE4E1BED5FB3007F68E0 /* StringUtils.h in Headers */,
+				C197CE2B1BED5E40007F68E0 /* VertexBufferMap.h in Headers */,
+				C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */,
+				C197CE441BED5F20007F68E0 /* GLMesh.h in Headers */,
+				C197CE311BED5E77007F68E0 /* View.h in Headers */,
+				C197CE491BED5F73007F68E0 /* Platform.h in Headers */,
+				C197CE3F1BED5F13007F68E0 /* GLGraphicSystem.h in Headers */,
+				C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */,
+				C197CE4A1BED5FA1007F68E0 /* Vector.h in Headers */,
+				C197CE301BED5E73007F68E0 /* Object.h in Headers */,
+				C197CE4F1BED5FB7007F68E0 /* XMLTree.h in Headers */,
+				C197CE4C1BED5FAA007F68E0 /* Quaternion.h in Headers */,
+				C197CE3A1BED5EBF007F68E0 /* Resource.h in Headers */,
+				C197CE431BED5F1E007F68E0 /* GLShader.h in Headers */,
+				C197CE511BED5FC1007F68E0 /* Mutex.h in Headers */,
+				C197CE501BED5FBB007F68E0 /* Semaphore.h in Headers */,
+				C197CE381BED5EA8007F68E0 /* RenderSlots.h in Headers */,
+				C197CE581BED5FDF007F68E0 /* Pool.h in Headers */,
+				C197CE351BED5E98007F68E0 /* Component.h in Headers */,
+				C197CE521BED5FC5007F68E0 /* Image.h in Headers */,
+				C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */,
+				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
+				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
+				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,
+				C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */,
+				C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */,
+				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
+				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,
+				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
+				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
+				C197CE3B1BED5EFB007F68E0 /* GraphicSystem.h in Headers */,
+				C197CE391BED5EBA007F68E0 /* System.h in Headers */,
+				C197CE451BED5F23007F68E0 /* GLTexture.h in Headers */,
+				C197CE421BED5F1B007F68E0 /* GLFrame.h in Headers */,
+				C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */,
+				C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */,
+				C197CE561BED5FD6007F68E0 /* List.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		C197CD751BED291A007F68E0 /* FelixEngine */ = {
@@ -397,6 +536,7 @@
 				C197CD721BED291A007F68E0 /* Sources */,
 				C197CD731BED291A007F68E0 /* Frameworks */,
 				C197CD741BED291A007F68E0 /* CopyFiles */,
+				C197CE281BED5DED007F68E0 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -406,6 +546,23 @@
 			productName = FelixEngine;
 			productReference = C197CD761BED291A007F68E0 /* libFelixEngine.a */;
 			productType = "com.apple.product-type.library.static";
+		};
+		C197CE091BED57B3007F68E0 /* HelloFelix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C197CE1E1BED57B3007F68E0 /* Build configuration list for PBXNativeTarget "HelloFelix" */;
+			buildPhases = (
+				C197CE061BED57B3007F68E0 /* Sources */,
+				C197CE071BED57B3007F68E0 /* Frameworks */,
+				C197CE081BED57B3007F68E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HelloFelix;
+			productName = HelloFelix;
+			productReference = C197CE0A1BED57B3007F68E0 /* HelloFelix.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -419,6 +576,12 @@
 					C197CD751BED291A007F68E0 = {
 						CreatedOnToolsVersion = 7.1;
 					};
+					C197CE091BED57B3007F68E0 = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					C197CE231BED585C007F68E0 = {
+						CreatedOnToolsVersion = 7.1;
+					};
 				};
 			};
 			buildConfigurationList = C197CD711BED291A007F68E0 /* Build configuration list for PBXProject "FelixEngine" */;
@@ -427,6 +590,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = C197CD6D1BED291A007F68E0;
 			productRefGroup = C197CD771BED291A007F68E0 /* Products */;
@@ -434,9 +598,38 @@
 			projectRoot = "";
 			targets = (
 				C197CD751BED291A007F68E0 /* FelixEngine */,
+				C197CE231BED585C007F68E0 /* FelixEngineAg */,
+				C197CE091BED57B3007F68E0 /* HelloFelix */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C197CE081BED57B3007F68E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C197CE271BED5865007F68E0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "LIB_NAME=FelixEngine\n\nWRK_DIR=build\nDEVICE_DIR=${WRK_DIR}/Release-iphoneos\nSIMULATOR_DIR=${WRK_DIR}/Release-iphonesimulator\n\n#DEVICE_DIR=${TARGET_TEMP_DIR}/Build/Products/Release-iphoneos\n#SIMULATOR_DIR=${TARGET_TEMP_DIR}/Build/Products/Release-iphonesimulator\n\nINSTALL_DIR=${SRCROOT}/FrameWorks/FelixEngine.framework\n\n# Build both for Device and Simulator\nxcodebuild -configuration \"Release\" -target \"${LIB_NAME}\" -sdk iphoneos\nxcodebuild -configuration \"Release\" -target \"${LIB_NAME}\" -sdk iphonesimulator\n\n# Delete and recreate the framework directories\nrm -r \"${INSTALL_DIR}\"\nmkdir -p \"${INSTALL_DIR}/Versions/A/Headers\"\n\n# Create the framework directory links\n/bin/ln -sfh A \"${INSTALL_DIR}/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${INSTALL_DIR}/Headers\"\n\n# Copy the headers to the framework\n/bin/cp -a \"${DEVICE_DIR}/usr/local/include/\" \"${INSTALL_DIR}/Versions/A/Headers\"\n\n# Combine the static libaries and write to the framework\nlipo -create \"${DEVICE_DIR}/lib${LIB_NAME}.a\" \"${SIMULATOR_DIR}/lib${LIB_NAME}.a\" -output \"${INSTALL_DIR}/Versions/A/FelixEngine\"\n/bin/ln -sfh \"Versions/Current/FelixEngine\" \"${INSTALL_DIR}/FelixEngine\"\n\n# Cleanup the work directories\nrm -r \"${WRK_DIR}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C197CD721BED291A007F68E0 /* Sources */ = {
@@ -457,6 +650,14 @@
 				C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */,
 				C197CDDF1BED298D007F68E0 /* Platform.mm in Sources */,
 				C197CDE31BED298D007F68E0 /* System.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197CE061BED57B3007F68E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C197CE221BED580F007F68E0 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,6 +764,44 @@
 			};
 			name = Release;
 		};
+		C197CE1F1BED57B3007F68E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = HelloFelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C197CE201BED57B3007F68E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = HelloFelix/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C197CE251BED585C007F68E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C197CE261BED585C007F68E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -583,6 +822,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		C197CE1E1BED57B3007F68E0 /* Build configuration list for PBXNativeTarget "HelloFelix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197CE1F1BED57B3007F68E0 /* Debug */,
+				C197CE201BED57B3007F68E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		C197CE241BED585C007F68E0 /* Build configuration list for PBXAggregateTarget "FelixEngineAg" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197CE251BED585C007F68E0 /* Debug */,
+				C197CE261BED585C007F68E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
