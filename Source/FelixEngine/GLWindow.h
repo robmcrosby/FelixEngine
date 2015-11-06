@@ -63,6 +63,7 @@ namespace fx
       if (mSDLWindow)
         SDL_GL_SwapWindow(mSDLWindow);
     }
+    SDL_Window* getSDLWindow() {return mSDLWindow;}
     
   private:
     bool load()

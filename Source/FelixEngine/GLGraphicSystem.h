@@ -13,7 +13,7 @@
 #include <map>
 #include <SDL2/SDL.h>
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+#if __IPHONEOS__
   #define GLES2_ENABLED 1
   #define GLES3_ENABLED 1
   #include <OpenGLES/ES3/gl.h>
@@ -56,6 +56,8 @@ namespace fx
     virtual Texture* getTexture(const std::string &name);
     
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
+    
+    virtual SDL_Window* getMainSDLWindow();
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}

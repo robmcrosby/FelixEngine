@@ -101,22 +101,47 @@ void FelixEngine::deleteScene(const std::string &name)
 
 int FelixEngine::runLoop()
 {
-  while (!mShutdown)
+#if __IPHONEOS__
+  // Hand over control to IOS.
+  SDL_Window *window = getGraphicSystem() ? getGraphicSystem()->getMainSDLWindow() : nullptr;
+  if (window)
+    SDL_iPhoneSetAnimationCallback(window, 1, &UpdateFrame, (void*)this);
+  else
   {
-    notify(Event(EVENT_APP_UPDATE, DISPATCH_MULTIPLE));
-    
-    EventSystem *eventSystem = GetEventSystem();
-    if (eventSystem)
-      eventSystem->pollEvents();
-    
-    GraphicSystem *graphicSystem = getGraphicSystem();
-    if (graphicSystem)
-      graphicSystem->render();
+    cerr << "Error: No SDL window avalible for setting up the iPhone Animation Callback." << endl;
+    SDL_Quit();
+    return 1;
   }
+#else
+  // Run the regular loop
+  while (!mShutdown)
+    updateFrame();
+#endif
   
   SDL_Quit();
   return 0;
 }
+
+void FelixEngine::updateFrame()
+{
+  notify(Event(EVENT_APP_UPDATE, DISPATCH_MULTIPLE));
+  
+  EventSystem *eventSystem = GetEventSystem();
+  if (eventSystem)
+    eventSystem->pollEvents();
+  
+  GraphicSystem *graphicSystem = getGraphicSystem();
+  if (graphicSystem)
+    graphicSystem->render();
+}
+
+void FelixEngine::UpdateFrame(void *ptr)
+{
+  FelixEngine *engine = static_cast<FelixEngine*>(ptr);
+  if (engine)
+    engine->updateFrame();
+}
+
 
 bool FelixEngine::loadSystems(const XMLTree::Node &node)
 {

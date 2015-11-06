@@ -64,10 +64,13 @@ namespace fx
     Scene* getScene(const std::string &name) {return mScenes.count(name) ? mScenes.at(name) : nullptr;}
     
     int runLoop();
+    
     void exit() {mShutdown = true;}
     
   private:
     bool loadSystems(const XMLTree::Node &node);
+    void updateFrame();
+    static void UpdateFrame(void *ptr);
     
     bool mShutdown;
     std::map<SYSTEM_TYPE, System*> mSystems;

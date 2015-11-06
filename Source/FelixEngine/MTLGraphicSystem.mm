@@ -458,6 +458,11 @@ InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
   return internalUniformMap;
 }
 
+SDL_Window* MTLGraphicSystem::getMainSDLWindow()
+{
+  return mWindows.size() ? mWindows.begin()->second->mSDLWindow : nullptr;
+}
+
 void MTLGraphicSystem::setNextWindowDrawables() const
 {
   for (map<string, MTLWindowInterface*>::const_iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)

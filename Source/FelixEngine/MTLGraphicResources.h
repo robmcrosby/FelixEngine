@@ -10,7 +10,7 @@
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
+#if __IPHONEOS__
   #import <UIKit/UIKit.h>
 #else
   #import <Cocoa/Cocoa.h>

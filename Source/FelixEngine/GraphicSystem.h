@@ -44,6 +44,8 @@ namespace fx
     
     void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
     
+    virtual SDL_Window* getMainSDLWindow() = 0;
+    
   private:
     void update();
     void clearTaskSlots();

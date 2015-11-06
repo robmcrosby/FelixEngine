@@ -159,6 +159,11 @@ InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
   return internalMap;
 }
 
+SDL_Window* GLGraphicSystem::getMainSDLWindow()
+{
+  return mWindows.size() ? mWindows.begin()->second->getSDLWindow() : nullptr;
+}
+
 void GLGraphicSystem::processTasks()
 {
   mTaskSlotsMutex.lock();

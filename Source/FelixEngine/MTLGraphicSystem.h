@@ -45,6 +45,8 @@ namespace fx
     
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
     
+    virtual SDL_Window* getMainSDLWindow();
+    
     MTLContextInfo* getContextInfo() const {return mContextInfo;}
     
   private:
