@@ -90,7 +90,30 @@
 		C197CE561BED5FD6007F68E0 /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9D1BED298D007F68E0 /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD841BED298D007F68E0 /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE581BED5FDF007F68E0 /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB31BED298D007F68E0 /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C197CE5A1BED6CCE007F68E0 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE591BED6C8C007F68E0 /* FelixEngine.framework */; };
+		C197CE5B1BED6D03007F68E0 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
+		C197CE5C1BED6D03007F68E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE041BED3562007F68E0 /* Foundation.framework */; };
+		C197CE5D1BED6D03007F68E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE021BED3511007F68E0 /* CoreGraphics.framework */; };
+		C197CE5E1BED6D03007F68E0 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE001BED3489007F68E0 /* Metal.framework */; };
+		C197CE5F1BED6D03007F68E0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDFE1BED3472007F68E0 /* OpenGLES.framework */; };
+		C197CE601BED6D03007F68E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDFC1BED343D007F68E0 /* UIKit.framework */; };
+		C197CE611BED6D03007F68E0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDFA1BED342D007F68E0 /* QuartzCore.framework */; };
+		C197CE621BED6D11007F68E0 /* freeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF51BED2F42007F68E0 /* freeimage.a */; };
+		C197CE661BED7FD1007F68E0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE651BED7FD1007F68E0 /* CoreAudio.framework */; };
+		C197CE681BED7FF1007F68E0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */; };
+		C197CE691BED8002007F68E0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */; };
+		C197CE6A1BED8002007F68E0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE651BED7FD1007F68E0 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C197CE631BED7045007F68E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C197CD6E1BED291A007F68E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C197CE231BED585C007F68E0;
+			remoteInfo = FelixEngineAg;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		C197CD741BED291A007F68E0 /* CopyFiles */ = {
@@ -195,6 +218,9 @@
 		C197CE181BED57B3007F68E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C197CE1D1BED57B3007F68E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C197CE211BED580F007F68E0 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/HelloFelix/main.cpp; sourceTree = "<group>"; };
+		C197CE591BED6C8C007F68E0 /* FelixEngine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FelixEngine.framework; path = "../Debug-universal/FelixEngine.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C197CE651BED7FD1007F68E0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,6 +228,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C197CE681BED7FF1007F68E0 /* AudioToolbox.framework in Frameworks */,
+				C197CE661BED7FD1007F68E0 /* CoreAudio.framework in Frameworks */,
 				C197CDFB1BED342D007F68E0 /* QuartzCore.framework in Frameworks */,
 				C197CE051BED3562007F68E0 /* Foundation.framework in Frameworks */,
 				C197CE031BED3511007F68E0 /* CoreGraphics.framework in Frameworks */,
@@ -217,6 +245,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C197CE691BED8002007F68E0 /* AudioToolbox.framework in Frameworks */,
+				C197CE6A1BED8002007F68E0 /* CoreAudio.framework in Frameworks */,
+				C197CE5A1BED6CCE007F68E0 /* FelixEngine.framework in Frameworks */,
+				C197CE5B1BED6D03007F68E0 /* SDL2.framework in Frameworks */,
+				C197CE5C1BED6D03007F68E0 /* Foundation.framework in Frameworks */,
+				C197CE5D1BED6D03007F68E0 /* CoreGraphics.framework in Frameworks */,
+				C197CE5E1BED6D03007F68E0 /* Metal.framework in Frameworks */,
+				C197CE5F1BED6D03007F68E0 /* OpenGLES.framework in Frameworks */,
+				C197CE601BED6D03007F68E0 /* UIKit.framework in Frameworks */,
+				C197CE611BED6D03007F68E0 /* QuartzCore.framework in Frameworks */,
+				C197CE621BED6D11007F68E0 /* freeimage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +479,9 @@
 		C197CDF71BED2F5A007F68E0 /* FrameWorks */ = {
 			isa = PBXGroup;
 			children = (
+				C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */,
+				C197CE651BED7FD1007F68E0 /* CoreAudio.framework */,
+				C197CE591BED6C8C007F68E0 /* FelixEngine.framework */,
 				C197CDF81BED2F76007F68E0 /* Freeimage */,
 				C197CDF31BED2F2B007F68E0 /* SDL2.framework */,
 				C197CE041BED3562007F68E0 /* Foundation.framework */,
@@ -558,6 +600,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C197CE641BED7045007F68E0 /* PBXTargetDependency */,
 			);
 			name = HelloFelix;
 			productName = HelloFelix;
@@ -627,7 +670,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "LIB_NAME=FelixEngine\n\nWRK_DIR=build\nDEVICE_DIR=${WRK_DIR}/Release-iphoneos\nSIMULATOR_DIR=${WRK_DIR}/Release-iphonesimulator\n\n#DEVICE_DIR=${TARGET_TEMP_DIR}/Build/Products/Release-iphoneos\n#SIMULATOR_DIR=${TARGET_TEMP_DIR}/Build/Products/Release-iphonesimulator\n\nINSTALL_DIR=${SRCROOT}/FrameWorks/FelixEngine.framework\n\n# Build both for Device and Simulator\nxcodebuild -configuration \"Release\" -target \"${LIB_NAME}\" -sdk iphoneos\nxcodebuild -configuration \"Release\" -target \"${LIB_NAME}\" -sdk iphonesimulator\n\n# Delete and recreate the framework directories\nrm -r \"${INSTALL_DIR}\"\nmkdir -p \"${INSTALL_DIR}/Versions/A/Headers\"\n\n# Create the framework directory links\n/bin/ln -sfh A \"${INSTALL_DIR}/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${INSTALL_DIR}/Headers\"\n\n# Copy the headers to the framework\n/bin/cp -a \"${DEVICE_DIR}/usr/local/include/\" \"${INSTALL_DIR}/Versions/A/Headers\"\n\n# Combine the static libaries and write to the framework\nlipo -create \"${DEVICE_DIR}/lib${LIB_NAME}.a\" \"${SIMULATOR_DIR}/lib${LIB_NAME}.a\" -output \"${INSTALL_DIR}/Versions/A/FelixEngine\"\n/bin/ln -sfh \"Versions/Current/FelixEngine\" \"${INSTALL_DIR}/FelixEngine\"\n\n# Cleanup the work directories\nrm -r \"${WRK_DIR}\"";
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\nFRAMEWORK_DIR=${UNIVERSAL_OUTPUTFOLDER}/FelixEngine.framework\n\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target ${PROJECT_NAME} -configuration ${CONFIGURATION} -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# Delete and recreate the framework directories\nrm -r \"${FRAMEWORK_DIR}\"\nmkdir -p \"${FRAMEWORK_DIR}/Versions/A/Headers\"\n\n# Create the framework directory links\n/bin/ln -sfh A \"${FRAMEWORK_DIR}/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${FRAMEWORK_DIR}/Headers\"\n\n# Copy the headers to the framework\n/bin/cp -a \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/usr/local/include/\" \"${FRAMEWORK_DIR}/Versions/A/Headers\"\n\n# Create universal binary file using lipo\nlipo -create -output \"${FRAMEWORK_DIR}/Versions/A/${PROJECT_NAME}\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n/bin/ln -sfh \"Versions/Current/${PROJECT_NAME}\" \"${FRAMEWORK_DIR}/${PROJECT_NAME}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -662,6 +705,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C197CE641BED7045007F68E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C197CE231BED585C007F68E0 /* FelixEngineAg */;
+			targetProxy = C197CE631BED7045007F68E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C197CD7D1BED291A007F68E0 /* Debug */ = {
@@ -748,6 +799,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = ../../../ThirdParty/SDL2/IOS/;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -768,6 +820,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					../../../ThirdParty/SDL2/IOS/,
+					"${BUILD_DIR}/${CONFIGURATION}-universal",
+				);
 				INFOPLIST_FILE = HelloFelix/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
@@ -780,6 +836,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					../../../ThirdParty/SDL2/IOS/,
+					"${BUILD_DIR}/${CONFIGURATION}-universal",
+				);
 				INFOPLIST_FILE = HelloFelix/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
