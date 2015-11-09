@@ -243,7 +243,7 @@ void SDLEventSystem::processWindowEvent(const SDL_WindowEvent &event)
       windowEvent.setType(EVENT_WINDOW_MOVED);
       break;
     case SDL_WINDOWEVENT_RESIZED:
-    case SDL_WINDOWEVENT_SIZE_CHANGED:
+    //case SDL_WINDOWEVENT_SIZE_CHANGED:
       windowEvent.setType(EVENT_WINDOW_RESIZED);
       break;
     case SDL_WINDOWEVENT_MINIMIZED:

@@ -32,7 +32,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -79,7 +79,7 @@ namespace fx
     bool load()
     {
       bool success = false;
-      if (!isLoaded())
+      if (!loaded())
       {
         GLuint shaderParts[SHADER_COUNT];
         success = true;

@@ -30,10 +30,10 @@ namespace fx
         mRemoved = true;
     }
     
-    bool isLoaded() const {return mLoaded;}
-    bool isLoading() const {return mLoading;}
-    bool isUnloading() const {return mUnloading;}
-    bool isRemoved() const {return mRemoved;}
+    bool loaded() const {return mLoaded;}
+    bool loading() const {return mLoading;}
+    bool unloading() const {return mUnloading;}
+    bool removed() const {return mRemoved;}
     
     void setToLoad() {mLoading = true;}
     void setToUnload() {mUnloading = true;}

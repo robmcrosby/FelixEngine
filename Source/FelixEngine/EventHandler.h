@@ -52,7 +52,8 @@ namespace fx
     
     virtual void handle(const Event &event) {}
     
-    void notify(const Event &event);
+    void notify(const Event &event) {notify(event, event.dispatchType());}
+    void notify(const Event &event, DISPATCH_TYPE dispatch);
     
     static void Cleanup()
     {

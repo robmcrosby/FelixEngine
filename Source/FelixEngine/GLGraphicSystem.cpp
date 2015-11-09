@@ -23,7 +23,6 @@ using namespace std;
 GLGraphicSystem::GLGraphicSystem(): mContext(0), mMainWindow(0)
 {
   mSDLInitFlags |= SDL_INIT_VIDEO;
-  //mUpdateDelegate = UpdateDelegate::Create<GLGraphicSystem, &GLGraphicSystem::update>(this);
 }
 
 GLGraphicSystem::~GLGraphicSystem()
@@ -147,15 +146,9 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
 
 void GLGraphicSystem::render()
 {
-  #if __IPHONEOS__
-  if (mMainWindow)
-    mMainWindow->updateFrameBufferId();
-  #endif
-  
-  processTasks();
-  
   updateResources();
   updateUniforms();
+  processTasks();
 }
 
 
@@ -210,7 +203,7 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
     const GLShader *shader = static_cast<const GLShader*>(task.shader);
     const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mesh);
     
-    if (frame->isLoaded() && shader->isLoaded() && mesh->isLoaded())
+    if (frame->loaded() && shader->loaded() && mesh->loaded())
     {
       // Set the state for the Frame
       frame->use();

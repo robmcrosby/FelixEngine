@@ -44,12 +44,21 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
         else
           setNotLoading();
+      }
+      
+      if (loaded())
+      {
+        SDL_GetWindowSize(mSDLWindow, &mSize.w, &mSize.h);
+        
+        #if __IPHONEOS__
+        updateFrameBufferId();
+        #endif
       }
     }
     
@@ -78,7 +87,7 @@ namespace fx
     bool load()
     {
       bool success = false;
-      if (!isLoaded())
+      if (!loaded())
       {
         #if __IPHONEOS__
         // Get the Screen Size.

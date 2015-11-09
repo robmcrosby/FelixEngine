@@ -40,6 +40,8 @@ void FelixEngine::handle(const Event &event)
 {
   if (event == EVENT_APP_QUIT)
     exit();
+  else
+    notify(event, DISPATCH_SERIAL);
 }
 
 bool FelixEngine::init(const std::string &settingsFile)

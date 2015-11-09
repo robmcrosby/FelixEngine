@@ -29,13 +29,15 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
         else
           setNotLoading();
       }
+      //if (loaded() && mGLWindow)
+      //  mSize = mGLWindow->size();
     }
     
     void setToWindow(GLWindow *window)
@@ -223,7 +225,7 @@ namespace fx
     bool load()
     {
       bool success = false;
-      if (!isLoaded())
+      if (!loaded())
       {
         GLint curFrameBuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);

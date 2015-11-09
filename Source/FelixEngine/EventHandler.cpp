@@ -31,16 +31,15 @@ EventHandler::~EventHandler()
   UsedObservers.pushBack(mObserver);
 }
 
-
-void EventHandler::notify(const fx::Event &event)
+void EventHandler::notify(const fx::Event &event, DISPATCH_TYPE dispatch)
 {
-  if (event.dispatchType() == DISPATCH_SERIAL)
+  if (dispatch == DISPATCH_SERIAL)
     notifySerial(event);
-  else if (event.dispatchType() == DISPATCH_SINGLE)
+  else if (dispatch == DISPATCH_SINGLE)
     notifySingle(event);
-  else if (event.dispatchType() == DISPATCH_MULTIPLE)
+  else if (dispatch == DISPATCH_MULTIPLE)
     notifyMultiple(event, nullptr);
-  else  if (event.dispatchType() == DISPATCH_BLOCK)
+  else  if (dispatch == DISPATCH_BLOCK)
   {
     TaskGroup group;
     notifyMultiple(event, &group);
