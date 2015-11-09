@@ -10,6 +10,7 @@
 #include "TaskingSystem.h"
 #include "GCDTaskingSystem.h"
 #include "SDLEventSystem.h"
+#include "GLGraphicSystem.h"
 
 
 using namespace fx;
@@ -18,6 +19,7 @@ using namespace std;
 DEFINE_SYSTEM_ID(TaskingSystem)
 DEFINE_SYSTEM_ID(GCDTaskingSystem)
 DEFINE_SYSTEM_ID(SDLEventSystem)
+DEFINE_SYSTEM_ID(GLGraphicSystem)
 
 TaskingSystem* TaskingSystem::sInstance = nullptr;
 EventSystem* EventSystem::sInstance = nullptr;

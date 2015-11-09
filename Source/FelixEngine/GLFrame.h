@@ -52,9 +52,14 @@ namespace fx
       {
         size = mGLWindow->size();
         mGLWindow->setActive();
+        glBindFramebuffer(GL_FRAMEBUFFER, mGLWindow->frameBufferId());
+        glViewport(0, 0, mGLWindow->size().w, mGLWindow->size().h);
       }
-      glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-      glViewport(0, 0, size.w, size.h);
+      else
+      {
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        glViewport(0, 0, size.w, size.h);
+      }
     }
     
     void clear(const ClearState &clearState) const

@@ -16,8 +16,6 @@ using namespace std;
 using namespace fx;
 
 
-DEFINE_COMPONENT_ID(RenderSlots);
-
 RenderSlots::RenderSlots(Object *obj): Component("RenderSlots", obj)
 {
   mGraphicSystem = dynamic_cast<GraphicSystem*>(FelixEngine::GetSystem(SYSTEM_GRAPHICS));

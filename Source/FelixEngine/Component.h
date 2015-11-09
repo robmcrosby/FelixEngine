@@ -64,11 +64,7 @@ namespace fx
       virtual ~ComponentId() {}
       virtual Component* create(Object *obj) = 0;
     };
-    static std::map<std::string, ComponentId*>& GetComponentIdMap()
-    {
-      static std::map<std::string, ComponentId*> compIdMap;
-      return compIdMap;
-    }
+    static std::map<std::string, ComponentId*>& GetComponentIdMap();
     
     /**
      *

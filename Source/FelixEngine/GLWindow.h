@@ -25,7 +25,7 @@ namespace fx
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0) {}
+    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0) {}
     virtual ~GLWindow()
     {
       if (mSDLWindow)
@@ -53,11 +53,18 @@ namespace fx
       }
     }
     
+    void updateFrameBufferId()
+    {
+      SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
+      glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mFrameBufferId);
+    }
+    
     void setActive()
     {
       if (mSDLWindow)
         SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
     }
+    
     void swapBuffers()
     {
       if (mSDLWindow)
@@ -65,17 +72,34 @@ namespace fx
     }
     SDL_Window* getSDLWindow() {return mSDLWindow;}
     
+    GLuint frameBufferId() const {return mFrameBufferId;}
+    
   private:
     bool load()
     {
       bool success = false;
       if (!isLoaded())
       {
+        #if __IPHONEOS__
+        // Get the Screen Size.
+        SDL_DisplayMode displayMode;
+        SDL_GetDesktopDisplayMode(0, &displayMode);
+        
+        mSize.w = displayMode.w;
+        mSize.h = displayMode.h;
+        
+        mSDLWindow = SDL_CreateWindow(NULL, 0, 0, mSize.w, mSize.h,
+                                      SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN |
+                                      SDL_WINDOW_RESIZABLE);
+        #else
         // Get and check the SDL Window
         mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
                                       mPosition.x, mPosition.y,
                                       mSize.w, mSize.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        #endif
+        
+        
         if (!mSDLWindow)
         {
           std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
@@ -95,8 +119,10 @@ namespace fx
           mGLSystem->setContext(context);
           
           // Set to Use V-Sync
+          #if !__IPHONEOS__
           if (SDL_GL_SetSwapInterval(1) < 0)
             std::cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
+          #endif
         }
         success = true;
       }
@@ -105,6 +131,7 @@ namespace fx
     
     SDL_Window *mSDLWindow;
     GLGraphicSystem *mGLSystem;
+    GLint mFrameBufferId;
   };
 }
 

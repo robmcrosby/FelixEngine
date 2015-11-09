@@ -88,6 +88,7 @@ namespace fx
     std::map<std::string, std::string> mShaderFunctions;
     
     SDL_GLContext mContext;
+    GLWindow *mMainWindow;
     int mMajorVersion;
     int mMinorVersion;
   };

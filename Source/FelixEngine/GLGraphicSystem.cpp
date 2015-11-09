@@ -20,10 +20,7 @@ using namespace fx;
 using namespace std;
 
 
-DEFINE_SYSTEM_ID(GLGraphicSystem)
-
-
-GLGraphicSystem::GLGraphicSystem(): mContext(0)
+GLGraphicSystem::GLGraphicSystem(): mContext(0), mMainWindow(0)
 {
   mSDLInitFlags |= SDL_INIT_VIDEO;
   //mUpdateDelegate = UpdateDelegate::Create<GLGraphicSystem, &GLGraphicSystem::update>(this);
@@ -104,12 +101,17 @@ bool GLGraphicSystem::init()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, mMajorVersion);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, mMinorVersion);
   
-  // Should be Apple Only.
+  #if !__IPHONEOS__
   if (mMajorVersion > 2)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  #endif
   
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  {
     success &= itr->second->init();
+    if (!mMainWindow && success)
+      mMainWindow = itr->second;
+  }
   
   cout << glGetString(GL_VERSION) << endl;
   
@@ -145,6 +147,11 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
 
 void GLGraphicSystem::render()
 {
+  #if __IPHONEOS__
+  if (mMainWindow)
+    mMainWindow->updateFrameBufferId();
+  #endif
+  
   processTasks();
   
   updateResources();
@@ -161,7 +168,7 @@ InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 
 SDL_Window* GLGraphicSystem::getMainSDLWindow()
 {
-  return mWindows.size() ? mWindows.begin()->second->getSDLWindow() : nullptr;
+  return mMainWindow ? mMainWindow->getSDLWindow() : nullptr;
 }
 
 void GLGraphicSystem::processTasks()

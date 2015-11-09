@@ -18,6 +18,7 @@
 using namespace fx;
 using namespace std;
 
+
 FelixEngine* FelixEngine::Instance()
 {
   static FelixEngine engine;
@@ -116,9 +117,8 @@ int FelixEngine::runLoop()
   // Run the regular loop
   while (!mShutdown)
     updateFrame();
-#endif
-  
   SDL_Quit();
+#endif
   return 0;
 }
 

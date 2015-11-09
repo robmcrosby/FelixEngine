@@ -92,6 +92,7 @@
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
+		C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10B5D3C1BF0F9DE00583B8F /* Component.cpp */; };
 		C197CCC71BE69D08007F68E0 /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CCC61BE69D08007F68E0 /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */; };
 		C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42D1BE178020064E84A /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -218,6 +219,7 @@
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
+		C10B5D3C1BF0F9DE00583B8F /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = ../../../../Source/FelixEngine/Component.cpp; sourceTree = "<group>"; };
 		C197CCC61BE69D08007F68E0 /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = List.h; path = ../../../../Source/FelixEngine/List.h; sourceTree = "<group>"; };
 		C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = ../../../../Source/FelixEngine/EventHandler.cpp; sourceTree = "<group>"; };
 		C197CCCE1BE96E3D007F68E0 /* SDLEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLEventSystem.cpp; path = ../../../../Source/FelixEngine/SDLEventSystem.cpp; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
+				C10B5D3C1BF0F9DE00583B8F /* Component.cpp */,
 				37CD4E371BC83E6300DAB4E3 /* Transform.h */,
 				37CD4E361BC83E6300DAB4E3 /* Transform.cpp */,
 				37B48FDC1BC9837B00FC97A5 /* Projection.h */,
@@ -701,6 +704,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
+				C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */,
 				37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,
 				370FEA6F1BC2F05000440244 /* Platform.cpp in Sources */,
