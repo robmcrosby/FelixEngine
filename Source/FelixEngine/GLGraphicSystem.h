@@ -48,6 +48,8 @@ namespace fx
     virtual void render();
     
     virtual void setVersion(int major, int minor);
+    int majorVersion() const {return mMajorVersion;}
+    int minorVersion() const {return mMinorVersion;}
     
     virtual Window*  getWindow(const std::string &name);
     virtual Frame*   getFrame(const std::string &name);

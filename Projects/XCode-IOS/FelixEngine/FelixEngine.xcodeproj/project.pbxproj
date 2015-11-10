@@ -28,6 +28,7 @@
 		C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10B5D3A1BEDD65000583B8F /* Component.cpp */; };
 		C10B5D401BF11BED00583B8F /* DepthScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D3E1BF11BED00583B8F /* DepthScene.xml */; };
 		C10B5D411BF11BED00583B8F /* FrameScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D3F1BF11BED00583B8F /* FrameScene.xml */; };
+		C1124BE51BF16F4B00CFADD7 /* SettingsGLES2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */; };
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
@@ -142,6 +143,7 @@
 		C10B5D3A1BEDD65000583B8F /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = ../../../../Source/FelixEngine/Component.cpp; sourceTree = "<group>"; };
 		C10B5D3E1BF11BED00583B8F /* DepthScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = DepthScene.xml; path = ../../../../Source/HelloFelix/Resources/DepthScene.xml; sourceTree = "<group>"; };
 		C10B5D3F1BF11BED00583B8F /* FrameScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = FrameScene.xml; path = ../../../../Source/HelloFelix/Resources/FrameScene.xml; sourceTree = "<group>"; };
+		C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES2.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES2.xml; sourceTree = "<group>"; };
 		C197CD761BED291A007F68E0 /* libFelixEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFelixEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197CD821BED298D007F68E0 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../../../Source/FelixEngine/Color.h; sourceTree = "<group>"; };
 		C197CD831BED298D007F68E0 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				C10B5D361BEDD2A200583B8F /* TextureScene.xml */,
 				C10B5D371BEDD2A200583B8F /* TriangleScene.xml */,
 				C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */,
+				C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */,
 				C10B5D311BEDD24000583B8F /* Images */,
 				C197CE181BED57B3007F68E0 /* Assets.xcassets */,
 			);
@@ -687,6 +690,7 @@
 				C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */,
 				C10B5D381BEDD2A200583B8F /* TextureScene.xml in Resources */,
 				C10B5D401BF11BED00583B8F /* DepthScene.xml in Resources */,
+				C1124BE51BF16F4B00CFADD7 /* SettingsGLES2.xml in Resources */,
 				C10B5D351BEDD28C00583B8F /* SettingsGLES3.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

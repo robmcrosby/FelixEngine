@@ -36,8 +36,8 @@ namespace fx
         else
           setNotLoading();
       }
-      //if (loaded() && mGLWindow)
-      //  mSize = mGLWindow->size();
+      if (loaded() && mGLWindow)
+        mSize = mGLWindow->size();
     }
     
     void setToWindow(GLWindow *window)
@@ -178,7 +178,12 @@ namespace fx
           glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
           success = true;
         }
-        
+        else if (mFormat == COLOR_DEPTH24)
+        {
+          glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.w, size.h);
+          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
+          success = true;
+        }
         glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
         return success;
       }
@@ -211,7 +216,12 @@ namespace fx
           glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
           success = true;
         }
-        
+        else if (mFormat == COLOR_DEPTH24)
+        {
+          glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, size.w, size.h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
+          success = true;
+        }
         glBindTexture(GL_TEXTURE_2D, 0);
         return success;
       }
@@ -265,7 +275,8 @@ namespace fx
         }
         else if (itr->format == COLOR_DEPTH32F)
         {
-          mDepthBuffer.setFormat(itr->format);
+          COLOR_TYPE format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
+          mDepthBuffer.setFormat(format);
           setTexture(mDepthBuffer, itr->name);
           success &= mDepthBuffer.load(mSize);
         }

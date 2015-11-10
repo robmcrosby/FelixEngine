@@ -30,6 +30,7 @@ namespace fx
     COLOR_RGBA,
     COLOR_FLOAT,
     COLOR_DEPTH32F,
+    COLOR_DEPTH24,
     COLOR_STENCIL8,
     COLOR_NONE,
   };
