@@ -8,6 +8,9 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
+
 @implementation MTLDescriptorKey
 
 /**
@@ -92,3 +95,5 @@
 }
 
 @end
+
+#endif

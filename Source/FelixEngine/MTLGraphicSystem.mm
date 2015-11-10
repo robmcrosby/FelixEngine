@@ -14,8 +14,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
+#if !TARGET_IPHONE_SIMULATOR
 #import "MTLGraphicResources.h"
-
 
 namespace fx
 {
@@ -50,7 +50,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -89,7 +89,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -184,7 +184,11 @@ namespace fx
       SDL_VERSION(&info->version);
       SDL_GetWindowWMInfo(mSDLWindow, info);
       
+      #if TARGET_OS_IPHONE
+      success = [mMTLWindow setUIWindow:info->info.uikit.window];
+      #else
       success = [mMTLWindow setNSWindow:info->info.cocoa.window];
+      #endif
       free(info);
       
       if (success)
@@ -213,7 +217,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -248,7 +252,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -345,9 +349,6 @@ namespace fx
 
 using namespace fx;
 using namespace std;
-
-
-DEFINE_SYSTEM_ID(MTLGraphicSystem)
 
 
 MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
@@ -711,3 +712,110 @@ void MTLGraphicSystem::updateUniforms()
     }
   }
 }
+
+
+
+
+#else
+
+using namespace fx;
+using namespace std;
+
+
+MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
+{
+}
+
+MTLGraphicSystem::~MTLGraphicSystem()
+{
+}
+
+Window* MTLGraphicSystem::getWindow(const std::string &name)
+{
+  return nullptr;
+}
+
+Frame* MTLGraphicSystem::getFrame(const std::string &name)
+{
+  return nullptr;
+}
+
+Shader* MTLGraphicSystem::getShader(const std::string &name)
+{
+  return nullptr;
+}
+
+Mesh* MTLGraphicSystem::getMesh(const std::string &name)
+{
+  return nullptr;
+}
+
+Texture* MTLGraphicSystem::getTexture(const std::string &name)
+{
+  return nullptr;
+}
+
+bool MTLGraphicSystem::setToXml(const XMLTree::Node *node)
+{
+  return false;
+}
+
+bool MTLGraphicSystem::init()
+{
+  return false;
+}
+
+void MTLGraphicSystem::render()
+{
+}
+
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+{
+  return nullptr;
+}
+
+SDL_Window* MTLGraphicSystem::getMainSDLWindow()
+{
+  return nullptr;
+}
+
+void MTLGraphicSystem::setNextWindowDrawables() const
+{
+}
+
+void MTLGraphicSystem::presentWindowDrawables() const
+{
+}
+
+void MTLGraphicSystem::processTasks()
+{
+}
+
+void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+{
+}
+
+void MTLGraphicSystem::processTask(const GraphicTask &task)
+{
+}
+
+MTLSamplerInterface* MTLGraphicSystem::getSampler(const Sampler &sampler) const
+{
+  return nullptr;
+}
+
+int MTLGraphicSystem::getSamplerAddressMode(SAMPLER_COORD coord) const
+{
+  return 0;
+}
+
+void MTLGraphicSystem::updateResources()
+{
+}
+
+void MTLGraphicSystem::updateUniforms()
+{
+}
+
+
+#endif

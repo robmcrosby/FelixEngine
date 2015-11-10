@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if !TARGET_IPHONE_SIMULATOR
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 
-#if __IPHONEOS__
+#if TARGET_OS_IPHONE
   #import <UIKit/UIKit.h>
 #else
   #import <Cocoa/Cocoa.h>
@@ -146,10 +148,14 @@
 -(void)setMetalDevice:(id <MTLDevice>)device;
 -(void)setMetalFrame:(MTLFrame*)frame;
 
--(BOOL)setNSWindow:(NSWindow*)window;
-
 -(void)setNextDrawable;
 -(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer;
+
+#if TARGET_OS_IPHONE
+-(BOOL)setUIWindow:(UIWindow*)window;
+#else
+-(BOOL)setNSWindow:(NSWindow*)window;
+#endif
 
 @end
 
@@ -177,3 +183,5 @@
 -(void)applyToShader:(MTLShader*)shader withEncoder:(id <MTLRenderCommandEncoder>)encoder;
 
 @end
+
+#endif

@@ -9,6 +9,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLFrame
 {
@@ -217,3 +219,5 @@
 
 
 @end
+
+#endif

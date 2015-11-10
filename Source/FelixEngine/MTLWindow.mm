@@ -8,6 +8,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLWindow
 {
@@ -16,11 +18,15 @@
   MTLTexture *_colorTexture;
   MTLTexture *_depthTexture;
   MTLFrame   *_mtlFrame;
-  
-  NSWindow     *_nsWindow;
+
   CAMetalLayer *_layer;
-  
   id <CAMetalDrawable>  _drawable;
+  
+  #if TARGET_OS_IPHONE
+  UIWindow *_uiWindow;
+  #else
+  NSWindow *_nsWindow;
+  #endif
 }
 
 -(id)init
@@ -69,6 +75,12 @@
   _drawable = nil;
 }
 
+#if TARGET_OS_IPHONE
+-(BOOL)setUIView:(UIView*)uiView
+{
+  return NO;
+}
+#else
 -(BOOL)setNSWindow:(NSWindow *)window
 {
   _nsWindow = window;
@@ -85,6 +97,7 @@
   }
   return NO;
 }
+#endif
 
 -(void)setNextDrawable
 {
@@ -104,3 +117,5 @@
 }
 
 @end
+
+#endif

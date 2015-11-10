@@ -8,6 +8,9 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
+
 @implementation MTLShader
 {
   id <MTLDevice> _mtlDevice;
@@ -125,3 +128,5 @@
 }
 
 @end
+
+#endif
