@@ -39,6 +39,7 @@
 		C1124BEE1BF17AC200CFADD7 /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAC1BED298D007F68E0 /* MTLWindow.mm */; };
 		C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAB1BED298D007F68E0 /* MTLUniformMap.m */; };
 		C1124BF01BF17ACD00CFADD7 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA61BED298D007F68E0 /* MTLGraphicSystem.mm */; };
+		C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */; };
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
@@ -155,6 +156,7 @@
 		C10B5D3F1BF11BED00583B8F /* FrameScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = FrameScene.xml; path = ../../../../Source/HelloFelix/Resources/FrameScene.xml; sourceTree = "<group>"; };
 		C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES2.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES2.xml; sourceTree = "<group>"; };
 		C1124BE61BF179BB00CFADD7 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/HelloFelix/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
+		C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/HelloFelix/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
 		C197CD761BED291A007F68E0 /* libFelixEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFelixEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197CD821BED298D007F68E0 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../../../Source/FelixEngine/Color.h; sourceTree = "<group>"; };
 		C197CD831BED298D007F68E0 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 		C10B5D331BEDD24500583B8F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */,
 				C10B5D3E1BF11BED00583B8F /* DepthScene.xml */,
 				C10B5D3F1BF11BED00583B8F /* FrameScene.xml */,
 				C10B5D361BEDD2A200583B8F /* TextureScene.xml */,
@@ -763,6 +766,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C197CE221BED580F007F68E0 /* main.cpp in Sources */,
+				C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -201,7 +201,7 @@
 
 -(void)addColorBuffer:(MTLTexture*)texture
 {
-  [texture setUsage:MTLTextureUsageRenderTarget];
+  [texture setUsage:MTLTextureUsageRenderTarget|MTLTextureUsageShaderRead|MTLTextureUsageShaderWrite];
   [_colorBuffers addObject:texture];
   
   [_pipelines removeAllObjects];
@@ -210,7 +210,7 @@
 
 -(void)setDepthBuffer:(MTLTexture*)texture
 {
-  [texture setUsage:MTLTextureUsageRenderTarget];
+  [texture setUsage:MTLTextureUsageRenderTarget|MTLTextureUsageShaderRead|MTLTextureUsageShaderWrite];
   _depthBuffer = texture;
   
   [_pipelines removeAllObjects];

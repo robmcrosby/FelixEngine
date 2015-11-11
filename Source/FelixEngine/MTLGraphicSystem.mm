@@ -14,8 +14,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
-#if !TARGET_IPHONE_SIMULATOR
 #import "MTLGraphicResources.h"
+
+#if !TARGET_IPHONE_SIMULATOR
+
 
 namespace fx
 {
@@ -177,7 +179,18 @@ namespace fx
       bool success = true;
       
       // Create the window with SDL
+      #if TARGET_OS_IPHONE
+      SDL_DisplayMode displayMode;
+      SDL_GetDesktopDisplayMode(0, &displayMode);
+      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE);
+      mSize = ivec2(displayMode.w, displayMode.h);
+      
+      SDL_GL_CreateContext(mSDLWindow);
+      
+      #else
       mSDLWindow = SDL_CreateWindow(mTitle.c_str(), mPosition.x, mPosition.y, mSize.w, mSize.h, SDL_WINDOW_RESIZABLE);
+      
+      #endif
       
       // Get the NSView of the Window
       SDL_SysWMinfo *info = (SDL_SysWMinfo*)malloc(sizeof(SDL_SysWMinfo));
@@ -195,7 +208,17 @@ namespace fx
         setLoaded();
       return success;
     }
-    void update() {}
+    void update()
+    {
+      if (mMTLWindow != nil)
+      {
+        #if TARGET_OS_IPHONE
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        CGFloat scale = [UIScreen mainScreen].scale;
+        [mMTLWindow updateSize:size andScale:scale];
+        #endif
+      }
+    }
     
     MTLWindow *mMTLWindow;
     MTLFrameInterface *mMTLFrame;

@@ -148,6 +148,8 @@
 -(void)setMetalDevice:(id <MTLDevice>)device;
 -(void)setMetalFrame:(MTLFrame*)frame;
 
+-(void)updateSize:(CGSize)size andScale:(CGFloat)scale;
+
 -(void)setNextDrawable;
 -(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer;
 
