@@ -93,6 +93,9 @@
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
 		C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10B5D3C1BF0F9DE00583B8F /* Component.cpp */; };
+		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; };
+		C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */; };
+		C15D73A21BF3C638002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */; };
 		C197CCC71BE69D08007F68E0 /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CCC61BE69D08007F68E0 /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */; };
 		C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42D1BE178020064E84A /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -220,6 +223,9 @@
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
 		C10B5D3C1BF0F9DE00583B8F /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = ../../../../Source/FelixEngine/Component.cpp; sourceTree = "<group>"; };
+		C15D739C1BF3C619002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
+		C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
+		C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
 		C197CCC61BE69D08007F68E0 /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = List.h; path = ../../../../Source/FelixEngine/List.h; sourceTree = "<group>"; };
 		C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = ../../../../Source/FelixEngine/EventHandler.cpp; sourceTree = "<group>"; };
 		C197CCCE1BE96E3D007F68E0 /* SDLEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLEventSystem.cpp; path = ../../../../Source/FelixEngine/SDLEventSystem.cpp; sourceTree = "<group>"; };
@@ -278,6 +284,7 @@
 				370FEA731BC2F31800440244 /* GraphicsSystem */,
 				3722FDEE1BDEAF1F00B07476 /* TaskingSystem */,
 				C1A7D42A1BE078980064E84A /* EventSystem */,
+				C15D739B1BF3C5F7002FEEE3 /* MotionSystem */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -502,6 +509,24 @@
 			name = Freeimage;
 			sourceTree = "<group>";
 		};
+		C15D739B1BF3C5F7002FEEE3 /* MotionSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C15D739C1BF3C619002FEEE3 /* MotionSystem.h */,
+				C15D739E1BF3C61E002FEEE3 /* IOSMotionSystem */,
+			);
+			name = MotionSystem;
+			sourceTree = "<group>";
+		};
+		C15D739E1BF3C61E002FEEE3 /* IOSMotionSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */,
+				C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */,
+			);
+			name = IOSMotionSystem;
+			sourceTree = "<group>";
+		};
 		C197CCCD1BE96B2A007F68E0 /* SDLEventSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -551,6 +576,8 @@
 				37B4901D1BCB127500FC97A5 /* Variant.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,
+				C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */,
+				C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */,
 				37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */,
 				370FEA751BC2F86400440244 /* GraphicSystem.h in Headers */,
 				3722FDF61BDEB47E00B07476 /* GCDTaskingSystem.h in Headers */,
@@ -727,6 +754,7 @@
 				C197CCD01BE96E3D007F68E0 /* SDLEventSystem.cpp in Sources */,
 				37B48FDD1BC9837B00FC97A5 /* Projection.cpp in Sources */,
 				37B48FE11BC984B500FC97A5 /* RenderSlots.cpp in Sources */,
+				C15D73A21BF3C638002FEEE3 /* IOSMotionSystem.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

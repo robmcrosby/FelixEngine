@@ -13,7 +13,7 @@
 #include "Pool.h"
 #include "Vector.h"
 
-#define DATA_SIZE 32
+#define DATA_SIZE 64
 
 
 namespace fx
@@ -62,6 +62,11 @@ namespace fx
     EVENT_WINDOW_ENTER     = 0x00800000, /**< Window has gained mouse focus */
     EVENT_WINDOW_LEAVE     = 0x01000000, /**< Window has lost mouse focus */
     EVENT_WINDOW_CLOSE     = 0x02000000, /**< Window has been closed */
+    
+    EVENT_MOTION_MASK      = 0x0C000000, /**< Motion events mask */
+    EVENT_MOTION_ROTATION  = 0x04000000, /**< Device has been rotated */
+    EVENT_MOTION_MOVEMENT  = 0x08000000, /**< Device has been moved */
+    EVENT_MOTION_COMBINED  = 0x0C000000, /**< Device movement combined */
     
     EVENT_USER_MASK        = 0xF0000000, /**< User events mask */
     EVENT_USER_1           = 0x10000000, /**< User event 1 */
@@ -174,6 +179,15 @@ namespace fx
     };
     MouseData& mouseData() {return *(MouseData*)mData;}
     const MouseData& mouseData() const {return *(MouseData*)mData;}
+    
+    struct MotionData
+    {
+      vec3 acceleration;
+      vec3 rotationRate;
+      vec3 gravity;
+    };
+    MotionData& motionData() {return *(MotionData*)mData;}
+    const MotionData& motionData() const {return *(MotionData*)mData;}
     
   private:
     EVENT_TYPE    mType;

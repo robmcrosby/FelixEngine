@@ -40,6 +40,11 @@
 		C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAB1BED298D007F68E0 /* MTLUniformMap.m */; };
 		C1124BF01BF17ACD00CFADD7 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA61BED298D007F68E0 /* MTLGraphicSystem.mm */; };
 		C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */; };
+		C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73911BF3B457002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */; };
+		C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */; };
+		C15D73991BF3BB1D002FEEE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */; };
+		C15D739A1BF3BB30002FEEE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */; };
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
@@ -157,6 +162,10 @@
 		C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES2.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES2.xml; sourceTree = "<group>"; };
 		C1124BE61BF179BB00CFADD7 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/HelloFelix/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
 		C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/HelloFelix/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
+		C15D73911BF3B457002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
+		C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
+		C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
+		C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		C197CD761BED291A007F68E0 /* libFelixEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFelixEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197CD821BED298D007F68E0 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../../../Source/FelixEngine/Color.h; sourceTree = "<group>"; };
 		C197CD831BED298D007F68E0 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
@@ -257,6 +266,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C15D73991BF3BB1D002FEEE3 /* CoreMotion.framework in Frameworks */,
 				C197CE681BED7FF1007F68E0 /* AudioToolbox.framework in Frameworks */,
 				C197CE661BED7FD1007F68E0 /* CoreAudio.framework in Frameworks */,
 				C197CDFB1BED342D007F68E0 /* QuartzCore.framework in Frameworks */,
@@ -274,6 +284,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C15D739A1BF3BB30002FEEE3 /* CoreMotion.framework in Frameworks */,
 				C197CE691BED8002007F68E0 /* AudioToolbox.framework in Frameworks */,
 				C197CE6A1BED8002007F68E0 /* CoreAudio.framework in Frameworks */,
 				C197CE5A1BED6CCE007F68E0 /* FelixEngine.framework in Frameworks */,
@@ -306,6 +317,24 @@
 				C197CE181BED57B3007F68E0 /* Assets.xcassets */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		C15D73901BF3B428002FEEE3 /* MotionSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C15D73911BF3B457002FEEE3 /* MotionSystem.h */,
+				C15D73931BF3B468002FEEE3 /* IOSMotionSystem */,
+			);
+			name = MotionSystem;
+			sourceTree = "<group>";
+		};
+		C15D73931BF3B468002FEEE3 /* IOSMotionSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */,
+				C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */,
+			);
+			name = IOSMotionSystem;
 			sourceTree = "<group>";
 		};
 		C197CD6D1BED291A007F68E0 = {
@@ -362,6 +391,7 @@
 				C197CDED1BED2BE5007F68E0 /* GraphicsSystem */,
 				C197CDEC1BED2BDE007F68E0 /* TaskingSystem */,
 				C197CDEB1BED2BD5007F68E0 /* EventSystem */,
+				C15D73901BF3B428002FEEE3 /* MotionSystem */,
 			);
 			name = Systems;
 			sourceTree = "<group>";
@@ -526,6 +556,7 @@
 		C197CDF71BED2F5A007F68E0 /* FrameWorks */ = {
 			isa = PBXGroup;
 			children = (
+				C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */,
 				C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */,
 				C197CE651BED7FD1007F68E0 /* CoreAudio.framework */,
 				C197CE591BED6C8C007F68E0 /* FelixEngine.framework */,
@@ -569,6 +600,7 @@
 			files = (
 				C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */,
 				C197CE531BED5FC9007F68E0 /* IndexedMap.h in Headers */,
+				C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */,
 				C197CE371BED5EA3007F68E0 /* Projection.h in Headers */,
 				C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */,
 				C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */,
@@ -604,6 +636,7 @@
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
 				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
+				C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */,
 				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
 				C197CE3B1BED5EFB007F68E0 /* GraphicSystem.h in Headers */,
 				C197CE391BED5EBA007F68E0 /* System.h in Headers */,
@@ -739,6 +772,7 @@
 				C1124BE91BF17AC200CFADD7 /* MTLFrame.mm in Sources */,
 				C1124BEA1BF17AC200CFADD7 /* MTLMesh.mm in Sources */,
 				C1124BEB1BF17AC200CFADD7 /* MTLPipelineKey.mm in Sources */,
+				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
 				C1124BEC1BF17AC200CFADD7 /* MTLShader.mm in Sources */,
 				C1124BED1BF17AC200CFADD7 /* MTLTexture.mm in Sources */,
 				C1124BEE1BF17AC200CFADD7 /* MTLWindow.mm in Sources */,
