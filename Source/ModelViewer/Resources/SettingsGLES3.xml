@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<Settings>
+  <Systems>
+    <GCDTaskingSystem/>
+    <GLGraphicSystem>
+      <Version major="3" minor="0"/>
+      <Windows>
+        <Window name="MainWindow" title="Hello Felix" type="resizable">
+          <position>100, 100</position>
+          <size>512, 512</size>
+        </Window>
+      </Windows>
+      <ShaderFunctions>
+        <ShaderFunction name="SimpleVertex" type="vertex">
+          #version 300 es
+          in vec4 Position;
+          void main() {gl_Position = Position;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleColor" type="fragment">
+          #version 300 es
+          uniform mediump vec4 Color;
+          out mediump vec4 FragColor;
+          void main() {FragColor = Color;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleVertexUV" type="vertex">
+          #version 300 es
+          in vec4 Position;
+          in vec2 UV_0;
+          out vec2 UV;
+          void main() {
+            gl_Position = Position;
+            UV = UV_0;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="SimpleTexture" type="fragment">
+          #version 300 es
+          in mediump vec2 UV;
+          uniform sampler2D tex2D;
+          out mediump vec4 FragColor;
+          void main() {FragColor = texture(tex2D, UV);}
+        </ShaderFunction>
+      </ShaderFunctions>
+    </GLGraphicSystem>
+  </Systems>
+</Settings>
