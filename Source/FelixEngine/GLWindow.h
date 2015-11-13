@@ -100,12 +100,15 @@ namespace fx
         mSDLWindow = SDL_CreateWindow(NULL, 0, 0, mSize.w, mSize.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN |
                                       SDL_WINDOW_RESIZABLE);
+//        mSDLWindow = SDL_CreateWindow(NULL, 0, 0, mSize.w, mSize.h,
+//                                      SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
         #else
         // Get and check the SDL Window
         mSDLWindow = SDL_CreateWindow(mTitle.c_str(),
                                       mPosition.x, mPosition.y,
                                       mSize.w, mSize.h,
-                                      SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+                                      SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |
+                                      SDL_WINDOW_RESIZABLE);
         #endif
         
         

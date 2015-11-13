@@ -41,6 +41,5 @@
         </ShaderFunction>
       </ShaderFunctions>
     </GLGraphicSystem>
-    <IOSMotionSystem frequency="60"/>
   </Systems>
 </Settings>
