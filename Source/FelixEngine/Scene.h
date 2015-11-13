@@ -9,24 +9,36 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include <istream>
-#include <list>
+
+#include "EventHandler.h"
 #include "XMLTree.h"
 #include "Object.h"
 #include "View.h"
 #include "Material.h"
 
+#include <istream>
+#include <list>
+
 namespace fx
 {
-  class Scene
+  class Scene: public EventHandler
   {
   public:
-    Scene() {}
+    Scene()
+    {
+      setEventFlags(EVENT_APP_UPDATE);
+    }
     ~Scene()
     {
       clearObjects();
       clearViews();
       clearMaterials();
+    }
+    
+    virtual void handle(const Event &event)
+    {
+      if (event == EVENT_APP_UPDATE)
+        update();
     }
     
     bool setToXml(const XMLTree::Node *node)

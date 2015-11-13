@@ -8,6 +8,9 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
+
 @implementation MTLPipelineKey
 
 
@@ -68,3 +71,5 @@
 }
 
 @end
+
+#endif

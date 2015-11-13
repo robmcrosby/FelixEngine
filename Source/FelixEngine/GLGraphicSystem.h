@@ -11,10 +11,18 @@
 
 #include "GraphicSystem.h"
 #include <map>
-
-#define GL_GLEXT_PROTOTYPES 1
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+
+#if __IPHONEOS__
+  #define GLES2_ENABLED 1
+  #define GLES3_ENABLED 1
+  #include <OpenGLES/ES3/gl.h>
+  #include <OpenGLES/ES3/glext.h>
+#else
+  #define GL_GLEXT_PROTOTYPES 1
+  #include <SDL2/SDL_opengl.h>
+#endif
+
 
 namespace fx
 {
@@ -34,12 +42,14 @@ namespace fx
     GLGraphicSystem();
     virtual ~GLGraphicSystem();
     
-    virtual void update();
-    
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
     
+    virtual void render();
+    
     virtual void setVersion(int major, int minor);
+    int majorVersion() const {return mMajorVersion;}
+    int minorVersion() const {return mMinorVersion;}
     
     virtual Window*  getWindow(const std::string &name);
     virtual Frame*   getFrame(const std::string &name);
@@ -48,6 +58,8 @@ namespace fx
     virtual Texture* getTexture(const std::string &name);
     
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
+    
+    virtual SDL_Window* getMainSDLWindow();
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
@@ -78,6 +90,7 @@ namespace fx
     std::map<std::string, std::string> mShaderFunctions;
     
     SDL_GLContext mContext;
+    GLWindow *mMainWindow;
     int mMajorVersion;
     int mMinorVersion;
   };

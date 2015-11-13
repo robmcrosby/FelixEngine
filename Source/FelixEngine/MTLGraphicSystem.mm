@@ -10,10 +10,13 @@
 #include "UniformMap.h"
 #include "TextureMap.h"
 #include "ImageLoader.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 
 #import "MTLGraphicResources.h"
+
+#if !TARGET_IPHONE_SIMULATOR
 
 
 namespace fx
@@ -49,7 +52,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -88,7 +91,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -176,21 +179,46 @@ namespace fx
       bool success = true;
       
       // Create the window with SDL
+      #if TARGET_OS_IPHONE
+      SDL_DisplayMode displayMode;
+      SDL_GetDesktopDisplayMode(0, &displayMode);
+      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE);
+      mSize = ivec2(displayMode.w, displayMode.h);
+      
+      SDL_GL_CreateContext(mSDLWindow);
+      
+      #else
       mSDLWindow = SDL_CreateWindow(mTitle.c_str(), mPosition.x, mPosition.y, mSize.w, mSize.h, SDL_WINDOW_RESIZABLE);
+      
+      #endif
       
       // Get the NSView of the Window
       SDL_SysWMinfo *info = (SDL_SysWMinfo*)malloc(sizeof(SDL_SysWMinfo));
       SDL_VERSION(&info->version);
       SDL_GetWindowWMInfo(mSDLWindow, info);
       
+      #if TARGET_OS_IPHONE
+      success = [mMTLWindow setUIWindow:info->info.uikit.window];
+      #else
       success = [mMTLWindow setNSWindow:info->info.cocoa.window];
+      #endif
       free(info);
       
       if (success)
         setLoaded();
       return success;
     }
-    void update() {}
+    void update()
+    {
+      if (mMTLWindow != nil)
+      {
+        #if TARGET_OS_IPHONE
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        CGFloat scale = [UIScreen mainScreen].scale;
+        [mMTLWindow updateSize:size andScale:scale];
+        #endif
+      }
+    }
     
     MTLWindow *mMTLWindow;
     MTLFrameInterface *mMTLFrame;
@@ -212,7 +240,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -247,7 +275,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -346,13 +374,10 @@ using namespace fx;
 using namespace std;
 
 
-DEFINE_SYSTEM_ID(MTLGraphicSystem)
-
-
 MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
 {
   mContextInfo = new MTLContextInfo();
-  mInitFlags |= SDL_INIT_VIDEO;
+  mSDLInitFlags |= SDL_INIT_VIDEO;
 }
 
 MTLGraphicSystem::~MTLGraphicSystem()
@@ -441,11 +466,12 @@ bool MTLGraphicSystem::init()
   return success;
 }
 
-void MTLGraphicSystem::update()
+void MTLGraphicSystem::render()
 {
+  processTasks();
+  
   updateResources();
   updateUniforms();
-  processTasks();
 }
 
 InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
@@ -454,6 +480,11 @@ InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
   internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
   mMTLUniforms.push_back(internalUniformMap);
   return internalUniformMap;
+}
+
+SDL_Window* MTLGraphicSystem::getMainSDLWindow()
+{
+  return mWindows.size() ? mWindows.begin()->second->mSDLWindow : nullptr;
 }
 
 void MTLGraphicSystem::setNextWindowDrawables() const
@@ -470,9 +501,6 @@ void MTLGraphicSystem::presentWindowDrawables() const
 
 void MTLGraphicSystem::processTasks()
 {
-  clearTaskSlots();
-  loadTaskSlots();
-
   @autoreleasepool
   {
     // Wait on the Inflight Semaphore before creating a new Command Buffer
@@ -487,11 +515,12 @@ void MTLGraphicSystem::processTasks()
     
     setNextWindowDrawables();
     
+    mTaskSlotsMutex.lock();
     if (mTaskSlots.size())
       processTaskSlot(mTaskSlots.at(0));
+    mTaskSlotsMutex.unlock();
     
     presentWindowDrawables();
-    
     [mContextInfo->mCommandBuffer commit];
     mContextInfo->mCommandBuffer = nil;
   }
@@ -523,103 +552,105 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
     const MTLShaderInterface *shader = static_cast<const MTLShaderInterface*>(task.shader);
     const MTLMeshInterface   *mesh   = static_cast<const MTLMeshInterface*>(task.mesh);
     
-    
-    // Get the pipeline state
-    [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
-    [mContextInfo->mPipelineKey setBlendingEnabled:task.blendState.isBlendingEnabled()];
-    id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
-    
-    // Get the Render Descriptor.
-    MTLClearColor color = MTLClearColorMake(task.clearState.colors[0].red,
-                                            task.clearState.colors[0].green,
-                                            task.clearState.colors[0].blue,
-                                            task.clearState.colors[0].alpha);
-    [mContextInfo->mDescriptorKey setClearColor:color];
-    [mContextInfo->mDescriptorKey setClearColorBuffers:task.clearState.flags & CLEAR_COLOR];
-    
-    [mContextInfo->mDescriptorKey setClearDepth:task.clearState.depth];
-    [mContextInfo->mDescriptorKey setClearDepthBuffer:task.clearState.flags & CLEAR_DEPTH];
-    
-    MTLRenderPassDescriptor *renderPassDesc = [frame->mMTLFrame getDescriptorForKey:mContextInfo->mDescriptorKey];
-    
-    NSNumber *depthKey = [NSNumber numberWithInt:task.depthState.flags];
-    id <MTLDepthStencilState> depthState = [mContextInfo->mDepthStencilStates objectForKey:depthKey];
-    if (depthState == nil)
+    if ([frame->mMTLFrame loaded] && [shader->mMTLShader loaded] && [mesh->mMTLMesh loaded])
     {
-      MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
-      depthDesc.depthWriteEnabled = task.depthState.isWritingEnabled();
-      depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
+      // Get the pipeline state
+      [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
+      [mContextInfo->mPipelineKey setBlendingEnabled:task.blendState.isBlendingEnabled()];
+      id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
       
-      if (task.depthState.getTestFunction() == DEPTH_TEST_LESS)
-        depthDesc.depthCompareFunction = MTLCompareFunctionLess;
-      else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER)
-        depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
-      else if (task.depthState.getTestFunction() == DEPTH_TEST_EQUAL)
-        depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
-      else if (task.depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
-        depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
-      else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
-        depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
-      else if (task.depthState.getTestFunction() == DEPTH_TEST_NEVER)
-        depthDesc.depthCompareFunction = MTLCompareFunctionNever;
+      // Get the Render Descriptor.
+      MTLClearColor color = MTLClearColorMake(task.clearState.colors[0].red,
+                                              task.clearState.colors[0].green,
+                                              task.clearState.colors[0].blue,
+                                              task.clearState.colors[0].alpha);
+      [mContextInfo->mDescriptorKey setClearColor:color];
+      [mContextInfo->mDescriptorKey setClearColorBuffers:task.clearState.flags & CLEAR_COLOR];
       
-      depthState = [mContextInfo->mDevice newDepthStencilStateWithDescriptor:depthDesc];
-      depthDesc = nil;
+      [mContextInfo->mDescriptorKey setClearDepth:task.clearState.depth];
+      [mContextInfo->mDescriptorKey setClearDepthBuffer:task.clearState.flags & CLEAR_DEPTH];
       
-      [mContextInfo->mDepthStencilStates setObject:depthState forKey:depthKey];
-    }
-    
-    MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-    viewport.width  = [frame->mMTLFrame width];
-    viewport.height = [frame->mMTLFrame height];
-    
-    if (pipelineState && renderPassDesc && depthState && mContextInfo->mCommandBuffer != nil)
-    {
-      id <MTLRenderCommandEncoder> renderEncoder = [mContextInfo->mCommandBuffer renderCommandEncoderWithDescriptor:renderPassDesc];
-      renderPassDesc = nil;
+      MTLRenderPassDescriptor *renderPassDesc = [frame->mMTLFrame getDescriptorForKey:mContextInfo->mDescriptorKey];
       
-      // Set the context state with the render encoder
-      [renderEncoder setViewport:viewport];
-      [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
-      [renderEncoder setDepthStencilState:depthState];
-      [renderEncoder setRenderPipelineState:pipelineState];
-      
-      if (task.localUniforms)
+      NSNumber *depthKey = [NSNumber numberWithInt:task.depthState.flags];
+      id <MTLDepthStencilState> depthState = [mContextInfo->mDepthStencilStates objectForKey:depthKey];
+      if (depthState == nil)
       {
-        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.localUniforms);
-        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+        MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
+        depthDesc.depthWriteEnabled = task.depthState.isWritingEnabled();
+        depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
+        
+        if (task.depthState.getTestFunction() == DEPTH_TEST_LESS)
+          depthDesc.depthCompareFunction = MTLCompareFunctionLess;
+        else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER)
+          depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
+        else if (task.depthState.getTestFunction() == DEPTH_TEST_EQUAL)
+          depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
+        else if (task.depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
+          depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
+        else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
+          depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
+        else if (task.depthState.getTestFunction() == DEPTH_TEST_NEVER)
+          depthDesc.depthCompareFunction = MTLCompareFunctionNever;
+        
+        depthState = [mContextInfo->mDevice newDepthStencilStateWithDescriptor:depthDesc];
+        depthDesc = nil;
+        
+        [mContextInfo->mDepthStencilStates setObject:depthState forKey:depthKey];
       }
       
-      if (task.viewUniforms)
-      {
-        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.viewUniforms);
-        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
-      }
+      MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+      viewport.width  = [frame->mMTLFrame width];
+      viewport.height = [frame->mMTLFrame height];
       
-      if (task.materialUniforms)
+      if (pipelineState && renderPassDesc && depthState && mContextInfo->mCommandBuffer != nil)
       {
-        const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.materialUniforms);
-        [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
-      }
-
-      if (task.textureMap)
-      {
-        NSUInteger index = 0;
-        for (TextureMap::const_iterator itr = task.textureMap->begin(); itr != task.textureMap->end(); ++itr, ++index)
+        id <MTLRenderCommandEncoder> renderEncoder = [mContextInfo->mCommandBuffer renderCommandEncoderWithDescriptor:renderPassDesc];
+        renderPassDesc = nil;
+        
+        // Set the context state with the render encoder
+        [renderEncoder setViewport:viewport];
+        [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+        [renderEncoder setDepthStencilState:depthState];
+        [renderEncoder setRenderPipelineState:pipelineState];
+        
+        if (task.localUniforms)
         {
-          const MTLTextureInterface *texture = static_cast<const MTLTextureInterface*>(itr->texture());
-          MTLSamplerInterface *sampler = getSampler(itr->sampler());
-          if (texture != nullptr && sampler != nullptr && sampler->mSampler != nil)
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.localUniforms);
+          [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+        }
+        
+        if (task.viewUniforms)
+        {
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.viewUniforms);
+          [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+        }
+        
+        if (task.materialUniforms)
+        {
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.materialUniforms);
+          [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
+        }
+        
+        if (task.textureMap)
+        {
+          NSUInteger index = 0;
+          for (TextureMap::const_iterator itr = task.textureMap->begin(); itr != task.textureMap->end(); ++itr, ++index)
           {
-            [texture->mMTLTexture applyToEncoder:renderEncoder atIndex:index];
-            [renderEncoder setFragmentSamplerState:sampler->mSampler atIndex:index];
+            const MTLTextureInterface *texture = static_cast<const MTLTextureInterface*>(itr->texture());
+            MTLSamplerInterface *sampler = getSampler(itr->sampler());
+            if (texture != nullptr && sampler != nullptr && sampler->mSampler != nil)
+            {
+              [texture->mMTLTexture applyToEncoder:renderEncoder atIndex:index];
+              [renderEncoder setFragmentSamplerState:sampler->mSampler atIndex:index];
+            }
           }
         }
+        
+        [mesh->mMTLMesh drawToEncoder:renderEncoder withShader:shader->mMTLShader instanceCount:task.instances];
+        [renderEncoder endEncoding];
+        renderEncoder = nil;
       }
-      
-      [mesh->mMTLMesh drawToEncoder:renderEncoder withShader:shader->mMTLShader instanceCount:task.instances];
-      [renderEncoder endEncoding];
-      renderEncoder = nil;
     }
   }
 }
@@ -704,3 +735,110 @@ void MTLGraphicSystem::updateUniforms()
     }
   }
 }
+
+
+
+
+#else
+
+using namespace fx;
+using namespace std;
+
+
+MTLGraphicSystem::MTLGraphicSystem(): mMainWindow(0)
+{
+}
+
+MTLGraphicSystem::~MTLGraphicSystem()
+{
+}
+
+Window* MTLGraphicSystem::getWindow(const std::string &name)
+{
+  return nullptr;
+}
+
+Frame* MTLGraphicSystem::getFrame(const std::string &name)
+{
+  return nullptr;
+}
+
+Shader* MTLGraphicSystem::getShader(const std::string &name)
+{
+  return nullptr;
+}
+
+Mesh* MTLGraphicSystem::getMesh(const std::string &name)
+{
+  return nullptr;
+}
+
+Texture* MTLGraphicSystem::getTexture(const std::string &name)
+{
+  return nullptr;
+}
+
+bool MTLGraphicSystem::setToXml(const XMLTree::Node *node)
+{
+  return false;
+}
+
+bool MTLGraphicSystem::init()
+{
+  return false;
+}
+
+void MTLGraphicSystem::render()
+{
+}
+
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+{
+  return nullptr;
+}
+
+SDL_Window* MTLGraphicSystem::getMainSDLWindow()
+{
+  return nullptr;
+}
+
+void MTLGraphicSystem::setNextWindowDrawables() const
+{
+}
+
+void MTLGraphicSystem::presentWindowDrawables() const
+{
+}
+
+void MTLGraphicSystem::processTasks()
+{
+}
+
+void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+{
+}
+
+void MTLGraphicSystem::processTask(const GraphicTask &task)
+{
+}
+
+MTLSamplerInterface* MTLGraphicSystem::getSampler(const Sampler &sampler) const
+{
+  return nullptr;
+}
+
+int MTLGraphicSystem::getSamplerAddressMode(SAMPLER_COORD coord) const
+{
+  return 0;
+}
+
+void MTLGraphicSystem::updateResources()
+{
+}
+
+void MTLGraphicSystem::updateUniforms()
+{
+}
+
+
+#endif

@@ -9,6 +9,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLFrame
 {
@@ -40,6 +42,11 @@
   }
   
   return self;
+}
+
+-(BOOL)loaded
+{
+  return [_colorBuffers count] > 0;
 }
 
 -(void)setMetalDevice:(id <MTLDevice>)device
@@ -194,7 +201,7 @@
 
 -(void)addColorBuffer:(MTLTexture*)texture
 {
-  [texture setUsage:MTLTextureUsageRenderTarget];
+  [texture setUsage:MTLTextureUsageRenderTarget|MTLTextureUsageShaderRead|MTLTextureUsageShaderWrite];
   [_colorBuffers addObject:texture];
   
   [_pipelines removeAllObjects];
@@ -203,7 +210,7 @@
 
 -(void)setDepthBuffer:(MTLTexture*)texture
 {
-  [texture setUsage:MTLTextureUsageRenderTarget];
+  [texture setUsage:MTLTextureUsageRenderTarget|MTLTextureUsageShaderRead|MTLTextureUsageShaderWrite];
   _depthBuffer = texture;
   
   [_pipelines removeAllObjects];
@@ -212,3 +219,5 @@
 
 
 @end
+
+#endif

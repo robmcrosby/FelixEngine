@@ -22,6 +22,8 @@ namespace fx
     void lock() {SDL_LockMutex(mMutex);}
     void unlock() {SDL_UnlockMutex(mMutex);}
     
+    bool tryLock() {return !SDL_TryLockMutex(mMutex);}
+    
   private:
     SDL_mutex *mMutex;
   };

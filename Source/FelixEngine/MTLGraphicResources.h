@@ -6,11 +6,17 @@
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
+
+#if !TARGET_IPHONE_SIMULATOR
 #import <QuartzCore/CAMetalLayer.h>
 #import <Metal/Metal.h>
 
+#if TARGET_OS_IPHONE
+  #import <UIKit/UIKit.h>
+#else
+  #import <Cocoa/Cocoa.h>
+#endif
 
 
 @interface MTLShader : NSObject
@@ -21,6 +27,8 @@
 @property (nonatomic, readonly) NSUInteger shaderId;
 
 -(id)initWithDevice:(id <MTLDevice>)device andLibrary:(id <MTLLibrary>)library;
+
+-(BOOL)loaded;
 
 -(BOOL)setVertexFunction:(NSString*)name;
 -(BOOL)setFragmentFunction:(NSString*)name;
@@ -42,6 +50,8 @@
 @interface MTLMesh : NSObject
 
 -(id)initWithDevice:(id <MTLDevice>)device;
+
+-(BOOL)loaded;
 
 -(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements forName:(NSString*)name;
 -(BOOL)setIndexBuffer:(const void*)buffer withNumIndices:(NSUInteger)numIndices;
@@ -65,6 +75,8 @@
 @property (nonatomic, readwrite) MTLTextureUsage usage;
 
 -(id)initWithDevice:(id <MTLDevice>)device;
+
+-(BOOL)loaded;
 
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height;
 -(BOOL)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height;
@@ -112,6 +124,8 @@
 
 -(id)initWithDevice:(id <MTLDevice>)device;
 
+-(BOOL)loaded;
+
 -(void)setMetalDevice:(id <MTLDevice>)device;
 
 -(void)resizeToWidth:(NSUInteger)width Height:(NSUInteger)height;
@@ -134,10 +148,16 @@
 -(void)setMetalDevice:(id <MTLDevice>)device;
 -(void)setMetalFrame:(MTLFrame*)frame;
 
--(BOOL)setNSWindow:(NSWindow*)window;
+-(void)updateSize:(CGSize)size andScale:(CGFloat)scale;
 
 -(void)setNextDrawable;
 -(void)presentDrawable:(id <MTLCommandBuffer>)cmdBuffer;
+
+#if TARGET_OS_IPHONE
+-(BOOL)setUIWindow:(UIWindow*)window;
+#else
+-(BOOL)setNSWindow:(NSWindow*)window;
+#endif
 
 @end
 
@@ -165,3 +185,5 @@
 -(void)applyToShader:(MTLShader*)shader withEncoder:(id <MTLRenderCommandEncoder>)encoder;
 
 @end
+
+#endif

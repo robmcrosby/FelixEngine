@@ -7,13 +7,29 @@
 //
 
 #include "System.h"
+#include "TaskingSystem.h"
+#include "GCDTaskingSystem.h"
+#include "SDLEventSystem.h"
+#include "GLGraphicSystem.h"
+#include "MTLGraphicSystem.h"
+#include "IOSMotionSystem.h"
 
 
 using namespace fx;
 using namespace std;
 
+DEFINE_SYSTEM_ID(TaskingSystem)
+DEFINE_SYSTEM_ID(GCDTaskingSystem)
+DEFINE_SYSTEM_ID(SDLEventSystem)
+DEFINE_SYSTEM_ID(GLGraphicSystem)
+DEFINE_SYSTEM_ID(MTLGraphicSystem)
+DEFINE_SYSTEM_ID(IOSMotionSystem)
 
-System::System(SYSTEM_TYPE type): mType(type), mInitFlags(0)
+TaskingSystem* TaskingSystem::sInstance = nullptr;
+EventSystem* EventSystem::sInstance = nullptr;
+
+
+System::System(SYSTEM_TYPE type): mType(type), mSDLInitFlags(0)
 {
 }
 

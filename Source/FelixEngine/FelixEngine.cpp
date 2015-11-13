@@ -7,15 +7,17 @@
 //
 
 #include "FelixEngine.h"
-#include "GraphicSystem.h"
+
 #include "System.h"
 #include "Scene.h"
 #include "Platform.h"
+
 #include <SDL2/SDL.h>
 
 
 using namespace fx;
 using namespace std;
+
 
 FelixEngine* FelixEngine::Instance()
 {
@@ -23,29 +25,23 @@ FelixEngine* FelixEngine::Instance()
   return &engine;
 }
 
-System* FelixEngine::GetSystem(SYSTEM_TYPE type)
+FelixEngine::FelixEngine(): mShutdown(0)
 {
-  return Instance()->getSystem(type);
-}
-
-GraphicSystem* FelixEngine::GetGraphicSystem()
-{
-  return dynamic_cast<GraphicSystem*>(GetSystem(SYSTEM_GRAPHICS));
-}
-
-Scene* FelixEngine::GetScene(const std::string &name)
-{
-  return Instance()->getScene(name);
-}
-
-FelixEngine::FelixEngine(): mRefreshRate(16)
-{
+  setEventFlags(EVENT_APP_QUIT);
 }
 
 FelixEngine::~FelixEngine()
 {
   clearScenes();
   clearSystems();
+}
+
+void FelixEngine::handle(const Event &event)
+{
+  if (event == EVENT_APP_QUIT)
+    exit();
+  else
+    notify(event, DISPATCH_SERIAL);
 }
 
 bool FelixEngine::init(const std::string &settingsFile)
@@ -86,6 +82,7 @@ void FelixEngine::addScene(Scene *scene)
     if (prev && prev != scene)
       delete prev;
     mScenes[scene->name()] = scene;
+    addHandler(scene);
   }
 }
 
@@ -105,34 +102,53 @@ void FelixEngine::deleteScene(const std::string &name)
   }
 }
 
-Scene* FelixEngine::getScene(const std::string &name)
-{
-  return mScenes.count(name) ? mScenes.at(name) : nullptr;
-}
-
 int FelixEngine::runLoop()
 {
-  bool quit = false;
-  SDL_Event event;
-  
-  while (!quit)
+#if __IPHONEOS__
+  // Hand over control to IOS.
+  SDL_Window *window = getGraphicSystem() ? getGraphicSystem()->getMainSDLWindow() : nullptr;
+  if (window)
+    SDL_iPhoneSetAnimationCallback(window, 1, &UpdateFrame, (void*)this);
+  else
   {
-    while (SDL_PollEvent(&event))
-    {
-      if (event.type == SDL_QUIT)
-        quit = true;
-    }
-    updateFrame();
+    cerr << "Error: No SDL window avalible for setting up the iPhone Animation Callback." << endl;
+    SDL_Quit();
+    return 1;
   }
-  
+#else
+  // Run the regular loop
+  while (!mShutdown)
+    updateFrame();
   SDL_Quit();
+#endif
   return 0;
 }
+
+void FelixEngine::updateFrame()
+{
+  notify(Event(EVENT_APP_UPDATE, DISPATCH_MULTIPLE));
+  
+  EventSystem *eventSystem = GetEventSystem();
+  if (eventSystem)
+    eventSystem->pollEvents();
+  
+  GraphicSystem *graphicSystem = getGraphicSystem();
+  if (graphicSystem)
+    graphicSystem->render();
+}
+
+void FelixEngine::UpdateFrame(void *ptr)
+{
+  FelixEngine *engine = static_cast<FelixEngine*>(ptr);
+  if (engine)
+    engine->updateFrame();
+}
+
 
 bool FelixEngine::loadSystems(const XMLTree::Node &node)
 {
   bool success = true;
-  int  initFlags = 0;
+  int  sdlInitFlags = 0;
   
   for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
@@ -140,12 +156,21 @@ bool FelixEngine::loadSystems(const XMLTree::Node &node)
     if (system)
     {
       success &= system->setToXml(*itr);
-      initFlags |= system->getInitFlags();
+      sdlInitFlags |= system->getSDLInitFlags();
       addSystem(system);
     }
   }
   
-  if (success && SDL_Init(initFlags) < 0)
+  // Add the default tasking system if there is none found.
+  if (!getTaskingSystem())
+    addSystem(System::Create("TaskingSystem"));
+  
+  // Add the default event system if there is none found.
+  if (!getEventSystem())
+    addSystem(System::Create("SDLEventSystem"));
+  getEventSystem()->addHandler(this);
+  
+  if (success && SDL_Init(sdlInitFlags) < 0)
   {
     cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
     success = false;
@@ -164,6 +189,7 @@ void FelixEngine::addSystem(System *system)
     if (mSystems.count(system->type()))
       delete mSystems.at(system->type());
     mSystems[system->type()] = system;
+    addHandler(system);
   }
 }
 
@@ -172,17 +198,4 @@ void FelixEngine::clearSystems()
   for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
     delete itr->second;
   mSystems.clear();
-}
-
-System* FelixEngine::getSystem(SYSTEM_TYPE type)
-{
-  return mSystems.count(type) ? mSystems.at(type) : nullptr;
-}
-
-void FelixEngine::updateFrame()
-{
-  for (map<SYSTEM_TYPE, System*>::iterator itr = mSystems.begin(); itr != mSystems.end(); ++itr)
-    itr->second->update();
-  for (map<string, Scene*>::iterator itr = mScenes.begin(); itr != mScenes.end(); ++itr)
-    itr->second->update();
 }

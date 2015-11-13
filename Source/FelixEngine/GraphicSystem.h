@@ -12,6 +12,8 @@
 #include "System.h"
 #include "GraphicResources.h"
 #include "GraphicTask.h"
+#include "MultiVector.h"
+#include "Mutex.h"
 
 
 namespace fx
@@ -25,8 +27,11 @@ namespace fx
   class GraphicSystem: public System
   {
   public:
-    GraphicSystem(): System(SYSTEM_GRAPHICS) {mTaskSlots.push_back(TaskSlot());}
-    virtual ~GraphicSystem() {}
+    GraphicSystem();
+    virtual ~GraphicSystem();
+    
+    virtual void handle(const Event &event);
+    virtual void render() = 0;
     
     virtual Window* getWindow(const std::string &name) = 0;
     virtual Frame* getFrame(const std::string &name) = 0;
@@ -37,42 +42,28 @@ namespace fx
     Resource* getResource(const std::string &type, const std::string &name);
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map) = 0;
     
-    void addGraphicTask(const GraphicTask &task)
-    {
-      // TODO: make this work with multiple threads.
-      mTaskList.push_back(task);
-    }
+    void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
+    
+    virtual SDL_Window* getMainSDLWindow() = 0;
+    
+  private:
+    void update();
+    void clearTaskSlots();
+    void loadTaskSlots();
     
   protected:
-    typedef std::list<GraphicTask> TaskList;
+    typedef MultiVector<GraphicTask> TaskCollection;
+    
+    typedef std::vector<GraphicTask> TaskBuffer;
     typedef std::vector<GraphicTask> TaskSlot;
     typedef std::vector<TaskSlot> TaskSlots;
     
-    void clearTaskSlots()
-    {
-      for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
-        itr->clear();
-    }
+    TaskCollection mTaskCollection;
+    TaskBuffer mTaskBuffer;
     
-    void loadTaskSlots()
-    {
-      mTaskList.sort();
-      for (TaskList::iterator itr = mTaskList.begin(); itr != mTaskList.end(); ++itr)
-      {
-        if (itr->isViewTask())
-          mTaskSlots.at(0).push_back(*itr);
-        else
-        {
-          if (itr->viewIndex >= (int)mTaskSlots.size())
-            mTaskSlots.resize(itr->viewIndex+1);
-          mTaskSlots.at(itr->viewIndex).push_back(*itr);
-        }
-      }
-      mTaskList.clear();
-    }
-    
-    TaskList  mTaskList;
     TaskSlots mTaskSlots;
+    Mutex mTaskSlotsMutex;
+    Mutex mUpdateMutex;
     
   protected:
     bool addWindows(const XMLTree::Node *node);

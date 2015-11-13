@@ -13,6 +13,7 @@
 #include <map>
 
 #include "XMLTree.h"
+#include "Delegate.h"
 
 
 namespace fx
@@ -25,7 +26,10 @@ namespace fx
   class Component
   {
   public:
-    Component(const std::string &type, Object *obj): mType(type), mObject(obj) {}
+    Component(const std::string &type, Object *obj): mType(type), mObject(obj)
+    {
+      mUpdateDelegate = UpdateDelegate::Create<Component, &Component::update>(this);
+    }
     virtual ~Component() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
@@ -40,7 +44,11 @@ namespace fx
       return success;
     }
     virtual bool init() {return true;}
-    virtual void update() {}
+    
+    void update(void*) {}
+    
+    typedef Delegate<void, void*> UpdateDelegate;
+    UpdateDelegate& getUpdateDelegate() {return mUpdateDelegate;}
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
@@ -56,11 +64,7 @@ namespace fx
       virtual ~ComponentId() {}
       virtual Component* create(Object *obj) = 0;
     };
-    static std::map<std::string, ComponentId*>& GetComponentIdMap()
-    {
-      static std::map<std::string, ComponentId*> compIdMap;
-      return compIdMap;
-    }
+    static std::map<std::string, ComponentId*>& GetComponentIdMap();
     
     /**
      *
@@ -93,6 +97,7 @@ namespace fx
   protected:
     std::string mName, mType;
     Object *mObject;
+    UpdateDelegate mUpdateDelegate;
   };
   
   /**

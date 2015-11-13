@@ -8,6 +8,9 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
+
 @implementation MTLShader
 {
   id <MTLDevice> _mtlDevice;
@@ -39,6 +42,11 @@
   }
   
   return self;
+}
+
+-(BOOL)loaded
+{
+  return _vertexFunction != nil && _fragmentFunction != nil;
 }
 
 -(void)dealloc
@@ -120,3 +128,5 @@
 }
 
 @end
+
+#endif

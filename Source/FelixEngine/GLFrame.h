@@ -29,13 +29,15 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
         else
           setNotLoading();
       }
+      if (loaded() && mGLWindow)
+        mSize = mGLWindow->size();
     }
     
     void setToWindow(GLWindow *window)
@@ -52,9 +54,14 @@ namespace fx
       {
         size = mGLWindow->size();
         mGLWindow->setActive();
+        glBindFramebuffer(GL_FRAMEBUFFER, mGLWindow->frameBufferId());
+        glViewport(0, 0, mGLWindow->size().w, mGLWindow->size().h);
       }
-      glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-      glViewport(0, 0, size.w, size.h);
+      else
+      {
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        glViewport(0, 0, size.w, size.h);
+      }
     }
     
     void clear(const ClearState &clearState) const
@@ -70,7 +77,7 @@ namespace fx
       if (clearState.flags & CLEAR_DEPTH)
       {
         glDepthMask(GL_TRUE);
-        glClearDepth(clearState.depth);
+        glClearDepthf(clearState.depth);
         clearFlags |= GL_DEPTH_BUFFER_BIT;
       }
       if (clearState.flags & CLEAR_STENCEIL)
@@ -171,7 +178,12 @@ namespace fx
           glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
           success = true;
         }
-        
+        else if (mFormat == COLOR_DEPTH24)
+        {
+          glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.w, size.h);
+          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
+          success = true;
+        }
         glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
         return success;
       }
@@ -204,7 +216,12 @@ namespace fx
           glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
           success = true;
         }
-        
+        else if (mFormat == COLOR_DEPTH24)
+        {
+          glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, size.w, size.h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
+          success = true;
+        }
         glBindTexture(GL_TEXTURE_2D, 0);
         return success;
       }
@@ -218,7 +235,7 @@ namespace fx
     bool load()
     {
       bool success = false;
-      if (!isLoaded())
+      if (!loaded())
       {
         GLint curFrameBuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
@@ -258,7 +275,8 @@ namespace fx
         }
         else if (itr->format == COLOR_DEPTH32F)
         {
-          mDepthBuffer.setFormat(itr->format);
+          COLOR_TYPE format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
+          mDepthBuffer.setFormat(format);
           setTexture(mDepthBuffer, itr->name);
           success &= mDepthBuffer.load(mSize);
         }

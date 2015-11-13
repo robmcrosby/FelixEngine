@@ -8,6 +8,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLWindow
 {
@@ -16,11 +18,15 @@
   MTLTexture *_colorTexture;
   MTLTexture *_depthTexture;
   MTLFrame   *_mtlFrame;
-  
-  NSWindow     *_nsWindow;
+
   CAMetalLayer *_layer;
-  
   id <CAMetalDrawable>  _drawable;
+  
+  #if TARGET_OS_IPHONE
+  UIWindow *_uiWindow;
+  #else
+  NSWindow *_nsWindow;
+  #endif
 }
 
 -(id)init
@@ -48,10 +54,6 @@
   _colorTexture = [[MTLTexture alloc] initWithDevice:_mtlDevice];
   [_colorTexture setFormat:MTLPixelFormatBGRA8Unorm];
   [_mtlFrame addColorBuffer:_colorTexture];
-  
-  //_depthTexture = [[MTLTexture alloc] initWithDevice:_mtlDevice];
-  //[_depthTexture setFormat:MTLPixelFormatDepth32Float];
-  //[_mtlFrame setDepthBuffer:_depthTexture];
 }
 
 -(void)setMetalFrame:(MTLFrame*)frame
@@ -69,6 +71,46 @@
   _drawable = nil;
 }
 
+#if TARGET_OS_IPHONE
+-(BOOL)setUIWindow:(UIWindow *)window
+{
+  UIView *uiView = window.rootViewController.view;
+  if (_mtlDevice != nil)
+  {
+    // Setup metal layer and add as sub layer to view
+    _layer = [CAMetalLayer layer];
+    _layer.device = _mtlDevice;
+    _layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+    
+    _layer.presentsWithTransaction = NO;
+    _layer.drawsAsynchronously     = YES;
+    _layer.needsDisplayOnBoundsChange = YES;
+    _layer.contentsScale = [UIScreen mainScreen].scale;
+    
+    // Change this to NO if the compute encoder is used as the last pass on the drawable texture
+    _layer.framebufferOnly = YES;
+    
+    // Add metal layer to the views layer hierarchy
+    [_layer setFrame:uiView.layer.frame];
+    [uiView.layer addSublayer:_layer];
+    
+    uiView.opaque = YES;
+    uiView.backgroundColor = nil;
+    uiView.contentScaleFactor = [UIScreen mainScreen].scale;
+    
+    if (_mtlFrame != nil)
+      [_mtlFrame setWidth:uiView.layer.frame.size.width Height:uiView.layer.frame.size.height];
+    
+    // Hide the Status Bar
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    
+    return YES;
+  }
+  
+  return NO;
+}
+
+#else
 -(BOOL)setNSWindow:(NSWindow *)window
 {
   _nsWindow = window;
@@ -84,6 +126,16 @@
     return YES;
   }
   return NO;
+}
+#endif
+
+-(void)updateSize:(CGSize)size andScale:(CGFloat)scale
+{
+  if (_layer != nil && (_layer.frame.size.width != size.width || _layer.frame.size.height != size.height))
+  {
+    [_layer setFrame:CGRectMake(0, 0, size.width, size.height)];
+    [_layer setDrawableSize:CGSizeMake(size.width*scale, size.height*scale)];
+  }
 }
 
 -(void)setNextDrawable
@@ -104,3 +156,5 @@
 }
 
 @end
+
+#endif

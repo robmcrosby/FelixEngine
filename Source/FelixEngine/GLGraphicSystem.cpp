@@ -7,7 +7,6 @@
 //
 
 #include "GLGraphicSystem.h"
-
 #include "GLUniformMap.h"
 
 #include "GLWindow.h"
@@ -21,12 +20,9 @@ using namespace fx;
 using namespace std;
 
 
-DEFINE_SYSTEM_ID(GLGraphicSystem)
-
-
-GLGraphicSystem::GLGraphicSystem(): mContext(0)
+GLGraphicSystem::GLGraphicSystem(): mContext(0), mMainWindow(0)
 {
-  mInitFlags |= SDL_INIT_VIDEO;
+  mSDLInitFlags |= SDL_INIT_VIDEO;
 }
 
 GLGraphicSystem::~GLGraphicSystem()
@@ -104,12 +100,17 @@ bool GLGraphicSystem::init()
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, mMajorVersion);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, mMinorVersion);
   
-  // Should be Apple Only.
+  #if !__IPHONEOS__
   if (mMajorVersion > 2)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+  #endif
   
   for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  {
     success &= itr->second->init();
+    if (!mMainWindow && success)
+      mMainWindow = itr->second;
+  }
   
   cout << glGetString(GL_VERSION) << endl;
   
@@ -143,14 +144,13 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
   return success;
 }
 
-void GLGraphicSystem::update()
+void GLGraphicSystem::render()
 {
   updateResources();
   updateUniforms();
   processTasks();
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->swapBuffers();
 }
+
 
 InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
@@ -159,13 +159,20 @@ InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
   return internalMap;
 }
 
+SDL_Window* GLGraphicSystem::getMainSDLWindow()
+{
+  return mMainWindow ? mMainWindow->getSDLWindow() : nullptr;
+}
+
 void GLGraphicSystem::processTasks()
 {
-  clearTaskSlots();
-  loadTaskSlots();
-  
+  mTaskSlotsMutex.lock();
   if (mTaskSlots.size())
     processTaskSlot(mTaskSlots.at(0));
+  mTaskSlotsMutex.unlock();
+  
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->swapBuffers();
 }
 
 void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
@@ -196,25 +203,28 @@ void GLGraphicSystem::processTask(const GraphicTask &task)
     const GLShader *shader = static_cast<const GLShader*>(task.shader);
     const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mesh);
     
-    // Set the state for the Frame
-    frame->use();
-    if (task.isClearTask())
-      frame->clear(task.clearState);
-    frame->setDepthState(task.depthState);
-    frame->setBlendState(task.blendState);
-    
-    // Set the state for the Shader
-    shader->use();
-    if (task.viewUniforms)
-      static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
-    if (task.materialUniforms)
-      static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
-    if (task.localUniforms)
-      static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
-    shader->applyTextureMap(task.textureMap);
-    
-    // Draw the Mesh
-    mesh->draw(shader, task.instances, task.subMesh);
+    if (frame->loaded() && shader->loaded() && mesh->loaded())
+    {
+      // Set the state for the Frame
+      frame->use();
+      if (task.isClearTask())
+        frame->clear(task.clearState);
+      frame->setDepthState(task.depthState);
+      frame->setBlendState(task.blendState);
+      
+      // Set the state for the Shader
+      shader->use();
+      if (task.viewUniforms)
+        static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
+      if (task.materialUniforms)
+        static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
+      if (task.localUniforms)
+        static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
+      shader->applyTextureMap(task.textureMap);
+      
+      // Draw the Mesh
+      mesh->draw(shader, task.instances, task.subMesh);
+    }
   }
 }
 

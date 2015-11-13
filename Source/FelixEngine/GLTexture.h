@@ -26,7 +26,7 @@ namespace fx
     
     void update()
     {
-      if (isLoading())
+      if (loading())
       {
         if (load())
           setLoaded();
@@ -56,7 +56,7 @@ namespace fx
   private:
     bool load()
     {
-      if (!isLoaded() && !mFBOTexture)
+      if (!loaded() && !mFBOTexture)
         return loadImageFile(mFile);
       return false;
     }

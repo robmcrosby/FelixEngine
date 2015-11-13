@@ -8,6 +8,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLMesh
 {
@@ -45,6 +47,11 @@
   _mtlDevice = nil;
   _vertexBuffers = nil;
   _indexBuffer = nil;
+}
+
+-(BOOL)loaded
+{
+  return [_vertexBuffers count] > 0;
 }
 
 -(BOOL)addVertexBuffer:(const void*)buffer withElementSize:(NSUInteger)elementSize withNumElements:(NSUInteger)numElements forName:(NSString*)name
@@ -101,3 +108,5 @@
 }
 
 @end
+
+#endif

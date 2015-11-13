@@ -11,7 +11,7 @@
 
 #include <map>
 #include <vector>
-#include "Semephore.h"
+#include "Semaphore.h"
 
 namespace fx
 {
@@ -111,7 +111,7 @@ namespace fx
   private:
     std::vector<T> mArray;
     std::map<std::string, int> mMap;
-    mutable Semephore mSemephore;
+    mutable Semaphore mSemephore;
   };
 }
 

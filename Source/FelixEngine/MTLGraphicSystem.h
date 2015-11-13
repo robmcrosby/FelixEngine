@@ -32,7 +32,7 @@ namespace fx
     MTLGraphicSystem();
     virtual ~MTLGraphicSystem();
     
-    virtual void update();
+    virtual void render();
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
@@ -44,6 +44,8 @@ namespace fx
     virtual Texture* getTexture(const std::string &name);
     
     virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
+    
+    virtual SDL_Window* getMainSDLWindow();
     
     MTLContextInfo* getContextInfo() const {return mContextInfo;}
     

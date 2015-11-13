@@ -8,6 +8,8 @@
 
 #import "MTLGraphicResources.h"
 
+#if !TARGET_IPHONE_SIMULATOR
+
 
 @implementation MTLTexture
 {
@@ -37,6 +39,11 @@
 {
   _mtlDevice = nil;
   _texture = nil;
+}
+
+-(BOOL)loaded
+{
+  return _texture != nil;
 }
 
 -(BOOL)loadImage:(const void*)image Width:(NSUInteger)width Height:(NSUInteger)height
@@ -135,3 +142,5 @@
 }
 
 @end
+
+#endif

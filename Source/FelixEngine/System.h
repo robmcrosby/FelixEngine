@@ -9,7 +9,7 @@
 #ifndef System_h
 #define System_h
 
-#include "Resource.h"
+#include "EventHandler.h"
 #include "XMLTree.h"
 
 #include <iostream>
@@ -22,6 +22,9 @@ namespace fx
   enum SYSTEM_TYPE
   {
     SYSTEM_GRAPHICS = 0,
+    SYSTEM_TASKING,
+    SYSTEM_EVENTS,
+    SYSTEM_MOTION,
     SYSTEM_AUDIO,
     SYSTEM_PHYSICS,
     SYSTEM_OTHER,
@@ -31,23 +34,21 @@ namespace fx
   /**
    * Defines the base class for a System used in the Felix Engine.
    */
-  class System
+  class System: public EventHandler
   {
   public:
     System(SYSTEM_TYPE type = SYSTEM_OTHER);
     virtual ~System();
     
-    virtual void update() = 0;
-    
     virtual bool setToXml(const XMLTree::Node *node) = 0;
     virtual bool init() = 0;
     
     SYSTEM_TYPE type() const {return mType;}
-    int getInitFlags() const {return mInitFlags;}
+    int getSDLInitFlags() const {return mSDLInitFlags;}
     
   protected:
     SYSTEM_TYPE mType;
-    int mInitFlags;
+    int mSDLInitFlags;
     
   public:
     static System* Create(const std::string &name);

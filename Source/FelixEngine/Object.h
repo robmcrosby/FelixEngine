@@ -50,7 +50,7 @@ namespace fx
     void update()
     {
       for (iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->update();
+        (*itr)->getUpdateDelegate()(nullptr);
     }
     
     void setName(const std::string &name) {mName = name;}
