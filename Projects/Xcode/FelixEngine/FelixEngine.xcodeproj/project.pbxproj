@@ -117,7 +117,11 @@
 		C1B00EC31BF6944A0060BE21 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 37C531C41BBCD4BB006DC58A /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1B00EC61BF694660060BE21 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1B00EC41BF694660060BE21 /* DefaultLibrary.metal */; };
 		C1B00EC71BF694660060BE21 /* SettingsGL41.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EC51BF694660060BE21 /* SettingsGL41.xml */; };
-		C1B00EC91BF694750060BE21 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EC81BF694750060BE21 /* TriangleScene.xml */; };
+		C1B00ECD1BF7E1D90060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECC1BF7E1D90060BE21 /* Scenes */; };
+		C1B00ED41BF7E4B70060BE21 /* ViewSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00ED21BF7E4B70060BE21 /* ViewSlots.cpp */; };
+		C1B00ED51BF7E4B70060BE21 /* ViewSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00ED31BF7E4B70060BE21 /* ViewSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1B00ED71BF7E6C10060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ED61BF7E6C10060BE21 /* Meshes */; };
+		C1B00EDD1BF7F4830060BE21 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -270,7 +274,11 @@
 		C1B00EBB1BF693E90060BE21 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Source/ModelViewer/main.cpp; sourceTree = "<group>"; };
 		C1B00EC41BF694660060BE21 /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/ModelViewer/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
 		C1B00EC51BF694660060BE21 /* SettingsGL41.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGL41.xml; path = ../../../../Source/ModelViewer/Resources/SettingsGL41.xml; sourceTree = "<group>"; };
-		C1B00EC81BF694750060BE21 /* TriangleScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TriangleScene.xml; path = ../../../../Source/ModelViewer/Resources/TriangleScene.xml; sourceTree = "<group>"; };
+		C1B00ECC1BF7E1D90060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
+		C1B00ED21BF7E4B70060BE21 /* ViewSlots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ViewSlots.cpp; path = ../../../../Source/FelixEngine/ViewSlots.cpp; sourceTree = "<group>"; };
+		C1B00ED31BF7E4B70060BE21 /* ViewSlots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewSlots.h; path = ../../../../Source/FelixEngine/ViewSlots.h; sourceTree = "<group>"; };
+		C1B00ED61BF7E6C10060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
+		C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/ModelViewer/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -528,6 +536,8 @@
 				37B48FDB1BC9837B00FC97A5 /* Projection.cpp */,
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
 				37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */,
+				C1B00ED31BF7E4B70060BE21 /* ViewSlots.h */,
+				C1B00ED21BF7E4B70060BE21 /* ViewSlots.cpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -605,11 +615,13 @@
 		C1B00EBA1BF693CA0060BE21 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				C1B00EC81BF694750060BE21 /* TriangleScene.xml */,
-				C1B00EC41BF694660060BE21 /* DefaultLibrary.metal */,
 				C1B00EC51BF694660060BE21 /* SettingsGL41.xml */,
+				C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */,
+				C1B00EC41BF694660060BE21 /* DefaultLibrary.metal */,
 				C1B00EB11BF693A60060BE21 /* Assets.xcassets */,
 				C1B00EB61BF693A60060BE21 /* Info.plist */,
+				C1B00ED61BF7E6C10060BE21 /* Meshes */,
+				C1B00ECC1BF7E1D90060BE21 /* Scenes */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -627,6 +639,7 @@
 				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
 				37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */,
 				37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */,
+				C1B00ED51BF7E4B70060BE21 /* ViewSlots.h in Headers */,
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
@@ -807,9 +820,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1B00EC91BF694750060BE21 /* TriangleScene.xml in Resources */,
+				C1B00ECD1BF7E1D90060BE21 /* Scenes in Resources */,
+				C1B00EDD1BF7F4830060BE21 /* SettingsMetal.xml in Resources */,
 				C1B00EC71BF694660060BE21 /* SettingsGL41.xml in Resources */,
 				C1B00EB21BF693A60060BE21 /* Assets.xcassets in Resources */,
+				C1B00ED71BF7E6C10060BE21 /* Meshes in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +860,7 @@
 				37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */,
+				C1B00ED41BF7E4B70060BE21 /* ViewSlots.cpp in Sources */,
 				37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */,
 				C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
@@ -1039,6 +1055,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = ../../../ThirdParty/SDL2/OSX/;
 				INFOPLIST_FILE = ModelViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.ModelViewer;
@@ -1052,6 +1069,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = ../../../ThirdParty/SDL2/OSX/;
 				INFOPLIST_FILE = ModelViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.ModelViewer;

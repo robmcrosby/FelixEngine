@@ -14,11 +14,11 @@
 #define SETTINGS_FILE "SettingsGLES3.xml"
 //#define SETTINGS_FILE "SettingsMetal.xml"
 #else
-#define SETTINGS_FILE "SettingsGL41.xml"
-//#define SETTINGS_FILE "SettingsMetal.xml"
+//#define SETTINGS_FILE "SettingsGL41.xml"
+#define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
-#define SCENE_FILE "TriangleScene.xml"
+#define SCENE_FILE "Scenes/CubeScene.xml"
 
 
 using namespace std;

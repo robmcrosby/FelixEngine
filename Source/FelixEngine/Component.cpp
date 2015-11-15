@@ -8,12 +8,14 @@
 
 #include "Component.h"
 #include "RenderSlots.h"
+#include "ViewSlots.h"
 
 
 using namespace fx;
 using namespace std;
 
 DEFINE_COMPONENT_ID(RenderSlots);
+DEFINE_COMPONENT_ID(ViewSlots);
 
 
 map<string, Component::ComponentId*>& Component::GetComponentIdMap()

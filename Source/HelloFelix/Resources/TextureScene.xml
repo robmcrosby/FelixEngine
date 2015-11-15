@@ -2,7 +2,7 @@
 <Scene name="TextureScene">
   <Model name="Quad">
     <RenderSlots>
-      <Slot layer="0">
+      <Slot layer="0" frame="MainWindow">
         <Mesh name="QuadMesh" primitive="strip">
           <Buffer attribute="Position" components="4">
             -0.8,  0.8, 0.0, 1.0,
@@ -17,11 +17,9 @@
             1.0, 0.0,
           </Buffer>
         </Mesh>
-        <View frame="MainWindow">
-          <ClearState>
-            <Color0>0.5, 0.5, 0.5, 1.0</Color0>
-          </ClearState>
-        </View>
+        <ClearState>
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
         <Material>
           <Shader name="TextureShader">
             <Vertex function="SimpleVertexUV"/>

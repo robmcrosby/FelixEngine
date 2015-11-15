@@ -71,8 +71,8 @@ namespace fx
     
   private:
     void processTasks();
-    void processTaskSlot(const TaskSlot &slot);
-    void processTask(const GraphicTask &task);
+    void processTaskSlot(const TaskSlot &slot, const GraphicTask *view);
+    void processTask(const GraphicTask *task, const GraphicTask *view);
     
     void updateResources();
     void updateUniforms();

@@ -168,62 +168,62 @@ void GLGraphicSystem::processTasks()
 {
   mTaskSlotsMutex.lock();
   if (mTaskSlots.size())
-    processTaskSlot(mTaskSlots.at(0));
+    processTaskSlot(mTaskSlots.at(0), nullptr);
   mTaskSlotsMutex.unlock();
   
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
 }
 
-void GLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+void GLGraphicSystem::processTaskSlot(const TaskSlot &slot, const GraphicTask *view)
 {
   for (TaskSlot::const_iterator itr = slot.begin(); itr != slot.end(); ++itr)
-    processTask(*itr);
+    processTask(&(*itr), view);
 }
 
-void GLGraphicSystem::processTask(const GraphicTask &task)
+void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
 {
-  if (task.isViewTask())
+  if (task->isViewTask())
   {
-    const GLFrame *frame = static_cast<const GLFrame*>(task.frame);
+    const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
     frame->use();
-    if (task.isClearTask())
-      frame->clear(task.clearState);
+    if (task->isClearTask())
+      frame->clear(task->clearState);
     
-    if (task.viewIndex < (int)mTaskSlots.size())
+    if (task->viewIndex < (int)mTaskSlots.size())
     {
-      const TaskSlot &slot = mTaskSlots.at(task.viewIndex);
+      const TaskSlot &slot = mTaskSlots.at(task->viewIndex);
       if (slot.size())
-        processTaskSlot(slot);
+        processTaskSlot(slot,task);
     }
   }
-  else if (task.isDrawTask())
+  else if (task->isDrawTask())
   {
-    const GLFrame  *frame  = static_cast<const GLFrame*>(task.frame);
-    const GLShader *shader = static_cast<const GLShader*>(task.shader);
-    const GLMesh   *mesh   = static_cast<const GLMesh*>(task.mesh);
+    const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
+    const GLShader *shader = static_cast<const GLShader*>(task->shader);
+    const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
     
-    if (frame->loaded() && shader->loaded() && mesh->loaded())
+    if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
     {
       // Set the state for the Frame
       frame->use();
-      if (task.isClearTask())
-        frame->clear(task.clearState);
-      frame->setDepthState(task.depthState);
-      frame->setBlendState(task.blendState);
+      if (task->isClearTask())
+        frame->clear(task->clearState);
+      frame->setDepthState(task->depthState);
+      frame->setBlendState(task->blendState);
       
       // Set the state for the Shader
       shader->use();
-      if (task.viewUniforms)
-        static_cast<const GLUniformMap*>(task.viewUniforms)->applyToShader(shader);
-      if (task.materialUniforms)
-        static_cast<const GLUniformMap*>(task.materialUniforms)->applyToShader(shader);
-      if (task.localUniforms)
-        static_cast<const GLUniformMap*>(task.localUniforms)->applyToShader(shader);
-      shader->applyTextureMap(task.textureMap);
+      if (view && view->localUniforms)
+        static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
+      if (task->materialUniforms)
+        static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
+      if (task->localUniforms)
+        static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
+      shader->applyTextureMap(task->textureMap);
       
       // Draw the Mesh
-      mesh->draw(shader, task.instances, task.subMesh);
+      mesh->draw(shader, task->instances, task->subMesh);
     }
   }
 }

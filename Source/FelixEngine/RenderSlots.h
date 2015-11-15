@@ -61,16 +61,20 @@ namespace fx
     
     bool setMesh(const XMLTree::Node &node);
     bool setView(const XMLTree::Node &node);
+    bool setFrame(const XMLTree::Node &node);
     bool setMaterial(const XMLTree::Node &node);
     
     void setMesh(const std::string &name);
     void setMesh(Mesh *mesh) {mMesh = mesh;}
     Mesh* mesh() const {return mMesh;}
     
+    void setFrame(const std::string &name);
+    void setFrame(Frame *frame) {mFrame = frame;}
+    Frame* frame() const {return mFrame;}
+    
     void setView(const std::string &name);
-    void setView(View *view) {mViewPtr = view;}
-    void setToInternalView() {mViewPtr = &mView;}
-    View* viewPointer() const {return mViewPtr;}
+    void setView(View *view) {mView = view;}
+    View* view() const {return mView;}
     
     void setMaterial(const std::string &name);
     void setMaterial(Material *material) {mMaterialPtr = material;}
@@ -87,14 +91,15 @@ namespace fx
     BlendState mBlendState;
     ClearState mClearState;
     
-    Mesh *mMesh;
-    View mView, *mViewPtr;
+    Mesh  *mMesh;
+    Frame *mFrame;
+    View  *mView;
     Material mMaterial, *mMaterialPtr;
     
     UniformMap *mUniformMapPtr;
     
     Scene *mScene;
-    GraphicSystem *mSystem;
+    GraphicSystem *mGraphicSystem;
   };
   
   /**
@@ -108,8 +113,6 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
-    
-    void update(void*);
     
   public:
     typedef std::vector<RenderSlot*>::const_iterator iterator;

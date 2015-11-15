@@ -75,7 +75,7 @@ namespace fx
         return false;
       task.frame = mFrame;
       task.viewIndex = mIndex;
-      task.viewUniforms = mUniformMap.getInternalMap();
+      task.localUniforms = mUniformMap.getInternalMap();
       return true;
     }
     

@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
-  <Model name="Triangle">
-    <RenderSlots>
-      <Slot layer="0" frame="MainWindow">
-        <Mesh name="TriangleMesh" primitive="triangles">
-          <Buffer attribute="Position" components="4">
-            -0.8, -0.6, 0.0, 1.0,
-            0.8, -0.6, 0.0, 1.0,
-            0.0,  0.8, 0.0, 1.0
-          </Buffer>
-        </Mesh>
+  <Camera name="MainCamera">
+    <ViewSlots>
+      <View name="MainView" frame="MainWindow">
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
+      </View>
+    </ViewSlots>
+  </Camera>
+  <Model name="Triangle">
+    <RenderSlots>
+      <Slot layer="0" view="MainView">
+        <Mesh name="CubeMesh" file="cube.mesh"/>
         <Material>
           <Shader name="ColorShader">
             <Vertex function="SimpleVertex"/>

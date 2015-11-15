@@ -145,7 +145,10 @@
 		C1B00E9F1BF691E30060BE21 /* SettingsGLES2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */; };
 		C1B00EA01BF691E30060BE21 /* SettingsGLES3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */; };
 		C1B00EA11BF691E30060BE21 /* SettingsMetal_IOS.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */; };
-		C1B00EA21BF691E30060BE21 /* TriangleScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E9C1BF691E30060BE21 /* TriangleScene.xml */; };
+		C1B00ED01BF7E1F00060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECE1BF7E1F00060BE21 /* Meshes */; };
+		C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECF1BF7E1F00060BE21 /* Scenes */; };
+		C1B00EDA1BF7E7E70060BE21 /* ViewSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00ED81BF7E7E70060BE21 /* ViewSlots.cpp */; };
+		C1B00EDB1BF7E7E70060BE21 /* ViewSlots.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00ED91BF7E7E70060BE21 /* ViewSlots.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,7 +296,10 @@
 		C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES2.xml; path = ../../../../Source/ModelViewer/Resources/SettingsGLES2.xml; sourceTree = "<group>"; };
 		C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES3.xml; path = ../../../../Source/ModelViewer/Resources/SettingsGLES3.xml; sourceTree = "<group>"; };
 		C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal_IOS.xml; path = ../../../../Source/ModelViewer/Resources/SettingsMetal_IOS.xml; sourceTree = "<group>"; };
-		C1B00E9C1BF691E30060BE21 /* TriangleScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TriangleScene.xml; path = ../../../../Source/ModelViewer/Resources/TriangleScene.xml; sourceTree = "<group>"; };
+		C1B00ECE1BF7E1F00060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
+		C1B00ECF1BF7E1F00060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
+		C1B00ED81BF7E7E70060BE21 /* ViewSlots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ViewSlots.cpp; path = ../../../../Source/FelixEngine/ViewSlots.cpp; sourceTree = "<group>"; };
+		C1B00ED91BF7E7E70060BE21 /* ViewSlots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewSlots.h; path = ../../../../Source/FelixEngine/ViewSlots.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +515,8 @@
 				C197CDB41BED298D007F68E0 /* Projection.cpp */,
 				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
 				C197CDB71BED298D007F68E0 /* RenderSlots.cpp */,
+				C1B00ED91BF7E7E70060BE21 /* ViewSlots.h */,
+				C1B00ED81BF7E7E70060BE21 /* ViewSlots.cpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -663,9 +671,10 @@
 				C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */,
 				C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */,
 				C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */,
-				C1B00E9C1BF691E30060BE21 /* TriangleScene.xml */,
 				C1B00E801BF68FDF0060BE21 /* Assets.xcassets */,
 				C1B00E851BF68FDF0060BE21 /* Info.plist */,
+				C1B00ECE1BF7E1F00060BE21 /* Meshes */,
+				C1B00ECF1BF7E1F00060BE21 /* Scenes */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -710,6 +719,7 @@
 				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
 				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
 				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,
+				C1B00EDB1BF7E7E70060BE21 /* ViewSlots.h in Headers */,
 				C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */,
 				C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */,
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
@@ -849,9 +859,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1B00EA21BF691E30060BE21 /* TriangleScene.xml in Resources */,
+				C1B00ED01BF7E1F00060BE21 /* Meshes in Resources */,
 				C1B00EA11BF691E30060BE21 /* SettingsMetal_IOS.xml in Resources */,
 				C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */,
+				C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */,
 				C1B00E9F1BF691E30060BE21 /* SettingsGLES2.xml in Resources */,
 				C1B00EA01BF691E30060BE21 /* SettingsGLES3.xml in Resources */,
 			);
@@ -896,6 +907,7 @@
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
 				C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */,
+				C1B00EDA1BF7E7E70060BE21 /* ViewSlots.cpp in Sources */,
 				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
 				C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */,
 				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
