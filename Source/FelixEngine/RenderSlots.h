@@ -12,13 +12,11 @@
 #include "EventHandler.h"
 #include "Component.h"
 #include "UniformMap.h"
-#include "View.h"
 #include "Material.h"
 
 namespace fx
 {
   class GraphicSystem;
-  class View;
   
   class RenderSlot: public EventHandler
   {
@@ -72,9 +70,9 @@ namespace fx
     void setFrame(Frame *frame) {mFrame = frame;}
     Frame* frame() const {return mFrame;}
     
-    void setView(const std::string &name);
-    void setView(View *view) {mView = view;}
-    View* view() const {return mView;}
+    void setPass(const std::string &pass);
+    std::string pass() const {return mPass;}
+    int passIndex() const {return mPassIndex;}
     
     void setMaterial(const std::string &name);
     void setMaterial(Material *material) {mMaterialPtr = material;}
@@ -83,6 +81,8 @@ namespace fx
     
     void setUniformMap(UniformMap *map) {mUniformMapPtr = map;}
     UniformMap* uniformMap() const {return mUniformMapPtr;}
+    
+    static int GetPassIndex(const std::string &pass);
     
   private:
     bool mVisible;
@@ -93,10 +93,13 @@ namespace fx
     
     Mesh  *mMesh;
     Frame *mFrame;
-    View  *mView;
+    
     Material mMaterial, *mMaterialPtr;
     
     UniformMap *mUniformMapPtr;
+    
+    std::string mPass;
+    int mPassIndex;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;

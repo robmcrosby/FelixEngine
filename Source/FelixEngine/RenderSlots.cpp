@@ -65,7 +65,7 @@ void RenderSlots::clear()
 
 
 
-RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mView(0),
+RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
   mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mUniformMapPtr(0)
 {
   setToInternalMaterial();
@@ -90,17 +90,6 @@ bool RenderSlot::setMesh(const XMLTree::Node &node)
   {
     setMesh(node.attribute("name"));
     success = mMesh->setToXml(node);
-  }
-  return success;
-}
-
-bool RenderSlot::setView(const XMLTree::Node &node)
-{
-  bool success = false;
-  if (node.hasAttribute("name"))
-  {
-    setView(node.attribute("name"));
-    success = mView->setToXml(node);
   }
   return success;
 }
@@ -131,12 +120,6 @@ void RenderSlot::setMesh(const string &name)
     setMesh(mGraphicSystem->getMesh(name));
 }
 
-void RenderSlot::setView(const string &name)
-{
-  if (mScene)
-    setView(mScene->getView(name));
-}
-
 void RenderSlot::setFrame(const string &name)
 {
   if (mGraphicSystem)
@@ -147,6 +130,22 @@ void RenderSlot::setMaterial(const string &name)
 {
   if (mScene)
     setMaterial(mScene->getMaterial(name));
+}
+
+void RenderSlot::setPass(const string &pass)
+{
+  mPass = pass;
+  mPassIndex = mPass == "" ? 0 : GetPassIndex(mPass);
+}
+
+int RenderSlot::GetPassIndex(const std::string &pass)
+{
+  static int counter = 0;
+  static map<string, int> passes;
+  
+  if (!passes.count(pass))
+    passes[pass] = ++counter;
+  return passes[pass];
 }
 
 
@@ -177,11 +176,9 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
     else if (node->hasSubNode("Mesh"))
       success &= setMesh(*node->subNode("Mesh"));
     
-    // Set the View
-    if (node->hasAttribute("view"))
-      setView(node->attribute("view"));
-    else if (node->hasSubNode("View"))
-      setView(*node->subNode("View"));
+    // Set the Pass
+    if (node->hasAttribute("pass"))
+      setPass(node->attribute("pass"));
     
     // Set the Frame
     if (node->hasAttribute("frame"))
@@ -211,10 +208,6 @@ bool RenderSlot::applyToTask(GraphicTask &task) const
   if (!mVisible)
     return false;
   
-  // Validate the needed items for the task.
-  if (mSubMesh < 0 || mInstances <= 0 || !mMesh || !mMaterialPtr || (!mFrame && !mView))
-    return false;
-  
   // Assign the items to the task.
   task.layer      = mLayer;
   task.subMesh    = mSubMesh;
@@ -226,15 +219,14 @@ bool RenderSlot::applyToTask(GraphicTask &task) const
   
   task.mesh = mMesh;
   task.frame = mFrame;
+  task.pass = mPassIndex;
   
   // Assign an optional local UniformMap.
   if (mUniformMapPtr)
     task.localUniforms = mUniformMapPtr->getInternalMap();
   else
     task.localUniforms = nullptr;
-  
-  // Attempt to apply the View and Matieral to the task.
-  if (mView)
-    return mView->applyToTask(task) && mMaterialPtr->applyToTask(task);
-  return mMaterialPtr->applyToTask(task);
+
+  mMaterialPtr->applyToTask(task);
+  return true;
 }

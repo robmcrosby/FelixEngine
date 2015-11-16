@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
   <Camera name="MainCamera">
-    <ViewSlots>
-      <View name="MainView" frame="MainWindow">
+    <RenderSlots>
+      <Slot layer="0" pass="MainPass" frame="MainWindow">
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
-      </View>
-    </ViewSlots>
+      </Slot>
+    </RenderSlots>
   </Camera>
   <Model name="Triangle">
     <RenderSlots>
-      <Slot layer="0" view="MainView">
+      <Slot layer="0" pass="MainPass">
         <Mesh name="CubeMesh" file="cube.mesh"/>
         <Material>
           <Shader name="ColorShader">
