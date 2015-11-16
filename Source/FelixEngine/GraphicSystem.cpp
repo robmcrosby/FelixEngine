@@ -17,7 +17,7 @@ using namespace std;
 GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
 {
   setEventFlags(EVENT_APP_UPDATE);
-  mTaskSlots.push_back(TaskSlot());
+  mPasses.push_back(Pass());
 }
 
 GraphicSystem::~GraphicSystem()
@@ -83,33 +83,33 @@ void GraphicSystem::update()
     
     mTaskCollection.dump(mTaskBuffer);
     sort(mTaskBuffer.begin(), mTaskBuffer.end());
-    loadTaskSlots();
+    loadPasses();
     
     mUpdateMutex.unlock();
   }
 }
 
-void GraphicSystem::clearTaskSlots()
+void GraphicSystem::clearPasses()
 {
-  for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
+  for (Passes::iterator itr = mPasses.begin(); itr != mPasses.end(); ++itr)
     itr->clear();
 }
 
-void GraphicSystem::loadTaskSlots()
+void GraphicSystem::loadPasses()
 {
-  mTaskSlotsMutex.lock();
-  clearTaskSlots();
-  for (TaskBuffer::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
+  mPassesMutex.lock();
+  clearPasses();
+  for (Pass::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
   {
     if (itr->isViewTask())
-      mTaskSlots.at(0).push_back(*itr);
+      mPasses.at(0).push_back(*itr);
     else
     {
-      if (itr->viewIndex >= (int)mTaskSlots.size())
-        mTaskSlots.resize(itr->viewIndex+1);
-      mTaskSlots.at(itr->viewIndex).push_back(*itr);
+      if (itr->pass >= (int)mPasses.size())
+        mPasses.resize(itr->pass+1);
+      mPasses.at(itr->pass).push_back(*itr);
     }
   }
-  mTaskSlotsMutex.unlock();
+  mPassesMutex.unlock();
   mTaskBuffer.clear();
 }

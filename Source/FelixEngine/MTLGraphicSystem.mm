@@ -515,10 +515,10 @@ void MTLGraphicSystem::processTasks()
     
     setNextWindowDrawables();
     
-    mTaskSlotsMutex.lock();
-    if (mTaskSlots.size())
-      processTaskSlot(mTaskSlots.at(0), nullptr);
-    mTaskSlotsMutex.unlock();
+    mPassesMutex.lock();
+    if (mPasses.size())
+      processPass(mPasses.at(0), nullptr);
+    mPassesMutex.unlock();
     
     presentWindowDrawables();
     [mContextInfo->mCommandBuffer commit];
@@ -526,24 +526,24 @@ void MTLGraphicSystem::processTasks()
   }
 }
 
-void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot, const GraphicTask *view)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
 {
-  for (TaskSlot::const_iterator itr = slot.begin(); itr != slot.end(); ++itr)
+  for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
     processTask(&(*itr), view);
 }
 
 void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
 {
-  if (task->isViewTask() && task->viewIndex < (int)mTaskSlots.size())
+  if (task->isViewTask() && task->pass < (int)mPasses.size())
   {
-    TaskSlot &slot = mTaskSlots.at(task->viewIndex);
-    if (slot.size())
+    Pass &pass = mPasses.at(task->pass);
+    if (pass.size())
     {
       // TODO: Fix this when Compute tasks are introduced
-      if (task->isClearTask() && !slot.at(0).isClearTask())
-        slot.at(0).clearState = task->clearState;
+      if (task->isClearTask() && !pass.at(0).isClearTask())
+        pass.at(0).clearState = task->clearState;
       
-      processTaskSlot(slot, task);
+      processPass(pass, task);
     }
   }
   else if (task->isDrawTask())
@@ -814,11 +814,11 @@ void MTLGraphicSystem::processTasks()
 {
 }
 
-void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
 {
 }
 
-void MTLGraphicSystem::processTask(const GraphicTask &task)
+void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
 {
 }
 

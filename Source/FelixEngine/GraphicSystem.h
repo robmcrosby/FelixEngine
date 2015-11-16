@@ -48,21 +48,20 @@ namespace fx
     
   private:
     void update();
-    void clearTaskSlots();
-    void loadTaskSlots();
+    void clearPasses();
+    void loadPasses();
     
   protected:
     typedef MultiVector<GraphicTask> TaskCollection;
     
-    typedef std::vector<GraphicTask> TaskBuffer;
-    typedef std::vector<GraphicTask> TaskSlot;
-    typedef std::vector<TaskSlot> TaskSlots;
+    typedef std::vector<GraphicTask> Pass;
+    typedef std::vector<Pass> Passes;
     
     TaskCollection mTaskCollection;
-    TaskBuffer mTaskBuffer;
+    Pass mTaskBuffer;
     
-    TaskSlots mTaskSlots;
-    Mutex mTaskSlotsMutex;
+    Passes mPasses;
+    Mutex mPassesMutex;
     Mutex mUpdateMutex;
     
   protected:

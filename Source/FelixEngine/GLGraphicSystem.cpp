@@ -166,18 +166,18 @@ SDL_Window* GLGraphicSystem::getMainSDLWindow()
 
 void GLGraphicSystem::processTasks()
 {
-  mTaskSlotsMutex.lock();
-  if (mTaskSlots.size())
-    processTaskSlot(mTaskSlots.at(0), nullptr);
-  mTaskSlotsMutex.unlock();
+  mPassesMutex.lock();
+  if (mPasses.size())
+    processPass(mPasses.at(0), nullptr);
+  mPassesMutex.unlock();
   
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
 }
 
-void GLGraphicSystem::processTaskSlot(const TaskSlot &slot, const GraphicTask *view)
+void GLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
 {
-  for (TaskSlot::const_iterator itr = slot.begin(); itr != slot.end(); ++itr)
+  for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
     processTask(&(*itr), view);
 }
 
@@ -190,11 +190,11 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
     if (task->isClearTask())
       frame->clear(task->clearState);
     
-    if (task->viewIndex < (int)mTaskSlots.size())
+    if (task->pass < (int)mPasses.size())
     {
-      const TaskSlot &slot = mTaskSlots.at(task->viewIndex);
-      if (slot.size())
-        processTaskSlot(slot,task);
+      const Pass &pass = mPasses.at(task->pass);
+      if (pass.size())
+        processPass(pass,task);
     }
   }
   else if (task->isDrawTask())

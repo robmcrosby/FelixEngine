@@ -65,7 +65,7 @@ namespace fx
         task.frame = mFrame;
         task.layer = mLayer;
         task.clearState = mClearState;
-        task.viewIndex = mIndex;
+        task.pass = mIndex;
         mSystem->addGraphicTask(task);
       }
     }
@@ -74,7 +74,7 @@ namespace fx
       if (!mFrame || mIndex < 0)
         return false;
       task.frame = mFrame;
-      task.viewIndex = mIndex;
+      task.pass = mIndex;
       task.localUniforms = mUniformMap.getInternalMap();
       return true;
     }
