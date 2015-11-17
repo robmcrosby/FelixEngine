@@ -495,6 +495,7 @@ namespace fx
       return m;
     }
     static Matrix4 Rotate(Vector3<T> r) {return RotZ(r.z) * RotY(r.y) * RotX(r.x);}
+    static Matrix4 Rotate(float angle, Vector3<T> axis) {return Matrix4();}
     
     static Matrix4 Trans3d(Vector3<T> t)
     {

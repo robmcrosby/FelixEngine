@@ -411,7 +411,6 @@
 			isa = PBXGroup;
 			children = (
 				371049F61BBF3A4F003EEC37 /* main.cpp */,
-				377B9B111BBDF03600440546 /* Info.plist */,
 				377B9B1E1BBE288100440546 /* Resources */,
 			);
 			path = HelloFelix;
@@ -427,6 +426,7 @@
 				3722FDE61BDD63BD00B07476 /* DepthScene.xml */,
 				370FEA941BC4638F00440244 /* SettingsGL41.xml */,
 				37BA17B01BD30B8B009478B0 /* SettingsMetal.xml */,
+				377B9B111BBDF03600440546 /* Info.plist */,
 				377B9B0C1BBDF03600440546 /* Assets.xcassets */,
 				377B9B1F1BBE289600440546 /* Images */,
 			);
