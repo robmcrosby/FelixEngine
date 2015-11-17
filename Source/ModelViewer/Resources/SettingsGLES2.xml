@@ -14,7 +14,9 @@
         <ShaderFunction name="SimpleVertex" type="vertex">
           #version 100
           attribute vec4 Position;
-          void main() {gl_Position = Position;}
+          uniform mat4 Model;
+          uniform mat4 Projection;
+          void main() {gl_Position = Projection * Model * Position;}
         </ShaderFunction>
         <ShaderFunction name="SimpleColor" type="fragment">
           #version 100
@@ -25,9 +27,11 @@
           #version 100
           attribute vec4 Position;
           attribute vec2 UV_0;
+          uniform mat4 Model;
+          uniform mat4 Projection;
           varying vec2 UV;
           void main() {
-            gl_Position = Position;
+            gl_Position = Projection * Model * Position;
             UV = UV_0;
           }
         </ShaderFunction>

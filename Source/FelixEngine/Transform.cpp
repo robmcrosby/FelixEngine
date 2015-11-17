@@ -7,15 +7,15 @@
 //
 
 #include "Transform.h"
+#include "Object.h"
+#include "RenderSlots.h"
 
 
 using namespace std;
 using namespace fx;
 
 
-DEFINE_COMPONENT_ID(Transform);
-
-Transform::Transform(Object *obj): Component("Transform", obj)
+Transform::Transform(Object *obj): Component("Transform", obj), mRenderSlots(0)
 {
 }
 
@@ -30,5 +30,14 @@ bool Transform::setToXml(const XMLTree::Node *node)
 
 bool Transform::init()
 {
-  return Component::init();
+  mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
+  
+  if (mRenderSlots)
+    mRenderSlots->localUniforms()["Model"] = mat4::Scale(vec3(0.5, 0.5, 0.5));
+  
+  return mRenderSlots ? Component::init() : false;
+}
+
+void Transform::update()
+{
 }

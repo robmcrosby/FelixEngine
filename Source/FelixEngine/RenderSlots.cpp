@@ -47,7 +47,9 @@ bool RenderSlots::init()
 
 void RenderSlots::addSlot()
 {
-  mSlots.push_back(new RenderSlot(mObject->getScene()));
+  RenderSlot *slot = new RenderSlot(mObject->getScene());
+  slot->setLocalUniforms(&mLocalUniforms);
+  mSlots.push_back(slot);
 }
 
 void RenderSlots::clear()
@@ -66,9 +68,8 @@ void RenderSlots::clear()
 
 
 RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
-  mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mUniformMapPtr(0)
+  mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mLocalUniforms(0), mMaterial(0)
 {
-  setToInternalMaterial();
   setEventFlags(EVENT_APP_RENDER);
   mGraphicSystem->addHandler(this);
 }
@@ -110,8 +111,8 @@ bool RenderSlot::setMaterial(const XMLTree::Node &node)
   if (node.hasAttribute("name"))
     setMaterial(node.attribute("name"));
   else
-    setToInternalMaterial();
-  return mMaterialPtr->setToXml(node);
+    mMaterial = new Material();
+  return mMaterial->setToXml(node);
 }
 
 void RenderSlot::setMesh(const string &name)
@@ -221,12 +222,19 @@ bool RenderSlot::applyToTask(GraphicTask &task) const
   task.frame = mFrame;
   task.pass = mPassIndex;
   
-  // Assign an optional local UniformMap.
-  if (mUniformMapPtr)
-    task.localUniforms = mUniformMapPtr->getInternalMap();
+  if (mLocalUniforms)
+    task.localUniforms = mLocalUniforms->getInternalMap();
   else
     task.localUniforms = nullptr;
 
-  mMaterialPtr->applyToTask(task);
+  if (mMaterial)
+    mMaterial->applyToTask(task);
+  else
+  {
+    task.shader = nullptr;
+    task.textureMap = nullptr;
+    task.materialUniforms = nullptr;
+  }
+  
   return true;
 }

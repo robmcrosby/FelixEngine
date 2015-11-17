@@ -13,6 +13,8 @@
 
 namespace fx
 {
+  class RenderSlots;
+  
   /**
    *
    */
@@ -24,6 +26,11 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    
+    virtual void update();
+    
+  private:
+    RenderSlots *mRenderSlots;
   };
 }
 

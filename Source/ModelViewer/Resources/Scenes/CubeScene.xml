@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
   <Camera name="MainCamera">
+    <Projection frame="MainWindow" type="ortho" aspect="auto">
+      <Volume near="0.0" far="1.0" left="-2.0" right="2.0" top="2.0" bottom="-2.0"/>
+    </Projection>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" frame="MainWindow">
         <ClearState>
@@ -10,6 +13,7 @@
     </RenderSlots>
   </Camera>
   <Model name="Triangle">
+    <Transform/>
     <RenderSlots>
       <Slot layer="0" pass="MainPass">
         <Mesh name="CubeMesh" file="cube.mesh"/>

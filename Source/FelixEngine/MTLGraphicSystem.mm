@@ -98,6 +98,11 @@ namespace fx
         else
           setNotLoading();
       }
+      else if (mMTLFrame != nil)
+      {
+        mSize.w = (int)[mMTLFrame width];
+        mSize.h = (int)[mMTLFrame height];
+      }
     }
     bool load()
     {

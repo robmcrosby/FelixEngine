@@ -34,7 +34,6 @@ namespace fx
         setType(node->element());
         if (node->hasAttribute("name"))
           setName(node->attribute("name"));
-        
         for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
           success &= addComponent(Component::Create(*itr, this));
       }
