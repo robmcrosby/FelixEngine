@@ -19,6 +19,12 @@
 #if !TARGET_IPHONE_SIMULATOR
 
 
+#if TARGET_OS_IPHONE
+  #define OFFSET_ALIGNMENT 16
+#else
+  #define OFFSET_ALIGNMENT 256
+#endif
+
 namespace fx
 {
   struct MTLContextInfo
@@ -345,7 +351,12 @@ namespace fx
       if (inUse() && mMTLUniformMap != nil)
       {
         [mMTLUniformMap setUniformsSize:mUniformMap->size()];
-        [mMTLUniformMap setBufferSize:mUniformMap->sizeInBytes()];
+        
+        NSUInteger bufferSize = 0;
+        for (UniformMap::const_iterator itr = mUniformMap->begin(); itr != mUniformMap->end(); ++itr)
+          bufferSize += (NSUInteger)((itr->second.sizeInBytes()/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
+        [mMTLUniformMap setBufferSize:bufferSize];
+        
         
         if (mMTLUniformMap.buffer != nil)
         {
@@ -362,7 +373,9 @@ namespace fx
             size_t size = itr->second.sizeInBytes();
             void *ptr = (void*)(buffer + offset);
             memcpy(ptr, itr->second.ptr(), size);
-            offset += (NSUInteger)size;
+            ++itr;
+            
+            offset += (NSUInteger)((size/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
           }
         }
       }

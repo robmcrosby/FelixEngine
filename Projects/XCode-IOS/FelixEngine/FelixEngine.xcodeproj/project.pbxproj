@@ -146,6 +146,8 @@
 		C1B00EA11BF691E30060BE21 /* SettingsMetal_IOS.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */; };
 		C1B00ED01BF7E1F00060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECE1BF7E1F00060BE21 /* Meshes */; };
 		C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECF1BF7E1F00060BE21 /* Scenes */; };
+		C1B00EE41BFBAB9C0060BE21 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00EE21BFBAB9C0060BE21 /* View.cpp */; };
+		C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EE31BFBAB9C0060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -294,6 +296,8 @@
 		C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal_IOS.xml; path = ../../../../Source/ModelViewer/Resources/SettingsMetal_IOS.xml; sourceTree = "<group>"; };
 		C1B00ECE1BF7E1F00060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
 		C1B00ECF1BF7E1F00060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
+		C1B00EE21BFBAB9C0060BE21 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = View.cpp; path = ../../../../Source/FelixEngine/View.cpp; sourceTree = "<group>"; };
+		C1B00EE31BFBAB9C0060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,6 +508,8 @@
 				C10B5D3A1BEDD65000583B8F /* Component.cpp */,
 				C197CDC71BED298D007F68E0 /* Transform.h */,
 				C197CDC61BED298D007F68E0 /* Transform.cpp */,
+				C1B00EE31BFBAB9C0060BE21 /* View.h */,
+				C1B00EE21BFBAB9C0060BE21 /* View.cpp */,
 				C197CDB51BED298D007F68E0 /* Projection.h */,
 				C197CDB41BED298D007F68E0 /* Projection.cpp */,
 				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
@@ -716,6 +722,7 @@
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
 				C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */,
 				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
+				C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */,
 				C197CE3B1BED5EFB007F68E0 /* GraphicSystem.h in Headers */,
 				C197CE391BED5EBA007F68E0 /* System.h in Headers */,
 				C197CE451BED5F23007F68E0 /* GLTexture.h in Headers */,
@@ -888,6 +895,7 @@
 				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
 				C1124BEC1BF17AC200CFADD7 /* MTLShader.mm in Sources */,
 				C1124BED1BF17AC200CFADD7 /* MTLTexture.mm in Sources */,
+				C1B00EE41BFBAB9C0060BE21 /* View.cpp in Sources */,
 				C1124BEE1BF17AC200CFADD7 /* MTLWindow.mm in Sources */,
 				C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */,
 				C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */,

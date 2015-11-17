@@ -1,13 +1,13 @@
 //
-//  Transform.h
+//  View.h
 //  FelixEngine
 //
-//  Created by Robert Crosby on 10/9/15.
+//  Created by Robert Crosby on 11/17/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef Transform_h
-#define Transform_h
+#ifndef View_h
+#define View_h
 
 #include "Component.h"
 #include "Matrix.h"
@@ -19,24 +19,23 @@ namespace fx
   /**
    *
    */
-  class Transform: public Component
+  class View: public Component
   {
   public:
-    Transform(Object *obj);
-    virtual ~Transform();
+    View(Object *obj);
+    virtual ~View();
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
     
-    void updateMatrices();
+    void updateMatrix();
     
   private:
     void update(void*);
     
-    mat4 mModelMatrix;
-    mat4 mRotationMatrix;
+    mat4 mMatrix;
     RenderSlots *mRenderSlots;
   };
 }
 
-#endif /* Transform_h */
+#endif /* View_h */

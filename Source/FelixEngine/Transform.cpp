@@ -17,6 +17,7 @@ using namespace fx;
 
 Transform::Transform(Object *obj): Component("Transform", obj), mRenderSlots(0)
 {
+  mUpdateDelegate = UpdateDelegate::Create<Transform, &Transform::update>(this);
 }
 
 Transform::~Transform()
@@ -31,13 +32,20 @@ bool Transform::setToXml(const XMLTree::Node *node)
 bool Transform::init()
 {
   mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
-  
-  if (mRenderSlots)
-    mRenderSlots->localUniforms()["Model"] = mat4::Scale(vec3(0.5, 0.5, 0.5));
-  
+  updateMatrices();
   return mRenderSlots ? Component::init() : false;
 }
 
-void Transform::update()
+void Transform::updateMatrices()
 {
+}
+
+void Transform::update(void*)
+{
+  updateMatrices();
+  if (mRenderSlots)
+  {
+    mRenderSlots->localUniforms()["Model"] = mModelMatrix;
+    mRenderSlots->localUniforms()["Rotation"] = mRotationMatrix;
+  }
 }

@@ -2,8 +2,13 @@
 <Scene name="TriangleScene">
   <Camera name="MainCamera">
     <Projection frame="MainWindow" type="ortho" aspect="auto">
-      <Volume near="0.0" far="1.0" left="-2.0" right="2.0" top="2.0" bottom="-2.0"/>
+      <Volume near="0.0" far="10.0" left="-2.0" right="2.0" top="2.0" bottom="-2.0"/>
     </Projection>
+    <View>
+      <Position>2.0, 2.0, 2.0</Position>
+      <Target>0.0, 0.0, 0.0</Target>
+      <Up>0.0, 1.0, 0.0</Up>
+    </View>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" frame="MainWindow">
         <ClearState>

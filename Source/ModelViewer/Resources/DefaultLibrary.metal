@@ -17,16 +17,17 @@ struct VertexOutput
 
 vertex VertexOutput SimpleVertex(device   float4   *Position   [[ buffer(0) ]],
                                  constant float4x4 *Model      [[ buffer(1) ]],
-                                 constant float4x4 *Projection [[ buffer(2) ]],
+                                 constant float4x4 *View       [[ buffer(2) ]],
+                                 constant float4x4 *Projection [[ buffer(3) ]],
                                           uint      vid        [[ vertex_id ]])
 {
   VertexOutput outVertices;
-  outVertices.m_Position = *Projection * *Model * Position[vid];
+  outVertices.m_Position = *Projection * *View * *Model * Position[vid];
   outVertices.m_Position.z = (outVertices.m_Position.z/2.0)+0.5;
   return outVertices;
 }
 
-fragment half4 SimpleColor(constant float4 *Color [[ buffer(3) ]])
+fragment half4 SimpleColor(constant float4 *Color [[ buffer(4) ]])
 {
   return half4(*Color);
 }
@@ -48,12 +49,13 @@ struct FragmentUVInput
 vertex VertexUVOutput SimpleVertexUV(device   float4   *Position   [[ buffer(0) ]],
                                      device   float2   *UV_0       [[ buffer(1) ]],
                                      constant float4x4 *Model      [[ buffer(2) ]],
-                                     constant float4x4 *Projection [[ buffer(3) ]],
+                                     constant float4x4 *View       [[ buffer(3) ]],
+                                     constant float4x4 *Projection [[ buffer(4) ]],
                                               uint      vid        [[ vertex_id ]])
 {
   VertexUVOutput outVertices;
   
-  outVertices.m_Position   = *Projection * *Model * Position[vid];
+  outVertices.m_Position   = *Projection * *View * *Model * Position[vid];
   outVertices.m_Position.z = (outVertices.m_Position.z/2.0)+0.5;
   outVertices.m_Coordinate = UV_0[vid];
   outVertices.m_Coordinate.y = 1.0 - outVertices.m_Coordinate.y;
