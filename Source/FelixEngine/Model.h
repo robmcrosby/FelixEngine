@@ -10,6 +10,8 @@
 #define Model_h
 
 #include "Object.h"
+#include "Transform.h"
+#include "RenderSlots.h"
 
 
 namespace fx
@@ -20,8 +22,47 @@ namespace fx
   class Model: public Object
   {
   public:
-    Model(Scene *scene): Object("Model", scene) {}
+    Model(Scene *scene): Object("Model", scene), mTransform(0), mRenderSlots(0) {}
     virtual ~Model() {}
+    
+    virtual bool setToXml(const XMLTree::Node *node)
+    {
+      bool success = Object::setToXml(node);
+      if (success)
+      {
+        setTransform();
+        setRenderSlots();
+      }
+      return success;
+    }
+    
+    Transform* transform() const {return mTransform;}
+    RenderSlots* renderSlots() const {return mRenderSlots;}
+    
+  private:
+    void setTransform()
+    {
+      mTransform = dynamic_cast<Transform*>(getComponentByType("Transform"));
+      if (!mTransform)
+      {
+        mTransform = new Transform(this);
+        addComponent(mTransform);
+      }
+    }
+    
+    void setRenderSlots()
+    {
+      mRenderSlots = dynamic_cast<RenderSlots*>(getComponentByType("RenderSlots"));
+      if (!mRenderSlots)
+      {
+        mRenderSlots = new RenderSlots(this);
+        addComponent(mRenderSlots);
+      }
+    }
+    
+  protected:
+    Transform *mTransform;
+    RenderSlots *mRenderSlots;
   };
 }
 
