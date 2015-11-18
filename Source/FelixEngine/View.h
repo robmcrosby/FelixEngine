@@ -33,6 +33,10 @@ namespace fx
   private:
     void update(void*);
     
+    vec3 mPosition;
+    vec3 mTarget;
+    vec3 mUp;
+    
     mat4 mMatrix;
     RenderSlots *mRenderSlots;
   };

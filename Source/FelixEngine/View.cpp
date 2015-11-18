@@ -18,6 +18,10 @@ using namespace fx;
 View::View(Object *obj): Component("View", obj), mRenderSlots(0)
 {
   mUpdateDelegate = UpdateDelegate::Create<View, &View::update>(this);
+  
+  mPosition = vec3(0.0f, 0.0f, 0.0f);
+  mTarget = vec3(0.0f, 0.0f, -1.0f);
+  mUp = vec3(0.0f, 1.0f, 0.0f);
 }
 
 View::~View()
@@ -26,6 +30,15 @@ View::~View()
 
 bool View::setToXml(const XMLTree::Node *node)
 {
+  if (node)
+  {
+    if (node->hasSubNode("Position"))
+      mPosition = node->subContents("Position");
+    if (node->hasSubNode("Target"))
+      mTarget = node->subContents("Target");
+    if (node->hasSubNode("Up"))
+      mUp = node->subContents("Up");
+  }
   return Component::setToXml(node);
 }
 
@@ -38,6 +51,7 @@ bool View::init()
 
 void View::updateMatrix()
 {
+  mMatrix = mat4::LookAt(mPosition, mTarget, mUp);
 }
 
 void View::update(void*)
