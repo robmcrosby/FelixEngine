@@ -91,6 +91,9 @@
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
+		C106DB6E1BFCF47E000065D4 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB6D1BFCF47E000065D4 /* Object.cpp */; };
+		C106DB721BFCFECA000065D4 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB701BFCFECA000065D4 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C106DB761BFCFFF3000065D4 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB741BFCFFF3000065D4 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10B5D3C1BF0F9DE00583B8F /* Component.cpp */; };
 		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; };
 		C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */; };
@@ -251,6 +254,9 @@
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
+		C106DB6D1BFCF47E000065D4 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = ../../../../Source/FelixEngine/Object.cpp; sourceTree = "<group>"; };
+		C106DB701BFCFECA000065D4 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../../Source/FelixEngine/Model.h; sourceTree = "<group>"; };
+		C106DB741BFCFFF3000065D4 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../../Source/FelixEngine/Camera.h; sourceTree = "<group>"; };
 		C10B5D3C1BF0F9DE00583B8F /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Component.cpp; path = ../../../../Source/FelixEngine/Component.cpp; sourceTree = "<group>"; };
 		C15D739C1BF3C619002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
@@ -513,10 +519,10 @@
 			isa = PBXGroup;
 			children = (
 				37104A001BBF4056003EEC37 /* Scene.h */,
-				37CD4E1B1BC5C04400DAB4E3 /* Object.h */,
 				37B490261BCC632E00FC97A5 /* Material.h */,
 				37B4901E1BCB12F600FC97A5 /* UniformMap.h */,
 				37E22FD91BCF319A0018BA15 /* TextureMap.h */,
+				C106DB6C1BFCF448000065D4 /* Objects */,
 				37CD4E351BC83CDF00DAB4E3 /* Components */,
 			);
 			name = Scene;
@@ -559,6 +565,17 @@
 				37E22FE51BCF43F50018BA15 /* libfreeimage.a */,
 			);
 			name = Freeimage;
+			sourceTree = "<group>";
+		};
+		C106DB6C1BFCF448000065D4 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				37CD4E1B1BC5C04400DAB4E3 /* Object.h */,
+				C106DB6D1BFCF47E000065D4 /* Object.cpp */,
+				C106DB701BFCFECA000065D4 /* Model.h */,
+				C106DB741BFCFFF3000065D4 /* Camera.h */,
+			);
+			name = Objects;
 			sourceTree = "<group>";
 		};
 		C15D739B1BF3C5F7002FEEE3 /* MotionSystem */ = {
@@ -631,6 +648,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				370FEA8A1BC31C6E00440244 /* XMLTree.h in Headers */,
+				C106DB761BFCFFF3000065D4 /* Camera.h in Headers */,
 				370FEA7F1BC2FE1100440244 /* GLGraphicSystem.h in Headers */,
 				37B490271BCC632E00FC97A5 /* Material.h in Headers */,
 				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
@@ -660,6 +678,7 @@
 				C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */,
 				C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
+				C106DB721BFCFECA000065D4 /* Model.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */,
 				C197CE2E1BED5E62007F68E0 /* Scene.h in Headers */,
@@ -857,6 +876,7 @@
 				37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */,
+				C106DB6E1BFCF47E000065D4 /* Object.cpp in Sources */,
 				37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */,
 				C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */,
 				370FEA791BC2FD6D00440244 /* GraphicSystem.cpp in Sources */,
@@ -1110,6 +1130,7 @@
 				C1B00EB81BF693A60060BE21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

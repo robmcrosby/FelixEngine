@@ -21,6 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		C106DB7B1BFD0294000065D4 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB781BFD0294000065D4 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C106DB7C1BFD0294000065D4 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB791BFD0294000065D4 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB7A1BFD0294000065D4 /* Object.cpp */; };
 		C10B5D321BEDD24000583B8F /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D311BEDD24000583B8F /* Images */; };
 		C10B5D351BEDD28C00583B8F /* SettingsGLES3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */; };
 		C10B5D381BEDD2A200583B8F /* TextureScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D361BEDD2A200583B8F /* TextureScene.xml */; };
@@ -180,6 +183,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C106DB781BFD0294000065D4 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../../Source/FelixEngine/Camera.h; sourceTree = "<group>"; };
+		C106DB791BFD0294000065D4 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../../Source/FelixEngine/Model.h; sourceTree = "<group>"; };
+		C106DB7A1BFD0294000065D4 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = ../../../../Source/FelixEngine/Object.cpp; sourceTree = "<group>"; };
 		C10B5D311BEDD24000583B8F /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/HelloFelix/Resources/Images; sourceTree = "<group>"; };
 		C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES3.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES3.xml; sourceTree = "<group>"; };
 		C10B5D361BEDD2A200583B8F /* TextureScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextureScene.xml; path = ../../../../Source/HelloFelix/Resources/TextureScene.xml; sourceTree = "<group>"; };
@@ -360,6 +366,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C106DB771BFD0276000065D4 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				C197CDAF1BED298D007F68E0 /* Object.h */,
+				C106DB7A1BFD0294000065D4 /* Object.cpp */,
+				C106DB791BFD0294000065D4 /* Model.h */,
+				C106DB781BFD0294000065D4 /* Camera.h */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
 		C10B5D331BEDD24500583B8F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -492,10 +509,10 @@
 			isa = PBXGroup;
 			children = (
 				C197CDBB1BED298D007F68E0 /* Scene.h */,
-				C197CDAF1BED298D007F68E0 /* Object.h */,
 				C197CD9E1BED298D007F68E0 /* Material.h */,
 				C197CDC81BED298D007F68E0 /* UniformMap.h */,
 				C197CDC51BED298D007F68E0 /* TextureMap.h */,
+				C106DB771BFD0276000065D4 /* Objects */,
 				C197CDEA1BED2AD3007F68E0 /* Components */,
 			);
 			name = Scene;
@@ -722,11 +739,13 @@
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
 				C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */,
 				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
+				C106DB7B1BFD0294000065D4 /* Camera.h in Headers */,
 				C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */,
 				C197CE3B1BED5EFB007F68E0 /* GraphicSystem.h in Headers */,
 				C197CE391BED5EBA007F68E0 /* System.h in Headers */,
 				C197CE451BED5F23007F68E0 /* GLTexture.h in Headers */,
 				C197CE421BED5F1B007F68E0 /* GLFrame.h in Headers */,
+				C106DB7C1BFD0294000065D4 /* Model.h in Headers */,
 				C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */,
 				C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */,
 				C197CE561BED5FD6007F68E0 /* List.h in Headers */,
@@ -904,6 +923,7 @@
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
 				C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */,
+				C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */,
 				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
 				C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */,
 				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
@@ -1183,6 +1203,7 @@
 				C1B00E871BF68FDF0060BE21 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

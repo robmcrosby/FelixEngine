@@ -51,7 +51,7 @@ namespace fx
           if (**itr == "Resources")
             success &= addResources(**itr);
           else
-            success &= addObject(createObject(*itr));
+            success &= addObject(Object::Create(*itr, this));
         }
       }
       return success;
@@ -154,16 +154,6 @@ namespace fx
         }
       }
       return success;
-    }
-    Object* createObject(const XMLTree::Node *node)
-    {
-      Object *obj = new Object(this);
-      if (!node || !obj->setToXml(node))
-      {
-        delete obj;
-        obj = nullptr;
-      }
-      return obj;
     }
     
     std::string mName;

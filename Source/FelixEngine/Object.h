@@ -22,30 +22,11 @@ namespace fx
   class Object
   {
   public:
-    Object(Scene *scene): mScene(scene) {}
-    ~Object() {clearComponents();}
+    Object(const std::string &type, Scene *scene);
+    virtual ~Object();
     
-    bool setToXml(const XMLTree::Node *node)
-    {
-      bool success = false;
-      if (node)
-      {
-        success = true;
-        setType(node->element());
-        if (node->hasAttribute("name"))
-          setName(node->attribute("name"));
-        for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-          success &= addComponent(Component::Create(*itr, this));
-      }
-      return success;
-    }
-    bool init()
-    {
-      bool success = true;
-      for (iterator itr = begin(); itr != end(); ++itr)
-        success &= (*itr)->init();
-      return success;
-    }
+    virtual bool setToXml(const XMLTree::Node *node);
+    virtual bool init();
     void update()
     {
       for (iterator itr = begin(); itr != end(); ++itr)
@@ -54,8 +35,6 @@ namespace fx
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
-    
-    void setType(const std::string &type) {mType = type;}
     std::string type() const {return mType;}
     
     Scene* getScene() const {return mScene;}
@@ -100,11 +79,62 @@ namespace fx
       return nullptr;
     }
     
+  public:
+    /**
+     * Internal class used for reflection with xml
+     */
+    struct ObjectId
+    {
+      virtual ~ObjectId() {}
+      virtual Object* create(Scene *scene) = 0;
+    };
+    static std::map<std::string, ObjectId*>& GetObjectIdMap();
+    
+    /**
+     *
+     */
+    static Object* Create(const std::string &type, Scene *scene)
+    {
+      if (GetObjectIdMap().count(type))
+        return GetObjectIdMap().at(type)->create(scene);
+      return new Object(type, scene);
+    }
+    
+    /**
+     *
+     */
+    static Object* Create(const XMLTree::Node *node, Scene *scene)
+    {
+      Object *obj = nullptr;
+      if (node)
+      {
+        obj = Create(node->element(), scene);
+        if (!obj || !obj->setToXml(node))
+        {
+          delete obj;
+          obj = nullptr;
+        }
+      }
+      return obj;
+    }
+    
   private:
     std::string mName, mType;
     std::list<Component*> mComponents;
     Scene *mScene;
   };
+  
+  /**
+   * Macro used to define ObjectId classes.
+   */
+  #define DEFINE_OBJECT_ID(T) \
+    struct T##ID: public Object::ObjectId {\
+    T##ID() {Object::GetObjectIdMap()[#T] = this;}\
+    virtual ~T##ID() {}\
+    virtual Object* create(Scene *scene) {return new T(scene);}\
+    static T##ID ID;\
+    };\
+    T##ID T##ID::ID;
 }
 
 #endif /* Object_hpp */

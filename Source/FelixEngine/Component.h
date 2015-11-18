@@ -111,6 +111,6 @@ namespace fx
       static T##ID ID;\
     };\
     T##ID T##ID::ID;
-  }
+}
 
 #endif /* Component_h */
