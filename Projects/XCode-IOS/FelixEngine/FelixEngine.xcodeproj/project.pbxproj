@@ -24,6 +24,7 @@
 		C106DB7B1BFD0294000065D4 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB781BFD0294000065D4 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C106DB7C1BFD0294000065D4 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB791BFD0294000065D4 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB7A1BFD0294000065D4 /* Object.cpp */; };
+		C106DB831BFD0F0A000065D4 /* ViewerCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */; };
 		C10B5D321BEDD24000583B8F /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D311BEDD24000583B8F /* Images */; };
 		C10B5D351BEDD28C00583B8F /* SettingsGLES3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */; };
 		C10B5D381BEDD2A200583B8F /* TextureScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D361BEDD2A200583B8F /* TextureScene.xml */; };
@@ -186,6 +187,8 @@
 		C106DB781BFD0294000065D4 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../../Source/FelixEngine/Camera.h; sourceTree = "<group>"; };
 		C106DB791BFD0294000065D4 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../../Source/FelixEngine/Model.h; sourceTree = "<group>"; };
 		C106DB7A1BFD0294000065D4 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = ../../../../Source/FelixEngine/Object.cpp; sourceTree = "<group>"; };
+		C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ViewerCamera.cpp; path = ../../../../Source/ModelViewer/ViewerCamera.cpp; sourceTree = "<group>"; };
+		C106DB821BFD0F0A000065D4 /* ViewerCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewerCamera.h; path = ../../../../Source/ModelViewer/ViewerCamera.h; sourceTree = "<group>"; };
 		C10B5D311BEDD24000583B8F /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/HelloFelix/Resources/Images; sourceTree = "<group>"; };
 		C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES3.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES3.xml; sourceTree = "<group>"; };
 		C10B5D361BEDD2A200583B8F /* TextureScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextureScene.xml; path = ../../../../Source/HelloFelix/Resources/TextureScene.xml; sourceTree = "<group>"; };
@@ -673,6 +676,8 @@
 			isa = PBXGroup;
 			children = (
 				C1B00E891BF690890060BE21 /* main.cpp */,
+				C106DB821BFD0F0A000065D4 /* ViewerCamera.h */,
+				C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */,
 				C1B00E741BF68FDF0060BE21 /* Resources */,
 			);
 			path = ModelViewer;
@@ -949,6 +954,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C106DB831BFD0F0A000065D4 /* ViewerCamera.cpp in Sources */,
 				C1B00E8A1BF690890060BE21 /* main.cpp in Sources */,
 				C1B00E9D1BF691E30060BE21 /* DefaultLibrary.metal in Sources */,
 			);

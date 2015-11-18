@@ -21,6 +21,7 @@ DEFINE_OBJECT_ID(Camera)
 
 Object::Object(const string &type, Scene *scene): mType(type), mScene(scene)
 {
+  setEventFlags(EVENT_NONE);
 }
 
 Object::~Object()

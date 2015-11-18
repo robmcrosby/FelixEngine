@@ -10,6 +10,7 @@
 #define Object_h
 
 #include <list>
+#include "EventHandler.h"
 #include "Component.h"
 
 
@@ -19,7 +20,7 @@ namespace fx
   /**
    *
    */
-  class Object
+  class Object: public EventHandler
   {
   public:
     Object(const std::string &type, Scene *scene);
@@ -128,10 +129,10 @@ namespace fx
    * Macro used to define ObjectId classes.
    */
   #define DEFINE_OBJECT_ID(T) \
-    struct T##ID: public Object::ObjectId {\
-    T##ID() {Object::GetObjectIdMap()[#T] = this;}\
+    struct T##ID: public fx::Object::ObjectId {\
+    T##ID() {fx::Object::GetObjectIdMap()[#T] = this;}\
     virtual ~T##ID() {}\
-    virtual Object* create(Scene *scene) {return new T(scene);}\
+    virtual fx::Object* create(fx::Scene *scene) {return new T(scene);}\
     static T##ID ID;\
     };\
     T##ID T##ID::ID;

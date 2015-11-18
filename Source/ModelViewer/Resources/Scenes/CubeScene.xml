@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
-  <Camera name="MainCamera">
+  <ViewerCamera name="MainCamera">
     <Projection frame="MainWindow" type="ortho" aspect="auto">
       <Volume near="0.0" far="10.0" left="-2.0" right="2.0" top="2.0" bottom="-2.0"/>
     </Projection>
@@ -16,7 +16,7 @@
         </ClearState>
       </Slot>
     </RenderSlots>
-  </Camera>
+  </ViewerCamera>
   <Model name="Triangle">
     <Transform>
       <Scale>0.5, 0.5, 0.5</Scale>
