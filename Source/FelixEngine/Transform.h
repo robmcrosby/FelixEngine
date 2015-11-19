@@ -46,9 +46,9 @@ namespace fx
       Item& operator=(TYPE t) {type = t; return *this;}
       Item& operator=(const vec4 &d) {data = d; return *this;}
       bool operator==(TYPE t) const {return type == t;}
-      void apply(mat4 &matrix) const {matrix *= toMatrix();}
+      void apply(mat4 &matrix) const {matrix *= toMatrix4x4();}
       bool setToXML(const XMLTree::Node *node);
-      mat4 toMatrix() const;
+      mat4 toMatrix4x4() const;
       
       vec4 data;
       TYPE type;

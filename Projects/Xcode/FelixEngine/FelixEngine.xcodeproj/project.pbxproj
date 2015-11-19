@@ -106,6 +106,8 @@
 		C197CCD11BE96E3D007F68E0 /* SDLEventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CCCF1BE96E3D007F68E0 /* SDLEventSystem.h */; };
 		C197CE2E1BED5E62007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = 37104A001BBF4056003EEC37 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE481BED5F37007F68E0 /* MTLGraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CBA85D1BD56561002A358A /* MTLGraphicResources.h */; };
+		C19892561BFD370F007DF57A /* TrackingView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892551BFD370F007DF57A /* TrackingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892571BFD3D1B007DF57A /* OrbitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -123,7 +125,6 @@
 		C1B00ECD1BF7E1D90060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECC1BF7E1D90060BE21 /* Scenes */; };
 		C1B00ED71BF7E6C10060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ED61BF7E6C10060BE21 /* Meshes */; };
 		C1B00EDD1BF7F4830060BE21 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */; };
-		C1B00EE01BFBA5950060BE21 /* View.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00EDE1BFBA5950060BE21 /* View.cpp */; };
 		C1B00EE11BFBA5950060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EDF1BFBA5950060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -268,6 +269,8 @@
 		C197CCCA1BE821EF007F68E0 /* EventHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = ../../../../Source/FelixEngine/EventHandler.cpp; sourceTree = "<group>"; };
 		C197CCCE1BE96E3D007F68E0 /* SDLEventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SDLEventSystem.cpp; path = ../../../../Source/FelixEngine/SDLEventSystem.cpp; sourceTree = "<group>"; };
 		C197CCCF1BE96E3D007F68E0 /* SDLEventSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLEventSystem.h; path = ../../../../Source/FelixEngine/SDLEventSystem.h; sourceTree = "<group>"; };
+		C19892551BFD370F007DF57A /* TrackingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackingView.h; path = ../../../../Source/FelixEngine/TrackingView.h; sourceTree = "<group>"; };
+		C19892571BFD3D1B007DF57A /* OrbitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrbitView.h; path = ../../../../Source/FelixEngine/OrbitView.h; sourceTree = "<group>"; };
 		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
 		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
@@ -284,7 +287,6 @@
 		C1B00ECC1BF7E1D90060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
 		C1B00ED61BF7E6C10060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
 		C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/ModelViewer/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
-		C1B00EDE1BFBA5950060BE21 /* View.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = View.cpp; path = ../../../../Source/FelixEngine/View.cpp; sourceTree = "<group>"; };
 		C1B00EDF1BFBA5950060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -538,12 +540,11 @@
 				C10B5D3C1BF0F9DE00583B8F /* Component.cpp */,
 				37CD4E371BC83E6300DAB4E3 /* Transform.h */,
 				37CD4E361BC83E6300DAB4E3 /* Transform.cpp */,
-				C1B00EDF1BFBA5950060BE21 /* View.h */,
-				C1B00EDE1BFBA5950060BE21 /* View.cpp */,
 				37B48FDC1BC9837B00FC97A5 /* Projection.h */,
 				37B48FDB1BC9837B00FC97A5 /* Projection.cpp */,
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
 				37B48FDF1BC984B500FC97A5 /* RenderSlots.cpp */,
+				C19892541BFD36F9007DF57A /* Views */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -606,6 +607,16 @@
 				C197CCCE1BE96E3D007F68E0 /* SDLEventSystem.cpp */,
 			);
 			name = SDLEventSystem;
+			sourceTree = "<group>";
+		};
+		C19892541BFD36F9007DF57A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C1B00EDF1BFBA5950060BE21 /* View.h */,
+				C19892551BFD370F007DF57A /* TrackingView.h */,
+				C19892571BFD3D1B007DF57A /* OrbitView.h */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		C1A7D42A1BE078980064E84A /* EventSystem */ = {
@@ -684,6 +695,7 @@
 				C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */,
 				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				C106DB721BFCFECA000065D4 /* Model.h in Headers */,
+				C19892561BFD370F007DF57A /* TrackingView.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */,
 				C197CE2E1BED5E62007F68E0 /* Scene.h in Headers */,
@@ -707,6 +719,7 @@
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,
 				37E22FDC1BCF38D40018BA15 /* ImageLoader.h in Headers */,
 				37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */,
+				C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */,
 				37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
 				37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */,
@@ -872,7 +885,6 @@
 				3722FDDF1BDAFFAB00B07476 /* MTLUniformMap.m in Sources */,
 				37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */,
 				370FEA711BC2F11500440244 /* Platform.mm in Sources */,
-				C1B00EE01BFBA5950060BE21 /* View.cpp in Sources */,
 				37DCCD961BD3C563003D9081 /* MTLGraphicSystem.mm in Sources */,
 				37CBA8671BD5752B002A358A /* MTLFrame.mm in Sources */,
 				37CBA8661BD5752B002A358A /* MTLDescriptorKey.mm in Sources */,

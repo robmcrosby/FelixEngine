@@ -28,29 +28,29 @@ namespace fx
     EVENT_ALL              = 0xFFFFFFFF, /** All Events */
     EVENT_NONE             = 0x00000000, /**< No Events */
     
-    EVENT_APP_MASK         = 0x0000000F, /**< Application events Mask */
+    EVENT_APP              = 0x0000000F, /**< Application events Mask */
     EVENT_APP_RENDER       = 0x00000001, /**< Application render */
     EVENT_APP_UPDATE       = 0x00000002, /**< Application update */
     EVENT_APP_QUIT         = 0x00000004, /**< Application quit */
     
-    EVENT_TOUCH_MASK       = 0x000000F0, /**< Touch events Mask */
+    EVENT_TOUCH            = 0x000000F0, /**< Touch events Mask */
     EVENT_TOUCH_DOWN       = 0x00000010, /**< Touch has made contact */
     EVENT_TOUCH_UP         = 0x00000020, /**< Touch has left contact */
     EVENT_TOUCH_MOVE       = 0x00000040, /**< Touch have moved */
     EVENT_TOUCH_GESTURE    = 0x00000080, /**< Touch gesture made */
     
-    EVENT_MOUSE_MASK       = 0x00000F00, /**< Mouse events Mask */
+    EVENT_MOUSE            = 0x00000F00, /**< Mouse events Mask */
     EVENT_MOUSE_DOWN       = 0x00000100, /**< Mouse button has been pressed */
     EVENT_MOUSE_UP         = 0x00000200, /**< Mouse button has been released */
     EVENT_MOUSE_MOVE       = 0x00000400, /**< Mouse has been moved */
     EVENT_MOUSE_WHEEL      = 0x00000800, /**< Mouse wheel has been moved */
     
-    EVENT_KEYBOARD_MASK    = 0x00007000, /**< Keyboard events Mask */
+    EVENT_KEYBOARD         = 0x00007000, /**< Keyboard events Mask */
     EVENT_KEYBOARD_DOWN    = 0x00001000, /**< Key has been pressed */
     EVENT_KEYBOARD_UP      = 0x00002000, /**< Key has been released */
     EVENT_KEYBOARD_REPEAT  = 0x00004000, /**< Key has been held down */
     
-    EVENT_WINDOW_MASK      = 0x03FF0000, /**< Window events mask */
+    EVENT_WINDOW           = 0x03FF0000, /**< Window events mask */
     EVENT_WINDOW_SHOWN     = 0x00010000, /**< Window has been shown */
     EVENT_WINDOW_HIDE      = 0x00020000, /**< Window has been hidden */
     EVENT_WINDOW_EXPOSED   = 0x00040000, /**< Window has been exposed and should be redrawn */
@@ -63,12 +63,12 @@ namespace fx
     EVENT_WINDOW_LEAVE     = 0x01000000, /**< Window has lost mouse focus */
     EVENT_WINDOW_CLOSE     = 0x02000000, /**< Window has been closed */
     
-    EVENT_MOTION_MASK      = 0x0C000000, /**< Motion events mask */
+    EVENT_MOTION           = 0x0C000000, /**< Motion events mask */
     EVENT_MOTION_ROTATION  = 0x04000000, /**< Device has been rotated */
     EVENT_MOTION_MOVEMENT  = 0x08000000, /**< Device has been moved */
     EVENT_MOTION_COMBINED  = 0x0C000000, /**< Device movement combined */
     
-    EVENT_USER_MASK        = 0xF0000000, /**< User events mask */
+    EVENT_USER             = 0xF0000000, /**< User events mask */
     EVENT_USER_1           = 0x10000000, /**< User event 1 */
     EVENT_USER_2           = 0x20000000, /**< User event 2 */
     EVENT_USER_3           = 0x40000000, /**< User event 3 */
@@ -109,7 +109,7 @@ namespace fx
       return *this;
     }
     
-    bool operator==(EVENT_TYPE type) const {return mType == type;}
+    bool operator==(EVENT_TYPE type) const {return mType & type;}
     
     void setType(EVENT_TYPE type) {mType = type;}
     EVENT_TYPE type() const {return mType;}

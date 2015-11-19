@@ -90,14 +90,14 @@ bool Transform::Item::setToXML(const XMLTree::Node *node)
   return success;
 }
 
-mat4 Transform::Item::toMatrix() const
+mat4 Transform::Item::toMatrix4x4() const
 {
   switch (type)
   {
     case SCALE:
       return mat4::Scale(data.xyz());
     case ANGLE_AXIS:
-      return mat4::Rotate(data.w, data.xyz());
+      return quat(data.xyz(), data.w).toMat4();
     case QUATERNION:
       return quat(data).toMat4();
     case TRANSLATE:

@@ -10,6 +10,8 @@
 #define View_h
 
 #include "Component.h"
+#include "Object.h"
+#include "RenderSlots.h"
 #include "Matrix.h"
 
 namespace fx
@@ -22,21 +24,31 @@ namespace fx
   class View: public Component
   {
   public:
-    View(Object *obj);
-    virtual ~View();
+    View(Object *obj): Component("View", obj), mRenderSlots(0)
+    {
+      mUpdateDelegate = UpdateDelegate::Create<View, &View::update>(this);
+    }
+    virtual ~View() {}
     
-    virtual bool setToXml(const XMLTree::Node *node);
-    virtual bool init();
+    virtual bool init()
+    {
+      mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
+      return mRenderSlots ? Component::init() : false;
+    }
     
-    void updateMatrix();
+    mat4 matrix4x4() const {return mMatrix;}
+    void setMatrix(const mat4 &matrix) {mMatrix = matrix;}
+    
+    RenderSlots* renderSlots() {return mRenderSlots;}
+    
+  protected:
+    void update(void*)
+    {
+      if (mRenderSlots)
+        mRenderSlots->localUniforms()["View"] = mMatrix;
+    }
     
   private:
-    void update(void*);
-    
-    vec3 mPosition;
-    vec3 mTarget;
-    vec3 mUp;
-    
     mat4 mMatrix;
     RenderSlots *mRenderSlots;
   };
