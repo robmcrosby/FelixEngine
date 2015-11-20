@@ -240,6 +240,8 @@ namespace fx
         GLint curFrameBuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
         
+        updateSize();
+        
         glGenFramebuffers(1, &mFrameBufferId);
         if (mFrameBufferId == 0)
           std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;

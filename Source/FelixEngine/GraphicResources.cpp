@@ -7,6 +7,8 @@
 //
 
 #include "GraphicResources.h"
+#include "GraphicSystem.h"
+#include "FelixEngine.h"
 #include "MeshLoader.h"
 #include "Platform.h"
 
@@ -62,6 +64,19 @@ bool Frame::setToXml(const XMLTree::Node &node)
   }
   setToLoad();
   return success;
+}
+
+void Frame::updateSize()
+{
+  if (mRefFrame != "")
+  {
+    GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+    if (sys)
+    {
+      Frame *frame = sys->getFrame(mRefFrame);
+      mSize = frame->size() * mScale;
+    }
+  }
 }
 
 

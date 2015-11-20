@@ -113,6 +113,7 @@ namespace fx
     bool load()
     {
       bool success = true;
+      updateSize();
       
       for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
       {

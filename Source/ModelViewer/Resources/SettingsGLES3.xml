@@ -29,12 +29,9 @@
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
-          uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
           out vec2 UV;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = Position;
             UV = UV_0;
           }
         </ShaderFunction>
@@ -44,6 +41,29 @@
           uniform sampler2D tex2D;
           out mediump vec4 FragColor;
           void main() {FragColor = texture(tex2D, UV);}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleNormal" type="vertex">
+          #version 300 es
+          in vec4 Position;
+          in vec4 Normal;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          uniform mat4 Rotation;
+          out vec3 vNormal;
+          void main() {
+            gl_Position = Projection * View * Model * Position;
+            vNormal = (Rotation * Normal).xyz;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="DirectLight" type="fragment">
+          #version 300 es
+          in mediump vec3 vNormal;
+          uniform mediump vec4 Color;
+          out mediump vec4 FragColor;
+          void main() {
+            FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);
+          }
         </ShaderFunction>
       </ShaderFunctions>
     </GLGraphicSystem>

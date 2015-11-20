@@ -61,7 +61,7 @@ void ViewerCamera::handleTouchEvent(const fx::Event &event)
   if (mOrbitView)
   {
     if (event == fx::EVENT_TOUCH_GESTURE)
-      mOrbitView->setDistance(mOrbitView->distance() - event.touchData().delta.y*2.0f);
+      mOrbitView->setDistance(mOrbitView->distance() - event.touchData().delta.y*8.0f);
     if (event == fx::EVENT_TOUCH_MOVE)
     {
       mOrbitView->setLongitude(mOrbitView->longitude() - event.touchData().delta.x*200.0f);

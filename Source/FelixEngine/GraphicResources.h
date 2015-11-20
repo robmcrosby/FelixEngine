@@ -89,6 +89,8 @@ namespace fx
     std::string refrenceFrame() const {return mRefFrame;}
     
   protected:
+    void updateSize();
+    
     ivec2 mSize;
     vec2 mScale;
     std::string mRefFrame;
