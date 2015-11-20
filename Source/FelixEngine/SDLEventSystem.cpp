@@ -289,11 +289,10 @@ float SDLEventSystem::getGestureDelta()
 {
   float distance = 0.0f;
   float delta = 0.0f;
-  int count = 0;
   for (map<int, Touch>::iterator i = mTouches.begin(); i != mTouches.end(); ++i)
   {
     map<int, Touch>::iterator j = i;
-    for (++j; j != mTouches.end(); ++j, ++count)
+    for (++j; j != mTouches.end(); ++j)
       distance += (i->second.nextLocation - j->second.nextLocation).length();
   }
   if (mLastDistance > 0.0f)

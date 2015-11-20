@@ -18,7 +18,8 @@
 //#define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
-#define SCENE_FILE "Scenes/CubeScene.xml"
+//#define SCENE_FILE "Scenes/CubeScene.xml"
+#define SCENE_FILE "Scenes/BunnyScene.xml"
 
 
 using namespace std;

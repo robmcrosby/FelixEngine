@@ -103,7 +103,7 @@ mat4 Transform::Item::toMatrix4x4() const
     case TRANSLATE:
       return mat4::Trans3d(data.xyz());
     case EULER_XYZ:
-      return mat4::RotX(data.x) * mat4::RotY(data.y) * mat4::RotZ(data.z);
+      return mat4::RotX(data.x*DegToRad) * mat4::RotY(data.y*DegToRad) * mat4::RotZ(data.z*DegToRad);
     case EULER_XZY:
       return mat4::RotX(data.x) * mat4::RotZ(data.z) * mat4::RotY(data.y);
     case EULER_YXZ:
@@ -148,5 +148,5 @@ Transform::TYPE Transform::GetEuler(const std::string &str)
     return EULER_ZXY;
   if (str == "zyx")
     return EULER_ZYX;
-  return IDENITY;
+  return EULER_XYZ;
 }

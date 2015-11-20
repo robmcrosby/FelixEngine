@@ -38,12 +38,14 @@ namespace fx
       {
         if (node->hasSubNode("Center"))
           setCenter(node->subContents("Center"));
+        if (node->hasAttribute("limit"))
+          setPolarLimit(node->attributeAsFloat("limit"));
         if (node->hasAttribute("latitude"))
           setLatitude(node->attributeAsFloat("latitude"));
         if (node->hasAttribute("longitude"))
           setLongitude(node->attributeAsFloat("longitude"));
-        if (node->hasAttribute("limit"))
-          setPolarLimit(node->attributeAsFloat("limit"));
+        if (node->hasAttribute("distance"))
+          setDistance(node->attributeAsFloat("distance"));
       }
       return success;
     }
