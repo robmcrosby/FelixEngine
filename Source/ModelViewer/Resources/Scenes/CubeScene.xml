@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
   <ViewerCamera name="MainCamera">
-    <Projection frame="MainWindow" type="ortho" aspect="auto">
-      <Volume near="0.0" far="10.0" left="-2.0" right="2.0" top="2.0" bottom="-2.0"/>
+    <Projection frame="MainWindow" type="frustum" aspect="auto">
+      <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
-    <OrbitView latitude="60.0" longitude="45" distance="2.0"/>
+    <OrbitView latitude="60.0" longitude="45" distance="4.0"/>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" frame="MainWindow">
         <ClearState>

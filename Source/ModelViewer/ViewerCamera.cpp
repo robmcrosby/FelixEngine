@@ -14,8 +14,11 @@ DEFINE_OBJECT_ID(ViewerCamera)
 
 ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene)
 {
-  setEventFlags(fx::EVENT_TOUCH | fx::EVENT_MOUSE);
-  cout << "Created Viewer Camera" << endl;
+  #if TARGET_OS_IPHONE
+  setEventFlags(fx::EVENT_TOUCH);
+  #else
+  setEventFlags(fx::EVENT_MOUSE);
+  #endif
 }
 
 bool ViewerCamera::init()
@@ -33,27 +36,36 @@ bool ViewerCamera::init()
 
 void ViewerCamera::handle(const fx::Event &event)
 {
-//  if (event == fx::EVENT_MOUSE)
-//    handleMouseEvent(event);
+  if (event == fx::EVENT_MOUSE)
+    handleMouseEvent(event);
   if (event == fx::EVENT_TOUCH)
     handleTouchEvent(event);
 }
 
 void ViewerCamera::handleMouseEvent(const fx::Event &event)
 {
-  if (mOrbitView && event == fx::EVENT_MOUSE_MOVE && (event.mouseData().buttons & fx::MOUSE_BUTTON_LEFT))
+  if (mOrbitView)
   {
-    mOrbitView->setLongitude(event.mouseData().delta.x*-0.5f + mOrbitView->longitude());
-    mOrbitView->setLatitude(event.mouseData().delta.y*0.5f + mOrbitView->latitude());
+    if (event == fx::EVENT_MOUSE_WHEEL)
+      mOrbitView->setDistance(mOrbitView->distance() + event.mouseData().delta.y*0.1f);
+    else if (event == fx::EVENT_MOUSE_MOVE && (event.mouseData().buttons & fx::MOUSE_BUTTON_LEFT))
+    {
+      mOrbitView->setLongitude(event.mouseData().delta.x*-0.5f + mOrbitView->longitude());
+      mOrbitView->setLatitude(event.mouseData().delta.y*0.5f + mOrbitView->latitude());
+    }
   }
 }
 
 void ViewerCamera::handleTouchEvent(const fx::Event &event)
 {
-  if (mOrbitView && event == fx::EVENT_TOUCH_MOVE)
+  if (mOrbitView)
   {
-    cout << "Touch: " << event.touchData().index << endl;
-    mOrbitView->setLongitude(event.touchData().delta.x*200.0f + mOrbitView->longitude());
-    mOrbitView->setLatitude(event.touchData().delta.y*-200.0f + mOrbitView->latitude());
+    if (event == fx::EVENT_TOUCH_GESTURE)
+      mOrbitView->setDistance(mOrbitView->distance() - event.touchData().delta.y*2.0f);
+    if (event == fx::EVENT_TOUCH_MOVE)
+    {
+      mOrbitView->setLongitude(mOrbitView->longitude() - event.touchData().delta.x*200.0f);
+      mOrbitView->setLatitude(mOrbitView->latitude() + event.touchData().delta.y*200.0f);
+    }
   }
 }

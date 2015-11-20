@@ -87,7 +87,7 @@ namespace fx
       setLatitude(mLatitude);
     }
     
-    void setDistance(float distance) {mDistance = distance < 0.0f ? 0.0f : distance;}
+    void setDistance(float distance) {mDistance = distance < 0.1f ? 0.1f : distance;}
     float distance() const {return mDistance;}
     
   private:
