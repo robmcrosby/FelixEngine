@@ -132,6 +132,7 @@
 		C197CE6A1BED8002007F68E0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CE651BED7FD1007F68E0 /* CoreAudio.framework */; };
 		C19892521BFD36A3007DF57A /* TrackingView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892511BFD36A3007DF57A /* TrackingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C198925A1BFD3D5A007DF57A /* OrbitView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892591BFD3D5A007DF57A /* OrbitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C198925C1BFFE171007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925B1BFFE171007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E801BF68FDF0060BE21 /* Assets.xcassets */; };
 		C1B00E8A1BF690890060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00E891BF690890060BE21 /* main.cpp */; };
 		C1B00E8B1BF690B00060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
@@ -298,6 +299,7 @@
 		C197CE671BED7FF1007F68E0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C19892511BFD36A3007DF57A /* TrackingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackingView.h; path = ../../../../Source/FelixEngine/TrackingView.h; sourceTree = "<group>"; };
 		C19892591BFD3D5A007DF57A /* OrbitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrbitView.h; path = ../../../../Source/FelixEngine/OrbitView.h; sourceTree = "<group>"; };
+		C198925B1BFFE171007DF57A /* GyroView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GyroView.h; path = ../../../../Source/FelixEngine/GyroView.h; sourceTree = "<group>"; };
 		C1B00E721BF68FDF0060BE21 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B00E801BF68FDF0060BE21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1B00E851BF68FDF0060BE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -526,7 +528,6 @@
 		C197CDEA1BED2AD3007F68E0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				C19892531BFD36AA007DF57A /* Views */,
 				C197CD831BED298D007F68E0 /* Component.h */,
 				C10B5D3A1BEDD65000583B8F /* Component.cpp */,
 				C197CDC71BED298D007F68E0 /* Transform.h */,
@@ -535,6 +536,7 @@
 				C197CDB41BED298D007F68E0 /* Projection.cpp */,
 				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
 				C197CDB71BED298D007F68E0 /* RenderSlots.cpp */,
+				C19892531BFD36AA007DF57A /* Views */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -679,6 +681,7 @@
 				C1B00EE31BFBAB9C0060BE21 /* View.h */,
 				C19892511BFD36A3007DF57A /* TrackingView.h */,
 				C19892591BFD3D5A007DF57A /* OrbitView.h */,
+				C198925B1BFFE171007DF57A /* GyroView.h */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -720,6 +723,7 @@
 				C197CE531BED5FC9007F68E0 /* IndexedMap.h in Headers */,
 				C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */,
 				C197CE371BED5EA3007F68E0 /* Projection.h in Headers */,
+				C198925C1BFFE171007DF57A /* GyroView.h in Headers */,
 				C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */,
 				C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */,
 				C197CE551BED5FD2007F68E0 /* MultiVector.h in Headers */,

@@ -95,8 +95,11 @@ namespace fx
     Quaternion conjugate()  const
     {
       Quaternion q(-x, -y, -z, w);
-      return q.Normalized();
+      return q.normalized();
     }
+    T norm() const {return x*x + y*y + z*z + w*w;}
+    Quaternion scale(T s) const {return Quaternion(x*s, y*s, z*s, w*s);}
+    Quaternion inverse() const {return conjugate().scale(1.0/norm());}
     
     void normalize() {*this = normalized();}
     

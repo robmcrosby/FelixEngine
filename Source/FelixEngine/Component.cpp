@@ -12,6 +12,7 @@
 #include "View.h"
 #include "TrackingView.h"
 #include "OrbitView.h"
+#include "GyroView.h"
 #include "Transform.h"
 
 
@@ -23,6 +24,7 @@ DEFINE_COMPONENT_ID(Transform);
 DEFINE_COMPONENT_ID(View);
 DEFINE_COMPONENT_ID(TrackingView);
 DEFINE_COMPONENT_ID(OrbitView);
+DEFINE_COMPONENT_ID(GyroView);
 DEFINE_COMPONENT_ID(Projection);
 
 

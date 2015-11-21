@@ -2,6 +2,7 @@
 <Settings>
   <Systems>
     <GCDTaskingSystem/>
+    <IOSMotionSystem frequency="60"/>
     <GLGraphicSystem>
       <Version major="3" minor="0"/>
       <Windows>

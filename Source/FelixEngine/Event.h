@@ -12,6 +12,7 @@
 #include "Platform.h"
 #include "Pool.h"
 #include "Vector.h"
+#include "Quaternion.h"
 
 #define DATA_SIZE 64
 
@@ -183,8 +184,9 @@ namespace fx
     struct MotionData
     {
       vec3 acceleration;
-      vec3 rotationRate;
       vec3 gravity;
+      vec3 rotationRate;
+      quat rotation;
     };
     MotionData& motionData() {return *(MotionData*)mData;}
     const MotionData& motionData() const {return *(MotionData*)mData;}

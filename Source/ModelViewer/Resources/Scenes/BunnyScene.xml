@@ -4,7 +4,7 @@
     <Projection frame="MainWindow" type="frustum" aspect="auto">
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
-    <OrbitView latitude="20.0" longitude="70" distance="2.0"/>
+    <GyroView distance="2.0"/>
     <RenderSlots>
       <Slot layer="0" pass="MainPass">
         <Frame name="TestFrame" frame="MainWindow">
