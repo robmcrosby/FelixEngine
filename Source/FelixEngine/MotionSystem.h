@@ -32,10 +32,10 @@ namespace fx
       mMotionSem.post();
       return ret;
     }
-    vec3 rotationRate() const
+    vec3 rotation() const
     {
       mMotionSem.wait();
-      vec3 ret = mRotationRate;
+      vec3 ret = mRotation;
       mMotionSem.post();
       return ret;
     }
@@ -46,19 +46,19 @@ namespace fx
       mMotionSem.post();
       return ret;
     }
-    quat rotation() const
+    quat orientation() const
     {
       mMotionSem.wait();
-      quat ret = mRotation;
+      quat ret = mOrientation;
       mMotionSem.post();
       return ret;
     }
     
   protected:
     vec3 mAcceleration;
-    vec3 mRotationRate;
+    vec3 mRotation;
     vec3 mGravity;
-    quat mRotation;
+    quat mOrientation;
     mutable Semaphore mMotionSem;
     
   private:

@@ -24,7 +24,7 @@ namespace fx
   class View: public Component
   {
   public:
-    View(Object *obj): Component("View", obj), mRenderSlots(0)
+    View(Object *obj): Component("View", obj), mRenderSlots(0), mActive(true), mLock(0)
     {
       mUpdateDelegate = UpdateDelegate::Create<View, &View::update>(this);
     }
@@ -36,20 +36,42 @@ namespace fx
       return mRenderSlots ? Component::init() : false;
     }
     
-    mat4 matrix4x4() const {return mMatrix;}
-    void setMatrix(const mat4 &matrix) {mMatrix = matrix;}
+    void setActive(bool active) {mActive = active;}
+    bool active() const {return mActive;}
+    
+    mat4 matrix4x4() const
+    {
+      SDL_AtomicLock(&mLock);
+      mat4 ret = mMatrix;
+      SDL_AtomicUnlock(&mLock);
+      return ret;
+    }
+    void setMatrix(const mat4 &matrix)
+    {
+      SDL_AtomicLock(&mLock);
+      mMatrix = matrix;
+      SDL_AtomicUnlock(&mLock);
+    }
     
     RenderSlots* renderSlots() {return mRenderSlots;}
     
   protected:
     void update(void*)
     {
-      if (mRenderSlots)
+      if (mActive && mRenderSlots)
+      {
+        SDL_AtomicLock(&mLock);
         mRenderSlots->localUniforms()["View"] = mMatrix;
+        SDL_AtomicUnlock(&mLock);
+      }
     }
+    
+  protected:
+    bool mActive;
     
   private:
     mat4 mMatrix;
+    mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;
   };
 }

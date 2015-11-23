@@ -11,6 +11,7 @@
 
 #include <FelixEngine/Camera.h>
 #include <FelixEngine/OrbitView.h>
+#include <FelixEngine/GyroView.h>
 
 
 class ViewerCamera: public fx::Camera
@@ -25,9 +26,13 @@ public:
 private:
   void handleMouseEvent(const fx::Event &event);
   void handleTouchEvent(const fx::Event &event);
+  void handleMotionEvent(const fx::Event &event);
   
-  fx::EventSystem *mEventSystem;
+  fx::EventSystem  *mEventSystem;
+  fx::MotionSystem *mMotionSystem;
+  
   fx::OrbitView *mOrbitView;
+  fx::GyroView  *mGyroView;
 };
 
 #endif /* ViewerCamera_h */

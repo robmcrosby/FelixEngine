@@ -185,8 +185,8 @@ namespace fx
     {
       vec3 acceleration;
       vec3 gravity;
-      vec3 rotationRate;
-      quat rotation;
+      vec3 rotation;
+      quat orientation;
     };
     MotionData& motionData() {return *(MotionData*)mData;}
     const MotionData& motionData() const {return *(MotionData*)mData;}

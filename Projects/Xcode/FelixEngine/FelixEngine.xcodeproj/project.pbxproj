@@ -108,6 +108,7 @@
 		C197CE481BED5F37007F68E0 /* MTLGraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CBA85D1BD56561002A358A /* MTLGraphicResources.h */; };
 		C19892561BFD370F007DF57A /* TrackingView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892551BFD370F007DF57A /* TrackingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892571BFD3D1B007DF57A /* OrbitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C198925E1C03BD8F007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925D1C03BD8F007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -271,6 +272,7 @@
 		C197CCCF1BE96E3D007F68E0 /* SDLEventSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLEventSystem.h; path = ../../../../Source/FelixEngine/SDLEventSystem.h; sourceTree = "<group>"; };
 		C19892551BFD370F007DF57A /* TrackingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TrackingView.h; path = ../../../../Source/FelixEngine/TrackingView.h; sourceTree = "<group>"; };
 		C19892571BFD3D1B007DF57A /* OrbitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrbitView.h; path = ../../../../Source/FelixEngine/OrbitView.h; sourceTree = "<group>"; };
+		C198925D1C03BD8F007DF57A /* GyroView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GyroView.h; path = ../../../../Source/FelixEngine/GyroView.h; sourceTree = "<group>"; };
 		C1A7D4241BDF52AF0064E84A /* Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Delegate.h; path = ../../../../Source/FelixEngine/Delegate.h; sourceTree = "<group>"; };
 		C1A7D4261BE0502D0064E84A /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C1A7D4281BE05D970064E84A /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
@@ -615,6 +617,7 @@
 				C1B00EDF1BFBA5950060BE21 /* View.h */,
 				C19892551BFD370F007DF57A /* TrackingView.h */,
 				C19892571BFD3D1B007DF57A /* OrbitView.h */,
+				C198925D1C03BD8F007DF57A /* GyroView.h */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -682,6 +685,7 @@
 				37B490191BCB119300FC97A5 /* Mutex.h in Headers */,
 				370FEA6C1BC2EEC500440244 /* Platform.h in Headers */,
 				C1A7D4321BE2EA360064E84A /* Pool.h in Headers */,
+				C198925E1C03BD8F007DF57A /* GyroView.h in Headers */,
 				37B4901D1BCB127500FC97A5 /* Variant.h in Headers */,
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,

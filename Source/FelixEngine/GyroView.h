@@ -52,16 +52,19 @@ namespace fx
     
     virtual void handle(const Event &event)
     {
-      if (event == EVENT_MOTION_COMBINED)
+      if (mActive && event == EVENT_MOTION)
       {
-        if (mInverseRotation == quat())
-          mInverseRotation = quat(vec3(0.0, 1.0, 0.0), 180.0f * DegToRad) * event.motionData().rotation.inverse();
+        if (mOrientation == quat())
+          mOrientation = quat(vec3(0.0, 1.0, 0.0), 180.0f * DegToRad) * event.motionData().orientation.inverse();
         
-        quat rotation = mInverseRotation * event.motionData().rotation;
+        quat rotation = mOrientation * event.motionData().orientation;
         mDirection = rotation * vec3(0.0f, 0.0f, 1.0f);
         mUp = rotation * vec3(0.0f, 1.0f, 0.0f);
       }
     }
+    
+    void setDistance(float distance) {mDistance = distance < 0.1f ? 0.1f : distance;}
+    float distance() const {return mDistance;}
     
   private:
     void update(void*)
@@ -74,7 +77,7 @@ namespace fx
     vec3 mCenter;
     vec3 mDirection;
     vec3 mUp;
-    quat mInverseRotation;
+    quat mOrientation;
     
     float mDistance;
     MotionSystem *mMotionSystem;

@@ -8,14 +8,16 @@
 
 #include "ViewerCamera.h"
 
+
 using namespace std;
 
 DEFINE_OBJECT_ID(ViewerCamera)
 
-ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene)
+ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene),
+mEventSystem(0), mMotionSystem(0), mOrbitView(0), mGyroView(0)
 {
   #if TARGET_OS_IPHONE
-  setEventFlags(fx::EVENT_TOUCH);
+  setEventFlags(fx::EVENT_TOUCH | fx::EVENT_MOTION);
   #else
   setEventFlags(fx::EVENT_MOUSE);
   #endif
@@ -29,7 +31,22 @@ bool ViewerCamera::init()
     mEventSystem = fx::FelixEngine::GetEventSystem();
     if (mEventSystem)
       mEventSystem->addHandler(this);
-    mOrbitView = dynamic_cast<fx::OrbitView*>(view());
+    
+    mMotionSystem = fx::FelixEngine::GetMotionSystem();
+    if (mMotionSystem)
+    {
+      mMotionSystem->addHandler(this);
+      
+      mGyroView = new fx::GyroView(this);
+      addComponent(mGyroView);
+      success &= mGyroView->init();
+      mGyroView->setActive(false);
+    }
+    
+    mOrbitView = new fx::OrbitView(this);
+    addComponent(mOrbitView);
+    mView = mOrbitView;
+    success &= mOrbitView->init();
   }
   return success;
 }
@@ -38,13 +55,15 @@ void ViewerCamera::handle(const fx::Event &event)
 {
   if (event == fx::EVENT_MOUSE)
     handleMouseEvent(event);
-  if (event == fx::EVENT_TOUCH)
+  else if (event == fx::EVENT_TOUCH)
     handleTouchEvent(event);
+  else if (event == fx::EVENT_MOTION)
+    handleMotionEvent(event);
 }
 
 void ViewerCamera::handleMouseEvent(const fx::Event &event)
 {
-  if (mOrbitView)
+  if (mOrbitView && mOrbitView->active())
   {
     if (event == fx::EVENT_MOUSE_WHEEL)
       mOrbitView->setDistance(mOrbitView->distance() + event.mouseData().delta.y*0.1f);
@@ -58,7 +77,7 @@ void ViewerCamera::handleMouseEvent(const fx::Event &event)
 
 void ViewerCamera::handleTouchEvent(const fx::Event &event)
 {
-  if (mOrbitView)
+  if (mOrbitView && mOrbitView->active())
   {
     if (event == fx::EVENT_TOUCH_GESTURE)
       mOrbitView->setDistance(mOrbitView->distance() - event.touchData().delta.y*8.0f);
@@ -66,6 +85,25 @@ void ViewerCamera::handleTouchEvent(const fx::Event &event)
     {
       mOrbitView->setLongitude(mOrbitView->longitude() - event.touchData().delta.x*200.0f);
       mOrbitView->setLatitude(mOrbitView->latitude() + event.touchData().delta.y*200.0f);
+    }
+  }
+}
+
+void ViewerCamera::handleMotionEvent(const fx::Event &event)
+{
+  if (mOrbitView && mGyroView)
+  {
+    fx::vec3 gravity = event.motionData().gravity;
+    if (mOrbitView->active() && (gravity.x > 0.8f || gravity.x < -0.8f))
+    {
+      mGyroView->setDistance(mOrbitView->distance());
+      mGyroView->setActive(true);
+      mOrbitView->setActive(false);
+    }
+    else if (mGyroView->active() && gravity.y < -0.8f)
+    {
+      mOrbitView->setActive(true);
+      mGyroView->setActive(false);
     }
   }
 }

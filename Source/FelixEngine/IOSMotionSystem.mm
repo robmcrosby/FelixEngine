@@ -93,7 +93,7 @@ void IOSMotionSystem::handleAccelerationData(vec3 acceleration)
   Event event(EVENT_MOTION_MOVEMENT);
   event.motionData().gravity = acceleration;
   event.motionData().acceleration = acceleration;
-  event.motionData().rotationRate = vec3(0, 0, 0);
+  event.motionData().rotation = vec3(0, 0, 0);
   notify(event);
 }
 
@@ -101,24 +101,24 @@ void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
 {
   // Assign the rotation rate field
   mMotionSem.lock();
-  mRotationRate = rotation;
+  mRotation = rotation;
   mMotionSem.unlock();
   
   // Dispatch a rotation event
   Event event(EVENT_MOTION_ROTATION);
   event.motionData().gravity = vec3(0, 0, 0);
   event.motionData().acceleration = vec3(0, 0, 0);
-  event.motionData().rotationRate = rotation;
+  event.motionData().rotation = rotation;
   notify(event);
 }
 
-void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotationRate, quat rotation)
+void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation, quat orientation)
 {
   // Assign the rotation rate field
   mMotionSem.lock();
   mGravity = gravity;
   mAcceleration = acceleration;
-  mRotationRate = rotationRate;
+  mRotation = rotation;
   mRotation = rotation;
   mMotionSem.unlock();
   
@@ -126,8 +126,8 @@ void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rot
   Event event(EVENT_MOTION_COMBINED);
   event.motionData().gravity = gravity;
   event.motionData().acceleration = acceleration;
-  event.motionData().rotationRate = rotationRate;
   event.motionData().rotation = rotation;
+  event.motionData().orientation = orientation;
   notify(event);
 }
 
@@ -211,7 +211,7 @@ void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
 {
 }
 
-void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation, quat rotation)
+void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotationRate, quat rotation)
 {
 }
 
