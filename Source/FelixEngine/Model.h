@@ -44,20 +44,14 @@ namespace fx
     {
       mTransform = dynamic_cast<Transform*>(getComponentByType("Transform"));
       if (!mTransform)
-      {
         mTransform = new Transform(this);
-        addComponent(mTransform);
-      }
     }
     
     void setRenderSlots()
     {
       mRenderSlots = dynamic_cast<RenderSlots*>(getComponentByType("RenderSlots"));
       if (!mRenderSlots)
-      {
         mRenderSlots = new RenderSlots(this);
-        addComponent(mRenderSlots);
-      }
     }
     
   protected:

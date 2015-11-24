@@ -54,6 +54,10 @@ namespace fx
         mComponents.push_back(comp);
       return comp;
     }
+    void removeComponent(Component *comp)
+    {
+      mComponents.remove(comp);
+    }
     void clearComponents()
     {
       for (iterator itr = begin(); itr != end(); ++itr)

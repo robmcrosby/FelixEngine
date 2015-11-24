@@ -11,7 +11,6 @@
 
 #include "GLGraphicSystem.h"
 #include "GLTexture.h"
-#include "UniformMap.h"
 #include "TextureMap.h"
 #include "Platform.h"
 

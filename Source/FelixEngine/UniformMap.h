@@ -27,12 +27,11 @@ namespace fx
   class UniformMap
   {
   public:
-    typedef VariantMap::iterator iterator;
-    typedef VariantMap::const_iterator const_iterator;
+    typedef VariantMap::const_iterator iterator;
     
   public:
-    UniformMap(): mInternalMap(0) {setInternalMap();}
-    UniformMap(const UniformMap &that): mInternalMap(0)
+    UniformMap(): mInternalMap(0), mLock(0) {setInternalMap();}
+    UniformMap(const UniformMap &that): mInternalMap(0), mLock(0)
     {
       setInternalMap();
       *this = that;
@@ -45,21 +44,27 @@ namespace fx
       return *this;
     }
     
+    void set(const std::string &key, const Uniform &uniform)
+    {
+      lock();
+      if (key == "View" && uniform.mat4Value() == mat4())
+        std::cout << "Idenity" << std::endl;
+      mMap[key] = uniform;
+      unlock();
+    }
+    
     Variant& operator[](const std::string &key) {return mMap[key];}
     void erase(const std::string &key) {mMap.erase(key);}
     void clear() {mMap.clear();}
     
-    iterator begin() {return mMap.begin();}
-    iterator end()   {return mMap.end();}
-    
-    const_iterator begin() const {return mMap.begin();}
-    const_iterator end()   const {return mMap.end();}
+    iterator begin() const {return mMap.begin();}
+    iterator end()   const {return mMap.end();}
     
     size_t size() const {return mMap.size();}
     size_t sizeInBytes() const
     {
       size_t totalSize = 0;
-      for (const_iterator itr = begin(); itr != end(); ++itr)
+      for (iterator itr = begin(); itr != end(); ++itr)
         totalSize += itr->second.sizeInBytes();
       return totalSize;
     }
@@ -85,6 +90,9 @@ namespace fx
       return success;
     }
     
+    void lock() const {SDL_AtomicLock(&mLock);}
+    void unlock() const {SDL_AtomicUnlock(&mLock);}
+    
   protected:
     void setInternalMap()
     {
@@ -93,7 +101,9 @@ namespace fx
         mInternalMap = system->getInternalUniformMap(this);
     }
     
+  private:
     VariantMap mMap;
+    mutable SDL_SpinLock mLock;
     InternalUniformMap *mInternalMap;
   };
 }

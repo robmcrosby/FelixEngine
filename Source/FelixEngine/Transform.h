@@ -79,12 +79,17 @@ namespace fx
     
     void updateMatrices();
     
+    void lock() {SDL_AtomicLock(&mLock);}
+    void unlock() {SDL_AtomicUnlock(&mLock);}
+    
   private:
     void update(void*);
     
     Stack mStack;
     mat4 mModelMatrix;
     mat4 mRotationMatrix;
+    
+    mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;
   };
 }

@@ -78,8 +78,11 @@ namespace fx
     void setMaterial(Material *material) {mMaterial = material;}
     Material* material() const {return mMaterial;}
     
-    void setLocalUniforms(UniformMap *map) {mLocalUniforms = map;}
-    UniformMap* localUniforms() const {return mLocalUniforms;}
+    UniformMap& uniforms() {return mUniforms;}
+    const UniformMap& uniforms() const {return mUniforms;}
+    
+    void lock() {mUniforms.lock();}
+    void unlock() {mUniforms.unlock();}
     
     static int GetPassIndex(const std::string &pass);
     
@@ -95,7 +98,7 @@ namespace fx
     
     Material *mMaterial;
     
-    UniformMap *mLocalUniforms;
+    UniformMap mUniforms;
     
     std::string mPass;
     int mPassIndex;
@@ -128,13 +131,8 @@ namespace fx
     void addSlot();
     void clear();
     
-  public:
-    UniformMap& localUniforms() {return mLocalUniforms;}
-    const UniformMap& localUniforms() const {return mLocalUniforms;}
-    
   private:
     GraphicSystem *mGraphicSystem;
-    UniformMap mLocalUniforms;
     std::vector<RenderSlot*> mSlots;
   };
 }

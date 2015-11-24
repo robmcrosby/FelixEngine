@@ -16,7 +16,7 @@ using namespace std;
 using namespace fx;
 
 
-Transform::Transform(Object *obj): Component("Transform", obj), mRenderSlots(0)
+Transform::Transform(Object *obj): Component("Transform", obj), mRenderSlots(0), mLock(0)
 {
   mUpdateDelegate = UpdateDelegate::Create<Transform, &Transform::update>(this);
 }
@@ -49,6 +49,8 @@ bool Transform::init()
 
 void Transform::updateMatrices()
 {
+  lock();
+  
   mModelMatrix = mat4();
   mRotationMatrix = mat4();
   for (const_iterator itr = begin(); itr != end(); ++itr)
@@ -57,16 +59,22 @@ void Transform::updateMatrices()
     if (itr->type != SCALE && itr->type != TRANSLATE)
       itr->apply(mRotationMatrix);
   }
+  unlock();
 }
 
 void Transform::update(void*)
 {
   updateMatrices();
+  lock();
   if (mRenderSlots)
   {
-    mRenderSlots->localUniforms()["Model"] = mModelMatrix;
-    mRenderSlots->localUniforms()["Rotation"] = mRotationMatrix;
+    for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+    {
+      (*itr)->uniforms().set("Model", mModelMatrix);
+      (*itr)->uniforms().set("Rotation", mRotationMatrix);
+    }
   }
+  unlock();
 }
 
 

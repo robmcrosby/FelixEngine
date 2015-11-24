@@ -27,12 +27,8 @@ namespace fx
   class Component: public EventHandler
   {
   public:
-    Component(const std::string &type, Object *obj): mType(type), mObject(obj)
-    {
-      setEventFlags(EVENT_NONE);
-      mUpdateDelegate = UpdateDelegate::Create<Component, &Component::update>(this);
-    }
-    virtual ~Component() {}
+    Component(const std::string &type, Object *obj);
+    virtual ~Component();
     
     virtual bool setToXml(const XMLTree::Node *node)
     {

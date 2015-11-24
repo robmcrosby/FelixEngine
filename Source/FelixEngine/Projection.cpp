@@ -18,7 +18,7 @@ using namespace std;
 
 
 Projection::Projection(Object *obj): Component("Projection", obj), mType(PROJ_ORTHO),
-mAspect(ASPECT_NONE), mFrame(0), mRenderSlots(0)
+mAspect(ASPECT_NONE), mFrame(0), mRenderSlots(0), mLock(0)
 {
   updateMatrix();
   mUpdateDelegate = UpdateDelegate::Create<Projection, &Projection::update>(this);
@@ -69,20 +69,22 @@ void Projection::setFrame(const std::string &name)
     setFrame(sys->getFrame(name));
 }
 
-void Projection::setFrame(Frame *frame)
-{
-  mFrame = frame;
-}
-
 void Projection::update(void *)
 {
   updateMatrix();
+  lock();
   if (mRenderSlots)
-    mRenderSlots->localUniforms()["Projection"] = mMatrix;
+  {
+    for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+      (*itr)->uniforms().set("Projection", mMatrix);
+  }
+  unlock();
 }
 
 void Projection::updateMatrix()
 {
+  lock();
+  
   Volume v = mVolume;
   if (mFrame)
   {
@@ -107,6 +109,8 @@ void Projection::updateMatrix()
     mMatrix = mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
   else if (mType == PROJ_FRUSTUM)
     mMatrix = mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far);
+  
+  unlock();
 }
 
 PROJ_TYPE Projection::GetProjectionType(const std::string &str)

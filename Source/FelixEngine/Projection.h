@@ -68,20 +68,67 @@ namespace fx
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
     
-    void setVolume(const Volume &volume) {mVolume = volume;}
-    Volume volume() const {return mVolume;}
+    void setVolume(const Volume &volume)
+    {
+      lock();
+      mVolume = volume;
+      unlock();
+    }
+    Volume volume() const
+    {
+      lock();
+      Volume ret = mVolume;
+      unlock();
+      return ret;
+    }
     
     void setType(const std::string &str);
-    void setType(PROJ_TYPE type) {mType = type;}
-    PROJ_TYPE type() const {return mType;}
+    void setType(PROJ_TYPE type)
+    {
+      lock();
+      mType = type;
+      unlock();
+    }
+    PROJ_TYPE type() const
+    {
+      lock();
+      PROJ_TYPE ret = mType;
+      unlock();
+      return ret;
+    }
     
     void setAspect(const std::string &str);
-    void setAspect(ASPECT_TYPE aspect) {mAspect = aspect;}
-    ASPECT_TYPE aspect() const {return mAspect;}
+    void setAspect(ASPECT_TYPE aspect)
+    {
+      lock();
+      mAspect = aspect;
+      unlock();
+    }
+    ASPECT_TYPE aspect() const
+    {
+      lock();
+      ASPECT_TYPE ret = mAspect;
+      unlock();
+      return ret;
+    }
     
     void setFrame(const std::string &name);
-    void setFrame(Frame *frame);
-    Frame* frame() const {return mFrame;}
+    void setFrame(Frame *frame)
+    {
+      lock();
+      mFrame = frame;
+      unlock();
+    }
+    Frame* frame() const
+    {
+      lock();
+      Frame *ret = mFrame;
+      unlock();
+      return ret;
+    }
+    
+    void lock() const {SDL_AtomicLock(&mLock);}
+    void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   private:
     void update(void*);
@@ -94,6 +141,7 @@ namespace fx
     mat4   mMatrix;
     Frame *mFrame;
     
+    mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;
   };
 }

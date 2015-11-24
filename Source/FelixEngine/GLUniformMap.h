@@ -17,7 +17,7 @@ namespace fx
   class GLUniformMap: public InternalUniformMap
   {
   public:
-    GLUniformMap(UniformMap *map): mUniformMap(map) {}
+    GLUniformMap(const UniformMap *map): mUniformMap(map) {}
     virtual ~GLUniformMap() {}
     
     virtual void release() {mUniformMap = nullptr;}
@@ -26,11 +26,15 @@ namespace fx
     {
       if (inUse())
       {
+        mUniformMap->lock();
+        
         mList.resize(mUniformMap->size());
         UniformMap::iterator mapItr = mUniformMap->begin();
         VariantList::iterator listItr = mList.begin();
         while (mapItr != mUniformMap->end())
           *(listItr++) = *(mapItr++);
+        
+        mUniformMap->unlock();
       }
     }
     bool inUse() const {return mUniformMap;}
@@ -90,7 +94,7 @@ namespace fx
       }
     }
     
-    UniformMap *mUniformMap;
+    const UniformMap *mUniformMap;
     VariantList mList;
   };
 }

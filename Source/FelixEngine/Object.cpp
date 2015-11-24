@@ -38,7 +38,7 @@ bool Object::setToXml(const XMLTree::Node *node)
     if (node->hasAttribute("name"))
       setName(node->attribute("name"));
     for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-      success &= addComponent(Component::Create(*itr, this));
+      success &= (bool)Component::Create(*itr, this);
   }
   return success;
 }

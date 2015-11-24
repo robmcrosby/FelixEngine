@@ -38,13 +38,13 @@ bool ViewerCamera::init()
       mMotionSystem->addHandler(this);
       
       mGyroView = new fx::GyroView(this);
-      addComponent(mGyroView);
       success &= mGyroView->init();
       mGyroView->setActive(false);
     }
     
     mOrbitView = new fx::OrbitView(this);
-    addComponent(mOrbitView);
+    
+    delete mView;
     mView = mOrbitView;
     success &= mOrbitView->init();
   }

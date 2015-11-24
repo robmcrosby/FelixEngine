@@ -41,36 +41,46 @@ namespace fx
     
     mat4 matrix4x4() const
     {
-      SDL_AtomicLock(&mLock);
+      lock();
       mat4 ret = mMatrix;
-      SDL_AtomicUnlock(&mLock);
+      unlock();
       return ret;
     }
     void setMatrix(const mat4 &matrix)
     {
-      SDL_AtomicLock(&mLock);
+      lock();
       mMatrix = matrix;
-      SDL_AtomicUnlock(&mLock);
+      unlock();
     }
     
-    RenderSlots* renderSlots() {return mRenderSlots;}
+    RenderSlots* renderSlots()
+    {
+      lock();
+      RenderSlots *ret = mRenderSlots;
+      unlock();
+      return ret;
+    }
+    
+    void lock() const {SDL_AtomicLock(&mLock);}
+    void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   protected:
     void update(void*)
     {
+      lock();
       if (mActive && mRenderSlots)
       {
-        SDL_AtomicLock(&mLock);
-        mRenderSlots->localUniforms()["View"] = mMatrix;
-        SDL_AtomicUnlock(&mLock);
+        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+          (*itr)->uniforms().set("View", mMatrix);
       }
+      unlock();
     }
     
   protected:
+    mat4 mMatrix;
     bool mActive;
     
   private:
-    mat4 mMatrix;
     mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;
   };

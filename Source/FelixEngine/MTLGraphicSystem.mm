@@ -342,7 +342,7 @@ namespace fx
   
   struct MTLUniformMapInterface: InternalUniformMap
   {
-    MTLUniformMapInterface(UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
+    MTLUniformMapInterface(const UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
     virtual ~MTLUniformMapInterface() {mMTLUniformMap = nil;}
     
     virtual void release() {mUniformMap = nullptr;}
@@ -351,10 +351,11 @@ namespace fx
     {
       if (inUse() && mMTLUniformMap != nil)
       {
+        mUniformMap->lock();
         [mMTLUniformMap setUniformsSize:mUniformMap->size()];
         
         NSUInteger bufferSize = 0;
-        for (UniformMap::const_iterator itr = mUniformMap->begin(); itr != mUniformMap->end(); ++itr)
+        for (UniformMap::iterator itr = mUniformMap->begin(); itr != mUniformMap->end(); ++itr)
           bufferSize += (NSUInteger)((itr->second.sizeInBytes()/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
         [mMTLUniformMap setBufferSize:bufferSize];
         
@@ -363,7 +364,7 @@ namespace fx
         {
           NSUInteger offset = 0;
           char *buffer = (char*)[mMTLUniformMap.buffer contents];
-          UniformMap::const_iterator itr = mUniformMap->begin();
+          UniformMap::iterator itr = mUniformMap->begin();
           for (MTLUniform *uniform in mMTLUniformMap.uniforms)
           {
             // Set the Uniform information
@@ -379,11 +380,12 @@ namespace fx
             offset += (NSUInteger)((size/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
           }
         }
+        mUniformMap->unlock();
       }
     }
     bool inUse() const {return mUniformMap;}
     
-    UniformMap    *mUniformMap;
+    const UniformMap *mUniformMap;
     MTLUniformMap *mMTLUniformMap;
   };
 }
@@ -493,7 +495,7 @@ void MTLGraphicSystem::render()
   updateUniforms();
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
 {
   MTLUniformMapInterface *internalUniformMap = new MTLUniformMapInterface(map);
   internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
@@ -811,7 +813,7 @@ void MTLGraphicSystem::render()
 {
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
 {
   return nullptr;
 }

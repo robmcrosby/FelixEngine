@@ -152,7 +152,7 @@ void GLGraphicSystem::render()
 }
 
 
-InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
+InternalUniformMap* GLGraphicSystem::getInternalUniformMap(const UniformMap *map)
 {
   GLUniformMap *internalMap = new GLUniformMap(map);
   mGLUniforms.push_back(internalMap);

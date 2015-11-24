@@ -44,30 +44,21 @@ namespace fx
     {
       mView = dynamic_cast<View*>(getComponentByType("View"));
       if (!mView)
-      {
         mView = new View(this);
-        addComponent(mView);
-      }
     }
     
     void setProjection()
     {
       mProjection = dynamic_cast<Projection*>(getComponentByType("Projection"));
       if (!mProjection)
-      {
         mProjection = new Projection(this);
-        addComponent(mProjection);
-      }
     }
     
     void setRenderSlots()
     {
       mRenderSlots = dynamic_cast<RenderSlots*>(getComponentByType("RenderSlots"));
       if (!mRenderSlots)
-      {
         mRenderSlots = new RenderSlots(this);
-        addComponent(mRenderSlots);
-      }
     }
     
   protected:
