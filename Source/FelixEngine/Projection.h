@@ -112,34 +112,16 @@ namespace fx
       return ret;
     }
     
-    void setFrame(const std::string &name);
-    void setFrame(Frame *frame)
-    {
-      lock();
-      mFrame = frame;
-      unlock();
-    }
-    Frame* frame() const
-    {
-      lock();
-      Frame *ret = mFrame;
-      unlock();
-      return ret;
-    }
-    
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   private:
     void update(void*);
-    void updateMatrix();
+    mat4 toMatrix4x4(vec2 size) const;
     
     PROJ_TYPE   mType;
     ASPECT_TYPE mAspect;
-    
-    Volume mVolume;
-    mat4   mMatrix;
-    Frame *mFrame;
+    Volume      mVolume;
     
     mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;

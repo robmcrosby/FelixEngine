@@ -18,9 +18,8 @@ using namespace std;
 
 
 Projection::Projection(Object *obj): Component("Projection", obj), mType(PROJ_ORTHO),
-mAspect(ASPECT_NONE), mFrame(0), mRenderSlots(0), mLock(0)
+mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0)
 {
-  updateMatrix();
   mUpdateDelegate = UpdateDelegate::Create<Projection, &Projection::update>(this);
 }
 
@@ -38,8 +37,6 @@ bool Projection::setToXml(const XMLTree::Node *node)
       setType(node->attribute("type"));
     if (node->hasAttribute("aspect"))
       setAspect(node->attribute("aspect"));
-    if (node->hasAttribute("frame"))
-      setFrame(node->attribute("frame"));
     if (node->hasSubNode("Volume"))
       success &= mVolume.setToXml(node->subNode("Volume"));
   }
@@ -62,55 +59,43 @@ void Projection::setAspect(const string &str)
   setAspect(GetAspectType(str));
 }
 
-void Projection::setFrame(const std::string &name)
-{
-  GraphicSystem *sys = FelixEngine::GetGraphicSystem();
-  if (sys)
-    setFrame(sys->getFrame(name));
-}
-
 void Projection::update(void *)
 {
-  updateMatrix();
-  lock();
   if (mRenderSlots)
   {
     for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-      (*itr)->uniforms().set("Projection", mMatrix);
+    {
+      Frame *frame = (*itr)->frame();
+      vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+      (*itr)->uniforms().set("Projection", toMatrix4x4(size));
+    }
   }
-  unlock();
 }
 
-void Projection::updateMatrix()
+mat4 Projection::toMatrix4x4(vec2 size) const
 {
   lock();
-  
   Volume v = mVolume;
-  if (mFrame)
+  ASPECT_TYPE aspect = mAspect;
+  PROJ_TYPE type = mType;
+  unlock();
+  
+  if (aspect == ASPECT_WIDTH || (aspect == ASPECT_AUTO && size.w < size.h))
   {
-    float width = (float)mFrame->size().w;
-    float height = (float)mFrame->size().h;
-    
-    if (mAspect == ASPECT_WIDTH || (mAspect == ASPECT_AUTO && width < height))
-    {
-      float aspect = height/width;
-      v.top *= aspect;
-      v.bottom *= aspect;
-    }
-    else if (mAspect == ASPECT_HEIGHT || (mAspect == ASPECT_AUTO && height < width))
-    {
-      float aspect = width/height;
-      v.left *= aspect;
-      v.right *= aspect;
-    }
+    float aspectRatio = size.h/size.w;
+    v.top *= aspectRatio;
+    v.bottom *= aspectRatio;
+  }
+  else if (aspect == ASPECT_HEIGHT || (aspect == ASPECT_AUTO && size.h < size.w))
+  {
+    float aspectRatio = size.w/size.h;
+    v.left *= aspectRatio;
+    v.right *= aspectRatio;
   }
   
-  if (mType == PROJ_ORTHO)
-    mMatrix = mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
-  else if (mType == PROJ_FRUSTUM)
-    mMatrix = mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far);
-  
-  unlock();
+  if (type == PROJ_ORTHO)
+    return mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
+  return mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far);
 }
 
 PROJ_TYPE Projection::GetProjectionType(const std::string &str)
@@ -130,6 +115,7 @@ ASPECT_TYPE Projection::GetAspectType(const std::string &str)
     return ASPECT_HEIGHT;
   return ASPECT_NONE;
 }
+
 
 
 bool Volume::setToXml(const XMLTree::Node *node)

@@ -60,9 +60,10 @@ namespace fx
     }
     void clearComponents()
     {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        delete *itr;
+      std::list<Component*> tmp = mComponents;
       mComponents.clear();
+      for (iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+        delete *itr;
     }
     
     Component* getComponentByName(const std::string &name)

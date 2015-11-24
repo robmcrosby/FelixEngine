@@ -51,7 +51,7 @@ namespace fx
           if (**itr == "Resources")
             success &= addResources(**itr);
           else
-            success &= addObject(Object::Create(*itr, this));
+            success &= (bool)Object::Create(*itr, this);
         }
       }
       return success;
@@ -86,11 +86,13 @@ namespace fx
         mObjects.push_back(obj);
       return obj;
     }
+    void removeObject(Object *obj) {mObjects.remove(obj);}
     void clearObjects()
     {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        delete *itr;
+      std::list<Object*> tmp = mObjects;
       mObjects.clear();
+      for (iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+        delete *itr;
     }
     
     Object* getObjectByName(const std::string &name)

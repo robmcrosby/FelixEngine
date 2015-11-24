@@ -7,6 +7,7 @@
 //
 
 #include "Object.h"
+#include "Scene.h"
 #include "Model.h"
 #include "Camera.h"
 
@@ -21,12 +22,14 @@ DEFINE_OBJECT_ID(Camera)
 
 Object::Object(const string &type, Scene *scene): mType(type), mScene(scene)
 {
+  mScene->addObject(this);
   setEventFlags(EVENT_NONE);
 }
 
 Object::~Object()
 {
   clearComponents();
+  mScene->removeObject(this);
 }
 
 bool Object::setToXml(const XMLTree::Node *node)

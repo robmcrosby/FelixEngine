@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
   <ViewerCamera name="MainCamera">
-    <Projection frame="MainWindow" type="frustum" aspect="auto">
+    <Projection type="frustum" aspect="auto">
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
     <RenderSlots>
