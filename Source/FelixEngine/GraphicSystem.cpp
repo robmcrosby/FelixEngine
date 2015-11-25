@@ -14,7 +14,7 @@ using namespace fx;
 using namespace std;
 
 
-GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
+GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS), mStereoFlags(STEREO_MONO)
 {
   setEventFlags(EVENT_APP_UPDATE);
   mPasses.push_back(Pass());
@@ -33,7 +33,6 @@ bool GraphicSystem::addWindows(const XMLTree::Node *node)
     for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
       success &= addWindow(*itr);
   }
-  
   return success;
 }
 
@@ -112,4 +111,17 @@ void GraphicSystem::loadPasses()
   }
   mPassesMutex.unlock();
   mTaskBuffer.clear();
+}
+
+int GraphicSystem::GetStereoFlags(const std::string &flags)
+{
+  if (flags == "left")
+    return STEREO_LEFT;
+  if (flags == "right")
+    return STEREO_RIGHT;
+  if (flags == "binary")
+    return STEREO_BINARY;
+  if (flags == "mono")
+    return STEREO_MONO;
+  return STEREO_ALL;
 }

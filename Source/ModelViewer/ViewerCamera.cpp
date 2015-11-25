@@ -14,7 +14,7 @@ using namespace std;
 DEFINE_OBJECT_ID(ViewerCamera)
 
 ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene),
-mEventSystem(0), mMotionSystem(0), mOrbitView(0), mGyroView(0)
+mEventSystem(0), mMotionSystem(0), mOrbitView(0), mGyroView(0), mGraphicSystem(0)
 {
   #if TARGET_OS_IPHONE
   setEventFlags(fx::EVENT_TOUCH | fx::EVENT_MOTION);
@@ -29,6 +29,10 @@ bool ViewerCamera::init()
   if (success)
   {
     mEventSystem = fx::FelixEngine::GetEventSystem();
+    mGraphicSystem = fx::FelixEngine::GetGraphicSystem();
+    
+    mRenderSlots->setGlobal("ViewRot", fx::mat4());
+    
     if (mEventSystem)
       mEventSystem->addHandler(this);
     
@@ -99,11 +103,28 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       mGyroView->setDistance(mOrbitView->distance());
       mGyroView->setActive(true);
       mOrbitView->setActive(false);
+      
+      fx::quat orientation(fx::vec3(1.0f, 0.0f, 0.0f), -90.0f*fx::DegToRad);
+      orientation *= fx::quat(fx::vec3(0.0f, 0.0f, 1.0f), (mOrbitView->longitude()-180.0f)*fx::DegToRad);
+      if (gravity.x > 0.8f)
+      {
+        mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(90*fx::DegToRad));
+        mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
+      }
+      else
+      {
+        mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(-90*fx::DegToRad));
+        mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
+      }
+      mGyroView->setOrientation(orientation);
+      mGraphicSystem->setStereoFlags(fx::STEREO_BINARY);
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
     {
       mOrbitView->setActive(true);
       mGyroView->setActive(false);
+      mRenderSlots->setGlobal("ViewRot", fx::mat4());
+      mGraphicSystem->setStereoFlags(fx::STEREO_MONO);
     }
   }
 }

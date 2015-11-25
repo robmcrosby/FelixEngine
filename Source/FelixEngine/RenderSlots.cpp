@@ -57,6 +57,12 @@ void RenderSlots::clear()
   mSlots.clear();
 }
 
+void RenderSlots::setGlobal(const std::string &name, const Uniform &uniform)
+{
+  for (iterator itr = begin(); itr != end(); ++itr)
+    (*itr)->uniforms().set(name, uniform);
+}
+
 
 
 
@@ -66,7 +72,7 @@ void RenderSlots::clear()
 
 
 RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
-  mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mMaterial(0)
+  mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mMaterial(0), mStereoFlags(STEREO_ALL)
 {
   setEventFlags(EVENT_APP_RENDER);
   mGraphicSystem->addHandler(this);
@@ -148,6 +154,7 @@ int RenderSlot::GetPassIndex(const std::string &pass)
 }
 
 
+
 bool RenderSlot::setToXml(const XMLTree::Node *node)
 {
   bool success = false;
@@ -194,6 +201,9 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
       setMaterial(node->attribute("material"));
     else if (node->hasSubNode("Material"))
       setMaterial(*node->subNode("Material"));
+    
+    // Set the Stereo Type
+    setStereoFlags(GraphicSystem::GetStereoFlags(node->attribute("stereo")));
   }
   return success;
 }
@@ -201,7 +211,7 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
 void RenderSlot::render() const
 {
   GraphicTask task;
-  if (mGraphicSystem && applyToTask(task))
+  if (mGraphicSystem && (mGraphicSystem->stereoFlags() & mStereoFlags) && applyToTask(task))
     mGraphicSystem->addGraphicTask(task);
 }
 

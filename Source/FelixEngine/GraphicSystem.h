@@ -21,6 +21,15 @@ namespace fx
   class UniformMap;
   class InternalUniformMap;
   
+  enum STEREO_FLAGS
+  {
+    STEREO_MONO   = 0x01,
+    STEREO_BINARY = 0x06,
+    STEREO_ALL    = 0x07,
+    STEREO_LEFT   = 0x02,
+    STEREO_RIGHT  = 0x04,
+  };
+
   /**
    *
    */
@@ -43,8 +52,12 @@ namespace fx
     virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map) = 0;
     
     void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
-    
     virtual SDL_Window* getMainSDLWindow() = 0;
+    
+  public:
+    static int GetStereoFlags(const std::string &flags);
+    void setStereoFlags(int flags) {mStereoFlags = flags;}
+    int stereoFlags() const {return mStereoFlags;}
     
   private:
     void update();
@@ -59,6 +72,7 @@ namespace fx
     
     TaskCollection mTaskCollection;
     Pass mTaskBuffer;
+    int mStereoFlags;
     
     Passes mPasses;
     Mutex mPassesMutex;

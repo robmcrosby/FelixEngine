@@ -29,9 +29,10 @@
           #version 100
           attribute vec4 Position;
           attribute vec2 UV_0;
+          uniform   mat4 ViewRot;
           varying vec2 UV;
           void main() {
-            gl_Position = Position;
+            gl_Position = ViewRot * Position;
             UV = UV_0;
           }
         </ShaderFunction>

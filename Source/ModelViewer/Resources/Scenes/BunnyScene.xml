@@ -5,33 +5,101 @@
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
-        <Frame name="TestFrame" frame="MainWindow">
-          <Buffer format="rgba" texture="TestTexture" min="linear" mag="linear"/>
+      <Slot layer="0" pass="MainPass" stereo="mono">
+        <Frame name="MonoFrame" frame="MainWindow">
+          <Buffer format="rgba" texture="MonoTexture" min="linear" mag="linear"/>
           <Buffer format="depth"/>
         </Frame>
         <ClearState depth="1.0">
-          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+          <Color0>0.0, 0.0, 0.0, 1.0</Color0>
         </ClearState>
       </Slot>
-      <Slot layer="1" frame="MainWindow">
-        <Material name="TextureMaterial">
+      <Slot layer="1" frame="MainWindow" stereo="mono">
+        <Material name="MonoTextureMaterial">
           <Shader name="TextureShader">
             <Vertex function="SimpleVertexUV"/>
             <Fragment function="SimpleTexture"/>
           </Shader>
           <TextureMap>
-            <Texture name="TestTexture" min="linear" mag="linear"/>
+            <Texture name="MonoTexture" min="linear" mag="linear"/>
           </TextureMap>
         </Material>
         <ClearState>
           <Color0>0.0, 0.0, 0.0, 1.0</Color0>
         </ClearState>
-        <Mesh name="QuadMesh" primitive="strip">
+        <Mesh name="FullQuad" primitive="strip">
           <Buffer attribute="Position" components="4">
             -1.0,  1.0, 0.5, 1.0,
             1.0,  1.0, 0.5, 1.0,
             -1.0, -1.0, 0.5, 1.0,
+            1.0, -1.0, 0.5, 1.0,
+          </Buffer>
+          <Buffer attribute="UV_0" components="2">
+            0.0, 1.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+          </Buffer>
+        </Mesh>
+      </Slot>
+      
+      <Slot layer="0" pass="MainPass" stereo="left">
+        <Frame name="LeftFrame" width="1024" height="1024">
+          <Buffer format="rgba" texture="LeftTexture" min="linear" mag="linear"/>
+          <Buffer format="depth"/>
+        </Frame>
+        <ClearState depth="1.0">
+          <Color0>0.0, 0.0, 0.0, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      <Slot layer="1" pass="MainPass" stereo="right">
+        <Frame name="RightFrame" width="1024" height="1024">
+          <Buffer format="rgba" texture="RightTexture" min="linear" mag="linear"/>
+          <Buffer format="depth"/>
+        </Frame>
+        <ClearState depth="1.0">
+          <Color0>0.0, 0.0, 0.0, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      
+      <Slot layer="2" frame="MainWindow" pass="StereoPass" stereo="binary">
+        <ClearState>
+          <Color0>0.0, 0.0, 0.0, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      
+      <Slot pass="StereoPass" stereo="left">
+        <Material name="LeftTextureMaterial" shader="TextureShader">
+          <TextureMap>
+            <Texture name="LeftTexture" min="linear" mag="linear"/>
+          </TextureMap>
+        </Material>
+        <Mesh name="LeftQuad" primitive="strip">
+          <Buffer attribute="Position" components="4">
+            -1.0,  1.0, 0.5, 1.0,
+            0.0,  1.0, 0.5, 1.0,
+            -1.0, -1.0, 0.5, 1.0,
+            0.0, -1.0, 0.5, 1.0,
+          </Buffer>
+          <Buffer attribute="UV_0" components="2">
+            0.0, 1.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+          </Buffer>
+        </Mesh>
+      </Slot>
+      <Slot pass="StereoPass" stereo="right">
+        <Material name="RightTextureMaterial" shader="TextureShader">
+          <TextureMap>
+            <Texture name="RightTexture" min="linear" mag="linear"/>
+          </TextureMap>
+        </Material>
+        <Mesh name="RightQuad" primitive="strip">
+          <Buffer attribute="Position" components="4">
+            0.0,  1.0, 0.5, 1.0,
+            1.0,  1.0, 0.5, 1.0,
+            0.0, -1.0, 0.5, 1.0,
             1.0, -1.0, 0.5, 1.0,
           </Buffer>
           <Buffer attribute="UV_0" components="2">

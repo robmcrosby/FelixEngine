@@ -78,6 +78,9 @@ namespace fx
     void setMaterial(Material *material) {mMaterial = material;}
     Material* material() const {return mMaterial;}
     
+    void setStereoFlags(int flags) {mStereoFlags = flags;}
+    int stereoFlags() const {return mStereoFlags;}
+    
     UniformMap& uniforms() {return mUniforms;}
     const UniformMap& uniforms() const {return mUniforms;}
     
@@ -102,6 +105,7 @@ namespace fx
     
     std::string mPass;
     int mPassIndex;
+    int mStereoFlags;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;
@@ -130,6 +134,8 @@ namespace fx
     
     void addSlot();
     void clear();
+    
+    void setGlobal(const std::string &name, const Uniform &uniform);
     
   private:
     GraphicSystem *mGraphicSystem;

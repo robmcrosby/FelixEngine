@@ -23,7 +23,8 @@ namespace fx
   class GyroView: public View
   {
   public:
-    GyroView(Object *obj): View(obj), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mDirection(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f)
+    GyroView(Object *obj): View(obj), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
+      mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f)
     {
       setEventFlags(EVENT_MOTION_COMBINED);
       mUpdateDelegate = UpdateDelegate::Create<GyroView, &GyroView::update>(this);
@@ -54,29 +55,32 @@ namespace fx
     {
       if (mActive && event == EVENT_MOTION)
       {
-        if (mOrientation == quat())
-          mOrientation = quat(vec3(0.0, 1.0, 0.0), 180.0f * DegToRad) * event.motionData().orientation.inverse();
-        
         quat rotation = mOrientation * event.motionData().orientation;
-        mDirection = rotation * vec3(0.0f, 0.0f, 1.0f);
-        mUp = rotation * vec3(0.0f, 1.0f, 0.0f);
+        mFwd = rotation * mFwdAxis;
+        mUp = rotation * mUpAxis;
       }
     }
     
     void setDistance(float distance) {mDistance = distance < 0.1f ? 0.1f : distance;}
     float distance() const {return mDistance;}
     
+    void setForwardAxis(const vec3 &axis) {mFwdAxis = axis;}
+    void setUpAxis(const vec3 &axis) {mUpAxis = axis;}
+    
+    void setOrientation(const quat &orient) {mOrientation = orient;}
+    quat orientation() const {return mOrientation;}
+    
   private:
     void update(void*)
     {
-      vec3 pos(mCenter + mDirection*mDistance);
+      vec3 pos(mCenter + mFwd*mDistance);
       setMatrix(mat4::LookAt(pos, mCenter, mUp));
       View::update(nullptr);
     }
     
     vec3 mCenter;
-    vec3 mDirection;
-    vec3 mUp;
+    vec3 mFwdAxis, mUpAxis;
+    vec3 mFwd, mUp;
     quat mOrientation;
     
     float mDistance;

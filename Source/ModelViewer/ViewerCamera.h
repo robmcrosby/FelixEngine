@@ -12,6 +12,7 @@
 #include <FelixEngine/Camera.h>
 #include <FelixEngine/OrbitView.h>
 #include <FelixEngine/GyroView.h>
+#include <FelixEngine/GraphicSystem.h>
 
 
 class ViewerCamera: public fx::Camera
@@ -33,6 +34,7 @@ private:
   
   fx::OrbitView *mOrbitView;
   fx::GyroView  *mGyroView;
+  fx::GraphicSystem *mGraphicSystem;
 };
 
 #endif /* ViewerCamera_h */
