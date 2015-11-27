@@ -39,9 +39,9 @@ bool GraphicSystem::addWindows(const XMLTree::Node *node)
 bool GraphicSystem::addWindow(const XMLTree::Node *node)
 {
   bool success = false;
-  if (node && node->hasAttribute("name"))
+  if (node)
   {
-    Window *window = getWindow(node->attribute("name"));
+    Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
     success = window && window->setToXml(*node);
   }
   return success;
@@ -49,23 +49,17 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
 
 Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
-  Resource *resource = nullptr;
-  if (name == "")
-    cerr << "Error: Blank name for Graphic Resource: " << type << endl;
-  else
-  {
-    if (type == "Window")
-      resource = getWindow(name);
-    else if (type == "Frame")
-      resource = getFrame(name);
-    else if (type == "Mesh")
-      resource = getMesh(name);
-    else if (type == "Shader")
-      resource = getShader(name);
-    else if (type == "Texture")
-      resource = getTexture(name);
-  }
-  return resource;
+  if (type == "Window")
+    return name == "" ? getWindow(MAIN_WINDOW) : getWindow(name);
+  if (type == "Frame")
+    return name == "" ? getFrame(MAIN_WINDOW) : getFrame(name);
+  if (type == "Mesh")
+    return getMesh(name);
+  if (type == "Shader")
+    return getShader(name);
+  if (type == "Texture")
+    return getTexture(name);
+  return nullptr;
 }
 
 void GraphicSystem::handle(const fx::Event &event)

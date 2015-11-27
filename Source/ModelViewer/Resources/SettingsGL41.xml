@@ -5,7 +5,7 @@
     <GLGraphicSystem>
       <Version major="4" minor="1"/>
       <Windows>
-        <Window name="MainWindow" title="Model Viewer" type="resizable">
+        <Window title="Model Viewer" type="resizable">
           <position>100, 100</position>
           <size>512, 512</size>
         </Window>

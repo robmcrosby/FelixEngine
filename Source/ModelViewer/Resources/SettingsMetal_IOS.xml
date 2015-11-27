@@ -5,7 +5,7 @@
     <IOSMotionSystem frequency="60"/>
     <MTLGraphicSystem>
       <Windows>
-        <Window name="MainWindow"/>
+        <Window/>
       </Windows>
     </MTLGraphicSystem>
   </Systems>

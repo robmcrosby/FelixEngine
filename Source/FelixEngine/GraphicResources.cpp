@@ -50,17 +50,17 @@ bool Frame::setToXml(const XMLTree::Node &node)
   // Set the size
   setSize(ivec2(0, 0));
   setScale(vec2(1.0f, 1.0f));
-  if (node.hasAttribute("frame"))
-  {
-    mRefFrame = node.attribute("frame");
-    if (node.hasAttribute("scale"))
-      setScale(node.attribute("scale"));
-  }
-  else
+  if (node.hasAttribute("width") && node.hasAttribute("height"))
   {
     int width  = node.attributeAsInt("width");
     int height = node.attributeAsInt("height");
     setSize(ivec2(width, height));
+  }
+  else
+  {
+    mRefFrame = node.hasAttribute("frame") ? node.attribute("frame") : MAIN_WINDOW;
+    if (node.hasAttribute("scale"))
+      setScale(node.attribute("scale"));
   }
   setToLoad();
   return success;

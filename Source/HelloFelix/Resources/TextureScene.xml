@@ -2,7 +2,7 @@
 <Scene name="TextureScene">
   <Model name="Quad">
     <RenderSlots>
-      <Slot layer="0" frame="MainWindow">
+      <Slot layer="0">
         <Mesh name="QuadMesh" primitive="strip">
           <Buffer attribute="Position" components="4">
             -0.8,  0.8, 0.0, 1.0,

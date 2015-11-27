@@ -16,6 +16,8 @@
 #include "Color.h"
 #include "Sampler.h"
 
+#define MAIN_WINDOW "MainWindow"
+
 
 namespace fx
 {

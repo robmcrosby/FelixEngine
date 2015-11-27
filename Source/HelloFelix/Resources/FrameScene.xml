@@ -30,7 +30,7 @@
   </Model>
   <Model name="Quad">
     <RenderSlots>
-      <Slot layer="1" frame="MainWindow">
+      <Slot layer="1">
         <Mesh name="QuadMesh" primitive="strip">
           <Buffer attribute="Position" components="4">
             -0.8,  0.8, 0.0, 1.0,

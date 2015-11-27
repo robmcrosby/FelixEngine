@@ -13,8 +13,8 @@
 //#include <FelixEngine/TaskGroup.h>
 
 #if __IPHONEOS__
-//#define SETTINGS_FILE "SettingsGLES2.xml"
-#define SETTINGS_FILE "SettingsGLES3.xml"
+#define SETTINGS_FILE "SettingsGLES2.xml"
+//#define SETTINGS_FILE "SettingsGLES3.xml"
 //#define SETTINGS_FILE "SettingsMetal.xml"
 #else
 #define SETTINGS_FILE "SettingsGL41.xml"
@@ -23,8 +23,8 @@
 
 //#define SCENE_FILE "TriangleScene.xml"
 //#define SCENE_FILE "TextureScene.xml"
-//#define SCENE_FILE "FrameScene.xml"
-#define SCENE_FILE "DepthScene.xml"
+#define SCENE_FILE "FrameScene.xml"
+//#define SCENE_FILE "DepthScene.xml"
 
 using namespace std;
 

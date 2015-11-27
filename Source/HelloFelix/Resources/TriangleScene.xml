@@ -2,7 +2,7 @@
 <Scene name="TriangleScene">
   <Model name="Triangle">
     <RenderSlots>
-      <Slot layer="0" frame="MainWindow">
+      <Slot layer="0">
         <Mesh name="TriangleMesh" primitive="triangles">
           <Buffer attribute="Position" components="4">
             -0.8, -0.6, 0.0, 1.0,

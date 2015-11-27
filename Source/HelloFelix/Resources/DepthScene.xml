@@ -64,7 +64,7 @@
   </Model>
   <Model name="TextureQuad">
     <RenderSlots>
-      <Slot layer="2" mesh="QuadMesh" frame="MainWindow">
+      <Slot layer="2" mesh="QuadMesh">
         <Material shader="TextureShader">
           <TextureMap>
             <Texture name="TestTexture" min="linear" mag="linear"/>

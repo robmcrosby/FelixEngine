@@ -195,6 +195,8 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
       setFrame(node->attribute("frame"));
     else if (node->hasSubNode("Frame"))
       setFrame(*node->subNode("Frame"));
+    else
+      setFrame(MAIN_WINDOW);
     
     // Set the Material
     if (node->hasAttribute("material"))
