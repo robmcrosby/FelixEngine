@@ -112,16 +112,47 @@ namespace fx
       return ret;
     }
     
+    void setDisparity(float disp)
+    {
+      lock();
+      mDisparity = disp;
+      unlock();
+    }
+    float disparity() const
+    {
+      lock();
+      float ret = mDisparity;
+      unlock();
+      return ret;
+    }
+    
+    void setZeroDistance(float dist)
+    {
+      lock();
+      mZeroDistance = dist;
+      unlock();
+    }
+    float zeroDistance() const
+    {
+      lock();
+      float ret = mZeroDistance;
+      unlock();
+      return ret;
+    }
+    
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   private:
     void update(void*);
-    mat4 toMatrix4x4(vec2 size) const;
+    mat4 toMatrix4x4(vec2 size, int flags) const;
     
     PROJ_TYPE   mType;
     ASPECT_TYPE mAspect;
     Volume      mVolume;
+    
+    float mDisparity;
+    float mZeroDistance;
     
     mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;

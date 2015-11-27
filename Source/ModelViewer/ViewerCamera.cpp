@@ -117,6 +117,7 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
       }
       mGyroView->setOrientation(orientation);
+      mProjection->setZeroDistance(mOrbitView->distance());
       mGraphicSystem->setStereoFlags(fx::STEREO_BINARY);
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
