@@ -20,15 +20,6 @@ namespace fx
 {
   class UniformMap;
   class InternalUniformMap;
-  
-  enum STEREO_FLAGS
-  {
-    STEREO_MONO   = 0x01,
-    STEREO_BINARY = 0x06,
-    STEREO_ALL    = 0x07,
-    STEREO_LEFT   = 0x02,
-    STEREO_RIGHT  = 0x04,
-  };
 
   /**
    *

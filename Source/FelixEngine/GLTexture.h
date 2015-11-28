@@ -42,15 +42,21 @@ namespace fx
       setFilters(sampler);
     }
     
-    GLuint useWithBuffer(const ivec2 &size)
+    void setBuffer(GLuint textureId, const ivec2 &size)
     {
-      if (!mTextureId)
-        glGenTextures(1, &mTextureId);
+      mTextureId = textureId;
       mSize = size;
       mFBOTexture = true;
       setLoaded();
-      return mTextureId;
     }
+    void clearBuffer()
+    {
+      mTextureId = 0;
+      mSize = ivec2();
+      mFBOTexture = false;
+      setUnloaded();
+    }
+    
     GLuint textureId() const {return mTextureId;}
     
   private:

@@ -71,13 +71,15 @@ namespace fx
     
   private:
     void processTasks();
-    void processPass(const Pass &pass, const GraphicTask *view);
-    void processTask(const GraphicTask *task, const GraphicTask *view);
+    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
+    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
     void updateResources();
     void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
     bool setShaderFunctions(const XMLTree::Node *node);
+    
+    int getStereoFlags() const;
     
     std::map<std::string, GLWindow*>  mWindows;
     std::map<std::string, GLFrame*>   mFrames;

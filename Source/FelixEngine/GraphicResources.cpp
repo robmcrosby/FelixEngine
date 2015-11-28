@@ -58,7 +58,7 @@ bool Frame::setToXml(const XMLTree::Node &node)
   }
   else
   {
-    mRefFrame = node.hasAttribute("frame") ? node.attribute("frame") : MAIN_WINDOW;
+    setRefrenceFrame(node.hasAttribute("frame") ? node.attribute("frame") : MAIN_WINDOW);
     if (node.hasAttribute("scale"))
       setScale(node.attribute("scale"));
   }
@@ -66,18 +66,27 @@ bool Frame::setToXml(const XMLTree::Node &node)
   return success;
 }
 
-void Frame::updateSize()
+void Frame::setRefrenceFrame(const std::string &name)
 {
-  if (mRefFrame != "")
-  {
-    GraphicSystem *sys = FelixEngine::GetGraphicSystem();
-    if (sys)
-    {
-      Frame *frame = sys->getFrame(mRefFrame);
-      mSize = frame->size() * mScale;
-    }
-  }
+  GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+  if (sys && name != "")
+    setRefrenceFrame(sys->getFrame(name));
+  else
+    setRefrenceFrame(nullptr);
 }
+
+//void Frame::updateSize()
+//{
+//  if (mRefFrame != "")
+//  {
+//    GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+//    if (sys)
+//    {
+//      Frame *frame = sys->getFrame(mRefFrame);
+//      mSize = frame->size() * mScale;
+//    }
+//  }
+//}
 
 
 

@@ -167,63 +167,74 @@ SDL_Window* GLGraphicSystem::getMainSDLWindow()
 void GLGraphicSystem::processTasks()
 {
   mPassesMutex.lock();
+  int flags = getStereoFlags();
   if (mPasses.size())
-    processPass(mPasses.at(0), nullptr);
+  {
+    if (flags & STEREO_MONO)
+      processPass(mPasses.at(0), nullptr, STEREO_MONO);
+    if (flags & STEREO_LEFT)
+      processPass(mPasses.at(0), nullptr, STEREO_LEFT);
+    if (flags & STEREO_RIGHT)
+      processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
+  }
   mPassesMutex.unlock();
   
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->swapBuffers();
 }
 
-void GLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
+void GLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
 {
   for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
-    processTask(&(*itr), view);
+    processTask(&(*itr), view, stereo);
 }
 
-void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
+void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
-  if (task->isViewTask())
+  if (task->stereo & stereo)
   {
-    const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
-    frame->use();
-    if (task->isClearTask())
-      frame->clear(task->clearState);
-    
-    if (task->pass < (int)mPasses.size())
+    if (task->isViewTask())
     {
-      const Pass &pass = mPasses.at(task->pass);
-      if (pass.size())
-        processPass(pass,task);
-    }
-  }
-  else if (task->isDrawTask())
-  {
-    const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
-    const GLShader *shader = static_cast<const GLShader*>(task->shader);
-    const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
-    
-    if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
-    {
-      // Set the state for the Frame
-      frame->use();
+      const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
+      frame->use(stereo);
       if (task->isClearTask())
         frame->clear(task->clearState);
-      frame->setDepthState(task->depthState);
-      frame->setBlendState(task->blendState);
       
-      // Set the state for the Shader
-      shader->use();
-      if (view && view->localUniforms)
-        static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
-      if (task->materialUniforms)
-        static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
-      if (task->localUniforms)
-        static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
-      shader->applyTextureMap(task->textureMap);
+      if (task->pass < (int)mPasses.size())
+      {
+        const Pass &pass = mPasses.at(task->pass);
+        if (pass.size())
+          processPass(pass, task, stereo);
+      }
+    }
+    else if (task->isDrawTask())
+    {
+      const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
+      const GLShader *shader = static_cast<const GLShader*>(task->shader);
+      const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
       
-      // Draw the Mesh
-      mesh->draw(shader, task->instances, task->subMesh);
+      if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
+      {
+        // Set the state for the Frame
+        frame->use(stereo);
+        if (task->isClearTask())
+          frame->clear(task->clearState);
+        frame->setDepthState(task->depthState);
+        frame->setBlendState(task->blendState);
+        
+        // Set the state for the Shader
+        shader->use();
+        if (view && view->localUniforms)
+          static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
+        if (task->materialUniforms)
+          static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
+        if (task->localUniforms)
+          static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
+        shader->applyTextureMap(task->textureMap);
+        
+        // Draw the Mesh
+        mesh->draw(shader, task->instances, task->subMesh);
+      }
     }
   }
 }
@@ -257,4 +268,12 @@ void GLGraphicSystem::updateUniforms()
       itr = mGLUniforms.erase(itr);
     }
   }
+}
+
+int GLGraphicSystem::getStereoFlags() const
+{
+  int flags = 0;
+  for (map<string, GLWindow*>::const_iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    flags |= itr->second->getStereoFlags();
+  return flags;
 }

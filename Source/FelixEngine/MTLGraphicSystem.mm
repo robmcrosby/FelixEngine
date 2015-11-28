@@ -113,7 +113,9 @@ namespace fx
     bool load()
     {
       bool success = true;
-      updateSize();
+      
+      if (mRefFrame)
+        mSize = mRefFrame->size() * mScale;
       
       for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
       {

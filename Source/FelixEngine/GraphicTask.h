@@ -292,7 +292,7 @@ namespace fx
   struct GraphicTask
   {
     GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
-    textureMap(0), layer(0), subMesh(0), pass(0), instances(1) {}
+    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL) {}
     
     bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
     bool isDrawTask()  const {return mesh && shader && instances > 0;}
@@ -318,6 +318,7 @@ namespace fx
     int pass;
     int subMesh;
     int instances;
+    int stereo;
     
     ClearState clearState;
     DepthState depthState;

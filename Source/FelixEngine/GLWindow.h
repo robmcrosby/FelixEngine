@@ -68,10 +68,43 @@ namespace fx
       glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mFrameBufferId);
     }
     
-    void setActive()
+    void setActive(int stereo)
     {
       if (mSDLWindow)
+      {
+        ivec2 pos;
+        ivec2 size(mSize);
+        
+        // Adjust the Viewport for Left and Right drawing
+        if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
+        {
+          size.x /= 2;
+          if ((mMode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+              (mMode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+            pos.x = size.x;
+        }
+        else if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
+        {
+          size.y /= 2;
+          if ((mMode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+              (mMode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+            pos.y = size.y;
+        }
+        
         SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        glViewport(pos.x,pos.y, size.w, size.h);
+      }
+    }
+    ivec2 frameSize()
+    {
+      ivec2 size = mSize;
+      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
+        size.y /= 2;
+      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
+        size.x /= 2;
+      return size;
     }
     
     void swapBuffers()
