@@ -213,7 +213,7 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
 void RenderSlot::render() const
 {
   GraphicTask task;
-  if (mGraphicSystem && (mGraphicSystem->stereoFlags() & mStereoFlags) && applyToTask(task))
+  if (mGraphicSystem && applyToTask(task))
     mGraphicSystem->addGraphicTask(task);
 }
 

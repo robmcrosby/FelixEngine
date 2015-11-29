@@ -13,8 +13,8 @@ using namespace std;
 
 DEFINE_OBJECT_ID(ViewerCamera)
 
-ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene),
-mEventSystem(0), mMotionSystem(0), mOrbitView(0), mGyroView(0), mGraphicSystem(0)
+ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene), mEventSystem(0),
+mMotionSystem(0), mOrbitView(0), mGyroView(0), mGraphicSystem(0), mMainWindow(0)
 {
   #if TARGET_OS_IPHONE
   setEventFlags(fx::EVENT_TOUCH | fx::EVENT_MOTION);
@@ -31,10 +31,14 @@ bool ViewerCamera::init()
     mEventSystem = fx::FelixEngine::GetEventSystem();
     mGraphicSystem = fx::FelixEngine::GetGraphicSystem();
     
+    
     mRenderSlots->setGlobal("ViewRot", fx::mat4());
     
     if (mEventSystem)
+    {
       mEventSystem->addHandler(this);
+      mMainWindow = mGraphicSystem->getWindow(MAIN_WINDOW);
+    }
     
     mMotionSystem = fx::FelixEngine::GetMotionSystem();
     if (mMotionSystem)
@@ -110,22 +114,25 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       {
         mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(90*fx::DegToRad));
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
+        mMainWindow->setMode(fx::WINDOW_RIGHT_OVER_LEFT);
       }
       else
       {
         mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(-90*fx::DegToRad));
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
+        mMainWindow->setMode(fx::WINDOW_LEFT_OVER_RIGHT);
       }
       mGyroView->setOrientation(orientation);
       mProjection->setZeroDistance(mOrbitView->distance());
-      mGraphicSystem->setStereoFlags(fx::STEREO_BINARY);
+      //mGraphicSystem->setStereoFlags(fx::STEREO_BINARY);
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
     {
       mOrbitView->setActive(true);
       mGyroView->setActive(false);
       mRenderSlots->setGlobal("ViewRot", fx::mat4());
-      mGraphicSystem->setStereoFlags(fx::STEREO_MONO);
+      mMainWindow->setMode(fx::WINDOW_FULL_MONO);
+      //mGraphicSystem->setStereoFlags(fx::STEREO_MONO);
     }
   }
 }

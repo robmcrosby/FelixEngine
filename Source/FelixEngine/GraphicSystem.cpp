@@ -14,7 +14,7 @@ using namespace fx;
 using namespace std;
 
 
-GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS), mStereoFlags(STEREO_MONO)
+GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
 {
   setEventFlags(EVENT_APP_UPDATE);
   mPasses.push_back(Pass());

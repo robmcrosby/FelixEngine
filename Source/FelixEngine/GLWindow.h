@@ -79,22 +79,24 @@ namespace fx
         if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
         {
           size.x /= 2;
-          if ((mMode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
-              (mMode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+          if ((mMode == WINDOW_LEFT_RIGHT && stereo == STEREO_LEFT) ||
+              (mMode == WINDOW_RIGHT_LEFT && stereo == STEREO_RIGHT))
             pos.x = size.x;
         }
         else if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
         {
           size.y /= 2;
-          if ((mMode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
-              (mMode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+          if ((mMode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_LEFT) ||
+              (mMode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_RIGHT))
             pos.y = size.y;
         }
         
         SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
         
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-        glViewport(pos.x,pos.y, size.w, size.h);
+        glViewport(pos.x, pos.y, size.w, size.h);
+        glScissor(pos.x, pos.y, size.w, size.h);
+        glEnable(GL_SCISSOR_TEST);
       }
     }
     ivec2 frameSize()

@@ -34,7 +34,9 @@ private:
   
   fx::OrbitView *mOrbitView;
   fx::GyroView  *mGyroView;
+  
   fx::GraphicSystem *mGraphicSystem;
+  fx::Window *mMainWindow;
 };
 
 #endif /* ViewerCamera_h */

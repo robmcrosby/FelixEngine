@@ -47,8 +47,6 @@ namespace fx
     
   public:
     static int GetStereoFlags(const std::string &flags);
-    void setStereoFlags(int flags) {mStereoFlags = flags;}
-    int stereoFlags() const {return mStereoFlags;}
     
   private:
     void update();
@@ -63,7 +61,6 @@ namespace fx
     
     TaskCollection mTaskCollection;
     Pass mTaskBuffer;
-    int mStereoFlags;
     
     Passes mPasses;
     Mutex mPassesMutex;

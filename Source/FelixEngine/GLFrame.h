@@ -39,7 +39,7 @@ namespace fx
       else if (loaded())
       {
         if (mGLWindow)
-          resize(mGLWindow->size());
+          mSize = mGLWindow->frameSize();//resize(mGLWindow->size());
         else if (mRefFrame)
           resize(mScale * mRefFrame->size());
       }
@@ -61,6 +61,7 @@ namespace fx
       {
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
         glViewport(0, 0, size.w, size.h);
+        glDisable(GL_SCISSOR_TEST);
       }
     }
     
