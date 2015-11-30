@@ -51,6 +51,7 @@ bool ViewerCamera::init()
     }
     
     mOrbitView = new fx::OrbitView(this);
+    mOrbitView->setDistance(2.5f);
     
     delete mView;
     mView = mOrbitView;

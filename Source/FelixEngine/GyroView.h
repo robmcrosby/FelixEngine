@@ -15,6 +15,8 @@
 #include "Quaternion.h"
 
 
+#define DEF_ROT_ACCELERATION 0.05f
+
 namespace fx
 {
   /**
@@ -24,7 +26,7 @@ namespace fx
   {
   public:
     GyroView(Object *obj): View(obj), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
-      mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f)
+      mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f), mAcceleration(DEF_ROT_ACCELERATION)
     {
       setEventFlags(EVENT_MOTION_COMBINED);
       mUpdateDelegate = UpdateDelegate::Create<GyroView, &GyroView::update>(this);
@@ -56,6 +58,7 @@ namespace fx
       if (mActive && event == EVENT_MOTION)
       {
         quat rotation = mOrientation * event.motionData().orientation;
+        rotation.rotate(event.motionData().rotation * mAcceleration);
         mFwd = rotation * mFwdAxis;
         mUp = rotation * mUpAxis;
       }
@@ -63,6 +66,9 @@ namespace fx
     
     void setDistance(float distance) {mDistance = distance < 0.1f ? 0.1f : distance;}
     float distance() const {return mDistance;}
+    
+    void setAcceleration(float acceleration) {mAcceleration = acceleration;}
+    float acceleration() const {return mAcceleration;}
     
     void setForwardAxis(const vec3 &axis) {mFwdAxis = axis;}
     void setUpAxis(const vec3 &axis) {mUpAxis = axis;}
@@ -84,6 +90,7 @@ namespace fx
     quat mOrientation;
     
     float mDistance;
+    float mAcceleration;
     MotionSystem *mMotionSystem;
   };
 }
