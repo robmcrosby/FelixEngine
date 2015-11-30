@@ -18,7 +18,7 @@ using namespace std;
 
 
 Projection::Projection(Object *obj): Component("Projection", obj), mType(PROJ_ORTHO),
-mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f)
+mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f), mSwapAspect(0)
 {
   mUpdateDelegate = UpdateDelegate::Create<Projection, &Projection::update>(this);
 }
@@ -85,6 +85,9 @@ mat4 Projection::toMatrix4x4(vec2 size, int flags) const
   float disparity = mDisparity/2.0f;
   float zeroDistance = mZeroDistance;
   unlock();
+  
+  if (mSwapAspect)
+    size = size.yx();
   
   if ((flags == STEREO_LEFT || flags == STEREO_RIGHT) && type == PROJ_FRUSTUM)
   {

@@ -99,15 +99,6 @@ namespace fx
         glEnable(GL_SCISSOR_TEST);
       }
     }
-    ivec2 frameSize()
-    {
-      ivec2 size = mSize;
-      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
-        size.y /= 2;
-      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
-        size.x /= 2;
-      return size;
-    }
     
     void swapBuffers()
     {

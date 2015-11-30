@@ -232,9 +232,10 @@ bool RenderSlot::applyToTask(GraphicTask &task) const
   task.blendState = mBlendState;
   task.clearState = mClearState;
   
-  task.mesh = mMesh;
-  task.frame = mFrame;
-  task.pass = mPassIndex;
+  task.mesh   = mMesh;
+  task.frame  = mFrame;
+  task.pass   = mPassIndex;
+  task.stereo = mStereoFlags;
   
   task.localUniforms = mUniforms.getInternalMap();
 

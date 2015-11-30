@@ -140,6 +140,9 @@ namespace fx
       return ret;
     }
     
+    void setSwapAspect(bool swap) {mSwapAspect = swap;}
+    bool aspectSwapped() const {return mSwapAspect;}
+    
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
@@ -150,6 +153,7 @@ namespace fx
     PROJ_TYPE   mType;
     ASPECT_TYPE mAspect;
     Volume      mVolume;
+    bool        mSwapAspect;
     
     float mDisparity;
     float mZeroDistance;

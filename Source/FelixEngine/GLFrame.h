@@ -39,7 +39,7 @@ namespace fx
       else if (loaded())
       {
         if (mGLWindow)
-          mSize = mGLWindow->frameSize();//resize(mGLWindow->size());
+          mSize = mGLWindow->frameSize();
         else if (mRefFrame)
           resize(mScale * mRefFrame->size());
       }

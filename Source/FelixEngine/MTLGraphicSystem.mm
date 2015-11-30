@@ -88,7 +88,7 @@ namespace fx
   
   struct MTLFrameInterface: Frame
   {
-    MTLFrameInterface(MTLGraphicSystem *system): mSystem(system)
+    MTLFrameInterface(MTLGraphicSystem *system): mSystem(system), mWindow(0)
     {
       MTLContextInfo *info = mSystem->getContextInfo();
       mMTLFrame = [[MTLFrame alloc] initWithDevice:info->mDevice];
@@ -106,8 +106,14 @@ namespace fx
       }
       else if (mMTLFrame != nil)
       {
-        mSize.w = (int)[mMTLFrame width];
-        mSize.h = (int)[mMTLFrame height];
+        if (mWindow)
+          mSize = mWindow->frameSize();
+        else
+        {
+          if (mRefFrame)
+            mSize = mScale * mRefFrame->size();
+          [mMTLFrame resizeToWidth:mSize.w Height:mSize.h];
+        }
       }
     }
     bool load()
@@ -171,8 +177,63 @@ namespace fx
       }
       return true;
     }
+    double originX(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+        return (double)(mSize.x);
+      return 0.0;
+    }
+    double originY(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+        return (double)(mSize.y);
+      return 0.0;
+    }
+    double width() const {return (double)mSize.w;}
+    double height() const {return (double)mSize.h;}
+    MTLViewport viewPort(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+      viewport.width  = (double)mSize.w;
+      viewport.height = (double)mSize.h;
+      if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+        viewport.originX = viewport.width;
+      if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+        viewport.originY = viewport.height;
+      return viewport;
+    }
+    MTLScissorRect scissor(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      MTLScissorRect rect = {0, 0, 0, 0};
+      rect.width = mMTLFrame.width;
+      rect.height = mMTLFrame.height;
+      if (mode == WINDOW_LEFT_RIGHT || mode == WINDOW_RIGHT_LEFT)
+      {
+        rect.width /= 2;
+        if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+            (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+          rect.x = rect.width;
+      }
+      else if (mode == WINDOW_LEFT_OVER_RIGHT || mode == WINDOW_RIGHT_OVER_LEFT)
+      {
+        rect.height /= 2;
+        if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+            (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+          rect.y = rect.height;
+      }
+      return rect;
+    }
     
     MTLFrame *mMTLFrame;
+    Window *mWindow;
     MTLGraphicSystem *mSystem;
     std::list<MTLTextureInterface*> mTextures;
   };
@@ -230,8 +291,12 @@ namespace fx
         CGSize size = [UIScreen mainScreen].bounds.size;
         CGFloat scale = [UIScreen mainScreen].scale;
         [mMTLWindow updateSize:size andScale:scale];
+        mSize.w = (int)(size.width*scale);
+        mSize.h = (int)(size.height*scale);
         #endif
       }
+      if (mMTLFrame)
+        mMTLFrame->mWindow = this;
     }
     
     MTLWindow *mMTLWindow;
@@ -540,7 +605,15 @@ void MTLGraphicSystem::processTasks()
     
     mPassesMutex.lock();
     if (mPasses.size())
-      processPass(mPasses.at(0), nullptr);
+    {
+      int flags = getStereoFlags();
+      if (flags & STEREO_MONO)
+        processPass(mPasses.at(0), nullptr, STEREO_MONO);
+      if (flags & STEREO_LEFT)
+        processPass(mPasses.at(0), nullptr, STEREO_LEFT);
+      if (flags & STEREO_RIGHT)
+        processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
+    }
     mPassesMutex.unlock();
     
     presentWindowDrawables();
@@ -549,15 +622,15 @@ void MTLGraphicSystem::processTasks()
   }
 }
 
-void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
 {
   for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
-    processTask(&(*itr), view);
+    processTask(&(*itr), view, stereo);
 }
 
-void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
+void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
-  if (task->isViewTask() && task->pass < (int)mPasses.size())
+  if (task->stereo & stereo && task->isViewTask() && task->pass < (int)mPasses.size())
   {
     Pass &pass = mPasses.at(task->pass);
     if (pass.size())
@@ -566,10 +639,10 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
       if (task->isClearTask() && !pass.at(0).isClearTask())
         pass.at(0).clearState = task->clearState;
       
-      processPass(pass, task);
+      processPass(pass, task, stereo);
     }
   }
-  else if (task->isDrawTask())
+  else if (task->stereo & stereo && task->isDrawTask())
   {
     const MTLFrameInterface  *frame  = static_cast<const MTLFrameInterface*>(view ? view->frame : task->frame);
     const MTLShaderInterface *shader = static_cast<const MTLShaderInterface*>(task->shader);
@@ -588,10 +661,10 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
                                               task->clearState.colors[0].blue,
                                               task->clearState.colors[0].alpha);
       [mContextInfo->mDescriptorKey setClearColor:color];
-      [mContextInfo->mDescriptorKey setClearColorBuffers:task->clearState.flags & CLEAR_COLOR];
+      [mContextInfo->mDescriptorKey setClearColorBuffers:(task->clearState.flags & CLEAR_COLOR)];
       
       [mContextInfo->mDescriptorKey setClearDepth:task->clearState.depth];
-      [mContextInfo->mDescriptorKey setClearDepthBuffer:task->clearState.flags & CLEAR_DEPTH];
+      [mContextInfo->mDescriptorKey setClearDepthBuffer:(task->clearState.flags & CLEAR_DEPTH)];
       
       MTLRenderPassDescriptor *renderPassDesc = [frame->mMTLFrame getDescriptorForKey:mContextInfo->mDescriptorKey];
       
@@ -622,17 +695,14 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
         [mContextInfo->mDepthStencilStates setObject:depthState forKey:depthKey];
       }
       
-      MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-      viewport.width  = [frame->mMTLFrame width];
-      viewport.height = [frame->mMTLFrame height];
-      
       if (pipelineState && renderPassDesc && depthState && mContextInfo->mCommandBuffer != nil)
       {
         id <MTLRenderCommandEncoder> renderEncoder = [mContextInfo->mCommandBuffer renderCommandEncoderWithDescriptor:renderPassDesc];
         renderPassDesc = nil;
         
         // Set the context state with the render encoder
-        [renderEncoder setViewport:viewport];
+        [renderEncoder setViewport:frame->viewPort(stereo)];
+        [renderEncoder setScissorRect:frame->scissor(stereo)];
         [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         [renderEncoder setDepthStencilState:depthState];
         [renderEncoder setRenderPipelineState:pipelineState];
@@ -726,6 +796,14 @@ int MTLGraphicSystem::getSamplerAddressMode(SAMPLER_COORD coord) const
   if (coord == SAMPLER_COORD_CLAMP_ZERO)
     return (int)MTLSamplerAddressModeClampToZero;
   return (int)MTLSamplerAddressModeClampToEdge;
+}
+
+int MTLGraphicSystem::getStereoFlags() const
+{
+  int flags = 0;
+  for (map<string, MTLWindowInterface*>::const_iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    flags |= itr->second->getStereoFlags();
+  return flags;
 }
 
 void MTLGraphicSystem::updateResources()
@@ -837,11 +915,11 @@ void MTLGraphicSystem::processTasks()
 {
 }
 
-void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
 {
 }
 
-void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
+void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
 }
 

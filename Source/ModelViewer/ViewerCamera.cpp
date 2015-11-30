@@ -124,15 +124,15 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       }
       mGyroView->setOrientation(orientation);
       mProjection->setZeroDistance(mOrbitView->distance());
-      //mGraphicSystem->setStereoFlags(fx::STEREO_BINARY);
+      mProjection->setSwapAspect(true);
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
     {
       mOrbitView->setActive(true);
       mGyroView->setActive(false);
+      mProjection->setSwapAspect(false);
       mRenderSlots->setGlobal("ViewRot", fx::mat4());
       mMainWindow->setMode(fx::WINDOW_FULL_MONO);
-      //mGraphicSystem->setStereoFlags(fx::STEREO_MONO);
     }
   }
 }

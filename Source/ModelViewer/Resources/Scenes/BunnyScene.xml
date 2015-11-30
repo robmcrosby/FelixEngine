@@ -1,15 +1,25 @@
 <?xml version="1.0"?>
-<Scene name="TriangleScene">
+<Scene name="BunnyScene">
   <ViewerCamera name="MainCamera">
     <Projection type="frustum" aspect="auto" disparity="0.2" zero="2.0">
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
+      <Slot layer="0" pass="MainPass" stereo="mono">
         <Frame name="MonoFrame">
           <Buffer format="rgba" texture="MonoTexture" min="linear" mag="linear"/>
           <Buffer format="depth"/>
         </Frame>
+        <ClearState depth="1.0">
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      <Slot layer="0" pass="MainPass" stereo="left" frame="MonoFrame">
+        <ClearState depth="1.0">
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      <Slot layer="0" pass="MainPass" stereo="right" frame="MonoFrame">
         <ClearState depth="1.0">
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
@@ -44,7 +54,7 @@
       </Slot>
     </RenderSlots>
   </ViewerCamera>
-  <Model name="Triangle">
+  <Model name="Bunny">
     <Transform>
       <Scale>0.2, 0.2, 0.2</Scale>
       <Euler>90.0, 0.0, 0.0</Euler>

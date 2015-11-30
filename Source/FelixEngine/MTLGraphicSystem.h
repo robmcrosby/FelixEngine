@@ -52,13 +52,14 @@ namespace fx
   private:
     MTLSamplerInterface* getSampler(const Sampler &sampler) const;
     int getSamplerAddressMode(fx::SAMPLER_COORD coord) const;
+    int getStereoFlags() const;
     
     void setNextWindowDrawables() const;
     void presentWindowDrawables() const;
     
     void processTasks();
-    void processPass(const Pass &pass, const GraphicTask *view);
-    void processTask(const GraphicTask *task, const GraphicTask *view);
+    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
+    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
     void updateResources();
     void updateUniforms();
