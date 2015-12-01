@@ -12,7 +12,7 @@
 #include "GLGraphicSystem.h"
 #include "GLTexture.h"
 #include "TextureMap.h"
-#include "Platform.h"
+#include "FileSystem.h"
 
 #define BUFF_SIZE 512
 #define MAX_TEXTURES 8
@@ -86,7 +86,7 @@ namespace fx
         {
           GLenum glPart = GetGLShaderPart((SHADER_PART)i);
           if (mPartTypes[i] == SHADER_FILE)
-            success &= compilePart(glPart, Platform::LoadTextFile(mParts[i]).c_str(), shaderParts+i);
+            success &= compilePart(glPart, FileSystem::LoadText(mParts[i]).c_str(), shaderParts+i);
           else if (mPartTypes[i] == SHADER_SOURCE)
             success &= compilePart(glPart, mParts[i].c_str(), shaderParts+i);
           else if (mPartTypes[i] == SHADER_FUNCTION)

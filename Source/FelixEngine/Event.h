@@ -9,7 +9,6 @@
 #ifndef Event_h
 #define Event_h
 
-#include "Platform.h"
 #include "Pool.h"
 #include "Vector.h"
 #include "Quaternion.h"
@@ -118,7 +117,7 @@ namespace fx
     void setDispatchType(DISPATCH_TYPE dispatch) {mDispatch = dispatch;}
     DISPATCH_TYPE dispatchType() const {return mDispatch;}
     
-    void setTimeStamp() {mTimeStamp = Platform::GetTimeStamp();}
+    void setTimeStamp() {mTimeStamp = SDL_GetTicks();}
     void setTimeStamp(unsigned int ts) {mTimeStamp = ts;}
     unsigned int timeStamp() const {return mTimeStamp;}
     

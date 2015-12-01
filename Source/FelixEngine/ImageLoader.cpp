@@ -8,7 +8,7 @@
 
 
 #include "ImageLoader.h"
-#include "Platform.h"
+#include "FileSystem.h"
 #include "FreeImage.h"
 
 using namespace fx;
@@ -16,7 +16,7 @@ using namespace std;
 
 bool ImageLoader::LoadImageFromFile(ImageRGBA &image, const std::string &file)
 {
-  string filePath = Platform::GetResourcePath() + file;
+  string filePath = FileSystem::GetLocalPath() + file;
   
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filePath.c_str() ,0);
   FIBITMAP* fimage = FreeImage_Load(format, filePath.c_str());

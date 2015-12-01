@@ -7,7 +7,7 @@
 //
 
 #include "MeshLoader.h"
-#include "Platform.h"
+#include "FileSystem.h"
 #include "StringUtils.h"
 
 #include <sstream>
@@ -46,7 +46,7 @@ bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node
 bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &file)
 {
   bool success = false;
-  std::string filePath = fx::Platform::GetResourcePath() + "Meshes/" + file;
+  std::string filePath = FileSystem::GetLocalPath() + "Meshes/" + file;
   std::string postfix = StringUtils::GetFilePostfix(file);
   
   if (postfix == "xml")
@@ -174,7 +174,7 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
   
   bufferMap.clear();
   
-  if (Platform::ReadInt(primitiveType, is) == sizeof(int) && Platform::ReadInt(numSubMeshes, is) == sizeof(int))
+  if (FileSystem::Read(primitiveType, is) == sizeof(int) && FileSystem::Read(numSubMeshes, is) == sizeof(int))
   {
     bufferMap.setPrimitiveType(GetVertexPrimitive(primitiveType));
     
@@ -182,12 +182,12 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
     for (int i = 0; i < numSubMeshes && success; ++i)
     {
       Range range;
-      success = Platform::ReadInt(range.start, is) == sizeof(int) && Platform::ReadInt(range.end, is) == sizeof(int);
+      success = FileSystem::Read(range.start, is) == sizeof(int) && FileSystem::Read(range.end, is) == sizeof(int);
       bufferMap.addSubMesh(range);
     }
     
     int numVertices, numBuffers;
-    if (success && Platform::ReadInt(numVertices, is) == sizeof(int) && Platform::ReadInt(numBuffers, is) == sizeof(int))
+    if (success && FileSystem::Read(numVertices, is) == sizeof(int) && FileSystem::Read(numBuffers, is) == sizeof(int))
     {
       for (int i = 0; i < numBuffers && success; ++i)
         success |= ReadBufferFromStream(bufferMap, numVertices, is);
@@ -198,10 +198,10 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
     if (primitiveType == 8 || primitiveType == 9)
     {
       int numIndices;
-      if (success && Platform::ReadInt(numIndices, is) == sizeof(int))
+      if (success && FileSystem::Read(numIndices, is) == sizeof(int))
       {
         bufferMap.indexBuffer().resize(numIndices);
-        Platform::ReadInts(&bufferMap.indexBuffer()[0], numIndices, is);
+        FileSystem::Read(&bufferMap.indexBuffer()[0], numIndices, is);
       }
       else
         success = false;
@@ -229,7 +229,7 @@ bool MeshLoader::ReadBufferFromStream(VertexBufferMap &bufferMap, int numVertice
 {
   int compSize = 0;
   
-  if (Platform::ReadInt(compSize, is) == sizeof(int))
+  if (FileSystem::Read(compSize, is) == sizeof(int))
   {
     char name[NAME_BUFFER_SIZE];
     
@@ -242,7 +242,7 @@ bool MeshLoader::ReadBufferFromStream(VertexBufferMap &bufferMap, int numVertice
       buffer.setComponents(compSize);
       buffer.resize(numVertices);
       
-      return Platform::ReadFloats(buffer.ptr(), numVertices*compSize, is) == numVertices*compSize*sizeof(float);
+      return FileSystem::Read(buffer.ptr(), numVertices*compSize, is) == numVertices*compSize*sizeof(float);
     }
   }
   return false;

@@ -10,7 +10,7 @@
 #include "GraphicSystem.h"
 #include "FelixEngine.h"
 #include "MeshLoader.h"
-#include "Platform.h"
+#include "FileSystem.h"
 
 
 using namespace fx;
@@ -98,7 +98,7 @@ bool Shader::setToXml(const XMLTree::Node &node)
   {
     SHADER_PART part = ParseShaderPart((*itr)->element());
     if ((*itr)->hasAttribute("file"))
-      setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
+      setFileToPart(FileSystem::GetLocalPath()+(*itr)->attribute("file"), part);
     else if ((*itr)->hasAttribute("function"))
       setFunctionToPart((*itr)->attribute("function"), part);
     else
