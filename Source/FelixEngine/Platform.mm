@@ -22,12 +22,10 @@ using namespace fx;
 string Platform::GetResourcePath()
 {
   NSBundle* mainBundle = [NSBundle mainBundle];
-  
   if (mainBundle != nil)
   {
     NSString* path = [mainBundle resourcePath];
     return [path UTF8String] + std::string("/");
   }
-  
   return "";
 }

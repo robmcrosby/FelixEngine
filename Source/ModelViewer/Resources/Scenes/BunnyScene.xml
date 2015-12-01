@@ -34,9 +34,6 @@
             <Texture name="MonoTexture" min="linear" mag="linear"/>
           </TextureMap>
         </Material>
-        <ClearState>
-          <Color0>0.0, 0.0, 0.0, 1.0</Color0>
-        </ClearState>
         <Mesh name="FullQuad" primitive="strip">
           <Buffer attribute="Position" components="4">
             -1.0,  1.0, 0.5, 1.0,

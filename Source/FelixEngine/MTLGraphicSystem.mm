@@ -635,9 +635,18 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
     Pass &pass = mPasses.at(task->pass);
     if (pass.size())
     {
-      // TODO: Fix this when Compute tasks are introduced
-      if (task->isClearTask() && !pass.at(0).isClearTask())
-        pass.at(0).clearState = task->clearState;
+      if (task->isClearTask())
+      {
+        for (Pass::iterator itr = pass.begin(); itr != pass.end(); ++itr)
+        {
+          if (itr->stereo & stereo && itr->isDrawTask())
+          {
+            if (!itr->isClearTask())
+              itr->clearState = task->clearState;
+            break;
+          }
+        }
+      }
       
       processPass(pass, task, stereo);
     }
