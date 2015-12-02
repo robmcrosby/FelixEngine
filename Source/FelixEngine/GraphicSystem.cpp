@@ -17,7 +17,7 @@ using namespace std;
 GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
 {
   setEventFlags(EVENT_APP_UPDATE);
-  mTaskSlots.push_back(TaskSlot());
+  mPasses.push_back(Pass());
 }
 
 GraphicSystem::~GraphicSystem()
@@ -33,16 +33,15 @@ bool GraphicSystem::addWindows(const XMLTree::Node *node)
     for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
       success &= addWindow(*itr);
   }
-  
   return success;
 }
 
 bool GraphicSystem::addWindow(const XMLTree::Node *node)
 {
   bool success = false;
-  if (node && node->hasAttribute("name"))
+  if (node)
   {
-    Window *window = getWindow(node->attribute("name"));
+    Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
     success = window && window->setToXml(*node);
   }
   return success;
@@ -50,23 +49,17 @@ bool GraphicSystem::addWindow(const XMLTree::Node *node)
 
 Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
-  Resource *resource = nullptr;
-  if (name == "")
-    cerr << "Error: Blank name for Graphic Resource: " << type << endl;
-  else
-  {
-    if (type == "Window")
-      resource = getWindow(name);
-    else if (type == "Frame")
-      resource = getFrame(name);
-    else if (type == "Mesh")
-      resource = getMesh(name);
-    else if (type == "Shader")
-      resource = getShader(name);
-    else if (type == "Texture")
-      resource = getTexture(name);
-  }
-  return resource;
+  if (type == "Window")
+    return name == "" ? getWindow(MAIN_WINDOW) : getWindow(name);
+  if (type == "Frame")
+    return name == "" ? getFrame(MAIN_WINDOW) : getFrame(name);
+  if (type == "Mesh")
+    return getMesh(name);
+  if (type == "Shader")
+    return getShader(name);
+  if (type == "Texture")
+    return getTexture(name);
+  return nullptr;
 }
 
 void GraphicSystem::handle(const fx::Event &event)
@@ -83,33 +76,46 @@ void GraphicSystem::update()
     
     mTaskCollection.dump(mTaskBuffer);
     sort(mTaskBuffer.begin(), mTaskBuffer.end());
-    loadTaskSlots();
+    loadPasses();
     
     mUpdateMutex.unlock();
   }
 }
 
-void GraphicSystem::clearTaskSlots()
+void GraphicSystem::clearPasses()
 {
-  for (TaskSlots::iterator itr = mTaskSlots.begin(); itr != mTaskSlots.end(); ++itr)
+  for (Passes::iterator itr = mPasses.begin(); itr != mPasses.end(); ++itr)
     itr->clear();
 }
 
-void GraphicSystem::loadTaskSlots()
+void GraphicSystem::loadPasses()
 {
-  mTaskSlotsMutex.lock();
-  clearTaskSlots();
-  for (TaskBuffer::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
+  mPassesMutex.lock();
+  clearPasses();
+  for (Pass::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
   {
     if (itr->isViewTask())
-      mTaskSlots.at(0).push_back(*itr);
+      mPasses.at(0).push_back(*itr);
     else
     {
-      if (itr->viewIndex >= (int)mTaskSlots.size())
-        mTaskSlots.resize(itr->viewIndex+1);
-      mTaskSlots.at(itr->viewIndex).push_back(*itr);
+      if (itr->pass >= (int)mPasses.size())
+        mPasses.resize(itr->pass+1);
+      mPasses.at(itr->pass).push_back(*itr);
     }
   }
-  mTaskSlotsMutex.unlock();
+  mPassesMutex.unlock();
   mTaskBuffer.clear();
+}
+
+int GraphicSystem::GetStereoFlags(const std::string &flags)
+{
+  if (flags == "left")
+    return STEREO_LEFT;
+  if (flags == "right")
+    return STEREO_RIGHT;
+  if (flags == "binary")
+    return STEREO_BINARY;
+  if (flags == "mono")
+    return STEREO_MONO;
+  return STEREO_ALL;
 }

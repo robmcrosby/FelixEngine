@@ -2,112 +2,88 @@
 //  View.h
 //  FelixEngine
 //
-//  Created by Robert Crosby on 10/12/15.
+//  Created by Robert Crosby on 11/17/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
 #ifndef View_h
 #define View_h
 
-#include "FelixEngine.h"
-#include "UniformMap.h"
-#include "GraphicTask.h"
-
+#include "Component.h"
+#include "Object.h"
+#include "RenderSlots.h"
+#include "Matrix.h"
 
 namespace fx
 {
-  class View
+  class RenderSlots;
+  
+  /**
+   *
+   */
+  class View: public Component
   {
   public:
-    View(): mIndex(1), mLayer(0), mFrame(0), mSystem(FelixEngine::GetGraphicSystem()) {}
-    ~View() {}
-    
-    bool setFrame(const XMLTree::Node &node)
+    View(Object *obj): Component("View", obj), mRenderSlots(0), mActive(true), mLock(0)
     {
-      bool success = false;
-      if (node.hasAttribute("name"))
+      mUpdateDelegate = UpdateDelegate::Create<View, &View::update>(this);
+    }
+    virtual ~View() {}
+    
+    virtual bool init()
+    {
+      mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
+      return mRenderSlots ? Component::init() : false;
+    }
+    
+    void setActive(bool active) {mActive = active;}
+    bool active() const {return mActive;}
+    
+    mat4 matrix4x4() const
+    {
+      lock();
+      mat4 ret = mMatrix;
+      unlock();
+      return ret;
+    }
+    void setMatrix(const mat4 &matrix)
+    {
+      lock();
+      mMatrix = matrix;
+      unlock();
+    }
+    
+    RenderSlots* renderSlots()
+    {
+      lock();
+      RenderSlots *ret = mRenderSlots;
+      unlock();
+      return ret;
+    }
+    
+    void lock() const {SDL_AtomicLock(&mLock);}
+    void unlock() const {SDL_AtomicUnlock(&mLock);}
+    
+  protected:
+    void update(void*)
+    {
+      lock();
+      if (mActive && mRenderSlots)
       {
-        setFrame(node.attribute("name"));
-        success = mFrame->setToXml(node);
+        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+          (*itr)->uniforms().set("View", mMatrix);
       }
-      return success;
+      unlock();
     }
     
-    void setFrame(Frame *frame) {mFrame = frame;}
-    void setFrame(const std::string &name)
-    {
-      if (mSystem)
-        setFrame(mSystem->getFrame(name));
-    }
-    
-    Frame* frame() {return mFrame;}
-    const Frame* frame() const {return mFrame;}
-    
-    void setIndex(int index) {mIndex = index;}
-    int index() const {return mIndex;}
-    
-    void setLayer(int layer) {mLayer = layer;}
-    int layer() const {return mLayer;}
-    
-    ClearState& clearState() {return mClearState;}
-    const ClearState& clearState() const {return mClearState;}
-    
-    UniformMap& uniformMap() {return mUniformMap;}
-    const UniformMap& uniformMap() const {return mUniformMap;}
-    
-    Uniform& operator[](const std::string &key) {return mUniformMap[key];}
-    
-    void update() const
-    {
-      if (mSystem && mFrame && mIndex > 0)
-      {
-        GraphicTask task;
-        task.frame = mFrame;
-        task.layer = mLayer;
-        task.clearState = mClearState;
-        task.viewIndex = mIndex;
-        mSystem->addGraphicTask(task);
-      }
-    }
-    bool applyToTask(GraphicTask &task) const
-    {
-      if (!mFrame || mIndex < 0)
-        return false;
-      task.frame = mFrame;
-      task.viewIndex = mIndex;
-      task.viewUniforms = mUniformMap.getInternalMap();
-      return true;
-    }
-    
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node)
-    {
-      bool success = true;
-      if (node.hasAttribute("index"))
-        setIndex(node.attributeAsInt("index"));
-      if (node.hasAttribute("layer"))
-        setLayer(node.attributeAsInt("layer"));
-      
-      if (node.hasAttribute("frame"))
-        setFrame(node.attribute("frame"));
-      else if (node.hasSubNode("Frame"))
-        success &= setFrame(*node.subNode("Frame"));
-      
-      if (node.hasSubNode("ClearState"))
-        success &= mClearState.setToXml(*node.subNode("ClearState"));
-      if (node.hasSubNode("UniformMap"))
-        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
-      
-      return success;
-    }
+  protected:
+    mat4 mMatrix;
+    bool mActive;
     
   private:
-    int mIndex, mLayer;
-    Frame *mFrame;
-    ClearState mClearState;
-    UniformMap mUniformMap;
-    GraphicSystem *mSystem;
+    mutable SDL_SpinLock mLock;
+    RenderSlots *mRenderSlots;
   };
 }
 
-#endif /* ViewMap_h */
+#endif /* View_h */

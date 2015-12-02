@@ -7,8 +7,10 @@
 //
 
 #include "GraphicResources.h"
+#include "GraphicSystem.h"
+#include "FelixEngine.h"
 #include "MeshLoader.h"
-#include "Platform.h"
+#include "FileSystem.h"
 
 
 using namespace fx;
@@ -48,21 +50,43 @@ bool Frame::setToXml(const XMLTree::Node &node)
   // Set the size
   setSize(ivec2(0, 0));
   setScale(vec2(1.0f, 1.0f));
-  if (node.hasAttribute("frame"))
-  {
-    mRefFrame = node.attribute("frame");
-    if (node.hasAttribute("scale"))
-      setScale(node.attribute("scale"));
-  }
-  else
+  if (node.hasAttribute("width") && node.hasAttribute("height"))
   {
     int width  = node.attributeAsInt("width");
     int height = node.attributeAsInt("height");
     setSize(ivec2(width, height));
   }
+  else
+  {
+    setRefrenceFrame(node.hasAttribute("frame") ? node.attribute("frame") : MAIN_WINDOW);
+    if (node.hasAttribute("scale"))
+      setScale(node.attribute("scale"));
+  }
   setToLoad();
   return success;
 }
+
+void Frame::setRefrenceFrame(const std::string &name)
+{
+  GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+  if (sys && name != "")
+    setRefrenceFrame(sys->getFrame(name));
+  else
+    setRefrenceFrame(nullptr);
+}
+
+//void Frame::updateSize()
+//{
+//  if (mRefFrame != "")
+//  {
+//    GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+//    if (sys)
+//    {
+//      Frame *frame = sys->getFrame(mRefFrame);
+//      mSize = frame->size() * mScale;
+//    }
+//  }
+//}
 
 
 
@@ -74,7 +98,7 @@ bool Shader::setToXml(const XMLTree::Node &node)
   {
     SHADER_PART part = ParseShaderPart((*itr)->element());
     if ((*itr)->hasAttribute("file"))
-      setFileToPart(Platform::GetResourcePath()+(*itr)->attribute("file"), part);
+      setFileToPart(FileSystem::GetLocalPath()+(*itr)->attribute("file"), part);
     else if ((*itr)->hasAttribute("function"))
       setFunctionToPart((*itr)->attribute("function"), part);
     else

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <map>
 
+#include "EventHandler.h"
 #include "XMLTree.h"
 #include "Delegate.h"
 
@@ -23,14 +24,11 @@ namespace fx
   /**
    *
    */
-  class Component
+  class Component: public EventHandler
   {
   public:
-    Component(const std::string &type, Object *obj): mType(type), mObject(obj)
-    {
-      mUpdateDelegate = UpdateDelegate::Create<Component, &Component::update>(this);
-    }
-    virtual ~Component() {}
+    Component(const std::string &type, Object *obj);
+    virtual ~Component();
     
     virtual bool setToXml(const XMLTree::Node *node)
     {
@@ -104,13 +102,13 @@ namespace fx
    * Macro used to define ComponentId classes.
    */
   #define DEFINE_COMPONENT_ID(T) \
-    struct T##ID: public Component::ComponentId {\
-      T##ID() {Component::GetComponentIdMap()[#T] = this;}\
+    struct T##ID: public fx::Component::ComponentId {\
+      T##ID() {fx::Component::GetComponentIdMap()[#T] = this;}\
       virtual ~T##ID() {}\
-      virtual Component* create(Object *obj) {return new T(obj);}\
+      virtual fx::Component* create(fx::Object *obj) {return new T(obj);}\
       static T##ID ID;\
     };\
     T##ID T##ID::ID;
-  }
+}
 
 #endif /* Component_h */

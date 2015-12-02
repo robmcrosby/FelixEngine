@@ -18,8 +18,7 @@ using namespace fx;
 
 RenderSlots::RenderSlots(Object *obj): Component("RenderSlots", obj)
 {
-  mGraphicSystem = dynamic_cast<GraphicSystem*>(FelixEngine::GetSystem(SYSTEM_GRAPHICS));
-  mUpdateDelegate = UpdateDelegate::Create<RenderSlots, &RenderSlots::update>(this);
+  mGraphicSystem = FelixEngine::GetGraphicSystem();
 }
 
 RenderSlots::~RenderSlots()
@@ -46,12 +45,6 @@ bool RenderSlots::init()
   return Component::init();
 }
 
-void RenderSlots::update(void*)
-{
-  for (iterator itr = begin(); itr != end(); ++itr)
-    (*itr)->update();
-}
-
 void RenderSlots::addSlot()
 {
   mSlots.push_back(new RenderSlot(mObject->getScene()));
@@ -64,21 +57,25 @@ void RenderSlots::clear()
   mSlots.clear();
 }
 
-
-
-
-
-
-
-
-
-RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1),
-  mInstances(1), mMesh(0), mScene(scene), mSystem(FelixEngine::GetGraphicSystem()), mUniformMapPtr(0)
+void RenderSlots::setGlobal(const std::string &name, const Uniform &uniform)
 {
-  setToInternalView();
-  setToInternalMaterial();
+  for (iterator itr = begin(); itr != end(); ++itr)
+    (*itr)->uniforms().set(name, uniform);
+}
+
+
+
+
+
+
+
+
+
+RenderSlot::RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
+  mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mMaterial(0), mStereoFlags(STEREO_ALL)
+{
   setEventFlags(EVENT_APP_RENDER);
-  mSystem->addHandler(this);
+  mGraphicSystem->addHandler(this);
 }
 
 RenderSlot::~RenderSlot()
@@ -87,7 +84,7 @@ RenderSlot::~RenderSlot()
 
 void RenderSlot::handle(const fx::Event &event)
 {
-  if (event == EVENT_APP_RENDER && event.sender() == mSystem)
+  if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
     render();
 }
 
@@ -102,13 +99,15 @@ bool RenderSlot::setMesh(const XMLTree::Node &node)
   return success;
 }
 
-bool RenderSlot::setView(const XMLTree::Node &node)
+bool RenderSlot::setFrame(const XMLTree::Node &node)
 {
+  bool success = false;
   if (node.hasAttribute("name"))
-    setView(node.attribute("name"));
-  else
-    setToInternalView();
-  return mViewPtr->setToXml(node);
+  {
+    setFrame(node.attribute("name"));
+    success = mFrame->setToXml(node);
+  }
+  return success;
 }
 
 bool RenderSlot::setMaterial(const XMLTree::Node &node)
@@ -116,20 +115,20 @@ bool RenderSlot::setMaterial(const XMLTree::Node &node)
   if (node.hasAttribute("name"))
     setMaterial(node.attribute("name"));
   else
-    setToInternalMaterial();
-  return mMaterialPtr->setToXml(node);
+    mMaterial = new Material();
+  return mMaterial->setToXml(node);
 }
 
 void RenderSlot::setMesh(const string &name)
 {
-  if (mSystem)
-    setMesh(mSystem->getMesh(name));
+  if (mGraphicSystem)
+    setMesh(mGraphicSystem->getMesh(name));
 }
 
-void RenderSlot::setView(const string &name)
+void RenderSlot::setFrame(const string &name)
 {
-  if (mScene)
-    setView(mScene->getView(name));
+  if (mGraphicSystem)
+    setFrame(mGraphicSystem->getFrame(name));
 }
 
 void RenderSlot::setMaterial(const string &name)
@@ -137,6 +136,23 @@ void RenderSlot::setMaterial(const string &name)
   if (mScene)
     setMaterial(mScene->getMaterial(name));
 }
+
+void RenderSlot::setPass(const string &pass)
+{
+  mPass = pass;
+  mPassIndex = mPass == "" ? 0 : GetPassIndex(mPass);
+}
+
+int RenderSlot::GetPassIndex(const std::string &pass)
+{
+  static int counter = 0;
+  static map<string, int> passes;
+  
+  if (!passes.count(pass))
+    passes[pass] = ++counter;
+  return passes[pass];
+}
+
 
 
 bool RenderSlot::setToXml(const XMLTree::Node *node)
@@ -160,47 +176,51 @@ bool RenderSlot::setToXml(const XMLTree::Node *node)
     if (node->hasSubNode("ClearState"))
       success &= mClearState.setToXml(*node->subNode("ClearState"));
     
+    // Set the Uniforms
+    if (node->hasSubNode("Uniforms"))
+      success &= mUniforms.setToXml(node->subNode("Uniforms"));
+    
     // Set the Mesh
     if (node->hasAttribute("mesh"))
       setMesh(node->attribute("mesh"));
     else if (node->hasSubNode("Mesh"))
       success &= setMesh(*node->subNode("Mesh"));
     
-    // Set the View
-    if (node->hasAttribute("view"))
-      setView(node->attribute("view"));
-    else if (node->hasSubNode("View"))
-      setView(*node->subNode("View"));
+    // Set the Pass
+    if (node->hasAttribute("pass"))
+      setPass(node->attribute("pass"));
+    
+    // Set the Frame
+    if (node->hasAttribute("frame"))
+      setFrame(node->attribute("frame"));
+    else if (node->hasSubNode("Frame"))
+      setFrame(*node->subNode("Frame"));
+    else
+      setFrame(MAIN_WINDOW);
     
     // Set the Material
     if (node->hasAttribute("material"))
       setMaterial(node->attribute("material"));
     else if (node->hasSubNode("Material"))
       setMaterial(*node->subNode("Material"));
+    
+    // Set the Stereo Type
+    setStereoFlags(GraphicSystem::GetStereoFlags(node->attribute("stereo")));
   }
   return success;
-}
-
-void RenderSlot::update() const
-{
-  mView.update();
 }
 
 void RenderSlot::render() const
 {
   GraphicTask task;
-  if (mSystem && applyToTask(task))
-    mSystem->addGraphicTask(task);
+  if (mGraphicSystem && applyToTask(task))
+    mGraphicSystem->addGraphicTask(task);
 }
 
 bool RenderSlot::applyToTask(GraphicTask &task) const
 {
   // Return false if not visible.
   if (!mVisible)
-    return false;
-  
-  // Validate the needed items for the task.
-  if (mSubMesh < 0 || mInstances <= 0 || !mMesh || !mViewPtr || !mMaterialPtr)
     return false;
   
   // Assign the items to the task.
@@ -212,14 +232,21 @@ bool RenderSlot::applyToTask(GraphicTask &task) const
   task.blendState = mBlendState;
   task.clearState = mClearState;
   
-  task.mesh = mMesh;
+  task.mesh   = mMesh;
+  task.frame  = mFrame;
+  task.pass   = mPassIndex;
+  task.stereo = mStereoFlags;
   
-  // Assign an optional local UniformMap.
-  if (mUniformMapPtr)
-    task.localUniforms = mUniformMapPtr->getInternalMap();
+  task.localUniforms = mUniforms.getInternalMap();
+
+  if (mMaterial)
+    mMaterial->applyToTask(task);
   else
-    task.localUniforms = nullptr;
+  {
+    task.shader = nullptr;
+    task.textureMap = nullptr;
+    task.materialUniforms = nullptr;
+  }
   
-  // Attempt to apply the View and Matieral to the task.
-  return mViewPtr->applyToTask(task) && mMaterialPtr->applyToTask(task);
+  return true;
 }

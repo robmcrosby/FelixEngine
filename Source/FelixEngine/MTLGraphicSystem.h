@@ -43,7 +43,7 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
+    virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map);
     
     virtual SDL_Window* getMainSDLWindow();
     
@@ -52,13 +52,14 @@ namespace fx
   private:
     MTLSamplerInterface* getSampler(const Sampler &sampler) const;
     int getSamplerAddressMode(fx::SAMPLER_COORD coord) const;
+    int getStereoFlags() const;
     
     void setNextWindowDrawables() const;
     void presentWindowDrawables() const;
     
     void processTasks();
-    void processTaskSlot(const TaskSlot &slot);
-    void processTask(const GraphicTask &task);
+    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
+    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
     void updateResources();
     void updateUniforms();

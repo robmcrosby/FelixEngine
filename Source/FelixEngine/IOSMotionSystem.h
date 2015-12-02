@@ -32,7 +32,7 @@ namespace fx
     
     void handleAccelerationData(vec3 acceleration);
     void handleGyroscopeData(vec3 rotation);
-    void handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation);
+    void handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotationRate, quat rotation);
     
     static IOSMotionSystem *Instance;
     

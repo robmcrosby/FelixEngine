@@ -30,24 +30,29 @@
       <Vertex function="SimpleVertexUV"/>
       <Fragment function="SimpleTexture"/>
     </Shader>
-    <View name="MainView" frame="MainWindow" layer="1" index="2">
-      <ClearState>
-        <Color0>0.2, 0.2, 0.2, 1.0</Color0>
-      </ClearState>
-    </View>
-    <View name="TestView" layer="0" index="1">
-      <Frame name="TestFrame" width="512" height="512">
-        <Buffer format="rgba" texture="TestTexture" min="linear" mag="linear"/>
-        <Buffer format="depth"/>
-      </Frame>
-      <ClearState depth="1.0">
-        <Color0>0.5, 0.5, 0.5, 1.0</Color0>
-      </ClearState>
-    </View>
+    <Frame name="TestFrame" width="512" height="512">
+      <Buffer format="rgba" texture="TestTexture" min="linear" mag="linear"/>
+      <Buffer format="depth"/>
+    </Frame>
   </Resources>
+  <Model name="Triangle">
+    <RenderSlots>
+      <Slot layer="0" mesh="TriMesh" frame="TestFrame">
+        <DepthState write="true" function="less"/>
+        <Material shader="ColorShader">
+          <UniformMap>
+            <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
+          </UniformMap>
+        </Material>
+        <ClearState depth="1.0">
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+      </Slot>
+    </RenderSlots>
+  </Model>
   <Model name="Quad">
     <RenderSlots>
-      <Slot layer="1" mesh="QuadMesh" view="TestView">
+      <Slot layer="1" mesh="QuadMesh" frame="TestFrame">
         <DepthState write="true" function="less"/>
         <Material shader="ColorShader">
           <UniformMap>
@@ -57,26 +62,17 @@
       </Slot>
     </RenderSlots>
   </Model>
-  <Model name="Triangle">
-    <RenderSlots>
-      <Slot layer="0" mesh="TriMesh" view="TestView">
-        <DepthState write="true" function="less"/>
-        <Material shader="ColorShader">
-          <UniformMap>
-            <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
-          </UniformMap>
-        </Material>
-      </Slot>
-    </RenderSlots>
-  </Model>
   <Model name="TextureQuad">
     <RenderSlots>
-      <Slot layer="0" mesh="QuadMesh" view="MainView">
+      <Slot layer="2" mesh="QuadMesh">
         <Material shader="TextureShader">
           <TextureMap>
             <Texture name="TestTexture" min="linear" mag="linear"/>
           </TextureMap>
         </Material>
+        <ClearState>
+          <Color0>0.2, 0.2, 0.2, 1.0</Color0>
+        </ClearState>
       </Slot>
     </RenderSlots>
   </Model>

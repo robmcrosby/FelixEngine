@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<Settings>
+  <Systems>
+    <GCDTaskingSystem/>
+    <IOSMotionSystem frequency="60"/>
+    <GLGraphicSystem>
+      <Version major="2" minor="0"/>
+      <Windows>
+        <Window title="Hello Felix" type="resizable">
+          <position>100, 100</position>
+          <size>512, 512</size>
+        </Window>
+      </Windows>
+      <ShaderFunctions>
+        <ShaderFunction name="SimpleVertex" type="vertex">
+          #version 100
+          attribute vec4 Position;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          void main() {gl_Position = Projection * View * Model * Position;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleColor" type="fragment">
+          #version 100
+          uniform mediump vec4 Color;
+          void main() {gl_FragColor = Color;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleVertexUV" type="vertex">
+          #version 100
+          attribute vec4 Position;
+          attribute vec2 UV_0;
+          uniform   mat4 ViewRot;
+          varying vec2 UV;
+          void main() {
+            gl_Position = ViewRot * Position;
+            UV = UV_0;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="SimpleTexture" type="fragment">
+          #version 100
+          varying mediump vec2 UV;
+          uniform sampler2D tex2D;
+          void main() {gl_FragColor = texture2D(tex2D, UV);}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleNormal" type="vertex">
+          #version 100
+          attribute vec4 Position;
+          attribute vec4 Normal;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          uniform mat4 Rotation;
+          varying vec3 vNormal;
+          void main() {
+            gl_Position = Projection * View * Model * Position;
+            vNormal = (Rotation * Normal).xyz;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="DirectLight" type="fragment">
+          #version 100
+          varying mediump vec3 vNormal;
+          uniform mediump vec4 Color;
+          void main() {
+            gl_FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);
+          }
+        </ShaderFunction>
+      </ShaderFunctions>
+    </GLGraphicSystem>
+  </Systems>
+</Settings>

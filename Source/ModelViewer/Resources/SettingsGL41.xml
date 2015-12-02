@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<Settings>
+  <Systems>
+    <GCDTaskingSystem/>
+    <GLGraphicSystem>
+      <Version major="4" minor="1"/>
+      <Windows>
+        <Window title="Model Viewer" type="resizable">
+          <position>100, 100</position>
+          <size>512, 512</size>
+        </Window>
+      </Windows>
+      <ShaderFunctions>
+        <ShaderFunction name="SimpleVertex" type="vertex">
+          #version 410
+          in vec4 Position;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          void main() {gl_Position = Projection * View * Model * Position;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleColor" type="fragment">
+          #version 410
+          uniform vec4 Color;
+          out vec4 FragColor;
+          void main() {FragColor = Color;}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleVertexUV" type="vertex">
+          #version 410
+          in vec4 Position;
+          in vec2 UV_0;
+          out vec2 UV;
+          void main() {
+            gl_Position = Position;
+            UV = UV_0;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="SimpleTexture" type="fragment">
+          #version 410
+          in vec2 UV;
+          uniform sampler2D tex2D;
+          out vec4 FragColor;
+          void main() {FragColor = texture(tex2D, UV);}
+        </ShaderFunction>
+        <ShaderFunction name="SimpleNormal" type="vertex">
+          #version 410
+          in vec4 Position;
+          in vec4 Normal;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          uniform mat4 Rotation;
+          out vec3 vNormal;
+          void main() {
+            gl_Position = Projection * View * Model * Position;
+            vNormal = (Rotation * Normal).xyz;
+          }
+        </ShaderFunction>
+        <ShaderFunction name="DirectLight" type="fragment">
+          #version 410
+          in vec3 vNormal;
+          uniform vec4 Color;
+          out vec4 FragColor;
+          void main() {
+            FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);}
+        </ShaderFunction>
+      </ShaderFunctions>
+    </GLGraphicSystem>
+  </Systems>
+</Settings>

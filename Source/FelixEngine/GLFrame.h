@@ -36,8 +36,13 @@ namespace fx
         else
           setNotLoading();
       }
-      if (loaded() && mGLWindow)
-        mSize = mGLWindow->size();
+      else if (loaded())
+      {
+        if (mGLWindow)
+          mSize = mGLWindow->frameSize();
+        else if (mRefFrame)
+          resize(mScale * mRefFrame->size());
+      }
     }
     
     void setToWindow(GLWindow *window)
@@ -47,20 +52,16 @@ namespace fx
       setLoaded();
     }
     
-    void use() const
+    void use(int stereo) const
     {
       ivec2 size = mSize;
       if (mGLWindow)
-      {
-        size = mGLWindow->size();
-        mGLWindow->setActive();
-        glBindFramebuffer(GL_FRAMEBUFFER, mGLWindow->frameBufferId());
-        glViewport(0, 0, mGLWindow->size().w, mGLWindow->size().h);
-      }
+        mGLWindow->setActive(stereo);
       else
       {
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
         glViewport(0, 0, size.w, size.h);
+        glDisable(GL_SCISSOR_TEST);
       }
     }
     
@@ -142,7 +143,7 @@ namespace fx
         bool success = false;
         if (mFormat != COLOR_NONE && size.w > 0 && size.h > 0)
         {
-          if (mTexture != NULL)
+          if (mTexture)
             success = loadTextureBuffer(size);
           else
             success = loadRenderBuffer(size);
@@ -150,9 +151,27 @@ namespace fx
         return success;
       }
       
-      void unload()
+      void detach()
       {
-        // TODO: implement this method
+        if (mTexture)
+          detachTextureBuffer();
+        else
+          detachRenderBuffer();
+      }
+      
+      void clear()
+      {
+        if (mBufferId)
+        {
+          if (!mTexture)
+            glDeleteRenderbuffers(1, &mBufferId);
+          else
+          {
+            mTexture->clearBuffer();
+            glDeleteTextures(1, &mBufferId);
+          }
+          mBufferId = 0;
+        }
       }
       
     private:
@@ -187,11 +206,30 @@ namespace fx
         glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
         return success;
       }
+      void detachRenderBuffer()
+      {
+        if (mBufferId > 0)
+        {
+          GLint curRenderBuff;
+          glGetIntegerv(GL_RENDERBUFFER_BINDING, &curRenderBuff);
+          glBindRenderbuffer(GL_RENDERBUFFER, mBufferId);
+          
+          // Detach the Render Buffer
+          glBindRenderbuffer(GL_RENDERBUFFER, mBufferId);
+          if (mFormat == COLOR_RGBA)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mIndex, GL_RENDERBUFFER, 0);
+          else
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+          glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
+        }
+      }
       
       bool loadTextureBuffer(const ivec2 &size)
       {
         bool success = false;
-        mBufferId = mTexture->useWithBuffer(size);
+        
+        glGenTextures(1, &mBufferId);
+        mTexture->setBuffer(mBufferId, size);
         glBindTexture(GL_TEXTURE_2D, mBufferId);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -225,6 +263,19 @@ namespace fx
         glBindTexture(GL_TEXTURE_2D, 0);
         return success;
       }
+      void detachTextureBuffer()
+      {
+        if (mBufferId > 0)
+        {
+          // Detach the Frame Buffer Texture
+          glBindTexture(GL_TEXTURE_2D, mBufferId);
+          if (mFormat == COLOR_RGBA)
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+          else
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+          glBindTexture(GL_TEXTURE_2D, 0);
+        }
+      }
       
       GLuint mIndex, mBufferId;
       COLOR_TYPE mFormat;
@@ -240,6 +291,9 @@ namespace fx
         GLint curFrameBuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
         
+        if (mRefFrame)
+          mSize = mRefFrame->size() * mScale;
+        
         glGenFramebuffers(1, &mFrameBufferId);
         if (mFrameBufferId == 0)
           std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
@@ -253,9 +307,39 @@ namespace fx
       return success;
     }
     
-    void clearGLBuffers()
+    void unload()
     {
-      // TODO: Implement this
+      if (mFrameBufferId > 0)
+      {
+        GLint curFrameBuffer;
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
+        
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        detachGLBuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
+        
+        glDeleteFramebuffers(1, &mFrameBufferId);
+        mFrameBufferId = 0;
+        clearGLBuffers();
+      }
+      setUnloaded();
+    }
+    
+    bool resize(const ivec2 &size)
+    {
+      bool success = true;
+      if (mSize != size)
+      {
+        std::cout << "Resize to " << size << std::endl;
+        unload();
+        
+        mSize = size;
+        success = load();
+        
+        if (success)
+          setLoaded();
+      }
+      return success;
     }
     
     bool loadGLBuffers()
@@ -295,6 +379,19 @@ namespace fx
         }
       }
       return success;
+    }
+    void detachGLBuffers()
+    {
+      for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
+        itr->detach();
+      mDepthBuffer.detach();
+    }
+    void clearGLBuffers()
+    {
+      for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
+        itr->clear();
+      mColorBuffers.clear();
+      mDepthBuffer.clear();
     }
     
     void setTexture(GLBuffer &buffer, const std::string &name)

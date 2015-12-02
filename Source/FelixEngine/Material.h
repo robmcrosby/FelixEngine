@@ -44,10 +44,8 @@ namespace fx
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textures() const {return mTextureMap;}
     
-    UniformMap& uniformMap() {return mUniformMap;}
+    UniformMap& uniforms() {return mUniformMap;}
     const UniformMap& uniforms() const {return mUniformMap;}
-    
-    Uniform& operator[](const std::string &key) {return mUniformMap[key];}
     
     bool setToXml(const XMLTree::Node *node) {return setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)

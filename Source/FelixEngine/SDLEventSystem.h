@@ -41,7 +41,27 @@ namespace fx
     
     void processWindowEvent(const SDL_WindowEvent &event);
     
+  private:
+    void notifyTouch(Event &event);
+    bool checkUpdatedTouches();
+    void resetTouches();
+    
+    vec2 getGestureLocation();
+    float getGestureTheta();
+    float getGestureDelta();
+    
+    struct Touch
+    {
+      vec2 nextLocation;
+      vec2 lastLocation;
+      bool updated;
+    };
+    
     Mutex mUpdateMutex;
+    
+    SDL_SpinLock mTouchLock;
+    std::map<int, Touch> mTouches;
+    float mLastDistance;
   };
 }
 

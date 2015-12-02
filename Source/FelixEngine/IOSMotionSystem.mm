@@ -21,10 +21,11 @@ namespace fx
 {
   struct MotionInfo
   {
-    MotionInfo() {mManager = nil;}
-    ~MotionInfo() {mManager = nil;}
+    MotionInfo() {mManager = nil; mAttitude = nil;}
+    ~MotionInfo() {mManager = nil; mAttitude = nil;}
     
     CMMotionManager *mManager;
+    CMAttitude *mAttitude;
   };
 }
 
@@ -92,7 +93,7 @@ void IOSMotionSystem::handleAccelerationData(vec3 acceleration)
   Event event(EVENT_MOTION_MOVEMENT);
   event.motionData().gravity = acceleration;
   event.motionData().acceleration = acceleration;
-  event.motionData().rotationRate = vec3(0, 0, 0);
+  event.motionData().rotation = vec3(0, 0, 0);
   notify(event);
 }
 
@@ -100,31 +101,33 @@ void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
 {
   // Assign the rotation rate field
   mMotionSem.lock();
-  mRotationRate = rotation;
+  mRotation = rotation;
   mMotionSem.unlock();
   
   // Dispatch a rotation event
   Event event(EVENT_MOTION_ROTATION);
   event.motionData().gravity = vec3(0, 0, 0);
   event.motionData().acceleration = vec3(0, 0, 0);
-  event.motionData().rotationRate = rotation;
+  event.motionData().rotation = rotation;
   notify(event);
 }
 
-void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation)
+void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation, quat orientation)
 {
   // Assign the rotation rate field
   mMotionSem.lock();
   mGravity = gravity;
   mAcceleration = acceleration;
-  mRotationRate = rotation;
+  mRotation = rotation;
+  mRotation = rotation;
   mMotionSem.unlock();
   
   // Dispatch a combined event
   Event event(EVENT_MOTION_COMBINED);
   event.motionData().gravity = gravity;
   event.motionData().acceleration = acceleration;
-  event.motionData().rotationRate = rotation;
+  event.motionData().rotation = rotation;
+  event.motionData().orientation = orientation;
   notify(event);
 }
 
@@ -143,9 +146,14 @@ bool IOSMotionSystem::init()
                                          withHandler:^(CMDeviceMotion *motion, NSError *error) {
       vec3 gravity(motion.gravity.x, motion.gravity.y, motion.gravity.z);
       vec3 accelration(motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z);
-      vec3 rotation(motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z);
-      Instance->handleMotionData(gravity, accelration, rotation);
+      vec3 rotationRate(motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z);
+      
+      CMQuaternion q = motion.attitude.quaternion;
+      quat rotation(q.x, q.y, q.z, q.w);
+                                           
+      Instance->handleMotionData(gravity, accelration, rotationRate, rotation);
      }];
+    
     success = true;
   }
   else
@@ -203,7 +211,7 @@ void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
 {
 }
 
-void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation)
+void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotationRate, quat rotation)
 {
 }
 

@@ -14,6 +14,7 @@
 #include "TaskingSystem.h"
 #include "GraphicSystem.h"
 #include "EventSystem.h"
+#include "MotionSystem.h"
 
 #ifndef FelixEngine_h
 #define FelixEngine_h
@@ -22,8 +23,6 @@ namespace fx
 {
   class System;
   class Scene;
-  class TaskingSystem;
-  class GraphicSystem;
   
   /**
    * Felix Engine Class
@@ -44,6 +43,7 @@ namespace fx
     static TaskingSystem* GetTaskingSystem() {return Instance()->getTaskingSystem();}
     static GraphicSystem* GetGraphicSystem() {return Instance()->getGraphicSystem();}
     static EventSystem* GetEventSystem() {return Instance()->getEventSystem();}
+    static MotionSystem* GetMotionSystem() {return Instance()->getMotionSystem();}
     
     static Scene* GetScene(const std::string &name) {return Instance()->getScene(name);}
     
@@ -55,6 +55,7 @@ namespace fx
     TaskingSystem* getTaskingSystem() {return static_cast<TaskingSystem*>(getSystem(SYSTEM_TASKING));}
     GraphicSystem* getGraphicSystem() {return static_cast<GraphicSystem*>(getSystem(SYSTEM_GRAPHICS));}
     EventSystem* getEventSystem() {return static_cast<EventSystem*>(getSystem(SYSTEM_EVENTS));}
+    MotionSystem* getMotionSystem() {return static_cast<MotionSystem*>(getSystem(SYSTEM_MOTION));}
     
     bool loadScene(const std::string &sceneFile);
     void addScene(Scene *scene);

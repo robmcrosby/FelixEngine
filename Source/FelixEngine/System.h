@@ -21,7 +21,8 @@ namespace fx
 {
   enum SYSTEM_TYPE
   {
-    SYSTEM_GRAPHICS = 0,
+    SYSTEM_FILE = 0,
+    SYSTEM_GRAPHICS,
     SYSTEM_TASKING,
     SYSTEM_EVENTS,
     SYSTEM_MOTION,

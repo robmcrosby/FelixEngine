@@ -20,7 +20,7 @@ namespace fx
 {
   class UniformMap;
   class InternalUniformMap;
-  
+
   /**
    *
    */
@@ -40,29 +40,30 @@ namespace fx
     virtual Texture* getTexture(const std::string &name) = 0;
     
     Resource* getResource(const std::string &type, const std::string &name);
-    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map) = 0;
+    virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map) = 0;
     
     void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
-    
     virtual SDL_Window* getMainSDLWindow() = 0;
+    
+  public:
+    static int GetStereoFlags(const std::string &flags);
     
   private:
     void update();
-    void clearTaskSlots();
-    void loadTaskSlots();
+    void clearPasses();
+    void loadPasses();
     
   protected:
     typedef MultiVector<GraphicTask> TaskCollection;
     
-    typedef std::vector<GraphicTask> TaskBuffer;
-    typedef std::vector<GraphicTask> TaskSlot;
-    typedef std::vector<TaskSlot> TaskSlots;
+    typedef std::vector<GraphicTask> Pass;
+    typedef std::vector<Pass> Passes;
     
     TaskCollection mTaskCollection;
-    TaskBuffer mTaskBuffer;
+    Pass mTaskBuffer;
     
-    TaskSlots mTaskSlots;
-    Mutex mTaskSlotsMutex;
+    Passes mPasses;
+    Mutex mPassesMutex;
     Mutex mUpdateMutex;
     
   protected:

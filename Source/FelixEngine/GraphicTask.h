@@ -291,12 +291,12 @@ namespace fx
   
   struct GraphicTask
   {
-    GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), viewUniforms(0), materialUniforms(0),
-    textureMap(0), layer(0), subMesh(0), viewIndex(0), instances(1) {}
+    GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
+    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL) {}
     
-    bool isViewTask()  const {return frame && !mesh && !shader && viewIndex > 0;}
-    bool isDrawTask()  const {return frame && mesh && shader && instances > 0;}
-    bool isClearTask() const {return frame && clearState.flags;}
+    bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
+    bool isDrawTask()  const {return mesh && shader && instances > 0;}
+    bool isClearTask() const {return clearState.flags;}
     
     void setClearColor(const RGBAf &color, unsigned int index = 0) {clearState.setClearColor(color, index);}
     void setClearDepth(float depth = 0.0f) {clearState.setClearDepth(depth);}
@@ -310,15 +310,15 @@ namespace fx
     const Mesh   *mesh;
     
     const InternalUniformMap *localUniforms;
-    const InternalUniformMap *viewUniforms;
     const InternalUniformMap *materialUniforms;
     
     const TextureMap *textureMap;
     
     int layer;
+    int pass;
     int subMesh;
-    int viewIndex;
     int instances;
+    int stereo;
     
     ClearState clearState;
     DepthState depthState;

@@ -12,13 +12,11 @@
 #include "EventHandler.h"
 #include "Component.h"
 #include "UniformMap.h"
-#include "View.h"
 #include "Material.h"
 
 namespace fx
 {
   class GraphicSystem;
-  class View;
   
   class RenderSlot: public EventHandler
   {
@@ -61,24 +59,35 @@ namespace fx
     
     bool setMesh(const XMLTree::Node &node);
     bool setView(const XMLTree::Node &node);
+    bool setFrame(const XMLTree::Node &node);
     bool setMaterial(const XMLTree::Node &node);
     
     void setMesh(const std::string &name);
     void setMesh(Mesh *mesh) {mMesh = mesh;}
     Mesh* mesh() const {return mMesh;}
     
-    void setView(const std::string &name);
-    void setView(View *view) {mViewPtr = view;}
-    void setToInternalView() {mViewPtr = &mView;}
-    View* viewPointer() const {return mViewPtr;}
+    void setFrame(const std::string &name);
+    void setFrame(Frame *frame) {mFrame = frame;}
+    Frame* frame() const {return mFrame;}
+    
+    void setPass(const std::string &pass);
+    std::string pass() const {return mPass;}
+    int passIndex() const {return mPassIndex;}
     
     void setMaterial(const std::string &name);
-    void setMaterial(Material *material) {mMaterialPtr = material;}
-    void setToInternalMaterial() {mMaterialPtr = &mMaterial;}
-    Material* materialPointer() const {return mMaterialPtr;}
+    void setMaterial(Material *material) {mMaterial = material;}
+    Material* material() const {return mMaterial;}
     
-    void setUniformMap(UniformMap *map) {mUniformMapPtr = map;}
-    UniformMap* uniformMap() const {return mUniformMapPtr;}
+    void setStereoFlags(int flags) {mStereoFlags = flags;}
+    int stereoFlags() const {return mStereoFlags;}
+    
+    UniformMap& uniforms() {return mUniforms;}
+    const UniformMap& uniforms() const {return mUniforms;}
+    
+    void lock() {mUniforms.lock();}
+    void unlock() {mUniforms.unlock();}
+    
+    static int GetPassIndex(const std::string &pass);
     
   private:
     bool mVisible;
@@ -87,14 +96,19 @@ namespace fx
     BlendState mBlendState;
     ClearState mClearState;
     
-    Mesh *mMesh;
-    View mView, *mViewPtr;
-    Material mMaterial, *mMaterialPtr;
+    Mesh  *mMesh;
+    Frame *mFrame;
     
-    UniformMap *mUniformMapPtr;
+    Material *mMaterial;
+    
+    UniformMap mUniforms;
+    
+    std::string mPass;
+    int mPassIndex;
+    int mStereoFlags;
     
     Scene *mScene;
-    GraphicSystem *mSystem;
+    GraphicSystem *mGraphicSystem;
   };
   
   /**
@@ -109,8 +123,6 @@ namespace fx
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
     
-    void update(void*);
-    
   public:
     typedef std::vector<RenderSlot*>::const_iterator iterator;
     iterator begin() const {return mSlots.begin();}
@@ -122,6 +134,8 @@ namespace fx
     
     void addSlot();
     void clear();
+    
+    void setGlobal(const std::string &name, const Uniform &uniform);
     
   private:
     GraphicSystem *mGraphicSystem;

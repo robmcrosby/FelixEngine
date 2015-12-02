@@ -89,10 +89,13 @@ void EventHandler::notifyMultiple(const Event &event, TaskGroup *group)
       EventHandler *handler = (*itr)->handler();
       if (handler)
       {
-        Event *copy = event.copy();
-        copy->setSender(this);
-        copy->setTarget(handler);
-        system->dispatch(delegate, (void*)copy, group);
+        if (handler->eventFlags() & event.type())
+        {
+          Event *copy = event.copy();
+          copy->setSender(this);
+          copy->setTarget(handler);
+          system->dispatch(delegate, (void*)copy, group);
+        }
         ++itr;
       }
       else
@@ -112,8 +115,11 @@ void EventHandler::dispatchSingle(void *ptr)
     EventHandler *handler = (*itr)->handler();
     if (handler)
     {
-      event.setTarget(handler);
-      handler->handle(event);
+      if (handler->eventFlags() & event.type())
+      {
+        event.setTarget(handler);
+        handler->handle(event);
+      }
       ++itr;
     }
     else

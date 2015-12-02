@@ -11,7 +11,7 @@
 using namespace fx;
 using namespace std;
 
-SDLEventSystem::SDLEventSystem()
+SDLEventSystem::SDLEventSystem(): mTouchLock(0), mLastDistance(0.0f)
 {
   setEventFlags(EVENT_APP_UPDATE);
 }
@@ -56,6 +56,9 @@ void SDLEventSystem::processEvent(const SDL_Event &event)
     case SDL_QUIT:
       processQuitEvent(event.quit);
       break;
+//    case SDL_MULTIGESTURE:
+//      processGestureEvent(event.mgesture);
+//      break;
     case SDL_KEYDOWN:
     case SDL_KEYUP:
       processKeyBoardEvent(event.key);
@@ -74,9 +77,6 @@ void SDLEventSystem::processEvent(const SDL_Event &event)
     case SDL_FINGERDOWN:
     case SDL_FINGERUP:
       processTouchFingerEvent(event.tfinger);
-      break;
-    case SDL_MULTIGESTURE:
-      processGestureEvent(event.mgesture);
       break;
     case SDL_WINDOWEVENT:
       processWindowEvent(event.window);
@@ -204,7 +204,101 @@ void SDLEventSystem::processTouchFingerEvent(const SDL_TouchFingerEvent &event)
   touchEvent.touchData().delta = vec2(event.dx, event.dy);
   
   if (touchEvent.type())
-    notify(touchEvent);
+    notifyTouch(touchEvent);
+}
+
+void SDLEventSystem::notifyTouch(Event &event)
+{
+  bool dispatch = false;
+  int index = event.touchData().index;
+  
+  SDL_AtomicLock(&mTouchLock);
+  if (event == EVENT_TOUCH_UP)
+  {
+    mTouches.erase(index);
+    resetTouches();
+    mLastDistance = 0.0f;
+    dispatch = true;
+  }
+  else
+  {
+    if (!mTouches.count(index))
+    {
+      Touch &touch = mTouches[index];
+      touch.nextLocation = touch.lastLocation = event.touchData().location;
+      resetTouches();
+      mLastDistance = 0.0f;
+      dispatch = true;
+    }
+    else if (mTouches.size() > 1)
+    {
+      Touch &touch = mTouches[index];
+      touch.lastLocation = touch.nextLocation;
+      touch.nextLocation = event.touchData().location;
+      touch.updated = true;
+      
+      if (checkUpdatedTouches())
+      {
+        event.setType(EVENT_TOUCH_GESTURE);
+        event.touchData().index = (int)mTouches.size();
+        event.touchData().location = getGestureLocation();
+        event.touchData().delta = vec2(getGestureTheta(), getGestureDelta());
+        resetTouches();
+        dispatch = true;
+      }
+    }
+    else
+      dispatch = true;
+  }
+  SDL_AtomicUnlock(&mTouchLock);
+  
+  if (dispatch)
+    notify(event);
+}
+
+bool SDLEventSystem::checkUpdatedTouches()
+{
+  bool updated = true;
+  for (map<int, Touch>::iterator itr = mTouches.begin(); itr != mTouches.end(); ++itr)
+    updated &= itr->second.updated;
+  return updated;
+}
+
+void SDLEventSystem::resetTouches()
+{
+  for (map<int, Touch>::iterator itr = mTouches.begin(); itr != mTouches.end(); ++itr)
+    itr->second.updated = false;
+}
+
+vec2 SDLEventSystem::getGestureLocation()
+{
+  map<int, Touch>::iterator itr = mTouches.begin();
+  vec2 location = itr->second.nextLocation;
+  for (++itr; itr != mTouches.end(); ++itr)
+    location += itr->second.nextLocation;
+  return location/(float)mTouches.size();
+}
+
+float SDLEventSystem::getGestureTheta()
+{
+  // TODO: Implement Gesture Theta when needed.
+  return 0;
+}
+
+float SDLEventSystem::getGestureDelta()
+{
+  float distance = 0.0f;
+  float delta = 0.0f;
+  for (map<int, Touch>::iterator i = mTouches.begin(); i != mTouches.end(); ++i)
+  {
+    map<int, Touch>::iterator j = i;
+    for (++j; j != mTouches.end(); ++j)
+      distance += (i->second.nextLocation - j->second.nextLocation).length();
+  }
+  if (mLastDistance > 0.0f)
+    delta = distance - mLastDistance;
+  mLastDistance = distance;
+  return delta;
 }
 
 void SDLEventSystem::processGestureEvent(const SDL_MultiGestureEvent &event)

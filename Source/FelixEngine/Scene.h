@@ -13,7 +13,6 @@
 #include "EventHandler.h"
 #include "XMLTree.h"
 #include "Object.h"
-#include "View.h"
 #include "Material.h"
 
 #include <istream>
@@ -31,7 +30,6 @@ namespace fx
     ~Scene()
     {
       clearObjects();
-      clearViews();
       clearMaterials();
     }
     
@@ -53,7 +51,7 @@ namespace fx
           if (**itr == "Resources")
             success &= addResources(**itr);
           else
-            success &= addObject(createObject(*itr));
+            success &= (bool)Object::Create(*itr, this);
         }
       }
       return success;
@@ -69,7 +67,6 @@ namespace fx
     {
       for (iterator itr = begin(); itr != end(); ++itr)
         (*itr)->update();
-      updateViews();
     }
     
     void setName(const std::string &name) {mName = name;}
@@ -89,11 +86,13 @@ namespace fx
         mObjects.push_back(obj);
       return obj;
     }
+    void removeObject(Object *obj) {mObjects.remove(obj);}
     void clearObjects()
     {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        delete *itr;
+      std::list<Object*> tmp = mObjects;
       mObjects.clear();
+      for (iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
+        delete *itr;
     }
     
     Object* getObjectByName(const std::string &name)
@@ -113,19 +112,6 @@ namespace fx
           return *itr;
       }
       return nullptr;
-    }
-    
-    View* getView(const std::string &name)
-    {
-      if (!mViewMap.count(name))
-        mViewMap[name] = new View();
-      return mViewMap.at(name);
-    }
-    void clearViews()
-    {
-      for (std::map<std::string, View*>::iterator itr = mViewMap.begin(); itr != mViewMap.end(); ++itr)
-        delete itr->second;
-      mViewMap.clear();
     }
     
     Material* getMaterial(const std::string &name)
@@ -154,12 +140,7 @@ namespace fx
       bool success = true;
       std::string name = node.attribute("name");
       std::string type = node.element();
-      if (type == "View")
-      {
-        View *view = getView(name);
-        success &= view->setToXml(node);
-      }
-      else if (type == "Material")
+      if (type == "Material")
       {
         Material *material = getMaterial(name);
         success &= material->setToXml(node);
@@ -176,27 +157,11 @@ namespace fx
       }
       return success;
     }
-    void updateViews()
-    {
-      for (std::map<std::string, View*>::iterator itr = mViewMap.begin(); itr != mViewMap.end(); ++itr)
-        itr->second->update();
-    }
-    Object* createObject(const XMLTree::Node *node)
-    {
-      Object *obj = new Object(this);
-      if (!node || !obj->setToXml(node))
-      {
-        delete obj;
-        obj = nullptr;
-      }
-      return obj;
-    }
     
     std::string mName;
     std::list<Object*> mObjects;
     std::list<Resource*> mResources;
     
-    std::map<std::string, View*>     mViewMap;
     std::map<std::string, Material*> mMaterialMap;
   };
 }

@@ -19,6 +19,12 @@
 #if !TARGET_IPHONE_SIMULATOR
 
 
+#if TARGET_OS_IPHONE
+  #define OFFSET_ALIGNMENT 16
+#else
+  #define OFFSET_ALIGNMENT 256
+#endif
+
 namespace fx
 {
   struct MTLContextInfo
@@ -82,7 +88,7 @@ namespace fx
   
   struct MTLFrameInterface: Frame
   {
-    MTLFrameInterface(MTLGraphicSystem *system): mSystem(system)
+    MTLFrameInterface(MTLGraphicSystem *system): mSystem(system), mWindow(0)
     {
       MTLContextInfo *info = mSystem->getContextInfo();
       mMTLFrame = [[MTLFrame alloc] initWithDevice:info->mDevice];
@@ -98,10 +104,24 @@ namespace fx
         else
           setNotLoading();
       }
+      else if (mMTLFrame != nil)
+      {
+        if (mWindow)
+          mSize = mWindow->frameSize();
+        else
+        {
+          if (mRefFrame)
+            mSize = mScale * mRefFrame->size();
+          [mMTLFrame resizeToWidth:mSize.w Height:mSize.h];
+        }
+      }
     }
     bool load()
     {
       bool success = true;
+      
+      if (mRefFrame)
+        mSize = mRefFrame->size() * mScale;
       
       for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
       {
@@ -157,8 +177,63 @@ namespace fx
       }
       return true;
     }
+    double originX(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+        return (double)(mSize.x);
+      return 0.0;
+    }
+    double originY(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+        return (double)(mSize.y);
+      return 0.0;
+    }
+    double width() const {return (double)mSize.w;}
+    double height() const {return (double)mSize.h;}
+    MTLViewport viewPort(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+      viewport.width  = (double)mSize.w;
+      viewport.height = (double)mSize.h;
+      if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+        viewport.originX = viewport.width;
+      if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+          (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+        viewport.originY = viewport.height;
+      return viewport;
+    }
+    MTLScissorRect scissor(int stereo) const
+    {
+      int mode = mWindow ? mWindow->mode() : 0;
+      MTLScissorRect rect = {0, 0, 0, 0};
+      rect.width = mMTLFrame.width;
+      rect.height = mMTLFrame.height;
+      if (mode == WINDOW_LEFT_RIGHT || mode == WINDOW_RIGHT_LEFT)
+      {
+        rect.width /= 2;
+        if ((mode == WINDOW_LEFT_RIGHT && stereo == STEREO_RIGHT) ||
+            (mode == WINDOW_RIGHT_LEFT && stereo == STEREO_LEFT))
+          rect.x = rect.width;
+      }
+      else if (mode == WINDOW_LEFT_OVER_RIGHT || mode == WINDOW_RIGHT_OVER_LEFT)
+      {
+        rect.height /= 2;
+        if ((mode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_RIGHT) ||
+            (mode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_LEFT))
+          rect.y = rect.height;
+      }
+      return rect;
+    }
     
     MTLFrame *mMTLFrame;
+    Window *mWindow;
     MTLGraphicSystem *mSystem;
     std::list<MTLTextureInterface*> mTextures;
   };
@@ -216,8 +291,12 @@ namespace fx
         CGSize size = [UIScreen mainScreen].bounds.size;
         CGFloat scale = [UIScreen mainScreen].scale;
         [mMTLWindow updateSize:size andScale:scale];
+        mSize.w = (int)(size.width*scale);
+        mSize.h = (int)(size.height*scale);
         #endif
       }
+      if (mMTLFrame)
+        mMTLFrame->mWindow = this;
     }
     
     MTLWindow *mMTLWindow;
@@ -330,7 +409,7 @@ namespace fx
   
   struct MTLUniformMapInterface: InternalUniformMap
   {
-    MTLUniformMapInterface(UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
+    MTLUniformMapInterface(const UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
     virtual ~MTLUniformMapInterface() {mMTLUniformMap = nil;}
     
     virtual void release() {mUniformMap = nullptr;}
@@ -339,14 +418,20 @@ namespace fx
     {
       if (inUse() && mMTLUniformMap != nil)
       {
+        mUniformMap->lock();
         [mMTLUniformMap setUniformsSize:mUniformMap->size()];
-        [mMTLUniformMap setBufferSize:mUniformMap->sizeInBytes()];
+        
+        NSUInteger bufferSize = 0;
+        for (UniformMap::iterator itr = mUniformMap->begin(); itr != mUniformMap->end(); ++itr)
+          bufferSize += (NSUInteger)((itr->second.sizeInBytes()/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
+        [mMTLUniformMap setBufferSize:bufferSize];
+        
         
         if (mMTLUniformMap.buffer != nil)
         {
           NSUInteger offset = 0;
           char *buffer = (char*)[mMTLUniformMap.buffer contents];
-          UniformMap::const_iterator itr = mUniformMap->begin();
+          UniformMap::iterator itr = mUniformMap->begin();
           for (MTLUniform *uniform in mMTLUniformMap.uniforms)
           {
             // Set the Uniform information
@@ -357,14 +442,17 @@ namespace fx
             size_t size = itr->second.sizeInBytes();
             void *ptr = (void*)(buffer + offset);
             memcpy(ptr, itr->second.ptr(), size);
-            offset += (NSUInteger)size;
+            ++itr;
+            
+            offset += (NSUInteger)((size/OFFSET_ALIGNMENT+1)*OFFSET_ALIGNMENT);
           }
         }
+        mUniformMap->unlock();
       }
     }
     bool inUse() const {return mUniformMap;}
     
-    UniformMap    *mUniformMap;
+    const UniformMap *mUniformMap;
     MTLUniformMap *mMTLUniformMap;
   };
 }
@@ -474,7 +562,7 @@ void MTLGraphicSystem::render()
   updateUniforms();
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
 {
   MTLUniformMapInterface *internalUniformMap = new MTLUniformMapInterface(map);
   internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
@@ -515,10 +603,18 @@ void MTLGraphicSystem::processTasks()
     
     setNextWindowDrawables();
     
-    mTaskSlotsMutex.lock();
-    if (mTaskSlots.size())
-      processTaskSlot(mTaskSlots.at(0));
-    mTaskSlotsMutex.unlock();
+    mPassesMutex.lock();
+    if (mPasses.size())
+    {
+      int flags = getStereoFlags();
+      if (flags & STEREO_MONO)
+        processPass(mPasses.at(0), nullptr, STEREO_MONO);
+      if (flags & STEREO_LEFT)
+        processPass(mPasses.at(0), nullptr, STEREO_LEFT);
+      if (flags & STEREO_RIGHT)
+        processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
+    }
+    mPassesMutex.unlock();
     
     presentWindowDrawables();
     [mContextInfo->mCommandBuffer commit];
@@ -526,71 +622,80 @@ void MTLGraphicSystem::processTasks()
   }
 }
 
-void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
 {
-  for (TaskSlot::const_iterator itr = slot.begin(); itr != slot.end(); ++itr)
-    processTask(*itr);
+  for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
+    processTask(&(*itr), view, stereo);
 }
 
-void MTLGraphicSystem::processTask(const GraphicTask &task)
+void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
-  if (task.isViewTask() && task.viewIndex < (int)mTaskSlots.size())
+  if (task->stereo & stereo && task->isViewTask() && task->pass < (int)mPasses.size())
   {
-    TaskSlot &slot = mTaskSlots.at(task.viewIndex);
-    if (slot.size())
+    Pass &pass = mPasses.at(task->pass);
+    if (pass.size())
     {
-      // TODO: Fix this when Compute tasks are introduced
-      if (task.isClearTask() && !slot.at(0).isClearTask())
-        slot.at(0).clearState = task.clearState;
+      if (task->isClearTask())
+      {
+        for (Pass::iterator itr = pass.begin(); itr != pass.end(); ++itr)
+        {
+          if (itr->stereo & stereo && itr->isDrawTask())
+          {
+            if (!itr->isClearTask())
+              itr->clearState = task->clearState;
+            break;
+          }
+        }
+      }
       
-      processTaskSlot(slot);
+      processPass(pass, task, stereo);
     }
   }
-  else if (task.isDrawTask())
+  else if (task->stereo & stereo && task->isDrawTask())
   {
-    const MTLFrameInterface  *frame  = static_cast<const MTLFrameInterface*>(task.frame);
-    const MTLShaderInterface *shader = static_cast<const MTLShaderInterface*>(task.shader);
-    const MTLMeshInterface   *mesh   = static_cast<const MTLMeshInterface*>(task.mesh);
+    const MTLFrameInterface  *frame  = static_cast<const MTLFrameInterface*>(view ? view->frame : task->frame);
+    const MTLShaderInterface *shader = static_cast<const MTLShaderInterface*>(task->shader);
+    const MTLMeshInterface   *mesh   = static_cast<const MTLMeshInterface*>(task->mesh);
     
-    if ([frame->mMTLFrame loaded] && [shader->mMTLShader loaded] && [mesh->mMTLMesh loaded])
+    if (frame && [frame->mMTLFrame loaded] && [shader->mMTLShader loaded] && [mesh->mMTLMesh loaded])
     {
       // Get the pipeline state
       [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
-      [mContextInfo->mPipelineKey setBlendingEnabled:task.blendState.isBlendingEnabled()];
+      [mContextInfo->mPipelineKey setBlendingEnabled:task->blendState.isBlendingEnabled()];
       id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
       
       // Get the Render Descriptor.
-      MTLClearColor color = MTLClearColorMake(task.clearState.colors[0].red,
-                                              task.clearState.colors[0].green,
-                                              task.clearState.colors[0].blue,
-                                              task.clearState.colors[0].alpha);
+      MTLClearColor color = MTLClearColorMake(task->clearState.colors[0].red,
+                                              task->clearState.colors[0].green,
+                                              task->clearState.colors[0].blue,
+                                              task->clearState.colors[0].alpha);
       [mContextInfo->mDescriptorKey setClearColor:color];
-      [mContextInfo->mDescriptorKey setClearColorBuffers:task.clearState.flags & CLEAR_COLOR];
+      [mContextInfo->mDescriptorKey setClearColorBuffers:(task->clearState.flags & CLEAR_COLOR)];
       
-      [mContextInfo->mDescriptorKey setClearDepth:task.clearState.depth];
-      [mContextInfo->mDescriptorKey setClearDepthBuffer:task.clearState.flags & CLEAR_DEPTH];
+      [mContextInfo->mDescriptorKey setClearDepth:task->clearState.depth];
+      [mContextInfo->mDescriptorKey setClearDepthBuffer:(task->clearState.flags & CLEAR_DEPTH)];
       
       MTLRenderPassDescriptor *renderPassDesc = [frame->mMTLFrame getDescriptorForKey:mContextInfo->mDescriptorKey];
       
-      NSNumber *depthKey = [NSNumber numberWithInt:task.depthState.flags];
+      NSNumber *depthKey = [NSNumber numberWithInt:task->depthState.flags];
       id <MTLDepthStencilState> depthState = [mContextInfo->mDepthStencilStates objectForKey:depthKey];
       if (depthState == nil)
       {
         MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
-        depthDesc.depthWriteEnabled = task.depthState.isWritingEnabled();
+        depthDesc.depthWriteEnabled = task->depthState.isWritingEnabled();
         depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
         
-        if (task.depthState.getTestFunction() == DEPTH_TEST_LESS)
+        if (task->depthState.getTestFunction() == DEPTH_TEST_LESS)
           depthDesc.depthCompareFunction = MTLCompareFunctionLess;
-        else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER)
+        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
-        else if (task.depthState.getTestFunction() == DEPTH_TEST_EQUAL)
+        else if (task->depthState.getTestFunction() == DEPTH_TEST_EQUAL)
           depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
-        else if (task.depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
+        else if (task->depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
-        else if (task.depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
+        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
-        else if (task.depthState.getTestFunction() == DEPTH_TEST_NEVER)
+        else if (task->depthState.getTestFunction() == DEPTH_TEST_NEVER)
           depthDesc.depthCompareFunction = MTLCompareFunctionNever;
         
         depthState = [mContextInfo->mDevice newDepthStencilStateWithDescriptor:depthDesc];
@@ -599,43 +704,40 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
         [mContextInfo->mDepthStencilStates setObject:depthState forKey:depthKey];
       }
       
-      MTLViewport viewport = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0};
-      viewport.width  = [frame->mMTLFrame width];
-      viewport.height = [frame->mMTLFrame height];
-      
       if (pipelineState && renderPassDesc && depthState && mContextInfo->mCommandBuffer != nil)
       {
         id <MTLRenderCommandEncoder> renderEncoder = [mContextInfo->mCommandBuffer renderCommandEncoderWithDescriptor:renderPassDesc];
         renderPassDesc = nil;
         
         // Set the context state with the render encoder
-        [renderEncoder setViewport:viewport];
+        [renderEncoder setViewport:frame->viewPort(stereo)];
+        [renderEncoder setScissorRect:frame->scissor(stereo)];
         [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         [renderEncoder setDepthStencilState:depthState];
         [renderEncoder setRenderPipelineState:pipelineState];
         
-        if (task.localUniforms)
+        if (view && view->localUniforms)
         {
-          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.localUniforms);
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(view->localUniforms);
           [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
         }
         
-        if (task.viewUniforms)
+        if (task->localUniforms)
         {
-          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.viewUniforms);
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task->localUniforms);
           [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
         }
         
-        if (task.materialUniforms)
+        if (task->materialUniforms)
         {
-          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task.materialUniforms);
+          const MTLUniformMapInterface *uniformMap = static_cast<const MTLUniformMapInterface*>(task->materialUniforms);
           [uniformMap->mMTLUniformMap applyToShader:shader->mMTLShader withEncoder:renderEncoder];
         }
         
-        if (task.textureMap)
+        if (task->textureMap)
         {
           NSUInteger index = 0;
-          for (TextureMap::const_iterator itr = task.textureMap->begin(); itr != task.textureMap->end(); ++itr, ++index)
+          for (TextureMap::const_iterator itr = task->textureMap->begin(); itr != task->textureMap->end(); ++itr, ++index)
           {
             const MTLTextureInterface *texture = static_cast<const MTLTextureInterface*>(itr->texture());
             MTLSamplerInterface *sampler = getSampler(itr->sampler());
@@ -647,7 +749,7 @@ void MTLGraphicSystem::processTask(const GraphicTask &task)
           }
         }
         
-        [mesh->mMTLMesh drawToEncoder:renderEncoder withShader:shader->mMTLShader instanceCount:task.instances];
+        [mesh->mMTLMesh drawToEncoder:renderEncoder withShader:shader->mMTLShader instanceCount:task->instances];
         [renderEncoder endEncoding];
         renderEncoder = nil;
       }
@@ -703,6 +805,14 @@ int MTLGraphicSystem::getSamplerAddressMode(SAMPLER_COORD coord) const
   if (coord == SAMPLER_COORD_CLAMP_ZERO)
     return (int)MTLSamplerAddressModeClampToZero;
   return (int)MTLSamplerAddressModeClampToEdge;
+}
+
+int MTLGraphicSystem::getStereoFlags() const
+{
+  int flags = 0;
+  for (map<string, MTLWindowInterface*>::const_iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    flags |= itr->second->getStereoFlags();
+  return flags;
 }
 
 void MTLGraphicSystem::updateResources()
@@ -792,7 +902,7 @@ void MTLGraphicSystem::render()
 {
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
 {
   return nullptr;
 }
@@ -814,11 +924,11 @@ void MTLGraphicSystem::processTasks()
 {
 }
 
-void MTLGraphicSystem::processTaskSlot(const TaskSlot &slot)
+void MTLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
 {
 }
 
-void MTLGraphicSystem::processTask(const GraphicTask &task)
+void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
 }
 

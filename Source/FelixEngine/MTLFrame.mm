@@ -89,8 +89,6 @@
 {
   _width = width;
   _height = height;
-  //  if (_depthBuffer != nil)
-  //    [_depthBuffer resizeToWidth:_width Height:_height];
   [_descriptors removeAllObjects];
 }
 

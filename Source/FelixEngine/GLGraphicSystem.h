@@ -57,7 +57,7 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
+    virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map);
     
     virtual SDL_Window* getMainSDLWindow();
     
@@ -71,13 +71,15 @@ namespace fx
     
   private:
     void processTasks();
-    void processTaskSlot(const TaskSlot &slot);
-    void processTask(const GraphicTask &task);
+    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
+    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
     void updateResources();
     void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
     bool setShaderFunctions(const XMLTree::Node *node);
+    
+    int getStereoFlags() const;
     
     std::map<std::string, GLWindow*>  mWindows;
     std::map<std::string, GLFrame*>   mFrames;

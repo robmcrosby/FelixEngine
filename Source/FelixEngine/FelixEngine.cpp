@@ -10,7 +10,7 @@
 
 #include "System.h"
 #include "Scene.h"
-#include "Platform.h"
+#include "FileSystem.h"
 
 #include <SDL2/SDL.h>
 
@@ -48,7 +48,7 @@ bool FelixEngine::init(const std::string &settingsFile)
 {
   bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(Platform::GetResourcePath()+settingsFile) && !tree.isEmpty())
+  if (tree.loadFile(FileSystem::GetLocalPath()+settingsFile) && !tree.isEmpty())
   {
     const XMLTree::Node *settingsNode = *tree.begin();
     if (settingsNode->hasSubNode("Systems"))
@@ -62,7 +62,7 @@ bool FelixEngine::loadScene(const string &sceneFile)
 {
   bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(Platform::GetResourcePath()+sceneFile) && !tree.isEmpty())
+  if (tree.loadFile(FileSystem::GetLocalPath()+sceneFile) && !tree.isEmpty())
   {
     Scene *scene = new Scene();
     success = scene->setToXml(*tree.begin()) && scene->init();

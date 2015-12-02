@@ -16,6 +16,8 @@
 #include "Color.h"
 #include "Sampler.h"
 
+#define MAIN_WINDOW "MainWindow"
+
 
 namespace fx
 {
@@ -34,9 +36,29 @@ namespace fx
     SHADER_FUNCTION,
   };
   
+  enum WINDOW_MODE {
+    WINDOW_FULL_MONO,
+    WINDOW_FULL_LEFT,
+    WINDOW_FULL_RIGHT,
+    WINDOW_LEFT_RIGHT,
+    WINDOW_RIGHT_LEFT,
+    WINDOW_LEFT_OVER_RIGHT,
+    WINDOW_RIGHT_OVER_LEFT,
+  };
+  
+  enum STEREO_FLAGS
+  {
+    STEREO_MONO   = 0x01,
+    STEREO_LEFT   = 0x02,
+    STEREO_RIGHT  = 0x04,
+    STEREO_BINARY = 0x06,
+    STEREO_ALL    = 0x07,
+  };
+  
   class Window: public Resource
   {
   public:
+    Window(): mMode(WINDOW_FULL_MONO) {}
     virtual ~Window() {}
     
     virtual bool setToXml(const XMLTree::Node &node);
@@ -47,10 +69,34 @@ namespace fx
     
     ivec2 position() const {return mPosition;}
     ivec2 size() const {return mSize;}
+    ivec2 frameSize()
+    {
+      ivec2 size = mSize;
+      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
+        size.y /= 2;
+      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
+        size.x /= 2;
+      return size;
+    }
+    
+    void setMode(WINDOW_MODE mode) {mMode = mode;}
+    WINDOW_MODE mode() const {return mMode;}
+    
+    int getStereoFlags() const
+    {
+      if (mMode == WINDOW_FULL_MONO)
+        return STEREO_MONO;
+      if (mMode == WINDOW_FULL_LEFT)
+        return STEREO_LEFT;
+      if (mMode == WINDOW_FULL_RIGHT)
+        return STEREO_RIGHT;
+      return STEREO_BINARY;
+    }
     
   protected:
     std::string mTitle;
     ivec2 mPosition, mSize;
+    WINDOW_MODE mMode;
   };
   
   class Frame: public Resource
@@ -64,6 +110,7 @@ namespace fx
     };
     
   public:
+    Frame(): mRefFrame(0) {}
     virtual ~Frame() {}
     
     virtual bool setToXml(const XMLTree::Node &node);
@@ -85,13 +132,14 @@ namespace fx
     void setScale(const vec2 &scale) {mScale = scale;}
     vec2 scale() const {return mScale;}
     
-    void setRefrenceFrame(const std::string &name) {mRefFrame = name;}
-    std::string refrenceFrame() const {return mRefFrame;}
+    void setRefrenceFrame(const std::string &name);
+    void setRefrenceFrame(Frame *frame) {mRefFrame = frame != this ? frame : nullptr;}
+    Frame* refrenceFrame() const {return mRefFrame;}
     
   protected:
     ivec2 mSize;
     vec2 mScale;
-    std::string mRefFrame;
+    Frame *mRefFrame;
     std::list<Buffer> mBuffers;
   };
   

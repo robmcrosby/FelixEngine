@@ -118,7 +118,27 @@ namespace fx
     Variant(const XMLTree::Node *node): mType(VAR_UNKNOWN) {setToXml(node);}
     Variant(const XMLTree::Node &node): mType(VAR_UNKNOWN) {setToXml(node);}
     
-    void resize(size_t size) {mData.resize(mTypeSize * size);}
+    Variant(const float &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const vec2  &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const vec3  &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const vec4  &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const RGBAf &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    
+    Variant(const int   &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const ivec2 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const ivec3 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const ivec4 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    
+    Variant(const mat2 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const mat3 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    Variant(const mat4 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    
+    void resize(size_t size)
+    {
+      size *= mTypeSize;
+      if (mData.size() < size)
+        mData.resize(size);
+    }
     void resize(VAR_TYPE type, size_t size)
     {
       mType = type;
@@ -128,7 +148,7 @@ namespace fx
     void setValues(VAR_TYPE type, const void *ptr, size_t size = 1)
     {
       resize(type, size);
-      memcpy(&mData.at(0), ptr, mTypeSize*size);
+      memcpy(&mData.at(0), ptr, sizeInBytes());
     }
     
     void setValues(const float *ptr, size_t size = 1) {setValues(VAR_FLOAT,   (const void*)ptr, size);}
