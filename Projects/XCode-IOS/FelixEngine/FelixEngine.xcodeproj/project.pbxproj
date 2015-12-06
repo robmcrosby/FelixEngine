@@ -443,7 +443,6 @@
 			children = (
 				C197CD8A1BED298D007F68E0 /* FelixEngine.h */,
 				C197CD891BED298D007F68E0 /* FelixEngine.cpp */,
-				C197CDE51BED29AD007F68E0 /* Loaders */,
 				C197CDE91BED29FB007F68E0 /* Scene */,
 				C197CDE61BED29B3007F68E0 /* Systems */,
 				C197CDE81BED29C9007F68E0 /* Utilities */,
@@ -679,6 +678,7 @@
 			children = (
 				C19EDC651C0E514A00F997AB /* FileSystem.h */,
 				C19EDC641C0E514A00F997AB /* FileSystem.mm */,
+				C197CDE51BED29AD007F68E0 /* Loaders */,
 			);
 			name = FileSystem;
 			sourceTree = "<group>";

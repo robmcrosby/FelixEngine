@@ -11,6 +11,7 @@
 #include "System.h"
 #include "XMLTree.h"
 
+#include "FileSystem.h"
 #include "TaskingSystem.h"
 #include "GraphicSystem.h"
 #include "EventSystem.h"

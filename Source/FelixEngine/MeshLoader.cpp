@@ -46,7 +46,7 @@ bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node
 bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &file)
 {
   bool success = false;
-  std::string filePath = FileSystem::GetLocalPath() + "Meshes/" + file;
+  std::string filePath = FileSystem::GetResourcesPath() + "Meshes/" + file;
   std::string postfix = StringUtils::GetFilePostfix(file);
   
   if (postfix == "xml")
