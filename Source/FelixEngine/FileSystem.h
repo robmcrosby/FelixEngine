@@ -43,6 +43,8 @@ namespace fx
     std::string path() const;
     std::string extension() const;
     
+    bool exists() const;
+    
     bool load(Directory &dir) const;
     bool load(std::string &text) const;
     bool load(XMLTree &tree) const;

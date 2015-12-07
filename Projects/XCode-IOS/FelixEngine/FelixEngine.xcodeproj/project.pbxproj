@@ -49,6 +49,8 @@
 		C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */; };
 		C15D73991BF3BB1D002FEEE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */; };
 		C15D739A1BF3BB30002FEEE3 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */; };
+		C17195451C14B9AC001DBDC6 /* IOSFileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C17195431C14B9AC001DBDC6 /* IOSFileSystem.mm */; };
+		C17195461C14B9AC001DBDC6 /* IOSFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C17195441C14B9AC001DBDC6 /* IOSFileSystem.h */; };
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
@@ -204,6 +206,9 @@
 		C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
 		C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
 		C15D73981BF3BB1D002FEEE3 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C17195431C14B9AC001DBDC6 /* IOSFileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSFileSystem.mm; path = ../../../../Source/FelixEngine/IOSFileSystem.mm; sourceTree = "<group>"; };
+		C17195441C14B9AC001DBDC6 /* IOSFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSFileSystem.h; path = ../../../../Source/FelixEngine/IOSFileSystem.h; sourceTree = "<group>"; };
+		C171954D1C150482001DBDC6 /* ModelViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ModelViewer.entitlements; sourceTree = "<group>"; };
 		C197CD761BED291A007F68E0 /* libFelixEngine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFelixEngine.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197CD821BED298D007F68E0 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../../../Source/FelixEngine/Color.h; sourceTree = "<group>"; };
 		C197CD831BED298D007F68E0 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
@@ -415,6 +420,15 @@
 				C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */,
 			);
 			name = IOSMotionSystem;
+			sourceTree = "<group>";
+		};
+		C17195421C14B964001DBDC6 /* IOSFilesystem */ = {
+			isa = PBXGroup;
+			children = (
+				C17195441C14B9AC001DBDC6 /* IOSFileSystem.h */,
+				C17195431C14B9AC001DBDC6 /* IOSFileSystem.mm */,
+			);
+			name = IOSFilesystem;
 			sourceTree = "<group>";
 		};
 		C197CD6D1BED291A007F68E0 = {
@@ -678,6 +692,7 @@
 			children = (
 				C19EDC651C0E514A00F997AB /* FileSystem.h */,
 				C19EDC641C0E514A00F997AB /* FileSystem.mm */,
+				C17195421C14B964001DBDC6 /* IOSFilesystem */,
 				C197CDE51BED29AD007F68E0 /* Loaders */,
 			);
 			name = FileSystem;
@@ -686,6 +701,7 @@
 		C1B00E731BF68FDF0060BE21 /* ModelViewer */ = {
 			isa = PBXGroup;
 			children = (
+				C171954D1C150482001DBDC6 /* ModelViewer.entitlements */,
 				C1B00E891BF690890060BE21 /* main.cpp */,
 				C106DB821BFD0F0A000065D4 /* ViewerCamera.h */,
 				C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */,
@@ -733,6 +749,7 @@
 				C197CE441BED5F20007F68E0 /* GLMesh.h in Headers */,
 				C197CE3F1BED5F13007F68E0 /* GLGraphicSystem.h in Headers */,
 				C19EDC671C0E514A00F997AB /* FileSystem.h in Headers */,
+				C17195461C14B9AC001DBDC6 /* IOSFileSystem.h in Headers */,
 				C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */,
 				C197CE4A1BED5FA1007F68E0 /* Vector.h in Headers */,
 				C197CE301BED5E73007F68E0 /* Object.h in Headers */,
@@ -842,12 +859,24 @@
 					};
 					C197CE091BED57B3007F68E0 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = K62X7R9XCJ;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 					C197CE231BED585C007F68E0 = {
 						CreatedOnToolsVersion = 7.1;
 					};
 					C1B00E711BF68FDF0060BE21 = {
 						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = K62X7R9XCJ;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -943,6 +972,7 @@
 				C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */,
 				C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */,
 				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
+				C17195451C14B9AC001DBDC6 /* IOSFileSystem.mm in Sources */,
 				C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */,
 				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
 				C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */,
@@ -1095,6 +1125,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					../../../ThirdParty/SDL2/IOS/,
@@ -1104,6 +1136,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1112,6 +1145,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					../../../ThirdParty/SDL2/IOS/,
@@ -1121,6 +1156,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.HelloFelix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1145,6 +1181,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ModelViewer/ModelViewer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					../../../ThirdParty/SDL2/IOS/,
@@ -1154,6 +1193,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.ModelViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1162,6 +1202,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ModelViewer/ModelViewer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					../../../ThirdParty/SDL2/IOS/,
@@ -1171,6 +1214,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.ModelViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

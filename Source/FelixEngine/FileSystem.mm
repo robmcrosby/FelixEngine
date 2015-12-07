@@ -113,6 +113,13 @@ string File::extension() const
   return [[[NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]] pathExtension] UTF8String];
 }
 
+bool File::exists() const
+{
+  NSFileManager *manager = [NSFileManager defaultManager];
+  NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];
+  return [manager fileExistsAtPath:[url path]];
+}
+
 bool File::load(Directory &dir) const
 {
   NSError *error = nil;
