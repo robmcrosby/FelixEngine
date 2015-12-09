@@ -61,35 +61,6 @@ int main(int argc, char* args[])
     return 1;
   }
   
-  fx::File documents = fx::FileSystem::GetDocuments();
-  fx::File testDir = documents + "test";
-  fx::File testFile = testDir + "test.txt";
-  fx::Directory dir;
-  
-  testDir.createDirectory();
-  
-  testFile.write("It Works!");
-  testFile.append("\nAnother Line");
-  
-  documents.load(dir);
-  cout << documents.name() << endl;
-  for (fx::Directory::iterator itr = dir.begin(); itr != dir.end(); ++itr)
-    cout << "  " << *itr << endl;
-  
-  string text;
-  testFile.load(text);
-  cout << text << endl;
-  
-  testDir.remove();
-  documents.load(dir);
-  cout << documents.name() << endl;
-  for (fx::Directory::iterator itr = dir.begin(); itr != dir.end(); ++itr)
-    cout << "  " << *itr << endl;
-  
-//  fx::Directory dir = fx::FileSystem::GetResourcesDirectory();
-//  dir.reload();
-//  cout << dir;
-  
 //    //Temporary Testing of List
 //  fx::List<int> testList;
 //  TestPush push1(&testList, 1);

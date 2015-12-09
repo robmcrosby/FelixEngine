@@ -90,6 +90,10 @@ namespace fx
   class FileSystem: public System
   {
   public:
+    virtual ~FileSystem() {}
+    virtual File getDocuments() = 0;
+    
+  public:
     static bool LoadText(std::string &buffer, const std::string &filePath);
     static std::string LoadText(const std::string &filePath);
     
@@ -107,8 +111,8 @@ namespace fx
     static File GetResources();
     static File GetDocuments();
     
-  public:
-    virtual ~FileSystem() {}
+  protected:
+    static FileSystem *sInstance;
   };
 }
 

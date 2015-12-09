@@ -69,7 +69,7 @@ namespace fx
   private:
     void setup() {mVectors = new Vector[mSemephore.size()];}
     
-    Semaphore mSemephore;
+    IndexedSemaphore mSemephore;
     Vector *mVectors;
   };
 }

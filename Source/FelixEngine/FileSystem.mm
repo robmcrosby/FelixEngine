@@ -20,6 +20,8 @@ using namespace fx;
 using namespace std;
 
 
+FileSystem* FileSystem::sInstance = nullptr;
+
 string FileSystem::GetResourcesPath()
 {
   NSBundle* mainBundle = [NSBundle mainBundle];
@@ -39,6 +41,9 @@ File FileSystem::GetResources()
 
 File FileSystem::GetDocuments()
 {
+  if (sInstance)
+    return sInstance->getDocuments();
+  
   NSArray *paths = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
   NSURL *url = [paths lastObject];
   return string([[url absoluteString] UTF8String]);
@@ -88,14 +93,17 @@ File::File(const string &url): mUrl(url), mType(FILE_OTHER)
 
 void File::setType()
 {
-  NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];
-  NSNumber *isDirectory;
-  
-  [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-  if ([isDirectory boolValue])
-    mType = FILE_DIR;
-  else
-    mType = TypeFromExtension([[url pathExtension] UTF8String]);
+  if (mUrl != "")
+  {
+    NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];
+    NSNumber *isDirectory;
+    
+    [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+    if ([isDirectory boolValue])
+      mType = FILE_DIR;
+    else
+      mType = TypeFromExtension([[url pathExtension] UTF8String]);
+  }
 }
 
 string File::name() const

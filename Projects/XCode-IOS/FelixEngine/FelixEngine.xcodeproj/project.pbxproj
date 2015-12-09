@@ -133,7 +133,7 @@
 		C198925A1BFD3D5A007DF57A /* OrbitView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892591BFD3D5A007DF57A /* OrbitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C198925C1BFFE171007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925B1BFFE171007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C19EDC641C0E514A00F997AB /* FileSystem.mm */; };
-		C19EDC671C0E514A00F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC651C0E514A00F997AB /* FileSystem.h */; };
+		C19EDC671C0E514A00F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC651C0E514A00F997AB /* FileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E801BF68FDF0060BE21 /* Assets.xcassets */; };
 		C1B00E8A1BF690890060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00E891BF690890060BE21 /* main.cpp */; };
 		C1B00E8B1BF690B00060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
@@ -155,6 +155,7 @@
 		C1B00ED01BF7E1F00060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECE1BF7E1F00060BE21 /* Meshes */; };
 		C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECF1BF7E1F00060BE21 /* Scenes */; };
 		C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EE31BFBAB9C0060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -314,6 +315,7 @@
 		C1B00ECE1BF7E1F00060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
 		C1B00ECF1BF7E1F00060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
 		C1B00EE31BFBAB9C0060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
+		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -431,6 +433,16 @@
 			name = IOSFilesystem;
 			sourceTree = "<group>";
 		};
+		C17195521C15379C001DBDC6 /* IOS */ = {
+			isa = PBXGroup;
+			children = (
+				C1B00E801BF68FDF0060BE21 /* Assets.xcassets */,
+				C1B00E851BF68FDF0060BE21 /* Info.plist */,
+				C171954D1C150482001DBDC6 /* ModelViewer.entitlements */,
+			);
+			name = IOS;
+			sourceTree = "<group>";
+		};
 		C197CD6D1BED291A007F68E0 = {
 			isa = PBXGroup;
 			children = (
@@ -509,6 +521,7 @@
 				C197CD9D1BED298D007F68E0 /* List.h */,
 				C197CD841BED298D007F68E0 /* Delegate.h */,
 				C197CDB31BED298D007F68E0 /* Pool.h */,
+				C1D905201C179C540099974C /* Condition.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -701,7 +714,6 @@
 		C1B00E731BF68FDF0060BE21 /* ModelViewer */ = {
 			isa = PBXGroup;
 			children = (
-				C171954D1C150482001DBDC6 /* ModelViewer.entitlements */,
 				C1B00E891BF690890060BE21 /* main.cpp */,
 				C106DB821BFD0F0A000065D4 /* ViewerCamera.h */,
 				C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */,
@@ -717,10 +729,9 @@
 				C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */,
 				C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */,
 				C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */,
-				C1B00E801BF68FDF0060BE21 /* Assets.xcassets */,
-				C1B00E851BF68FDF0060BE21 /* Info.plist */,
 				C1B00ECE1BF7E1F00060BE21 /* Meshes */,
 				C1B00ECF1BF7E1F00060BE21 /* Scenes */,
+				C17195521C15379C001DBDC6 /* IOS */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -782,6 +793,7 @@
 				C197CE451BED5F23007F68E0 /* GLTexture.h in Headers */,
 				C197CE421BED5F1B007F68E0 /* GLFrame.h in Headers */,
 				C106DB7C1BFD0294000065D4 /* Model.h in Headers */,
+				C1D905211C179C540099974C /* Condition.h in Headers */,
 				C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */,
 				C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */,
 				C197CE561BED5FD6007F68E0 /* List.h in Headers */,

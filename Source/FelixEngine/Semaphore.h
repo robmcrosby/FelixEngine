@@ -22,38 +22,13 @@ namespace fx
     {
       SDL_DestroyMutex(mLockMutex);
       SDL_DestroySemaphore(mSemaphore);
-      delete [] mIndexQueue;
     }
     
     Semaphore& operator=(const Semaphore &other) {return *this;}
     
     void wait() {SDL_SemWait(mSemaphore);}
     void post() {SDL_SemPost(mSemaphore);}
-    
     bool tryWait() {return !SDL_SemTryWait(mSemaphore);}
-    
-    int waitForIndex()
-    {
-      wait();
-      int i = SDL_AtomicAdd(&mDequeueIndex, 1) % (int)mSize;
-      return mIndexQueue[i].index;
-    }
-    int tryWaitForIndex()
-    {
-      if (tryWait())
-      {
-        int i = SDL_AtomicAdd(&mDequeueIndex, 1) % (int)mSize;
-        return mIndexQueue[i].index;
-      }
-      return -1;
-    }
-    
-    void postIndex(int index)
-    {
-      int i = SDL_AtomicAdd(&mEnqueueIndex, 1) % (int)mSize;
-      mIndexQueue[i].index = index;
-      post();
-    }
     
     void lock()
     {
@@ -72,6 +47,50 @@ namespace fx
     unsigned int value() const {return SDL_SemValue(mSemaphore);}
     
   private:
+    void setup(unsigned int size)
+    {
+      mSize = size ? size : SDL_GetCPUCount();
+      mSemaphore = SDL_CreateSemaphore(mSize);
+      mLockMutex = SDL_CreateMutex();
+    }
+    
+    unsigned int mSize;
+    SDL_sem   *mSemaphore;
+    SDL_mutex *mLockMutex;
+    
+    
+  };
+  
+  class IndexedSemaphore: public Semaphore
+  {
+  public:
+    IndexedSemaphore(unsigned int size = 0): Semaphore(size) {setup();}
+    IndexedSemaphore(const Semaphore &other): Semaphore(other) {setup();}
+    ~IndexedSemaphore() {delete [] mIndexQueue;}
+    
+    int waitForIndex()
+    {
+      wait();
+      int i = SDL_AtomicAdd(&mDequeueIndex, 1) % size();
+      return mIndexQueue[i].index;
+    }
+    int tryWaitForIndex()
+    {
+      if (tryWait())
+      {
+        int i = SDL_AtomicAdd(&mDequeueIndex, 1) % size();
+        return mIndexQueue[i].index;
+      }
+      return -1;
+    }
+    void postIndex(int index)
+    {
+      int i = SDL_AtomicAdd(&mEnqueueIndex, 1) % size();
+      mIndexQueue[i].index = index;
+      post();
+    }
+    
+  private:
     struct Index
     {
       int index;
@@ -79,24 +98,14 @@ namespace fx
     };
     
   private:
-    void setup(unsigned int size)
+    void setup()
     {
-      // Setup the Semaphore and Lock Mutex
-      mSize = size ? size : SDL_GetCPUCount();
-      mSemaphore = SDL_CreateSemaphore(mSize);
-      mLockMutex = SDL_CreateMutex();
-      
-      // Setup the Index Queue
-      mIndexQueue = new Index[mSize];
-      for (int i = 0; i < mSize; ++i)
+      mIndexQueue = new Index[size()];
+      for (int i = 0; i < size(); ++i)
         mIndexQueue[i].index = i;
       SDL_AtomicSet(&mDequeueIndex, 0);
       SDL_AtomicSet(&mEnqueueIndex, 0);
     }
-    
-    unsigned int mSize;
-    SDL_sem   *mSemaphore;
-    SDL_mutex *mLockMutex;
     
     Index *mIndexQueue;
     SDL_atomic_t mDequeueIndex;

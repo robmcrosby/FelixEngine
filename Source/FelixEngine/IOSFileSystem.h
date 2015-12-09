@@ -10,9 +10,12 @@
 #define IOSFileSystem_h
 
 #include "FileSystem.h"
+#include "Condition.h"
 
 namespace fx
 {
+  class IOSFileSystemInfo;
+  
   /**
    *
    */
@@ -24,6 +27,15 @@ namespace fx
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
+    
+    virtual File getDocuments();
+    
+  private:
+    void initUbiquity(void*);
+    File getUbiquity();
+    
+    Condition mCondition;
+    IOSFileSystemInfo *mInfo;
   };
 }
 
