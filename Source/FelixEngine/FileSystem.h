@@ -63,6 +63,7 @@ namespace fx
     std::string url() const {return mUrl;}
     
     File operator+(const std::string &path) const;
+    File upperDirectory() const;
     
   public:
     friend std::ostream &operator<<(std::ostream &os, const File &f)
@@ -105,8 +106,6 @@ namespace fx
     
     static long Read(float *buffer, long size, std::istream &is) {return Read((unsigned int*)buffer, size, is);}
     static long Read(float &f, std::istream &is) {return Read((unsigned int*)&f, 1, is);}
-    
-    static std::string GetResourcesPath();
     
     static File GetResources();
     static File GetDocuments();

@@ -48,7 +48,8 @@ bool FelixEngine::init(const std::string &settingsFile)
 {
   bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(FileSystem::GetResourcesPath()+settingsFile) && !tree.isEmpty())
+  File file = FileSystem::GetResources() + settingsFile;
+  if (file.load(tree) && !tree.isEmpty())
   {
     const XMLTree::Node *settingsNode = *tree.begin();
     if (settingsNode->hasSubNode("Systems"))
@@ -58,11 +59,12 @@ bool FelixEngine::init(const std::string &settingsFile)
   return success;
 }
 
-bool FelixEngine::loadScene(const string &sceneFile)
+bool FelixEngine::loadScene(const File &file)
 {
   bool success = false;
   XMLTree::XMLTree tree;
-  if (tree.loadFile(FileSystem::GetResourcesPath()+sceneFile) && !tree.isEmpty())
+  
+  if (file.load(tree) && !tree.isEmpty())
   {
     Scene *scene = new Scene();
     success = scene->setToXml(*tree.begin()) && scene->init();

@@ -22,17 +22,6 @@ using namespace std;
 
 FileSystem* FileSystem::sInstance = nullptr;
 
-string FileSystem::GetResourcesPath()
-{
-  NSBundle* mainBundle = [NSBundle mainBundle];
-  if (mainBundle != nil)
-  {
-    NSString* path = [mainBundle resourcePath];
-    return [path UTF8String] + std::string("/");
-  }
-  return "";
-}
-
 File FileSystem::GetResources()
 {
   NSBundle* mainBundle = [NSBundle mainBundle];
@@ -264,6 +253,13 @@ File File::operator+(const std::string &path) const
   NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];
   url = [url URLByAppendingPathComponent:[NSString stringWithUTF8String:path.c_str()]];
   return string([[url absoluteString] UTF8String]);
+}
+
+File File::upperDirectory() const
+{
+  NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];
+  url = [url URLByDeletingLastPathComponent];
+  return url != nil ? [[url absoluteString] UTF8String] : string();
 }
 
 string File::TypeString(FILE_TYPE type)

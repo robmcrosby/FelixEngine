@@ -156,6 +156,7 @@
 		C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECF1BF7E1F00060BE21 /* Scenes */; };
 		C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EE31BFBAB9C0060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1D905251C1920A10099974C /* MainScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1D905241C1920A10099974C /* MainScene.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -316,6 +317,7 @@
 		C1B00ECF1BF7E1F00060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
 		C1B00EE31BFBAB9C0060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
 		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
+		C1D905241C1920A10099974C /* MainScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = MainScene.xml; path = ../../../../Source/HelloFelix/Resources/MainScene.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -729,6 +731,7 @@
 				C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */,
 				C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */,
 				C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */,
+				C1D905241C1920A10099974C /* MainScene.xml */,
 				C1B00ECE1BF7E1F00060BE21 /* Meshes */,
 				C1B00ECF1BF7E1F00060BE21 /* Scenes */,
 				C17195521C15379C001DBDC6 /* IOS */,
@@ -937,6 +940,7 @@
 				C1B00ED01BF7E1F00060BE21 /* Meshes in Resources */,
 				C1B00EA11BF691E30060BE21 /* SettingsMetal_IOS.xml in Resources */,
 				C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */,
+				C1D905251C1920A10099974C /* MainScene.xml in Resources */,
 				C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */,
 				C1B00E9F1BF691E30060BE21 /* SettingsGLES2.xml in Resources */,
 				C1B00EA01BF691E30060BE21 /* SettingsGLES3.xml in Resources */,

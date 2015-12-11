@@ -98,7 +98,11 @@ bool Shader::setToXml(const XMLTree::Node &node)
   {
     SHADER_PART part = ParseShaderPart((*itr)->element());
     if ((*itr)->hasAttribute("file"))
-      setFileToPart(FileSystem::GetResourcesPath()+(*itr)->attribute("file"), part);
+    {
+      //setFileToPart(FileSystem::GetResourcesPath()+(*itr)->attribute("file"), part);
+      string filePath = (*itr)->tree() ? (*itr)->tree()->path() : "";
+      setFileToPart(filePath+(*itr)->attribute("file"), part);
+    }
     else if ((*itr)->hasAttribute("function"))
       setFunctionToPart((*itr)->attribute("function"), part);
     else
@@ -193,7 +197,8 @@ bool Texture::setToXml(const XMLTree::Node &node)
   bool success = false;
   if (node.hasAttribute("file"))
   {
-    setImageFile(node.attribute("file"));
+    string filePath = node.tree() ? node.tree()->path() : "";
+    setImageFile(filePath+node.attribute("file"));
     if (mSampler.setToXml(node))
     {
       success = true;

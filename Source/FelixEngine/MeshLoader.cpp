@@ -22,7 +22,10 @@ bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node
 {
   bool success = false;
   if (node.hasAttribute("file"))
-    success = LoadMeshFromFile(bufferMap, node.attribute("file"));
+  {
+    string filePath = node.tree() ? node.tree()->path() : "";
+    success = LoadMeshFromFile(bufferMap, filePath+node.attribute("file"));
+  }
   else if (node.numberSubNodes() == 0)
     success = LoadMeshPrimitive(bufferMap, node);
   else
@@ -43,11 +46,10 @@ bool MeshLoader::LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node
   return success;
 }
 
-bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &file)
+bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &filePath)
 {
   bool success = false;
-  std::string filePath = FileSystem::GetResourcesPath() + "Meshes/" + file;
-  std::string postfix = StringUtils::GetFilePostfix(file);
+  std::string postfix = StringUtils::GetFilePostfix(filePath);
   
   if (postfix == "xml")
   {
@@ -60,7 +62,7 @@ bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string 
         cerr << "Mesh XML File is empty" << endl;
     }
     else
-      cerr << "Error Reading Mesh XML File: " << file << endl;
+      cerr << "Error Reading Mesh XML File: " << filePath << endl;
   }
   else if (postfix == "mesh")
   {
@@ -72,7 +74,7 @@ bool MeshLoader::LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string 
       meshFile.close();
     }
     else
-      cerr << "Error Opening Mesh File: " << file << endl;
+      cerr << "Error Opening Mesh File: " << filePath << endl;
   }
   
   return success;

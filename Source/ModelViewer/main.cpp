@@ -18,7 +18,7 @@
 #define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
-#define SCENE_FILE "Scenes/BunnyScene.xml"
+#define SCENE_FILE "MainScene.xml"
 
 
 using namespace std;
@@ -34,6 +34,13 @@ int main(int argc, char* args[])
     return 1;
   }
   
+//  fx::File documents = fx::FileSystem::GetDocuments()+"BunnyScene/Meshes";
+//  fx::Directory dir;
+//  documents.load(dir);
+//  for (fx::Directory::iterator itr = dir.begin(); itr != dir.end(); ++itr)
+//    cout << *itr << endl;
+  
+//  if (!engine->loadScene(fx::FileSystem::GetDocuments()+"BunnyScene/Scene.xml"))
   if (!engine->loadScene(SCENE_FILE))
   {
     cerr << "Error Loading the Scene" << endl;

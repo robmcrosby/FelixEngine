@@ -14,10 +14,8 @@
 using namespace fx;
 using namespace std;
 
-bool ImageLoader::LoadImageFromFile(ImageRGBA &image, const std::string &file)
+bool ImageLoader::LoadImageFromFile(ImageRGBA &image, const std::string &filePath)
 {
-  string filePath = FileSystem::GetResourcesPath() + file;
-  
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filePath.c_str() ,0);
   FIBITMAP* fimage = FreeImage_Load(format, filePath.c_str());
   if (!fimage)
