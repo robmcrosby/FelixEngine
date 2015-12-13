@@ -8,6 +8,7 @@
 
 #include "UbiquityFileSystem.h"
 #include "TaskGroup.h"
+#include "Event.h"
 #import <Foundation/Foundation.h>
 
 
@@ -198,4 +199,5 @@ File UbiquityFileSystem::getUbiquity()
 
 void UbiquityFileSystem::handleUpdate()
 {
+  notify(EVENT_FILE);
 }

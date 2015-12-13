@@ -7,7 +7,6 @@
 //
 
 #include "IOSMotionSystem.h"
-#include "Event.h"
 
 
 fx::IOSMotionSystem* fx::IOSMotionSystem::Instance = nullptr;
@@ -84,11 +83,9 @@ void IOSMotionSystem::setUpdateFrequency(float frequency)
 
 void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation, quat orientation)
 {
-  // Assign the rotation rate field
   mMotionSem.lock();
   mGravity = gravity;
   mAcceleration = acceleration;
-  mRotation = rotation;
   mRotation = rotation;
   mMotionSem.unlock();
   

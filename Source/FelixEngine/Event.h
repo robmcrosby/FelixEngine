@@ -54,6 +54,8 @@ namespace fx
     
     EVENT_WINDOW           = 0x00010000, /**< Window events mask */
     
+    EVENT_FILE             = 0x00020000, /**< File(s) have been changed externally */
+    
     EVENT_USER             = 0xF0000000, /**< User events mask */
     EVENT_USER_1           = 0x10000000, /**< User event 1 */
     EVENT_USER_2           = 0x20000000, /**< User event 2 */
