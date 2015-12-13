@@ -10,9 +10,6 @@
 #include "TaskGroup.h"
 #import <Foundation/Foundation.h>
 
-#if __IPHONEOS__
-
-
 
 @interface UbiquityListener : NSObject
 
@@ -202,45 +199,3 @@ File UbiquityFileSystem::getUbiquity()
 void UbiquityFileSystem::handleUpdate()
 {
 }
-
-#else
-
-using namespace fx;
-using namespace std;
-
-UbiquityFileSystem* UbiquityFileSystem::sInstance = nullptr;
-
-UbiquityFileSystem::UbiquityFileSystem()
-{
-}
-
-UbiquityFileSystem::~UbiquityFileSystem()
-{
-}
-
-bool UbiquityFileSystem::setToXml(const XMLTree::Node *node)
-{
-  return false;
-}
-
-bool UbiquityFileSystem::init()
-{
-  return false;
-}
-
-File UbiquityFileSystem::getDocuments()
-{
-  NSArray *paths = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
-  NSURL *url = [paths lastObject];
-  return string([[url absoluteString] UTF8String]);
-}
-
-void UbiquityFileSystem::initUbiquity(void*)
-{
-}
-
-void UbiquityFileSystem::handleUpdate()
-{
-}
-
-#endif
