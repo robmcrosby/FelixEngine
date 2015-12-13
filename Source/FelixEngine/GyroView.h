@@ -28,7 +28,7 @@ namespace fx
     GyroView(Object *obj): View(obj), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
       mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f), mAcceleration(DEF_ROT_ACCELERATION)
     {
-      setEventFlags(EVENT_MOTION_COMBINED);
+      setEventFlags(EVENT_MOTION);
       mUpdateDelegate = UpdateDelegate::Create<GyroView, &GyroView::update>(this);
       mMotionSystem = FelixEngine::GetMotionSystem();
       if (mMotionSystem)

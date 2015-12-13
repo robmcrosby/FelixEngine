@@ -50,6 +50,8 @@ namespace fx
     EVENT_KEYBOARD_UP      = 0x00002000, /**< Key has been released */
     EVENT_KEYBOARD_REPEAT  = 0x00004000, /**< Key has been held down */
     
+    EVENT_MOTION           = 0x00008000, /**< Device has moved */
+    
     EVENT_WINDOW           = 0x03FF0000, /**< Window events mask */
     EVENT_WINDOW_SHOWN     = 0x00010000, /**< Window has been shown */
     EVENT_WINDOW_HIDE      = 0x00020000, /**< Window has been hidden */
@@ -62,11 +64,6 @@ namespace fx
     EVENT_WINDOW_ENTER     = 0x00800000, /**< Window has gained mouse focus */
     EVENT_WINDOW_LEAVE     = 0x01000000, /**< Window has lost mouse focus */
     EVENT_WINDOW_CLOSE     = 0x02000000, /**< Window has been closed */
-    
-    EVENT_MOTION           = 0x0C000000, /**< Motion events mask */
-    EVENT_MOTION_ROTATION  = 0x04000000, /**< Device has been rotated */
-    EVENT_MOTION_MOVEMENT  = 0x08000000, /**< Device has been moved */
-    EVENT_MOTION_COMBINED  = 0x0C000000, /**< Device movement combined */
     
     EVENT_USER             = 0xF0000000, /**< User events mask */
     EVENT_USER_1           = 0x10000000, /**< User event 1 */

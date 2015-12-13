@@ -82,36 +82,6 @@ void IOSMotionSystem::setUpdateFrequency(float frequency)
   }
 }
 
-void IOSMotionSystem::handleAccelerationData(vec3 acceleration)
-{
-  // Assign the acceleration field
-  mMotionSem.lock();
-  mAcceleration = acceleration;
-  mMotionSem.unlock();
-  
-  // Dispatch a movement event
-  Event event(EVENT_MOTION_MOVEMENT);
-  event.motionData().gravity = acceleration;
-  event.motionData().acceleration = acceleration;
-  event.motionData().rotation = vec3(0, 0, 0);
-  notify(event);
-}
-
-void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
-{
-  // Assign the rotation rate field
-  mMotionSem.lock();
-  mRotation = rotation;
-  mMotionSem.unlock();
-  
-  // Dispatch a rotation event
-  Event event(EVENT_MOTION_ROTATION);
-  event.motionData().gravity = vec3(0, 0, 0);
-  event.motionData().acceleration = vec3(0, 0, 0);
-  event.motionData().rotation = rotation;
-  notify(event);
-}
-
 void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rotation, quat orientation)
 {
   // Assign the rotation rate field
@@ -122,8 +92,8 @@ void IOSMotionSystem::handleMotionData(vec3 gravity, vec3 acceleration, vec3 rot
   mRotation = rotation;
   mMotionSem.unlock();
   
-  // Dispatch a combined event
-  Event event(EVENT_MOTION_COMBINED);
+  // Dispatch a motion event
+  Event event(EVENT_MOTION);
   event.motionData().gravity = gravity;
   event.motionData().acceleration = acceleration;
   event.motionData().rotation = rotation;
@@ -159,33 +129,6 @@ bool IOSMotionSystem::init()
   else
     cerr << "Device Motion Missing" << endl;
   
-  // TODO: implement these at a later time.
-//  if (mInfo->mManager.accelerometerAvailable)
-//  {
-//    //cout << "Acceleromenter Avalible" << endl;
-//    [mInfo->mManager setAccelerometerUpdateInterval:interval];
-//    [mInfo->mManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue]
-//                                          withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-//      vec3 acceleration(accelerometerData.acceleration.x, accelerometerData.acceleration.y, accelerometerData.acceleration.z);
-//      IOSMotionSystem::Instance->handleAccelerationData(acceleration);
-//     }];
-//  }
-//  //else
-//  //  cout << "Acceleromenter Missing" << endl;
-
-//  if (mInfo->mManager.gyroAvailable)
-//  {
-//    //cout << "Gyrosope Avalible" << endl;
-//    [mInfo->mManager setGyroUpdateInterval:interval];
-//    [mInfo->mManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
-//                                 withHandler:^(CMGyroData *gyroData, NSError *error) {
-//      vec3 rotation(gyroData.rotationRate.x, gyroData.rotationRate.y, gyroData.rotationRate.z);
-//      IOSMotionSystem::Instance->handleGyroscopeData(rotation);
-//     }];
-//  }
-//  //else
-//  //  cout << "Gyrosope Missing" << endl;
-  
   return success;
 }
 
@@ -200,14 +143,6 @@ IOSMotionSystem::IOSMotionSystem()
 }
 
 IOSMotionSystem::~IOSMotionSystem()
-{
-}
-
-void IOSMotionSystem::handleAccelerationData(vec3 acceleration)
-{
-}
-
-void IOSMotionSystem::handleGyroscopeData(vec3 rotation)
 {
 }
 
