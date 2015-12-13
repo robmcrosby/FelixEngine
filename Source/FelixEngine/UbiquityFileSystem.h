@@ -1,29 +1,29 @@
 //
-//  IOSFileSystem.h
+//  UbiquityFileSystem.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 12/6/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef IOSFileSystem_h
-#define IOSFileSystem_h
+#ifndef UbiquityFileSystem_h
+#define UbiquityFileSystem_h
 
 #include "FileSystem.h"
 #include "Condition.h"
 
 namespace fx
 {
-  class IOSFileSystemInfo;
+  class UbiquityFileSystemInfo;
   
   /**
    *
    */
-  class IOSFileSystem: public FileSystem
+  class UbiquityFileSystem: public FileSystem
   {
   public:
-    IOSFileSystem();
-    virtual ~IOSFileSystem();
+    UbiquityFileSystem();
+    virtual ~UbiquityFileSystem();
     
     virtual bool setToXml(const XMLTree::Node *node);
     virtual bool init();
@@ -31,17 +31,17 @@ namespace fx
     virtual File getDocuments();
     
     void handleUpdate();
-    static IOSFileSystem *Instance() {return IOSFileSystem::sInstance;}
+    static UbiquityFileSystem *Instance() {return UbiquityFileSystem::sInstance;}
     
   private:
     void initUbiquity(void*);
     File getUbiquity();
     
     Condition mCondition;
-    IOSFileSystemInfo *mInfo;
+    UbiquityFileSystemInfo *mInfo;
     
-    static IOSFileSystem *sInstance;
+    static UbiquityFileSystem *sInstance;
   };
 }
 
-#endif /* IOSFileSystem_h */
+#endif /* UbiquityFileSystem_h */

@@ -1,12 +1,12 @@
 //
-//  IOSFileSystem.mm
+//  UbiquityFileSystem.mm
 //  FelixEngine
 //
 //  Created by Robert Crosby on 12/6/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#include "IOSFileSystem.h"
+#include "UbiquityFileSystem.h"
 #include "TaskGroup.h"
 #import <Foundation/Foundation.h>
 
@@ -58,7 +58,7 @@
   [_query disableUpdates];
   //[self printQuery];
   [self updateFiles];
-  fx::IOSFileSystem *fileSys = fx::IOSFileSystem::Instance();
+  fx::UbiquityFileSystem *fileSys = fx::UbiquityFileSystem::Instance();
   if (fileSys)
     fileSys->handleUpdate();
   [_query enableUpdates];
@@ -69,7 +69,7 @@
   [_query disableUpdates];
   //[self printQuery];
   [self updateFiles];
-  fx::IOSFileSystem *fileSys = fx::IOSFileSystem::Instance();
+  fx::UbiquityFileSystem *fileSys = fx::UbiquityFileSystem::Instance();
   if (fileSys)
     fileSys->handleUpdate();
   [_query enableUpdates];
@@ -110,14 +110,14 @@
 
 namespace fx
 {
-  struct IOSFileSystemInfo
+  struct UbiquityFileSystemInfo
   {
-    IOSFileSystemInfo()
+    UbiquityFileSystemInfo()
     {
       mUbiquityContainerUrl = nil;
       mUbiquityListener = nil;
     }
-    ~IOSFileSystemInfo()
+    ~UbiquityFileSystemInfo()
     {
       mUbiquityContainerUrl = nil;
       mUbiquityListener = nil;
@@ -131,27 +131,27 @@ namespace fx
 using namespace fx;
 using namespace std;
 
-IOSFileSystem* IOSFileSystem::sInstance = nullptr;
+UbiquityFileSystem* UbiquityFileSystem::sInstance = nullptr;
 
 
-IOSFileSystem::IOSFileSystem()
+UbiquityFileSystem::UbiquityFileSystem()
 {
-  mInfo = new IOSFileSystemInfo();
+  mInfo = new UbiquityFileSystemInfo();
   FileSystem::sInstance = this;
-  IOSFileSystem::sInstance = this;
+  UbiquityFileSystem::sInstance = this;
 }
 
-IOSFileSystem::~IOSFileSystem()
+UbiquityFileSystem::~UbiquityFileSystem()
 {
   delete mInfo;
 }
 
-bool IOSFileSystem::setToXml(const XMLTree::Node *node)
+bool UbiquityFileSystem::setToXml(const XMLTree::Node *node)
 {
   return true;
 }
 
-bool IOSFileSystem::init()
+bool UbiquityFileSystem::init()
 {
   NSFileManager *manager = [NSFileManager defaultManager];
   id icloudToken = manager.ubiquityIdentityToken;
@@ -166,14 +166,14 @@ bool IOSFileSystem::init()
   else
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
   
-  Delegate<void, void*> delegate = Delegate<void, void*>::Create<IOSFileSystem, &IOSFileSystem::initUbiquity>(this);
+  Delegate<void, void*> delegate = Delegate<void, void*>::Create<UbiquityFileSystem, &UbiquityFileSystem::initUbiquity>(this);
   TaskingSystem::Instance()->dispatch(delegate);
   
   mInfo->mUbiquityListener = [[UbiquityListener alloc] init];
   return true;
 }
 
-File IOSFileSystem::getDocuments()
+File UbiquityFileSystem::getDocuments()
 {
   // Attempt to get the Documents directory in the Ubiquity Container.
   mCondition.wait();
@@ -186,7 +186,7 @@ File IOSFileSystem::getDocuments()
   return string([[url absoluteString] UTF8String]);
 }
 
-void IOSFileSystem::initUbiquity(void*)
+void UbiquityFileSystem::initUbiquity(void*)
 {
   mInfo->mUbiquityContainerUrl = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
   if (mInfo->mUbiquityContainerUrl == nil)
@@ -194,12 +194,12 @@ void IOSFileSystem::initUbiquity(void*)
   mCondition.broadcast(false);
 }
 
-File IOSFileSystem::getUbiquity()
+File UbiquityFileSystem::getUbiquity()
 {
   return string([[mInfo->mUbiquityContainerUrl absoluteString] UTF8String]);
 }
 
-void IOSFileSystem::handleUpdate()
+void UbiquityFileSystem::handleUpdate()
 {
 }
 
@@ -208,38 +208,38 @@ void IOSFileSystem::handleUpdate()
 using namespace fx;
 using namespace std;
 
-IOSFileSystem* IOSFileSystem::sInstance = nullptr;
+UbiquityFileSystem* UbiquityFileSystem::sInstance = nullptr;
 
-IOSFileSystem::IOSFileSystem()
+UbiquityFileSystem::UbiquityFileSystem()
 {
 }
 
-IOSFileSystem::~IOSFileSystem()
+UbiquityFileSystem::~UbiquityFileSystem()
 {
 }
 
-bool IOSFileSystem::setToXml(const XMLTree::Node *node)
-{
-  return false;
-}
-
-bool IOSFileSystem::init()
+bool UbiquityFileSystem::setToXml(const XMLTree::Node *node)
 {
   return false;
 }
 
-File IOSFileSystem::getDocuments()
+bool UbiquityFileSystem::init()
+{
+  return false;
+}
+
+File UbiquityFileSystem::getDocuments()
 {
   NSArray *paths = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
   NSURL *url = [paths lastObject];
   return string([[url absoluteString] UTF8String]);
 }
 
-void IOSFileSystem::initUbiquity(void*)
+void UbiquityFileSystem::initUbiquity(void*)
 {
 }
 
-void IOSFileSystem::handleUpdate()
+void UbiquityFileSystem::handleUpdate()
 {
 }
 
