@@ -34,13 +34,21 @@ int main(int argc, char* args[])
     return 1;
   }
   
-//  fx::File documents = fx::FileSystem::GetDocuments()+"BunnyScene/Meshes";
+//  fx::File documents = fx::FileSystem::GetDocuments();
+//  fx::File testFile = documents + "Scene.xml";
+//  if (testFile.update())
+//  {
+//    string contents;
+//    testFile.load(contents);
+//    cout << contents << endl;
+//  }
+//
 //  fx::Directory dir;
 //  documents.load(dir);
 //  for (fx::Directory::iterator itr = dir.begin(); itr != dir.end(); ++itr)
-//    cout << *itr << endl;
+//    cout << itr->name() << endl;
   
-//  if (!engine->loadScene(fx::FileSystem::GetDocuments()+"BunnyScene/Scene.xml"))
+  //if (!engine->loadScene(fx::FileSystem::GetDocuments()+"BunnyScene/Scene.xml"))
   if (!engine->loadScene(SCENE_FILE))
   {
     cerr << "Error Loading the Scene" << endl;

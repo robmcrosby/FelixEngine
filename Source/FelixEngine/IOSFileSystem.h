@@ -30,12 +30,17 @@ namespace fx
     
     virtual File getDocuments();
     
+    void handleUpdate();
+    static IOSFileSystem *Instance() {return IOSFileSystem::sInstance;}
+    
   private:
     void initUbiquity(void*);
     File getUbiquity();
     
     Condition mCondition;
     IOSFileSystemInfo *mInfo;
+    
+    static IOSFileSystem *sInstance;
   };
 }
 
