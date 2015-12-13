@@ -52,24 +52,29 @@ namespace fx
     
     EVENT_MOTION           = 0x00008000, /**< Device has moved */
     
-    EVENT_WINDOW           = 0x03FF0000, /**< Window events mask */
-    EVENT_WINDOW_SHOWN     = 0x00010000, /**< Window has been shown */
-    EVENT_WINDOW_HIDE      = 0x00020000, /**< Window has been hidden */
-    EVENT_WINDOW_EXPOSED   = 0x00040000, /**< Window has been exposed and should be redrawn */
-    EVENT_WINDOW_MOVED     = 0x00080000, /**< Window has been moved */
-    EVENT_WINDOW_RESIZED   = 0x00100000, /**< Window has been resized */
-    EVENT_WINDOW_MINIMIZED = 0x00200000, /**< Window has been minimized */
-    EVENT_WINDOW_MAXIMIZED = 0x00300000, /**< Window has been maximized */
-    EVENT_WINDOW_RESTORED  = 0x00400000, /**< Window has been restored to normal size and position */
-    EVENT_WINDOW_ENTER     = 0x00800000, /**< Window has gained mouse focus */
-    EVENT_WINDOW_LEAVE     = 0x01000000, /**< Window has lost mouse focus */
-    EVENT_WINDOW_CLOSE     = 0x02000000, /**< Window has been closed */
+    EVENT_WINDOW           = 0x00010000, /**< Window events mask */
     
     EVENT_USER             = 0xF0000000, /**< User events mask */
     EVENT_USER_1           = 0x10000000, /**< User event 1 */
     EVENT_USER_2           = 0x20000000, /**< User event 2 */
     EVENT_USER_3           = 0x40000000, /**< User event 3 */
     EVENT_USER_4           = 0x80000000, /**< User event 4 */
+  };
+  
+  enum EVENT_WINDOW_TYPE
+  {
+    EVENT_WINDOW_NONE = 0,  /**< No Window event has happend */
+    EVENT_WINDOW_SHOWN,     /**< Window has been shown */
+    EVENT_WINDOW_HIDE,      /**< Window has been hidden */
+    EVENT_WINDOW_EXPOSED,   /**< Window has been exposed and should be redrawn */
+    EVENT_WINDOW_MOVED,     /**< Window has been moved */
+    EVENT_WINDOW_RESIZED,   /**< Window has been resized */
+    EVENT_WINDOW_MINIMIZED, /**< Window has been minimized */
+    EVENT_WINDOW_MAXIMIZED, /**< Window has been maximized */
+    EVENT_WINDOW_RESTORED,  /**< Window has been restored to normal size and position */
+    EVENT_WINDOW_ENTER,     /**< Window has gained mouse focus */
+    EVENT_WINDOW_LEAVE,     /**< Window has lost mouse focus */
+    EVENT_WINDOW_CLOSE,     /**< Window has been closed */
   };
   
   enum DISPATCH_TYPE
@@ -139,6 +144,7 @@ namespace fx
   public:
     struct WindowData
     {
+      EVENT_WINDOW_TYPE event;
       int window;
       ivec2 data;
     };
