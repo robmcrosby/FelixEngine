@@ -140,7 +140,7 @@ namespace fx
       
       bool load(const ivec2 &size)
       {
-        bool success = false;
+        bool success = true;
         if (mFormat != COLOR_NONE && size.w > 0 && size.h > 0)
         {
           if (mTexture)

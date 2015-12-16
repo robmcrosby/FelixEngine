@@ -14,8 +14,8 @@
 #define SETTINGS_FILE "SettingsGLES3.xml"
 //#define SETTINGS_FILE "SettingsMetal_IOS.xml"
 #else
-//#define SETTINGS_FILE "SettingsGL41.xml"
-#define SETTINGS_FILE "SettingsMetal.xml"
+#define SETTINGS_FILE "SettingsGL41.xml"
+//#define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
 #define SCENE_FILE "MainScene.xml"
@@ -34,21 +34,6 @@ int main(int argc, char* args[])
     return 1;
   }
   
-//  fx::File documents = fx::FileSystem::GetDocuments();
-//  fx::File testFile = documents + "Scene.xml";
-//  if (testFile.update())
-//  {
-//    string contents;
-//    testFile.load(contents);
-//    cout << contents << endl;
-//  }
-//
-//  fx::Directory dir;
-//  documents.load(dir);
-//  for (fx::Directory::iterator itr = dir.begin(); itr != dir.end(); ++itr)
-//    cout << itr->name() << endl;
-  
-  //if (!engine->loadScene(fx::FileSystem::GetDocuments()+"BunnyScene/Scene.xml"))
   if (!engine->loadScene(SCENE_FILE))
   {
     cerr << "Error Loading the Scene" << endl;

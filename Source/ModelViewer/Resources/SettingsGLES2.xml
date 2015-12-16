@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <Settings>
   <Systems>
+    <UbiquityFileSystem/>
     <GCDTaskingSystem/>
     <IOSMotionSystem frequency="60"/>
     <GLGraphicSystem>
