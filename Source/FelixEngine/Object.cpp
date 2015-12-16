@@ -11,6 +11,9 @@
 #include "Model.h"
 #include "Camera.h"
 
+#include "UICanvas.h"
+#include "UIWidget.h"
+
 
 using namespace fx;
 using namespace std;
@@ -18,6 +21,9 @@ using namespace std;
 
 DEFINE_OBJECT_ID(Model)
 DEFINE_OBJECT_ID(Camera)
+
+DEFINE_OBJECT_ID(UICanvas);
+DEFINE_OBJECT_ID(UIWidget);
 
 
 Object::Object(const string &type, Scene *scene): mType(type), mScene(scene)

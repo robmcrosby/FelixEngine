@@ -18,7 +18,8 @@
 //#define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
-#define SCENE_FILE "MainScene.xml"
+//#define SCENE_FILE "MainScene.xml"
+#define SCENE_FILE "TestUI.xml"
 
 
 using namespace std;
