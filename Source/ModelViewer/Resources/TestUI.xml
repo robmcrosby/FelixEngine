@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Scene name="BunnyScene">
-  <UICanvas name="MainCanvas" window="MainWindow"/>
-  <UIWidget name="TestWidget" canvas="MainCanvas">
+  <UIScreen name="MainScreen" window="MainWindow"/>
+  <UIWidget name="TestWidget" canvas="MainScreen">
   </UIWidget>
   <ViewerCamera name="MainCamera">
     <Projection type="frustum" aspect="auto" disparity="0.2" zero="2.0">

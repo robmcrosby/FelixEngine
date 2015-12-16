@@ -44,8 +44,8 @@
 		C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAB1BED298D007F68E0 /* MTLUniformMap.m */; };
 		C1124BF01BF17ACD00CFADD7 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA61BED298D007F68E0 /* MTLGraphicSystem.mm */; };
 		C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */; };
-		C1250DF51C20F4E000C6F7C8 /* UICanvas.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF31C20F4E000C6F7C8 /* UICanvas.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF41C20F4E000C6F7C8 /* UIWidget.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF71C21434300C6F7C8 /* UIScreen.h */; };
 		C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73911BF3B457002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */; };
 		C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */; };
@@ -207,8 +207,8 @@
 		C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsGLES2.xml; path = ../../../../Source/HelloFelix/Resources/SettingsGLES2.xml; sourceTree = "<group>"; };
 		C1124BE61BF179BB00CFADD7 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/HelloFelix/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
 		C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/HelloFelix/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
-		C1250DF31C20F4E000C6F7C8 /* UICanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UICanvas.h; path = ../../../../Source/FelixEngine/UICanvas.h; sourceTree = "<group>"; };
 		C1250DF41C20F4E000C6F7C8 /* UIWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWidget.h; path = ../../../../Source/FelixEngine/UIWidget.h; sourceTree = "<group>"; };
+		C1250DF71C21434300C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
 		C15D73911BF3B457002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
 		C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
@@ -393,7 +393,7 @@
 				C106DB7A1BFD0294000065D4 /* Object.cpp */,
 				C106DB791BFD0294000065D4 /* Model.h */,
 				C106DB781BFD0294000065D4 /* Camera.h */,
-				C1250DF31C20F4E000C6F7C8 /* UICanvas.h */,
+				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
 				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
 			);
 			name = Objects;
@@ -785,10 +785,10 @@
 				C197CE381BED5EA8007F68E0 /* RenderSlots.h in Headers */,
 				C197CE581BED5FDF007F68E0 /* Pool.h in Headers */,
 				C197CE351BED5E98007F68E0 /* Component.h in Headers */,
+				C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */,
 				C197CE521BED5FC5007F68E0 /* Image.h in Headers */,
 				C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */,
 				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
-				C1250DF51C20F4E000C6F7C8 /* UICanvas.h in Headers */,
 				C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */,
 				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
 				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,

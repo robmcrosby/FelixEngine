@@ -71,7 +71,7 @@ namespace fx
     {
       if (GetComponentIdMap().count(type))
         return GetComponentIdMap().at(type)->create(obj);
-      std::cerr << "Error: Unknown Object Component: " << type << std::endl;
+      //std::cerr << "Error: Unknown Object Component: " << type << std::endl;
       return nullptr;
     }
     

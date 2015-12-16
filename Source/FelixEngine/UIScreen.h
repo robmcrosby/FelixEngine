@@ -1,13 +1,13 @@
 //
-//  UICanvas.h
+//  UIScreen.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 12/15/15.
 //  Copyright © 2015 Robert Crosby. All rights reserved.
 //
 
-#ifndef UICanvas_h
-#define UICanvas_h
+#ifndef UIScreen_h
+#define UIScreen_h
 
 #include "Object.h"
 
@@ -17,11 +17,11 @@ namespace fx
   /**
    *
    */
-  class UICanvas: public Object
+  class UIScreen: public Object
   {
   public:
-    UICanvas(Scene *scene): Object("UICanvas", scene) {std::cout << "Created UICanvas" << std::endl;}
-    virtual ~UICanvas() {}
+    UIScreen(Scene *scene): Object("UIScreen", scene) {std::cout << "Created UIScreen" << std::endl;}
+    virtual ~UIScreen() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
     {
@@ -34,4 +34,4 @@ namespace fx
   };
 }
 
-#endif /* UICanvas_h */
+#endif /* UIScreen_h */

@@ -11,7 +11,7 @@
 #include "Model.h"
 #include "Camera.h"
 
-#include "UICanvas.h"
+#include "UIScreen.h"
 #include "UIWidget.h"
 
 
@@ -22,7 +22,7 @@ using namespace std;
 DEFINE_OBJECT_ID(Model)
 DEFINE_OBJECT_ID(Camera)
 
-DEFINE_OBJECT_ID(UICanvas);
+DEFINE_OBJECT_ID(UIScreen);
 DEFINE_OBJECT_ID(UIWidget);
 
 
