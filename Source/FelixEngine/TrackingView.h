@@ -23,19 +23,15 @@ namespace fx
     TrackingView(Scene *scene): View(scene), mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f) {}
     virtual ~TrackingView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-        if (node->hasSubNode("Position"))
-          setPosition(node->subContents("Position"));
-        if (node->hasSubNode("Target"))
-          setTarget(node->subContents("Target"));
-        if (node->hasSubNode("Up"))
-          setUp(node->subContents("Up"));
-      }
-      return success;
+      View::setToXml(node);
+      if (node.hasSubNode("Position"))
+        setPosition(node.subContents("Position"));
+      if (node.hasSubNode("Target"))
+        setTarget(node.subContents("Target"));
+      if (node.hasSubNode("Up"))
+        setUp(node.subContents("Up"));
     }
     
     virtual bool init()

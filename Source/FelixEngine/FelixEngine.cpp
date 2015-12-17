@@ -67,11 +67,9 @@ bool FelixEngine::loadScene(const File &file)
   if (file.load(tree) && !tree.isEmpty())
   {
     Scene *scene = new Scene();
-    success = scene->setToXml(*tree.begin()) && scene->init();
-    if (success)
-      addScene(scene);
-    else
-      delete scene;
+    scene->setToXml(**tree.begin());
+    addScene(scene);
+    success = scene->init();
   }
   return success;
 }

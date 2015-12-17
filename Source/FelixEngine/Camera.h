@@ -23,17 +23,13 @@ namespace fx
     Camera(Scene *scene): Component("Camera", scene) {}
     virtual ~Camera() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Component::setToXml(node);
-      if (success)
-      {
-        addChildren(*node);
-        setView();
-        setProjection();
-        setRenderSlots();
-      }
-      return success;
+      Component::setToXml(node);
+      addChildren(node);
+      setView();
+      setProjection();
+      setRenderSlots();
     }
     
     View* view() const {return mView;}

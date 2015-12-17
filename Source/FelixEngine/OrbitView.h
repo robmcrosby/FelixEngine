@@ -27,23 +27,19 @@ namespace fx
     OrbitView(Scene *scene): View(scene), mLatitude(0), mLongitude(0), mPolarLimit(DEF_POLAR_LIMIT), mDistance(DEF_DISTANCE) {}
     virtual ~OrbitView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-        if (node->hasSubNode("Center"))
-          setCenter(node->subContents("Center"));
-        if (node->hasAttribute("limit"))
-          setPolarLimit(node->attributeAsFloat("limit"));
-        if (node->hasAttribute("latitude"))
-          setLatitude(node->attributeAsFloat("latitude"));
-        if (node->hasAttribute("longitude"))
-          setLongitude(node->attributeAsFloat("longitude"));
-        if (node->hasAttribute("distance"))
-          setDistance(node->attributeAsFloat("distance"));
-      }
-      return success;
+      View::setToXml(node);
+      if (node.hasSubNode("Center"))
+        setCenter(node.subContents("Center"));
+      if (node.hasAttribute("limit"))
+        setPolarLimit(node.attributeAsFloat("limit"));
+      if (node.hasAttribute("latitude"))
+        setLatitude(node.attributeAsFloat("latitude"));
+      if (node.hasAttribute("longitude"))
+        setLongitude(node.attributeAsFloat("longitude"));
+      if (node.hasAttribute("distance"))
+        setDistance(node.attributeAsFloat("distance"));
     }
     
     virtual bool init()

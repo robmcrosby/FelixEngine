@@ -23,19 +23,14 @@ Transform::~Transform()
 {
 }
 
-bool Transform::setToXml(const XMLTree::Node *node)
+void Transform::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
+  Component::setToXml(node);
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
-    success = true;
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-    {
-      pushBack(IDENITY);
-      success &= back().setToXML(*itr);
-    }
+    pushBack(IDENITY);
+    back().setToXML(*itr);
   }
-  return success ? Component::setToXml(node) : false;
 }
 
 bool Transform::init()

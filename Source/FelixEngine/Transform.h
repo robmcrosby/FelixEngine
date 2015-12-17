@@ -74,7 +74,7 @@ namespace fx
     Transform(Scene *scene);
     virtual ~Transform();
     
-    virtual bool setToXml(const XMLTree::Node *node);
+    virtual void setToXml(const XMLTree::Node &node);
     virtual bool init();
     
     void updateMatrices();

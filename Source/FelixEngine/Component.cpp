@@ -51,16 +51,10 @@ Component::~Component()
   clearChildren();
 }
 
-bool Component::setToXml(const XMLTree::Node *node)
+void Component::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("name"))
-      setName(node->attribute("name"));
-  }
-  return success;
+  if (node.hasAttribute("name"))
+    setName(node.attribute("name"));
 }
 
 bool Component::init()
@@ -71,19 +65,23 @@ bool Component::init()
   return success;
 }
 
-bool Component::addChildren(const XMLTree::Node &node)
+void Component::update()
 {
-  bool success = true;
+  for (iterator itr = begin(); itr != end(); ++itr)
+    (*itr)->update();
+}
+
+void Component::addChildren(const XMLTree::Node &node)
+{
   for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-  {
-    Component *child = Create((*itr)->element(), mScene);
-    if (child)
-    {
-      success &= child->setToXml(*itr);
-      addChild(child);
-    }
-  }
-  return success;
+    addChild(**itr);
+}
+
+void Component::addChild(const XMLTree::Node &node)
+{
+  Component *child = Create(node, mScene);
+  if (child)
+    addChild(child);
 }
 
 void Component::addChild(Component *child)
@@ -114,15 +112,6 @@ Component::iterator Component::removeChild(iterator itr)
     (*itr)->mParrent = nullptr;
   }
   return itr;
-}
-
-void Component::deleteChild(Component *child)
-{
-  if (child && child->mParrent == this)
-  {
-    mChildren.remove(child);
-    delete child;
-  }
 }
 
 Component::iterator Component::deleteChild(iterator itr)
@@ -168,4 +157,19 @@ map<string, Component::ComponentId*>& Component::GetComponentIdMap()
 {
   static map<string, ComponentId*> compIdMap;
   return compIdMap;
+}
+
+Component* Component::Create(const std::string &type, Scene *scene)
+{
+  if (GetComponentIdMap().count(type))
+    return GetComponentIdMap().at(type)->create(scene);
+  return nullptr;
+}
+
+Component* Component::Create(const XMLTree::Node &node, Scene *scene)
+{
+  Component *comp = Create(node.element(), scene);
+  if (comp)
+    comp->setToXml(node);
+  return comp;
 }

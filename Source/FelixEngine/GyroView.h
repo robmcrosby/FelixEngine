@@ -35,13 +35,9 @@ namespace fx
     }
     virtual ~GyroView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-      }
-      return success;
+      View::setToXml(node);
     }
     
     virtual bool init()

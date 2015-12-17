@@ -31,17 +31,9 @@ namespace fx
     Component(const std::string &type, Scene *scene);
     virtual ~Component();
     
-    virtual bool setToXml(const XMLTree::Node *node);
+    virtual void setToXml(const XMLTree::Node &node);
     virtual bool init();
-    
-    virtual void update()
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->update();
-    }
-    
-//    typedef Delegate<void, void*> UpdateDelegate;
-//    UpdateDelegate& getUpdateDelegate() {return mUpdateDelegate;}
+    virtual void update();
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
@@ -57,12 +49,13 @@ namespace fx
     iterator begin() {return mChildren.begin();}
     iterator end() {return mChildren.end();}
     
-    bool addChildren(const XMLTree::Node &node);
+    void addChildren(const XMLTree::Node &node);
+    void addChild(const XMLTree::Node &node);
+    
     void addChild(Component *child);
     void removeChild(Component *child);
     iterator removeChild(iterator itr);
     
-    void deleteChild(Component *child);
     iterator deleteChild(iterator itr);
     
     Component* getChildByName(const std::string &name);
@@ -80,35 +73,9 @@ namespace fx
       virtual Component* create(Scene *scene) = 0;
     };
     static std::map<std::string, ComponentId*>& GetComponentIdMap();
+    static Component* Create(const std::string &type, Scene *scene);
+    static Component* Create(const XMLTree::Node &node, Scene *scene);
     
-    /**
-     *
-     */
-    static Component* Create(const std::string &type, Scene *scene)
-    {
-      if (GetComponentIdMap().count(type))
-        return GetComponentIdMap().at(type)->create(scene);
-      //std::cerr << "Error: Unknown Object Component: " << type << std::endl;
-      return nullptr;
-    }
-    
-    /**
-     *
-     */
-    static Component* Create(const XMLTree::Node *node, Scene *scene)
-    {
-      Component *comp = nullptr;
-      if (node)
-      {
-        comp = Create(node->element(), scene);
-        if (!comp || !comp->setToXml(node))
-        {
-          delete comp;
-          comp = nullptr;
-        }
-      }
-      return comp;
-    }
   protected:
     std::string mName;
     std::string mType;

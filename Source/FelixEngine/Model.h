@@ -25,16 +25,12 @@ namespace fx
     Model(Scene *scene): Component("Model", scene), mTransform(0), mRenderSlots(0) {}
     virtual ~Model() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Component::setToXml(node);
-      if (success)
-      {
-        addChildren(*node);
-        setTransform();
-        setRenderSlots();
-      }
-      return success;
+      Component::setToXml(node);
+      addChildren(node);
+      setTransform();
+      setRenderSlots();
     }
     
     Transform* transform() const {return mTransform;}

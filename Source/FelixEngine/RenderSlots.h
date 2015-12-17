@@ -26,7 +26,7 @@ namespace fx
     
     virtual void handle(const Event &event);
     
-    bool setToXml(const XMLTree::Node *node);
+    void setToXml(const XMLTree::Node &node);
     
     void update() const;
     void render() const;
@@ -120,7 +120,7 @@ namespace fx
     RenderSlots(Scene *scene);
     virtual ~RenderSlots();
     
-    virtual bool setToXml(const XMLTree::Node *node);
+    virtual void setToXml(const XMLTree::Node &node);
     virtual bool init();
     
   public:

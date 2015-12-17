@@ -24,6 +24,7 @@ namespace fx
   public:
     Scene(): Component("Scene", this)
     {
+      mScene = this;
       setEventFlags(EVENT_APP_UPDATE);
     }
     ~Scene()
@@ -37,26 +38,16 @@ namespace fx
         update();
     }
     
-    bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Component::setToXml(node);
-      if (success)
+      Component::setToXml(node);
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
       {
-        for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-        {
-          if (**itr == "Resources")
-            success &= addResources(**itr);
-          else
-          {
-            Component *comp = Component::Create(*itr, this);
-            if (comp)
-              addChild(comp);
-            else
-              success = false;
-          }
-        }
+        if (**itr == "Resources")
+          addResources(**itr);
+        else
+          addChild(**itr);
       }
-      return success;
     }
     bool init()
     {

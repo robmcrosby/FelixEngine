@@ -65,7 +65,7 @@ namespace fx
     Projection(Scene *scene);
     virtual ~Projection();
     
-    virtual bool setToXml(const XMLTree::Node *node);
+    virtual void setToXml(const XMLTree::Node &node);
     virtual bool init();
     
     void setVolume(const Volume &volume)

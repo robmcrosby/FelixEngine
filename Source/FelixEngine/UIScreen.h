@@ -23,13 +23,9 @@ namespace fx
     UIScreen(Scene *scene): Component("UIScreen", scene) {std::cout << "Created UIScreen" << std::endl;}
     virtual ~UIScreen() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Component::setToXml(node);
-      if (success)
-      {
-      }
-      return success;
+      Component::setToXml(node);
     }
   };
 }

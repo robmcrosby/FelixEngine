@@ -25,24 +25,19 @@ Projection::~Projection()
 {
 }
 
-bool Projection::setToXml(const XMLTree::Node *node)
+void Projection::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("type"))
-      setType(node->attribute("type"));
-    if (node->hasAttribute("aspect"))
-      setAspect(node->attribute("aspect"));
-    if (node->hasAttribute("disparity"))
-      setDisparity(node->attributeAsFloat("disparity"));
-    if (node->hasAttribute("zero"))
-      setZeroDistance(node->attributeAsFloat("zero"));
-    if (node->hasSubNode("Volume"))
-      success &= mVolume.setToXml(node->subNode("Volume"));
-  }
-  return success ? Component::setToXml(node) : false;
+  Component::setToXml(node);
+  if (node.hasAttribute("type"))
+    setType(node.attribute("type"));
+  if (node.hasAttribute("aspect"))
+    setAspect(node.attribute("aspect"));
+  if (node.hasAttribute("disparity"))
+    setDisparity(node.attributeAsFloat("disparity"));
+  if (node.hasAttribute("zero"))
+    setZeroDistance(node.attributeAsFloat("zero"));
+  if (node.hasSubNode("Volume"))
+    mVolume.setToXml(node.subNode("Volume"));
 }
 
 bool Projection::init()

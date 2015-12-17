@@ -26,18 +26,14 @@ RenderSlots::~RenderSlots()
   clear();
 }
 
-bool RenderSlots::setToXml(const XMLTree::Node *node)
+void RenderSlots::setToXml(const XMLTree::Node &node)
 {
-  bool success = Component::setToXml(node);
-  if (success && node)
+  Component::setToXml(node);
+  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
   {
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-    {
-      addSlot();
-      success &= back()->setToXml(*itr);
-    }
+    addSlot();
+    back()->setToXml(**itr);
   }
-  return success;
 }
 
 bool RenderSlots::init()
@@ -155,59 +151,53 @@ int RenderSlot::GetPassIndex(const std::string &pass)
 
 
 
-bool RenderSlot::setToXml(const XMLTree::Node *node)
+void RenderSlot::setToXml(const XMLTree::Node &node)
 {
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    if (node->hasAttribute("layer"))
-      setLayer(node->attributeAsInt("layer"));
-    if (node->hasAttribute("subMesh"))
-      setSubMesh(node->attributeAsInt("subMesh"));
-    if (node->hasAttribute("instances"))
-      setInstances(node->attributeAsInt("instances"));
-    
-    // Set the States
-    if (node->hasSubNode("DepthState"))
-      success &= mDepthState.setToXml(*node->subNode("DepthState"));
-    if (node->hasSubNode("BlendState"))
-      success &= mBlendState.setToXml(*node->subNode("BlendState"));
-    if (node->hasSubNode("ClearState"))
-      success &= mClearState.setToXml(*node->subNode("ClearState"));
-    
-    // Set the Uniforms
-    if (node->hasSubNode("Uniforms"))
-      success &= mUniforms.setToXml(node->subNode("Uniforms"));
-    
-    // Set the Mesh
-    if (node->hasAttribute("mesh"))
-      setMesh(node->attribute("mesh"));
-    else if (node->hasSubNode("Mesh"))
-      success &= setMesh(*node->subNode("Mesh"));
-    
-    // Set the Pass
-    if (node->hasAttribute("pass"))
-      setPass(node->attribute("pass"));
-    
-    // Set the Frame
-    if (node->hasAttribute("frame"))
-      setFrame(node->attribute("frame"));
-    else if (node->hasSubNode("Frame"))
-      setFrame(*node->subNode("Frame"));
-    else
-      setFrame(MAIN_WINDOW);
-    
-    // Set the Material
-    if (node->hasAttribute("material"))
-      setMaterial(node->attribute("material"));
-    else if (node->hasSubNode("Material"))
-      setMaterial(*node->subNode("Material"));
-    
-    // Set the Stereo Type
-    setStereoFlags(GraphicSystem::GetStereoFlags(node->attribute("stereo")));
-  }
-  return success;
+  if (node.hasAttribute("layer"))
+    setLayer(node.attributeAsInt("layer"));
+  if (node.hasAttribute("subMesh"))
+    setSubMesh(node.attributeAsInt("subMesh"));
+  if (node.hasAttribute("instances"))
+    setInstances(node.attributeAsInt("instances"));
+  
+  // Set the States
+  if (node.hasSubNode("DepthState"))
+    mDepthState.setToXml(*node.subNode("DepthState"));
+  if (node.hasSubNode("BlendState"))
+    mBlendState.setToXml(*node.subNode("BlendState"));
+  if (node.hasSubNode("ClearState"))
+    mClearState.setToXml(*node.subNode("ClearState"));
+  
+  // Set the Uniforms
+  if (node.hasSubNode("Uniforms"))
+    mUniforms.setToXml(node.subNode("Uniforms"));
+  
+  // Set the Mesh
+  if (node.hasAttribute("mesh"))
+    setMesh(node.attribute("mesh"));
+  else if (node.hasSubNode("Mesh"))
+    setMesh(*node.subNode("Mesh"));
+  
+  // Set the Pass
+  if (node.hasAttribute("pass"))
+    setPass(node.attribute("pass"));
+  
+  // Set the Frame
+  if (node.hasAttribute("frame"))
+    setFrame(node.attribute("frame"));
+  else if (node.hasSubNode("Frame"))
+    setFrame(*node.subNode("Frame"));
+  else
+    setFrame(MAIN_WINDOW);
+  
+  // Set the Material
+  if (node.hasAttribute("material"))
+    setMaterial(node.attribute("material"));
+  else if (node.hasSubNode("Material"))
+    setMaterial(*node.subNode("Material"));
+  
+  // Set the Stereo Type
+  setStereoFlags(GraphicSystem::GetStereoFlags(node.attribute("stereo")));
 }
 
 void RenderSlot::render() const

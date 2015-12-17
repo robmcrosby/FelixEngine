@@ -23,13 +23,9 @@ namespace fx
     UIWidget(Scene *scene): Component("UIWidget", scene) {std::cout << "Created UIWidget" << std::endl;}
     virtual ~UIWidget() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Component::setToXml(node);
-      if (success)
-      {
-      }
-      return success;
+      Component::setToXml(node);
     }
   };
 }
