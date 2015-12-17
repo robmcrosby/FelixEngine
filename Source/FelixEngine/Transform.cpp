@@ -7,7 +7,6 @@
 //
 
 #include "Transform.h"
-#include "Object.h"
 #include "RenderSlots.h"
 #include "Quaternion.h"
 
@@ -16,9 +15,8 @@ using namespace std;
 using namespace fx;
 
 
-Transform::Transform(Object *obj): Component("Transform", obj), mRenderSlots(0), mLock(0)
+Transform::Transform(Scene *scene): Component("Transform", scene), mRenderSlots(0), mLock(0)
 {
-  mUpdateDelegate = UpdateDelegate::Create<Transform, &Transform::update>(this);
 }
 
 Transform::~Transform()
@@ -42,9 +40,14 @@ bool Transform::setToXml(const XMLTree::Node *node)
 
 bool Transform::init()
 {
-  mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
-  updateMatrices();
-  return mRenderSlots ? Component::init() : false;
+  bool success = false;
+  if (mParrent)
+  {
+    mRenderSlots = static_cast<RenderSlots*>(mParrent->getChildByType("RenderSlots"));
+    updateMatrices();
+    success = mRenderSlots ? Component::init() : false;
+  }
+  return success;
 }
 
 void Transform::updateMatrices()
@@ -62,7 +65,7 @@ void Transform::updateMatrices()
   unlock();
 }
 
-void Transform::update(void*)
+void Transform::update()
 {
   updateMatrices();
   lock();
@@ -75,6 +78,7 @@ void Transform::update(void*)
     }
   }
   unlock();
+  Component::update();
 }
 
 

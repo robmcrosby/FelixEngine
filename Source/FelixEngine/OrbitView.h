@@ -24,11 +24,7 @@ namespace fx
   class OrbitView: public View
   {
   public:
-    OrbitView(Object *obj): View(obj), mLatitude(0), mLongitude(0),
-      mPolarLimit(DEF_POLAR_LIMIT), mDistance(DEF_DISTANCE)
-    {
-      mUpdateDelegate = UpdateDelegate::Create<OrbitView, &OrbitView::update>(this);
-    }
+    OrbitView(Scene *scene): View(scene), mLatitude(0), mLongitude(0), mPolarLimit(DEF_POLAR_LIMIT), mDistance(DEF_DISTANCE) {}
     virtual ~OrbitView() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
@@ -54,7 +50,7 @@ namespace fx
     {
       bool success = View::init();
       if (success)
-        update(nullptr);
+        update();
       return success;
     }
     
@@ -132,17 +128,18 @@ namespace fx
       return ret;
     }
     
-  private:
-    void update(void*)
+  protected:
+    virtual void update()
     {
       lock();
       vec3 dir = mat4::RotY(mLongitude*DegToRad) * mat4::RotX(mLatitude*DegToRad) * vec3(0.0f, 0.0f, 1.0f);
       mMatrix = mat4::LookAt(mCenter-dir*mDistance, mCenter, vec3(0.0f, 1.0f, 0.0f));
       unlock();
       
-      View::update(nullptr);
+      View::update();
     }
     
+  private:
     vec3 mCenter;
     
     float mLatitude;

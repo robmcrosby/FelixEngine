@@ -62,7 +62,7 @@ namespace fx
     ASPECT_TYPE GetAspectType(const std::string &str);
     
   public:
-    Projection(Object *obj);
+    Projection(Scene *scene);
     virtual ~Projection();
     
     virtual bool setToXml(const XMLTree::Node *node);
@@ -146,8 +146,10 @@ namespace fx
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
+  protected:
+    virtual void update();
+    
   private:
-    void update(void*);
     mat4 toMatrix4x4(vec2 size, int flags) const;
     
     PROJ_TYPE   mType;

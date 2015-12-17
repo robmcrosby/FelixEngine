@@ -23,7 +23,6 @@
 /* Begin PBXBuildFile section */
 		C106DB7B1BFD0294000065D4 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB781BFD0294000065D4 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C106DB7C1BFD0294000065D4 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB791BFD0294000065D4 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB7A1BFD0294000065D4 /* Object.cpp */; };
 		C106DB831BFD0F0A000065D4 /* ViewerCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */; };
 		C10B5D321BEDD24000583B8F /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D311BEDD24000583B8F /* Images */; };
 		C10B5D351BEDD28C00583B8F /* SettingsGLES3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */; };
@@ -82,7 +81,6 @@
 		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
 		C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9B1BED298D007F68E0 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE301BED5E73007F68E0 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDAF1BED298D007F68E0 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC81BED298D007F68E0 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC51BED298D007F68E0 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -194,7 +192,6 @@
 /* Begin PBXFileReference section */
 		C106DB781BFD0294000065D4 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../../Source/FelixEngine/Camera.h; sourceTree = "<group>"; };
 		C106DB791BFD0294000065D4 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../../Source/FelixEngine/Model.h; sourceTree = "<group>"; };
-		C106DB7A1BFD0294000065D4 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = ../../../../Source/FelixEngine/Object.cpp; sourceTree = "<group>"; };
 		C106DB811BFD0F0A000065D4 /* ViewerCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ViewerCamera.cpp; path = ../../../../Source/ModelViewer/ViewerCamera.cpp; sourceTree = "<group>"; };
 		C106DB821BFD0F0A000065D4 /* ViewerCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewerCamera.h; path = ../../../../Source/ModelViewer/ViewerCamera.h; sourceTree = "<group>"; };
 		C10B5D311BEDD24000583B8F /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/HelloFelix/Resources/Images; sourceTree = "<group>"; };
@@ -264,7 +261,6 @@
 		C197CDAC1BED298D007F68E0 /* MTLWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLWindow.mm; path = ../../../../Source/FelixEngine/MTLWindow.mm; sourceTree = "<group>"; };
 		C197CDAD1BED298D007F68E0 /* MultiVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiVector.h; path = ../../../../Source/FelixEngine/MultiVector.h; sourceTree = "<group>"; };
 		C197CDAE1BED298D007F68E0 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex.h; path = ../../../../Source/FelixEngine/Mutex.h; sourceTree = "<group>"; };
-		C197CDAF1BED298D007F68E0 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
 		C197CDB31BED298D007F68E0 /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pool.h; path = ../../../../Source/FelixEngine/Pool.h; sourceTree = "<group>"; };
 		C197CDB41BED298D007F68E0 /* Projection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Projection.cpp; path = ../../../../Source/FelixEngine/Projection.cpp; sourceTree = "<group>"; };
 		C197CDB51BED298D007F68E0 /* Projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Projection.h; path = ../../../../Source/FelixEngine/Projection.h; sourceTree = "<group>"; };
@@ -386,19 +382,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C106DB771BFD0276000065D4 /* Objects */ = {
-			isa = PBXGroup;
-			children = (
-				C197CDAF1BED298D007F68E0 /* Object.h */,
-				C106DB7A1BFD0294000065D4 /* Object.cpp */,
-				C106DB791BFD0294000065D4 /* Model.h */,
-				C106DB781BFD0294000065D4 /* Camera.h */,
-				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
-				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
-			);
-			name = Objects;
-			sourceTree = "<group>";
-		};
 		C10B5D331BEDD24500583B8F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -543,7 +526,6 @@
 				C197CD9E1BED298D007F68E0 /* Material.h */,
 				C197CDC81BED298D007F68E0 /* UniformMap.h */,
 				C197CDC51BED298D007F68E0 /* TextureMap.h */,
-				C106DB771BFD0276000065D4 /* Objects */,
 				C197CDEA1BED2AD3007F68E0 /* Components */,
 			);
 			name = Scene;
@@ -554,6 +536,10 @@
 			children = (
 				C197CD831BED298D007F68E0 /* Component.h */,
 				C10B5D3A1BEDD65000583B8F /* Component.cpp */,
+				C106DB791BFD0294000065D4 /* Model.h */,
+				C106DB781BFD0294000065D4 /* Camera.h */,
+				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
+				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
 				C197CDC71BED298D007F68E0 /* Transform.h */,
 				C197CDC61BED298D007F68E0 /* Transform.cpp */,
 				C197CDB51BED298D007F68E0 /* Projection.h */,
@@ -775,7 +761,6 @@
 				C17195461C14B9AC001DBDC6 /* UbiquityFileSystem.h in Headers */,
 				C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */,
 				C197CE4A1BED5FA1007F68E0 /* Vector.h in Headers */,
-				C197CE301BED5E73007F68E0 /* Object.h in Headers */,
 				C197CE4F1BED5FB7007F68E0 /* XMLTree.h in Headers */,
 				C197CE4C1BED5FAA007F68E0 /* Quaternion.h in Headers */,
 				C197CE3A1BED5EBF007F68E0 /* Resource.h in Headers */,
@@ -998,7 +983,6 @@
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
 				C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */,
-				C106DB7D1BFD0294000065D4 /* Object.cpp in Sources */,
 				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
 				C17195451C14B9AC001DBDC6 /* UbiquityFileSystem.mm in Sources */,
 				C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */,

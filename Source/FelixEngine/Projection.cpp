@@ -10,17 +10,15 @@
 #include "FelixEngine.h"
 #include "GraphicSystem.h"
 #include "RenderSlots.h"
-#include "Object.h"
 
 
 using namespace fx;
 using namespace std;
 
 
-Projection::Projection(Object *obj): Component("Projection", obj), mType(PROJ_ORTHO),
+Projection::Projection(Scene *scene): Component("Projection", scene), mType(PROJ_ORTHO),
 mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f), mSwapAspect(0)
 {
-  mUpdateDelegate = UpdateDelegate::Create<Projection, &Projection::update>(this);
 }
 
 Projection::~Projection()
@@ -49,8 +47,13 @@ bool Projection::setToXml(const XMLTree::Node *node)
 
 bool Projection::init()
 {
-  mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
-  return mRenderSlots ? Component::init() : false;
+  bool success = false;
+  if (mParrent)
+  {
+    mRenderSlots = static_cast<RenderSlots*>(mParrent->getChildByType("RenderSlots"));
+    success = mRenderSlots ? Component::init() : false;
+  }
+  return success;
 }
 
 void Projection::setType(const string &str)
@@ -63,7 +66,7 @@ void Projection::setAspect(const string &str)
   setAspect(GetAspectType(str));
 }
 
-void Projection::update(void *)
+void Projection::update()
 {
   if (mRenderSlots)
   {
@@ -74,6 +77,7 @@ void Projection::update(void *)
       (*itr)->uniforms().set("Projection", toMatrix4x4(size, (*itr)->stereoFlags()));
     }
   }
+  Component::update();
 }
 
 mat4 Projection::toMatrix4x4(vec2 size, int flags) const

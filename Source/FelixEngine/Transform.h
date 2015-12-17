@@ -71,7 +71,7 @@ namespace fx
     Item& front() {return mStack.front();}
     
   public:
-    Transform(Object *obj);
+    Transform(Scene *scene);
     virtual ~Transform();
     
     virtual bool setToXml(const XMLTree::Node *node);
@@ -82,9 +82,10 @@ namespace fx
     void lock() {SDL_AtomicLock(&mLock);}
     void unlock() {SDL_AtomicUnlock(&mLock);}
     
-  private:
-    void update(void*);
+  protected:
+    virtual void update();
     
+  private:
     Stack mStack;
     mat4 mModelMatrix;
     mat4 mRotationMatrix;

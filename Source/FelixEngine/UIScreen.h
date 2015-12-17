@@ -9,7 +9,7 @@
 #ifndef UIScreen_h
 #define UIScreen_h
 
-#include "Object.h"
+#include "Component.h"
 
 
 namespace fx
@@ -17,15 +17,15 @@ namespace fx
   /**
    *
    */
-  class UIScreen: public Object
+  class UIScreen: public Component
   {
   public:
-    UIScreen(Scene *scene): Object("UIScreen", scene) {std::cout << "Created UIScreen" << std::endl;}
+    UIScreen(Scene *scene): Component("UIScreen", scene) {std::cout << "Created UIScreen" << std::endl;}
     virtual ~UIScreen() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
     {
-      bool success = Object::setToXml(node);
+      bool success = Component::setToXml(node);
       if (success)
       {
       }

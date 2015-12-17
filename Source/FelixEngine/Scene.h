@@ -10,9 +10,8 @@
 #define Scene_h
 
 
-#include "EventHandler.h"
+#include "Component.h"
 #include "XMLTree.h"
-#include "Object.h"
 #include "Material.h"
 
 #include <istream>
@@ -20,16 +19,15 @@
 
 namespace fx
 {
-  class Scene: public EventHandler
+  class Scene: public Component
   {
   public:
-    Scene()
+    Scene(): Component("Scene", this)
     {
       setEventFlags(EVENT_APP_UPDATE);
     }
     ~Scene()
     {
-      clearObjects();
       clearMaterials();
     }
     
@@ -41,17 +39,21 @@ namespace fx
     
     bool setToXml(const XMLTree::Node *node)
     {
-      bool success = false;
-      if (node && node->hasAttribute("name"))
+      bool success = Component::setToXml(node);
+      if (success)
       {
-        success = true;
-        setName(node->attribute("name"));
         for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
         {
           if (**itr == "Resources")
             success &= addResources(**itr);
           else
-            success &= (bool)Object::Create(*itr, this);
+          {
+            Component *comp = Component::Create(*itr, this);
+            if (comp)
+              addChild(comp);
+            else
+              success = false;
+          }
         }
       }
       return success;
@@ -62,56 +64,6 @@ namespace fx
       for (iterator itr = begin(); itr != end(); ++itr)
         success &= (*itr)->init();
       return success;
-    }
-    void update()
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->update();
-    }
-    
-    void setName(const std::string &name) {mName = name;}
-    std::string name() const {return mName;}
-    
-    typedef std::list<Object*>::iterator iterator;
-    iterator begin() {return mObjects.begin();}
-    iterator end() {return mObjects.end();}
-    
-    typedef std::list<Object*>::const_iterator const_iterator;
-    const_iterator begin() const {return mObjects.begin();}
-    const_iterator end() const {return mObjects.end();}
-    
-    bool addObject(Object *obj)
-    {
-      if (obj)
-        mObjects.push_back(obj);
-      return obj;
-    }
-    void removeObject(Object *obj) {mObjects.remove(obj);}
-    void clearObjects()
-    {
-      std::list<Object*> tmp = mObjects;
-      mObjects.clear();
-      for (iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
-        delete *itr;
-    }
-    
-    Object* getObjectByName(const std::string &name)
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-      {
-        if ((*itr)->name() == name)
-          return *itr;
-      }
-      return nullptr;
-    }
-    Object* getObjectByType(const std::string &type)
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-      {
-        if ((*itr)->type() == type)
-          return *itr;
-      }
-      return nullptr;
     }
     
     Material* getMaterial(const std::string &name)
@@ -158,10 +110,7 @@ namespace fx
       return success;
     }
     
-    std::string mName;
-    std::list<Object*> mObjects;
     std::list<Resource*> mResources;
-    
     std::map<std::string, Material*> mMaterialMap;
   };
 }

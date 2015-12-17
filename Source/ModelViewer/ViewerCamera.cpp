@@ -11,7 +11,7 @@
 
 using namespace std;
 
-DEFINE_OBJECT_ID(ViewerCamera)
+DEFINE_COMPONENT_ID(ViewerCamera)
 
 ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene), mEventSystem(0),
 mMotionSystem(0), mOrbitView(0), mGyroView(0), mGraphicSystem(0), mMainWindow(0)
@@ -45,13 +45,15 @@ bool ViewerCamera::init()
     {
       mMotionSystem->addHandler(this);
       
-      mGyroView = new fx::GyroView(this);
+      mGyroView = new fx::GyroView(mScene);
+      addChild(mGyroView);
       success &= mGyroView->init();
       mGyroView->setActive(false);
     }
     
-    mOrbitView = new fx::OrbitView(this);
+    mOrbitView = new fx::OrbitView(mScene);
     mOrbitView->setDistance(2.5f);
+    addChild(mOrbitView);
     
     delete mView;
     mView = mOrbitView;

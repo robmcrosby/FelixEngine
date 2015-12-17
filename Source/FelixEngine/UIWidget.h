@@ -9,7 +9,7 @@
 #ifndef UIWidget_h
 #define UIWidget_h
 
-#include "Object.h"
+#include "Component.h"
 
 
 namespace fx
@@ -17,15 +17,15 @@ namespace fx
   /**
    *
    */
-  class UIWidget: public Object
+  class UIWidget: public Component
   {
   public:
-    UIWidget(Scene *scene): Object("UIWidget", scene) {std::cout << "Created UIWidget" << std::endl;}
+    UIWidget(Scene *scene): Component("UIWidget", scene) {std::cout << "Created UIWidget" << std::endl;}
     virtual ~UIWidget() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
     {
-      bool success = Object::setToXml(node);
+      bool success = Component::setToXml(node);
       if (success)
       {
       }

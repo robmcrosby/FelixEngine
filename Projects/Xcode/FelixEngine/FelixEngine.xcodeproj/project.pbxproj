@@ -76,7 +76,6 @@
 		37CBA86C1BD5752B002A358A /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA8651BD5752B002A358A /* MTLWindow.mm */; };
 		37CBA86E1BD6A0F5002A358A /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = 37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */; };
 		37CBA86F1BD6BDEB002A358A /* DefaultLibrary.metal in Resources */ = {isa = PBXBuildFile; fileRef = 37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */; };
-		37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1B1BC5C04400DAB4E3 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E381BC83E6300DAB4E3 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37CD4E361BC83E6300DAB4E3 /* Transform.cpp */; };
 		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -88,7 +87,6 @@
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
-		C106DB6E1BFCF47E000065D4 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB6D1BFCF47E000065D4 /* Object.cpp */; };
 		C106DB721BFCFECA000065D4 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB701BFCFECA000065D4 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C106DB761BFCFFF3000065D4 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C106DB741BFCFFF3000065D4 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C106DB801BFD0D35000065D4 /* ViewerCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C106DB7E1BFD0D35000065D4 /* ViewerCamera.cpp */; };
@@ -248,7 +246,6 @@
 		37CBA8641BD5752B002A358A /* MTLTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLTexture.mm; path = ../../../../Source/FelixEngine/MTLTexture.mm; sourceTree = "<group>"; };
 		37CBA8651BD5752B002A358A /* MTLWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLWindow.mm; path = ../../../../Source/FelixEngine/MTLWindow.mm; sourceTree = "<group>"; };
 		37CBA86D1BD6A0F5002A358A /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/HelloFelix/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
-		37CD4E1B1BC5C04400DAB4E3 /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = ../../../../Source/FelixEngine/Object.h; sourceTree = "<group>"; };
 		37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Component.h; path = ../../../../Source/FelixEngine/Component.h; sourceTree = "<group>"; };
 		37CD4E361BC83E6300DAB4E3 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../../Source/FelixEngine/Transform.cpp; sourceTree = "<group>"; };
 		37CD4E371BC83E6300DAB4E3 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
@@ -260,7 +257,6 @@
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
-		C106DB6D1BFCF47E000065D4 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Object.cpp; path = ../../../../Source/FelixEngine/Object.cpp; sourceTree = "<group>"; };
 		C106DB701BFCFECA000065D4 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../../../../Source/FelixEngine/Model.h; sourceTree = "<group>"; };
 		C106DB741BFCFFF3000065D4 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../../../Source/FelixEngine/Camera.h; sourceTree = "<group>"; };
 		C106DB7E1BFD0D35000065D4 /* ViewerCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ViewerCamera.cpp; path = ../../../../Source/ModelViewer/ViewerCamera.cpp; sourceTree = "<group>"; };
@@ -531,7 +527,6 @@
 				37B490261BCC632E00FC97A5 /* Material.h */,
 				37B4901E1BCB12F600FC97A5 /* UniformMap.h */,
 				37E22FD91BCF319A0018BA15 /* TextureMap.h */,
-				C106DB6C1BFCF448000065D4 /* Objects */,
 				37CD4E351BC83CDF00DAB4E3 /* Components */,
 			);
 			name = Scene;
@@ -542,6 +537,10 @@
 			children = (
 				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
 				C10B5D3C1BF0F9DE00583B8F /* Component.cpp */,
+				C106DB701BFCFECA000065D4 /* Model.h */,
+				C106DB741BFCFFF3000065D4 /* Camera.h */,
+				C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */,
+				C1250DF11C20F16100C6F7C8 /* UIWidget.h */,
 				37CD4E371BC83E6300DAB4E3 /* Transform.h */,
 				37CD4E361BC83E6300DAB4E3 /* Transform.cpp */,
 				37B48FDC1BC9837B00FC97A5 /* Projection.h */,
@@ -573,19 +572,6 @@
 				37E22FE51BCF43F50018BA15 /* libfreeimage.a */,
 			);
 			name = Freeimage;
-			sourceTree = "<group>";
-		};
-		C106DB6C1BFCF448000065D4 /* Objects */ = {
-			isa = PBXGroup;
-			children = (
-				37CD4E1B1BC5C04400DAB4E3 /* Object.h */,
-				C106DB6D1BFCF47E000065D4 /* Object.cpp */,
-				C106DB701BFCFECA000065D4 /* Model.h */,
-				C106DB741BFCFFF3000065D4 /* Camera.h */,
-				C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */,
-				C1250DF11C20F16100C6F7C8 /* UIWidget.h */,
-			);
-			name = Objects;
 			sourceTree = "<group>";
 		};
 		C15D739B1BF3C5F7002FEEE3 /* MotionSystem */ = {
@@ -700,7 +686,6 @@
 				37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */,
 				37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */,
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
-				37CD4E1D1BC5C04400DAB4E3 /* Object.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
 				C1B00EE11BFBA5950060BE21 /* View.h in Headers */,
 				370FEA881BC31C6E00440244 /* StringUtils.h in Headers */,
@@ -927,7 +912,6 @@
 				37CBA86A1BD5752B002A358A /* MTLShader.mm in Sources */,
 				37B490151BCA02F900FC97A5 /* GraphicResources.cpp in Sources */,
 				37CBA8691BD5752B002A358A /* MTLPipelineKey.mm in Sources */,
-				C106DB6E1BFCF47E000065D4 /* Object.cpp in Sources */,
 				37CBA86B1BD5752B002A358A /* MTLTexture.mm in Sources */,
 				C181A52D1C1D095600A228AE /* UbiquityFileSystem.mm in Sources */,
 				C197CCCB1BE821EF007F68E0 /* EventHandler.cpp in Sources */,

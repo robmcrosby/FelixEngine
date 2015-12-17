@@ -9,7 +9,7 @@
 #ifndef Camera_h
 #define Camera_h
 
-#include "Object.h"
+#include "Component.h"
 #include "View.h"
 #include "Projection.h"
 #include "RenderSlots.h"
@@ -17,17 +17,18 @@
 
 namespace fx
 {
-  class Camera: public Object
+  class Camera: public Component
   {
   public:
-    Camera(Scene *scene): Object("Camera", scene) {}
+    Camera(Scene *scene): Component("Camera", scene) {}
     virtual ~Camera() {}
     
     virtual bool setToXml(const XMLTree::Node *node)
     {
-      bool success = Object::setToXml(node);
+      bool success = Component::setToXml(node);
       if (success)
       {
+        addChildren(*node);
         setView();
         setProjection();
         setRenderSlots();
@@ -42,23 +43,32 @@ namespace fx
   private:
     void setView()
     {
-      mView = dynamic_cast<View*>(getComponentByType("View"));
+      mView = dynamic_cast<View*>(getChildByType("View"));
       if (!mView)
-        mView = new View(this);
+      {
+        mView = new View(mScene);
+        addChild(mView);
+      }
     }
     
     void setProjection()
     {
-      mProjection = dynamic_cast<Projection*>(getComponentByType("Projection"));
+      mProjection = dynamic_cast<Projection*>(getChildByType("Projection"));
       if (!mProjection)
-        mProjection = new Projection(this);
+      {
+        mProjection = new Projection(mScene);
+        addChild(mProjection);
+      }
     }
     
     void setRenderSlots()
     {
-      mRenderSlots = dynamic_cast<RenderSlots*>(getComponentByType("RenderSlots"));
+      mRenderSlots = dynamic_cast<RenderSlots*>(getChildByType("RenderSlots"));
       if (!mRenderSlots)
-        mRenderSlots = new RenderSlots(this);
+      {
+        mRenderSlots = new RenderSlots(mScene);
+        addChild(mRenderSlots);
+      }
     }
     
   protected:

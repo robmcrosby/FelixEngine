@@ -16,7 +16,7 @@ using namespace std;
 using namespace fx;
 
 
-RenderSlots::RenderSlots(Object *obj): Component("RenderSlots", obj)
+RenderSlots::RenderSlots(Scene *scene): Component("RenderSlots", scene)
 {
   mGraphicSystem = FelixEngine::GetGraphicSystem();
 }
@@ -47,7 +47,7 @@ bool RenderSlots::init()
 
 void RenderSlots::addSlot()
 {
-  mSlots.push_back(new RenderSlot(mObject->getScene()));
+  mSlots.push_back(new RenderSlot(mScene));
 }
 
 void RenderSlots::clear()
