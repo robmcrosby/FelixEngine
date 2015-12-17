@@ -20,52 +20,21 @@ namespace fx
   class Camera: public Component
   {
   public:
-    Camera(Scene *scene): Component("Camera", scene) {}
+    Camera(Scene *scene): Component("Camera", scene), mView(0), mProjection(0), mRenderSlots(0) {}
     virtual ~Camera() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
       addChildren(node);
-      setView();
-      setProjection();
-      setRenderSlots();
+      mView = getChildByType<View>("View");
+      mProjection = getChildByType<Projection>("Projection");
+      mRenderSlots = getChildByType<RenderSlots>("RenderSlots");
     }
     
     View* view() const {return mView;}
     Projection* projection() const {return mProjection;}
     RenderSlots* renderSlots() const {return mRenderSlots;}
-    
-  private:
-    void setView()
-    {
-      mView = dynamic_cast<View*>(getChildByType("View"));
-      if (!mView)
-      {
-        mView = new View(mScene);
-        addChild(mView);
-      }
-    }
-    
-    void setProjection()
-    {
-      mProjection = dynamic_cast<Projection*>(getChildByType("Projection"));
-      if (!mProjection)
-      {
-        mProjection = new Projection(mScene);
-        addChild(mProjection);
-      }
-    }
-    
-    void setRenderSlots()
-    {
-      mRenderSlots = dynamic_cast<RenderSlots*>(getChildByType("RenderSlots"));
-      if (!mRenderSlots)
-      {
-        mRenderSlots = new RenderSlots(mScene);
-        addChild(mRenderSlots);
-      }
-    }
     
   protected:
     View *mView;

@@ -133,23 +133,34 @@ void Component::clearChildren()
   mChildren.clear();
 }
 
-Component* Component::getChildByName(const std::string &name)
+Component* Component::getChildByName(const std::string &name) const
 {
-  for (iterator itr = begin(); itr != end(); ++itr)
+  for (const_iterator itr = begin(); itr != end(); ++itr)
   {
     if ((*itr)->name() == name)
       return *itr;
   }
   return nullptr;
 }
-Component* Component::getChildByType(const std::string &type)
+
+Component* Component::getChildByType(const std::string &type) const
 {
-  for (iterator itr = begin(); itr != end(); ++itr)
+  for (const_iterator itr = begin(); itr != end(); ++itr)
   {
     if ((*itr)->type() == type)
       return *itr;
   }
   return nullptr;
+}
+
+Component* Component::getSiblingByName(const std::string &name) const
+{
+  return mParrent ? mParrent->getChildByName(name) : nullptr;
+}
+
+Component* Component::getSiblingByType(const std::string &type) const
+{
+  return mParrent ? mParrent->getChildByType(type) : nullptr;
 }
 
 

@@ -49,6 +49,10 @@ namespace fx
     iterator begin() {return mChildren.begin();}
     iterator end() {return mChildren.end();}
     
+    typedef std::list<Component*>::const_iterator const_iterator;
+    const_iterator begin() const {return mChildren.begin();}
+    const_iterator end() const {return mChildren.end();}
+    
     void addChildren(const XMLTree::Node &node);
     void addChild(const XMLTree::Node &node);
     
@@ -58,9 +62,23 @@ namespace fx
     
     iterator deleteChild(iterator itr);
     
-    Component* getChildByName(const std::string &name);
-    Component* getChildByType(const std::string &type);
-
+    Component* getChildByName(const std::string &name) const;
+    Component* getChildByType(const std::string &type) const;
+    
+    Component* getSiblingByName(const std::string &name) const;
+    Component* getSiblingByType(const std::string &type) const;
+    
+    template <typename T>
+    T* getChildByType(const std::string &type)
+    {
+      T *child = dynamic_cast<T*>(getChildByType(type));
+      if (!child)
+      {
+        child = new T(mScene);
+        addChild(child);
+      }
+      return child;
+    }
     
     void clearChildren();
     

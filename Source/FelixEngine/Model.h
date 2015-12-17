@@ -29,33 +29,12 @@ namespace fx
     {
       Component::setToXml(node);
       addChildren(node);
-      setTransform();
-      setRenderSlots();
+      mTransform = getChildByType<Transform>("Transform");
+      mRenderSlots = getChildByType<RenderSlots>("RenderSlots");
     }
     
     Transform* transform() const {return mTransform;}
     RenderSlots* renderSlots() const {return mRenderSlots;}
-    
-  private:
-    void setTransform()
-    {
-      mTransform = dynamic_cast<Transform*>(getChildByType("Transform"));
-      if (!mTransform)
-      {
-        mTransform = new Transform(mScene);
-        addChild(mTransform);
-      }
-    }
-    
-    void setRenderSlots()
-    {
-      mRenderSlots = dynamic_cast<RenderSlots*>(getChildByType("RenderSlots"));
-      if (!mRenderSlots)
-      {
-        mRenderSlots = new RenderSlots(mScene);
-        addChild(mRenderSlots);
-      }
-    }
     
   protected:
     Transform *mTransform;
