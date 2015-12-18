@@ -13,6 +13,7 @@
 #include "Component.h"
 #include "UniformMap.h"
 #include "Material.h"
+#include "Scene.h"
 
 namespace fx
 {
@@ -21,16 +22,109 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene);
-    virtual ~RenderSlot();
+    RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
+    mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mMaterial(0), mStereoFlags(STEREO_ALL)
+    {
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+    }
+    virtual ~RenderSlot() {}
     
-    virtual void handle(const Event &event);
+    virtual void handle(const Event &event)
+    {
+      if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
+        render();
+    }
     
-    void setToXml(const XMLTree::Node &node);
+    void setToXml(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("layer"))
+        setLayer(node.attributeAsInt("layer"));
+      if (node.hasAttribute("subMesh"))
+        setSubMesh(node.attributeAsInt("subMesh"));
+      if (node.hasAttribute("instances"))
+        setInstances(node.attributeAsInt("instances"));
+      
+      // Set the States
+      if (node.hasSubNode("DepthState"))
+        mDepthState.setToXml(*node.subNode("DepthState"));
+      if (node.hasSubNode("BlendState"))
+        mBlendState.setToXml(*node.subNode("BlendState"));
+      if (node.hasSubNode("ClearState"))
+        mClearState.setToXml(*node.subNode("ClearState"));
+      
+      // Set the Uniforms
+      if (node.hasSubNode("Uniforms"))
+        mUniforms.setToXml(node.subNode("Uniforms"));
+      
+      // Set the Mesh
+      if (node.hasAttribute("mesh"))
+        setMesh(node.attribute("mesh"));
+      else if (node.hasSubNode("Mesh"))
+        setMesh(*node.subNode("Mesh"));
+      
+      // Set the Pass
+      if (node.hasAttribute("pass"))
+        setPass(node.attribute("pass"));
+      
+      // Set the Frame
+      if (node.hasAttribute("frame"))
+        setFrame(node.attribute("frame"));
+      else if (node.hasSubNode("Frame"))
+        setFrame(*node.subNode("Frame"));
+      else
+        setFrame(MAIN_WINDOW);
+      
+      // Set the Material
+      if (node.hasAttribute("material"))
+        setMaterial(node.attribute("material"));
+      else if (node.hasSubNode("Material"))
+        setMaterial(*node.subNode("Material"));
+      
+      // Set the Stereo Type
+      setStereoFlags(GraphicSystem::GetStereoFlags(node.attribute("stereo")));
+    }
     
     void update() const;
-    void render() const;
-    bool applyToTask(GraphicTask &task) const;
+    void render() const
+    {
+      GraphicTask task;
+      if (mGraphicSystem && applyToTask(task))
+        mGraphicSystem->addGraphicTask(task);
+    }
+    bool applyToTask(GraphicTask &task) const
+    {
+      // Return false if not visible.
+      if (!mVisible)
+        return false;
+      
+      // Assign the items to the task.
+      task.layer      = mLayer;
+      task.subMesh    = mSubMesh;
+      task.instances  = mInstances;
+      
+      task.depthState = mDepthState;
+      task.blendState = mBlendState;
+      task.clearState = mClearState;
+      
+      task.mesh   = mMesh;
+      task.frame  = mFrame;
+      task.pass   = mPassIndex;
+      task.stereo = mStereoFlags;
+      
+      task.localUniforms = mUniforms.getInternalMap();
+      
+      if (mMaterial)
+        mMaterial->applyToTask(task);
+      else
+      {
+        task.shader = nullptr;
+        task.textureMap = nullptr;
+        task.materialUniforms = nullptr;
+      }
+      
+      return true;
+    }
     
     void setVisible() {mVisible = true;}
     void setHidden() {mVisible = false;}
@@ -57,24 +151,60 @@ namespace fx
     ClearState& clearState() {return mClearState;}
     const ClearState& clearState() const {return mClearState;}
     
-    bool setMesh(const XMLTree::Node &node);
-    bool setView(const XMLTree::Node &node);
-    bool setFrame(const XMLTree::Node &node);
-    bool setMaterial(const XMLTree::Node &node);
+    void setMaterial(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+        setMaterial(node.attribute("name"));
+      else
+        mMaterial = new Material();
+      mMaterial->setToXml(node);
+    }
     
-    void setMesh(const std::string &name);
     void setMesh(Mesh *mesh) {mMesh = mesh;}
+    void setMesh(const std::string &name)
+    {
+      if (mGraphicSystem)
+        setMesh(mGraphicSystem->getMesh(name));
+    }
+    void setMesh(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+      {
+        setMesh(node.attribute("name"));
+        mMesh->setToXml(node);
+      }
+    }
     Mesh* mesh() const {return mMesh;}
     
-    void setFrame(const std::string &name);
     void setFrame(Frame *frame) {mFrame = frame;}
+    void setFrame(const std::string &name)
+    {
+      if (mGraphicSystem)
+        setFrame(mGraphicSystem->getFrame(name));
+    }
+    void setFrame(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+      {
+        setFrame(node.attribute("name"));
+        mFrame->setToXml(node);
+      }
+    }
     Frame* frame() const {return mFrame;}
     
-    void setPass(const std::string &pass);
+    void setPass(const std::string &pass)
+    {
+      mPass = pass;
+      mPassIndex = mPass == "" ? 0 : GetPassIndex(mPass);
+    }
     std::string pass() const {return mPass;}
     int passIndex() const {return mPassIndex;}
     
-    void setMaterial(const std::string &name);
+    void setMaterial(const std::string &name)
+    {
+      if (mScene)
+        setMaterial(mScene->getMaterial(name));
+    }
     void setMaterial(Material *material) {mMaterial = material;}
     Material* material() const {return mMaterial;}
     
@@ -87,7 +217,15 @@ namespace fx
     void lock() {mUniforms.lock();}
     void unlock() {mUniforms.unlock();}
     
-    static int GetPassIndex(const std::string &pass);
+    static int GetPassIndex(const std::string &pass)
+    {
+      static int counter = 0;
+      static std::map<std::string, int> passes;
+      
+      if (!passes.count(pass))
+        passes[pass] = ++counter;
+      return passes[pass];
+    }
     
   private:
     bool mVisible;
@@ -117,11 +255,18 @@ namespace fx
   class RenderSlots: public Component
   {
   public:
-    RenderSlots(Scene *scene);
-    virtual ~RenderSlots();
+    RenderSlots(Scene *scene): Component("RenderSlots", scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    virtual ~RenderSlots() {clear();}
     
-    virtual void setToXml(const XMLTree::Node &node);
-    virtual bool init();
+    virtual void setToXml(const XMLTree::Node &node)
+    {
+      Component::setToXml(node);
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+      {
+        addSlot();
+        back()->setToXml(**itr);
+      }
+    }
     
   public:
     typedef std::vector<RenderSlot*>::const_iterator iterator;
@@ -132,10 +277,20 @@ namespace fx
     RenderSlot* back() const {return mSlots.size() ? mSlots.back() : nullptr;}
     RenderSlot* front() const {return mSlots.size() ? mSlots.front() : nullptr;}
     
-    void addSlot();
-    void clear();
+    void addSlot() {mSlots.push_back(new RenderSlot(mScene));}
     
-    void setGlobal(const std::string &name, const Uniform &uniform);
+    void clear()
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        delete *itr;
+      mSlots.clear();
+    }
+    
+    void setGlobal(const std::string &name, const Uniform &uniform)
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        (*itr)->uniforms().set(name, uniform);
+    }
     
   private:
     GraphicSystem *mGraphicSystem;

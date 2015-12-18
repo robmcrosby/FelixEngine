@@ -10,9 +10,9 @@
 #define Camera_h
 
 #include "Component.h"
+#include "RenderSlots.h"
 #include "View.h"
 #include "Projection.h"
-#include "RenderSlots.h"
 
 
 namespace fx

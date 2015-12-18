@@ -9,13 +9,12 @@
 #ifndef Projection_h
 #define Projection_h
 
-#include "Component.h"
+#include "RenderSlots.h"
 #include "Matrix.h"
 
 namespace fx
 {
   class Frame;
-  class RenderSlots;
   
   /**
    *
@@ -43,13 +42,24 @@ namespace fx
   struct Volume
   {
     Volume(): near(0), far(1), left(-1), right(1), top(1), bottom(1) {}
-    bool setToXml(const XMLTree::Node *node);
+    void setToXml(const XMLTree::Node *node)
+    {
+      near   = node->attributeAsFloat("near");
+      far    = node->attributeAsFloat("far");
+      left   = node->attributeAsFloat("left");
+      right  = node->attributeAsFloat("right");
+      top    = node->attributeAsFloat("top");
+      bottom = node->attributeAsFloat("bottom");
+    }
     float width() const {return right - left;}
     float height() const {return top - bottom;}
     
-    float near, far;
-    float left, right;
-    float top, bottom;
+    float near;
+    float far;
+    float left;
+    float right;
+    float top;
+    float bottom;
   };
   
   /**
@@ -58,15 +68,48 @@ namespace fx
   class Projection: public Component
   {
   public:
-    PROJ_TYPE GetProjectionType(const std::string &str);
-    ASPECT_TYPE GetAspectType(const std::string &str);
+    static PROJ_TYPE GetProjectionType(const std::string &str)
+    {
+      if (str == "ortho")
+        return PROJ_ORTHO;
+      return PROJ_FRUSTUM;
+    }
+    static ASPECT_TYPE GetAspectType(const std::string &str)
+    {
+      if (str == "auto")
+        return ASPECT_AUTO;
+      if (str == "width")
+        return ASPECT_WIDTH;
+      if (str == "height")
+        return ASPECT_HEIGHT;
+      return ASPECT_NONE;
+    }
     
   public:
-    Projection(Scene *scene);
-    virtual ~Projection();
+    Projection(Scene *scene): Component("Projection", scene), mType(PROJ_ORTHO),
+    mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f), mSwapAspect(0) {}
+    virtual ~Projection() {}
     
-    virtual void setToXml(const XMLTree::Node &node);
-    virtual bool init();
+    virtual void setToXml(const XMLTree::Node &node)
+    {
+      Component::setToXml(node);
+      if (node.hasAttribute("type"))
+        setType(node.attribute("type"));
+      if (node.hasAttribute("aspect"))
+        setAspect(node.attribute("aspect"));
+      if (node.hasAttribute("disparity"))
+        setDisparity(node.attributeAsFloat("disparity"));
+      if (node.hasAttribute("zero"))
+        setZeroDistance(node.attributeAsFloat("zero"));
+      if (node.hasSubNode("Volume"))
+        mVolume.setToXml(node.subNode("Volume"));
+    }
+    
+    virtual bool init()
+    {
+      mRenderSlots = getSiblingByType<RenderSlots>("RenderSlots");
+      return Component::init() && mRenderSlots;
+    }
     
     void setVolume(const Volume &volume)
     {
@@ -82,7 +125,7 @@ namespace fx
       return ret;
     }
     
-    void setType(const std::string &str);
+    void setType(const std::string &str) {setType(GetProjectionType(str));}
     void setType(PROJ_TYPE type)
     {
       lock();
@@ -97,7 +140,7 @@ namespace fx
       return ret;
     }
     
-    void setAspect(const std::string &str);
+    void setAspect(const std::string &str) {setAspect(GetAspectType(str));}
     void setAspect(ASPECT_TYPE aspect)
     {
       lock();
@@ -147,10 +190,69 @@ namespace fx
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   protected:
-    virtual void update();
+    virtual void update()
+    {
+      if (mRenderSlots)
+      {
+        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+        {
+          Frame *frame = (*itr)->frame();
+          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+          (*itr)->uniforms().set("Projection", toMatrix4x4(size, (*itr)->stereoFlags()));
+        }
+      }
+      Component::update();
+    }
     
   private:
-    mat4 toMatrix4x4(vec2 size, int flags) const;
+    mat4 toMatrix4x4(vec2 size, int flags) const
+    {
+      lock();
+      Volume v = mVolume;
+      ASPECT_TYPE aspect = mAspect;
+      PROJ_TYPE type = mType;
+      float disparity = mDisparity/2.0f;
+      float zeroDistance = mZeroDistance;
+      unlock();
+      
+      if (mSwapAspect)
+        size = size.yx();
+      
+      if ((flags == STEREO_LEFT || flags == STEREO_RIGHT) && type == PROJ_FRUSTUM)
+      {
+        float shift = disparity * (v.near/zeroDistance);
+        if (flags == STEREO_LEFT)
+        {
+          v.left += shift;
+          v.right += shift;
+        }
+        else
+        {
+          v.left -= shift;
+          v.right -= shift;
+          disparity = -disparity;
+        }
+      }
+      else
+        disparity = 0.0f;
+      
+      if (aspect == ASPECT_WIDTH || (aspect == ASPECT_AUTO && size.w < size.h))
+      {
+        float aspectRatio = size.h/size.w;
+        v.top *= aspectRatio;
+        v.bottom *= aspectRatio;
+      }
+      else if (aspect == ASPECT_HEIGHT || (aspect == ASPECT_AUTO && size.h < size.w))
+      {
+        float aspectRatio = size.w/size.h;
+        v.left *= aspectRatio;
+        v.right *= aspectRatio;
+      }
+      
+      if (type == PROJ_ORTHO)
+        return mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
+      return mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
+    }
     
     PROJ_TYPE   mType;
     ASPECT_TYPE mAspect;

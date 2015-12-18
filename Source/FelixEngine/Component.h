@@ -80,6 +80,18 @@ namespace fx
       return child;
     }
     
+    template <typename T>
+    T* getChildByType(const std::string &type) const
+    {
+      return dynamic_cast<T*>(getChildByType(type));
+    }
+    
+    template <typename T>
+    T* getSiblingByType(const std::string &type) const
+    {
+      return mParrent ? mParrent->getChildByType<T>(type) : nullptr;
+    }
+    
     void clearChildren();
     
     /**

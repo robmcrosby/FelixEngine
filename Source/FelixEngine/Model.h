@@ -10,8 +10,8 @@
 #define Model_h
 
 #include "Component.h"
-#include "Transform.h"
 #include "RenderSlots.h"
+#include "Transform.h"
 
 
 namespace fx

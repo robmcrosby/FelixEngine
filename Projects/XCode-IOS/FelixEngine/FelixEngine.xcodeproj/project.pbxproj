@@ -61,11 +61,8 @@
 		C197CDD21BED298D007F68E0 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD961BED298D007F68E0 /* GraphicSystem.cpp */; };
 		C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD9A1BED298D007F68E0 /* ImageLoader.cpp */; };
 		C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA01BED298D007F68E0 /* MeshLoader.cpp */; };
-		C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDB41BED298D007F68E0 /* Projection.cpp */; };
-		C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDB71BED298D007F68E0 /* RenderSlots.cpp */; };
 		C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDBC1BED298D007F68E0 /* SDLEventSystem.cpp */; };
 		C197CDE31BED298D007F68E0 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDC01BED298D007F68E0 /* System.cpp */; };
-		C197CDE41BED298D007F68E0 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDC61BED298D007F68E0 /* Transform.cpp */; };
 		C197CDF41BED2F2C007F68E0 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
 		C197CDF61BED2F42007F68E0 /* freeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF51BED2F42007F68E0 /* freeimage.a */; };
 		C197CDFB1BED342D007F68E0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDFA1BED342D007F68E0 /* QuartzCore.framework */; };
@@ -262,10 +259,8 @@
 		C197CDAD1BED298D007F68E0 /* MultiVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiVector.h; path = ../../../../Source/FelixEngine/MultiVector.h; sourceTree = "<group>"; };
 		C197CDAE1BED298D007F68E0 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex.h; path = ../../../../Source/FelixEngine/Mutex.h; sourceTree = "<group>"; };
 		C197CDB31BED298D007F68E0 /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pool.h; path = ../../../../Source/FelixEngine/Pool.h; sourceTree = "<group>"; };
-		C197CDB41BED298D007F68E0 /* Projection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Projection.cpp; path = ../../../../Source/FelixEngine/Projection.cpp; sourceTree = "<group>"; };
 		C197CDB51BED298D007F68E0 /* Projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Projection.h; path = ../../../../Source/FelixEngine/Projection.h; sourceTree = "<group>"; };
 		C197CDB61BED298D007F68E0 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../../../Source/FelixEngine/Quaternion.h; sourceTree = "<group>"; };
-		C197CDB71BED298D007F68E0 /* RenderSlots.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderSlots.cpp; path = ../../../../Source/FelixEngine/RenderSlots.cpp; sourceTree = "<group>"; };
 		C197CDB81BED298D007F68E0 /* RenderSlots.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderSlots.h; path = ../../../../Source/FelixEngine/RenderSlots.h; sourceTree = "<group>"; };
 		C197CDB91BED298D007F68E0 /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resource.h; path = ../../../../Source/FelixEngine/Resource.h; sourceTree = "<group>"; };
 		C197CDBA1BED298D007F68E0 /* Sampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Sampler.h; path = ../../../../Source/FelixEngine/Sampler.h; sourceTree = "<group>"; };
@@ -280,7 +275,6 @@
 		C197CDC31BED298D007F68E0 /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
 		C197CDC41BED298D007F68E0 /* TaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskingSystem.h; path = ../../../../Source/FelixEngine/TaskingSystem.h; sourceTree = "<group>"; };
 		C197CDC51BED298D007F68E0 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
-		C197CDC61BED298D007F68E0 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Transform.cpp; path = ../../../../Source/FelixEngine/Transform.cpp; sourceTree = "<group>"; };
 		C197CDC71BED298D007F68E0 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
 		C197CDC81BED298D007F68E0 /* UniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniformMap.h; path = ../../../../Source/FelixEngine/UniformMap.h; sourceTree = "<group>"; };
 		C197CDC91BED298D007F68E0 /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = ../../../../Source/FelixEngine/Variant.h; sourceTree = "<group>"; };
@@ -399,6 +393,45 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		C1250DFE1C23C04B00C6F7C8 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
+				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
+			);
+			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		C1250DFF1C23C05400C6F7C8 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				C106DB781BFD0294000065D4 /* Camera.h */,
+				C197CDB51BED298D007F68E0 /* Projection.h */,
+				C19892531BFD36AA007DF57A /* Views */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		C1250E001C23C05B00C6F7C8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C106DB791BFD0294000065D4 /* Model.h */,
+				C197CDC71BED298D007F68E0 /* Transform.h */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		C1250E011C23C0A300C6F7C8 /* RenderSlots */ = {
+			isa = PBXGroup;
+			children = (
+				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
+				C197CD9E1BED298D007F68E0 /* Material.h */,
+				C197CDC81BED298D007F68E0 /* UniformMap.h */,
+				C197CDC51BED298D007F68E0 /* TextureMap.h */,
+			);
+			name = RenderSlots;
+			sourceTree = "<group>";
+		};
 		C15D73901BF3B428002FEEE3 /* MotionSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,7 +495,7 @@
 			children = (
 				C197CD8A1BED298D007F68E0 /* FelixEngine.h */,
 				C197CD891BED298D007F68E0 /* FelixEngine.cpp */,
-				C197CDE91BED29FB007F68E0 /* Scene */,
+				C197CDE91BED29FB007F68E0 /* Components */,
 				C197CDE61BED29B3007F68E0 /* Systems */,
 				C197CDE81BED29C9007F68E0 /* Utilities */,
 			);
@@ -519,34 +552,16 @@
 			name = Utilities;
 			sourceTree = "<group>";
 		};
-		C197CDE91BED29FB007F68E0 /* Scene */ = {
-			isa = PBXGroup;
-			children = (
-				C197CDBB1BED298D007F68E0 /* Scene.h */,
-				C197CD9E1BED298D007F68E0 /* Material.h */,
-				C197CDC81BED298D007F68E0 /* UniformMap.h */,
-				C197CDC51BED298D007F68E0 /* TextureMap.h */,
-				C197CDEA1BED2AD3007F68E0 /* Components */,
-			);
-			name = Scene;
-			sourceTree = "<group>";
-		};
-		C197CDEA1BED2AD3007F68E0 /* Components */ = {
+		C197CDE91BED29FB007F68E0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				C197CD831BED298D007F68E0 /* Component.h */,
 				C10B5D3A1BEDD65000583B8F /* Component.cpp */,
-				C106DB791BFD0294000065D4 /* Model.h */,
-				C106DB781BFD0294000065D4 /* Camera.h */,
-				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
-				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
-				C197CDC71BED298D007F68E0 /* Transform.h */,
-				C197CDC61BED298D007F68E0 /* Transform.cpp */,
-				C197CDB51BED298D007F68E0 /* Projection.h */,
-				C197CDB41BED298D007F68E0 /* Projection.cpp */,
-				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
-				C197CDB71BED298D007F68E0 /* RenderSlots.cpp */,
-				C19892531BFD36AA007DF57A /* Views */,
+				C197CDBB1BED298D007F68E0 /* Scene.h */,
+				C1250E011C23C0A300C6F7C8 /* RenderSlots */,
+				C1250E001C23C05B00C6F7C8 /* Model */,
+				C1250DFF1C23C05400C6F7C8 /* Camera */,
+				C1250DFE1C23C04B00C6F7C8 /* User Interface */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -982,13 +997,10 @@
 				C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */,
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
-				C197CDE01BED298D007F68E0 /* Projection.cpp in Sources */,
 				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
 				C17195451C14B9AC001DBDC6 /* UbiquityFileSystem.mm in Sources */,
-				C197CDE11BED298D007F68E0 /* RenderSlots.cpp in Sources */,
 				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
 				C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */,
-				C197CDE41BED298D007F68E0 /* Transform.cpp in Sources */,
 				C197CDD21BED298D007F68E0 /* GraphicSystem.cpp in Sources */,
 				C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */,
 				C197CDE31BED298D007F68E0 /* System.cpp in Sources */,
