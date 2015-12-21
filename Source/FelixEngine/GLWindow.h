@@ -122,6 +122,7 @@ namespace fx
         
         mSize.w = displayMode.w;
         mSize.h = displayMode.h;
+        mScale = 2.0f;
         
         mSDLWindow = SDL_CreateWindow(NULL, 0, 0, mSize.w, mSize.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN |

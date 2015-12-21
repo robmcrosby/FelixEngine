@@ -1,7 +1,29 @@
 <?xml version="1.0"?>
 <Scene name="BunnyScene">
   <UIScreen name="MainScreen" window="MainWindow">
+    <Projection type="ortho" aspect="none"/>
+    <RenderSlots>
+      <Slot layer="1" pass="UIPass" frame="DrawFrame" stereo="mono"/>
+    </RenderSlots>
     <UIWidget name="TestWidget" canvas="MainScreen">
+      <Transform>
+        <Scale>40.0, 20.0, 1.0</Scale>
+      </Transform>
+      <RenderSlots>
+        <Slot layer="0" pass="UIPass">
+          <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>
+          <DepthState write="false" function="always"/>
+          <Material>
+            <Shader name="ColorShader">
+              <Vertex function="SimpleVertex"/>
+              <Fragment function="SimpleColor"/>
+            </Shader>
+            <UniformMap>
+              <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
+            </UniformMap>
+          </Material>
+        </Slot>
+      </RenderSlots>
     </UIWidget>
   </UIScreen>
   <ViewerCamera name="MainCamera">
@@ -18,7 +40,7 @@
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
       </Slot>
-      <Slot layer="1">
+      <Slot layer="2">
         <Material name="TextureMaterial">
           <Shader name="TextureShader">
             <Vertex function="SimpleVertexUV"/>

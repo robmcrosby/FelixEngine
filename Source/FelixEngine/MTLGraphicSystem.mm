@@ -293,6 +293,7 @@ namespace fx
         [mMTLWindow updateSize:size andScale:scale];
         mSize.w = (int)(size.width*scale);
         mSize.h = (int)(size.height*scale);
+        mScale = (float)scale;
         #endif
       }
       if (mMTLFrame)

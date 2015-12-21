@@ -58,7 +58,7 @@ namespace fx
   class Window: public Resource
   {
   public:
-    Window(): mMode(WINDOW_FULL_MONO) {}
+    Window(): mMode(WINDOW_FULL_MONO), mScale(1.0f) {}
     virtual ~Window() {}
     
     virtual bool setToXml(const XMLTree::Node &node);
@@ -66,6 +66,7 @@ namespace fx
     void setTitle(const std::string &title) {mTitle = title;}
     void setPosition(const ivec2 &pos) {mPosition = pos;}
     void setSize(const ivec2 &size) {mSize = size;}
+    void setScale(float scale) {mScale = scale;}
     
     ivec2 position() const {return mPosition;}
     ivec2 size() const {return mSize;}
@@ -78,6 +79,8 @@ namespace fx
         size.x /= 2;
       return size;
     }
+    
+    float scale() const {return mScale;}
     
     void setMode(WINDOW_MODE mode) {mMode = mode;}
     WINDOW_MODE mode() const {return mMode;}
@@ -96,6 +99,7 @@ namespace fx
   protected:
     std::string mTitle;
     ivec2 mPosition, mSize;
+    float mScale;
     WINDOW_MODE mMode;
   };
   

@@ -47,8 +47,6 @@ namespace fx
     void set(const std::string &key, const Uniform &uniform)
     {
       lock();
-      if (key == "View" && uniform.mat4Value() == mat4())
-        std::cout << "Idenity" << std::endl;
       mMap[key] = uniform;
       unlock();
     }

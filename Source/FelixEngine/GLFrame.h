@@ -330,7 +330,6 @@ namespace fx
       bool success = true;
       if (mSize != size)
       {
-        std::cout << "Resize to " << size << std::endl;
         unload();
         
         mSize = size;
