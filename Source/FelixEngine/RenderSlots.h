@@ -255,7 +255,7 @@ namespace fx
   class RenderSlots: public Component
   {
   public:
-    RenderSlots(Scene *scene): Component("RenderSlots", scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    RenderSlots(Scene *scene): Component(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
     virtual ~RenderSlots() {clear();}
     
     virtual void setToXml(const XMLTree::Node &node)

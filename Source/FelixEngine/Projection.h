@@ -86,7 +86,7 @@ namespace fx
     }
     
   public:
-    Projection(Scene *scene): Component("Projection", scene), mType(PROJ_ORTHO),
+    Projection(Scene *scene): Component(scene), mType(PROJ_ORTHO),
     mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f), mSwapAspect(0) {}
     virtual ~Projection() {}
     
@@ -107,7 +107,7 @@ namespace fx
     
     virtual bool init()
     {
-      mRenderSlots = getSiblingByType<RenderSlots>("RenderSlots");
+      mRenderSlots = getSibling<RenderSlots>();
       return Component::init() && mRenderSlots;
     }
     

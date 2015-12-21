@@ -28,7 +28,7 @@ namespace fx
   class Component: public EventHandler
   {
   public:
-    Component(const std::string &type, Scene *scene);
+    Component(Scene *scene);
     virtual ~Component();
     
     virtual void setToXml(const XMLTree::Node &node);
@@ -38,7 +38,6 @@ namespace fx
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
     
-    std::string type() const {return mType;}
     Component* parrent() const {return mParrent;}
     
     void lock() const {mMutex.lock();}
@@ -62,16 +61,15 @@ namespace fx
     
     iterator deleteChild(iterator itr);
     
-    Component* getChildByName(const std::string &name) const;
-    Component* getChildByType(const std::string &type) const;
-    
-    Component* getSiblingByName(const std::string &name) const;
-    Component* getSiblingByType(const std::string &type) const;
+    Component* getChild(const std::string &name) const;
+    Component* getSibling(const std::string &name) const;
     
     template <typename T>
-    T* getChildByType(const std::string &type)
+    T* getChild()
     {
-      T *child = dynamic_cast<T*>(getChildByType(type));
+      T *child = nullptr;
+      for (const_iterator itr = begin(); !child && itr != end(); ++itr)
+        child = dynamic_cast<T*>(*itr);
       if (!child)
       {
         child = new T(mScene);
@@ -81,15 +79,25 @@ namespace fx
     }
     
     template <typename T>
-    T* getChildByType(const std::string &type) const
+    T* getChild() const
     {
-      return dynamic_cast<T*>(getChildByType(type));
+      T *child = nullptr;
+      for (const_iterator itr = begin(); !child && itr != end(); ++itr)
+        child = dynamic_cast<T*>(*itr++);
+      return child;
     }
     
     template <typename T>
-    T* getSiblingByType(const std::string &type) const
+    T* getSibling() const {return mParrent ? mParrent->getChild<T>() : nullptr;}
+    
+    template <typename T>
+    T* getParrent() const
     {
-      return mParrent ? mParrent->getChildByType<T>(type) : nullptr;
+      Component *parrent = mParrent;
+      T *ret = dynamic_cast<T*>(parrent);
+      while (!ret && parrent != (Component*)mScene)
+        ret = dynamic_cast<T*>(parrent = parrent->mParrent);
+        return ret;
     }
     
     void clearChildren();
@@ -108,7 +116,6 @@ namespace fx
     
   protected:
     std::string mName;
-    std::string mType;
     Scene *mScene;
     
     Component *mParrent;

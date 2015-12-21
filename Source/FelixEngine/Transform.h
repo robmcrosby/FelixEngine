@@ -140,7 +140,7 @@ namespace fx
     Item& front() {return mStack.front();}
     
   public:
-    Transform(Scene *scene): Component("Transform", scene), mRenderSlots(0), mLock(0) {}
+    Transform(Scene *scene): Component(scene), mRenderSlots(0), mLock(0) {}
     virtual ~Transform() {}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -155,7 +155,7 @@ namespace fx
     
     virtual bool init()
     {
-      mRenderSlots = getSiblingByType<RenderSlots>("RenderSlots");
+      mRenderSlots = getSibling<RenderSlots>();
       updateMatrices();
       return Component::init() && mRenderSlots;
     }

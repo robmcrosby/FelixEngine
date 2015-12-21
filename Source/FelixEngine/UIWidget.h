@@ -10,7 +10,7 @@
 #define UIWidget_h
 
 #include "Component.h"
-
+#include "Transform.h"
 
 namespace fx
 {
@@ -20,13 +20,20 @@ namespace fx
   class UIWidget: public Component
   {
   public:
-    UIWidget(Scene *scene): Component("UIWidget", scene) {std::cout << "Created UIWidget" << std::endl;}
+    UIWidget(Scene *scene): Component(scene) {std::cout << "Created UIWidget" << std::endl;}
     virtual ~UIWidget() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
+      addChildren(node);
+      mTransform = getChild<Transform>();
+      
     }
+    
+  protected:
+    Transform *mTransform;
+    UIWidget *mUIParrent;
   };
 }
 

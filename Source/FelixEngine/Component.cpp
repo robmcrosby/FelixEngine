@@ -39,7 +39,7 @@ DEFINE_COMPONENT_ID(UIScreen)
 DEFINE_COMPONENT_ID(UIWidget)
 
 
-Component::Component(const std::string &type, Scene *scene): mType(type), mParrent(0), mScene(scene)
+Component::Component(Scene *scene): mParrent(0), mScene(scene)
 {
   setEventFlags(EVENT_NONE);
 }
@@ -133,7 +133,7 @@ void Component::clearChildren()
   mChildren.clear();
 }
 
-Component* Component::getChildByName(const std::string &name) const
+Component* Component::getChild(const std::string &name) const
 {
   for (const_iterator itr = begin(); itr != end(); ++itr)
   {
@@ -143,26 +143,10 @@ Component* Component::getChildByName(const std::string &name) const
   return nullptr;
 }
 
-Component* Component::getChildByType(const std::string &type) const
+Component* Component::getSibling(const std::string &name) const
 {
-  for (const_iterator itr = begin(); itr != end(); ++itr)
-  {
-    if ((*itr)->type() == type)
-      return *itr;
-  }
-  return nullptr;
+  return mParrent ? mParrent->getChild(name) : nullptr;
 }
-
-Component* Component::getSiblingByName(const std::string &name) const
-{
-  return mParrent ? mParrent->getChildByName(name) : nullptr;
-}
-
-Component* Component::getSiblingByType(const std::string &type) const
-{
-  return mParrent ? mParrent->getChildByType(type) : nullptr;
-}
-
 
 map<string, Component::ComponentId*>& Component::GetComponentIdMap()
 {

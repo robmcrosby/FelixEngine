@@ -22,15 +22,15 @@ namespace fx
   class Model: public Component
   {
   public:
-    Model(Scene *scene): Component("Model", scene), mTransform(0), mRenderSlots(0) {}
+    Model(Scene *scene): Component(scene), mTransform(0), mRenderSlots(0) {}
     virtual ~Model() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
       addChildren(node);
-      mTransform = getChildByType<Transform>("Transform");
-      mRenderSlots = getChildByType<RenderSlots>("RenderSlots");
+      mTransform = getChild<Transform>();
+      mRenderSlots = getChild<RenderSlots>();
     }
     
     Transform* transform() const {return mTransform;}

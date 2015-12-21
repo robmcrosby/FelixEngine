@@ -21,14 +21,14 @@ namespace fx
   class View: public Component
   {
   public:
-    View(Scene *scene): Component("View", scene), mRenderSlots(0), mActive(true), mLock(0)
+    View(Scene *scene): Component(scene), mRenderSlots(0), mActive(true), mLock(0)
     {
     }
     virtual ~View() {}
     
     virtual bool init()
     {
-      mRenderSlots = static_cast<RenderSlots*>(mParrent->getChildByType("RenderSlots"));
+      mRenderSlots = getSibling<RenderSlots>();
       return mRenderSlots ? Component::init() : false;
     }
     

@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <Scene name="BunnyScene">
-  <UIScreen name="MainScreen" window="MainWindow"/>
-  <UIWidget name="TestWidget" canvas="MainScreen">
-  </UIWidget>
+  <UIScreen name="MainScreen" window="MainWindow">
+    <UIWidget name="TestWidget" canvas="MainScreen">
+    </UIWidget>
+  </UIScreen>
   <ViewerCamera name="MainCamera">
     <Projection type="frustum" aspect="auto" disparity="0.2" zero="2.0">
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>

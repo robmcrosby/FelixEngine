@@ -20,16 +20,16 @@ namespace fx
   class Camera: public Component
   {
   public:
-    Camera(Scene *scene): Component("Camera", scene), mView(0), mProjection(0), mRenderSlots(0) {}
+    Camera(Scene *scene): Component(scene), mView(0), mProjection(0), mRenderSlots(0) {}
     virtual ~Camera() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
       addChildren(node);
-      mView = getChildByType<View>("View");
-      mProjection = getChildByType<Projection>("Projection");
-      mRenderSlots = getChildByType<RenderSlots>("RenderSlots");
+      mView = getChild<View>();
+      mProjection = getChild<Projection>();
+      mRenderSlots = getChild<RenderSlots>();
     }
     
     View* view() const {return mView;}

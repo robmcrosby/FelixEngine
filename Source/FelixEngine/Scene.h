@@ -22,7 +22,7 @@ namespace fx
   class Scene: public Component
   {
   public:
-    Scene(): Component("Scene", this)
+    Scene(): Component(this)
     {
       mScene = this;
       setEventFlags(EVENT_APP_UPDATE);
