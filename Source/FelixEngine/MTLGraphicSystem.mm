@@ -260,6 +260,9 @@ namespace fx
       mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE);
       mSize = ivec2(displayMode.w, displayMode.h);
       
+      if (mMTLFrame)
+        mMTLFrame->setSize(mSize);
+      
       SDL_GL_CreateContext(mSDLWindow);
       
       #else

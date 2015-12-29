@@ -9,7 +9,7 @@
 #ifndef UIScreen_h
 #define UIScreen_h
 
-#include "Component.h"
+#include "UIWidget.h"
 #include "RenderSlots.h"
 #include "Projection.h"
 #include "View.h"
@@ -20,10 +20,10 @@ namespace fx
   /**
    *
    */
-  class UIScreen: public Component
+  class UIScreen: public UIWidget
   {
   public:
-    UIScreen(Scene *scene): Component(scene), mWindow(0), mRenderSlots(0), mProjection(0), mView(0), mScale(1.0f)
+    UIScreen(Scene *scene): UIWidget(scene), mWindow(0), mRenderSlots(0), mProjection(0), mView(0)
     {
       setEventFlags(EVENT_WINDOW);
     }
@@ -57,23 +57,20 @@ namespace fx
         handleWindowEvent(event);
     }
     
-    float scale() const {return mScale;}
-    void setScale(float scale) {mScale = scale;}
-    
-    vec2 size() const {return mSize/mScale;}
-    ivec2 pixelSize() const {return mSize;}
-    void resize(const ivec2 size)
+    void resize(const vec2 size)
     {
       if (mProjection && mSize != size)
       {
         mSize = size;
         
         Volume vol;
-        vol.right = (mSize.w/2.0f)/mScale;
+        vol.right = mSize.w/2.0f;
         vol.left = -vol.right;
-        vol.top = (mSize.h/2.0f)/mScale;
+        vol.top = mSize.h/2.0f;
         vol.bottom = -vol.top;
         mProjection->setVolume(vol);
+        
+        updateWidgets();
       }
     }
     
@@ -82,12 +79,7 @@ namespace fx
     {
       mWindow = window;
       if (mWindow)
-      {
-        setScale(mWindow->scale());
         resize(mWindow->size());
-      }
-      else
-        setScale(1.0f);
     }
     
   protected:
@@ -96,13 +88,18 @@ namespace fx
       if (mWindow && event.windowData().event == EVENT_WINDOW_RESIZED)
         resize(event.windowData().data);
     }
+    void updateWidgets()
+    {
+      vec2 screenSize = size();
+      vec2 screenCenter = vec2(0.0f, 0.0f);
+      for (UIWidgets::iterator itr = mWidgets.begin(); itr != mWidgets.end(); ++itr)
+        (*itr)->updateLayout(screenSize, screenCenter);
+    }
     
     RenderSlots *mRenderSlots;
     Projection *mProjection;
     View *mView;
     
-    ivec2 mSize;
-    float mScale;
     Window *mWindow;
   };
 }

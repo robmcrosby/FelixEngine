@@ -55,11 +55,9 @@ namespace fx
     void addChildren(const XMLTree::Node &node);
     void addChild(const XMLTree::Node &node);
     
-    void addChild(Component *child);
-    void removeChild(Component *child);
-    iterator removeChild(iterator itr);
-    
-    iterator deleteChild(iterator itr);
+    virtual void addChild(Component *child);
+    virtual void removeChild(Component *child);
+    virtual void clearChildren();
     
     Component* getChild(const std::string &name) const;
     Component* getSibling(const std::string &name) const;
@@ -99,8 +97,6 @@ namespace fx
         ret = dynamic_cast<T*>(parrent = parrent->mParrent);
         return ret;
     }
-    
-    void clearChildren();
     
     /**
      * Internal class used for reflection with xml

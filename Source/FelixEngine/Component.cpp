@@ -104,33 +104,13 @@ void Component::removeChild(Component *child)
   }
 }
 
-Component::iterator Component::removeChild(iterator itr)
-{
-  if (*itr && (*itr)->mParrent == this)
-  {
-    itr = mChildren.erase(itr);
-    (*itr)->mParrent = nullptr;
-  }
-  return itr;
-}
-
-Component::iterator Component::deleteChild(iterator itr)
-{
-  if (*itr && (*itr)->mParrent == this)
-  {
-    Component *child = *itr;
-    itr = mChildren.erase(itr);
-    delete child;
-  }
-  return itr;
-}
-
 void Component::clearChildren()
 {
   std::list<Component*> children = mChildren;
+  mChildren.clear();
+  
   for (iterator itr = children.begin(); itr != children.end(); ++itr)
     delete *itr;
-  mChildren.clear();
 }
 
 Component* Component::getChild(const std::string &name) const

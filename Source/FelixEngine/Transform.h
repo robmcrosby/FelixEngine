@@ -136,6 +136,12 @@ namespace fx
     void pushBack(const Item &item) {mStack.push_back(item);}
     void pushFront(const Item &item) {mStack.push_front(item);}
     
+    void addScale(const vec3 &scale) {pushBack(Item(SCALE, vec4(scale, 1.0f)));}
+    void addScale(const vec2 &scale) {pushBack(Item(SCALE, vec4(scale, 1.0f, 1.0f)));}
+    
+    void addTranslate(const vec3 &trans) {pushBack(Item(TRANSLATE, vec4(trans, 1.0f)));}
+    void addTranslate(const vec2 &trans) {pushBack(Item(TRANSLATE, vec4(trans, 0.0f, 1.0f)));}
+    
     Item& back() {return mStack.back();}
     Item& front() {return mStack.front();}
     
