@@ -127,6 +127,7 @@
 		C1B00ED71BF7E6C10060BE21 /* Meshes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ED61BF7E6C10060BE21 /* Meshes */; };
 		C1B00EDD1BF7F4830060BE21 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */; };
 		C1B00EE11BFBA5950060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EDF1BFBA5950060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1D308621C322B7F003286CF /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C1D308611C322B7F003286CF /* Images */; };
 		C1D905231C17B1750099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905221C17B1750099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -291,6 +292,7 @@
 		C1B00ED61BF7E6C10060BE21 /* Meshes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Meshes; path = ../../../../Source/ModelViewer/Resources/Meshes; sourceTree = "<group>"; };
 		C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = SettingsMetal.xml; path = ../../../../Source/ModelViewer/Resources/SettingsMetal.xml; sourceTree = "<group>"; };
 		C1B00EDF1BFBA5950060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
+		C1D308611C322B7F003286CF /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/ModelViewer/Resources/Images; sourceTree = "<group>"; };
 		C1D905221C17B1750099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -678,10 +680,11 @@
 				C1B00EC51BF694660060BE21 /* SettingsGL41.xml */,
 				C1B00EDC1BF7F4830060BE21 /* SettingsMetal.xml */,
 				C1B00EC41BF694660060BE21 /* DefaultLibrary.metal */,
-				C1B00EB11BF693A60060BE21 /* Assets.xcassets */,
 				C1B00EB61BF693A60060BE21 /* Info.plist */,
+				C1B00EB11BF693A60060BE21 /* Assets.xcassets */,
 				C1B00ED61BF7E6C10060BE21 /* Meshes */,
 				C1B00ECC1BF7E1D90060BE21 /* Scenes */,
+				C1D308611C322B7F003286CF /* Images */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -891,6 +894,7 @@
 				C1250DEE1C20ACB100C6F7C8 /* TestUI.xml in Resources */,
 				C1B00EDD1BF7F4830060BE21 /* SettingsMetal.xml in Resources */,
 				C1B00EC71BF694660060BE21 /* SettingsGL41.xml in Resources */,
+				C1D308621C322B7F003286CF /* Images in Resources */,
 				C1B00EB21BF693A60060BE21 /* Assets.xcassets in Resources */,
 				C1B00ED71BF7E6C10060BE21 /* Meshes in Resources */,
 				C181A5311C1D0A7100A228AE /* MainScene.xml in Resources */,

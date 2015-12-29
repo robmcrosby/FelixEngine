@@ -5,34 +5,25 @@
     <RenderSlots>
       <Slot layer="1" pass="UIPass" frame="DrawFrame" stereo="mono"/>
     </RenderSlots>
-    <UIWidget name="TestWidget" size="100, 50" offset="10, -10" origin="TL">
+    <UIWidget name="TestWidget" size="200, 200" offset="10, -10" origin="TL">
       <RenderSlots>
         <Slot layer="0" pass="UIPass">
           <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>
           <DepthState write="false" function="always"/>
           <Material>
-            <Shader name="ColorShader">
-              <Vertex function="SimpleVertex"/>
-              <Fragment function="SimpleColor"/>
+            <Shader name="TextureShader">
+              <Vertex function="VertexUV"/>
+              <Fragment function="SimpleTexture"/>
             </Shader>
             <UniformMap>
               <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
             </UniformMap>
+            <TextureMap>
+              <Texture name="Icon" file="Images/Icon.png" min="linear" mag="linear"/>
+            </TextureMap>
           </Material>
         </Slot>
       </RenderSlots>
-      <UIWidget name="InnerWidget" size="75, 25" offset="-10, 10" origin="BR">
-        <RenderSlots>
-          <Slot layer="1" pass="UIPass" mesh="TestQuad">
-            <DepthState write="false" function="always"/>
-            <Material shader="ColorShader">
-              <UniformMap>
-                <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
-              </UniformMap>
-            </Material>
-          </Slot>
-        </RenderSlots>
-      </UIWidget>
     </UIWidget>
   </UIScreen>
   <ViewerCamera name="MainCamera">
@@ -51,7 +42,7 @@
       </Slot>
       <Slot layer="2">
         <Material name="TextureMaterial">
-          <Shader name="TextureShader">
+          <Shader name="FullShader">
             <Vertex function="SimpleVertexUV"/>
             <Fragment function="SimpleTexture"/>
           </Shader>

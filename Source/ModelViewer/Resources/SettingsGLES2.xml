@@ -37,6 +37,19 @@
             UV = UV_0;
           }
         </ShaderFunction>
+        <ShaderFunction name="VertexUV" type="vertex">
+          #version 100
+          attribute vec4 Position;
+          attribute vec2 UV_0;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          varying vec2 UV;
+          void main() {
+            gl_Position = Projection * View * Model * Position;
+            UV = UV_0;
+          }
+        </ShaderFunction>
         <ShaderFunction name="SimpleTexture" type="fragment">
           #version 100
           varying mediump vec2 UV;
