@@ -47,7 +47,7 @@ namespace fx
     {
       FelixEngine::GetEventSystem()->addHandler(this);
       if (mWindow)
-        resize(mWindow->size());
+        resize(vec2(mWindow->size())/mWindow->scale());
       return Component::init();
     }
     
@@ -79,14 +79,14 @@ namespace fx
     {
       mWindow = window;
       if (mWindow)
-        resize(mWindow->size());
+        resize(vec2(mWindow->size())/mWindow->scale());
     }
     
   protected:
     void handleWindowEvent(const Event &event)
     {
       if (mWindow && event.windowData().event == EVENT_WINDOW_RESIZED)
-        resize(event.windowData().data);
+        resize(vec2(event.windowData().data)/mWindow->scale());
     }
     void updateWidgets()
     {

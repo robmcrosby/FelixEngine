@@ -159,6 +159,8 @@
 -(BOOL)setNSWindow:(NSWindow*)window;
 #endif
 
+@property (nonatomic, readonly) CGFloat scale;
+
 @end
 
 

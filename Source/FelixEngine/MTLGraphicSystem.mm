@@ -282,6 +282,8 @@ namespace fx
       #endif
       free(info);
       
+      mScale = (float)[mMTLWindow scale];
+      
       if (success)
         setLoaded();
       return success;
