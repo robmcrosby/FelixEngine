@@ -118,8 +118,8 @@ namespace fx
         
         if (blending.seperate())
         {
-          GLenum srcAlpha = GetGLBlendInput(blending.src());
-          GLenum dstAlpha = GetGLBlendInput(blending.dst());
+          GLenum srcAlpha = GetGLBlendInput(blending.srcAlpha());
+          GLenum dstAlpha = GetGLBlendInput(blending.dstAlpha());
           GLenum eqAlpha  = GetGLBlendEquation(blending.equationAlpha());
           
           glBlendEquationSeparate(eq, eqAlpha);

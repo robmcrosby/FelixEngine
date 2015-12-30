@@ -667,7 +667,7 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
     {
       // Get the pipeline state
       [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
-      [mContextInfo->mPipelineKey setBlendingEnabled:task->blendState.enabled()];
+      [mContextInfo->mPipelineKey setBlendFlags:(NSInteger)task->blendState.flags];
       id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
       
       // Get the Render Descriptor.

@@ -11,6 +11,7 @@
 
 #include "Color.h"
 #include "XMLTree.h"
+#include "GraphicResources.h"
 
 namespace fx
 {
@@ -250,7 +251,7 @@ namespace fx
   
   struct BlendState
   {
-    BlendState(): flags(0) {}
+    BlendState(int f = 0): flags(f) {}
     
     void setToXml(const XMLTree::Node &node)
     {

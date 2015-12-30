@@ -95,7 +95,19 @@
 @interface MTLPipelineKey : NSObject<NSCopying>
 
 @property (nonatomic, readwrite) MTLShader *shader;
-@property (nonatomic, readwrite) BOOL blendingEnabled;
+@property (nonatomic, readwrite) NSInteger blendFlags;
+
+-(BOOL)blendingEnabled;
+-(BOOL)alphaOperations;
+
+-(MTLBlendOperation)colorBlendOperation;
+-(MTLBlendOperation)alphaBlendOperation;
+
+-(MTLBlendFactor)sourceColorBlendFactor;
+-(MTLBlendFactor)destColorBlendFactor;
+
+-(MTLBlendFactor)sourceAlphaBlendFactor;
+-(MTLBlendFactor)destAlphaBlendFactor;
 
 @end
 

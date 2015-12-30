@@ -105,15 +105,19 @@
     {
       pipelineDesc.colorAttachments[index].pixelFormat = buffer.format;
       
-      if (key.blendingEnabled)
+      if ([key blendingEnabled])
       {
         pipelineDesc.colorAttachments[index].blendingEnabled = YES;
-        pipelineDesc.colorAttachments[index].rgbBlendOperation   = MTLBlendOperationAdd;
-        //pipelineDesc.colorAttachments[index].alphaBlendOperation = MTLBlendOperationAdd;
-        pipelineDesc.colorAttachments[index].sourceRGBBlendFactor   = MTLBlendFactorBlendAlpha;
-        //pipelineDesc.colorAttachments[index].sourceAlphaBlendFactor = MTLBlendFactorOne;
-        pipelineDesc.colorAttachments[index].destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
-        //pipelineDesc.colorAttachments[index].destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+        pipelineDesc.colorAttachments[index].rgbBlendOperation         = [key colorBlendOperation];
+        pipelineDesc.colorAttachments[index].sourceRGBBlendFactor      = [key sourceColorBlendFactor];
+        pipelineDesc.colorAttachments[index].destinationRGBBlendFactor = [key destColorBlendFactor];
+        
+        if ([key alphaOperations])
+        {
+          pipelineDesc.colorAttachments[index].alphaBlendOperation =         [key alphaBlendOperation];
+          pipelineDesc.colorAttachments[index].sourceAlphaBlendFactor =      [key sourceAlphaBlendFactor];
+          pipelineDesc.colorAttachments[index].destinationAlphaBlendFactor = [key destAlphaBlendFactor];
+        }
       }
       ++index;
     }
