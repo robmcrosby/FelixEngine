@@ -56,30 +56,29 @@ namespace fx
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  enum BLEND_FUNC_FLAGS
+  /**
+   * 0000 0000 0000 0000 0000 0000 #### ####
+   */
+  enum BLEND_EQ_FLAGS
   {
-    BLEND_FUNC_MASK       = 0xff00,
-    BLEND_FUNC_COLOR_MASK = 0x0f00,
-    BLEND_FUNC_ALPHA_MASK = 0xf000,
+    BLEND_EQ_MASK         = 0xff,
+    BLEND_EQ_COMP_MASK    = 0xf,
     
-    BLEND_FUNC_ADD          = 0x0100,
-    BLEND_FUNC_SUBTRACT     = 0x0200,
-    BLEND_FUNC_REV_SUBTRACT = 0x0300,
-    BLEND_FUNC_MIN          = 0x0400,
-    BLEND_FUNC_MAX          = 0x0500,
+    BLEND_EQ_ADD          = 0x1,
+    BLEND_EQ_SUBTRACT     = 0x2,
+    BLEND_EQ_REV_SUBTRACT = 0x3,
+    BLEND_EQ_MIN          = 0x4,
+    BLEND_EQ_MAX          = 0x5,
     
-    BLEND_FUNC_ADD_ALPHA          = 0x1000,
-    BLEND_FUNC_SUBTRACT_ALPHA     = 0x2000,
-    BLEND_FUNC_REV_SUBTRACT_ALPHA = 0x3000,
-    BLEND_FUNC_MIN_ALPHA          = 0x4000,
-    BLEND_FUNC_MAX_ALPHA          = 0x5000,
+    BLEND_EQ_COLOR_SHIFT  = 0,
+    BLEND_EQ_ALPHA_SHIFT  = 4,
   };
   
   /**
-   * 0000 0000 0000 0000 #### #### 0000 0000
+   * 0000 0000 #### #### #### #### 0000 0000
    */
   enum BLEND_INPUT_FLAGS {
-    BLEND_INPUT_MASK        = 0xffff0000,
+    BLEND_INPUT_MASK        = 0xffff00,
     BLEND_INPUT_COMP_MASK   = 0xf,
     
     BLEND_INPUT_SRC_COLOR   = 0x1, // 0001
@@ -96,10 +95,10 @@ namespace fx
     
     BLEND_INPUT_SRC_ALPHA_SATURATE = 0xf, // 1111
     
-    BLEND_INPUT_SRC_COLOR_SHIFT  = 12,
-    BLEND_INPUT_DEST_COLOR_SHIFT = 16,
-    BLEND_INPUT_SRC_ALPHA_SHIFT  = 20,
-    BLEND_INPUT_DEST_ALPHA_SHIFT = 24,
+    BLEND_INPUT_SRC_COLOR_SHIFT  = 8,
+    BLEND_INPUT_DEST_COLOR_SHIFT = 12,
+    BLEND_INPUT_SRC_ALPHA_SHIFT  = 16,
+    BLEND_INPUT_DEST_ALPHA_SHIFT = 20,
   };
   
   
@@ -199,7 +198,7 @@ namespace fx
       else
         flags &= ~DEPTH_ENABLE_TESTING;
     }
-    void setTestFunction(int function)
+    void setFunction(int function)
     {
       flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);
     }
@@ -216,32 +215,33 @@ namespace fx
         std::transform(str.begin(), str.end(), str.begin(), ::tolower);
         
         if (str == "less_equal")
-          setTestFunction(DEPTH_TEST_LESS_EQ);
+          setFunction(DEPTH_TEST_LESS_EQ);
         else if (str == "greater_equal")
-          setTestFunction(DEPTH_TEST_GREATER_EQ);
+          setFunction(DEPTH_TEST_GREATER_EQ);
         else if (str == "less")
-          setTestFunction(DEPTH_TEST_LESS);
+          setFunction(DEPTH_TEST_LESS);
         else if (str == "greater")
-          setTestFunction(DEPTH_TEST_GREATER);
+          setFunction(DEPTH_TEST_GREATER);
         else if (str == "equal")
-          setTestFunction(DEPTH_TEST_EQUAL);
+          setFunction(DEPTH_TEST_EQUAL);
         else if (str == "never")
-          setTestFunction(DEPTH_TEST_NEVER);
+          setFunction(DEPTH_TEST_NEVER);
         else
-          setTestFunction(DEPTH_TEST_ALWAYS);
+          setFunction(DEPTH_TEST_ALWAYS);
       }
       else
       {
         setTesting(false);
-        setTestFunction(DEPTH_TEST_ALWAYS);
+        setFunction(DEPTH_TEST_ALWAYS);
       }
       
       return true;
     }
     
-    bool isWritingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
-    bool isTestingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
-    int  getTestFunction()  const {return flags & DEPTH_TEST_MASK;}
+    bool enabled() const {return writingEnabled() || testingEnabled();}
+    bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
+    bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
+    int  function()  const {return flags & DEPTH_TEST_MASK;}
     
     int flags;
   };
@@ -252,36 +252,113 @@ namespace fx
   {
     BlendState(): flags(0) {}
     
-    bool setToXml(const XMLTree::Node &node)
+    void setToXml(const XMLTree::Node &node)
     {
-      setFunction(BLEND_FUNC_ADD);
-      return true;
+      if (node.hasAttribute("equation"))
+        setEquation(node.attribute("equation"));
+      else
+        setEquation(BLEND_EQ_ADD);
+      
+      if (node.hasAttribute("src"))
+        setSrc(node.attribute("src"));
+      else
+        setSrc(BLEND_INPUT_SRC_ALPHA);
+      
+      if (node.hasAttribute("dst"))
+        setDst(node.attribute("dst"));
+      else
+        setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+      
+      if (node.hasAttribute("color"))
+        color = RGBAf(node.attribute("color"));
+      else if (node.hasSubNode("Color"))
+        color = RGBAf(node.subContents("Color"));
+      else
+        color = RGBAf(0.0f, 0.0f, 0.0f, 1.0f);
+      
+      const XMLTree::Node *alpha = node.subNode("Alpha");
+      if (alpha)
+      {
+        if (alpha->hasAttribute("equation"))
+          setEquationAlpha(alpha->attribute("equation"));
+        else
+          setEquationAlpha(equation());
+        
+        if (alpha->hasAttribute("src"))
+          setSrcAlpha(alpha->attribute("src"));
+        else
+          setSrcAlpha(src());
+        
+        if (alpha->hasAttribute("dst"))
+          setDstAlpha(alpha->attribute("dst"));
+        else
+          setDstAlpha(dst());
+      }
     }
     
-    void setFunction(int func) {flags = (flags & ~BLEND_FUNC_MASK) | (func & BLEND_FUNC_MASK);}
-    void setColorFunction(int func) {flags = (flags & ~BLEND_FUNC_COLOR_MASK) | (func & BLEND_FUNC_COLOR_MASK);}
-    void setAlphaFunction(int func) {flags = (flags & ~BLEND_FUNC_ALPHA_MASK) | (func & BLEND_FUNC_ALPHA_MASK);}
+    void setEquation(int func, int shift = BLEND_EQ_COLOR_SHIFT) {flags = (flags & ~(BLEND_EQ_COMP_MASK << shift)) | ((func << shift) & (BLEND_EQ_COMP_MASK << shift));}
+    void setEquationAlpha(int func) {setEquation(func, BLEND_EQ_ALPHA_SHIFT);}
+    
+    void setEquation(const std::string &str, int shift = BLEND_EQ_COLOR_SHIFT) {setEquation(GetEquationFlag(str), shift);}
+    void setEquationAlpha(const std::string &str) {setEquation(str, BLEND_EQ_ALPHA_SHIFT);}
     
     void setInput(int input, int shift)
     {
       int mask = BLEND_INPUT_MASK << shift;
       flags = (flags & ~mask) | ((input << shift) & mask);
     }
-    void setInputColorSrc(int input)  {setInput(input, BLEND_INPUT_SRC_COLOR_SHIFT);}
-    void setInputColorDest(int input) {setInput(input, BLEND_INPUT_DEST_COLOR_SHIFT);}
-    void setInputAlphaSrc(int input)  {setInput(input, BLEND_INPUT_SRC_ALPHA_SHIFT);}
-    void setInputAlphaDest(int input) {setInput(input, BLEND_INPUT_DEST_ALPHA_SHIFT);}
+    void setSrc(int input) {setInput(input, BLEND_INPUT_SRC_COLOR_SHIFT);}
+    void setDst(int input) {setInput(input, BLEND_INPUT_DEST_COLOR_SHIFT);}
+    void setSrcAlpha(int input) {setInput(input, BLEND_INPUT_SRC_ALPHA_SHIFT);}
+    void setDstAlpha(int input) {setInput(input, BLEND_INPUT_DEST_ALPHA_SHIFT);}
     
-    int colorFunction() const {return flags & BLEND_FUNC_COLOR_MASK;}
-    int alphaFunction() const {return flags & BLEND_FUNC_ALPHA_MASK;}
+    void setSrc(const std::string &str) {setSrc(GetInputFlag(str));}
+    void setDst(const std::string &str) {setDst(GetInputFlag(str));}
+    void setSrcAlpha(const std::string &str) {setSrcAlpha(GetInputFlag(str));}
+    void setDstAlpha(const std::string &str) {setDstAlpha(GetInputFlag(str));}
     
-    int inputColorSrc()  const {return (flags >> BLEND_INPUT_SRC_COLOR_SHIFT) & BLEND_INPUT_MASK;}
-    int inputColorDest() const {return (flags >> BLEND_INPUT_DEST_COLOR_SHIFT) & BLEND_INPUT_MASK;}
-    int inputAlphaSrc()  const {return (flags >> BLEND_INPUT_SRC_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
-    int inputAlphaDest() const {return (flags >> BLEND_INPUT_DEST_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    int equation() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_COMP_MASK;}
+    int equationAlpha() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}
     
-    bool isBlendingEnabled() const {return flags & BLEND_FUNC_MASK;}
-    bool isBlendSeperate() const {return flags & BLEND_FUNC_ALPHA_MASK;}
+    int src() const {return (flags >> BLEND_INPUT_SRC_COLOR_SHIFT) & BLEND_INPUT_MASK;}
+    int dst() const {return (flags >> BLEND_INPUT_DEST_COLOR_SHIFT) & BLEND_INPUT_MASK;}
+    int srcAlpha() const {return (flags >> BLEND_INPUT_SRC_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    int dstAlpha() const {return (flags >> BLEND_INPUT_DEST_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    
+    bool enabled() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_MASK;}
+    bool seperate() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}
+    
+    static int GetInputFlag(const std::string &str)
+    {
+      if (str == "saturate")
+        return BLEND_INPUT_SRC_ALPHA_SATURATE;
+      if (str == "0")
+        return BLEND_INPUT_ZERO;
+      if (str == "1")
+        return BLEND_INPUT_ONE;
+      
+      int mod = (str.find("1-") == 0) ? BLEND_INPUT_ONE_MINUS : 0;
+      if (str.find("src") != std::string::npos)
+        return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_SRC_ALPHA : BLEND_INPUT_SRC_COLOR);
+      if (str.find("dst") != std::string::npos)
+        return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_DST_ALPHA : BLEND_INPUT_DST_COLOR);
+      return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_CONST_ALPHA : BLEND_INPUT_CONST_COLOR);
+    }
+    
+    static int GetEquationFlag(const std::string &str)
+    {
+      if (str == "add")
+        return BLEND_EQ_ADD;
+      if (str == "subtract")
+        return BLEND_EQ_SUBTRACT;
+      if (str == "reverse")
+        return BLEND_EQ_REV_SUBTRACT;
+      if (str == "min")
+        return BLEND_EQ_MIN;
+      if (str == "max")
+        return BLEND_EQ_MAX;
+      return 0;
+    }
     
     int   flags;
     RGBAf color;

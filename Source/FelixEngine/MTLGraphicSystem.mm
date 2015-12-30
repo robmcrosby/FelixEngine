@@ -667,7 +667,7 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
     {
       // Get the pipeline state
       [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
-      [mContextInfo->mPipelineKey setBlendingEnabled:task->blendState.isBlendingEnabled()];
+      [mContextInfo->mPipelineKey setBlendingEnabled:task->blendState.enabled()];
       id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
       
       // Get the Render Descriptor.
@@ -688,20 +688,20 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
       if (depthState == nil)
       {
         MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
-        depthDesc.depthWriteEnabled = task->depthState.isWritingEnabled();
+        depthDesc.depthWriteEnabled = task->depthState.writingEnabled();
         depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
         
-        if (task->depthState.getTestFunction() == DEPTH_TEST_LESS)
+        if (task->depthState.function() == DEPTH_TEST_LESS)
           depthDesc.depthCompareFunction = MTLCompareFunctionLess;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER)
+        else if (task->depthState.function() == DEPTH_TEST_GREATER)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_EQUAL)
+        else if (task->depthState.function() == DEPTH_TEST_EQUAL)
           depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
+        else if (task->depthState.function() == DEPTH_TEST_LESS_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
+        else if (task->depthState.function() == DEPTH_TEST_GREATER_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_NEVER)
+        else if (task->depthState.function() == DEPTH_TEST_NEVER)
           depthDesc.depthCompareFunction = MTLCompareFunctionNever;
         
         depthState = [mContextInfo->mDevice newDepthStencilStateWithDescriptor:depthDesc];

@@ -53,6 +53,7 @@ namespace fx
   {
     Color4(): red(0), green(0), blue(0), alpha(0) {}
     Color4(T r, T g, T b, T a): red(r), green(g), blue(b), alpha(a) {}
+    Color4(const std::string &str) {parse(str);}
     
     const void* ptr() const {return (const void*)&red;}
     bool parse(const std::string &str)

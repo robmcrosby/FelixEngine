@@ -9,7 +9,7 @@
       <RenderSlots>
         <Slot layer="0" pass="UIPass">
           <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>
-          <DepthState write="false" function="always"/>
+          <BlendState color="0.9, 0.2, 0.2, 1.0"/>
           <Material>
             <Shader name="TextureShader">
               <Vertex function="VertexUV"/>

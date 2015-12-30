@@ -75,18 +75,6 @@ void Frame::setRefrenceFrame(const std::string &name)
     setRefrenceFrame(nullptr);
 }
 
-//void Frame::updateSize()
-//{
-//  if (mRefFrame != "")
-//  {
-//    GraphicSystem *sys = FelixEngine::GetGraphicSystem();
-//    if (sys)
-//    {
-//      Frame *frame = sys->getFrame(mRefFrame);
-//      mSize = frame->size() * mScale;
-//    }
-//  }
-//}
 
 
 

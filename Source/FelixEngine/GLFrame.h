@@ -92,27 +92,46 @@ namespace fx
     
     void setDepthState(const DepthState &state) const
     {
-      if (state.isTestingEnabled())
+      if (state.testingEnabled())
       {
         glEnable(GL_DEPTH_TEST);
-        glDepthFunc(getGLDepthFunction(state.getTestFunction()));
+        glDepthFunc(GetGLDepthFunction(state.function()));
       }
       else
         glDisable(GL_DEPTH_TEST);
       
-      glDepthMask(state.isWritingEnabled() ? GL_TRUE : GL_FALSE);
+      glDepthMask(state.writingEnabled() ? GL_TRUE : GL_FALSE);
       
       // Put in setCullFaceState method
       //glEnable(GL_CULL_FACE);
       //glCullFace(GL_BACK);
     }
     
-    void setBlendState(const BlendState &state) const
+    void setBlendState(const BlendState &blending) const
     {
-      if (state.isBlendingEnabled())
+      if (blending.enabled())
       {
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        GLenum src = GetGLBlendInput(blending.src());
+        GLenum dst = GetGLBlendInput(blending.dst());
+        GLenum eq  = GetGLBlendEquation(blending.equation());
+        
+        if (blending.seperate())
+        {
+          GLenum srcAlpha = GetGLBlendInput(blending.src());
+          GLenum dstAlpha = GetGLBlendInput(blending.dst());
+          GLenum eqAlpha  = GetGLBlendEquation(blending.equationAlpha());
+          
+          glBlendEquationSeparate(eq, eqAlpha);
+          glBlendFuncSeparate(src, dst, srcAlpha, dstAlpha);
+        }
+        else
+        {
+          glBlendEquation(eq);
+          glBlendFunc(src, dst);
+        }
+        
+        glBlendColor(blending.color.red, blending.color.green, blending.color.blue, blending.color.alpha);
       }
       else
         glDisable(GL_BLEND);
@@ -402,7 +421,7 @@ namespace fx
       }
     }
     
-    GLenum getGLDepthFunction(int function) const
+    static GLenum GetGLDepthFunction(int function)
     {
       switch (function)
       {
@@ -415,6 +434,45 @@ namespace fx
         default:                    return GL_ALWAYS;
       }
     }
+    
+    static GLenum GetGLBlendInput(int input)
+    {
+      if (input == BLEND_INPUT_SRC_ALPHA_SATURATE)
+        return GL_SRC_ALPHA_SATURATE;
+      if (input & BLEND_INPUT_ONE_MINUS)
+      {
+        input &= ~BLEND_INPUT_ONE_MINUS;
+        switch (input)
+        {
+          case BLEND_INPUT_SRC_COLOR:   return GL_ONE_MINUS_SRC_COLOR;
+          case BLEND_INPUT_SRC_ALPHA:   return GL_ONE_MINUS_SRC_ALPHA;
+          case BLEND_INPUT_DST_COLOR:   return GL_ONE_MINUS_DST_COLOR;
+          case BLEND_INPUT_DST_ALPHA:   return GL_ONE_MINUS_DST_ALPHA;
+          case BLEND_INPUT_CONST_COLOR: return GL_ONE_MINUS_CONSTANT_COLOR;
+          case BLEND_INPUT_CONST_ALPHA: return GL_ONE_MINUS_CONSTANT_ALPHA;
+        }
+      }
+      else
+      {
+        switch (input)
+        {
+          case BLEND_INPUT_SRC_COLOR:   return GL_SRC_COLOR;
+          case BLEND_INPUT_SRC_ALPHA:   return GL_SRC_ALPHA;
+          case BLEND_INPUT_DST_COLOR:   return GL_DST_COLOR;
+          case BLEND_INPUT_DST_ALPHA:   return GL_DST_ALPHA;
+          case BLEND_INPUT_CONST_COLOR: return GL_CONSTANT_COLOR;
+          case BLEND_INPUT_CONST_ALPHA: return GL_CONSTANT_ALPHA;
+          case BLEND_INPUT_ZERO:        return GL_ZERO;
+        }
+      }
+      return GL_ONE;
+    }
+    
+    static GLenum GetGLBlendEquation(int eq)
+    {
+      return GL_FUNC_ADD;
+    }
+    
     
   private:
     GLuint mFrameBufferId;

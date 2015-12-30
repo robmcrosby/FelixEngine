@@ -54,7 +54,7 @@ namespace fx
       
       if (loaded())
       {
-        SDL_GetWindowSize(mSDLWindow, &mSize.w, &mSize.h);
+        SDL_GL_GetDrawableSize(mSDLWindow, &mSize.w, &mSize.h);
         
         #if __IPHONEOS__
         updateFrameBufferId();
@@ -134,7 +134,16 @@ namespace fx
                                       mPosition.x, mPosition.y,
                                       mSize.w, mSize.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN |
-                                      SDL_WINDOW_RESIZABLE);
+                                      SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+        
+        if (mSDLWindow)
+        {
+          ivec2 size;
+          SDL_GL_GetDrawableSize(mSDLWindow, &size.w, &size.h);
+          mScale = (float)size.w / (float)mSize.w;
+          mSize = size;
+        }
+        
         #endif
         
         
