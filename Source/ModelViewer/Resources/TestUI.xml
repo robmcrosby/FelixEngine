@@ -5,7 +5,7 @@
     <RenderSlots>
       <Slot layer="1" pass="UIPass" frame="DrawFrame" stereo="mono"/>
     </RenderSlots>
-    <UIWidget name="TestWidget" size="200, 200" offset="10, -10" origin="TL">
+    <UIWidget name="TestWidget" size="200, 200" offset="10, 10" origin="TBLR">
       <RenderSlots>
         <Slot layer="0" pass="UIPass">
           <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>
@@ -19,7 +19,7 @@
               <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
             </UniformMap>
             <TextureMap>
-              <Texture name="Icon" file="Images/Icon.png" min="linear" mag="linear"/>
+              <Texture name="Icon" file="Images/arial.png" min="linear" mag="linear"/>
             </TextureMap>
           </Material>
         </Slot>
