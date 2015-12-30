@@ -232,10 +232,28 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
           static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
         shader->applyTextureMap(task->textureMap);
         
+        setTriangleCullMode(task->cullMode);
+        
         // Draw the Mesh
         mesh->draw(shader, task->instances, task->subMesh);
       }
     }
+  }
+}
+
+void GLGraphicSystem::setTriangleCullMode(fx::CULL_MODE mode)
+{
+  static CULL_MODE curMode = CULL_NONE;
+  if (curMode != mode)
+  {
+    curMode = mode;
+    if (mode != CULL_NONE)
+    {
+      glEnable(GL_CULL_FACE);
+      glCullFace((mode == CULL_BACK) ? GL_BACK : GL_FRONT);
+    }
+    else
+      glDisable(GL_CULL_FACE);
   }
 }
 

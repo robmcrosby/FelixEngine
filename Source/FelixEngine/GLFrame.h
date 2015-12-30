@@ -99,12 +99,7 @@ namespace fx
       }
       else
         glDisable(GL_DEPTH_TEST);
-      
       glDepthMask(state.writingEnabled() ? GL_TRUE : GL_FALSE);
-      
-      // Put in setCullFaceState method
-      //glEnable(GL_CULL_FACE);
-      //glCullFace(GL_BACK);
     }
     
     void setBlendState(const BlendState &blending) const

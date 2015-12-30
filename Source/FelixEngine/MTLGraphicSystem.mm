@@ -721,6 +721,16 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
         [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         [renderEncoder setDepthStencilState:depthState];
         [renderEncoder setRenderPipelineState:pipelineState];
+        [renderEncoder setBlendColorRed:task->blendState.color.red
+                                  green:task->blendState.color.green
+                                   blue:task->blendState.color.blue
+                                  alpha:task->blendState.color.alpha];
+        
+        // Set the Triangle Cull Mode
+        if (task->cullMode == CULL_FRONT)
+          [renderEncoder setCullMode:MTLCullModeFront];
+        else if (task->cullMode == CULL_BACK)
+          [renderEncoder setCullMode:MTLCullModeBack];
         
         if (view && view->localUniforms)
         {

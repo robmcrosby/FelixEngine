@@ -61,7 +61,7 @@
       <Translate>0.0, -0.2, 0.0</Translate>
     </Transform>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
+      <Slot layer="0" pass="MainPass" cull="front">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
         <Material>

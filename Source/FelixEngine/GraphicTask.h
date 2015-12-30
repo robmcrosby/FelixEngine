@@ -57,6 +57,13 @@ namespace fx
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
+  enum CULL_MODE
+  {
+    CULL_NONE,
+    CULL_FRONT,
+    CULL_BACK,
+  };
+  
   /**
    * 0000 0000 0000 0000 0000 0000 #### ####
    */
@@ -370,7 +377,7 @@ namespace fx
   struct GraphicTask
   {
     GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
-    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL) {}
+    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
     
     bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
     bool isDrawTask()  const {return mesh && shader && instances > 0;}
@@ -401,6 +408,8 @@ namespace fx
     ClearState clearState;
     DepthState depthState;
     BlendState blendState;
+    
+    CULL_MODE cullMode;
   };
 }
 

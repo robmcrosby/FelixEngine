@@ -74,6 +74,8 @@ namespace fx
     void processPass(const Pass &pass, const GraphicTask *view, int stereo);
     void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
+    void setTriangleCullMode(CULL_MODE mode);
+    
     void updateResources();
     void updateUniforms();
     bool setVersion(const XMLTree::Node *node);

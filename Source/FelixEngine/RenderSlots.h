@@ -22,7 +22,7 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0),
+    RenderSlot(Scene *scene): mVisible(true), mLayer(0), mSubMesh(0), mViewIndex(-1), mFrame(0), mPassIndex(0), mCullMode(CULL_NONE),
     mInstances(1), mMesh(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mMaterial(0), mStereoFlags(STEREO_ALL)
     {
       setEventFlags(EVENT_APP_RENDER);
@@ -52,6 +52,12 @@ namespace fx
         mBlendState.setToXml(*node.subNode("BlendState"));
       if (node.hasSubNode("ClearState"))
         mClearState.setToXml(*node.subNode("ClearState"));
+      
+      // Set the Triangle Cull Mode
+      if (node.hasAttribute("cull"))
+        setCullMode(node.attribute("cull"));
+      else
+        setCullMode(CULL_NONE);
       
       // Set the Uniforms
       if (node.hasSubNode("Uniforms"))
@@ -107,6 +113,8 @@ namespace fx
       task.blendState = mBlendState;
       task.clearState = mClearState;
       
+      task.cullMode = mCullMode;
+      
       task.mesh   = mMesh;
       task.frame  = mFrame;
       task.pass   = mPassIndex;
@@ -150,6 +158,10 @@ namespace fx
     
     ClearState& clearState() {return mClearState;}
     const ClearState& clearState() const {return mClearState;}
+    
+    void setCullMode(CULL_MODE mode) {mCullMode = mode;}
+    void setCullMode(const std::string &str) {setCullMode(GetCullMode(str));}
+    CULL_MODE cullMode() const {return mCullMode;}
     
     void setMaterial(const XMLTree::Node &node)
     {
@@ -227,12 +239,23 @@ namespace fx
       return passes[pass];
     }
     
+    static CULL_MODE GetCullMode(const std::string &str)
+    {
+      if (str == "back")
+        return CULL_BACK;
+      if (str == "front")
+        return CULL_FRONT;
+      return CULL_NONE;
+    }
+    
   private:
     bool mVisible;
     int mLayer, mSubMesh, mViewIndex, mInstances;
     DepthState mDepthState;
     BlendState mBlendState;
     ClearState mClearState;
+    
+    CULL_MODE mCullMode;
     
     Mesh  *mMesh;
     Frame *mFrame;
