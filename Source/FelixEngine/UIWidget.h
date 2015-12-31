@@ -37,12 +37,15 @@ namespace fx
   class UIWidget: public Component
   {
   public:
-    UIWidget(Scene *scene): Component(scene), mTransform(0), mLayoutFlags(0) {}
+    UIWidget(Scene *scene): Component(scene), mTransform(0), mLayoutFlags(0), mDirectory(FileSystem::GetResources()) {}
     virtual ~UIWidget() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
+      if (node.tree() && node.tree()->url() != "")
+        mDirectory = node.tree()->url();
+      
       addChildren(node);
       mTransform = getChild<Transform>();
       
@@ -182,6 +185,7 @@ namespace fx
     vec2 mSize;
     vec2 mOffset;
     
+    File mDirectory;
     
     vec2 mParrentSize;
     vec2 mParrentCenter;

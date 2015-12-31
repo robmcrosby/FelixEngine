@@ -86,7 +86,7 @@ namespace fx
     void handleWindowEvent(const Event &event)
     {
       if (mWindow && event.windowData().event == EVENT_WINDOW_RESIZED)
-        resize(vec2(event.windowData().data)/mWindow->scale());
+        resize(vec2(event.windowData().data));
     }
     void updateWidgets()
     {

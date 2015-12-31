@@ -155,6 +155,8 @@
 		C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */ = {isa = PBXBuildFile; fileRef = C1B00ECF1BF7E1F00060BE21 /* Scenes */; };
 		C1B00EE51BFBAB9C0060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EE31BFBAB9C0060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D308641C322E0B003286CF /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C1D308631C322E0B003286CF /* Images */; };
+		C1D3086A1C34507F003286CF /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D308691C34507F003286CF /* UIText.h */; };
+		C1D3086C1C348098003286CF /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C1D3086B1C348098003286CF /* Fonts */; };
 		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -315,6 +317,8 @@
 		C1B00ECF1BF7E1F00060BE21 /* Scenes */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Scenes; path = ../../../../Source/ModelViewer/Resources/Scenes; sourceTree = "<group>"; };
 		C1B00EE31BFBAB9C0060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
 		C1D308631C322E0B003286CF /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/ModelViewer/Resources/Images; sourceTree = "<group>"; };
+		C1D308691C34507F003286CF /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIText.h; path = ../../../../Source/FelixEngine/UIText.h; sourceTree = "<group>"; };
+		C1D3086B1C348098003286CF /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/ModelViewer/Resources/Fonts; sourceTree = "<group>"; };
 		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -398,8 +402,9 @@
 		C1250DFE1C23C04B00C6F7C8 /* User Interface */ = {
 			isa = PBXGroup;
 			children = (
-				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
 				C1250DF41C20F4E000C6F7C8 /* UIWidget.h */,
+				C1250DF71C21434300C6F7C8 /* UIScreen.h */,
+				C1D308691C34507F003286CF /* UIText.h */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -744,6 +749,7 @@
 				C1B00E991BF691E30060BE21 /* SettingsGLES2.xml */,
 				C1B00E9A1BF691E30060BE21 /* SettingsGLES3.xml */,
 				C1B00E9B1BF691E30060BE21 /* SettingsMetal_IOS.xml */,
+				C1D3086B1C348098003286CF /* Fonts */,
 				C1D308631C322E0B003286CF /* Images */,
 				C1B00ECE1BF7E1F00060BE21 /* Meshes */,
 				C1B00ECF1BF7E1F00060BE21 /* Scenes */,
@@ -800,6 +806,7 @@
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
 				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
+				C1D3086A1C34507F003286CF /* UIText.h in Headers */,
 				C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */,
 				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
 				C106DB7B1BFD0294000065D4 /* Camera.h in Headers */,
@@ -956,6 +963,7 @@
 				C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */,
 				C181A52F1C1D0A3D00A228AE /* MainScene.xml in Resources */,
 				C1B00ED11BF7E1F00060BE21 /* Scenes in Resources */,
+				C1D3086C1C348098003286CF /* Fonts in Resources */,
 				C1B00E9F1BF691E30060BE21 /* SettingsGLES2.xml in Resources */,
 				C1B00EA01BF691E30060BE21 /* SettingsGLES3.xml in Resources */,
 				C1D308641C322E0B003286CF /* Images in Resources */,

@@ -129,6 +129,7 @@
 		C1B00EE11BFBA5950060BE21 /* View.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B00EDF1BFBA5950060BE21 /* View.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D308621C322B7F003286CF /* Images in Resources */ = {isa = PBXBuildFile; fileRef = C1D308611C322B7F003286CF /* Images */; };
 		C1D308661C3449E7003286CF /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C1D308651C3449E7003286CF /* Fonts */; };
+		C1D308681C34505C003286CF /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D308671C34505C003286CF /* UIText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D905231C17B1750099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905221C17B1750099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -295,6 +296,7 @@
 		C1B00EDF1BFBA5950060BE21 /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = View.h; path = ../../../../Source/FelixEngine/View.h; sourceTree = "<group>"; };
 		C1D308611C322B7F003286CF /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Images; path = ../../../../Source/ModelViewer/Resources/Images; sourceTree = "<group>"; };
 		C1D308651C3449E7003286CF /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/ModelViewer/Resources/Fonts; sourceTree = "<group>"; };
+		C1D308671C34505C003286CF /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIText.h; path = ../../../../Source/FelixEngine/UIText.h; sourceTree = "<group>"; };
 		C1D905221C17B1750099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -557,8 +559,9 @@
 		C1250DF91C23B57E00C6F7C8 /* User Interface */ = {
 			isa = PBXGroup;
 			children = (
-				C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */,
 				C1250DF11C20F16100C6F7C8 /* UIWidget.h */,
+				C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */,
+				C1D308671C34505C003286CF /* UIText.h */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -723,6 +726,7 @@
 				371049F51BBF3A1C003EEC37 /* FelixEngine.h in Headers */,
 				37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */,
 				C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */,
+				C1D308681C34505C003286CF /* UIText.h in Headers */,
 				C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */,
 				C1250DF01C20F14E00C6F7C8 /* UIScreen.h in Headers */,
 				37B48FE21BC984B500FC97A5 /* RenderSlots.h in Headers */,

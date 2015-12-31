@@ -235,7 +235,9 @@ bool File::load(std::string &text) const
 
 bool File::load(fx::XMLTree &tree) const
 {
-  return tree.loadFile(path());
+  bool success = tree.loadFile(path());
+  tree.setUrl(upperDirectory().url());
+  return success;
 }
 
 bool File::load(ImageRGBA &image) const

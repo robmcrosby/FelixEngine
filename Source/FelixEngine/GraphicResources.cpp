@@ -136,6 +136,7 @@ void Shader::setFunctionToPart(const std::string &func, SHADER_PART part)
   {
     mParts[i] = func;
     mPartTypes[i] = SHADER_FUNCTION;
+    setToLoad();
   }
 }
 

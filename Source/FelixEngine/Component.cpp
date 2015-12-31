@@ -18,8 +18,10 @@
 
 #include "Model.h"
 #include "Camera.h"
-#include "UIScreen.h"
+
 #include "UIWidget.h"
+#include "UIScreen.h"
+#include "UIText.h"
 
 
 using namespace fx;
@@ -35,8 +37,9 @@ DEFINE_COMPONENT_ID(Projection)
 
 DEFINE_COMPONENT_ID(Model)
 DEFINE_COMPONENT_ID(Camera)
-DEFINE_COMPONENT_ID(UIScreen)
 DEFINE_COMPONENT_ID(UIWidget)
+DEFINE_COMPONENT_ID(UIScreen)
+DEFINE_COMPONENT_ID(UIText)
 
 
 Component::Component(Scene *scene): mParrent(0), mScene(scene)

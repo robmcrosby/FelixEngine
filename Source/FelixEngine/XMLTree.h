@@ -752,7 +752,10 @@ namespace fx
       
       size_t pos = filePath.find_last_of('/');
       if (pos != std::string::npos)
+      {
         mPath = filePath.substr(0, pos+1);
+        mUrl = "file://" + mPath;
+      }
       
       fileIn.open(filePath.c_str(), std::ios::in);
       if (fileIn.is_open())
@@ -768,11 +771,14 @@ namespace fx
       std::cerr << "error reading XML file: " << filePath << std::endl;
       return false;
     }
+    void setUrl(const std::string &url) {mUrl = url;}
     
+    std::string url() const {return mUrl;}
     std::string path() const {return mPath;}
     
   private:
     Node mRootNode;
+    std::string mUrl;
     std::string mPath;
   };
 }
