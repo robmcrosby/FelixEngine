@@ -257,7 +257,7 @@ namespace fx
       #if TARGET_OS_IPHONE
       SDL_DisplayMode displayMode;
       SDL_GetDesktopDisplayMode(0, &displayMode);
-      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE);
+      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
       mSize = ivec2(displayMode.w, displayMode.h);
       
       if (mMTLFrame)

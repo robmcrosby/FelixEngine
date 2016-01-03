@@ -22,7 +22,7 @@ namespace fx
   class Scene: public Component
   {
   public:
-    Scene(): Component(this)
+    Scene(): Component(this), mDirectory(FileSystem::GetResources())
     {
       mScene = this;
       setEventFlags(EVENT_APP_UPDATE);
@@ -43,6 +43,9 @@ namespace fx
       Component::setToXml(node);
       for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
       {
+        if (node.tree() && node.tree()->url() != "")
+          mDirectory = node.tree()->url();
+        
         if (**itr == "Resources")
           addResources(**itr);
         else
@@ -69,6 +72,8 @@ namespace fx
         delete itr->second;
       mMaterialMap.clear();
     }
+    
+    File directory() const {return mDirectory;}
     
   private:
     bool addResources(const XMLTree::Node &node)
@@ -100,6 +105,8 @@ namespace fx
       }
       return success;
     }
+    
+    File mDirectory;
     
     std::list<Resource*> mResources;
     std::map<std::string, Material*> mMaterialMap;

@@ -10,9 +10,13 @@
 #define UIText_h
 
 #include "UIWidget.h"
+#include "Scene.h"
 #include "FileSystem.h"
 #include "RenderSlots.h"
 #include "MeshLoader.h"
+
+
+#define GLYPH_TABLE_SIZE 128
 
 namespace fx
 {
@@ -22,16 +26,15 @@ namespace fx
   class UIText: public UIWidget
   {
   public:
-    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0) {}
+    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0) {initGlyphTable();}
     virtual ~UIText() {}
     
     virtual void setToXml(const XMLTree::Node &node)
     {
       UIWidget::setToXml(node);
-      addChildren(node);
       
       if (node.hasAttribute("font"))
-        setFontFile(mDirectory+node.attribute("font"));
+        setFontFile(mScene->directory()+node.attribute("font"));
       
       mRenderSlots = getChild<RenderSlots>();
     }
@@ -52,6 +55,24 @@ namespace fx
     
     
   private:
+    struct Glyph
+    {
+      Glyph(): advance(0) {}
+      
+      vec2 size;
+      vec2 loc;
+      float advance;
+      
+      vec2 uvLoc;
+      vec2 uvSize;
+    };
+    
+    void initGlyphTable()
+    {
+      for (int i = 0; i < GLYPH_TABLE_SIZE; ++i)
+        mGlyphTable[i] = Glyph();
+    }
+    
     bool loadBitmapFont()
     {
       bool success = false;
@@ -67,14 +88,31 @@ namespace fx
           size_t pos = line.find(',');
           if (pos != std::string::npos)
           {
-            File atlasFile = mDirectory + line.substr(0, pos);
-            //ivec2 atlasSize = line.substr(pos+1);
+            File atlasFile = mScene->directory() + line.substr(0, pos);
+            vec2 atlasSize = line.substr(pos+1);
+            
+            // Load the Texture Atlas of the Font
             Texture *atlas = FelixEngine::GetGraphicSystem()->getTexture(atlasFile.name());
             atlas->setImageFile(atlasFile.path());
             atlas->setToLoad();
             setAtlas(atlas);
             
-            // TODO: get and process the glyths
+            // Get the Glyph Information
+            initGlyphTable();
+            while (getline(fileIn, line))
+            {
+              //32,18,125,309,0,0,0,0
+              int code;
+              Glyph glyph;
+              sscanf(line.c_str(), "%i , %f , %f , %f , %f , %f , %f , %f" ,
+                     &code, &glyph.advance, &glyph.uvLoc.x, &glyph.uvLoc.y,
+                     &glyph.loc.x, &glyph.loc.y, &glyph.size.x, &glyph.size.y);
+              glyph.uvLoc /= atlasSize;
+              glyph.uvSize = glyph.size / atlasSize;
+              
+              if (code > 0 && code < GLYPH_TABLE_SIZE)
+                mGlyphTable[code] = glyph;
+            }
             
             fileIn.close();
             success = setupRenderSlots();
@@ -106,17 +144,17 @@ namespace fx
         }
         
         mRenderSlots->addSlot();
-        RenderSlot *slot = mRenderSlots->back();
-        slot->setMaterial(new Material());
-        slot->material()->setShader(fontShader);
-        slot->material()->textureMap().push();
-        slot->material()->textureMap().back().setTexture(mAtlas);
-        slot->setMesh(planeMesh);
-        slot->setPass("UIPass");
-        slot->setLayer(1);
-        slot->blendState().setEquation(BLEND_EQ_ADD);
-        slot->blendState().setSrc(BLEND_INPUT_SRC_ALPHA);
-        slot->blendState().setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+        mRenderSlot = mRenderSlots->back();
+        mRenderSlot->setMaterial(new Material());
+        mRenderSlot->material()->setShader(fontShader);
+        mRenderSlot->material()->textureMap().push();
+        mRenderSlot->material()->textureMap().back().setTexture(mAtlas);
+        mRenderSlot->setMesh(planeMesh);
+        mRenderSlot->setPass("UIPass");
+        mRenderSlot->setLayer(1);
+        mRenderSlot->blendState().setEquation(BLEND_EQ_ADD);
+        mRenderSlot->blendState().setSrc(BLEND_INPUT_SRC_ALPHA);
+        mRenderSlot->blendState().setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
         
         success = true;
       }
@@ -125,8 +163,11 @@ namespace fx
     
     File mFontFile;
     
+    Glyph mGlyphTable[GLYPH_TABLE_SIZE];
+    
     Texture *mAtlas;
     RenderSlots *mRenderSlots;
+    RenderSlot *mRenderSlot;
   };
 }
 
