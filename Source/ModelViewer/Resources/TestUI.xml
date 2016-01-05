@@ -5,8 +5,8 @@
     <RenderSlots>
       <Slot layer="1" pass="UIPass" frame="DrawFrame" stereo="mono"/>
     </RenderSlots>
-    <UIText name="TestText" size="200, 200" offset="-100, 0" font="Fonts/arial.font" pass="UIPass"/>
-    <UIWidget name="TestWidget" size="200, 200" offset="100, 0">
+    <UIText name="TestText" text="Test" size="200, 200" offset="-100, 0" font="Fonts/arial.font" pass="UIPass"/>
+    <UIWidget name="TestWidget" size="200, 200" offset="100, -200">
       <RenderSlots>
         <Slot layer="0" pass="UIPass">
           <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>

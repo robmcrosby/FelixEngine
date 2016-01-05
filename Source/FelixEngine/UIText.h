@@ -17,6 +17,8 @@
 
 
 #define GLYPH_TABLE_SIZE 128
+#define TEXT_VERT_SHADER "TextUV"
+#define TEXT_FRAG_SHADER "SimpleTexture"
 
 namespace fx
 {
@@ -26,7 +28,10 @@ namespace fx
   class UIText: public UIWidget
   {
   public:
-    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0) {initGlyphTable();}
+    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0), mRenderSlot(0), mUpdateText(0)
+    {
+      initGlyphTable();
+    }
     virtual ~UIText() {}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -35,6 +40,8 @@ namespace fx
       
       if (node.hasAttribute("font"))
         setFontFile(mScene->directory()+node.attribute("font"));
+      if (node.hasAttribute("text"))
+        setText(node.attribute("text"));
       
       mRenderSlots = getChild<RenderSlots>();
     }
@@ -53,6 +60,19 @@ namespace fx
     void setFontFile(const File &file) {mFontFile = file;}
     void setAtlas(Texture *atlas) {mAtlas = atlas;}
     
+    void setText(const std::string &text)
+    {
+      mText = text;
+      mUpdateText = true;
+    }
+    std::string text() const {return mText;}
+    
+    virtual void update()
+    {
+      UIWidget::update();
+      if (mUpdateText)
+        updateText();
+    }
     
   private:
     struct Glyph
@@ -66,6 +86,59 @@ namespace fx
       vec2 uvLoc;
       vec2 uvSize;
     };
+    
+    void updateText()
+    {
+      if (mRenderSlot)
+      {
+        mUpdateText = false;
+        float advance = 0.0f;
+        std::vector<vec4> locs;
+        std::vector<vec4> uvs;
+        
+        for (std::string::const_iterator c = mText.begin(); c != mText.end(); ++c)
+        {
+          unsigned int i = (unsigned int)*c;
+          if (i < GLYPH_TABLE_SIZE)
+          {
+            Glyph &glyph = mGlyphTable[i];
+            if (glyph.size.w != 0.0f && glyph.size.h != 0.0f)
+            {
+              vec4 loc;
+              loc.x = advance - glyph.loc.x;
+              loc.y = 0; //glyph.loc.y;
+              loc.z = glyph.size.w;
+              loc.w = glyph.size.h;
+              locs.push_back(loc);
+              
+              vec4 uv;
+              uv.x = glyph.uvLoc.x;
+              uv.y = 1.0f - glyph.uvLoc.y;
+              uv.z = uv.x + glyph.uvSize.w;
+              uv.w = uv.y - glyph.uvSize.h;
+              uvs.push_back(uv);
+            }
+            std::cout << i << ":" << glyph.loc << std::endl;
+            advance += glyph.advance;
+          }
+        }
+        
+        if (locs.size() > 0)
+        {
+          vec2 s = size();
+          for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
+            *itr /= vec4(s, s);
+            
+          mRenderSlot->uniforms()["Locs"].setValues(&locs[0], (int)locs.size());
+          mRenderSlot->uniforms()["UVs"].setValues(&uvs[0], (int)uvs.size());
+        }
+        mRenderSlot->setInstances((int)locs.size());
+        
+        //std::cout << "Updated Text Locations:" << std::endl;
+        //for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
+        //  std::cout << *itr << std::endl;
+      }
+    }
     
     void initGlyphTable()
     {
@@ -101,12 +174,12 @@ namespace fx
             initGlyphTable();
             while (getline(fileIn, line))
             {
-              //32,18,125,309,0,0,0,0
               int code;
               Glyph glyph;
               sscanf(line.c_str(), "%i , %f , %f , %f , %f , %f , %f , %f" ,
                      &code, &glyph.advance, &glyph.uvLoc.x, &glyph.uvLoc.y,
                      &glyph.loc.x, &glyph.loc.y, &glyph.size.x, &glyph.size.y);
+              
               glyph.uvLoc /= atlasSize;
               glyph.uvSize = glyph.size / atlasSize;
               
@@ -133,8 +206,8 @@ namespace fx
         if (!fontShader)
         {
           fontShader = FelixEngine::GetGraphicSystem()->getShader("FontShader");
-          fontShader->setFunctionToPart("VertexUV", SHADER_VERTEX);
-          fontShader->setFunctionToPart("SimpleTexture", SHADER_FRAGMENT);
+          fontShader->setFunctionToPart(TEXT_VERT_SHADER, SHADER_VERTEX);
+          fontShader->setFunctionToPart(TEXT_FRAG_SHADER, SHADER_FRAGMENT);
         }
         if (!planeMesh)
         {
@@ -155,6 +228,7 @@ namespace fx
         mRenderSlot->blendState().setEquation(BLEND_EQ_ADD);
         mRenderSlot->blendState().setSrc(BLEND_INPUT_SRC_ALPHA);
         mRenderSlot->blendState().setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+        mRenderSlot->setInstances(0);
         
         success = true;
       }
@@ -168,6 +242,9 @@ namespace fx
     Texture *mAtlas;
     RenderSlots *mRenderSlots;
     RenderSlot *mRenderSlot;
+    
+    std::string mText;
+    bool mUpdateText;
   };
 }
 

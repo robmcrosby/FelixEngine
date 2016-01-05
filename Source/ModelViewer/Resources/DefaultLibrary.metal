@@ -10,6 +10,9 @@
 
 using namespace metal;
 
+float4 adjustPos(float4 pos, float4 loc);
+float2 adjustUV(float2 uv, float4 adj);
+
 struct VertexOutput
 {
   float4 m_Position [[position]];
@@ -75,6 +78,43 @@ vertex VertexUVOutput VertexUV(device   float4   *Position   [[ buffer(0) ]],
   outVertices.m_Coordinate.y = 1.0 - outVertices.m_Coordinate.y;
   return outVertices;
 }
+
+
+
+float4 adjustPos(float4 pos, float4 loc)
+{
+  pos.x = (pos.x * loc.z) + loc.x;
+  pos.y = (pos.y * loc.w) + loc.y;
+  return pos;
+}
+
+float2 adjustUV(float2 uv, float4 adj)
+{
+  uv.x = (1.0-uv.x) * adj.x + uv.x * adj.z;
+  uv.y = uv.y * adj.y + (1.0-uv.y) * adj.w;
+  return uv;
+}
+
+vertex VertexUVOutput TextUV(device   float4   *Position   [[ buffer(0) ]],
+                             device   float2   *UV_0       [[ buffer(1) ]],
+                             constant float4x4 *Model      [[ buffer(2) ]],
+                             constant float4x4 *View       [[ buffer(3) ]],
+                             constant float4x4 *Projection [[ buffer(4) ]],
+                             constant float4   *Locs       [[ buffer(5) ]],
+                             constant float4   *UVs        [[ buffer(6) ]],
+                                      uint      iid        [[ instance_id]],
+                                      uint      vid        [[ vertex_id ]])
+{
+  VertexUVOutput outVertices;
+  
+  outVertices.m_Position   = *Projection * *View * *Model * adjustPos(Position[vid], Locs[iid]);
+  outVertices.m_Position.z = (outVertices.m_Position.z/2.0)+0.5;
+  outVertices.m_Coordinate = adjustUV(UV_0[vid], UVs[iid]);
+  outVertices.m_Coordinate.y = 1.0 - outVertices.m_Coordinate.y;
+  return outVertices;
+}
+
+
 
 fragment half4 SimpleTexture(FragmentUVInput   inFrag    [[ stage_in ]],
                              texture2d<float>  tex2D     [[ texture(0) ]],

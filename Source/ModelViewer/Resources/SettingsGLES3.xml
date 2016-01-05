@@ -51,6 +51,31 @@
             UV = UV_0;
           }
         </ShaderFunction>
+        <ShaderFunction name="TextUV" type="vertex">
+          #version 300 es
+          in vec4 Position;
+          in vec2 UV_0;
+          uniform mat4 Model;
+          uniform mat4 View;
+          uniform mat4 Projection;
+          uniform vec4 Locs[100];
+          uniform vec4 UVs[100];
+          out vec2 UV;
+          vec4 adjustPos(vec4 pos, vec4 loc) {
+            pos.x = (pos.x * loc.z) + loc.x;
+            pos.y = (pos.y * loc.w) + loc.y;
+            return pos;
+          }
+          vec2 adjustUV(vec2 uv, vec4 adj) {
+            uv.x = (1.0-uv.x) * adj.x + uv.x * adj.z;
+            uv.y = uv.y * adj.y + (1.0-uv.y) * adj.w;
+            return uv;
+          }
+          void main() {
+            gl_Position = Projection * View * Model * adjustPos(Position, Locs[gl_InstanceID]);
+            UV = adjustUV(UV_0, UVs[gl_InstanceID]);
+          }
+        </ShaderFunction>
         <ShaderFunction name="SimpleTexture" type="fragment">
           #version 300 es
           in mediump vec2 UV;
