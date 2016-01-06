@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <map>
+#include <stdint.h>
 
 #include "Vector.h"
 #include "Matrix.h"
@@ -152,6 +153,7 @@ namespace fx
       resize(type, size);
       memcpy(&mData.at(0), ptr, sizeInBytes());
     }
+    void clearData() {mData.clear();}
     
     void setValues(const float *ptr, size_t size = 1) {setValues(VAR_FLOAT,   (const void*)ptr, size);}
     void setValues(const vec2  *ptr, size_t size = 1) {setValues(VAR_FLOAT_2, (const void*)&ptr->x, size);}
@@ -205,8 +207,8 @@ namespace fx
     void* ptr() {return mData.size() ? &mData.at(0) : nullptr;}
     const void* ptr() const {return mData.size() ? &mData.at(0) : nullptr;}
     
-    char& operator[](int index) {return mData.at(index * mTypeSize);}
-    const char& operator[](int index) const {return mData.at(index * mTypeSize);}
+    uint8_t& operator[](int index) {return mData.at(index * mTypeSize);}
+    const uint8_t& operator[](int index) const {return mData.at(index * mTypeSize);}
     
     float& floatAt(int index) {return (float&)mData.at(index*GetTypeSize(VAR_FLOAT));}
     vec2&  vec2At(int index)  {return (vec2&)mData.at(index*GetTypeSize(VAR_FLOAT_2));}
@@ -330,7 +332,7 @@ namespace fx
   private:
     VAR_TYPE mType;
     size_t mTypeSize;
-    std::vector<char> mData;
+    std::vector<uint8_t> mData;
   };
   
   typedef std::map<std::string, Variant> VariantMap;
