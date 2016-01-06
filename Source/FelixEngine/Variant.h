@@ -133,6 +133,8 @@ namespace fx
     Variant(const mat3 &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const mat4 &value): mType(VAR_UNKNOWN) {setValues(&value);}
     
+    virtual ~Variant() {}
+    
     void resize(size_t size)
     {
       size *= mTypeSize;
@@ -183,6 +185,14 @@ namespace fx
     
     Variant& operator=(const XMLTree::Node *node) {setToXml(node); return *this;}
     Variant& operator=(const XMLTree::Node &node) {setToXml(node); return *this;}
+    
+    bool operator==(const Variant &other) const
+    {
+      if (mType != other.mType || mData.size() != other.mData.size())
+        return false;
+      return mData.size() == 0 || !memcmp(&mData[0], &other.mData[0], mData.size());
+    }
+    bool operator!=(const Variant &other) const {return !(*this == other);}
     
     VAR_TYPE type() const {return mType;}
     bool isIntType() const {return mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4;}

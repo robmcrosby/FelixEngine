@@ -106,7 +106,7 @@ namespace fx
             {
               vec4 loc;
               loc.x = advance - glyph.loc.x;
-              loc.y = 0; //glyph.loc.y;
+              loc.y = glyph.loc.y;
               loc.z = glyph.size.w;
               loc.w = glyph.size.h;
               locs.push_back(loc);
@@ -128,9 +128,14 @@ namespace fx
           vec2 s = size();
           for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
             *itr /= vec4(s, s);
-            
+          
+          mRenderSlot->lock();
           mRenderSlot->uniforms()["Locs"].setValues(&locs[0], (int)locs.size());
+          mRenderSlot->uniforms()["Locs"].setInstanceDivisor(1);
+          
           mRenderSlot->uniforms()["UVs"].setValues(&uvs[0], (int)uvs.size());
+          mRenderSlot->uniforms()["UVs"].setInstanceDivisor(1);
+          mRenderSlot->unlock();
         }
         mRenderSlot->setInstances((int)locs.size());
         

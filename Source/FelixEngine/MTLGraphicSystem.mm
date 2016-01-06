@@ -415,7 +415,7 @@ namespace fx
   
   struct MTLUniformMapInterface: InternalUniformMap
   {
-    MTLUniformMapInterface(const UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
+    MTLUniformMapInterface(UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
     virtual ~MTLUniformMapInterface() {mMTLUniformMap = nil;}
     
     virtual void release() {mUniformMap = nullptr;}
@@ -458,7 +458,7 @@ namespace fx
     }
     bool inUse() const {return mUniformMap;}
     
-    const UniformMap *mUniformMap;
+    UniformMap *mUniformMap;
     MTLUniformMap *mMTLUniformMap;
   };
 }
@@ -568,7 +568,7 @@ void MTLGraphicSystem::render()
   updateUniforms();
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   MTLUniformMapInterface *internalUniformMap = new MTLUniformMapInterface(map);
   internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
@@ -918,7 +918,7 @@ void MTLGraphicSystem::render()
 {
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   return nullptr;
 }

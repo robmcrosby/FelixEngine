@@ -52,14 +52,13 @@
         </ShaderFunction>
         <ShaderFunction name="TextUV" type="vertex">
           #version 100
-          #extension GL_EXT_draw_instanced : enable
           attribute vec4 Position;
           attribute vec2 UV_0;
+          attribute vec4 Locs;
+          attribute vec4 UVs;
           uniform mat4 Model;
           uniform mat4 View;
           uniform mat4 Projection;
-          uniform vec4 Locs[100];
-          uniform vec4 UVs[100];
           varying vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -72,8 +71,8 @@
             return uv;
           }
           void main() {
-            gl_Position = Projection * View * Model * adjustPos(Position, Locs[gl_InstanceIDEXT]);
-            UV = adjustUV(UV_0, UVs[gl_InstanceIDEXT]);
+            gl_Position = Projection * View * Model * adjustPos(Position, Locs);
+            UV = adjustUV(UV_0, UVs);
           }
         </ShaderFunction>
         <ShaderFunction name="SimpleTexture" type="fragment">

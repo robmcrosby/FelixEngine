@@ -152,7 +152,7 @@ void GLGraphicSystem::render()
 }
 
 
-InternalUniformMap* GLGraphicSystem::getInternalUniformMap(const UniformMap *map)
+InternalUniformMap* GLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   GLUniformMap *internalMap = new GLUniformMap(map);
   mGLUniforms.push_back(internalMap);
@@ -215,6 +215,8 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
       
       if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
       {
+        setTriangleCullMode(task->cullMode);
+        
         // Set the state for the Frame
         frame->use(stereo);
         if (task->isClearTask())
@@ -224,6 +226,8 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
         
         // Set the state for the Shader
         shader->use();
+        mesh->bind(shader);
+        
         if (view && view->localUniforms)
           static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
         if (task->materialUniforms)
@@ -232,10 +236,8 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
           static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
         shader->applyTextureMap(task->textureMap);
         
-        setTriangleCullMode(task->cullMode);
-        
         // Draw the Mesh
-        mesh->draw(shader, task->instances, task->subMesh);
+        mesh->draw(task->instances, task->subMesh);
       }
     }
   }

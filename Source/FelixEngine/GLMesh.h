@@ -51,11 +51,10 @@ namespace fx
       }
     }
     
-    void draw(const GLShader *shader, int instances, int index) const
+    void bind(const GLShader *shader) const
     {
-      if (shader && index < (int)mSubMeshes.size())
+      if (shader)
       {
-        const GLRange &subMesh = mSubMeshes.at(index);
         glBindVertexArray(mVertexArray);
         for (GLBufferMap::const_iterator itr = mVertexBuffers.begin(); itr != mVertexBuffers.end(); ++itr)
         {
@@ -67,6 +66,14 @@ namespace fx
             glVertexAttribPointer(index, itr->second.components, GL_FLOAT, GL_FALSE, 0, 0);
           }
         }
+      }
+    }
+    
+    void draw(int instances, int index) const
+    {
+      if (index < (int)mSubMeshes.size())
+      {
+        const GLRange &subMesh = mSubMeshes.at(index);
         if (mIndexBuffer)
         {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);

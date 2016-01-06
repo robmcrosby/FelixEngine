@@ -55,11 +55,11 @@
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
+          in vec4 Locs;
+          in vec4 UVs;
           uniform mat4 Model;
           uniform mat4 View;
           uniform mat4 Projection;
-          uniform vec4 Locs[100];
-          uniform vec4 UVs[100];
           out vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -72,8 +72,8 @@
             return uv;
           }
           void main() {
-            gl_Position = Projection * View * Model * adjustPos(Position, Locs[gl_InstanceID]);
-            UV = adjustUV(UV_0, UVs[gl_InstanceID]);
+            gl_Position = Projection * View * Model * adjustPos(Position, Locs);
+            UV = adjustUV(UV_0, UVs);
           }
         </ShaderFunction>
         <ShaderFunction name="SimpleTexture" type="fragment">

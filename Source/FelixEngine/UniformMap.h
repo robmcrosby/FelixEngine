@@ -23,12 +23,46 @@ namespace fx
     virtual void release() = 0;
   };
   
-  typedef Variant Uniform;
-  class UniformMap
+  class Uniform: public Variant
   {
   public:
-    typedef VariantMap::const_iterator iterator;
+    Uniform(const Variant &var): Variant(var), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): Variant(type, size), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const std::string &type, const std::string &str): Variant(type, str), mInstancedDivisor(0), mBufferId(0) {}
     
+    Uniform(const XMLTree::Node *node): Variant(node), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const XMLTree::Node &node): Variant(node), mInstancedDivisor(0), mBufferId(0) {}
+    
+    Uniform(const float &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const vec2  &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const vec3  &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const vec4  &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const RGBAf &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    
+    Uniform(const int   &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const ivec2 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const ivec3 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const ivec4 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    
+    Uniform(const mat2 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const mat3 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    Uniform(const mat4 &value): Variant(value), mInstancedDivisor(0), mBufferId(0) {}
+    virtual ~Uniform() {}
+    
+    int instanceDivisor() const {return mInstancedDivisor;}
+    void setInstanceDivisor(int divisor) {mInstancedDivisor = divisor;}
+    
+    int bufferId() const {return mBufferId;}
+    void setBufferId(int buffId) {mBufferId = buffId;}
+    
+  private:
+    int mInstancedDivisor;
+    int mBufferId;
+  };
+  
+  
+  class UniformMap
+  {
   public:
     UniformMap(): mInternalMap(0), mLock(0) {setInternalMap();}
     UniformMap(const UniformMap &that): mInternalMap(0), mLock(0)
@@ -51,24 +85,28 @@ namespace fx
       unlock();
     }
     
-    Variant& operator[](const std::string &key) {return mMap[key];}
+    Uniform& operator[](const std::string &key) {return mMap[key];}
     void erase(const std::string &key) {mMap.erase(key);}
     void clear() {mMap.clear();}
     
-    iterator begin() const {return mMap.begin();}
-    iterator end()   const {return mMap.end();}
+    typedef std::map<std::string, Uniform>::iterator iterator;
+    iterator begin() {return mMap.begin();}
+    iterator end()   {return mMap.end();}
+    
+    typedef std::map<std::string, Uniform>::const_iterator const_iterator;
+    const_iterator begin() const {return mMap.begin();}
+    const_iterator end()   const {return mMap.end();}
     
     size_t size() const {return mMap.size();}
     size_t sizeInBytes() const
     {
       size_t totalSize = 0;
-      for (iterator itr = begin(); itr != end(); ++itr)
+      for (const_iterator itr = begin(); itr != end(); ++itr)
         totalSize += itr->second.sizeInBytes();
       return totalSize;
     }
     
     InternalUniformMap* getInternalMap() const {return mInternalMap;}
-    const VariantMap& getVariantMap() const {return mMap;}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
@@ -100,10 +138,13 @@ namespace fx
     }
     
   private:
-    VariantMap mMap;
+    std::map<std::string, Uniform> mMap;
     mutable SDL_SpinLock mLock;
     InternalUniformMap *mInternalMap;
   };
+  
+  typedef std::pair<std::string, Uniform> UniformPair;
+  typedef std::list<UniformPair> UniformList;
 }
 
 #endif /* UniformMap_h */
