@@ -17,6 +17,8 @@
 #include "Matrix.h"
 #include "Color.h"
 
+#define RGBA_STR "rgba"
+
 #define FLOAT_STR "float"
 #define VEC2_STR "vec2"
 #define VEC3_STR "vec3"
@@ -32,10 +34,12 @@ namespace fx
 {
   enum VAR_TYPE
   {
-    VAR_FLOAT = 0,
+    VAR_FLOAT,
     VAR_FLOAT_2,
     VAR_FLOAT_3,
     VAR_FLOAT_4,
+    
+    VAR_CHAR_4,
     
     VAR_INT,
     VAR_INT_2,
@@ -49,18 +53,6 @@ namespace fx
     VAR_UNKNOWN,
   };
   
-  enum VAR_SIZE
-  {
-    VAR_SIZE_1   = 4,
-    VAR_SIZE_2   = 8,
-    VAR_SIZE_3   = 12,
-    VAR_SIZE_4   = 16,
-    VAR_SIZE_2X2 = 16,
-    VAR_SIZE_3X3 = 36,
-    VAR_SIZE_4X4 = 64,
-    VAR_SIZE_UNKNOWN = 0
-  };
-  
   class Variant
   {
   public:
@@ -69,31 +61,33 @@ namespace fx
       switch (type)
       {
         case VAR_FLOAT:
+        case VAR_CHAR_4:
         case VAR_INT:
-          return VAR_SIZE_1;
+          return sizeof(uint32_t);
         case VAR_FLOAT_2:
         case VAR_INT_2:
-          return VAR_SIZE_2;
+          return 2*sizeof(uint32_t);
         case VAR_FLOAT_3:
         case VAR_INT_3:
-          return VAR_SIZE_3;
+          return 3*sizeof(uint32_t);
         case VAR_FLOAT_4:
         case VAR_INT_4:
-          return VAR_SIZE_4;
         case VAR_MTX_2X2:
-          return VAR_SIZE_2X2;
+          return 4*sizeof(uint32_t);
         case VAR_MTX_3X3:
-          return VAR_SIZE_3X3;
+          return 9*sizeof(uint32_t);
         case VAR_MTX_4X4:
-          return VAR_SIZE_4X4;
+          return 16*sizeof(uint32_t);
         case VAR_UNKNOWN:
-          return VAR_SIZE_UNKNOWN;
+          return 0;
       }
-      return VAR_SIZE_UNKNOWN;
+      return 0;
     }
     
     static VAR_TYPE GetVariantType(const std::string &str)
     {
+      if (str == RGBA_STR)
+        return VAR_CHAR_4;
       if (str == FLOAT_STR)
         return VAR_FLOAT;
       if (str == VEC2_STR)
@@ -114,7 +108,7 @@ namespace fx
     }
     
   public:
-    Variant(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): mType(VAR_UNKNOWN) {resize(type, size);}
+    Variant(VAR_TYPE type = VAR_UNKNOWN, size_t width = 1, size_t height = 1): mType(VAR_UNKNOWN) {resize(type, width, height);}
     Variant(const std::string &type, const std::string &str): mType(VAR_UNKNOWN) {parse(type, str);}
     Variant(const XMLTree::Node *node): mType(VAR_UNKNOWN) {setToXml(node);}
     Variant(const XMLTree::Node &node): mType(VAR_UNKNOWN) {setToXml(node);}
@@ -123,6 +117,8 @@ namespace fx
     Variant(const vec2  &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const vec3  &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const vec4  &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    
+    Variant(const RGBA &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const RGBAf &value): mType(VAR_UNKNOWN) {setValues(&value);}
     
     Variant(const int   &value): mType(VAR_UNKNOWN) {setValues(&value);}
@@ -136,39 +132,42 @@ namespace fx
     
     virtual ~Variant() {}
     
-    void resize(size_t size)
+    void resize(size_t width, size_t height = 1)
     {
-      size *= mTypeSize;
+      mWidth = width;
+      size_t size = width * height * mTypeSize;
       if (mData.size() < size)
         mData.resize(size);
     }
-    void resize(VAR_TYPE type, size_t size)
+    void resize(VAR_TYPE type, size_t width, size_t height = 1)
     {
       mType = type;
       mTypeSize = GetTypeSize(mType);
-      resize(size);
+      resize(width, height);
     }
-    void setValues(VAR_TYPE type, const void *ptr, size_t size = 1)
+    void setValues(VAR_TYPE type, const void *ptr, size_t width = 1, size_t height = 1)
     {
-      resize(type, size);
+      resize(type, width, height);
       memcpy(&mData.at(0), ptr, sizeInBytes());
     }
     void clearData() {mData.clear();}
     
-    void setValues(const float *ptr, size_t size = 1) {setValues(VAR_FLOAT,   (const void*)ptr, size);}
-    void setValues(const vec2  *ptr, size_t size = 1) {setValues(VAR_FLOAT_2, (const void*)&ptr->x, size);}
-    void setValues(const vec3  *ptr, size_t size = 1) {setValues(VAR_FLOAT_3, (const void*)&ptr->x, size);}
-    void setValues(const vec4  *ptr, size_t size = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->x, size);}
-    void setValues(const RGBAf *ptr, size_t size = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->red, size);}
+    void setValues(const float *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT,   (const void*)ptr, width, height);}
+    void setValues(const vec2  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_2, (const void*)&ptr->x, width, height);}
+    void setValues(const vec3  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_3, (const void*)&ptr->x, width, height);}
+    void setValues(const vec4  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->x, width, height);}
     
-    void setValues(const int   *ptr, size_t size = 1) {setValues(VAR_INT,   (const void*)ptr, size);}
-    void setValues(const ivec2 *ptr, size_t size = 1) {setValues(VAR_INT_2, (const void*)&ptr->x, size);}
-    void setValues(const ivec3 *ptr, size_t size = 1) {setValues(VAR_INT_3, (const void*)&ptr->x, size);}
-    void setValues(const ivec4 *ptr, size_t size = 1) {setValues(VAR_INT_4, (const void*)&ptr->x, size);}
+    void setValues(const RGBA *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_CHAR_4, (const void*)&ptr->red, width, height);}
+    void setValues(const RGBAf *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->red, width, height);}
     
-    void setValues(const mat2 *ptr, size_t size = 1) {setValues(VAR_MTX_2X2, (const void*)&ptr->x.x, size);}
-    void setValues(const mat3 *ptr, size_t size = 1) {setValues(VAR_MTX_3X3, (const void*)&ptr->x.x, size);}
-    void setValues(const mat4 *ptr, size_t size = 1) {setValues(VAR_MTX_4X4, (const void*)&ptr->x.x, size);}
+    void setValues(const int   *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT,   (const void*)ptr, width, height);}
+    void setValues(const ivec2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_2, (const void*)&ptr->x, width, height);}
+    void setValues(const ivec3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_3, (const void*)&ptr->x, width, height);}
+    void setValues(const ivec4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_4, (const void*)&ptr->x, width, height);}
+    
+    void setValues(const mat2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_2X2, (const void*)&ptr->x.x, width, height);}
+    void setValues(const mat3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_3X3, (const void*)&ptr->x.x, width, height);}
+    void setValues(const mat4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_4X4, (const void*)&ptr->x.x, width, height);}
     
     Variant& operator=(const float &value) {setValues(&value); return *this;}
     Variant& operator=(const vec2  &value) {setValues(&value); return *this;}
@@ -197,11 +196,13 @@ namespace fx
     bool operator!=(const Variant &other) const {return !(*this == other);}
     
     VAR_TYPE type() const {return mType;}
-    bool isIntType() const {return mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4;}
+    bool isIntType() const {return mType == VAR_CHAR_4 || mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4;}
     bool isFloatType() const {return !isIntType();}
     
     size_t typeSize() const {return mTypeSize;}
     size_t size() const {return mData.size()/mTypeSize;}
+    size_t width() const {return mWidth;}
+    size_t height() const {return size()/mWidth;}
     size_t sizeInBytes() const {return mData.size();}
     
     void* ptr() {return mData.size() ? &mData.at(0) : nullptr;}
@@ -210,43 +211,46 @@ namespace fx
     uint8_t& operator[](int index) {return mData.at(index * mTypeSize);}
     const uint8_t& operator[](int index) const {return mData.at(index * mTypeSize);}
     
-    float& floatAt(int index) {return (float&)mData.at(index*GetTypeSize(VAR_FLOAT));}
-    vec2&  vec2At(int index)  {return (vec2&)mData.at(index*GetTypeSize(VAR_FLOAT_2));}
-    vec3&  vec3At(int index)  {return (vec3&)mData.at(index*GetTypeSize(VAR_FLOAT_3));}
-    vec4&  vec4At(int index)  {return (vec4&)mData.at(index*GetTypeSize(VAR_FLOAT_4));}
-    RGBAf& RGBAfAt(int index) {return (RGBAf&)mData.at(index*GetTypeSize(VAR_FLOAT_4));}
+    float& floatAt(int x = 0, int y = 0) {return (float&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT));}
+    vec2&  vec2At(int x = 0, int y = 0)  {return (vec2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_2));}
+    vec3&  vec3At(int x = 0, int y = 0)  {return (vec3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_3));}
+    vec4&  vec4At(int x = 0, int y = 0)  {return (vec4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_4));}
     
-    int&   intAt(int index)   {return (int&)mData.at(index*GetTypeSize(VAR_INT));}
-    ivec2& ivec2At(int index) {return (ivec2&)mData.at(index*GetTypeSize(VAR_INT_2));}
-    ivec3& ivec3At(int index) {return (ivec3&)mData.at(index*GetTypeSize(VAR_INT_3));}
-    ivec4& ivec4At(int index) {return (ivec4&)mData.at(index*GetTypeSize(VAR_INT_4));}
+    RGBA& RGBAAt(int x = 0, int y = 0) {return (RGBA&)mData.at((x+y*mWidth)*GetTypeSize(VAR_CHAR_4));}
+    RGBAf& RGBAfAt(int x = 0, int y = 0) {return (RGBAf&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_4));}
     
-    mat2& mat2At(int index) {return (mat2&)mData.at(index*GetTypeSize(VAR_MTX_2X2));}
-    mat3& mat3At(int index) {return (mat3&)mData.at(index*GetTypeSize(VAR_MTX_3X3));}
-    mat4& mat4At(int index) {return (mat4&)mData.at(index*GetTypeSize(VAR_MTX_4X4));}
+    int&   intAt(int x = 0, int y = 0)   {return (int&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT));}
+    ivec2& ivec2At(int x = 0, int y = 0) {return (ivec2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_2));}
+    ivec3& ivec3At(int x = 0, int y = 0) {return (ivec3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_3));}
+    ivec4& ivec4At(int x = 0, int y = 0) {return (ivec4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_4));}
     
-    float floatValue(int index = 0) const {return isIntType() ? (float)intValue(index) : *((const float*)&mData.at(index*GetTypeSize(VAR_FLOAT)));}
-    vec2 vec2Value(int index = 0) const {return isIntType() ? vec2(ivec2Value(index)) : *((const vec2*)&mData.at(index*GetTypeSize(VAR_FLOAT_2)));}
-    vec3 vec3Value(int index = 0) const {return isIntType() ? vec3(ivec3Value(index)) : *((const vec3*)&mData.at(index*GetTypeSize(VAR_FLOAT_3)));}
-    vec4 vec4Value(int index = 0) const {return isIntType() ? vec4(ivec4Value(index)) : *((const vec4*)&mData.at(index*GetTypeSize(VAR_FLOAT_4)));}
-    RGBAf RGBAfValue(int index = 0) const
+    mat2& mat2At(int x = 0, int y = 0) {return (mat2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_2X2));}
+    mat3& mat3At(int x = 0, int y = 0) {return (mat3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_3X3));}
+    mat4& mat4At(int x = 0, int y = 0) {return (mat4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_4X4));}
+    
+    float floatValue(int x = 0, int y = 0) const {return isIntType() ? (float)intValue(x, y) : (const float&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT));}
+    vec2 vec2Value(int x = 0, int y = 0) const {return isIntType() ? vec2(ivec2Value(x, y)) : (const vec2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_2));}
+    vec3 vec3Value(int x = 0, int y = 0) const {return isIntType() ? vec3(ivec3Value(x, y)) : (const vec3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_3));}
+    vec4 vec4Value(int x = 0, int y = 0) const {return isIntType() ? vec4(ivec4Value(x, y)) : (const vec4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_4));}
+    RGBA RGBAValue(int x = 0, int y = 0) const {return (const RGBA&)mData.at((x+y*mWidth)*GetTypeSize(VAR_CHAR_4));}
+    RGBAf RGBAfValue(int x = 0, int y = 0) const
     {
       if (isIntType())
       {
-        vec4 color = vec4(ivec4Value(index));
+        vec4 color = vec4(ivec4Value(x, y));
         return RGBAf(color.x, color.y, color.z, color.w);
       }
-      return *((const RGBAf*)&mData.at(index*GetTypeSize(VAR_FLOAT_4)));
+      return *((const RGBAf*)&mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_4)));
     }
     
-    int intValue(int index = 0) const {return isIntType() ? *((const int*)&mData.at(index*GetTypeSize(VAR_INT))) : (int)floatValue(index);}
-    ivec2 ivec2Value(int index = 0) const {return isIntType() ? *((const ivec2*)&mData.at(index*GetTypeSize(VAR_INT_2))) : ivec2(vec2Value(index));}
-    ivec3 ivec3Value(int index = 0) const {return isIntType() ? *((const ivec3*)&mData.at(index*GetTypeSize(VAR_INT_3))) : ivec3(vec3Value(index));}
-    ivec4 ivec4Value(int index = 0) const {return isIntType() ? *((const ivec4*)&mData.at(index*GetTypeSize(VAR_INT_4))) : ivec4(vec4Value(index));}
+    int intValue(int x = 0, int y = 0) const {return isIntType() ? (const int&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT)) : (int)floatValue(x, y);}
+    ivec2 ivec2Value(int x = 0, int y = 0) const {return isIntType() ? (const ivec2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_2)) : ivec2(vec2Value(x, y));}
+    ivec3 ivec3Value(int x = 0, int y = 0) const {return isIntType() ? (const ivec3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_3)) : ivec3(vec3Value(x, y));}
+    ivec4 ivec4Value(int x = 0, int y = 0) const {return isIntType() ? (const ivec4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_INT_4)) : ivec4(vec4Value(x, y));}
     
-    mat2 mat2Value(int index = 0) const {return *((const mat2*)&mData.at(index*GetTypeSize(VAR_MTX_2X2)));}
-    mat3 mat3Value(int index = 0) const {return *((const mat3*)&mData.at(index*GetTypeSize(VAR_MTX_3X3)));}
-    mat4 mat4Value(int index = 0) const {return *((const mat4*)&mData.at(index*GetTypeSize(VAR_MTX_4X4)));}
+    mat2 mat2Value(int x = 0, int y = 0) const {return (const mat2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_2X2));}
+    mat3 mat3Value(int x = 0, int y = 0) const {return (const mat3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_3X3));}
+    mat4 mat4Value(int x = 0, int y = 0) const {return (const mat4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_4X4));}
     
     operator float() const {return floatValue();}
     operator int()   const {return intValue();}
@@ -255,6 +259,7 @@ namespace fx
     operator vec3() const {return vec3Value();}
     operator vec4() const {return vec4Value();}
     
+    operator RGBA() const {return RGBAValue();}
     operator RGBAf() const {return RGBAfValue();}
     
     operator ivec2() const {return ivec2Value();}
@@ -325,13 +330,33 @@ namespace fx
         success = value.parse(str);
         *this = value;
       }
-      
       return success;
+    }
+    
+    void invert()
+    {
+      if (mData.size() > 0)
+      {
+        size_t rowSize = mWidth * mTypeSize;
+        std::vector<uint8_t> temp(rowSize);
+        
+        uint8_t *ptrA = &mData.at(0);
+        uint8_t *ptrB = ptrA + rowSize*(height()-1);
+        while (ptrA < ptrB)
+        {
+          memcpy(&temp[0], ptrA, rowSize);
+          memcpy(ptrA, ptrB, rowSize);
+          memcpy(ptrB, &temp[0], rowSize);
+          ptrA += rowSize;
+          ptrB -= rowSize;
+        }
+      }
     }
     
   private:
     VAR_TYPE mType;
     size_t mTypeSize;
+    size_t mWidth;
     std::vector<uint8_t> mData;
   };
   

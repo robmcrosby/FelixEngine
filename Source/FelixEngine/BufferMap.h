@@ -32,13 +32,13 @@ namespace fx
   class Buffer: public Variant
   {
   public:
-    Buffer(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): Variant(type, size), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): Variant(type, size), mBufferType(BUFFER_UNIFORM), mResource(0) {}
     Buffer(const Variant &var): Variant(var), mBufferType(BUFFER_UNIFORM), mResource(0) {}
     Buffer(const Buffer &buf): Variant(buf), mName(buf.mName), mBufferType(buf.mBufferType), mResource(0) {setResource(buf.mResource);}
-    Buffer(const std::string &type, const std::string &str): Variant(type, str), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(const std::string &type, const std::string &str): Variant(type, str), mBufferType(BUFFER_UNIFORM), mResource(0) {}
     
-    Buffer(const XMLTree::Node *node): Variant(node), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const XMLTree::Node &node): Variant(node), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(const XMLTree::Node *node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0) {setToXml(node);}
+    Buffer(const XMLTree::Node &node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0) {setToXml(node);}
     
     Buffer(const float &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
     Buffer(const vec2  &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
@@ -54,8 +54,16 @@ namespace fx
     Buffer(const mat2 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
     Buffer(const mat3 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
     Buffer(const mat4 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    virtual ~Buffer() {}
+    virtual ~Buffer() {setResource(nullptr);}
     
+    Buffer& operator=(const Buffer &buffer)
+    {
+      Variant::operator=(buffer);
+      mName = buffer.mName;
+      mBufferType = buffer.mBufferType;
+      setResource(buffer.mResource);
+      return *this;
+    }
     Buffer& operator=(const Variant &variant) {Variant::operator=(variant); return *this;}
     
     Buffer& operator=(const float &value) {Variant::operator=(value); return *this;}
@@ -89,7 +97,7 @@ namespace fx
     void setBufferType(BUFFER_TYPE type) {mBufferType = type;}
     BUFFER_TYPE bufferType() const {return mBufferType;}
     
-    void setResource(Resource *r) {mResource = r;}
+    void setResource(Resource *r) {Resource::Replace(&mResource, r);}
     Resource* resource() const {return mResource;}
     
   private:
@@ -102,7 +110,18 @@ namespace fx
   {
   public:
     BufferMap(): mType(BUFFER_MAP_UNIFORMS), mResource(0) {}
-    ~BufferMap() {}
+    BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0) {*this = map;}
+    ~BufferMap() {setResource(nullptr);}
+    
+    BufferMap& operator=(const BufferMap &map)
+    {
+      mName = map.mName;
+      mType = map.mType;
+      mBuffers = map.mBuffers;
+      mNameMap = map.mNameMap;
+      setResource(map.mResource);
+      return *this;
+    }
     
     typedef std::vector<Buffer>::iterator iterator;
     iterator begin() {return mBuffers.begin();}
@@ -142,7 +161,7 @@ namespace fx
     void setType(BUFFER_MAP_TYPE type) {mType = type;}
     BUFFER_MAP_TYPE type() const {return mType;}
     
-    void setResource(Resource *r) {mResource = r;}
+    void setResource(Resource *r) {Resource::Replace(&mResource, r);}
     void* resource() const {return mResource;}
     
     /**
@@ -190,6 +209,8 @@ namespace fx
     BUFFER_MAP_TYPE mType;
     Resource *mResource;
   };
+  typedef std::list<BufferMap*> BufferMapList;
+  typedef std::map<std::string, BufferMap*> BufferMapDirectory;
 }
 
 

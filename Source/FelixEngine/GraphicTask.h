@@ -11,7 +11,9 @@
 
 #include "Color.h"
 #include "XMLTree.h"
+#include "BufferMap.h"
 #include "GraphicResources.h"
+
 
 namespace fx
 {
@@ -22,6 +24,22 @@ namespace fx
   
   class InternalUniformMap;
   
+  
+  enum TASK_TYPE
+  {
+    TASK_UPLOAD,   /**< Upload the contents of the buffers to the GPU resources */
+    TASK_UNLOAD,   /**< Unload the GPU resources associated with the buffers */
+    TASK_DOWNLOAD, /**< Download the GPU resources to the buffers */
+    TASK_PASS,     /**< Runs a group of Draw/Compute tasks associated with a numbered pass */
+    TASK_DRAW,     /**< Perform a Draw operation */
+    TASK_COMPUTE,  /**< Perform a Compute operation */
+    TASK_EMPTY,    /**< Does nothing */
+  };
+  
+  enum BUFFER_SLOTS
+  {
+    BUFFER_SLOTS_SIZE = 8,
+  };
   
   enum COLOR_ATTACHMENTS
   {
@@ -371,6 +389,40 @@ namespace fx
     int   flags;
     RGBAf color;
   };
+  
+  
+  struct DrawState
+  {
+    DrawState(): subMesh(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
+    
+    int subMesh;
+    int instances;
+    int stereo;
+    
+    ClearState clearState;
+    DepthState depthState;
+    BlendState blendState;
+    
+    CULL_MODE cullMode;
+  };
+  
+//  struct GraphicTask
+//  {
+//    GraphicTask(TASK_TYPE type = TASK_EMPTY): type(type), layer(0), pass(0) {clearBufferSlots();}
+//    void clearBufferSlots()
+//    {
+//      for (int i = 0; i < BUFFER_SLOTS_SIZE; ++i)
+//        bufferSlots[i] = nullptr;
+//    }
+//    
+//    TASK_TYPE type;
+//    DrawState drawState;
+//    
+//    int layer;
+//    int pass;
+//    
+//    BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
+//  };
   
   
   

@@ -49,6 +49,19 @@ namespace fx
       mUnloading = false;
     }
     
+  public:
+    static void Replace(Resource **dst, Resource *src)
+    {
+      if (*dst != src)
+      {
+        if (src != nullptr)
+          src->retain();
+        if (*dst != nullptr)
+          (*dst)->release();
+        *dst = src;
+      }
+    }
+    
   protected:
     void setNotLoading() {mLoading = false;}
     void setNotUnloading() {mUnloading = false;}
