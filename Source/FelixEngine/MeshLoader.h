@@ -29,19 +29,24 @@ namespace fx
     
     
     
-//    static bool LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node);
-//    static bool LoadMeshFromStream(BufferMap &bufferMap, std::istream &is);
-//    
-//    static bool LoadMeshFromFile(BufferMap &bufferMap, const std::string &file);
-//    
-//    static bool LoadMeshPrimitive(BufferMap &bufferMap, const XMLTree::Node &node);
-//    static bool LoadMeshPlane(BufferMap &bufferMap, const vec2 &size, const vec2 &offset);
+    static bool LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node);
+    static bool LoadMeshFromStream(BufferMap &bufferMap, std::istream &is);
+    
+    static bool LoadMeshFromFile(BufferMap &bufferMap, const std::string &file);
+    
+    static bool LoadMeshPrimitive(BufferMap &bufferMap, const XMLTree::Node &node);
+    static bool LoadMeshPlane(BufferMap &bufferMap, const vec2 &size, const vec2 &offset);
     
   private:
     static bool AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node &node);
     static bool AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node &node);
     
+    static bool ReadBufferFromStream(BufferMap &bufferMap, int numVertices, std::istream &is);
+    
+    
+    
     static bool AddBuffer(BufferMap &bufferMap, const XMLTree::Node &node);
+    static bool AddIndices(BufferMap &bufferMap, const XMLTree::Node &node);
     static bool AddSubMesh(Buffer &buffer, const XMLTree::Node &node);
 
     

@@ -155,6 +155,12 @@ namespace fx
       mBuffers.back().setName(name);
     }
     
+    void clear()
+    {
+      mBuffers.clear();
+      mNameMap.clear();
+    }
+    
     Buffer& operator[](int index) {return mBuffers.at(index);}
     const Buffer& operator[](int index) const {return mBuffers.at(index);}
     
@@ -171,6 +177,27 @@ namespace fx
       if (!mNameMap.count(name))
         addBuffer(name, type);
       return mBuffers.at(mNameMap.at(name));
+    }
+    Buffer& getBuffer(BUFFER_TYPE type)
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+      {
+        if (itr->bufferType() == type)
+          return *itr;
+      }
+      addBuffer(type);
+      return mBuffers.back();
+    }
+    
+    bool contains(const std::string &name) const {return mNameMap.count(name);}
+    bool contains(BUFFER_TYPE type) const
+    {
+      for (const_iterator itr = begin(); itr != end(); ++itr)
+      {
+        if (itr->bufferType() == type)
+          return true;
+      }
+      return false;
     }
     
     void setName(const std::string &name) {mName = name;}
