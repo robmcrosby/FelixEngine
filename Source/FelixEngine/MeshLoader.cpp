@@ -168,6 +168,47 @@ bool MeshLoader::AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node &node
   return success;
 }
 
+bool MeshLoader::AddBuffer(BufferMap &bufferMap, const XMLTree::Node &node)
+{
+  bool success = false;
+  int components = node.attributeAsInt("components");
+  if (node.hasAttribute("attribute") && (components == 2 || components == 4))
+  {
+    Buffer &buffer = bufferMap.getBuffer(node.attribute("attribute"), BUFFER_VERTEX);
+    
+    // TODO: implement parsing of values directly with buffer.
+    
+    // Get the buffer contents in a float vector
+    vector<float> data;
+    StringUtils::ParseFloats(data, node.contents());
+    
+    // Resize the buffer for the contents
+    if (components == 2)
+      buffer.setValues((vec2*)&data[0], data.size()/2);
+    else
+      buffer.setValues((vec4*)&data[0], data.size()/4);
+    success = data.size();
+  }
+  else
+    cerr << "Vertex Buffer Node missing either attribute or components attributes" << endl;
+  
+  return success;
+}
+
+bool MeshLoader::AddSubMesh(Buffer &buffer, const XMLTree::Node &node)
+{
+  bool success = false;
+  if (node.hasAttribute("start") && node.hasAttribute("end"))
+  {
+    ivec2 range;
+    range.x = node.attributeAsInt("start");
+    range.y = node.attributeAsInt("end");
+    buffer.append(range);
+    success = true;
+  }
+  return success;
+}
+
 bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is)
 {
   bool success = true;

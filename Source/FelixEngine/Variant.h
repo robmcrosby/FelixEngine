@@ -16,6 +16,7 @@
 #include "Vector.h"
 #include "Matrix.h"
 #include "Color.h"
+#include "XMLTree.h"
 
 #define RGBA_STR "rgba"
 
@@ -145,29 +146,53 @@ namespace fx
       mTypeSize = GetTypeSize(mType);
       resize(width, height);
     }
+    void clearData() {mData.clear();}
+    
     void setValues(VAR_TYPE type, const void *ptr, size_t width = 1, size_t height = 1)
     {
       resize(type, width, height);
       memcpy(&mData.at(0), ptr, sizeInBytes());
     }
-    void clearData() {mData.clear();}
     
-    void setValues(const float *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT,   (const void*)ptr, width, height);}
-    void setValues(const vec2  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_2, (const void*)&ptr->x, width, height);}
-    void setValues(const vec3  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_3, (const void*)&ptr->x, width, height);}
-    void setValues(const vec4  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->x, width, height);}
+    void setValues(const float *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT,   ptr, width, height);}
+    void setValues(const vec2  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_2, ptr->ptr(), width, height);}
+    void setValues(const vec3  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_3, ptr->ptr(), width, height);}
+    void setValues(const vec4  *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, ptr->ptr(), width, height);}
     
-    void setValues(const RGBA *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_CHAR_4, (const void*)&ptr->red, width, height);}
-    void setValues(const RGBAf *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, (const void*)&ptr->red, width, height);}
+    void setValues(const RGBA *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_CHAR_4, ptr->ptr(), width, height);}
+    void setValues(const RGBAf *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_FLOAT_4, ptr->ptr(), width, height);}
     
-    void setValues(const int   *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT,   (const void*)ptr, width, height);}
-    void setValues(const ivec2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_2, (const void*)&ptr->x, width, height);}
-    void setValues(const ivec3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_3, (const void*)&ptr->x, width, height);}
-    void setValues(const ivec4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_4, (const void*)&ptr->x, width, height);}
+    void setValues(const int   *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT,   ptr, width, height);}
+    void setValues(const ivec2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_2, ptr->ptr(), width, height);}
+    void setValues(const ivec3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_3, ptr->ptr(), width, height);}
+    void setValues(const ivec4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_INT_4, ptr->ptr(), width, height);}
     
-    void setValues(const mat2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_2X2, (const void*)&ptr->x.x, width, height);}
-    void setValues(const mat3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_3X3, (const void*)&ptr->x.x, width, height);}
-    void setValues(const mat4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_4X4, (const void*)&ptr->x.x, width, height);}
+    void setValues(const mat2 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_2X2, ptr->ptr(), width, height);}
+    void setValues(const mat3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_3X3, ptr->ptr(), width, height);}
+    void setValues(const mat4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_4X4, ptr->ptr(), width, height);}
+    
+    void append(VAR_TYPE type, const void *ptr)
+    {
+      size_t typeSize = GetTypeSize(type);
+      mData.resize(mData.size()+typeSize);
+      memcpy(&mData.at(mData.size()-typeSize), ptr, typeSize);
+    }
+    void append(const float &value) {append(VAR_FLOAT, &value);}
+    void append(const vec2  &value) {append(VAR_FLOAT_2, value.ptr());}
+    void append(const vec3  &value) {append(VAR_FLOAT_3, value.ptr());}
+    void append(const vec4  &value) {append(VAR_FLOAT_4, value.ptr());}
+    
+    void append(const RGBA  &value) {append(VAR_CHAR_4, value.ptr());}
+    void append(const RGBAf &value) {append(VAR_FLOAT_4, value.ptr());}
+    
+    void append(const int   &value) {append(VAR_INT, &value);}
+    void append(const ivec2 &value) {append(VAR_INT_2, value.ptr());}
+    void append(const ivec3 &value) {append(VAR_INT_3, value.ptr());}
+    void append(const ivec4 &value) {append(VAR_INT_4, value.ptr());}
+    
+    void append(const mat2 &value) {append(VAR_MTX_2X2, value.ptr());}
+    void append(const mat3 &value) {append(VAR_MTX_3X3, value.ptr());}
+    void append(const mat4 &value) {append(VAR_MTX_4X4, value.ptr());}
     
     Variant& operator=(const float &value) {setValues(&value); return *this;}
     Variant& operator=(const vec2  &value) {setValues(&value); return *this;}

@@ -15,24 +15,34 @@
 
 namespace fx
 {
+  /**
+   * Defines what the Buffer would be used for.
+   */
   enum BUFFER_TYPE
   {
-    BUFFER_UNIFORM,
-    BUFFER_ATTRIBUTE,
-    BUFFER_INSTANCED,
+    BUFFER_UNIFORM,   /**< Constant Uniform Value or Values */
+    BUFFER_INSTANCED, /**< Constant Uniform Values for multiple Instances */
+    BUFFER_VERTEX,    /**< Values for a Vertex Attribute in a Mesh */
+    BUFFER_INDICES,   /**< Indices for a Mesh */
+    BUFFER_RANGES,    /**< Ranges for Sub-Meshes in a Mesh */
+    BUFFER_TEXTURE,   /**< Two dimensional image */
   };
   
+  /**
+   * Defines what a BufferMap would be used for.
+   */
   enum BUFFER_MAP_TYPE
   {
-    BUFFER_MAP_UNIFORMS,
-    BUFFER_MAP_STRUCT,
-    BUFFER_MAP_MESH,
+    BUFFER_MAP_UNIFORMS, /**< Individual Uniforms */
+    BUFFER_MAP_STRUCT,   /**< Values of a Uniform Struct */
+    BUFFER_MAP_MESH,     /**< Parts for a Mesh */
+    BUFFER_MAP_TEXTURES, /**< Collection of Textures */
   };
   
   class Buffer: public Variant
   {
   public:
-    Buffer(VAR_TYPE type = VAR_UNKNOWN, size_t size = 1): Variant(type, size), mBufferType(BUFFER_UNIFORM), mResource(0) {}
+    Buffer(BUFFER_TYPE bufType = BUFFER_UNIFORM, VAR_TYPE varType = VAR_UNKNOWN, size_t size = 1): Variant(varType, size), mBufferType(bufType), mResource(0) {}
     Buffer(const Variant &var): Variant(var), mBufferType(BUFFER_UNIFORM), mResource(0) {}
     Buffer(const Buffer &buf): Variant(buf), mName(buf.mName), mBufferType(buf.mBufferType), mResource(0) {setResource(buf.mResource);}
     Buffer(const std::string &type, const std::string &str): Variant(type, str), mBufferType(BUFFER_UNIFORM), mResource(0) {}
@@ -109,14 +119,15 @@ namespace fx
   class BufferMap
   {
   public:
-    BufferMap(): mType(BUFFER_MAP_UNIFORMS), mResource(0) {}
-    BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0) {*this = map;}
+    BufferMap(): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {}
+    BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {*this = map;}
     ~BufferMap() {setResource(nullptr);}
     
     BufferMap& operator=(const BufferMap &map)
     {
       mName = map.mName;
       mType = map.mType;
+      mFlags = map.mFlags;
       mBuffers = map.mBuffers;
       mNameMap = map.mNameMap;
       setResource(map.mResource);
@@ -154,6 +165,13 @@ namespace fx
       return mBuffers.at(mNameMap.at(name));
     }
     const Buffer& operator[](const std::string &name) const {return mBuffers.at(mNameMap.at(name));}
+    
+    Buffer& getBuffer(const std::string &name, BUFFER_TYPE type)
+    {
+      if (!mNameMap.count(name))
+        addBuffer(name, type);
+      return mBuffers.at(mNameMap.at(name));
+    }
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
@@ -201,12 +219,16 @@ namespace fx
         itr->clearData();
     }
     
+    void setFlags(int f) {mFlags = f;}
+    int flags() const {return mFlags;}
+    
   private:
     std::vector<Buffer> mBuffers;
     std::map<std::string, int> mNameMap;
     
     std::string mName;
     BUFFER_MAP_TYPE mType;
+    int mFlags;
     Resource *mResource;
   };
   typedef std::list<BufferMap*> BufferMapList;
