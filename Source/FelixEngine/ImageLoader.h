@@ -10,6 +10,7 @@
 #define ImageLoader_h
 
 #include "Image.h"
+#include "BufferMap.h"
 
 
 namespace fx
@@ -21,6 +22,7 @@ namespace fx
   {
   public:
     static bool LoadImageFromFile(ImageRGBA &image, const std::string &file);
+    static bool LoadImageFromFile(BufferMap &textureMap, const std::string &file);
   };
 }
 

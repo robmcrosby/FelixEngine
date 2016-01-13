@@ -47,3 +47,37 @@ bool ImageLoader::LoadImageFromFile(ImageRGBA &image, const std::string &filePat
   return true;
 }
 
+bool ImageLoader::LoadImageFromFile(BufferMap &textureMap, const std::string &file)
+{
+  FREE_IMAGE_FORMAT format = FreeImage_GetFileType(file.c_str() ,0);
+  FIBITMAP* fimage = FreeImage_Load(format, file.c_str());
+  if (!fimage)
+    return false;
+  
+  FIBITMAP* temp = fimage;
+  fimage = FreeImage_ConvertTo32Bits(fimage);
+  FreeImage_Unload(temp);
+  
+  unsigned int width  = FreeImage_GetWidth(fimage);
+  unsigned int height = FreeImage_GetHeight(fimage);
+  
+  // Setup the TextureMap with a single texture.
+  textureMap.clear();
+  textureMap.setType(BUFFER_MAP_TEXTURES);
+  Buffer &textureBuffer = textureMap.getBuffer("Main", BUFFER_TEXTURE);
+  textureBuffer.resize(VAR_CHAR_4, width, height);
+  
+  char *pixeles = (char*)FreeImage_GetBits(fimage);
+  RGBA *texture = (RGBA*)textureBuffer.ptr();
+  for (int i = 0; i < width*height; ++i)
+  {
+    texture[i].red   = pixeles[i*4+2];
+    texture[i].green = pixeles[i*4+1];
+    texture[i].blue  = pixeles[i*4+0];
+    texture[i].alpha = pixeles[i*4+3];
+  }
+  
+  FreeImage_Unload(fimage);
+  return true;
+}
+
