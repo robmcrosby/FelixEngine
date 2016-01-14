@@ -33,15 +33,6 @@
 		C10B5D411BF11BED00583B8F /* FrameScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C10B5D3F1BF11BED00583B8F /* FrameScene.xml */; };
 		C1124BE51BF16F4B00CFADD7 /* SettingsGLES2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */; };
 		C1124BE71BF179BB00CFADD7 /* SettingsMetal.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1124BE61BF179BB00CFADD7 /* SettingsMetal.xml */; };
-		C1124BE81BF17AC200CFADD7 /* MTLDescriptorKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA21BED298D007F68E0 /* MTLDescriptorKey.mm */; };
-		C1124BE91BF17AC200CFADD7 /* MTLFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA31BED298D007F68E0 /* MTLFrame.mm */; };
-		C1124BEA1BF17AC200CFADD7 /* MTLMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA71BED298D007F68E0 /* MTLMesh.mm */; };
-		C1124BEB1BF17AC200CFADD7 /* MTLPipelineKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA81BED298D007F68E0 /* MTLPipelineKey.mm */; };
-		C1124BEC1BF17AC200CFADD7 /* MTLShader.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA91BED298D007F68E0 /* MTLShader.mm */; };
-		C1124BED1BF17AC200CFADD7 /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAA1BED298D007F68E0 /* MTLTexture.mm */; };
-		C1124BEE1BF17AC200CFADD7 /* MTLWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAC1BED298D007F68E0 /* MTLWindow.mm */; };
-		C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */ = {isa = PBXBuildFile; fileRef = C197CDAB1BED298D007F68E0 /* MTLUniformMap.m */; };
-		C1124BF01BF17ACD00CFADD7 /* MTLGraphicSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA61BED298D007F68E0 /* MTLGraphicSystem.mm */; };
 		C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */; };
 		C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF41C20F4E000C6F7C8 /* UIWidget.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF71C21434300C6F7C8 /* UIScreen.h */; };
@@ -998,17 +989,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1124BF01BF17ACD00CFADD7 /* MTLGraphicSystem.mm in Sources */,
-				C1124BE81BF17AC200CFADD7 /* MTLDescriptorKey.mm in Sources */,
-				C1124BE91BF17AC200CFADD7 /* MTLFrame.mm in Sources */,
-				C1124BEA1BF17AC200CFADD7 /* MTLMesh.mm in Sources */,
 				C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */,
-				C1124BEB1BF17AC200CFADD7 /* MTLPipelineKey.mm in Sources */,
 				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
-				C1124BEC1BF17AC200CFADD7 /* MTLShader.mm in Sources */,
-				C1124BED1BF17AC200CFADD7 /* MTLTexture.mm in Sources */,
-				C1124BEE1BF17AC200CFADD7 /* MTLWindow.mm in Sources */,
-				C1124BEF1BF17AC200CFADD7 /* MTLUniformMap.m in Sources */,
 				C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */,
 				C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */,
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
