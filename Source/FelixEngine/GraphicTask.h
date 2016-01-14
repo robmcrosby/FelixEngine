@@ -25,15 +25,15 @@ namespace fx
   class InternalUniformMap;
   
   
-  enum TASK_TYPE
+  enum GRAPHIC_TASK_TYPE
   {
-    TASK_UPLOAD,   /**< Upload the contents of the buffers to the GPU resources */
-    TASK_UNLOAD,   /**< Unload the GPU resources associated with the buffers */
-    TASK_DOWNLOAD, /**< Download the GPU resources to the buffers */
-    TASK_PASS,     /**< Runs a group of Draw/Compute tasks associated with a numbered pass */
-    TASK_DRAW,     /**< Perform a Draw operation */
-    TASK_COMPUTE,  /**< Perform a Compute operation */
-    TASK_EMPTY,    /**< Does nothing */
+    GRAPHIC_TASK_UPLOAD,   /**< Upload the contents of the buffers to the GPU resources */
+    GRAPHIC_TASK_UNLOAD,   /**< Unload the GPU resources associated with the buffers */
+    GRAPHIC_TASK_DOWNLOAD, /**< Download the GPU resources to the buffers */
+    GRAPHIC_TASK_PASS,     /**< Runs a group of Draw/Compute tasks associated with a numbered pass */
+    GRAPHIC_TASK_DRAW,     /**< Perform a Draw operation */
+    GRAPHIC_TASK_COMPUTE,  /**< Perform a Compute operation */
+    GRAPHIC_TASK_EMPTY,    /**< Does nothing */
   };
   
   enum BUFFER_SLOTS
@@ -406,63 +406,63 @@ namespace fx
     CULL_MODE cullMode;
   };
   
-//  struct GraphicTask
-//  {
-//    GraphicTask(TASK_TYPE type = TASK_EMPTY): type(type), layer(0), pass(0) {clearBufferSlots();}
-//    void clearBufferSlots()
-//    {
-//      for (int i = 0; i < BUFFER_SLOTS_SIZE; ++i)
-//        bufferSlots[i] = nullptr;
-//    }
-//    
-//    TASK_TYPE type;
-//    DrawState drawState;
-//    
-//    int layer;
-//    int pass;
-//    
-//    BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
-//  };
-  
-  
-  
   struct GraphicTask
   {
-    GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
-    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
+    GraphicTask(GRAPHIC_TASK_TYPE type = GRAPHIC_TASK_EMPTY): type(type), layer(0), pass(0) {clearBufferSlots();}
+    void clearBufferSlots()
+    {
+      for (int i = 0; i < BUFFER_SLOTS_SIZE; ++i)
+        bufferSlots[i] = nullptr;
+    }
     
-    bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
-    bool isDrawTask()  const {return mesh && shader && instances > 0;}
-    bool isClearTask() const {return clearState.flags;}
-    
-    void setClearColor(const RGBAf &color, unsigned int index = 0) {clearState.setClearColor(color, index);}
-    void setClearDepth(float depth = 0.0f) {clearState.setClearDepth(depth);}
-    void setClearStencil(int value = 0)    {clearState.setClearStencil(value);}
-    
-    bool operator<(const GraphicTask &that)  const {return layer < that.layer;}
-    bool operator==(const GraphicTask &that) const {return layer == that.layer;}
-    
-    const Frame  *frame;
-    const Shader *shader;
-    const Mesh   *mesh;
-    
-    const InternalUniformMap *localUniforms;
-    const InternalUniformMap *materialUniforms;
-    
-    const TextureMap *textureMap;
+    GRAPHIC_TASK_TYPE type;
+    DrawState drawState;
     
     int layer;
     int pass;
-    int subMesh;
-    int instances;
-    int stereo;
     
-    ClearState clearState;
-    DepthState depthState;
-    BlendState blendState;
-    
-    CULL_MODE cullMode;
+    BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
   };
+  
+  
+  
+//  struct GraphicTask
+//  {
+//    GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
+//    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
+//    
+//    bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
+//    bool isDrawTask()  const {return mesh && shader && instances > 0;}
+//    bool isClearTask() const {return clearState.flags;}
+//    
+//    void setClearColor(const RGBAf &color, unsigned int index = 0) {clearState.setClearColor(color, index);}
+//    void setClearDepth(float depth = 0.0f) {clearState.setClearDepth(depth);}
+//    void setClearStencil(int value = 0)    {clearState.setClearStencil(value);}
+//    
+//    bool operator<(const GraphicTask &that)  const {return layer < that.layer;}
+//    bool operator==(const GraphicTask &that) const {return layer == that.layer;}
+//    
+//    const Frame  *frame;
+//    const Shader *shader;
+//    const Mesh   *mesh;
+//    
+//    const InternalUniformMap *localUniforms;
+//    const InternalUniformMap *materialUniforms;
+//    
+//    const TextureMap *textureMap;
+//    
+//    int layer;
+//    int pass;
+//    int subMesh;
+//    int instances;
+//    int stereo;
+//    
+//    ClearState clearState;
+//    DepthState depthState;
+//    BlendState blendState;
+//    
+//    CULL_MODE cullMode;
+//  };
 }
 
 #endif /* GraphicTask_h */

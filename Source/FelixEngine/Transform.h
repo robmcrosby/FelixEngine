@@ -185,16 +185,16 @@ namespace fx
     virtual void update()
     {
       updateMatrices();
-      lock();
-      if (mRenderSlots)
-      {
-        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-        {
-          (*itr)->uniforms().set("Model", mModelMatrix);
-          (*itr)->uniforms().set("Rotation", mRotationMatrix);
-        }
-      }
-      unlock();
+//      lock();
+//      if (mRenderSlots)
+//      {
+//        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+//        {
+//          (*itr)->uniforms().set("Model", mModelMatrix);
+//          (*itr)->uniforms().set("Rotation", mRotationMatrix);
+//        }
+//      }
+//      unlock();
       Component::update();
     }
     

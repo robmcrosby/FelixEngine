@@ -56,12 +56,12 @@ namespace fx
     }
     void applyTextureMap(const TextureMap *textures) const
     {
-      if (textures)
-      {
-        int index = 0;
-        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
-          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
-      }
+//      if (textures)
+//      {
+//        int index = 0;
+//        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
+//          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
+//      }
     }
     
     static GLenum GetGLShaderPart(SHADER_PART part)

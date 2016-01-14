@@ -28,7 +28,7 @@ namespace fx
   class UIText: public UIWidget
   {
   public:
-    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0), mRenderSlot(0), mUpdateText(0)
+    UIText(Scene *scene): UIWidget(scene), mAtlas(0), mRenderSlots(0), mUpdateText(0)
     {
       initGlyphTable();
     }
@@ -89,60 +89,60 @@ namespace fx
     
     void updateText()
     {
-      if (mRenderSlot)
-      {
-        mUpdateText = false;
-        float advance = 0.0f;
-        std::vector<vec4> locs;
-        std::vector<vec4> uvs;
-        
-        for (std::string::const_iterator c = mText.begin(); c != mText.end(); ++c)
-        {
-          unsigned int i = (unsigned int)*c;
-          if (i < GLYPH_TABLE_SIZE)
-          {
-            Glyph &glyph = mGlyphTable[i];
-            if (glyph.size.w != 0.0f && glyph.size.h != 0.0f)
-            {
-              vec4 loc;
-              loc.x = advance - glyph.loc.x;
-              loc.y = glyph.loc.y;
-              loc.z = glyph.size.w;
-              loc.w = glyph.size.h;
-              locs.push_back(loc);
-              
-              vec4 uv;
-              uv.x = glyph.uvLoc.x;
-              uv.y = 1.0f - glyph.uvLoc.y;
-              uv.z = uv.x + glyph.uvSize.w;
-              uv.w = uv.y - glyph.uvSize.h;
-              uvs.push_back(uv);
-            }
-            std::cout << i << ":" << glyph.loc << std::endl;
-            advance += glyph.advance;
-          }
-        }
-        
-        if (locs.size() > 0)
-        {
-          vec2 s = size();
-          for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
-            *itr /= vec4(s, s);
-          
-          mRenderSlot->lock();
-          mRenderSlot->uniforms()["Locs"].setValues(&locs[0], (int)locs.size());
-          mRenderSlot->uniforms()["Locs"].setInstanceDivisor(1);
-          
-          mRenderSlot->uniforms()["UVs"].setValues(&uvs[0], (int)uvs.size());
-          mRenderSlot->uniforms()["UVs"].setInstanceDivisor(1);
-          mRenderSlot->unlock();
-        }
-        mRenderSlot->setInstances((int)locs.size());
-        
-        //std::cout << "Updated Text Locations:" << std::endl;
-        //for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
-        //  std::cout << *itr << std::endl;
-      }
+//      if (mRenderSlot)
+//      {
+//        mUpdateText = false;
+//        float advance = 0.0f;
+//        std::vector<vec4> locs;
+//        std::vector<vec4> uvs;
+//        
+//        for (std::string::const_iterator c = mText.begin(); c != mText.end(); ++c)
+//        {
+//          unsigned int i = (unsigned int)*c;
+//          if (i < GLYPH_TABLE_SIZE)
+//          {
+//            Glyph &glyph = mGlyphTable[i];
+//            if (glyph.size.w != 0.0f && glyph.size.h != 0.0f)
+//            {
+//              vec4 loc;
+//              loc.x = advance - glyph.loc.x;
+//              loc.y = glyph.loc.y;
+//              loc.z = glyph.size.w;
+//              loc.w = glyph.size.h;
+//              locs.push_back(loc);
+//              
+//              vec4 uv;
+//              uv.x = glyph.uvLoc.x;
+//              uv.y = 1.0f - glyph.uvLoc.y;
+//              uv.z = uv.x + glyph.uvSize.w;
+//              uv.w = uv.y - glyph.uvSize.h;
+//              uvs.push_back(uv);
+//            }
+//            std::cout << i << ":" << glyph.loc << std::endl;
+//            advance += glyph.advance;
+//          }
+//        }
+//        
+//        if (locs.size() > 0)
+//        {
+//          vec2 s = size();
+//          for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
+//            *itr /= vec4(s, s);
+//          
+//          mRenderSlot->lock();
+//          mRenderSlot->uniforms()["Locs"].setValues(&locs[0], (int)locs.size());
+//          mRenderSlot->uniforms()["Locs"].setInstanceDivisor(1);
+//          
+//          mRenderSlot->uniforms()["UVs"].setValues(&uvs[0], (int)uvs.size());
+//          mRenderSlot->uniforms()["UVs"].setInstanceDivisor(1);
+//          mRenderSlot->unlock();
+//        }
+//        mRenderSlot->setInstances((int)locs.size());
+//        
+//        //std::cout << "Updated Text Locations:" << std::endl;
+//        //for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)
+//        //  std::cout << *itr << std::endl;
+//      }
     }
     
     void initGlyphTable()
@@ -206,37 +206,37 @@ namespace fx
       static Mesh *planeMesh = nullptr;
       
       bool success = false;
-      if (mRenderSlots)
-      {
-        if (!fontShader)
-        {
-          fontShader = FelixEngine::GetGraphicSystem()->getShader("FontShader");
-          fontShader->setFunctionToPart(TEXT_VERT_SHADER, SHADER_VERTEX);
-          fontShader->setFunctionToPart(TEXT_FRAG_SHADER, SHADER_FRAGMENT);
-        }
-        if (!planeMesh)
-        {
-          planeMesh = FelixEngine::GetGraphicSystem()->getMesh("PlaneMesh");
-          MeshLoader::LoadMeshPlane(planeMesh->getVertexBufferMap(), vec2(1.0f, 1.0f), vec2(0.0f, 0.0f));
-          planeMesh->setToLoad();
-        }
-        
-        mRenderSlots->addSlot();
-        mRenderSlot = mRenderSlots->back();
-        mRenderSlot->setMaterial(new Material());
-        mRenderSlot->material()->setShader(fontShader);
-        mRenderSlot->material()->textureMap().push();
-        mRenderSlot->material()->textureMap().back().setTexture(mAtlas);
-        mRenderSlot->setMesh(planeMesh);
-        mRenderSlot->setPass("UIPass");
-        mRenderSlot->setLayer(1);
-        mRenderSlot->blendState().setEquation(BLEND_EQ_ADD);
-        mRenderSlot->blendState().setSrc(BLEND_INPUT_SRC_ALPHA);
-        mRenderSlot->blendState().setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
-        mRenderSlot->setInstances(0);
-        
-        success = true;
-      }
+//      if (mRenderSlots)
+//      {
+//        if (!fontShader)
+//        {
+//          fontShader = FelixEngine::GetGraphicSystem()->getShader("FontShader");
+//          fontShader->setFunctionToPart(TEXT_VERT_SHADER, SHADER_VERTEX);
+//          fontShader->setFunctionToPart(TEXT_FRAG_SHADER, SHADER_FRAGMENT);
+//        }
+//        if (!planeMesh)
+//        {
+//          planeMesh = FelixEngine::GetGraphicSystem()->getMesh("PlaneMesh");
+//          MeshLoader::LoadMeshPlane(planeMesh->getVertexBufferMap(), vec2(1.0f, 1.0f), vec2(0.0f, 0.0f));
+//          planeMesh->setToLoad();
+//        }
+//        
+//        mRenderSlots->addSlot();
+//        mRenderSlot = mRenderSlots->back();
+//        mRenderSlot->setMaterial(new Material());
+//        mRenderSlot->material()->setShader(fontShader);
+//        mRenderSlot->material()->textureMap().push();
+//        mRenderSlot->material()->textureMap().back().setTexture(mAtlas);
+//        mRenderSlot->setMesh(planeMesh);
+//        mRenderSlot->setPass("UIPass");
+//        mRenderSlot->setLayer(1);
+//        mRenderSlot->blendState().setEquation(BLEND_EQ_ADD);
+//        mRenderSlot->blendState().setSrc(BLEND_INPUT_SRC_ALPHA);
+//        mRenderSlot->blendState().setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+//        mRenderSlot->setInstances(0);
+//        
+//        success = true;
+//      }
       return success;
     }
     
@@ -246,7 +246,7 @@ namespace fx
     
     Texture *mAtlas;
     RenderSlots *mRenderSlots;
-    RenderSlot *mRenderSlot;
+//    RenderSlot *mRenderSlot;
     
     std::string mText;
     bool mUpdateText;

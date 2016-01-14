@@ -57,8 +57,6 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* getInternalUniformMap(UniformMap *map);
-    
     virtual SDL_Window* getMainSDLWindow();
     
     void setContext(SDL_GLContext context) {mContext = context;}
@@ -77,7 +75,6 @@ namespace fx
     void setTriangleCullMode(CULL_MODE mode);
     
     void updateResources();
-    void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
     bool setShaderFunctions(const XMLTree::Node *node);
     
@@ -88,8 +85,6 @@ namespace fx
     std::map<std::string, GLShader*>  mShaders;
     std::map<std::string, GLMesh*>    mMeshes;
     std::map<std::string, GLTexture*> mTextures;
-    
-    std::list<GLUniformMap*> mGLUniforms;
     
     std::map<std::string, std::string> mShaderFunctions;
     

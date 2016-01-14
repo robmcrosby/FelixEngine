@@ -192,15 +192,15 @@ namespace fx
   protected:
     virtual void update()
     {
-      if (mRenderSlots)
-      {
-        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-        {
-          Frame *frame = (*itr)->frame();
-          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
-          (*itr)->uniforms().set("Projection", toMatrix4x4(size, (*itr)->stereoFlags()));
-        }
-      }
+//      if (mRenderSlots)
+//      {
+//        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
+//        {
+//          Frame *frame = (*itr)->frame();
+//          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+//          (*itr)->uniforms().set("Projection", toMatrix4x4(size, (*itr)->stereoFlags()));
+//        }
+//      }
       Component::update();
     }
     
