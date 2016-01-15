@@ -38,6 +38,7 @@ namespace fx
   
   enum BUFFER_SLOTS
   {
+    BUFFER_SLOT_MESH = 0,
     BUFFER_SLOTS_SIZE = 8,
   };
   
@@ -393,9 +394,44 @@ namespace fx
   
   struct DrawState
   {
-    DrawState(): subMesh(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
+    DrawState(): submesh(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
     
-    int subMesh;
+    void setToXml(const XMLTree::Node &node)
+    {
+      submesh = node.hasAttribute("submesh") ? node.attributeAsInt("submesh") : 0;
+      instances = node.hasAttribute("instances") ? node.attributeAsInt("instances") : 1;
+      stereo = GetStereoFlags(node.attribute("stereo"));
+      
+      if (node.hasSubNode("ClearState"))
+        clearState.setToXml(*node.subNode("ClearState"));
+      else
+        clearState = ClearState();
+      
+      if (node.hasSubNode("DepthState"))
+        depthState.setToXml(*node.subNode("DepthState"));
+      else
+        depthState = DepthState();
+      
+      if (node.hasSubNode("BlendState"))
+        blendState.setToXml(*node.subNode("BlendState"));
+      else
+        blendState = BlendState();
+    }
+    
+    static int GetStereoFlags(const std::string &flags)
+    {
+      if (flags == "left")
+        return STEREO_LEFT;
+      if (flags == "right")
+        return STEREO_RIGHT;
+      if (flags == "binary")
+        return STEREO_BINARY;
+      if (flags == "mono")
+        return STEREO_MONO;
+      return STEREO_ALL;
+    }
+    
+    int submesh;
     int instances;
     int stereo;
     

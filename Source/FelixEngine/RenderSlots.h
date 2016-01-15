@@ -279,7 +279,7 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
+    RenderSlot(Scene *scene): mMeshBuffer(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -297,7 +297,11 @@ namespace fx
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
       
-      std::cout << node << std::endl;
+//      // Get the Mesh BufferMap
+//      if (node.hasAttribute("mesh"))
+//        mMeshBuffer = &mScene->getBufferMap(node.attribute("mesh"));
+//      else if (node.hasSubNode("Mesh"))
+//        
     }
     
     void setLayer(int layer) {mLayer = layer;}
@@ -307,6 +311,8 @@ namespace fx
     void render() {std::cout << "Render" << std::endl;}
     
     int mLayer;
+    
+    BufferMap *mMeshBuffer;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;

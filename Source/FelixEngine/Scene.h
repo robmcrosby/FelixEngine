@@ -13,6 +13,7 @@
 #include "Component.h"
 #include "XMLTree.h"
 #include "Material.h"
+#include "BufferMap.h"
 
 #include <istream>
 #include <list>
@@ -30,6 +31,7 @@ namespace fx
     ~Scene()
     {
       clearMaterials();
+      clearBufferMaps();
     }
     
     virtual void handle(const Event &event)
@@ -73,6 +75,19 @@ namespace fx
       mMaterialMap.clear();
     }
     
+    BufferMap& getBufferMap(const std::string name)
+    {
+      if (!mBufferMaps.count(name))
+        mBufferMaps[name] = new BufferMap();
+      return *mBufferMaps[name];
+    }
+    void clearBufferMaps()
+    {
+      for (BufferMapDirectory::iterator itr = mBufferMaps.begin(); itr != mBufferMaps.end(); ++itr)
+        delete itr->second;
+      mBufferMaps.clear();
+    }
+    
     File directory() const {return mDirectory;}
     
   private:
@@ -110,6 +125,8 @@ namespace fx
     
     std::list<Resource*> mResources;
     std::map<std::string, Material*> mMaterialMap;
+    
+    BufferMapDirectory mBufferMaps;
   };
 }
 
