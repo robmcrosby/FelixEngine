@@ -150,6 +150,7 @@
 		C1D3086A1C34507F003286CF /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D308691C34507F003286CF /* UIText.h */; };
 		C1D3086C1C348098003286CF /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C1D3086B1C348098003286CF /* Fonts */; };
 		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834B1C49B4FC00E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -313,6 +314,7 @@
 		C1D308691C34507F003286CF /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIText.h; path = ../../../../Source/FelixEngine/UIText.h; sourceTree = "<group>"; };
 		C1D3086B1C348098003286CF /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/ModelViewer/Resources/Fonts; sourceTree = "<group>"; };
 		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
+		C1E6834B1C49B4FC00E1705D /* OwnPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OwnPtr.h; path = ../../../../Source/FelixEngine/OwnPtr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -533,6 +535,7 @@
 		C197CDE81BED29C9007F68E0 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				C1E6834B1C49B4FC00E1705D /* OwnPtr.h */,
 				C197CDCA1BED298D007F68E0 /* Vector.h */,
 				C197CD9F1BED298D007F68E0 /* Matrix.h */,
 				C197CDB61BED298D007F68E0 /* Quaternion.h */,
@@ -797,6 +800,7 @@
 				C14A956F1C3DD57E0037D982 /* BufferMap.h in Headers */,
 				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,
 				C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */,
+				C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */,
 				C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */,
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
 				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,

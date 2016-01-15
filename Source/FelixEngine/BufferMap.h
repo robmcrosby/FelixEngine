@@ -119,7 +119,7 @@ namespace fx
   class BufferMap
   {
   public:
-    BufferMap(): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {}
+    BufferMap(BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mType(type), mResource(0), mFlags(0) {}
     BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {*this = map;}
     ~BufferMap() {setResource(nullptr);}
     

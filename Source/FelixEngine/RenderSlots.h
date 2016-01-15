@@ -14,6 +14,7 @@
 #include "UniformMap.h"
 #include "Material.h"
 #include "Scene.h"
+#include "OwnPtr.h"
 
 namespace fx
 {
@@ -279,7 +280,7 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mMeshBuffer(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
+    RenderSlot(Scene *scene): mMeshBuffer(BUFFER_MAP_MESH), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -312,7 +313,7 @@ namespace fx
     
     int mLayer;
     
-    BufferMap *mMeshBuffer;
+    OwnPtr<BufferMap> mMeshBuffer;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;

@@ -123,6 +123,7 @@
 		C1D308661C3449E7003286CF /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C1D308651C3449E7003286CF /* Fonts */; };
 		C1D308681C34505C003286CF /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D308671C34505C003286CF /* UIText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D905231C17B1750099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905221C17B1750099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E6834A1C488D8900E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683491C488D8900E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -291,6 +292,7 @@
 		C1D308651C3449E7003286CF /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/ModelViewer/Resources/Fonts; sourceTree = "<group>"; };
 		C1D308671C34505C003286CF /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIText.h; path = ../../../../Source/FelixEngine/UIText.h; sourceTree = "<group>"; };
 		C1D905221C17B1750099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
+		C1E683491C488D8900E1705D /* OwnPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OwnPtr.h; path = ../../../../Source/FelixEngine/OwnPtr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +400,7 @@
 				C1A7D4241BDF52AF0064E84A /* Delegate.h */,
 				C1A7D4311BE2EA360064E84A /* Pool.h */,
 				C1D905221C17B1750099974C /* Condition.h */,
+				C1E683491C488D8900E1705D /* OwnPtr.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -760,6 +763,7 @@
 				37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */,
 				C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */,
 				37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */,
+				C1E6834A1C488D8900E1705D /* OwnPtr.h in Headers */,
 				371049FF1BBF3DCA003EEC37 /* System.h in Headers */,
 				37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */,
 			);
