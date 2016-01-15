@@ -15,6 +15,7 @@
 #include "Material.h"
 #include "Scene.h"
 #include "OwnPtr.h"
+#include "MeshLoader.h"
 
 namespace fx
 {
@@ -298,15 +299,28 @@ namespace fx
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
       
-//      // Get the Mesh BufferMap
-//      if (node.hasAttribute("mesh"))
-//        mMeshBuffer = &mScene->getBufferMap(node.attribute("mesh"));
-//      else if (node.hasSubNode("Mesh"))
-//        
+      // Set the Mesh BufferMap
+      if (node.hasAttribute("mesh"))
+        setMesh(node.attribute("mesh"));
+      if (node.hasSubNode("Mesh"))
+        setMesh(*node.subNode("Mesh"));
     }
     
     void setLayer(int layer) {mLayer = layer;}
     int layer() const {return mLayer;}
+    
+    void setMesh(BufferMap &mesh) {mMeshBuffer = &mesh;}
+    void setMesh(const std::string &name) {setMesh(mScene->getBufferMap(name));}
+    void setMesh(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+        setMesh(node.attribute("name"));
+      else
+        mMeshBuffer = BUFFER_MAP_MESH;
+      
+      if (MeshLoader::LoadMeshFromXML(*mMeshBuffer, node))
+        std::cout << "Loaded Mesh" << std::endl;
+    }
     
   private:
     void render() {std::cout << "Render" << std::endl;}

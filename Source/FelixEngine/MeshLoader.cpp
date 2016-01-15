@@ -237,8 +237,6 @@ bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node
     bufferMap.clear();
     bufferMap.setFlags(VertexBufferMap::GetPrimitiveType(node.attribute("primitive")));
     
-    Buffer &subMeshBuffer = bufferMap.getBuffer("SubMeshes", BUFFER_RANGES);
-    
     for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
     {
       if ((*itr)->element() == "Buffer")
@@ -246,18 +244,18 @@ bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node
       else if ((*itr)->element() == "Indices")
         success &= AddIndices(bufferMap, **itr);
       else if ((*itr)->element() == "SubMesh")
-        success &= AddSubMesh(subMeshBuffer, **itr);
+        success &= AddSubMesh(bufferMap.getBuffer("SubMeshes", BUFFER_RANGES), **itr);
     }
-    
+
     // Check if any Sub Meshes have been added.
-    if (!subMeshBuffer.size())
+    if (!bufferMap.contains("SubMeshes"))
     {
       ivec2 range;
       if (bufferMap.contains(BUFFER_INDICES))
         range.y = (int)bufferMap.getBuffer(BUFFER_INDICES).size();
       else if (bufferMap.contains(BUFFER_VERTEX))
-        range.y = (int)bufferMap.getBuffer(BUFFER_VERTEX);
-      subMeshBuffer = range;
+        range.y = (int)bufferMap.getBuffer(BUFFER_VERTEX).size();
+      bufferMap.getBuffer("SubMeshes", BUFFER_RANGES) = range;
     }
   }
   return success;

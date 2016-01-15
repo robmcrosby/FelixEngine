@@ -64,6 +64,7 @@ namespace fx
       if (mPtr != ptr)
         clear();
       mPtr = ptr;
+      return *this;
     }
     
     /**

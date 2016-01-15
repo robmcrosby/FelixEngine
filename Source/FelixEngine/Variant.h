@@ -225,7 +225,7 @@ namespace fx
     bool isFloatType() const {return !isIntType();}
     
     size_t typeSize() const {return mTypeSize;}
-    size_t size() const {return mData.size()/mTypeSize;}
+    size_t size() const {return mTypeSize ? mData.size()/mTypeSize : 0;}
     size_t width() const {return mWidth;}
     size_t height() const {return size()/mWidth;}
     size_t sizeInBytes() const {return mData.size();}
