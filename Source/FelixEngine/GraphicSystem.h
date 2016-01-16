@@ -42,6 +42,13 @@ namespace fx
     Resource* getResource(const std::string &type, const std::string &name);
     
     void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
+    void uploadBuffer(BufferMap &bufferMap)
+    {
+      GraphicTask task(GRAPHIC_TASK_UPLOAD);
+      task.bufferSlots[0] = &bufferMap;
+      addGraphicTask(task);
+    }
+    
     virtual SDL_Window* getMainSDLWindow() = 0;
     
   public:

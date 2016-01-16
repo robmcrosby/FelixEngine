@@ -313,17 +313,21 @@ namespace fx
     void setMesh(const std::string &name) {setMesh(mScene->getBufferMap(name));}
     void setMesh(const XMLTree::Node &node)
     {
+      // Set the shared Mesh Buffer if there is a name attribute
       if (node.hasAttribute("name"))
         setMesh(node.attribute("name"));
-      else
-        mMeshBuffer = BUFFER_MAP_MESH;
       
+      // Load the Mesh Buffer
       if (MeshLoader::LoadMeshFromXML(*mMeshBuffer, node))
-        std::cout << "Loaded Mesh" << std::endl;
+        mGraphicSystem->uploadBuffer(*mMeshBuffer);
     }
+    BufferMap& mesh() {return *mMeshBuffer;}
     
   private:
-    void render() {std::cout << "Render" << std::endl;}
+    void render()
+    {
+      
+    }
     
     int mLayer;
     
