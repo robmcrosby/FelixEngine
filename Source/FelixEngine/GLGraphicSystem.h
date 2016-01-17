@@ -68,9 +68,14 @@ namespace fx
     }
     
   private:
-    void processTasks();
-    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
+    void processPass(const TaskPass &pass, const GraphicTask *view, int stereo);
     void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
+    
+    void processUploadTask(const GraphicTask *task);
+    void processUnloadTask(const GraphicTask *task);
+    void processDownloadTask(const GraphicTask *task);
+    void processViewTask(const GraphicTask *task, int stereo);
+    void processDrawTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
     void setTriangleCullMode(CULL_MODE mode);
     

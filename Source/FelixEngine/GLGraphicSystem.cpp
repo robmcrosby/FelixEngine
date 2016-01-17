@@ -146,92 +146,178 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
 
 void GLGraphicSystem::render()
 {
-  processTasks();
+  updateTasks();
+  int flags = getStereoFlags();
+  
+  // Update the Windows
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->update();
+  
+  // Process the Graphic Tasks
+  processPass(mPreTasks, nullptr, 0);
+  if (mTaskPasses.size())
+  {
+    if (flags & STEREO_MONO)
+      processPass(mTaskPasses.at(0), nullptr, STEREO_MONO);
+    if (flags & STEREO_LEFT)
+      processPass(mTaskPasses.at(0), nullptr, STEREO_LEFT);
+    if (flags & STEREO_RIGHT)
+      processPass(mTaskPasses.at(0), nullptr, STEREO_RIGHT);
+  }
+  processPass(mPostTasks, nullptr, 0);
+  
+  // Swap the Window Buffers
+  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+    itr->second->swapBuffers();
 }
 
 SDL_Window* GLGraphicSystem::getMainSDLWindow()
 {
   return mMainWindow ? mMainWindow->getSDLWindow() : nullptr;
 }
+//
+//void GLGraphicSystem::processTasks()
+//{
+////  mPassesMutex.lock();
+////  int flags = getStereoFlags();
+////  if (mPasses.size())
+////  {
+////    if (flags & STEREO_MONO)
+////      processPass(mPasses.at(0), nullptr, STEREO_MONO);
+////    if (flags & STEREO_LEFT)
+////      processPass(mPasses.at(0), nullptr, STEREO_LEFT);
+////    if (flags & STEREO_RIGHT)
+////      processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
+////  }
+////  mPassesMutex.unlock();
+////  
+////  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+////    itr->second->swapBuffers();
+//}
 
-void GLGraphicSystem::processTasks()
+void GLGraphicSystem::processPass(const TaskPass &pass, const GraphicTask *view, int stereo)
 {
-//  mPassesMutex.lock();
-//  int flags = getStereoFlags();
-//  if (mPasses.size())
-//  {
-//    if (flags & STEREO_MONO)
-//      processPass(mPasses.at(0), nullptr, STEREO_MONO);
-//    if (flags & STEREO_LEFT)
-//      processPass(mPasses.at(0), nullptr, STEREO_LEFT);
-//    if (flags & STEREO_RIGHT)
-//      processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
-//  }
-//  mPassesMutex.unlock();
-//  
-//  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-//    itr->second->swapBuffers();
-}
-
-void GLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
-{
-//  for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
-//    processTask(&(*itr), view, stereo);
+  for (TaskPass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
+    processTask(&(*itr), view, stereo);
 }
 
 void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
-//  if (task->stereo & stereo)
-//  {
-//    if (task->isViewTask())
-//    {
-//      const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
-//      frame->use(stereo);
-//      if (task->isClearTask())
-//        frame->clear(task->clearState);
-//      
-//      if (task->pass < (int)mPasses.size())
-//      {
-//        const Pass &pass = mPasses.at(task->pass);
-//        if (pass.size())
-//          processPass(pass, task, stereo);
-//      }
-//    }
-//    else if (task->isDrawTask())
-//    {
-//      const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
-//      const GLShader *shader = static_cast<const GLShader*>(task->shader);
-//      const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
-//      
-//      if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
-//      {
-//        setTriangleCullMode(task->cullMode);
-//        
-//        // Set the state for the Frame
-//        frame->use(stereo);
-//        if (task->isClearTask())
-//          frame->clear(task->clearState);
-//        frame->setDepthState(task->depthState);
-//        frame->setBlendState(task->blendState);
-//        
-//        // Set the state for the Shader
-//        shader->use();
-//        mesh->bind(shader);
-//        
-//        if (view && view->localUniforms)
-//          static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
-//        if (task->materialUniforms)
-//          static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
-//        if (task->localUniforms)
-//          static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
-//        shader->applyTextureMap(task->textureMap);
-//        
-//        // Draw the Mesh
-//        mesh->draw(task->instances, task->subMesh);
-//      }
-//    }
-//  }
+  switch (task->type)
+  {
+    case GRAPHIC_TASK_UPLOAD:
+      processUploadTask(task);
+      break;
+    case GRAPHIC_TASK_UNLOAD:
+      processUnloadTask(task);
+      break;
+    case GRAPHIC_TASK_DOWNLOAD:
+      processDownloadTask(task);
+      break;
+    case GRAPHIC_TASK_PASS:
+      processViewTask(task, stereo);
+      break;
+    case GRAPHIC_TASK_DRAW:
+      processDrawTask(task, view, stereo);
+    case GRAPHIC_TASK_COMPUTE:
+    case GRAPHIC_TASK_EMPTY:
+      break;
+  }
 }
+
+void GLGraphicSystem::processUploadTask(const GraphicTask *task)
+{
+  BufferMap *bufferMap = task->bufferSlots[0];
+  if (bufferMap != nullptr)
+  {
+    if (bufferMap->type() == BUFFER_MAP_MESH)
+    {
+      if (bufferMap->resource() == nullptr)
+        bufferMap->setResource(getMesh(bufferMap->name()));
+      GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
+      mesh->uploadBufferMap(*bufferMap);
+    }
+  }
+}
+
+void GLGraphicSystem::processUnloadTask(const GraphicTask *task)
+{
+  
+}
+
+void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
+{
+  
+}
+
+void GLGraphicSystem::processViewTask(const GraphicTask *task, int stereo)
+{
+  if (task->pass < mTaskPasses.size())
+    processPass(mTaskPasses.at(task->pass), task, stereo);
+}
+
+void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask *view, int stereo)
+{
+  
+}
+
+
+
+
+
+//void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
+//{
+////  if (task->stereo & stereo)
+////  {
+////    if (task->isViewTask())
+////    {
+////      const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
+////      frame->use(stereo);
+////      if (task->isClearTask())
+////        frame->clear(task->clearState);
+////      
+////      if (task->pass < (int)mPasses.size())
+////      {
+////        const Pass &pass = mPasses.at(task->pass);
+////        if (pass.size())
+////          processPass(pass, task, stereo);
+////      }
+////    }
+////    else if (task->isDrawTask())
+////    {
+////      const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
+////      const GLShader *shader = static_cast<const GLShader*>(task->shader);
+////      const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
+////      
+////      if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
+////      {
+////        setTriangleCullMode(task->cullMode);
+////        
+////        // Set the state for the Frame
+////        frame->use(stereo);
+////        if (task->isClearTask())
+////          frame->clear(task->clearState);
+////        frame->setDepthState(task->depthState);
+////        frame->setBlendState(task->blendState);
+////        
+////        // Set the state for the Shader
+////        shader->use();
+////        mesh->bind(shader);
+////        
+////        if (view && view->localUniforms)
+////          static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
+////        if (task->materialUniforms)
+////          static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
+////        if (task->localUniforms)
+////          static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
+////        shader->applyTextureMap(task->textureMap);
+////        
+////        // Draw the Mesh
+////        mesh->draw(task->instances, task->subMesh);
+////      }
+////    }
+////  }
+//}
 
 void GLGraphicSystem::setTriangleCullMode(fx::CULL_MODE mode)
 {

@@ -28,11 +28,11 @@ namespace fx
   enum GRAPHIC_TASK_TYPE
   {
     GRAPHIC_TASK_UPLOAD,   /**< Upload the contents of the buffers to the GPU resources */
+    GRAPHIC_TASK_UNLOAD,   /**< Unload the GPU resources associated with the buffers */
+    GRAPHIC_TASK_DOWNLOAD, /**< Download the GPU resources to the buffers */
     GRAPHIC_TASK_PASS,     /**< Runs a group of Draw/Compute tasks associated with a numbered pass */
     GRAPHIC_TASK_DRAW,     /**< Perform a Draw operation */
     GRAPHIC_TASK_COMPUTE,  /**< Perform a Compute operation */
-    GRAPHIC_TASK_UNLOAD,   /**< Unload the GPU resources associated with the buffers */
-    GRAPHIC_TASK_DOWNLOAD, /**< Download the GPU resources to the buffers */
     GRAPHIC_TASK_EMPTY,    /**< Does nothing */
   };
   
@@ -451,14 +451,9 @@ namespace fx
         bufferSlots[i] = nullptr;
     }
     
-    bool operator<(const GraphicTask &other) const
-    {
-      if (type != other.type)
-        return type < other.type;
-      return layer < other.layer;
-    }
-    bool operator==(const GraphicTask &other) const {return type == other.type && layer == other.layer;}
-    bool operator!=(const GraphicTask &other) const {return type != other.type || layer != other.layer;}
+    bool operator<(const GraphicTask &other) const {return layer < other.layer;}
+    bool operator==(const GraphicTask &other) const {return layer == other.layer;}
+    bool operator!=(const GraphicTask &other) const {return layer != other.layer;}
     
     GRAPHIC_TASK_TYPE type;
     DrawState drawState;

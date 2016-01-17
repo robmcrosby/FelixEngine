@@ -11,6 +11,7 @@
 
 #include "System.h"
 #include "GraphicResources.h"
+#include "TaskingSystem.h"
 #include "GraphicTask.h"
 #include "MultiVector.h"
 #include "Mutex.h"
@@ -29,8 +30,7 @@ namespace fx
   public:
     GraphicSystem();
     virtual ~GraphicSystem();
-    
-    virtual void handle(const Event &event);
+
     virtual void render() = 0;
     
     virtual Window* getWindow(const std::string &name) = 0;
@@ -55,22 +55,30 @@ namespace fx
     static int GetStereoFlags(const std::string &flags);
     
   private:
-    void update();
-    void clearPasses();
-    void loadPasses();
+    void addTaskToPass(const GraphicTask &task, int pass)
+    {
+      if (pass >= mTaskPasses.size())
+        mTaskPasses.resize(pass+1);
+      mTaskPasses.at(pass).push_back(task);
+    }
     
   protected:
-    typedef MultiVector<GraphicTask> TaskCollection;
+    void updateTasks();
     
-    typedef std::vector<GraphicTask> Pass;
-    typedef std::vector<Pass> Passes;
+    typedef std::vector<GraphicTask> TaskPass;
     
-    TaskCollection mTaskCollection;
-    Pass mTaskBuffer;
+    TaskPass mPreTasks;
+    TaskPass mPostTasks;
+    std::vector<TaskPass> mTaskPasses;
     
-    Passes mPasses;
-    Mutex mPassesMutex;
-    Mutex mUpdateMutex;
+  private:
+    void updateTaskBuffer(void*);
+    TaskDelegate mUpdateTaskBufferDelgate;
+    
+    MultiVector<GraphicTask> mTaskCollection;
+    
+    TaskPass mTaskBuffer;
+    Mutex mTaskBufferMutex;
     
   protected:
     bool addWindows(const XMLTree::Node *node);

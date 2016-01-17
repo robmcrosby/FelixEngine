@@ -224,6 +224,10 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
 bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
+  
+  bufferMap.setType(BUFFER_MAP_MESH);
+  bufferMap.setName(node.attribute("name"));
+  
   if (node.hasAttribute("file"))
   {
     string filePath = node.tree() ? node.tree()->path() : "";

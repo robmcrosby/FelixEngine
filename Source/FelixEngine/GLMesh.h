@@ -93,6 +93,11 @@ namespace fx
       }
     }
     
+    void uploadBufferMap(const BufferMap &bufferMap)
+    {
+      std::cout << "Upload BufferMap" << std::endl;
+    }
+    
   private:
     bool load()
     {
