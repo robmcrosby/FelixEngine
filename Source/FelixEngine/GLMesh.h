@@ -95,7 +95,35 @@ namespace fx
     
     void uploadBufferMap(const BufferMap &bufferMap)
     {
-      std::cout << "Upload BufferMap" << std::endl;
+      bool loaded = true;
+      clearBuffers();
+      
+      glGenVertexArrays(1, &mVertexArray);
+      glBindVertexArray(mVertexArray);
+      
+      for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
+      {
+        if (itr->bufferType() == BUFFER_VERTEX)
+          loaded &= loadVertexBuffer(*itr);
+        else if (itr->bufferType() == BUFFER_INDICES)
+          loaded &= loadIndexBuffer(*itr);
+        else if (itr->bufferType() == BUFFER_RANGES)
+          loaded &= loadSubMeshes(*itr);
+      }
+      glBindVertexArray(0);
+      
+      if (mSubMeshes.size() == 0)
+      {
+        mSubMeshes.push_back(GLRange());
+        mSubMeshes.back().end = mVertexBuffers.begin()->second.count;
+      }
+      
+      setGLPrimitiveType((VERTEX_PRIMITIVE)bufferMap.flags());
+      
+      if (loaded)
+        setLoaded();
+      else
+        setUnloaded();
     }
     
   private:
@@ -151,6 +179,38 @@ namespace fx
       mSubMeshes.clear();
     }
     
+    bool loadVertexBuffer(const Buffer &buffer)
+    {
+      // Create the Vertex Buffer
+      GLBuffer glBuffer;
+      glGenBuffers(1, &glBuffer.bufferId);
+      if (!glBuffer.bufferId)
+      {
+        std::cerr << "Error Creating Vertex Buffer." << std::endl;
+        return false;
+      }
+      
+      // Determine the number of components
+      if (buffer.type() == VAR_FLOAT)
+        glBuffer.components = 1;
+      else if (buffer.type() == VAR_FLOAT_2)
+        glBuffer.components = 2;
+      else if (buffer.type() == VAR_FLOAT_4)
+        glBuffer.components = 4;
+      
+      glBuffer.count = (GLuint)buffer.size();
+      
+      // Load the Vertices
+      glBindBuffer(GL_ARRAY_BUFFER, glBuffer.bufferId);
+      GLsizeiptr bufSize = glBuffer.components * glBuffer.count * sizeof(float);
+      const GLvoid *ptr = (const GLvoid*)buffer.ptr();
+      glBufferData(GL_ARRAY_BUFFER, bufSize, ptr, GL_STATIC_DRAW);
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      
+      mVertexBuffers[buffer.name()] = glBuffer;
+      return true;
+    }
+    
     bool loadVertexBuffer(const std::string &name, const VertexBuffer &buffer)
     {
       // Create the Vertex Buffer
@@ -175,6 +235,26 @@ namespace fx
       return true;
     }
     
+    bool loadIndexBuffer(const Buffer &buffer)
+    {
+      // Create the Index Buffer
+      glGenBuffers(1, &mIndexBuffer);
+      if (!mIndexBuffer)
+      {
+        std::cerr << "Error Creating Index Buffer." << std::endl;
+        return false;
+      }
+      
+      // Load the Indices.
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+      GLsizeiptr bufSize = buffer.size() * sizeof(unsigned int);
+      const GLvoid *ptr = (const GLvoid*)buffer.ptr();
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER,  bufSize, ptr, GL_STATIC_DRAW);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      
+      return true;
+    }
+    
     bool loadIndexBuffer(const IndexBuffer &buffer)
     {
       // Create the Index Buffer
@@ -195,11 +275,24 @@ namespace fx
       return true;
     }
     
+    bool loadSubMeshes(const Buffer &buffer)
+    {
+      mSubMeshes.clear();
+      ivec2 *ranges = (ivec2*)buffer.ptr();
+      for (int i = 0; i < buffer.size(); ++i)
+      {
+        mSubMeshes.push_back(GLRange());
+        mSubMeshes.back().start = ranges[i].x;
+        mSubMeshes.back().end = ranges[i].y;
+      }
+      return mSubMeshes.size() > 0;
+    }
+    
     void setGLPrimitiveType(VERTEX_PRIMITIVE type)
     {
       if (type == VERTEX_TRIANGLES)
         mPrimitiveType = GL_TRIANGLES;
-      if (type == VERTEX_TRIANGLE_STRIP)
+      else if (type == VERTEX_TRIANGLE_STRIP)
         mPrimitiveType = GL_TRIANGLE_STRIP;
     }
     
