@@ -30,6 +30,8 @@
 #define IVEC3_STR "ivec3"
 #define IVEC4_STR "ivec4"
 
+#define STRING_STR "string"
+
 
 namespace fx
 {
@@ -50,6 +52,8 @@ namespace fx
     VAR_MTX_2X2,
     VAR_MTX_3X3,
     VAR_MTX_4X4,
+    
+    VAR_STRING,
     
     VAR_UNKNOWN,
   };
@@ -79,6 +83,8 @@ namespace fx
           return 9*sizeof(uint32_t);
         case VAR_MTX_4X4:
           return 16*sizeof(uint32_t);
+        case VAR_STRING:
+          return sizeof(uint8_t);
         case VAR_UNKNOWN:
           return 0;
       }
@@ -105,6 +111,8 @@ namespace fx
         return VAR_INT_3;
       if (str == IVEC4_STR)
         return VAR_INT_4;
+      if (str == STRING_STR)
+        return VAR_STRING;
       return VAR_UNKNOWN;
     }
     
@@ -130,6 +138,9 @@ namespace fx
     Variant(const mat2 &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const mat3 &value): mType(VAR_UNKNOWN) {setValues(&value);}
     Variant(const mat4 &value): mType(VAR_UNKNOWN) {setValues(&value);}
+    
+    Variant(const std::string &value): mType(VAR_UNKNOWN) {setValues(value.c_str());}
+    Variant(const char *value): mType(VAR_UNKNOWN) {setValues(value);}
     
     virtual ~Variant() {}
     
@@ -171,6 +182,8 @@ namespace fx
     void setValues(const mat3 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_3X3, ptr->ptr(), width, height);}
     void setValues(const mat4 *ptr, size_t width = 1, size_t height = 1) {setValues(VAR_MTX_4X4, ptr->ptr(), width, height);}
     
+    void setValues(const char *ptr) {setValues(VAR_STRING, ptr, strlen(ptr)+1);}
+    
     void append(VAR_TYPE type, const void *ptr)
     {
       size_t typeSize = GetTypeSize(type);
@@ -209,6 +222,9 @@ namespace fx
     Variant& operator=(const mat3 &value) {setValues(&value); return *this;}
     Variant& operator=(const mat4 &value) {setValues(&value); return *this;}
     
+    Variant& operator=(const std::string &value) {setValues(value.c_str()); return *this;}
+    Variant& operator=(const char *value) {setValues(value); return *this;}
+    
     Variant& operator=(const XMLTree::Node *node) {setToXml(node); return *this;}
     Variant& operator=(const XMLTree::Node &node) {setToXml(node); return *this;}
     
@@ -221,8 +237,9 @@ namespace fx
     bool operator!=(const Variant &other) const {return !(*this == other);}
     
     VAR_TYPE type() const {return mType;}
-    bool isIntType() const {return mType == VAR_CHAR_4 || mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4;}
-    bool isFloatType() const {return !isIntType();}
+    bool isIntType() const {return mType != VAR_STRING && (mType == VAR_CHAR_4 || mType == VAR_INT || mType == VAR_INT_2 || mType == VAR_INT_3 || mType == VAR_INT_4);}
+    bool isFloatType() const {return mType != VAR_STRING && !isIntType();}
+    bool isStringType() const {return mType == VAR_STRING;}
     
     size_t typeSize() const {return mTypeSize;}
     size_t size() const {return mTypeSize ? mData.size()/mTypeSize : 0;}
@@ -253,6 +270,8 @@ namespace fx
     mat3& mat3At(int x = 0, int y = 0) {return (mat3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_3X3));}
     mat4& mat4At(int x = 0, int y = 0) {return (mat4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_4X4));}
     
+    char& charAt(int x = 0, int y = 0) {return (char&)mData.at((x+y*mWidth)*GetTypeSize(VAR_STRING));}
+    
     float floatValue(int x = 0, int y = 0) const {return isIntType() ? (float)intValue(x, y) : (const float&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT));}
     vec2 vec2Value(int x = 0, int y = 0) const {return isIntType() ? vec2(ivec2Value(x, y)) : (const vec2&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_2));}
     vec3 vec3Value(int x = 0, int y = 0) const {return isIntType() ? vec3(ivec3Value(x, y)) : (const vec3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_FLOAT_3));}
@@ -277,6 +296,9 @@ namespace fx
     mat3 mat3Value(int x = 0, int y = 0) const {return (const mat3&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_3X3));}
     mat4 mat4Value(int x = 0, int y = 0) const {return (const mat4&)mData.at((x+y*mWidth)*GetTypeSize(VAR_MTX_4X4));}
     
+    char charValue(int x = 0, int y = 0) const {return (char&)mData.at((x+y*mWidth)*GetTypeSize(VAR_STRING));}
+    std::string stringValue() const {return (const char*)ptr();}
+    
     operator float() const {return floatValue();}
     operator int()   const {return intValue();}
     
@@ -294,6 +316,8 @@ namespace fx
     operator mat2() const {return mat2Value();}
     operator mat3() const {return mat3Value();}
     operator mat4() const {return mat4Value();}
+    
+    operator std::string() const {return (const char*)ptr();}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
@@ -354,6 +378,11 @@ namespace fx
         ivec4 value(0, 0, 0, 0);
         success = value.parse(str);
         *this = value;
+      }
+      else
+      {
+        success = true;
+        *this = str;
       }
       return success;
     }
