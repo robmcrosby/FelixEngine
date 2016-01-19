@@ -18,9 +18,10 @@
         </ShaderFunction>
         <ShaderFunction name="SimpleColor" type="fragment">
           #version 410
-          uniform vec4 Color;
+          //uniform vec4 Color;
           out vec4 FragColor;
-          void main() {FragColor = Color;}
+          //void main() {FragColor = Color;}
+          void main() {FragColor = vec4(1.0, 1.0, 1.0, 1.0);}
         </ShaderFunction>
         <ShaderFunction name="SimpleVertexUV" type="vertex">
           #version 410

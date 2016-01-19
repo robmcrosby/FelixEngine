@@ -263,7 +263,39 @@ void GLGraphicSystem::processViewTask(const GraphicTask *task, int stereo)
 
 void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask *view, int stereo)
 {
-  
+  if (task->drawState.stereo & stereo)
+  {
+//    const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
+    const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
+    const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
+    
+    if (shader && shader->loaded() && mesh && mesh->loaded())
+    {
+      setTriangleCullMode(task->drawState.cullMode);
+      
+      // Set the state for the Frame
+      //frame->use(stereo);
+      //if (task->isClearTask())
+      //  frame->clear(task->clearState);
+      //frame->setDepthState(task->depthState);
+      //frame->setBlendState(task->blendState);
+      
+      // Set the state for the Shader
+      shader->use();
+      mesh->bind(shader);
+      
+//      if (view && view->localUniforms)
+//        static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
+//      if (task->materialUniforms)
+//        static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
+//      if (task->localUniforms)
+//        static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
+//      shader->applyTextureMap(task->textureMap);
+      
+      // Draw the Mesh
+      mesh->draw(task->drawState.instances, task->drawState.submesh);
+    }
+  }
 }
 
 

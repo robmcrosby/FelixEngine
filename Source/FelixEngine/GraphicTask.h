@@ -38,8 +38,10 @@ namespace fx
   
   enum BUFFER_SLOTS
   {
-    BUFFER_SLOT_MESH = 0,
-    BUFFER_SLOTS_SIZE = 8,
+    BUFFER_SLOT_SHADER   = 0,
+    BUFFER_SLOT_MESH     = 1,
+    BUFFER_SLOT_UNIFORMS = 2,
+    BUFFER_SLOTS_SIZE    = 4,
   };
   
   enum COLOR_ATTACHMENTS

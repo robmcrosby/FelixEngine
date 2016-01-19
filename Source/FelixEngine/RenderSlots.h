@@ -310,6 +310,13 @@ namespace fx
         setShader(node.attribute("shader"));
       if (node.hasSubNode("Shader"))
         setShader(*node.subNode("Shader"));
+      
+      // Set the Uniforms
+      if (node.hasSubNode("Uniforms"))
+        setUniforms(*node.subNode("Uniforms"));
+      
+      // Set the Draw State
+      mDrawState.setToXml(node);
     }
     
     void setLayer(int layer) {mLayer = layer;}
@@ -342,16 +349,34 @@ namespace fx
     }
     BufferMap& shader() {return *mShader;}
     
+    void setUniforms(const BufferMap &uniforms) {mUniforms = uniforms;}
+    void setUniforms(const XMLTree::Node &node)
+    {
+      mUniforms = BUFFER_MAP_UNIFORMS;
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+        mUniforms->addBuffer((*itr)->attribute("name"), *itr);
+      mGraphicSystem->uploadBuffer(*mUniforms);
+    }
+    BufferMap& uniforms() {return *mUniforms;}
+    
   private:
     void render()
     {
-      
+      GraphicTask task(GRAPHIC_TASK_DRAW);
+      task.drawState = mDrawState;
+      task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
+      task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
+      mGraphicSystem->addGraphicTask(task);
     }
     
     int mLayer;
     
     OwnPtr<BufferMap> mShader;
     OwnPtr<BufferMap> mMesh;
+    OwnPtr<BufferMap> mUniforms;
+    
+    DrawState mDrawState;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;
