@@ -265,7 +265,7 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
 {
   if (task->drawState.stereo & stereo)
   {
-//    const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
+    const GLFrame  *frame  = mFrames.begin()->second;
     const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
     const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
     
@@ -274,11 +274,10 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       setTriangleCullMode(task->drawState.cullMode);
       
       // Set the state for the Frame
-      //frame->use(stereo);
-      //if (task->isClearTask())
-      //  frame->clear(task->clearState);
-      //frame->setDepthState(task->depthState);
-      //frame->setBlendState(task->blendState);
+      frame->use(stereo);
+      frame->clear(task->drawState.clearState);
+      frame->setDepthState(task->drawState.depthState);
+      frame->setBlendState(task->drawState.blendState);
       
       // Set the state for the Shader
       shader->use();

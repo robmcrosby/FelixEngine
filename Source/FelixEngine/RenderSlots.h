@@ -327,8 +327,8 @@ namespace fx
     void setMesh(const XMLTree::Node &node)
     {
       setMesh(node.attribute("name"));
-      if (MeshLoader::LoadMeshFromXML(*mMesh, node))
-        mGraphicSystem->uploadBuffer(*mMesh);
+      mMesh->setToXml(node);
+      mGraphicSystem->uploadBuffer(*mMesh);
     }
     BufferMap& mesh() {return *mMesh;}
     
@@ -337,26 +337,12 @@ namespace fx
     void setShader(const XMLTree::Node &node)
     {
       setShader(node.attribute("name"));
-      mShader->clear();
-      mShader->setType(BUFFER_MAP_SHADER);
-      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-      {
-        Buffer &buffer = mShader->addBuffer((*itr)->attribute("name"), BUFFER_SHADER);
-        buffer = (*itr)->contents();
-        buffer.setFlags((int)Shader::ParseShaderPart((*itr)->element()));
-      }
+      mShader->setToXml(node);
       mGraphicSystem->uploadBuffer(*mShader);
     }
     BufferMap& shader() {return *mShader;}
     
     void setUniforms(const BufferMap &uniforms) {mUniforms = uniforms;}
-    void setUniforms(const XMLTree::Node &node)
-    {
-      mUniforms = BUFFER_MAP_UNIFORMS;
-      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-        mUniforms->addBuffer((*itr)->attribute("name"), *itr);
-      mGraphicSystem->uploadBuffer(*mUniforms);
-    }
     BufferMap& uniforms() {return *mUniforms;}
     
   private:

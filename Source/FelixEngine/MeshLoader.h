@@ -10,12 +10,14 @@
 #define MeshLoader_h
 
 #include "VertexBufferMap.h"
-#include "BufferMap.h"
 #include "XMLTree.h"
 
 
 namespace fx
 {
+  class BufferMap;
+  class Buffer;
+  
   class MeshLoader
   {
   public:

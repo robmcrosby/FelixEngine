@@ -322,13 +322,15 @@ namespace fx
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
-      // TODO: Update to handle arrays.
-      return parse(node.attribute("type"), node.contents());
+      if (node.hasAttribute("type"))
+        return parse(node.attribute("type"), node.contents());
+      return parse(node.element(), node.contents());
     }
     
     bool parse(const std::string &type, const std::string &str) {return parse(GetVariantType(type), str);}
     bool parse(VAR_TYPE type, const std::string &str)
     {
+      // TODO: Update to handle arrays.
       bool success = false;
       
       if (type == VAR_FLOAT)

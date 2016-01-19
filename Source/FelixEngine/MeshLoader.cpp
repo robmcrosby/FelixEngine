@@ -9,6 +9,7 @@
 #include "MeshLoader.h"
 #include "FileSystem.h"
 #include "StringUtils.h"
+#include "BufferMap.h"
 
 #include <sstream>
 

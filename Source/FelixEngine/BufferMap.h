@@ -12,6 +12,23 @@
 #include "Variant.h"
 #include "Resource.h"
 
+#include "MeshLoader.h"
+#include "GraphicResources.h"
+
+#define UNIFORMS_STR "Uniforms"
+#define STRUCT_STR   "Struct"
+#define MESH_STR     "Mesh"
+#define TEXTURES_STR "Textures"
+#define SHADER_STR   "Shader"
+#define TARGETS_STR  "Targets"
+
+#define UNIFORM_STR   "Uniform"
+#define INSTANCED_STR "Instanced"
+#define VERTEX_STR    "Vertex"
+#define INDICES_STR   "Indices"
+#define RANGES_STR    "Ranges"
+#define TEXTURE_STR   "Texture"
+
 
 namespace fx
 {
@@ -37,8 +54,9 @@ namespace fx
     BUFFER_MAP_UNIFORMS, /**< Individual Uniforms */
     BUFFER_MAP_STRUCT,   /**< Values of a Uniform Struct */
     BUFFER_MAP_MESH,     /**< Parts for a Mesh */
-    BUFFER_MAP_TEXTURES, /**< Collection of Textures */
+    BUFFER_MAP_TEXTURES, /**< Map of Textures */
     BUFFER_MAP_SHADER,   /**< Shader Program */
+    BUFFER_MAP_TARGETS,  /**< Render Target Textures */
   };
   
   class Buffer: public Variant
@@ -104,9 +122,29 @@ namespace fx
     Buffer& operator=(const XMLTree::Node *node) {setToXml(node); return *this;}
     Buffer& operator=(const XMLTree::Node &node) {setToXml(node); return *this;}
     
+    static BUFFER_TYPE ParseType(const std::string &str)
+    {
+      if (str == UNIFORM_STR)
+        return BUFFER_UNIFORM;
+      if (str == INSTANCED_STR)
+        return BUFFER_INSTANCED;
+      if (str == VERTEX_STR)
+        return BUFFER_VERTEX;
+      if (str == INDICES_STR)
+        return BUFFER_INDICES;
+      if (str == RANGES_STR)
+        return BUFFER_RANGES;
+      if (str == TEXTURES_STR)
+        return BUFFER_TEXTURE;
+      if (str == SHADER_STR)
+        return BUFFER_SHADER;
+      return BUFFER_UNIFORM;
+    }
+    
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
+      
       Variant::setToXml(node);
       return true;
     }
@@ -134,6 +172,7 @@ namespace fx
   {
   public:
     BufferMap(BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mType(type), mResource(0), mFlags(0) {}
+    BufferMap(const XMLTree::Node &node): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {setToXml(node);}
     BufferMap(const std::string &name, BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mName(name), mType(type), mResource(0), mFlags(0) {}
     BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {*this = map;}
     ~BufferMap() {setResource(nullptr);}
@@ -149,6 +188,23 @@ namespace fx
       return *this;
     }
     
+    static BUFFER_MAP_TYPE ParseType(const std::string &str)
+    {
+      if (str == UNIFORMS_STR)
+        return BUFFER_MAP_UNIFORMS;
+      if (str == STRUCT_STR)
+        return BUFFER_MAP_STRUCT;
+      if (str == MESH_STR)
+        return BUFFER_MAP_MESH;
+      if (str == TEXTURES_STR)
+        return BUFFER_MAP_TEXTURES;
+      if (str == SHADER_STR)
+        return BUFFER_MAP_SHADER;
+      if (str == TARGETS_STR)
+        return BUFFER_MAP_TARGETS;
+      return BUFFER_MAP_UNIFORMS;
+    }
+    
     typedef std::vector<Buffer>::iterator iterator;
     iterator begin() {return mBuffers.begin();}
     iterator end() {return mBuffers.end();}
@@ -157,6 +213,16 @@ namespace fx
     const_iterator begin() const {return mBuffers.begin();}
     const_iterator end() const {return mBuffers.end();}
     
+    Buffer& addBuffer(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+        mNameMap[node.attribute("name")] = (int)mBuffers.size();
+      mBuffers.push_back(node);
+      
+      // TODO: implement differnet buffer stuff here.
+      
+      return mBuffers.back();
+    }
     Buffer& addBuffer(const Buffer &buffer = Buffer())
     {
       if (buffer.name() != "")
@@ -220,6 +286,7 @@ namespace fx
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
     
+    void setType(const std::string &str) {mType = ParseType(str);}
     void setType(BUFFER_MAP_TYPE type) {mType = type;}
     BUFFER_MAP_TYPE type() const {return mType;}
     
@@ -267,6 +334,32 @@ namespace fx
     
     void setFlags(int f) {mFlags = f;}
     int flags() const {return mFlags;}
+    
+    void setToXml(const XMLTree::Node &node)
+    {
+      clear();
+      setType(node.element());
+      setName(node.attribute("name"));
+      
+      if (mType == BUFFER_MAP_MESH)
+      {
+        MeshLoader::LoadMeshFromXML(*this, node);
+      }
+      else if (mType == BUFFER_MAP_SHADER)
+      {
+        for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+        {
+          Buffer &buffer = addBuffer((*itr)->attribute("name"), BUFFER_SHADER);
+          buffer = (*itr)->contents();
+          buffer.setFlags((int)Shader::ParseShaderPart((*itr)->element()));
+        }
+      }
+      else
+      {
+        for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+          addBuffer(**itr);
+      }
+    }
     
   private:
     std::vector<Buffer> mBuffers;
