@@ -14,6 +14,7 @@
 #include "GLShader.h"
 #include "GLMesh.h"
 #include "GLTexture.h"
+#include "GLUniforms.h"
 
 
 using namespace fx;
@@ -242,6 +243,17 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
+    else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
+    {
+      GLUniforms *uniforms = GetResource<GLUniforms>(bufferMap);
+      if (!uniforms || !mUniforms.count(uniforms))
+      {
+        uniforms = new GLUniforms();
+        mUniforms.insert(uniforms);
+        bufferMap->setResource(uniforms);
+      }
+      uniforms->uploadBufferMap(*bufferMap);
+    }
   }
 }
 
@@ -269,6 +281,8 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
     const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
     
+    const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+    
     if (shader && shader->loaded() && mesh && mesh->loaded())
     {
       setTriangleCullMode(task->drawState.cullMode);
@@ -282,6 +296,9 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       // Set the state for the Shader
       shader->use();
       mesh->bind(shader);
+      
+      if (localUniforms)
+        localUniforms->applyToShader(shader);
       
 //      if (view && view->localUniforms)
 //        static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);

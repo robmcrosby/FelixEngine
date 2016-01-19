@@ -56,7 +56,7 @@
 //        }
 //      }
 //    }
-//    
+//
 //  private:
 //    void copyUniform(UniformList::iterator &dst, UniformMap::iterator &src)
 //    {
@@ -212,7 +212,7 @@
 //        }
 //      }
 //    }
-//    
+//
 //    UniformMap *mUniformMap;
 //    UniformList mList;
 //  };

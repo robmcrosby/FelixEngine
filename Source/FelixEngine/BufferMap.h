@@ -144,7 +144,7 @@ namespace fx
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
-      
+      setName(node.attribute("name"));
       Variant::setToXml(node);
       return true;
     }

@@ -11,6 +11,7 @@
 
 #include "GraphicSystem.h"
 #include <map>
+#include <set>
 #include <SDL2/SDL.h>
 
 #if __IPHONEOS__
@@ -31,7 +32,7 @@ namespace fx
   class GLShader;
   class GLMesh;
   class GLTexture;
-  class GLUniformMap;
+  class GLUniforms;
   
   /**
    *
@@ -96,6 +97,8 @@ namespace fx
     std::map<std::string, GLShader*>  mShaders;
     std::map<std::string, GLMesh*>    mMeshes;
     std::map<std::string, GLTexture*> mTextures;
+    
+    std::set<GLUniforms*> mUniforms;
     
     std::map<std::string, std::string> mShaderFunctions;
     

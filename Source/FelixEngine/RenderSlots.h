@@ -343,6 +343,11 @@ namespace fx
     BufferMap& shader() {return *mShader;}
     
     void setUniforms(const BufferMap &uniforms) {mUniforms = uniforms;}
+    void setUniforms(const XMLTree::Node &node)
+    {
+      mUniforms = node;
+      mGraphicSystem->uploadBuffer(*mUniforms);
+    }
     BufferMap& uniforms() {return *mUniforms;}
     
   private:

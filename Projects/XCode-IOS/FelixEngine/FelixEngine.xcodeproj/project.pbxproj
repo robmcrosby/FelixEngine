@@ -151,6 +151,7 @@
 		C1D3086C1C348098003286CF /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C1D3086B1C348098003286CF /* Fonts */; };
 		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834B1C49B4FC00E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E683501C4ED40A00E1705D /* GLUniforms.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834F1C4ED40A00E1705D /* GLUniforms.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -315,6 +316,7 @@
 		C1D3086B1C348098003286CF /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/ModelViewer/Resources/Fonts; sourceTree = "<group>"; };
 		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 		C1E6834B1C49B4FC00E1705D /* OwnPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OwnPtr.h; path = ../../../../Source/FelixEngine/OwnPtr.h; sourceTree = "<group>"; };
+		C1E6834F1C4ED40A00E1705D /* GLUniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLUniforms.h; path = ../../../../Source/FelixEngine/GLUniforms.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -657,6 +659,7 @@
 		C197CDF21BED2D87007F68E0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C1E6834F1C4ED40A00E1705D /* GLUniforms.h */,
 				C197CD931BED298D007F68E0 /* GLWindow.h */,
 				C197CD8C1BED298D007F68E0 /* GLFrame.h */,
 				C197CD901BED298D007F68E0 /* GLShader.h */,
@@ -820,6 +823,7 @@
 				C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */,
 				C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */,
 				C197CE561BED5FD6007F68E0 /* List.h in Headers */,
+				C1E683501C4ED40A00E1705D /* GLUniforms.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

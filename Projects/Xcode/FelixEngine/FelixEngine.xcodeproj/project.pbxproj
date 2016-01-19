@@ -124,6 +124,7 @@
 		C1D308681C34505C003286CF /* UIText.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D308671C34505C003286CF /* UIText.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D905231C17B1750099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905221C17B1750099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E6834A1C488D8900E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683491C488D8900E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E6834E1C4ECB2000E1705D /* GLUniforms.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834D1C4ECB2000E1705D /* GLUniforms.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,6 +294,7 @@
 		C1D308671C34505C003286CF /* UIText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIText.h; path = ../../../../Source/FelixEngine/UIText.h; sourceTree = "<group>"; };
 		C1D905221C17B1750099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 		C1E683491C488D8900E1705D /* OwnPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OwnPtr.h; path = ../../../../Source/FelixEngine/OwnPtr.h; sourceTree = "<group>"; };
+		C1E6834D1C4ECB2000E1705D /* GLUniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLUniforms.h; path = ../../../../Source/FelixEngine/GLUniforms.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -445,6 +447,7 @@
 		37B490061BC9D79D00FC97A5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C1E6834D1C4ECB2000E1705D /* GLUniforms.h */,
 				370FEA8C1BC3428900440244 /* GLWindow.h */,
 				37B48FFB1BC9D73D00FC97A5 /* GLFrame.h */,
 				37B490031BC9D77A00FC97A5 /* GLShader.h */,
@@ -743,6 +746,7 @@
 				C197CCC71BE69D08007F68E0 /* List.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
 				37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */,
+				C1E6834E1C4ECB2000E1705D /* GLUniforms.h in Headers */,
 				C197CE481BED5F37007F68E0 /* MTLGraphicResources.h in Headers */,
 				37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */,
 				3722FDF21BDEAF9A00B07476 /* TaskingSystem.h in Headers */,
