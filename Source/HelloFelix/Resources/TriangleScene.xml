@@ -13,15 +13,13 @@
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
-        <Material>
-          <Shader name="ColorShader">
-            <Vertex function="SimpleVertex"/>
-            <Fragment function="SimpleColor"/>
-          </Shader>
-          <UniformMap>
-            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
-          </UniformMap>
-        </Material>
+        <Shader name="ColorShader">
+          <Vertex name="SimpleVertex"/>
+          <Fragment name="SimpleColor"/>
+        </Shader>
+        <Uniforms>
+          <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+        </Uniforms>
       </Slot>
     </RenderSlots>
   </Model>

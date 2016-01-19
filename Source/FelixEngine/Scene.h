@@ -78,7 +78,7 @@ namespace fx
     BufferMap& getBufferMap(const std::string name)
     {
       if (!mBufferMaps.count(name))
-        mBufferMaps[name] = new BufferMap();
+        mBufferMaps[name] = new BufferMap(name);
       return *mBufferMaps[name];
     }
     void clearBufferMaps()

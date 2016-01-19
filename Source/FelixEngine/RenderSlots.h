@@ -281,7 +281,7 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mMeshBuffer(BUFFER_MAP_MESH), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
+    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -299,29 +299,48 @@ namespace fx
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
       
-      // Set the Mesh BufferMap
+      // Set the Mesh
       if (node.hasAttribute("mesh"))
         setMesh(node.attribute("mesh"));
       if (node.hasSubNode("Mesh"))
         setMesh(*node.subNode("Mesh"));
+      
+      // Set the Shader
+      if (node.hasAttribute("shader"))
+        setShader(node.attribute("shader"));
+      if (node.hasSubNode("Shader"))
+        setShader(*node.subNode("Shader"));
     }
     
     void setLayer(int layer) {mLayer = layer;}
     int layer() const {return mLayer;}
     
-    void setMesh(BufferMap &mesh) {mMeshBuffer = &mesh;}
+    void setMesh(BufferMap &mesh) {mMesh = &mesh;}
     void setMesh(const std::string &name) {setMesh(mScene->getBufferMap(name));}
     void setMesh(const XMLTree::Node &node)
     {
-      // Set the shared Mesh Buffer if there is a name attribute
-      if (node.hasAttribute("name"))
-        setMesh(node.attribute("name"));
-      
-      // Load the Mesh Buffer
-      if (MeshLoader::LoadMeshFromXML(*mMeshBuffer, node))
-        mGraphicSystem->uploadBuffer(*mMeshBuffer);
+      setMesh(node.attribute("name"));
+      if (MeshLoader::LoadMeshFromXML(*mMesh, node))
+        mGraphicSystem->uploadBuffer(*mMesh);
     }
-    BufferMap& mesh() {return *mMeshBuffer;}
+    BufferMap& mesh() {return *mMesh;}
+    
+    void setShader(BufferMap &shader) {mShader = &shader;}
+    void setShader(const std::string &name) {setShader(mScene->getBufferMap(name));}
+    void setShader(const XMLTree::Node &node)
+    {
+      setShader(node.attribute("name"));
+      mShader->clear();
+      mShader->setType(BUFFER_MAP_SHADER);
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+      {
+        Buffer &buffer = mShader->addBuffer((*itr)->attribute("name"), BUFFER_SHADER);
+        buffer = (*itr)->contents();
+        buffer.setFlags((int)Shader::ParseShaderPart((*itr)->element()));
+      }
+      mGraphicSystem->uploadBuffer(*mShader);
+    }
+    BufferMap& shader() {return *mShader;}
     
   private:
     void render()
@@ -331,7 +350,8 @@ namespace fx
     
     int mLayer;
     
-    OwnPtr<BufferMap> mMeshBuffer;
+    OwnPtr<BufferMap> mShader;
+    OwnPtr<BufferMap> mMesh;
     
     Scene *mScene;
     GraphicSystem *mGraphicSystem;

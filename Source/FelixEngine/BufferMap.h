@@ -26,6 +26,7 @@ namespace fx
     BUFFER_INDICES,   /**< Indices for a Mesh */
     BUFFER_RANGES,    /**< Ranges for Sub-Meshes in a Mesh */
     BUFFER_TEXTURE,   /**< Two dimensional image */
+    BUFFER_SHADER,    /**< Shader source string */
   };
   
   /**
@@ -37,33 +38,38 @@ namespace fx
     BUFFER_MAP_STRUCT,   /**< Values of a Uniform Struct */
     BUFFER_MAP_MESH,     /**< Parts for a Mesh */
     BUFFER_MAP_TEXTURES, /**< Collection of Textures */
+    BUFFER_MAP_SHADER,   /**< Shader Program */
   };
   
   class Buffer: public Variant
   {
   public:
-    Buffer(BUFFER_TYPE bufType = BUFFER_UNIFORM, VAR_TYPE varType = VAR_UNKNOWN, size_t size = 1): Variant(varType, size), mBufferType(bufType), mResource(0) {}
-    Buffer(const Variant &var): Variant(var), mBufferType(BUFFER_UNIFORM), mResource(0) {}
-    Buffer(const Buffer &buf): Variant(buf), mName(buf.mName), mBufferType(buf.mBufferType), mResource(0) {setResource(buf.mResource);}
-    Buffer(const std::string &type, const std::string &str): Variant(type, str), mBufferType(BUFFER_UNIFORM), mResource(0) {}
+    Buffer(BUFFER_TYPE bufType = BUFFER_UNIFORM, VAR_TYPE varType = VAR_UNKNOWN, size_t size = 1): Variant(varType, size), mBufferType(bufType), mResource(0), mFlags(0) {}
+    Buffer(const Variant &var): Variant(var), mBufferType(BUFFER_UNIFORM), mResource(0), mFlags(0) {}
+    Buffer(const Buffer &buf): Variant(buf), mName(buf.mName), mBufferType(buf.mBufferType), mResource(0), mFlags(buf.mFlags) {setResource(buf.mResource);}
+    Buffer(const std::string &type, const std::string &str): Variant(type, str), mBufferType(BUFFER_UNIFORM), mResource(0), mFlags(0) {}
     
-    Buffer(const XMLTree::Node *node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0) {setToXml(node);}
-    Buffer(const XMLTree::Node &node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0) {setToXml(node);}
+    Buffer(const XMLTree::Node *node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0), mFlags(0) {setToXml(node);}
+    Buffer(const XMLTree::Node &node): Variant(node), mBufferType(BUFFER_UNIFORM), mResource(0), mFlags(0) {setToXml(node);}
     
-    Buffer(const float &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const vec2  &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const vec3  &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const vec4  &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const RGBAf &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(const float &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const vec2  &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const vec3  &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const vec4  &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const RGBAf &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
     
-    Buffer(const int   &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const ivec2 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const ivec3 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const ivec4 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(const int   &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const ivec2 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const ivec3 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const ivec4 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
     
-    Buffer(const mat2 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const mat3 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
-    Buffer(const mat4 &value): Variant(value), mBufferType(BUFFER_UNIFORM) {}
+    Buffer(const mat2 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const mat3 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const mat4 &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    
+    Buffer(const std::string &value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    Buffer(const char *value): Variant(value), mBufferType(BUFFER_UNIFORM), mFlags(0) {}
+    
     virtual ~Buffer() {setResource(nullptr);}
     
     Buffer& operator=(const Buffer &buffer)
@@ -72,6 +78,7 @@ namespace fx
       mName = buffer.mName;
       mBufferType = buffer.mBufferType;
       setResource(buffer.mResource);
+      mFlags = buffer.mFlags;
       return *this;
     }
     Buffer& operator=(const Variant &variant) {Variant::operator=(variant); return *this;}
@@ -90,6 +97,9 @@ namespace fx
     Buffer& operator=(const mat2 &value) {Variant::operator=(value); return *this;}
     Buffer& operator=(const mat3 &value) {Variant::operator=(value); return *this;}
     Buffer& operator=(const mat4 &value) {Variant::operator=(value); return *this;}
+    
+    Buffer& operator=(const std::string &value) {Variant::operator=(value); return *this;}
+    Buffer& operator=(const char *value) {Variant::operator=(value); return *this;}
     
     Buffer& operator=(const XMLTree::Node *node) {setToXml(node); return *this;}
     Buffer& operator=(const XMLTree::Node &node) {setToXml(node); return *this;}
@@ -110,16 +120,21 @@ namespace fx
     void setResource(Resource *r) {Resource::Replace(&mResource, r);}
     Resource* resource() const {return mResource;}
     
+    void setFlags(int f) {mFlags = f;}
+    int flags() const {return mFlags;}
+    
   private:
     std::string mName;
     BUFFER_TYPE mBufferType;
     Resource *mResource;
+    int mFlags;
   };
   
   class BufferMap
   {
   public:
     BufferMap(BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mType(type), mResource(0), mFlags(0) {}
+    BufferMap(const std::string &name, BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mName(name), mType(type), mResource(0), mFlags(0) {}
     BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {*this = map;}
     ~BufferMap() {setResource(nullptr);}
     
@@ -142,17 +157,19 @@ namespace fx
     const_iterator begin() const {return mBuffers.begin();}
     const_iterator end() const {return mBuffers.end();}
     
-    void addBuffer(const Buffer &buffer = Buffer())
+    Buffer& addBuffer(const Buffer &buffer = Buffer())
     {
       if (buffer.name() != "")
         mNameMap[buffer.name()] = (int)mBuffers.size();
       mBuffers.push_back(buffer);
+      return mBuffers.back();
     }
-    void addBuffer(const std::string &name, const Buffer &buffer = Buffer())
+    Buffer& addBuffer(const std::string &name, const Buffer &buffer = Buffer())
     {
       mNameMap[name] = (int)mBuffers.size();
       mBuffers.push_back(buffer);
       mBuffers.back().setName(name);
+      return mBuffers.back();
     }
     
     void clear()
@@ -255,8 +272,8 @@ namespace fx
     
     std::string mName;
     BUFFER_MAP_TYPE mType;
-    int mFlags;
     Resource *mResource;
+    int mFlags;
   };
   typedef std::list<BufferMap*> BufferMapList;
   typedef std::map<std::string, BufferMap*> BufferMapDirectory;

@@ -63,6 +63,7 @@ namespace fx
     {
       if (mPtr != ptr)
         clear();
+      mHasOwnership = false;
       mPtr = ptr;
       return *this;
     }
