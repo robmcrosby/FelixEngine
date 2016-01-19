@@ -84,6 +84,8 @@ namespace fx
     void processViewTask(const GraphicTask *task, int stereo);
     void processDrawTask(const GraphicTask *task, const GraphicTask *view, int stereo);
     
+    bool bindTextures(BufferMap *textures);
+    
     void setTriangleCullMode(CULL_MODE mode);
     
     void updateResources();

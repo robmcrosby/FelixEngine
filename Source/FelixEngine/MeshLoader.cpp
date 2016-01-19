@@ -371,6 +371,7 @@ bool MeshLoader::LoadMeshPrimitive(BufferMap &bufferMap, const XMLTree::Node &no
 bool MeshLoader::LoadMeshPlane(BufferMap &bufferMap, const vec2 &size, const vec2 &offset)
 {
   bufferMap.clear();
+  bufferMap.setFlags((int)VERTEX_TRIANGLE_STRIP);
   bufferMap.getBuffer("SubMeshes", BUFFER_RANGES) = ivec2(0, 4);
   
   // Set Positions

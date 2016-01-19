@@ -152,6 +152,8 @@
 		C1D905211C179C540099974C /* Condition.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D905201C179C540099974C /* Condition.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834B1C49B4FC00E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E683501C4ED40A00E1705D /* GLUniforms.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834F1C4ED40A00E1705D /* GLUniforms.h */; };
+		C1E683571C4EFB5000E1705D /* TextureLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E683551C4EFB5000E1705D /* TextureLoader.cpp */; };
+		C1E683581C4EFB5000E1705D /* TextureLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683561C4EFB5000E1705D /* TextureLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -317,6 +319,8 @@
 		C1D905201C179C540099974C /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Condition.h; path = ../../../../Source/FelixEngine/Condition.h; sourceTree = "<group>"; };
 		C1E6834B1C49B4FC00E1705D /* OwnPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OwnPtr.h; path = ../../../../Source/FelixEngine/OwnPtr.h; sourceTree = "<group>"; };
 		C1E6834F1C4ED40A00E1705D /* GLUniforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLUniforms.h; path = ../../../../Source/FelixEngine/GLUniforms.h; sourceTree = "<group>"; };
+		C1E683551C4EFB5000E1705D /* TextureLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureLoader.cpp; path = ../../../../Source/FelixEngine/TextureLoader.cpp; sourceTree = "<group>"; };
+		C1E683561C4EFB5000E1705D /* TextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureLoader.h; path = ../../../../Source/FelixEngine/TextureLoader.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -515,6 +519,8 @@
 				C197CDA01BED298D007F68E0 /* MeshLoader.cpp */,
 				C197CD9B1BED298D007F68E0 /* ImageLoader.h */,
 				C197CD9A1BED298D007F68E0 /* ImageLoader.cpp */,
+				C1E683561C4EFB5000E1705D /* TextureLoader.h */,
+				C1E683551C4EFB5000E1705D /* TextureLoader.cpp */,
 			);
 			name = Loaders;
 			sourceTree = "<group>";
@@ -766,6 +772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */,
+				C1E683581C4EFB5000E1705D /* TextureLoader.h in Headers */,
 				C197CE531BED5FC9007F68E0 /* IndexedMap.h in Headers */,
 				C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */,
 				C197CE371BED5EA3007F68E0 /* Projection.h in Headers */,
@@ -997,6 +1004,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1E683571C4EFB5000E1705D /* TextureLoader.cpp in Sources */,
 				C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */,
 				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
 				C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */,

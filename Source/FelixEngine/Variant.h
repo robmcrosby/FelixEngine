@@ -186,9 +186,8 @@ namespace fx
     
     void append(VAR_TYPE type, const void *ptr)
     {
-      size_t typeSize = GetTypeSize(type);
-      mData.resize(mData.size()+typeSize);
-      memcpy(&mData.at(mData.size()-typeSize), ptr, typeSize);
+      resize(type, size()+1);
+      memcpy(&mData.at(mData.size()-mTypeSize), ptr, mTypeSize);
     }
     void append(const float &value) {append(VAR_FLOAT, &value);}
     void append(const vec2  &value) {append(VAR_FLOAT_2, value.ptr());}

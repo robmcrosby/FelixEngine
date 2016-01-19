@@ -13,6 +13,7 @@
 #include "Resource.h"
 
 #include "MeshLoader.h"
+#include "TextureLoader.h"
 #include "GraphicResources.h"
 
 #define UNIFORMS_STR "Uniforms"
@@ -342,9 +343,9 @@ namespace fx
       setName(node.attribute("name"));
       
       if (mType == BUFFER_MAP_MESH)
-      {
         MeshLoader::LoadMeshFromXML(*this, node);
-      }
+      else if (mType == BUFFER_MAP_TEXTURES)
+        TextureLoader::LoadTexturesFromXml(*this, node);
       else if (mType == BUFFER_MAP_SHADER)
       {
         for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)

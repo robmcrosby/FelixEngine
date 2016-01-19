@@ -57,6 +57,54 @@ namespace fx
       setUnloaded();
     }
     
+    void uploadBuffer(const Buffer &buffer)
+    {
+      bool success = false;
+      
+      unload();
+      if (!mTextureId)
+        glGenTextures(1, &mTextureId);
+      if (!mTextureId)
+        std::cerr << "Error: creating OpenGL Texture" << std::endl;
+      else
+      {
+        mSize.w = (int)buffer.width();
+        mSize.h = (int)buffer.height();
+        
+        glBindTexture(GL_TEXTURE_2D, mTextureId);
+        
+        setFilters(mSampler);
+        
+        // Load the Image to the Texture
+        const GLvoid *pixels = buffer.ptr();
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLint)mSize.w, (GLint)mSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        
+        // Generate the Mipmaps
+        if (mSampler.mipMappingEnabled())
+        {
+          mMipMapped = true;
+          glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        glBindTexture(GL_TEXTURE_2D, 0);
+        success = true;
+      }
+      
+      if (success)
+        setLoaded();
+      else
+        setUnloaded();
+    }
+    
+    void unload()
+    {
+      if (!mFBOTexture && mTextureId)
+      {
+        glDeleteTextures(1, &mTextureId);
+        mTextureId = 0;
+      }
+    }
+    
+    
     GLuint textureId() const {return mTextureId;}
     
   private:

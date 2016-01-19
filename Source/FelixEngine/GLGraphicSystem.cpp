@@ -243,6 +243,16 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
+    else if (bufferMap->type() == BUFFER_MAP_TEXTURES)
+    {
+      for (BufferMap::iterator itr = bufferMap->begin(); itr != bufferMap->end(); ++itr)
+      {
+        Buffer &buffer = *itr;
+        buffer.setResource(getTexture(buffer.name()));
+        GLTexture *texture = GetResource<GLTexture>(&buffer);
+        texture->uploadBuffer(buffer);
+      }
+    }
     else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
     {
       GLUniforms *uniforms = GetResource<GLUniforms>(bufferMap);
@@ -309,9 +319,29 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
 //      shader->applyTextureMap(task->textureMap);
       
       // Draw the Mesh
-      mesh->draw(task->drawState.instances, task->drawState.submesh);
+      if (bindTextures(task->bufferSlots[BUFFER_SLOT_TEXTURES]))
+        mesh->draw(task->drawState.instances, task->drawState.submesh);
     }
   }
+}
+
+bool GLGraphicSystem::bindTextures(BufferMap *textures)
+{
+  bool success = true;
+  if (textures != nullptr)
+  {
+    int index = 0;
+    Sampler sampler;
+    for (BufferMap::iterator itr = textures->begin(); itr != textures->end(); ++itr)
+    {
+      GLTexture *texture = GetResource<GLTexture>(&(*itr));
+      if (!texture || !texture->loaded())
+        success = false;
+      else
+        texture->use(index++, sampler);
+    }
+  }
+  return success;
 }
 
 
