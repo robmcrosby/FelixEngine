@@ -226,6 +226,8 @@ namespace fx
     void setResource(Resource *r) {Resource::Replace(&mResource, r);}
     void* resource() const {return mResource;}
     
+    size_t size() const {return mBuffers.size();}
+    
     /**
      * Gets the combined size of all the buffers.
      */

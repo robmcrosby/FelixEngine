@@ -232,10 +232,15 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
   {
     if (bufferMap->type() == BUFFER_MAP_MESH)
     {
-      if (bufferMap->resource() == nullptr)
-        bufferMap->setResource(getMesh(bufferMap->name()));
+      bufferMap->setResource(getMesh(bufferMap->name()));
       GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
       mesh->uploadBufferMap(*bufferMap);
+    }
+    else if (bufferMap->type() == BUFFER_MAP_SHADER)
+    {
+      bufferMap->setResource(getShader(bufferMap->name()));
+      GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
+      shader->uploadBufferMap(*bufferMap);
     }
   }
 }

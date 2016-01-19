@@ -73,8 +73,65 @@ namespace fx
       return 0;
     }
 
+    void uploadBufferMap(const BufferMap &bufferMap)
+    {
+      bool success = false;
+      unload();
+      if (bufferMap.size() >= 2)
+      {
+        GLuint shaderParts[SHADER_COUNT];
+        for (int i = 0; i < SHADER_COUNT; ++i)
+          shaderParts[i] = 0;
+        
+        // Load the Shader Parts
+        success = true;
+        for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
+          success &= loadBuffer(*itr, shaderParts);
+        
+        if (success)
+          createProgram(shaderParts);
+        deleteParts(shaderParts);
+      }
+      
+      if (success)
+        setLoaded();
+      else
+        setUnloaded();
+    }
     
   private:
+    bool loadBuffer(const Buffer &buffer, GLuint *parts)
+    {
+      SHADER_PART part = (SHADER_PART)buffer.flags();
+      GLenum type = GetGLShaderPart(part);
+      std::string source = buffer;
+      if (source == "")
+        source = mGLSystem->getShaderFunction(buffer.name());
+      return compilePart(type, source.c_str(), parts+part);
+    }
+    
+    bool createProgram(GLuint *parts)
+    {
+      mProgramId = glCreateProgram();
+      if (!mProgramId)
+      {
+        std::cerr << "Error: Unable to create OpenGL Program" << std::endl;
+        return false;
+      }
+      attachParts(mProgramId, parts);
+      glLinkProgram(mProgramId);
+      if (!checkProgram())
+      {
+        glDeleteProgram(mProgramId);
+        mProgramId = 0;
+        return false;
+      }
+      setupTextures();
+      detachParts(mProgramId, parts);
+      return true;
+    }
+    
+    
     bool load()
     {
       bool success = false;
@@ -121,6 +178,7 @@ namespace fx
     {
       glDeleteProgram(mProgramId);
       mProgramId = 0;
+      setUnloaded();
     }
     
     bool compilePart(GLenum type, const char *src, GLuint *partId)

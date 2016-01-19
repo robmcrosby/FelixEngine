@@ -62,7 +62,7 @@ namespace fx
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     
-    std::string getShaderFunction(std::string &name)
+    std::string getShaderFunction(const std::string &name)
     {
       return mShaderFunctions.count(name) ? mShaderFunctions.at(name) : "";
     }
