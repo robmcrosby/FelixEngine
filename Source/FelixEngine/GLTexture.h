@@ -10,7 +10,6 @@
 #define GLTexture_h
 
 #include "GLGraphicSystem.h"
-#include "ImageLoader.h"
 
 
 namespace fx
@@ -57,9 +56,10 @@ namespace fx
       setUnloaded();
     }
     
-    void uploadBuffer(const Buffer &buffer)
+    void uploadBufferMap(const BufferMap &bufferMap)
     {
       bool success = false;
+      const Buffer &buffer = bufferMap["data"];
       
       unload();
       if (!mTextureId)
@@ -110,50 +110,50 @@ namespace fx
   private:
     bool load()
     {
-      if (!loaded() && !mFBOTexture)
-        return loadImageFile(mFile);
+//      if (!loaded() && !mFBOTexture)
+//        return loadImageFile(mFile);
       return false;
     }
     
-    bool loadImageFile(const std::string &file)
-    {
-      ImageRGBA image;
-      return ImageLoader::LoadImageFromFile(image, file) && loadImage(image);
-    }
-    
-    bool loadImage(const ImageRGBA &image)
-    {
-      if (!mTextureId)
-      {
-        glGenTextures(1, &mTextureId);
-        if (!mTextureId)
-        {
-          std::cerr << "failed to create GLTexture" << std::endl;
-          return false;
-        }
-      }
-      
-      mSize.w = image.width();
-      mSize.h = image.height();
-      
-      glBindTexture(GL_TEXTURE_2D, mTextureId);
-      
-      setFilters(mSampler);
-      
-      // Load the Image to the Texture
-      const GLvoid *pixels = image.ptr();
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLint)mSize.w, (GLint)mSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-      
-      // Generate the Mipmaps
-      if (mSampler.mipMappingEnabled())
-      {
-        mMipMapped = true;
-        glGenerateMipmap(GL_TEXTURE_2D);
-      }
-      glBindTexture(GL_TEXTURE_2D, 0);
-      
-      return true;
-    }
+//    bool loadImageFile(const std::string &file)
+//    {
+//      ImageRGBA image;
+//      return ImageLoader::LoadImageFromFile(image, file) && loadImage(image);
+//    }
+//    
+//    bool loadImage(const ImageRGBA &image)
+//    {
+//      if (!mTextureId)
+//      {
+//        glGenTextures(1, &mTextureId);
+//        if (!mTextureId)
+//        {
+//          std::cerr << "failed to create GLTexture" << std::endl;
+//          return false;
+//        }
+//      }
+//      
+//      mSize.w = image.width();
+//      mSize.h = image.height();
+//      
+//      glBindTexture(GL_TEXTURE_2D, mTextureId);
+//      
+//      setFilters(mSampler);
+//      
+//      // Load the Image to the Texture
+//      const GLvoid *pixels = image.ptr();
+//      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLint)mSize.w, (GLint)mSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+//      
+//      // Generate the Mipmaps
+//      if (mSampler.mipMappingEnabled())
+//      {
+//        mMipMapped = true;
+//        glGenerateMipmap(GL_TEXTURE_2D);
+//      }
+//      glBindTexture(GL_TEXTURE_2D, 0);
+//      
+//      return true;
+//    }
     
     void  setFilters(const Sampler &sampler) const
     {

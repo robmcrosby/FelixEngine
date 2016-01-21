@@ -15,23 +15,12 @@ using namespace fx;
 using namespace std;
 
 
-bool TextureLoader::LoadTexturesFromXml(BufferMap &textures, const XMLTree::Node &node)
+bool TextureLoader::LoadTextureFromXml(BufferMap &texture, const XMLTree::Node &node)
 {
-  bool success = true;
-  string path = node.tree()->path();
-  
-  textures.clear();
-  textures.setType(BUFFER_MAP_TEXTURES);
-  
-  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-  {
-    Buffer &texture = textures.addBuffer((*itr)->attribute("name"), BUFFER_TEXTURE);
-    success &= LoadTextureFromFile(texture, path+(*itr)->attribute("file"));
-  }
-  return success;
+  return LoadTextureFromFile(texture, node.tree()->path() + node.attribute("file"));
 }
 
-bool TextureLoader::LoadTextureFromFile(Buffer &texture, const string &file)
+bool TextureLoader::LoadTextureFromFile(BufferMap &texture, const string &file)
 {
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType(file.c_str() ,0);
   FIBITMAP* fimage = FreeImage_Load(format, file.c_str());
@@ -45,10 +34,15 @@ bool TextureLoader::LoadTextureFromFile(Buffer &texture, const string &file)
   unsigned int width  = FreeImage_GetWidth(fimage);
   unsigned int height = FreeImage_GetHeight(fimage);
   
-  texture.resize(VAR_CHAR_4, width, height);
+  texture.clear();
+  texture.setType(BUFFER_MAP_TEXTURE);
+  texture["size"] = ivec2(width, height);
+  Buffer &buffer = texture.addBuffer("data", BUFFER_TEXTURE);
+  
+  buffer.resize(VAR_CHAR_4, width, height);
   
   char *pixeles = (char*)FreeImage_GetBits(fimage);
-  RGBA *tex = (RGBA*)texture.ptr();
+  RGBA *tex = (RGBA*)buffer.ptr();
   for (int i = 0; i < width*height; ++i)
   {
     tex[i].red   = pixeles[i*4+2];

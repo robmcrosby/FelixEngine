@@ -41,7 +41,6 @@ namespace fx
     BUFFER_SLOT_SHADER   = 0,
     BUFFER_SLOT_MESH     = 1,
     BUFFER_SLOT_UNIFORMS = 2,
-    BUFFER_SLOT_TEXTURES = 3,
     BUFFER_SLOTS_SIZE    = 4,
   };
   
@@ -447,7 +446,7 @@ namespace fx
   
   struct GraphicTask
   {
-    GraphicTask(GRAPHIC_TASK_TYPE type = GRAPHIC_TASK_EMPTY): type(type), layer(0), pass(0) {clearBufferSlots();}
+    GraphicTask(GRAPHIC_TASK_TYPE type = GRAPHIC_TASK_EMPTY): type(type), layer(0), pass(0), textureMap(0) {clearBufferSlots();}
     void clearBufferSlots()
     {
       for (int i = 0; i < BUFFER_SLOTS_SIZE; ++i)
@@ -465,6 +464,7 @@ namespace fx
     int pass;
     
     BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
+    TextureMap *textureMap;
   };
   
   

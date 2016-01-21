@@ -19,8 +19,8 @@ namespace fx
   class TextureLoader
   {
   public:
-    static bool LoadTexturesFromXml(BufferMap &textures, const XMLTree::Node &node);
-    static bool LoadTextureFromFile(Buffer &texture, const std::string &file);
+    static bool LoadTextureFromXml(BufferMap &texture, const XMLTree::Node &node);
+    static bool LoadTextureFromFile(BufferMap &texture, const std::string &file);
   };
 }
 

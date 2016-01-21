@@ -19,7 +19,6 @@
 #define UNIFORMS_STR "Uniforms"
 #define STRUCT_STR   "Struct"
 #define MESH_STR     "Mesh"
-#define TEXTURES_STR "Textures"
 #define SHADER_STR   "Shader"
 #define TARGETS_STR  "Targets"
 
@@ -55,7 +54,7 @@ namespace fx
     BUFFER_MAP_UNIFORMS, /**< Individual Uniforms */
     BUFFER_MAP_STRUCT,   /**< Values of a Uniform Struct */
     BUFFER_MAP_MESH,     /**< Parts for a Mesh */
-    BUFFER_MAP_TEXTURES, /**< Map of Textures */
+    BUFFER_MAP_TEXTURE,  /**< Map of Textures */
     BUFFER_MAP_SHADER,   /**< Shader Program */
     BUFFER_MAP_TARGETS,  /**< Render Target Textures */
   };
@@ -135,7 +134,7 @@ namespace fx
         return BUFFER_INDICES;
       if (str == RANGES_STR)
         return BUFFER_RANGES;
-      if (str == TEXTURES_STR)
+      if (str == TEXTURE_STR)
         return BUFFER_TEXTURE;
       if (str == SHADER_STR)
         return BUFFER_SHADER;
@@ -197,8 +196,8 @@ namespace fx
         return BUFFER_MAP_STRUCT;
       if (str == MESH_STR)
         return BUFFER_MAP_MESH;
-      if (str == TEXTURES_STR)
-        return BUFFER_MAP_TEXTURES;
+      if (str == TEXTURE_STR)
+        return BUFFER_MAP_TEXTURE;
       if (str == SHADER_STR)
         return BUFFER_MAP_SHADER;
       if (str == TARGETS_STR)
@@ -344,8 +343,8 @@ namespace fx
       
       if (mType == BUFFER_MAP_MESH)
         MeshLoader::LoadMeshFromXML(*this, node);
-      else if (mType == BUFFER_MAP_TEXTURES)
-        TextureLoader::LoadTexturesFromXml(*this, node);
+      else if (mType == BUFFER_MAP_TEXTURE)
+        TextureLoader::LoadTextureFromXml(*this, node);
       else if (mType == BUFFER_MAP_SHADER)
       {
         for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)

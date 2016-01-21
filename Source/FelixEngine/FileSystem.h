@@ -48,7 +48,6 @@ namespace fx
     bool load(Directory &dir) const;
     bool load(std::string &text) const;
     bool load(XMLTree &tree) const;
-    bool load(ImageRGBA &image) const;
     bool load(VertexBufferMap &bufferMap) const;
     
     bool createDirectory() const;

@@ -11,15 +11,14 @@
 
 #include "EventHandler.h"
 #include "Component.h"
-#include "UniformMap.h"
 #include "Material.h"
 #include "Scene.h"
 #include "OwnPtr.h"
 #include "MeshLoader.h"
+#include "TextureMap.h"
 
 namespace fx
 {
-  class GraphicSystem;
   
 //  class RenderSlot: public EventHandler
 //  {
@@ -281,7 +280,7 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mTextures(0), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem())
+    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -318,10 +317,8 @@ namespace fx
         setUniforms(*node.subNode("Uniforms"));
       
       // Set the Textures
-      if (node.hasAttribute("textures"))
-        setTextures(node.attribute("textures"));
-      if (node.hasSubNode("Textures"))
-        setTextures(*node.subNode("Textures"));
+      if (node.hasSubNode("TextureMap"))
+        mTextureMap.setToXml(*node.subNode("TextureMap"));
       
       // Set the Draw State
       mDrawState.setToXml(node);
@@ -345,6 +342,7 @@ namespace fx
       mGraphicSystem->uploadBuffer(*mMesh);
     }
     BufferMap& mesh() {return *mMesh;}
+    const BufferMap& mesh() const {return *mMesh;}
     
     void setShader(BufferMap &shader) {mShader = &shader;}
     void setShader(const std::string &name = "")
@@ -361,6 +359,7 @@ namespace fx
       mGraphicSystem->uploadBuffer(*mShader);
     }
     BufferMap& shader() {return *mShader;}
+    const BufferMap& shader() const {return *mShader;}
     
     void setUniforms(BufferMap &uniforms) {mUniforms = &uniforms;}
     void setUniforms(const std::string &name = "")
@@ -377,21 +376,10 @@ namespace fx
       mGraphicSystem->uploadBuffer(*mUniforms);
     }
     BufferMap& uniforms() {return *mUniforms;}
+    const BufferMap& uniforms() const {return *mUniforms;}
     
-    void setTextures(BufferMap &textures) {mTextures = &textures;}
-    void setTextures(const std::string &name = "")
-    {
-      if (name == "")
-        mTextures = BUFFER_MAP_TEXTURES;
-      else
-        setTextures(mScene->getBufferMap(name));
-    }
-    void setTextures(const XMLTree::Node &node)
-    {
-      setTextures(node.attribute("name"));
-      mTextures->setToXml(node);
-      mGraphicSystem->uploadBuffer(*mTextures);
-    }
+    TextureMap& textureMap() {return mTextureMap;}
+    const TextureMap& textureMap() const {return mTextureMap;}
     
   private:
     void render()
@@ -401,7 +389,7 @@ namespace fx
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
       task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
-      task.bufferSlots[BUFFER_SLOT_TEXTURES] = mTextures.ptr();
+      task.textureMap = &mTextureMap;
       mGraphicSystem->addGraphicTask(task);
     }
     
@@ -410,7 +398,8 @@ namespace fx
     OwnPtr<BufferMap> mShader;
     OwnPtr<BufferMap> mMesh;
     OwnPtr<BufferMap> mUniforms;
-    OwnPtr<BufferMap> mTextures;
+    
+    TextureMap mTextureMap;
     
     DrawState mDrawState;
     

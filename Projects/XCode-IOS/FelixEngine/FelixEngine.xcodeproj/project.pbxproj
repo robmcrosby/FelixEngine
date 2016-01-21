@@ -51,7 +51,6 @@
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
 		C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD941BED298D007F68E0 /* GraphicResources.cpp */; };
 		C197CDD21BED298D007F68E0 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD961BED298D007F68E0 /* GraphicSystem.cpp */; };
-		C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD9A1BED298D007F68E0 /* ImageLoader.cpp */; };
 		C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA01BED298D007F68E0 /* MeshLoader.cpp */; };
 		C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDBC1BED298D007F68E0 /* SDLEventSystem.cpp */; };
 		C197CDE31BED298D007F68E0 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDC01BED298D007F68E0 /* System.cpp */; };
@@ -68,7 +67,6 @@
 		C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8A1BED298D007F68E0 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE2B1BED5E40007F68E0 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */; };
 		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
-		C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9B1BED298D007F68E0 /* ImageLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC81BED298D007F68E0 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -237,8 +235,6 @@
 		C197CD971BED298D007F68E0 /* GraphicSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicSystem.h; path = ../../../../Source/FelixEngine/GraphicSystem.h; sourceTree = "<group>"; };
 		C197CD981BED298D007F68E0 /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = ../../../../Source/FelixEngine/GraphicTask.h; sourceTree = "<group>"; };
 		C197CD991BED298D007F68E0 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
-		C197CD9A1BED298D007F68E0 /* ImageLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageLoader.cpp; path = ../../../../Source/FelixEngine/ImageLoader.cpp; sourceTree = "<group>"; };
-		C197CD9B1BED298D007F68E0 /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageLoader.h; path = ../../../../Source/FelixEngine/ImageLoader.h; sourceTree = "<group>"; };
 		C197CD9C1BED298D007F68E0 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = ../../../../Source/FelixEngine/IndexedMap.h; sourceTree = "<group>"; };
 		C197CD9D1BED298D007F68E0 /* List.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = List.h; path = ../../../../Source/FelixEngine/List.h; sourceTree = "<group>"; };
 		C197CD9E1BED298D007F68E0 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = ../../../../Source/FelixEngine/Material.h; sourceTree = "<group>"; };
@@ -517,8 +513,6 @@
 				C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */,
 				C197CDA11BED298D007F68E0 /* MeshLoader.h */,
 				C197CDA01BED298D007F68E0 /* MeshLoader.cpp */,
-				C197CD9B1BED298D007F68E0 /* ImageLoader.h */,
-				C197CD9A1BED298D007F68E0 /* ImageLoader.cpp */,
 				C1E683561C4EFB5000E1705D /* TextureLoader.h */,
 				C1E683551C4EFB5000E1705D /* TextureLoader.cpp */,
 			);
@@ -778,7 +772,6 @@
 				C197CE371BED5EA3007F68E0 /* Projection.h in Headers */,
 				C198925C1BFFE171007DF57A /* GyroView.h in Headers */,
 				C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */,
-				C197CE2D1BED5E52007F68E0 /* ImageLoader.h in Headers */,
 				C197CE551BED5FD2007F68E0 /* MultiVector.h in Headers */,
 				C197CE4D1BED5FAE007F68E0 /* Color.h in Headers */,
 				C197CE461BED5F2D007F68E0 /* MTLGraphicSystem.h in Headers */,
@@ -1011,7 +1004,6 @@
 				C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */,
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
-				C197CDD31BED298D007F68E0 /* ImageLoader.cpp in Sources */,
 				C17195451C14B9AC001DBDC6 /* UbiquityFileSystem.mm in Sources */,
 				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
 				C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */,

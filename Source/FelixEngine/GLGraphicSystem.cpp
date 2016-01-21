@@ -243,15 +243,11 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_TEXTURES)
+    else if (bufferMap->type() == BUFFER_MAP_TEXTURE)
     {
-      for (BufferMap::iterator itr = bufferMap->begin(); itr != bufferMap->end(); ++itr)
-      {
-        Buffer &buffer = *itr;
-        buffer.setResource(getTexture(buffer.name()));
-        GLTexture *texture = GetResource<GLTexture>(&buffer);
-        texture->uploadBuffer(buffer);
-      }
+      bufferMap->setResource(getTexture(bufferMap->name()));
+      GLTexture *texture = GetResource<GLTexture>(bufferMap);
+      texture->uploadBufferMap(*bufferMap);
     }
     else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
     {
@@ -307,38 +303,30 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       shader->use();
       mesh->bind(shader);
       
+      // Set the Local Uniforms
       if (localUniforms)
         localUniforms->applyToShader(shader);
       
-//      if (view && view->localUniforms)
-//        static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
-//      if (task->materialUniforms)
-//        static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
-//      if (task->localUniforms)
-//        static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
-//      shader->applyTextureMap(task->textureMap);
-      
-      // Draw the Mesh
-      if (bindTextures(task->bufferSlots[BUFFER_SLOT_TEXTURES]))
+      // Set the Textures and Draw the Mesh
+      if (bindTextureMap(task->textureMap))
         mesh->draw(task->drawState.instances, task->drawState.submesh);
     }
   }
 }
 
-bool GLGraphicSystem::bindTextures(BufferMap *textures)
+bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
 {
   bool success = true;
-  if (textures != nullptr)
+  if (textureMap != nullptr)
   {
     int index = 0;
-    Sampler sampler;
-    for (BufferMap::iterator itr = textures->begin(); itr != textures->end(); ++itr)
+    for (TextureMap::iterator itr = textureMap->begin(); itr != textureMap->end(); ++itr)
     {
-      GLTexture *texture = GetResource<GLTexture>(&(*itr));
+      GLTexture *texture = GetResource<GLTexture>(&itr->texture());
       if (!texture || !texture->loaded())
         success = false;
       else
-        texture->use(index++, sampler);
+        texture->use(index++, itr->sampler());
     }
   }
   return success;

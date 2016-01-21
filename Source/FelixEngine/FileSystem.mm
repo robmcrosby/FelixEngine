@@ -7,7 +7,6 @@
 //
 
 #include "FileSystem.h"
-#include "ImageLoader.h"
 #include "MeshLoader.h"
 
 #include <fstream>
@@ -238,11 +237,6 @@ bool File::load(fx::XMLTree &tree) const
   bool success = tree.loadFile(path());
   tree.setUrl(upperDirectory().url());
   return success;
-}
-
-bool File::load(ImageRGBA &image) const
-{
-  return ImageLoader::LoadImageFromFile(image, path());
 }
 
 bool File::load(VertexBufferMap &bufferMap) const
