@@ -69,10 +69,7 @@ namespace fx
     void setToXml(const XMLTree::Node &node)
     {
       for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-      {
         addTexture(**itr);
-        mGraphicSystem->uploadBuffer(mTextures.back().texture());
-      }
     }
     
     void addTexture(const BufferMap &texture = BUFFER_MAP_TEXTURE, Sampler sampler = Sampler())
@@ -91,6 +88,7 @@ namespace fx
     {
       mTextures.push_back(mScene);
       mTextures.back().setToXml(node);
+      mGraphicSystem->uploadBuffer(mTextures.back().texture());
     }
     
     size_t size() const {return mTextures.size();}

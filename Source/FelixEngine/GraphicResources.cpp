@@ -35,17 +35,17 @@ bool Window::setToXml(const XMLTree::Node &node)
 bool Frame::setToXml(const XMLTree::Node &node)
 {
   bool success = true;
-  clearBuffers();
+  //clearBuffers();
   
-  // Add the buffers
-  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-  {
-    Buffer buffer;
-    buffer.format = StrToColorType((*itr)->attribute("format"));
-    buffer.name = (*itr)->attribute("texture");
-    success &= buffer.sampler.setToXml(**itr);
-    addBuffer(buffer);
-  }
+//  // Add the buffers
+//  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+//  {
+//    Buffer buffer;
+//    buffer.format = ParseColorType((*itr)->attribute("format"));
+//    buffer.name = (*itr)->attribute("texture");
+//    success &= buffer.sampler.setToXml(**itr);
+//    addBuffer(buffer);
+//  }
   
   // Set the size
   setSize(ivec2(0, 0));

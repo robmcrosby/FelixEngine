@@ -35,7 +35,7 @@ namespace fx
     COLOR_NONE,
   };
   
-  static COLOR_TYPE StrToColorType(const std::string &str)
+  static COLOR_TYPE ParseColorType(const std::string &str)
   {
     if (str == "rgba")
       return COLOR_RGBA;

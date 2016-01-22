@@ -106,29 +106,10 @@ namespace fx
   class Frame: public Resource
   {
   public:
-    struct Buffer
-    {
-      COLOR_TYPE format;
-      std::string name;
-      Sampler sampler;
-    };
-    
-  public:
     Frame(): mRefFrame(0) {}
     virtual ~Frame() {}
     
     virtual bool setToXml(const XMLTree::Node &node);
-    
-    void clearBuffers() {mBuffers.clear();}
-    void addBuffer(COLOR_TYPE format = COLOR_RGBA, const std::string &name = "", const Sampler &sampler = Sampler())
-    {
-      Buffer buffer;
-      buffer.format = format;
-      buffer.name = name;
-      buffer.sampler = sampler;
-      addBuffer(buffer);
-    }
-    void addBuffer(const Buffer &buffer) {mBuffers.push_back(buffer);}
     
     void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
@@ -144,7 +125,6 @@ namespace fx
     ivec2 mSize;
     vec2 mScale;
     Frame *mRefFrame;
-    std::list<Buffer> mBuffers;
   };
   
   class Shader: public Resource

@@ -41,6 +41,7 @@ namespace fx
     BUFFER_SLOT_SHADER   = 0,
     BUFFER_SLOT_MESH     = 1,
     BUFFER_SLOT_UNIFORMS = 2,
+    BUFFER_SLOT_TARGETS  = 3,
     BUFFER_SLOTS_SIZE    = 4,
   };
   

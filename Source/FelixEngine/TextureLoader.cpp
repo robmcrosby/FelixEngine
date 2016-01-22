@@ -17,7 +17,9 @@ using namespace std;
 
 bool TextureLoader::LoadTextureFromXml(BufferMap &texture, const XMLTree::Node &node)
 {
-  return LoadTextureFromFile(texture, node.tree()->path() + node.attribute("file"));
+  if (node.hasAttribute("file"))
+    return LoadTextureFromFile(texture, node.tree()->path() + node.attribute("file"));
+  return false;
 }
 
 bool TextureLoader::LoadTextureFromFile(BufferMap &texture, const string &file)

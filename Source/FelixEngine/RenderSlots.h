@@ -280,7 +280,8 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene)
+    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mTargets(0),
+      mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -315,6 +316,12 @@ namespace fx
         setUniforms(node.attribute("uniforms"));
       if (node.hasSubNode("Uniforms"))
         setUniforms(*node.subNode("Uniforms"));
+      
+      // Set the Render Targets
+      if (node.hasAttribute("targets"))
+        setTargets(node.attribute("targets"));
+      if (node.hasSubNode("Targets"))
+        setTargets(*node.subNode("Targets"));
       
       // Set the Textures
       if (node.hasSubNode("TextureMap"))
@@ -378,6 +385,23 @@ namespace fx
     BufferMap& uniforms() {return *mUniforms;}
     const BufferMap& uniforms() const {return *mUniforms;}
     
+    void setTargets(BufferMap &targets) {mTargets = &targets;}
+    void setTargets(const std::string &name = "")
+    {
+      if (name == "")
+        mTargets = BUFFER_MAP_TARGETS;
+      else
+        setTargets(mScene->getBufferMap(name));
+    }
+    void setTargets(const XMLTree::Node &node)
+    {
+      setTargets(node.attribute("name"));
+      mTargets->setToXml(node);
+      mGraphicSystem->uploadBuffer(*mTargets);
+    }
+    BufferMap& targets() {return *mTargets;}
+    const BufferMap& targets() const {return *mTargets;}
+    
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
     
@@ -389,6 +413,7 @@ namespace fx
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
       task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
+      task.bufferSlots[BUFFER_SLOT_TARGETS]  = mTargets.ptr();
       task.textureMap = &mTextureMap;
       mGraphicSystem->addGraphicTask(task);
     }
@@ -398,6 +423,7 @@ namespace fx
     OwnPtr<BufferMap> mShader;
     OwnPtr<BufferMap> mMesh;
     OwnPtr<BufferMap> mUniforms;
+    OwnPtr<BufferMap> mTargets;
     
     TextureMap mTextureMap;
     

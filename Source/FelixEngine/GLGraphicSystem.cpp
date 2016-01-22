@@ -176,25 +176,6 @@ SDL_Window* GLGraphicSystem::getMainSDLWindow()
 {
   return mMainWindow ? mMainWindow->getSDLWindow() : nullptr;
 }
-//
-//void GLGraphicSystem::processTasks()
-//{
-////  mPassesMutex.lock();
-////  int flags = getStereoFlags();
-////  if (mPasses.size())
-////  {
-////    if (flags & STEREO_MONO)
-////      processPass(mPasses.at(0), nullptr, STEREO_MONO);
-////    if (flags & STEREO_LEFT)
-////      processPass(mPasses.at(0), nullptr, STEREO_LEFT);
-////    if (flags & STEREO_RIGHT)
-////      processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
-////  }
-////  mPassesMutex.unlock();
-////  
-////  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-////    itr->second->swapBuffers();
-//}
 
 void GLGraphicSystem::processPass(const TaskPass &pass, const GraphicTask *view, int stereo)
 {
@@ -246,8 +227,17 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
     else if (bufferMap->type() == BUFFER_MAP_TEXTURE)
     {
       bufferMap->setResource(getTexture(bufferMap->name()));
-      GLTexture *texture = GetResource<GLTexture>(bufferMap);
-      texture->uploadBufferMap(*bufferMap);
+      if (bufferMap->contains("data"))
+      {
+        GLTexture *texture = GetResource<GLTexture>(bufferMap);
+        texture->uploadBufferMap(*bufferMap);
+      }
+    }
+    else if (bufferMap->type() == BUFFER_MAP_TARGETS)
+    {
+      bufferMap->setResource(getFrame(bufferMap->name()));
+      GLFrame *frame = GetResource<GLFrame>(bufferMap);
+      frame->uploadBufferMap(*bufferMap);
     }
     else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
     {
@@ -283,13 +273,16 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
 {
   if (task->drawState.stereo & stereo)
   {
-    const GLFrame  *frame  = mFrames.begin()->second;
     const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
     const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
     
     const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
     
-    if (shader && shader->loaded() && mesh && mesh->loaded())
+    const GLFrame  *frame  = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    if (!frame)
+      frame = static_cast<GLFrame*>(getFrame("MainWindow"));
+    
+    if (frame && frame->loaded() && shader && shader->loaded() && mesh && mesh->loaded())
     {
       setTriangleCullMode(task->drawState.cullMode);
       

@@ -296,6 +296,60 @@ namespace fx
       GLTexture *mTexture;
     };
     
+    
+  public:
+    void uploadBufferMap(const BufferMap &bufferMap)
+    {
+      bool success = false;
+      unload();
+      
+      GLint curFrameBuffer;
+      glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
+      
+      // Create a new FrameBuffer
+      glGenFramebuffers(1, &mFrameBufferId);
+      if (mFrameBufferId == 0)
+        std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
+      else
+      {
+        // Determine the Size
+        if (bufferMap.contains("size"))
+          mSize = bufferMap["size"].ivec2Value();
+        else if (bufferMap.contains("reference"))
+        {
+          setRefrenceFrame(bufferMap["reference"].stringValue());
+          if (bufferMap.contains("scale"))
+            mScale = bufferMap["scale"].vec2Value();
+          else
+            mScale = vec2(1.0f, 1.0f);
+          
+          if (mRefFrame)
+            mSize = mRefFrame->size() * mScale;
+          else
+            mSize = ivec2(0, 0);
+        }
+        
+        if (mSize > ivec2(0, 0))
+        {
+          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+          success = true;
+          for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
+          {
+            if (itr->bufferType() == BUFFER_TARGET)
+              success &= addTarget(*itr);
+          }
+          
+          glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
+        }
+      }
+      
+      
+      if (success)
+        setLoaded();
+      else
+        setUnloaded();
+    }
+    
   private:
     bool load()
     {
@@ -342,16 +396,34 @@ namespace fx
     bool resize(const ivec2 &size)
     {
       bool success = true;
-      if (mSize != size)
+//      if (mSize != size)
+//      {
+//        unload();
+//        
+//        mSize = size;
+//        success = load();
+//        
+//        if (success)
+//          setLoaded();
+//      }
+      return success;
+    }
+    
+    bool addTarget(const Buffer &buffer)
+    {
+      bool success = true;
+      
+      COLOR_TYPE format = (COLOR_TYPE)buffer.flags();
+      if (format == COLOR_RGBA)
       {
-        unload();
-        
-        mSize = size;
-        success = load();
-        
-        if (success)
-          setLoaded();
+        mColorBuffers.push_back(GLBuffer());
+        mColorBuffers.back().setIndex((int)mColorBuffers.size()-1);
+        mColorBuffers.back().setFormat(format);
+        setTexture(mColorBuffers.back(), buffer.name());
+        success = mColorBuffers.back().load(mSize);
       }
+      // TODO: Add Depth, Stencil, and other Types
+      
       return success;
     }
     
@@ -359,38 +431,38 @@ namespace fx
     {
       bool success = true;
       
-      int colorIndex = 0;
-      for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
-      {
-        if (itr->format == COLOR_RGBA)
-        {
-          mColorBuffers.push_back(GLBuffer());
-          mColorBuffers.back().setIndex(colorIndex++);
-          mColorBuffers.back().setFormat(itr->format);
-          setTexture(mColorBuffers.back(), itr->name);
-          success &= mColorBuffers.back().load(mSize);
-        }
-        else if (itr->format == COLOR_DEPTH32F)
-        {
-          COLOR_TYPE format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
-          mDepthBuffer.setFormat(format);
-          setTexture(mDepthBuffer, itr->name);
-          success &= mDepthBuffer.load(mSize);
-        }
-        else if (itr->format == COLOR_STENCIL8)
-        {
-          mStencilBuffer.setFormat(itr->format);
-          success &= mStencilBuffer.load(mSize);
-        }
-        
-        if (mColorBuffers.size() != 0)
-        {
-          std::vector<GLenum> drawBuffers;
-          for (int i = 0; i < (int)mColorBuffers.size(); ++i)
-            drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
-          glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
-        }
-      }
+//      int colorIndex = 0;
+//      for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
+//      {
+//        if (itr->format == COLOR_RGBA)
+//        {
+//          mColorBuffers.push_back(GLBuffer());
+//          mColorBuffers.back().setIndex(colorIndex++);
+//          mColorBuffers.back().setFormat(itr->format);
+//          setTexture(mColorBuffers.back(), itr->name);
+//          success &= mColorBuffers.back().load(mSize);
+//        }
+//        else if (itr->format == COLOR_DEPTH32F)
+//        {
+//          COLOR_TYPE format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
+//          mDepthBuffer.setFormat(format);
+//          setTexture(mDepthBuffer, itr->name);
+//          success &= mDepthBuffer.load(mSize);
+//        }
+//        else if (itr->format == COLOR_STENCIL8)
+//        {
+//          mStencilBuffer.setFormat(itr->format);
+//          success &= mStencilBuffer.load(mSize);
+//        }
+//        
+//        if (mColorBuffers.size() != 0)
+//        {
+//          std::vector<GLenum> drawBuffers;
+//          for (int i = 0; i < (int)mColorBuffers.size(); ++i)
+//            drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
+//          glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
+//        }
+//      }
       return success;
     }
     void detachGLBuffers()

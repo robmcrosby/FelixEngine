@@ -11,6 +11,7 @@
 
 #include "Variant.h"
 #include "Resource.h"
+#include "Color.h"
 
 #include "MeshLoader.h"
 #include "TextureLoader.h"
@@ -20,6 +21,7 @@
 #define STRUCT_STR   "Struct"
 #define MESH_STR     "Mesh"
 #define SHADER_STR   "Shader"
+#define TARGET_STR   "Target"
 #define TARGETS_STR  "Targets"
 
 #define UNIFORM_STR   "Uniform"
@@ -44,6 +46,7 @@ namespace fx
     BUFFER_RANGES,    /**< Ranges for Sub-Meshes in a Mesh */
     BUFFER_TEXTURE,   /**< Two dimensional image */
     BUFFER_SHADER,    /**< Shader source string */
+    BUFFER_TARGET,    /**< Render Target */
   };
   
   /**
@@ -56,7 +59,7 @@ namespace fx
     BUFFER_MAP_MESH,     /**< Parts for a Mesh */
     BUFFER_MAP_TEXTURE,  /**< Map of Textures */
     BUFFER_MAP_SHADER,   /**< Shader Program */
-    BUFFER_MAP_TARGETS,  /**< Render Target Textures */
+    BUFFER_MAP_TARGETS,  /**< Render Targets */
   };
   
   class Buffer: public Variant
@@ -138,6 +141,8 @@ namespace fx
         return BUFFER_TEXTURE;
       if (str == SHADER_STR)
         return BUFFER_SHADER;
+      if (str == TARGET_STR)
+        return BUFFER_TARGET;
       return BUFFER_UNIFORM;
     }
     
@@ -218,9 +223,6 @@ namespace fx
       if (node.hasAttribute("name"))
         mNameMap[node.attribute("name")] = (int)mBuffers.size();
       mBuffers.push_back(node);
-      
-      // TODO: implement differnet buffer stuff here.
-      
       return mBuffers.back();
     }
     Buffer& addBuffer(const Buffer &buffer = Buffer())
@@ -352,6 +354,22 @@ namespace fx
           Buffer &buffer = addBuffer((*itr)->attribute("name"), BUFFER_SHADER);
           buffer = (*itr)->contents();
           buffer.setFlags((int)Shader::ParseShaderPart((*itr)->element()));
+        }
+      }
+      else if (mType == BUFFER_MAP_TARGETS)
+      {
+        for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+        {
+          Buffer &buffer = addBuffer((*itr)->attribute("name"), BUFFER_TARGET);
+          buffer.setFlags(ParseColorType((*itr)->attribute("format")));
+        }
+        if (node.hasAttribute("size"))
+          addBuffer("size", ivec2(node.attribute("size")));
+        else if (node.hasAttribute("reference"))
+        {
+          addBuffer("reference", node.attribute("reference"));
+          if (node.hasAttribute("scale"))
+            addBuffer("scale", vec2(node.attribute("scale")));
         }
       }
       else

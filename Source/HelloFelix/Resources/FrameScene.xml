@@ -10,53 +10,36 @@
             0.0,  0.8, 0.0, 1.0
           </Buffer>
         </Mesh>
-        <Frame name="TestFrame" width="512" height="512">
-          <Buffer format="rgba" texture="TestTexture" min="linear" mag="linear"/>
-        </Frame>
+        <Targets name="TestTargets" size="512, 512">
+          <Target name="TestTexture" format="rgba"/>
+        </Targets>
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
-        <Material>
-          <Shader name="ColorShader">
-            <Vertex function="SimpleVertex"/>
-            <Fragment function="SimpleColor"/>
-          </Shader>
-          <UniformMap>
-            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
-          </UniformMap>
-        </Material>
+        <Shader name="ColorShader">
+          <Vertex name="SimpleVertex"/>
+          <Fragment name="SimpleColor"/>
+        </Shader>
+        <Uniforms>
+          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</Uniform>
+        </Uniforms>
       </Slot>
     </RenderSlots>
   </Model>
   <Model name="Quad">
     <RenderSlots>
       <Slot layer="1">
-        <Mesh name="QuadMesh" primitive="strip">
-          <Buffer attribute="Position" components="4">
-            -0.8,  0.8, 0.0, 1.0,
-            0.8,  0.8, 0.0, 1.0,
-            -0.8, -0.8, 0.0, 1.0,
-            0.8, -0.8, 0.0, 1.0,
-          </Buffer>
-          <Buffer attribute="UV_0" components="2">
-            0.0, 1.0,
-            1.0, 1.0,
-            0.0, 0.0,
-            1.0, 0.0,
-          </Buffer>
-        </Mesh>
+        <Mesh name="QuadMesh" primitive="plane" size="1.6, 1.6"/>
         <ClearState>
           <Color0>0.2, 0.2, 0.2, 1.0</Color0>
         </ClearState>
-        <Material>
-          <Shader name="TextureShader">
-            <Vertex function="SimpleVertexUV"/>
-            <Fragment function="SimpleTexture"/>
-          </Shader>
-          <TextureMap>
-            <Texture name="TestTexture" min="linear" mag="linear"/>
-          </TextureMap>
-        </Material>
+        <Shader name="TextureShader">
+          <Vertex name="SimpleVertexUV"/>
+          <Fragment name="SimpleTexture"/>
+        </Shader>
+        <TextureMap>
+          <Texture name="TestTexture" min="linear" mag="linear"/>
+        </TextureMap>
       </Slot>
     </RenderSlots>
   </Model>
