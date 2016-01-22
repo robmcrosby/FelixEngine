@@ -331,12 +331,22 @@ namespace fx
         
         if (mSize > ivec2(0, 0))
         {
-          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
           success = true;
+          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+          // Add the Targets
           for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
           {
             if (itr->bufferType() == BUFFER_TARGET)
               success &= addTarget(*itr);
+          }
+          
+          // Set the Color Attachments
+          if (mColorBuffers.size() != 0)
+          {
+            std::vector<GLenum> drawBuffers;
+            for (int i = 0; i < (int)mColorBuffers.size(); ++i)
+              drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
+            glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
           }
           
           glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);

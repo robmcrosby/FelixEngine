@@ -409,6 +409,7 @@ namespace fx
     void render()
     {
       GraphicTask task(GRAPHIC_TASK_DRAW);
+      task.layer = mLayer;
       task.drawState = mDrawState;
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();

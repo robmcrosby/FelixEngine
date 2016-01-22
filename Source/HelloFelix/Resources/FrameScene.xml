@@ -21,7 +21,7 @@
           <Fragment name="SimpleColor"/>
         </Shader>
         <Uniforms>
-          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</Uniform>
+          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
         </Uniforms>
       </Slot>
     </RenderSlots>

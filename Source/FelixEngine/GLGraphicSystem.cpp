@@ -286,14 +286,15 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     {
       setTriangleCullMode(task->drawState.cullMode);
       
+      // Set the state for the Shader
+      shader->use();
+      
       // Set the state for the Frame
       frame->use(stereo);
       frame->clear(task->drawState.clearState);
       frame->setDepthState(task->drawState.depthState);
       frame->setBlendState(task->drawState.blendState);
       
-      // Set the state for the Shader
-      shader->use();
       mesh->bind(shader);
       
       // Set the Local Uniforms
