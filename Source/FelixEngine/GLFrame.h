@@ -432,7 +432,19 @@ namespace fx
         setTexture(mColorBuffers.back(), buffer.name());
         success = mColorBuffers.back().load(mSize);
       }
-      // TODO: Add Depth, Stencil, and other Types
+      else if (format == COLOR_DEPTH32F)
+      {
+        format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
+        mDepthBuffer.setFormat(format);
+        setTexture(mDepthBuffer, buffer.name());
+        success &= mDepthBuffer.load(mSize);
+      }
+      else if (format == COLOR_STENCIL8)
+      {
+        mStencilBuffer.setFormat(format);
+        success &= mStencilBuffer.load(mSize);
+      }
+
       
       return success;
     }
@@ -464,7 +476,7 @@ namespace fx
 //          mStencilBuffer.setFormat(itr->format);
 //          success &= mStencilBuffer.load(mSize);
 //        }
-//        
+//
 //        if (mColorBuffers.size() != 0)
 //        {
 //          std::vector<GLenum> drawBuffers;
