@@ -546,6 +546,7 @@ namespace fx
        */
       std::istream &read(std::istream &is)
       {
+        bool commented = false;
         std::list<Node *> stack;
         std::string line;
         stack.push_back(this);
@@ -553,10 +554,52 @@ namespace fx
         while (!is.eof() && stack.size())
         {
           getline(is, line);
-          ParseLine(&stack, line);
+          RemoveComments(line, commented);
+          if (line != "")
+            ParseLine(&stack, line);
         }
         
         return is;
+      }
+      
+      /**
+       * Removes the Comments out of a line
+       * @param [in, out] line to edit comments out.
+       * @param [in, out] boolean state to determine if the line is initally commented out.
+       */
+      static void RemoveComments(std::string &line, bool &commented)
+      {
+        std::string::size_type start = 0;
+        std::string::size_type end = 0;
+        do {
+          if (commented)
+          {
+            end = line.find("-->");
+            if (end != std::string::npos)
+            {
+              line = line.substr(end+3, line.size());
+              commented = false;
+            }
+            else
+              line = line.substr(0, start);
+          }
+          else
+          {
+            start = line.find("<!--");
+            if (start != std::string::npos)
+            {
+              end = line.find("-->", start);
+              if (end != std::string::npos)
+                line = line.substr(0, start) + line.substr(end+3, line.size());
+              else
+              {
+                line = line.substr(0, start);
+                commented = true;
+              }
+            }
+          }
+          
+        } while (start != std::string::npos && end != std::string::npos);
       }
       
       /**
