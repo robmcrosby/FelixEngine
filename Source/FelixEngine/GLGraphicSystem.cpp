@@ -210,7 +210,7 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
 void GLGraphicSystem::processUploadTask(const GraphicTask *task)
 {
   BufferMap *bufferMap = task->bufferSlots[0];
-  if (bufferMap != nullptr)
+  if (bufferMap != nullptr && !bufferMap->updated())
   {
     if (bufferMap->type() == BUFFER_MAP_MESH)
     {
@@ -250,6 +250,7 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
       }
       uniforms->uploadBufferMap(*bufferMap);
     }
+    bufferMap->setUpdated();
   }
 }
 
@@ -265,7 +266,14 @@ void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
 
 void GLGraphicSystem::processViewTask(const GraphicTask *task, int stereo)
 {
-  if (task->pass < mTaskPasses.size())
+  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+  if (frame)
+  {
+    frame->use(stereo);
+    frame->clear(task->drawState.clearState);
+  }
+  
+  if (task->pass < mTaskPasses.size() && task->pass > 0)
     processPass(mTaskPasses.at(task->pass), task, stereo);
 }
 
@@ -278,7 +286,18 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     
     const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
     
-    const GLFrame  *frame  = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    // Get the Render Targets and View Uniforms.
+    const GLFrame  *frame = nullptr;
+    const GLUniforms *viewUniforms = nullptr;
+    if (view)
+    {
+      frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_TARGETS]);
+      viewUniforms = GetResource<GLUniforms>(view->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+    }
+    else
+      frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    
+    // If no Render Targets are specified, then use the main window.
     if (!frame)
       frame = static_cast<GLFrame*>(getFrame("MainWindow"));
     
@@ -300,6 +319,10 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       // Set the Local Uniforms
       if (localUniforms)
         localUniforms->applyToShader(shader);
+      
+      // Set the View Uniforms
+      if (viewUniforms)
+        viewUniforms->applyToShader(shader);
       
       // Set the Textures and Draw the Mesh
       if (bindTextureMap(task->textureMap))

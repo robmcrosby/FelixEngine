@@ -280,8 +280,8 @@ namespace fx
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mTargets(0),
-      mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene)
+    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mTargets(0), mScene(scene),
+    mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene), mLayer(0), mPass(0), mTaskType(GRAPHIC_TASK_DRAW)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -291,13 +291,20 @@ namespace fx
     virtual void handle(const Event &event)
     {
       if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
+      {
+        updateBuffers();
         render();
+      }
     }
     
     void setToXml(const XMLTree::Node &node)
     {
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
+      
+      // Set the Pass
+      if (node.hasAttribute("pass"))
+        setPass(node.attribute("pass"));
       
       // Set the Mesh
       if (node.hasAttribute("mesh"))
@@ -327,12 +334,20 @@ namespace fx
       if (node.hasSubNode("TextureMap"))
         mTextureMap.setToXml(*node.subNode("TextureMap"));
       
+      // Set the Task Type
+      if (node.hasAttribute("type"))
+        setTaskType(node.attribute("type"));
+      
       // Set the Draw State
       mDrawState.setToXml(node);
     }
     
     void setLayer(int layer) {mLayer = layer;}
     int layer() const {return mLayer;}
+    
+    void setPass(int pass) {mPass = pass;}
+    void setPass(const std::string &name) {setPass(mScene->getPassIndex(name));}
+    int pass() const {return mPass;}
     
     void setMesh(BufferMap &mesh) {mMesh = &mesh;}
     void setMesh(const std::string &name = "")
@@ -346,7 +361,7 @@ namespace fx
     {
       setMesh(node.attribute("name"));
       mMesh->setToXml(node);
-      mGraphicSystem->uploadBuffer(*mMesh);
+      //mGraphicSystem->uploadBuffer(*mMesh);
     }
     BufferMap& mesh() {return *mMesh;}
     const BufferMap& mesh() const {return *mMesh;}
@@ -363,7 +378,7 @@ namespace fx
     {
       setShader(node.attribute("name"));
       mShader->setToXml(node);
-      mGraphicSystem->uploadBuffer(*mShader);
+      //mGraphicSystem->uploadBuffer(*mShader);
     }
     BufferMap& shader() {return *mShader;}
     const BufferMap& shader() const {return *mShader;}
@@ -380,9 +395,14 @@ namespace fx
     {
       setUniforms(node.attribute("name"));
       mUniforms->setToXml(node);
-      mGraphicSystem->uploadBuffer(*mUniforms);
+      //mGraphicSystem->uploadBuffer(*mUniforms);
     }
-    BufferMap& uniforms() {return *mUniforms;}
+    BufferMap& uniforms()
+    {
+      if (!mUniforms.ptr())
+        mUniforms = BUFFER_MAP_UNIFORMS;
+      return *mUniforms;
+    }
     const BufferMap& uniforms() const {return *mUniforms;}
     
     void setTargets(BufferMap &targets) {mTargets = &targets;}
@@ -397,7 +417,7 @@ namespace fx
     {
       setTargets(node.attribute("name"));
       mTargets->setToXml(node);
-      mGraphicSystem->uploadBuffer(*mTargets);
+      //mGraphicSystem->uploadBuffer(*mTargets);
     }
     BufferMap& targets() {return *mTargets;}
     const BufferMap& targets() const {return *mTargets;}
@@ -405,11 +425,16 @@ namespace fx
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
     
+    void setTaskType(GRAPHIC_TASK_TYPE type) {mTaskType = type;}
+    void setTaskType(const std::string &str) {mTaskType = ParseGraphicTaskType(str);}
+    GRAPHIC_TASK_TYPE taskType() const {return mTaskType;}
+    
   private:
     void render()
     {
-      GraphicTask task(GRAPHIC_TASK_DRAW);
+      GraphicTask task(mTaskType);
       task.layer = mLayer;
+      task.pass = mPass;
       task.drawState = mDrawState;
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
@@ -418,8 +443,20 @@ namespace fx
       task.textureMap = &mTextureMap;
       mGraphicSystem->addGraphicTask(task);
     }
+    void updateBuffers()
+    {
+      if (mShader.ptr() && !mShader->updated())
+        mGraphicSystem->uploadBuffer(*mShader);
+      if (mMesh.ptr() && !mMesh->updated())
+        mGraphicSystem->uploadBuffer(*mMesh);
+      if (mUniforms.ptr() && !mUniforms->updated())
+        mGraphicSystem->uploadBuffer(*mUniforms);
+      if (mTargets.ptr() && !mTargets->updated())
+        mGraphicSystem->uploadBuffer(*mTargets);
+    }
     
     int mLayer;
+    int mPass;
     
     OwnPtr<BufferMap> mShader;
     OwnPtr<BufferMap> mMesh;
@@ -428,6 +465,7 @@ namespace fx
     
     TextureMap mTextureMap;
     
+    GRAPHIC_TASK_TYPE mTaskType;
     DrawState mDrawState;
     
     Scene *mScene;
@@ -459,6 +497,12 @@ namespace fx
       }
     }
     
+    void setGlobal(const std::string &name, const Variant &v)
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        (*itr)->uniforms()[name] = v;
+    }
+    
   public:
     typedef std::vector<RenderSlot*>::const_iterator iterator;
     iterator begin() const {return mSlots.begin();}
@@ -475,6 +519,12 @@ namespace fx
       for (iterator itr = begin(); itr != end(); ++itr)
         delete *itr;
       mSlots.clear();
+    }
+    
+    void setUniform(const std::string &name, const Variant &var)
+    {
+      for (iterator itr = begin(); itr != end(); ++itr)
+        (*itr)->uniforms().set(name, var);
     }
     
   private:

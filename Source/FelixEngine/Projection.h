@@ -192,6 +192,12 @@ namespace fx
   protected:
     virtual void update()
     {
+      if (mRenderSlots)
+      {
+        vec2 size(1.0f, 1.0f);
+        mRenderSlots->setUniform("Projection", toMatrix4x4(size, STEREO_MONO));
+      }
+      
 //      if (mRenderSlots)
 //      {
 //        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)

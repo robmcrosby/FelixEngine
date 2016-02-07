@@ -5,26 +5,24 @@
       <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
     </Projection>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
-        <Frame name="DrawFrame">
-          <Buffer format="rgba" texture="DrawTexture" min="linear" mag="linear"/>
-          <Buffer format="depth"/>
-        </Frame>
+      <Slot layer="0" pass="MainPass" type="pass">
+        <Targets name="DrawFrame" size="1024, 1024">
+          <Target name="DrawTexture" format="rgba"/>
+          <Target format="depth"/>
+        </Targets>
         <ClearState depth="1.0">
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
       </Slot>
       <Slot layer="1">
-        <Material name="TextureMaterial">
-          <Shader name="TextureShader">
-            <Vertex function="SimpleVertexUV"/>
-            <Fragment function="SimpleTexture"/>
-          </Shader>
-          <TextureMap>
-            <Texture name="DrawTexture" min="linear" mag="linear"/>
-          </TextureMap>
-        </Material>
         <Mesh name="FullQuad" primitive="plane" size="2.0, 2.0"/>
+        <Shader name="TextureShader">
+          <Vertex name="SimpleVertexUV"/>
+          <Fragment name="SimpleTexture"/>
+        </Shader>
+        <TextureMap>
+          <Texture name="DrawTexture" min="linear" mag="linear"/>
+        </TextureMap>
       </Slot>
     </RenderSlots>
   </ViewerCamera>
@@ -38,15 +36,13 @@
       <Slot layer="0" pass="MainPass">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
-        <Material>
-          <Shader name="DirectLightShader">
-            <Vertex function="SimpleNormal"/>
-            <Fragment function="DirectLight"/>
-          </Shader>
-          <UniformMap>
-            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
-          </UniformMap>
-        </Material>
+        <Shader name="DirectLightShader">
+          <Vertex name="SimpleNormal"/>
+          <Fragment name="DirectLight"/>
+        </Shader>
+        <Uniforms>
+          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
+        </Uniforms>
       </Slot>
     </RenderSlots>
   </Model>

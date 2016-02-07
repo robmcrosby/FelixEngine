@@ -88,6 +88,13 @@ namespace fx
       mBufferMaps.clear();
     }
     
+    int getPassIndex(const std::string &name)
+    {
+      if (!mPassNameMap.count(name))
+        mPassNameMap[name] = (int)mPassNameMap.size()+1;
+      return mPassNameMap[name];
+    }
+    
     File directory() const {return mDirectory;}
     
   private:
@@ -136,6 +143,8 @@ namespace fx
     
     std::list<Resource*> mResources;
     std::map<std::string, Material*> mMaterialMap;
+    
+    std::map<std::string, int> mPassNameMap;
     
     BufferMapDirectory mBufferMaps;
   };

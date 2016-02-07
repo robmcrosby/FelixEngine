@@ -14,6 +14,13 @@
 #include "BufferMap.h"
 #include "GraphicResources.h"
 
+#define UPLOAD_STR   "upload"
+#define UNLOAD_STR   "unload"
+#define DOWNLOAD_STR "download"
+#define PASS_STR     "pass"
+#define DRAW_STR     "draw"
+#define COMPUTE_STR  "compute"
+
 
 namespace fx
 {
@@ -468,7 +475,22 @@ namespace fx
     TextureMap *textureMap;
   };
   
-  
+  static GRAPHIC_TASK_TYPE ParseGraphicTaskType(const std::string &str)
+  {
+    if (str == PASS_STR)
+      return GRAPHIC_TASK_PASS;
+    if (str == DRAW_STR)
+      return GRAPHIC_TASK_DRAW;
+    if (str == COMPUTE_STR)
+      return GRAPHIC_TASK_COMPUTE;
+    if (str == UPLOAD_STR)
+      return GRAPHIC_TASK_UPLOAD;
+    if (str == UNLOAD_STR)
+      return GRAPHIC_TASK_UNLOAD;
+    if (str == DOWNLOAD_STR)
+      return GRAPHIC_TASK_DOWNLOAD;
+    return GRAPHIC_TASK_EMPTY;
+  }
   
 //  struct GraphicTask
 //  {

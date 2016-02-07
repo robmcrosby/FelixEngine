@@ -63,13 +63,11 @@ namespace fx
   protected:
     virtual void update()
     {
-//      lock();
-//      if (mActive && mRenderSlots)
-//      {
-//        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-//          (*itr)->uniforms().set("View", mMatrix);
-//      }
-//      unlock();
+      lock();
+      if (mActive && mRenderSlots)
+        mRenderSlots->setUniform("View", mMatrix);
+      unlock();
+      
       Component::update();
     }
     

@@ -176,10 +176,10 @@ namespace fx
   class BufferMap
   {
   public:
-    BufferMap(BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mType(type), mResource(0), mFlags(0) {}
-    BufferMap(const XMLTree::Node &node): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {setToXml(node);}
-    BufferMap(const std::string &name, BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mName(name), mType(type), mResource(0), mFlags(0) {}
-    BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mFlags(0) {*this = map;}
+    BufferMap(BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mType(type), mResource(0), mUpdated(0), mFlags(0) {}
+    BufferMap(const XMLTree::Node &node): mType(BUFFER_MAP_UNIFORMS), mResource(0), mUpdated(0), mFlags(0) {setToXml(node);}
+    BufferMap(const std::string &name, BUFFER_MAP_TYPE type = BUFFER_MAP_UNIFORMS): mName(name), mType(type), mResource(0), mUpdated(0), mFlags(0) {}
+    BufferMap(const BufferMap &map): mType(BUFFER_MAP_UNIFORMS), mResource(0), mUpdated(0), mFlags(0) {*this = map;}
     ~BufferMap() {setResource(nullptr);}
     
     BufferMap& operator=(const BufferMap &map)
@@ -256,6 +256,13 @@ namespace fx
       return mBuffers.at(mNameMap.at(name));
     }
     const Buffer& operator[](const std::string &name) const {return mBuffers.at(mNameMap.at(name));}
+    
+    void set(const std::string &name, const Variant &var)
+    {
+      (*this)[name] = var;
+      setToUpdate();
+    }
+    
     
     Buffer& getBuffer(const std::string &name, BUFFER_TYPE type)
     {
@@ -379,6 +386,10 @@ namespace fx
       }
     }
     
+    void setToUpdate() {mUpdated = false;}
+    void setUpdated() {mUpdated = true;}
+    bool updated() const {return mUpdated;}
+    
   private:
     std::vector<Buffer> mBuffers;
     std::map<std::string, int> mNameMap;
@@ -386,6 +397,7 @@ namespace fx
     std::string mName;
     BUFFER_MAP_TYPE mType;
     Resource *mResource;
+    bool mUpdated;
     int mFlags;
   };
   typedef std::list<BufferMap*> BufferMapList;
