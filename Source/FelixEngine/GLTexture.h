@@ -22,6 +22,7 @@ namespace fx
   public:
     /**
      * Constructor takes a pointer to an OpenGL Graphics System.
+     *
      * @param system Pointer to the GLGraphicSystem
      */
     GLTexture(GLGraphicSystem *system): mGLSystem(system), mMipMapped(0), mFBOTexture(0) {}
@@ -44,6 +45,7 @@ namespace fx
     
     /**
      * Sets the texture to part of a FBO.
+     *
      * @param textureId intenger for the texture handle of the FBO
      * @param size 2d intenger vector for the size of the texture
      */
@@ -71,6 +73,7 @@ namespace fx
     
     /**
      * Uploads the contents of the given Buffer Map to video memory.
+     *
      * @param bufferMap refrence to the buffer map to upload.
      */
     void uploadBufferMap(const BufferMap &bufferMap)
@@ -130,6 +133,7 @@ namespace fx
     
     /**
      * Sets the Texture Minification and Magnification filters from the given Sampler.
+     *
      * @param sampler Sampler refrence to get the filter settings from.
      */
     void  setFilters(const Sampler &sampler) const
@@ -147,6 +151,7 @@ namespace fx
     
     /**
      * Gets the Minification filter from the given Sampler.
+     *
      * @param sampler Sampler refrence to get the Minification settings from.
      * @return Valid OpenGL Minification intenger value
      */
@@ -163,6 +168,7 @@ namespace fx
     
     /**
      * Gets the Magnification filter from the given Sampler.
+     *
      * @param sampler Sampler refrence to get the Magnification settings from.
      * @return Valid OpenGL Magnification intenger value
      */
@@ -173,6 +179,7 @@ namespace fx
     
     /**
      * Determines if the given intenger value is a power of two.
+     *
      * @param value Intenger value to determine if is a power of two.
      * @return true if value is a power of tow or false otherwise.
      */
@@ -180,6 +187,7 @@ namespace fx
     
     /**
      * Determines if values in size are powers of two.
+     *
      * @return true if both width and height are powers of two or false otherwise.
      */
     bool  isPowerOfTwo() const {return !isPowerOfTwo(mSize.w) || !isPowerOfTwo(mSize.h);}

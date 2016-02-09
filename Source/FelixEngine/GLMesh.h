@@ -43,6 +43,7 @@ namespace fx
   public:
     /**
      * Constructor that initalizes the Mesh.
+     *
      * @param system Pointer to a GLGraphicsSystem.
      */
     GLMesh(GLGraphicSystem *system): mGLSystem(system), mIndexBuffer(0) {}
@@ -54,6 +55,7 @@ namespace fx
     
     /**
      * Binds the Mesh to the given shader.
+     *
      * @param shader Shader to bind this Mesh to.
      */
     void bind(const GLShader *shader) const
@@ -76,6 +78,7 @@ namespace fx
     
     /**
      * Draws the Mesh using OpenGL calls.
+     *
      * @param instances Number of times the mesh would be drawn.
      * @param index The sub-mesh to draw.
      */
@@ -106,6 +109,7 @@ namespace fx
     /**
      * Uploads the Vertex and Index information from the given Buffer Map to
      * Video Memory.
+     *
      * @param bufferMap Refrence to the BufferMap to load from.
      */
     void uploadBufferMap(const BufferMap &bufferMap)
@@ -159,6 +163,7 @@ namespace fx
   private:
     /**
      * Uploads a Vertex Buffer from the given Buffer to Video Memory.
+     *
      * @param buffer Refrence to the Buffer to upload.
      * @return true if successful or false on an error.
      */
@@ -196,6 +201,7 @@ namespace fx
     
     /**
      * Uploads an Index Buffer from the given Buffer to Video Memory.
+     *
      * @param buffer Refrence to the Buffer to upload.
      * @return true if successful or false on an error.
      */
@@ -221,6 +227,7 @@ namespace fx
     
     /**
      * Sets the Sub-Mesh ranges from the given Buffer.
+     *
      * @param buffer Refrence to the Buffer to load the ranges from.
      * @return true if there were ranges loaded or false if not.
      */
@@ -235,6 +242,7 @@ namespace fx
     
     /**
      * Sets the OpenGL primitive type from the given type.
+     *
      * @param type Enum to either VERTEX_TRIANGLES or GL_TRIANGLE_STRIP.
      */
     void setGLPrimitiveType(VERTEX_PRIMITIVE type)
