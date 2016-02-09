@@ -61,7 +61,7 @@ namespace fx
     Window(): mMode(WINDOW_FULL_MONO), mScale(1.0f) {}
     virtual ~Window() {}
     
-    virtual bool setToXml(const XMLTree::Node &node);
+    bool setToXml(const XMLTree::Node &node);
     
     void setTitle(const std::string &title) {mTitle = title;}
     void setPosition(const ivec2 &pos) {mPosition = pos;}
@@ -109,7 +109,7 @@ namespace fx
     Frame(): mRefFrame(0) {}
     virtual ~Frame() {}
     
-    virtual bool setToXml(const XMLTree::Node &node);
+    //virtual bool setToXml(const XMLTree::Node &node);
     
     void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
@@ -130,58 +130,25 @@ namespace fx
   class Shader: public Resource
   {
   public:
-    Shader() {clearParts();}
+    Shader() {}
     virtual ~Shader() {}
     
-    virtual bool setToXml(const XMLTree::Node &node);
-    
-    void clearParts();
-    void setSourceToPart(const std::string &src, SHADER_PART part);
-    void setFileToPart(const std::string &file, SHADER_PART part);
-    void setFunctionToPart(const std::string &func, SHADER_PART part);
-    
     static SHADER_PART ParseShaderPart(const std::string &partStr);
-    
-  protected:
-    std::string mParts[SHADER_COUNT];
-    SHADER_TYPE mPartTypes[SHADER_COUNT];
   };
   
   class Mesh: public Resource
   {
   public:
     virtual ~Mesh() {}
-    
-    virtual bool setToXml(const XMLTree::Node &node);
-    
-    VertexBufferMap& getVertexBufferMap() {return mBufferMap;}
-    void addVertexBuffer(const std::string &name, int components, int count, const float *data);
-    void setIndexBuffer(int count, const int *data);
-    void setPrimitiveType(VERTEX_PRIMITIVE type);
-    
-  protected:
-    VertexBufferMap mBufferMap;
   };
   
   class Texture: public Resource
   {
   public:
     virtual ~Texture() {}
-    
-    virtual bool setToXml(const XMLTree::Node &node);
-    
-    void setImageFile(const std::string &file) {mFile = file;}
-    std::string imageFile() const {return mFile;}
-    
-    void setSampler(const Sampler &sampler) {mSampler = sampler;}
-    Sampler sampler() const {return mSampler;}
-    
-    void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
     
   protected:
-    std::string mFile;
-    Sampler mSampler;
     ivec2 mSize;
   };
 }

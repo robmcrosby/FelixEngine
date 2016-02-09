@@ -260,12 +260,12 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
 
 void GLGraphicSystem::processUnloadTask(const GraphicTask *task)
 {
-  
+  // TODO: Implement this when needed.
 }
 
 void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
 {
-  
+  // TODO: Implement this when needed.
 }
 
 void GLGraphicSystem::processViewTask(const GraphicTask *task, int stereo)
@@ -301,7 +301,7 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     else
       frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
     
-    // If no Render Targets are specified, then use the main window.
+    // If no Render Targets are specified, use the main window.
     if (!frame)
       frame = static_cast<GLFrame*>(getFrame("MainWindow"));
     
@@ -318,6 +318,7 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       frame->setDepthState(task->drawState.depthState);
       frame->setBlendState(task->drawState.blendState);
       
+      // Bind the Mesh to the Shader
       mesh->bind(shader);
       
       // Set the Local Uniforms

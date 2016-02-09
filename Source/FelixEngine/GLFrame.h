@@ -354,29 +354,29 @@ namespace fx
     }
     
   private:
-    bool load()
-    {
-      bool success = false;
-      if (!loaded())
-      {
-        GLint curFrameBuffer;
-        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
-        
-        if (mRefFrame)
-          mSize = mRefFrame->size() * mScale;
-        
-        glGenFramebuffers(1, &mFrameBufferId);
-        if (mFrameBufferId == 0)
-          std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
-        else
-        {
-          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-          success = loadGLBuffers();
-          glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
-        }
-      }
-      return success;
-    }
+//    bool load()
+//    {
+//      bool success = false;
+//      if (!loaded())
+//      {
+//        GLint curFrameBuffer;
+//        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
+//        
+//        if (mRefFrame)
+//          mSize = mRefFrame->size() * mScale;
+//        
+//        glGenFramebuffers(1, &mFrameBufferId);
+//        if (mFrameBufferId == 0)
+//          std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
+//        else
+//        {
+//          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+//          success = loadGLBuffers();
+//          glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
+//        }
+//      }
+//      return success;
+//    }
     
     void unload()
     {

@@ -31,12 +31,6 @@ namespace fx
       }
     }
     
-    virtual bool setToXml(const XMLTree::Node &node)
-    {
-      mBufferMap.setToXml(node);
-      return true;
-    }
-    
   private:
     void applyBufferToShader(const Buffer &buffer, const GLShader *shader) const
     {

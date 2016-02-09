@@ -29,7 +29,7 @@ namespace fx
       if (node.hasAttribute("name"))
       {
         setShader(node.attribute("name"));
-        success = mShader->setToXml(node);
+        //success = mShader->setToXml(node);
       }
       return success;
     }

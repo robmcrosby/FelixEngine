@@ -20,9 +20,6 @@ namespace fx
     Resource(): mLoaded(0), mRemoved(0) {SDL_AtomicSet(&mCount, 0);}
     virtual ~Resource() {}
     
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node) = 0;
-    
     void retain() {SDL_AtomicIncRef(&mCount);}
     void release()
     {

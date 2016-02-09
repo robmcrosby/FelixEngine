@@ -93,18 +93,18 @@ namespace fx
         
         glBindTexture(GL_TEXTURE_2D, mTextureId);
         
-        setFilters(mSampler);
-        
         // Load the Image to the Texture
         const GLvoid *pixels = buffer.ptr();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLint)mSize.w, (GLint)mSize.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         
-        // Generate the Mipmaps
-        if (mSampler.mipMappingEnabled())
-        {
-          mMipMapped = true;
-          glGenerateMipmap(GL_TEXTURE_2D);
-        }
+        // TODO: Implement Mipmap loading/creation
+//        // Generate the Mipmaps
+//        if (mSampler.mipMappingEnabled())
+//        {
+//          mMipMapped = true;
+//          glGenerateMipmap(GL_TEXTURE_2D);
+//        }
+        
         glBindTexture(GL_TEXTURE_2D, 0);
         success = true;
       }
