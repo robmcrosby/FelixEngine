@@ -17,7 +17,7 @@
 namespace fx
 {
   /**
-   *
+   * Resource that manages OpenGL Vertex/Index buffers.
    */
   class GLMesh: public Mesh
   {
