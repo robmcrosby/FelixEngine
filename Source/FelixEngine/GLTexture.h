@@ -23,17 +23,6 @@ namespace fx
     GLTexture(GLGraphicSystem *system): mGLSystem(system), mMipMapped(0), mFBOTexture(0) {}
     virtual ~GLTexture() {}
     
-    void update()
-    {
-      if (loading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-    }
-    
     void use(GLint index, const Sampler &sampler) const
     {
       glActiveTexture(GL_TEXTURE0 + index);

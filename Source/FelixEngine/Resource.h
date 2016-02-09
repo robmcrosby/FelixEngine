@@ -17,7 +17,7 @@ namespace fx
   class Resource
   {
   public:
-    Resource(): mLoaded(0), mLoading(0), mUnloading(0), mRemoved(0) {SDL_AtomicSet(&mCount, 0);}
+    Resource(): mLoaded(0), mRemoved(0) {SDL_AtomicSet(&mCount, 0);}
     virtual ~Resource() {}
     
     bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
@@ -31,23 +31,10 @@ namespace fx
     }
     
     bool loaded() const {return mLoaded;}
-    bool loading() const {return mLoading;}
-    bool unloading() const {return mUnloading;}
     bool removed() const {return mRemoved;}
     
-    void setToLoad() {mLoading = true;}
-    void setToUnload() {mUnloading = true;}
-    
-    void setLoaded()
-    {
-      mLoaded = true;
-      mLoading = false;
-    }
-    void setUnloaded()
-    {
-      mLoaded = false;
-      mUnloading = false;
-    }
+    void setLoaded(bool loaded = true) {mLoaded = loaded;}
+    void setUnloaded() {setLoaded(false);}
     
   public:
     static void Replace(Resource **dst, Resource *src)
@@ -62,12 +49,9 @@ namespace fx
       }
     }
     
-  protected:
-    void setNotLoading() {mLoading = false;}
-    void setNotUnloading() {mUnloading = false;}
-    
   private:
-    bool mLoaded, mLoading, mUnloading, mRemoved;
+    bool mLoaded;
+    bool mRemoved;
     SDL_atomic_t mCount;
   };
 }

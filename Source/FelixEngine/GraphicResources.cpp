@@ -35,17 +35,6 @@ bool Window::setToXml(const XMLTree::Node &node)
 bool Frame::setToXml(const XMLTree::Node &node)
 {
   bool success = true;
-  //clearBuffers();
-  
-//  // Add the buffers
-//  for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-//  {
-//    Buffer buffer;
-//    buffer.format = ParseColorType((*itr)->attribute("format"));
-//    buffer.name = (*itr)->attribute("texture");
-//    success &= buffer.sampler.setToXml(**itr);
-//    addBuffer(buffer);
-//  }
   
   // Set the size
   setSize(ivec2(0, 0));
@@ -62,7 +51,6 @@ bool Frame::setToXml(const XMLTree::Node &node)
     if (node.hasAttribute("scale"))
       setScale(node.attribute("scale"));
   }
-  setToLoad();
   return success;
 }
 
@@ -96,7 +84,6 @@ bool Shader::setToXml(const XMLTree::Node &node)
     else
       setSourceToPart((*itr)->contents(), part);
   }
-  setToLoad();
   return success;
 }
 
@@ -136,7 +123,6 @@ void Shader::setFunctionToPart(const std::string &func, SHADER_PART part)
   {
     mParts[i] = func;
     mPartTypes[i] = SHADER_FUNCTION;
-    setToLoad();
   }
 }
 
@@ -153,10 +139,7 @@ SHADER_PART Shader::ParseShaderPart(const std::string &partStr)
 
 bool Mesh::setToXml(const XMLTree::Node &node)
 {
-  bool success = MeshLoader::LoadMeshFromXML(mBufferMap, node);
-  if (success)
-    setToLoad();
-  return success;
+  return MeshLoader::LoadMeshFromXML(mBufferMap, node);
 }
 
 void Mesh::addVertexBuffer(const std::string &name, int components, int count, const float *data)
@@ -189,10 +172,7 @@ bool Texture::setToXml(const XMLTree::Node &node)
     string filePath = node.tree() ? node.tree()->path() : "";
     setImageFile(filePath+node.attribute("file"));
     if (mSampler.setToXml(node))
-    {
       success = true;
-      setToLoad();
-    }
   }
   return success;
 }

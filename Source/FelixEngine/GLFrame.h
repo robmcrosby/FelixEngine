@@ -29,14 +29,7 @@ namespace fx
     
     void update()
     {
-      if (loading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-      else if (loaded())
+      if (loaded())
       {
         if (mGLWindow)
           mSize = mGLWindow->frameSize();

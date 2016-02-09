@@ -40,17 +40,6 @@ namespace fx
     GLMesh(GLGraphicSystem *system): mGLSystem(system), mIndexBuffer(0) {}
     virtual ~GLMesh() {clearBuffers();}
     
-    void update()
-    {
-      if (loading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-    }
-    
     void bind(const GLShader *shader) const
     {
       if (shader)

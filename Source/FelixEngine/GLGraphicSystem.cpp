@@ -154,6 +154,10 @@ void GLGraphicSystem::render()
   for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
     itr->second->update();
   
+  // Update the Frames
+  for (map<string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
+    itr->second->update();
+  
   // Process the Graphic Tasks
   processPass(mPreTasks, nullptr, 0);
   if (mTaskPasses.size())

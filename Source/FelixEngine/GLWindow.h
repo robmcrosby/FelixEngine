@@ -34,24 +34,12 @@ namespace fx
     
     bool init()
     {
-      bool success = load();
-      if (success)
-        setLoaded();
-      else
-        setNotLoading();
-      return success;
+      setLoaded(load());
+      return loaded();
     }
     
     void update()
     {
-      if (loading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-      
       if (loaded())
       {
         SDL_GL_GetDrawableSize(mSDLWindow, &mSize.w, &mSize.h);

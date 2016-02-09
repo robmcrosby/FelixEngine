@@ -29,17 +29,6 @@ namespace fx
     GLShader(GLGraphicSystem *system): mGLSystem(system), mProgramId(0) {}
     virtual ~GLShader() {}
     
-    void update()
-    {
-      if (loading())
-      {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
-      }
-    }
-    
     void use() const
     {
       glUseProgram(mProgramId);
@@ -53,15 +42,6 @@ namespace fx
     {
       if (texture)
         texture->use(index, sampler);
-    }
-    void applyTextureMap(const TextureMap *textures) const
-    {
-//      if (textures)
-//      {
-//        int index = 0;
-//        for (TextureMap::const_iterator itr = textures->begin(); itr != textures->end() && index < mNumTextureLocs; ++itr)
-//          applyTexture(index++, static_cast<const GLTexture*>(itr->texture()), itr->sampler());
-//      }
     }
     
     static GLenum GetGLShaderPart(SHADER_PART part)

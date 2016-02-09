@@ -172,7 +172,6 @@ namespace fx
             // Load the Texture Atlas of the Font
             Texture *atlas = FelixEngine::GetGraphicSystem()->getTexture(atlasFile.name());
             atlas->setImageFile(atlasFile.path());
-            atlas->setToLoad();
             setAtlas(atlas);
             
             // Get the Glyph Information
