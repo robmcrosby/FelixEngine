@@ -29,7 +29,7 @@ namespace fx
     /**
      * Destructor
      */
-    virtual ~GLTexture() {}
+    virtual ~GLTexture() {unload();}
     
     /**
      * Applies the texture to the given index and filter settings in the Sampler
@@ -118,6 +118,7 @@ namespace fx
         glDeleteTextures(1, &mTextureId);
         mTextureId = 0;
       }
+      setLoaded(false);
     }
     
     /**

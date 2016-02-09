@@ -140,8 +140,8 @@ namespace fx
     static Vector2 Random() {return Vector2((T)rand(), (T)rand());}
     static Vector2 RandMax() {return Vector2((T)RAND_MAX, (T)RAND_MAX);}
     
-    union {T x; T r; T w;};
-    union {T y; T g; T h;};
+    union {T x; T r; T w; T start;};
+    union {T y; T g; T h; T end;};
   };
   
   
