@@ -30,30 +30,6 @@ bool Window::setToXml(const XMLTree::Node &node)
   return success;
 }
 
-
-
-//bool Frame::setToXml(const XMLTree::Node &node)
-//{
-//  bool success = true;
-//  
-//  // Set the size
-//  setSize(ivec2(0, 0));
-//  setScale(vec2(1.0f, 1.0f));
-//  if (node.hasAttribute("width") && node.hasAttribute("height"))
-//  {
-//    int width  = node.attributeAsInt("width");
-//    int height = node.attributeAsInt("height");
-//    setSize(ivec2(width, height));
-//  }
-//  else
-//  {
-//    setRefrenceFrame(node.hasAttribute("frame") ? node.attribute("frame") : MAIN_WINDOW);
-//    if (node.hasAttribute("scale"))
-//      setScale(node.attribute("scale"));
-//  }
-//  return success;
-//}
-
 void Frame::setRefrenceFrame(const std::string &name)
 {
   GraphicSystem *sys = FelixEngine::GetGraphicSystem();

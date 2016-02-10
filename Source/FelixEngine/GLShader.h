@@ -39,9 +39,9 @@ namespace fx
     virtual ~GLShader() {unload();}
     
     /**
-     * Calls OpenGL to use this Shader.
+     * Calls OpenGL to bind this Shader.
      */
-    void use() const
+    void bind() const
     {
       glUseProgram(mProgramId);
       for (int i = 0; i < mNumTextureLocs; ++i)

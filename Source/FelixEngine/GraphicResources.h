@@ -109,8 +109,6 @@ namespace fx
     Frame(): mRefFrame(0) {}
     virtual ~Frame() {}
     
-    //virtual bool setToXml(const XMLTree::Node &node);
-    
     void setSize(const ivec2 &size) {mSize = size;}
     ivec2 size() const {return mSize;}
     

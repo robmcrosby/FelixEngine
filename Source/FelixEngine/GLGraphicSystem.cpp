@@ -273,7 +273,7 @@ void GLGraphicSystem::processViewTask(const GraphicTask *task, int stereo)
   const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
   if (frame)
   {
-    frame->use(stereo);
+    frame->bind(stereo);
     frame->clear(task->drawState.clearState);
   }
   
@@ -310,10 +310,10 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       setTriangleCullMode(task->drawState.cullMode);
       
       // Set the state for the Shader
-      shader->use();
+      shader->bind();
       
       // Set the state for the Frame
-      frame->use(stereo);
+      frame->bind(stereo);
       frame->clear(task->drawState.clearState);
       frame->setDepthState(task->drawState.depthState);
       frame->setBlendState(task->drawState.blendState);

@@ -19,14 +19,26 @@ namespace fx
   class GLWindow;
   
   /**
-   *
+   * Encapsolates an OpenGL Frame Buffer Object (FBO) which controls the render targets in rendering.
    */
   class GLFrame: public Frame
   {
   public:
+    /**
+     * Constructor that initalizes the Frame.
+     *
+     * @param system Pointer to a GLGraphicSystem.
+     */
     GLFrame(GLGraphicSystem *system): mGLSystem(system), mFrameBufferId(0), mGLWindow(0) {}
-    virtual ~GLFrame() {clearGLBuffers();}
     
+    /**
+     * Destructor
+     */
+    virtual ~GLFrame() {unload();}
+    
+    /**
+     * Updates the size if refrencing a window or another frame buffer.
+     */
     void update()
     {
       if (loaded())
@@ -38,6 +50,11 @@ namespace fx
       }
     }
     
+    /**
+     * Sets the Frame to refrence a Window.
+     *
+     * @param window Pointer to a GLWindow to refrence.
+     */
     void setToWindow(GLWindow *window)
     {
       mGLWindow = window;
@@ -45,7 +62,12 @@ namespace fx
       setLoaded();
     }
     
-    void use(int stereo) const
+    /**
+     * Calls OpenGL to bind the FBO.
+     *
+     * @param stereo Flags to pass to window if used.
+     */
+    void bind(int stereo) const
     {
       ivec2 size = mSize;
       if (mGLWindow)
@@ -58,31 +80,41 @@ namespace fx
       }
     }
     
-    void clear(const ClearState &clearState) const
+    /**
+     * Clears the FBO with the settings from the given ClearState.
+     *
+     * @param state Refrence to a ClearState.
+     */
+    void clear(const ClearState &state) const
     {
-      GLbitfield clearFlags = 0;
+      GLbitfield flags = 0;
       // TODO: update this to clear individual attachments.
-      if (clearState.flags & CLEAR_COLOR)
+      if (state.flags & CLEAR_COLOR)
       {
-        RGBAf color = clearState.colors[0];
+        RGBAf color = state.colors[0];
         glClearColor(color.red, color.green, color.blue, color.alpha);
-        clearFlags = GL_COLOR_BUFFER_BIT;
+        flags = GL_COLOR_BUFFER_BIT;
       }
-      if (clearState.flags & CLEAR_DEPTH)
+      if (state.flags & CLEAR_DEPTH)
       {
         glDepthMask(GL_TRUE);
-        glClearDepthf(clearState.depth);
-        clearFlags |= GL_DEPTH_BUFFER_BIT;
+        glClearDepthf(state.depth);
+        flags |= GL_DEPTH_BUFFER_BIT;
       }
-      if (clearState.flags & CLEAR_STENCEIL)
+      if (state.flags & CLEAR_STENCEIL)
       {
-        glClearStencil(clearState.stenceil);
-        clearFlags |= GL_STENCIL_BUFFER_BIT;
+        glClearStencil(state.stenceil);
+        flags |= GL_STENCIL_BUFFER_BIT;
       }
-      if (clearFlags)
-        glClear(clearFlags);
+      if (flags)
+        glClear(flags);
     }
     
+    /**
+     * Sets how the depth buffer would be used from the given DepthState.
+     *
+     * @param state Refrence to a DepthState.
+     */
     void setDepthState(const DepthState &state) const
     {
       if (state.testingEnabled())
@@ -95,20 +127,25 @@ namespace fx
       glDepthMask(state.writingEnabled() ? GL_TRUE : GL_FALSE);
     }
     
-    void setBlendState(const BlendState &blending) const
+    /**
+     * Sets how blending would be handled from the given BlendState
+     *
+     * @param state Refrence to a BlendState.
+     */
+    void setBlendState(const BlendState &state) const
     {
-      if (blending.enabled())
+      if (state.enabled())
       {
         glEnable(GL_BLEND);
-        GLenum src = GetGLBlendInput(blending.src());
-        GLenum dst = GetGLBlendInput(blending.dst());
-        GLenum eq  = GetGLBlendEquation(blending.equation());
+        GLenum src = GetGLBlendInput(state.src());
+        GLenum dst = GetGLBlendInput(state.dst());
+        GLenum eq  = GetGLBlendEquation(state.equation());
         
-        if (blending.seperate())
+        if (state.seperate())
         {
-          GLenum srcAlpha = GetGLBlendInput(blending.srcAlpha());
-          GLenum dstAlpha = GetGLBlendInput(blending.dstAlpha());
-          GLenum eqAlpha  = GetGLBlendEquation(blending.equationAlpha());
+          GLenum srcAlpha = GetGLBlendInput(state.srcAlpha());
+          GLenum dstAlpha = GetGLBlendInput(state.dstAlpha());
+          GLenum eqAlpha  = GetGLBlendEquation(state.equationAlpha());
           
           glBlendEquationSeparate(eq, eqAlpha);
           glBlendFuncSeparate(src, dst, srcAlpha, dstAlpha);
@@ -119,125 +156,137 @@ namespace fx
           glBlendFunc(src, dst);
         }
         
-        glBlendColor(blending.color.red, blending.color.green, blending.color.blue, blending.color.alpha);
+        glBlendColor(state.color.red, state.color.green, state.color.blue, state.color.alpha);
       }
       else
         glDisable(GL_BLEND);
     }
     
   private:
-    class GLBuffer
+    /**
+     * Internal class that manages a single OpenGL Frame Buffer.
+     */
+    struct GLBuffer
     {
-    public:
-      GLBuffer(): mIndex(0), mBufferId(0), mFormat(COLOR_NONE), mTexture(0) {}
+      /**
+       * Constructor initalizes to an empty Frame Buffer.
+       */
+      GLBuffer(): index(0), bufferId(0), format(COLOR_NONE), texture(0) {}
       
-      void setIndex(GLint index) {mIndex = index;}
-      void setFormat(COLOR_TYPE format) {mFormat = format;}
-      void setTexture(GLTexture *texture)
+      /**
+       * Checks some conditions and creates either a texture or render buffer to the given size.
+       *
+       * @param size Refrence to a 2d intenger vector for the size of the buffer.
+       * @return true if the buffer loaded correctly or false otherwise.
+       */
+      bool create(const ivec2 &size)
       {
-        if (mTexture != texture)
-        {
-          if (mTexture)
-            mTexture->release();
-          if (texture)
-            texture->retain();
-          mTexture = texture;
-        }
+        if (format != COLOR_NONE && size.w > 0 && size.h > 0)
+          return texture ? createTextureBuffer(size) : createRenderBuffer(size);
+        return false;
       }
       
-      bool load(const ivec2 &size)
-      {
-        bool success = true;
-        if (mFormat != COLOR_NONE && size.w > 0 && size.h > 0)
-        {
-          if (mTexture)
-            success = loadTextureBuffer(size);
-          else
-            success = loadRenderBuffer(size);
-        }
-        return success;
-      }
-      
+      /**
+       * Detaches either the texture or the render buffer from the FBO.
+       */
       void detach()
       {
-        if (mTexture)
+        if (texture)
           detachTextureBuffer();
         else
           detachRenderBuffer();
       }
       
-      void clear()
+      /**
+       * Deletes either the texture or the render buffer.
+       */
+      void destroy()
       {
-        if (mBufferId)
+        if (bufferId)
         {
-          if (!mTexture)
-            glDeleteRenderbuffers(1, &mBufferId);
+          if (!texture)
+            glDeleteRenderbuffers(1, &bufferId);
           else
           {
-            mTexture->clearBuffer();
-            glDeleteTextures(1, &mBufferId);
+            texture->clearBuffer();
+            glDeleteTextures(1, &bufferId);
           }
-          mBufferId = 0;
+          bufferId = 0;
         }
       }
       
-    private:
-      bool loadRenderBuffer(const ivec2 &size)
+      /**
+       * Creates a Render Buffer to the given size.
+       *
+       * @param size Refrence to a 2d intenger vector for the size of the buffer.
+       * @return true if successfully created or false otherwise.
+       */
+      bool createRenderBuffer(const ivec2 &size)
       {
         bool success = false;
         GLint curRenderBuff;
         glGetIntegerv(GL_RENDERBUFFER_BINDING, &curRenderBuff);
         
-        glGenRenderbuffers(1, &mBufferId);
-        glBindRenderbuffer(GL_RENDERBUFFER, mBufferId);
+        glGenRenderbuffers(1, &bufferId);
+        glBindRenderbuffer(GL_RENDERBUFFER, bufferId);
         
         // TODO: support the other formats.
-        if (mFormat == COLOR_RGBA)
+        if (format == COLOR_RGBA)
         {
           glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, size.w, size.h);
-          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mIndex, GL_RENDERBUFFER, mBufferId);
+          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_RENDERBUFFER, bufferId);
           success = true;
         }
-        else if (mFormat == COLOR_DEPTH32F)
+        else if (format == COLOR_DEPTH32F)
         {
           glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32F, size.w, size.h);
-          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
+          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, bufferId);
           success = true;
         }
-        else if (mFormat == COLOR_DEPTH24)
+        else if (format == COLOR_DEPTH24)
         {
           glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.w, size.h);
-          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mBufferId);
+          glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, bufferId);
           success = true;
         }
         glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
         return success;
       }
+      
+      /**
+       * Detaches this Render Buffer from the FBO.
+       */
       void detachRenderBuffer()
       {
-        if (mBufferId > 0)
+        if (bufferId > 0)
         {
           GLint curRenderBuff;
           glGetIntegerv(GL_RENDERBUFFER_BINDING, &curRenderBuff);
-          glBindRenderbuffer(GL_RENDERBUFFER, mBufferId);
+          glBindRenderbuffer(GL_RENDERBUFFER, bufferId);
           
           // Detach the Render Buffer
-          glBindRenderbuffer(GL_RENDERBUFFER, mBufferId);
-          if (mFormat == COLOR_RGBA)
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mIndex, GL_RENDERBUFFER, 0);
+          glBindRenderbuffer(GL_RENDERBUFFER, bufferId);
+          if (format == COLOR_RGBA)
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_RENDERBUFFER, 0);
           else
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
           glBindRenderbuffer(GL_RENDERBUFFER, curRenderBuff);
         }
       }
       
-      bool loadTextureBuffer(const ivec2 &size)
+      /**
+       * Creates a Texture Buffer to the given size.
+       *
+       * @param size Refrence to a 2d intenger vector for the size of the buffer.
+       * @return true if successfully created or false otherwise.
+       */
+      bool createTextureBuffer(const ivec2 &size)
       {
         bool success = false;
         
-        glGenTextures(1, &mBufferId);
-        mTexture->setBuffer(mBufferId, size);
-        glBindTexture(GL_TEXTURE_2D, mBufferId);
+        glGenTextures(1, &bufferId);
+        texture->setBuffer(bufferId, size);
+        glBindTexture(GL_TEXTURE_2D, bufferId);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -249,34 +298,38 @@ namespace fx
         }
         
         // TODO: support the other formats.
-        if (mFormat == COLOR_RGBA)
+        if (format == COLOR_RGBA)
         {
           glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.w, size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-          glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+mIndex, GL_TEXTURE_2D, mBufferId, 0);
+          glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+index, GL_TEXTURE_2D, bufferId, 0);
           success = true;
         }
-        else if (mFormat == COLOR_DEPTH32F)
+        else if (format == COLOR_DEPTH32F)
         {
           glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, size.w, size.h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
+          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferId, 0);
           success = true;
         }
-        else if (mFormat == COLOR_DEPTH24)
+        else if (format == COLOR_DEPTH24)
         {
           glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, size.w, size.h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mBufferId, 0);
+          glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, bufferId, 0);
           success = true;
         }
         glBindTexture(GL_TEXTURE_2D, 0);
         return success;
       }
+      
+      /**
+       * Detaches this Texture Buffer from the FBO.
+       */
       void detachTextureBuffer()
       {
-        if (mBufferId > 0)
+        if (bufferId > 0)
         {
           // Detach the Frame Buffer Texture
-          glBindTexture(GL_TEXTURE_2D, mBufferId);
-          if (mFormat == COLOR_RGBA)
+          glBindTexture(GL_TEXTURE_2D, bufferId);
+          if (format == COLOR_RGBA)
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
           else
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
@@ -284,13 +337,20 @@ namespace fx
         }
       }
       
-      GLuint mIndex, mBufferId;
-      COLOR_TYPE mFormat;
-      GLTexture *mTexture;
+      GLuint index;    /**< Index of the buffer */
+      GLuint bufferId; /**< OpenGL buffer handle */
+      
+      COLOR_TYPE format;  /**< Format of the buffer */
+      GLTexture *texture; /**< Pointer to a GLTexture if a Texture Buffer */
     };
     
     
   public:
+    /**
+     * Upload from a BufferMap
+     *
+     * @param bufferMap Refrence to a BufferMap that defines the Frame.
+     */
     void uploadBufferMap(const BufferMap &bufferMap)
     {
       bool success = false;
@@ -330,7 +390,7 @@ namespace fx
           for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
           {
             if (itr->bufferType() == BUFFER_TARGET)
-              success &= addTarget(*itr);
+              success &= addBuffer(*itr);
           }
           
           // Set the Color Attachments
@@ -345,39 +405,12 @@ namespace fx
           glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
         }
       }
-      
-      
-      if (success)
-        setLoaded();
-      else
-        setUnloaded();
+      setLoaded(success);
     }
     
-  private:
-//    bool load()
-//    {
-//      bool success = false;
-//      if (!loaded())
-//      {
-//        GLint curFrameBuffer;
-//        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
-//        
-//        if (mRefFrame)
-//          mSize = mRefFrame->size() * mScale;
-//        
-//        glGenFramebuffers(1, &mFrameBufferId);
-//        if (mFrameBufferId == 0)
-//          std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
-//        else
-//        {
-//          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-//          success = loadGLBuffers();
-//          glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
-//        }
-//      }
-//      return success;
-//    }
-    
+    /**
+     * Unloads the FBO
+     */
     void unload()
     {
       if (mFrameBufferId > 0)
@@ -386,123 +419,104 @@ namespace fx
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
         
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-        detachGLBuffers();
+        detachBuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
         
         glDeleteFramebuffers(1, &mFrameBufferId);
         mFrameBufferId = 0;
-        clearGLBuffers();
+        destroyBuffers();
       }
       setUnloaded();
     }
     
+    /**
+     * Resizes all the buffers in the FBO to the given size.
+     *
+     * @param size Refrence to a 2d intenger vector for the new size.
+     * @return true if successful or false otherwise.
+     */
     bool resize(const ivec2 &size)
     {
       bool success = true;
-//      if (mSize != size)
-//      {
-//        unload();
-//        
-//        mSize = size;
-//        success = load();
-//        
-//        if (success)
-//          setLoaded();
-//      }
       return success;
     }
     
-    bool addTarget(const Buffer &buffer)
+  private:
+    
+    /**
+     * Adds either a Texture or Render buffer defined by the given Buffer.
+     *
+     * @param buffer Refrence to a Buffer that defines the type of Buffer to add to the FBO.
+     * @return true if successfully added or false otherwise.
+     */
+    bool addBuffer(const Buffer &buffer)
     {
-      bool success = true;
-      
       COLOR_TYPE format = (COLOR_TYPE)buffer.flags();
       if (format == COLOR_RGBA)
       {
         mColorBuffers.push_back(GLBuffer());
-        mColorBuffers.back().setIndex((int)mColorBuffers.size()-1);
-        mColorBuffers.back().setFormat(format);
-        setTexture(mColorBuffers.back(), buffer.name());
-        success = mColorBuffers.back().load(mSize);
+        mColorBuffers.back().index = (int)mColorBuffers.size()-1;
+        mColorBuffers.back().format = format;
+        setTextureToBuffer(buffer.name(), mColorBuffers.back());
+        return mColorBuffers.back().create(mSize);
       }
-      else if (format == COLOR_DEPTH32F)
+      if (format == COLOR_DEPTH32F)
       {
         format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
-        mDepthBuffer.setFormat(format);
-        setTexture(mDepthBuffer, buffer.name());
-        success &= mDepthBuffer.load(mSize);
+        mDepthBuffer.format = format;
+        setTextureToBuffer(buffer.name(), mDepthBuffer);
+        return mDepthBuffer.create(mSize);
       }
-      else if (format == COLOR_STENCIL8)
+      if (format == COLOR_STENCIL8)
       {
-        mStencilBuffer.setFormat(format);
-        success &= mStencilBuffer.load(mSize);
+        mStencilBuffer.format = format;
+        return mStencilBuffer.create(mSize);
       }
-
-      
-      return success;
+      return false;
     }
     
-    bool loadGLBuffers()
-    {
-      bool success = true;
-      
-//      int colorIndex = 0;
-//      for (std::list<Buffer>::const_iterator itr = mBuffers.begin(); itr != mBuffers.end(); ++itr)
-//      {
-//        if (itr->format == COLOR_RGBA)
-//        {
-//          mColorBuffers.push_back(GLBuffer());
-//          mColorBuffers.back().setIndex(colorIndex++);
-//          mColorBuffers.back().setFormat(itr->format);
-//          setTexture(mColorBuffers.back(), itr->name);
-//          success &= mColorBuffers.back().load(mSize);
-//        }
-//        else if (itr->format == COLOR_DEPTH32F)
-//        {
-//          COLOR_TYPE format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
-//          mDepthBuffer.setFormat(format);
-//          setTexture(mDepthBuffer, itr->name);
-//          success &= mDepthBuffer.load(mSize);
-//        }
-//        else if (itr->format == COLOR_STENCIL8)
-//        {
-//          mStencilBuffer.setFormat(itr->format);
-//          success &= mStencilBuffer.load(mSize);
-//        }
-//
-//        if (mColorBuffers.size() != 0)
-//        {
-//          std::vector<GLenum> drawBuffers;
-//          for (int i = 0; i < (int)mColorBuffers.size(); ++i)
-//            drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
-//          glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
-//        }
-//      }
-      return success;
-    }
-    void detachGLBuffers()
+    /**
+     * Detaches all the buffers from the FBO.
+     */
+    void detachBuffers()
     {
       for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
         itr->detach();
       mDepthBuffer.detach();
     }
-    void clearGLBuffers()
+    
+    /**
+     * Destroys all the buffers and clears out the Color Buffers.
+     */
+    void destroyBuffers()
     {
       for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
-        itr->clear();
+        itr->destroy();
       mColorBuffers.clear();
-      mDepthBuffer.clear();
+      mDepthBuffer.destroy();
     }
     
-    void setTexture(GLBuffer &buffer, const std::string &name)
+    /**
+     * Sets a Texture from the GLGraphicSystem with the given name to the given buffer.
+     *
+     * @param name String name of the texture.
+     * @param buffer Refrence to a GLBuffer to assign the texture to.
+     */
+    void setTextureToBuffer(const std::string &name, GLBuffer &buffer)
     {
       if (name != "")
       {
         GLTexture *texture = static_cast<GLTexture*>(mGLSystem->getTexture(name));
-        buffer.setTexture(texture);
+        Resource::Replace(&buffer.texture, texture);
       }
     }
     
+    /**
+     * Gets an OpenGL enum for the given depth testing function.
+     *
+     * @param function Intenger value equal to a depth function in DEPTH_FLAGS.
+     * @return OpenGL depth testing function enum.
+     */
     static GLenum GetGLDepthFunction(int function)
     {
       switch (function)
@@ -517,6 +531,12 @@ namespace fx
       }
     }
     
+    /**
+     * Gets OpenGL flags for the given blend input flags.
+     *
+     * @param input Intenger value from combined BLEND_FLAGS.
+     * @return OpenGL blend input enum.
+     */
     static GLenum GetGLBlendInput(int input)
     {
       if (input == BLEND_INPUT_SRC_ALPHA_SATURATE)
@@ -550,20 +570,28 @@ namespace fx
       return GL_ONE;
     }
     
+    /**
+     * Gets an OpenGL enum for the given blend equation.
+     *
+     * @param eq Intenger value equal to a blend equation in BLEND_FLAGS.
+     * @return OpenGL blend equation enum.
+     */
     static GLenum GetGLBlendEquation(int eq)
     {
+      // TODO: add the other blend functions.
       return GL_FUNC_ADD;
     }
     
-    
   private:
-    GLuint mFrameBufferId;
-    GLGraphicSystem *mGLSystem;
-    GLWindow *mGLWindow;
+    GLuint mFrameBufferId; /**< OpenGL handle for a FBO */
+    GLWindow *mGLWindow;   /**< Pointer to a GLWindow if owned by a Window or Null otherwise. */
     
-    std::list<GLBuffer> mColorBuffers;
-    GLBuffer mDepthBuffer;
-    GLBuffer mStencilBuffer;
+    std::list<GLBuffer> mColorBuffers; /**< List of Color Buffers */
+    
+    GLBuffer mDepthBuffer;   /**< Depth Buffer */
+    GLBuffer mStencilBuffer; /**< Stencil Buffer */
+    
+    GLGraphicSystem *mGLSystem; /**< Pointer to the GLGraphicsSystem that owns this Frame */
   };
 }
 

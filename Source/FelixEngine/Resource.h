@@ -14,6 +14,8 @@
 
 namespace fx
 {
+  class Resource;
+  
   class Resource
   {
   public:
@@ -45,6 +47,10 @@ namespace fx
         *dst = src;
       }
     }
+    
+    template <typename T>
+    static void Replace(T **dst, T *src) {Replace((Resource**)dst, (Resource*)src);}
+    
     
   private:
     bool mLoaded;
