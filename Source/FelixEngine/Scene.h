@@ -108,35 +108,13 @@ namespace fx
     bool addResource(const XMLTree::Node &node)
     {
       bool success = true;
-      
       if (node.hasAttribute("name"))
       {
         BufferMap &bufferMap = getBufferMap(node.attribute("name"));
         bufferMap.setToXml(node);
         FelixEngine::GetGraphicSystem()->uploadBuffer(bufferMap);
       }
-      
       return success;
-      
-//      bool success = true;
-//      std::string name = node.attribute("name");
-//      std::string type = node.element();
-//      if (type == "Material")
-//      {
-//        Material *material = getMaterial(name);
-//        success &= material->setToXml(node);
-//      }
-//      else
-//      {
-//        Resource *resource = FelixEngine::GetGraphicSystem()->getResource(type, name);
-//        if (resource)
-//        {
-//          resource->retain();
-//          success &= resource->setToXml(node);
-//          mResources.push_back(resource);
-//        }
-//      }
-//      return success;
     }
     
     File mDirectory;

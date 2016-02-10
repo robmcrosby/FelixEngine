@@ -168,8 +168,6 @@ namespace fx
     
     void updateMatrices()
     {
-      lock();
-      
       mModelMatrix = mat4();
       mRotationMatrix = mat4();
       for (const_iterator itr = begin(); itr != end(); ++itr)
@@ -178,19 +176,19 @@ namespace fx
         if (itr->type != SCALE && itr->type != TRANSLATE)
           itr->apply(mRotationMatrix);
       }
-      unlock();
     }
     
   protected:
     virtual void update()
     {
-      updateMatrices();
       lock();
+      updateMatrices();
       if (mRenderSlots)
       {
         mRenderSlots->setUniform("Model", mModelMatrix);
         mRenderSlots->setUniform("Rotation", mRotationMatrix);
       }
+      unlock();
       Component::update();
     }
     
