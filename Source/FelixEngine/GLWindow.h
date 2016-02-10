@@ -47,6 +47,10 @@ namespace fx
         #if __IPHONEOS__
         updateFrameBufferId();
         #endif
+        
+        ivec2 fSize = frameSize();
+        if (mFrame && mFrame->size() != fSize)
+          mFrame->resize(fSize);
       }
     }
     

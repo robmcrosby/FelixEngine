@@ -55,10 +55,33 @@ namespace fx
     STEREO_ALL    = 0x07,
   };
   
+  class Frame: public Resource
+  {
+  public:
+    Frame(): mRefFrame(0) {}
+    virtual ~Frame() {}
+    
+    ivec2 size() const {return mSize;}
+    
+    void setScale(const vec2 &scale) {mScale = scale;}
+    vec2 scale() const {return mScale;}
+    
+    void setRefrenceFrame(const std::string &name);
+    void setRefrenceFrame(Frame *frame) {mRefFrame = frame != this ? frame : nullptr;}
+    Frame* refrenceFrame() const {return mRefFrame;}
+    
+    virtual bool resize(const ivec2 &size) = 0;
+    
+  protected:
+    ivec2 mSize;
+    vec2 mScale;
+    Frame *mRefFrame;
+  };
+  
   class Window: public Resource
   {
   public:
-    Window(): mMode(WINDOW_FULL_MONO), mScale(1.0f) {}
+    Window(): mMode(WINDOW_FULL_MONO), mScale(1.0f), mFrame(0) {}
     virtual ~Window() {}
     
     bool setToXml(const XMLTree::Node &node);
@@ -67,6 +90,8 @@ namespace fx
     void setPosition(const ivec2 &pos) {mPosition = pos;}
     void setSize(const ivec2 &size) {mSize = size;}
     void setScale(float scale) {mScale = scale;}
+    
+    void setFrame(Frame *frame) {Resource::Replace(&mFrame, frame);}
     
     ivec2 position() const {return mPosition;}
     ivec2 size() const {return mSize;}
@@ -101,28 +126,7 @@ namespace fx
     ivec2 mPosition, mSize;
     float mScale;
     WINDOW_MODE mMode;
-  };
-  
-  class Frame: public Resource
-  {
-  public:
-    Frame(): mRefFrame(0) {}
-    virtual ~Frame() {}
-    
-    void setSize(const ivec2 &size) {mSize = size;}
-    ivec2 size() const {return mSize;}
-    
-    void setScale(const vec2 &scale) {mScale = scale;}
-    vec2 scale() const {return mScale;}
-    
-    void setRefrenceFrame(const std::string &name);
-    void setRefrenceFrame(Frame *frame) {mRefFrame = frame != this ? frame : nullptr;}
-    Frame* refrenceFrame() const {return mRefFrame;}
-    
-  protected:
-    ivec2 mSize;
-    vec2 mScale;
-    Frame *mRefFrame;
+    Frame *mFrame;
   };
   
   class Shader: public Resource

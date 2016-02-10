@@ -39,16 +39,16 @@ namespace fx
     /**
      * Updates the size if refrencing a window or another frame buffer.
      */
-    void update()
-    {
-      if (loaded())
-      {
-        if (mGLWindow)
-          mSize = mGLWindow->frameSize();
-        else if (mRefFrame)
-          resize(mScale * mRefFrame->size());
-      }
-    }
+//    void update()
+//    {
+//      if (loaded())
+//      {
+//        if (mGLWindow)
+//          mSize = mGLWindow->frameSize();
+//        else if (mRefFrame)
+//          resize(mScale * mRefFrame->size());
+//      }
+//    }
     
     /**
      * Sets the Frame to refrence a Window.
@@ -435,9 +435,13 @@ namespace fx
      * @param size Refrence to a 2d intenger vector for the new size.
      * @return true if successful or false otherwise.
      */
-    bool resize(const ivec2 &size)
+    virtual bool resize(const ivec2 &size)
     {
       bool success = true;
+      if (mGLWindow)
+        mSize = size;
+      // TODO: Implement resizing
+      
       return success;
     }
     
