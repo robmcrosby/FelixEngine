@@ -351,62 +351,31 @@ bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
 }
 
 
+bool GLGraphicSystem::addWindows(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    success = true;
+    for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
+      success &= addWindow(*itr);
+  }
+  return success;
+}
 
+bool GLGraphicSystem::addWindow(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    //Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
+    string name = node->hasSubNode("name") ? node->attribute("name") : MAIN_WINDOW;
+    GLWindow *window = static_cast<GLWindow*>(getWindow(name));
+    success = window && window->setToXml(*node);
+  }
+  return success;
+}
 
-
-//void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
-//{
-////  if (task->stereo & stereo)
-////  {
-////    if (task->isViewTask())
-////    {
-////      const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
-////      frame->use(stereo);
-////      if (task->isClearTask())
-////        frame->clear(task->clearState);
-////      
-////      if (task->pass < (int)mPasses.size())
-////      {
-////        const Pass &pass = mPasses.at(task->pass);
-////        if (pass.size())
-////          processPass(pass, task, stereo);
-////      }
-////    }
-////    else if (task->isDrawTask())
-////    {
-////      const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
-////      const GLShader *shader = static_cast<const GLShader*>(task->shader);
-////      const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
-////      
-////      if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
-////      {
-////        setTriangleCullMode(task->cullMode);
-////        
-////        // Set the state for the Frame
-////        frame->use(stereo);
-////        if (task->isClearTask())
-////          frame->clear(task->clearState);
-////        frame->setDepthState(task->depthState);
-////        frame->setBlendState(task->blendState);
-////        
-////        // Set the state for the Shader
-////        shader->use();
-////        mesh->bind(shader);
-////        
-////        if (view && view->localUniforms)
-////          static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
-////        if (task->materialUniforms)
-////          static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
-////        if (task->localUniforms)
-////          static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
-////        shader->applyTextureMap(task->textureMap);
-////        
-////        // Draw the Mesh
-////        mesh->draw(task->instances, task->subMesh);
-////      }
-////    }
-////  }
-//}
 
 void GLGraphicSystem::setTriangleCullMode(fx::CULL_MODE mode)
 {

@@ -79,10 +79,6 @@ namespace fx
     
     TaskPass mTaskBuffer;
     Mutex mTaskBufferMutex;
-    
-  protected:
-    bool addWindows(const XMLTree::Node *node);
-    bool addWindow(const XMLTree::Node *node);
   };
 }
 

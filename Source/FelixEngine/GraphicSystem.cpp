@@ -23,29 +23,6 @@ GraphicSystem::~GraphicSystem()
 {
 }
 
-bool GraphicSystem::addWindows(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
-      success &= addWindow(*itr);
-  }
-  return success;
-}
-
-bool GraphicSystem::addWindow(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
-    success = window && window->setToXml(*node);
-  }
-  return success;
-}
-
 Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
 {
   if (type == "Window")

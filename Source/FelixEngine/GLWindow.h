@@ -25,7 +25,7 @@ namespace fx
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0) {}
+    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0), mMode(WINDOW_FULL_MONO), mScale(1.0f), mFrame(0) {}
     virtual ~GLWindow()
     {
       if (mSDLWindow)
@@ -101,6 +101,53 @@ namespace fx
     
     GLuint frameBufferId() const {return mFrameBufferId;}
     
+    bool setToXml(const XMLTree::Node &node)
+    {
+      bool success = true;
+      if (node.hasAttribute("title"))
+        setTitle(node.attribute("title"));
+      if (node.hasSubNode("position"))
+        setPosition(node.subContents("position"));
+      if (node.hasSubNode("size"))
+        setSize(node.subContents("size"));
+      return success;
+    }
+    
+    void setTitle(const std::string &title) {mTitle = title;}
+    void setPosition(const ivec2 &pos) {mPosition = pos;}
+    void setSize(const ivec2 &size) {mSize = size;}
+    void setScale(float scale) {mScale = scale;}
+    
+    void setFrame(Frame *frame) {Resource::Replace(&mFrame, frame);}
+    
+    virtual ivec2 position() const {return mPosition;}
+    virtual ivec2 size() const {return mSize;}
+    ivec2 frameSize()
+    {
+      ivec2 size = mSize;
+      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
+        size.y /= 2;
+      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
+        size.x /= 2;
+      return size;
+    }
+    
+    virtual vec2 scale() const {return vec2(mScale, mScale);}
+    
+    virtual void setMode(WINDOW_MODE mode) {mMode = mode;}
+    virtual WINDOW_MODE mode() const {return mMode;}
+    
+    int getStereoFlags() const
+    {
+      if (mMode == WINDOW_FULL_MONO)
+        return STEREO_MONO;
+      if (mMode == WINDOW_FULL_LEFT)
+        return STEREO_LEFT;
+      if (mMode == WINDOW_FULL_RIGHT)
+        return STEREO_RIGHT;
+      return STEREO_BINARY;
+    }
+    
   private:
     bool load()
     {
@@ -167,6 +214,12 @@ namespace fx
       }
       return success;
     }
+    
+    std::string mTitle;
+    ivec2 mPosition, mSize;
+    float mScale;
+    WINDOW_MODE mMode;
+    Frame *mFrame;
     
     SDL_Window *mSDLWindow;
     GLGraphicSystem *mGLSystem;

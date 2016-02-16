@@ -70,55 +70,19 @@ namespace fx
     virtual bool resize(const ivec2 &size) = 0;
   };
   
-  class Window: public Resource
+  /**
+   * Window Resource Interface
+   */
+  struct Window: public Resource
   {
-  public:
-    Window(): mMode(WINDOW_FULL_MONO), mScale(1.0f), mFrame(0) {}
     virtual ~Window() {}
     
-    bool setToXml(const XMLTree::Node &node);
+    virtual ivec2 position() const = 0;
+    virtual ivec2 size()     const = 0;
+    virtual vec2  scale()    const = 0;
     
-    void setTitle(const std::string &title) {mTitle = title;}
-    void setPosition(const ivec2 &pos) {mPosition = pos;}
-    void setSize(const ivec2 &size) {mSize = size;}
-    void setScale(float scale) {mScale = scale;}
-    
-    void setFrame(Frame *frame) {Resource::Replace(&mFrame, frame);}
-    
-    ivec2 position() const {return mPosition;}
-    ivec2 size() const {return mSize;}
-    ivec2 frameSize()
-    {
-      ivec2 size = mSize;
-      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
-        size.y /= 2;
-      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
-        size.x /= 2;
-      return size;
-    }
-    
-    float scale() const {return mScale;}
-    
-    void setMode(WINDOW_MODE mode) {mMode = mode;}
-    WINDOW_MODE mode() const {return mMode;}
-    
-    int getStereoFlags() const
-    {
-      if (mMode == WINDOW_FULL_MONO)
-        return STEREO_MONO;
-      if (mMode == WINDOW_FULL_LEFT)
-        return STEREO_LEFT;
-      if (mMode == WINDOW_FULL_RIGHT)
-        return STEREO_RIGHT;
-      return STEREO_BINARY;
-    }
-    
-  protected:
-    std::string mTitle;
-    ivec2 mPosition, mSize;
-    float mScale;
-    WINDOW_MODE mMode;
-    Frame *mFrame;
+    virtual void setMode(WINDOW_MODE mode) = 0;
+    virtual WINDOW_MODE mode() const = 0;
   };
   
   /**

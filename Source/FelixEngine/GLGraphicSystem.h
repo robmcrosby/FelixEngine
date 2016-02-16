@@ -94,6 +94,10 @@ namespace fx
     
     int getStereoFlags() const;
     
+    bool addWindows(const XMLTree::Node *node);
+    bool addWindow(const XMLTree::Node *node);
+
+    
     std::map<std::string, GLWindow*>  mWindows;
     std::map<std::string, GLFrame*>   mFrames;
     std::map<std::string, GLShader*>  mShaders;
