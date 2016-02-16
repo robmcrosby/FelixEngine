@@ -9,6 +9,8 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
+#include <set>
+
 #include "Resource.h"
 #include "VertexBufferMap.h"
 #include "XMLTree.h"
@@ -55,27 +57,17 @@ namespace fx
     STEREO_ALL    = 0x07,
   };
   
-  class Frame: public Resource
+  /**
+   * Frame Resource Interface
+   */
+  struct Frame: public Resource
   {
-  public:
-    Frame(): mRefFrame(0) {}
     virtual ~Frame() {}
     
-    ivec2 size() const {return mSize;}
-    
-    void setScale(const vec2 &scale) {mScale = scale;}
-    vec2 scale() const {return mScale;}
-    
-    void setRefrenceFrame(const std::string &name);
-    void setRefrenceFrame(Frame *frame) {mRefFrame = frame != this ? frame : nullptr;}
-    Frame* refrenceFrame() const {return mRefFrame;}
+    virtual ivec2 size() const = 0;
+    virtual vec2 scale() const = 0;
     
     virtual bool resize(const ivec2 &size) = 0;
-    
-  protected:
-    ivec2 mSize;
-    vec2 mScale;
-    Frame *mRefFrame;
   };
   
   class Window: public Resource
@@ -129,29 +121,44 @@ namespace fx
     Frame *mFrame;
   };
   
-  class Shader: public Resource
+  /**
+   * Shader Resource Interface
+   */
+  struct Shader: public Resource
   {
-  public:
-    Shader() {}
     virtual ~Shader() {}
     
-    static SHADER_PART ParseShaderPart(const std::string &partStr);
+    /**
+     * Gets a SHADER_PART enum for the given string.
+     *
+     * @param str String value to parse.
+     * @return SHADER_PART enum.
+     */
+    static SHADER_PART ParseShaderPart(const std::string &str)
+    {
+      if (str == "Vertex")
+        return SHADER_VERTEX;
+      if (str == "Fragment")
+        return SHADER_FRAGMENT;
+      return SHADER_COUNT;
+    }
   };
   
-  class Mesh: public Resource
+  /**
+   * Mesh Resource Interface
+   */
+  struct Mesh: public Resource
   {
-  public:
     virtual ~Mesh() {}
   };
   
-  class Texture: public Resource
+  /**
+   * Texture Resource Interface
+   */
+  struct Texture: public Resource
   {
-  public:
     virtual ~Texture() {}
-    ivec2 size() const {return mSize;}
-    
-  protected:
-    ivec2 mSize;
+    virtual ivec2 size() const = 0;
   };
 }
 

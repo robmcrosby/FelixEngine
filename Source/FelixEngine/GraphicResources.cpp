@@ -30,22 +30,11 @@ bool Window::setToXml(const XMLTree::Node &node)
   return success;
 }
 
-void Frame::setRefrenceFrame(const std::string &name)
-{
-  GraphicSystem *sys = FelixEngine::GetGraphicSystem();
-  if (sys && name != "")
-    setRefrenceFrame(sys->getFrame(name));
-  else
-    setRefrenceFrame(nullptr);
-}
-
-
-
-SHADER_PART Shader::ParseShaderPart(const std::string &partStr)
-{
-  if (partStr == "Vertex")
-    return SHADER_VERTEX;
-  if (partStr == "Fragment")
-    return SHADER_FRAGMENT;
-  return SHADER_COUNT;
-}
+//void Frame::setRefrenceFrame(const std::string &name)
+//{
+//  GraphicSystem *sys = FelixEngine::GetGraphicSystem();
+//  if (sys && name != "")
+//    setRefrenceFrame(sys->getFrame(name));
+//  else
+//    setRefrenceFrame(nullptr);
+//}

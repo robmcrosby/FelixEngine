@@ -33,6 +33,13 @@ namespace fx
     virtual ~GLTexture() {unload();}
     
     /**
+     * Getter for the texture size.
+     *
+     * @return 2d intenger vector for texture width and height.
+     */
+    virtual ivec2 size() const {return mSize;}
+    
+    /**
      * Applies the texture to the given index and filter settings in the Sampler
      * to the active shader.
      */
@@ -193,6 +200,7 @@ namespace fx
     bool  isPowerOfTwo() const {return !isPowerOfTwo(mSize.w) || !isPowerOfTwo(mSize.h);}
     
   private:
+    ivec2  mSize;       /**< 2d intenger vector for texture and height */
     GLuint mTextureId;  /**< OpenGL texture handle */
     bool   mMipMapped;  /**< Boolean if the texture is Mip Mapped */
     bool   mFBOTexture; /**< Boolean if the texture handle is part of a FBO */

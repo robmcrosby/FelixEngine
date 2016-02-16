@@ -37,18 +37,18 @@ namespace fx
     virtual ~GLFrame() {unload();}
     
     /**
-     * Updates the size if refrencing a window or another frame buffer.
+     * Getter for the size of the Frame.
+     *
+     * @return 2d intenger vector for the width and height of the frame.
      */
-//    void update()
-//    {
-//      if (loaded())
-//      {
-//        if (mGLWindow)
-//          mSize = mGLWindow->frameSize();
-//        else if (mRefFrame)
-//          resize(mScale * mRefFrame->size());
-//      }
-//    }
+    virtual ivec2 size() const {return mSize;}
+    
+    /**
+     * Getter for the scale of the Frame.
+     *
+     * @return 2d float vector for the scale in width and height.
+     */
+    virtual vec2 scale() const {return mScale;}
     
     /**
      * Sets the Frame to refrence a Window.
@@ -370,16 +370,17 @@ namespace fx
           mSize = bufferMap["size"].ivec2Value();
         else if (bufferMap.contains("reference"))
         {
-          setRefrenceFrame(bufferMap["reference"].stringValue());
+          // TODO: fix this part.
+          //setRefrenceFrame(bufferMap["reference"].stringValue());
           if (bufferMap.contains("scale"))
             mScale = bufferMap["scale"].vec2Value();
           else
             mScale = vec2(1.0f, 1.0f);
           
-          if (mRefFrame)
-            mSize = mRefFrame->size() * mScale;
-          else
-            mSize = ivec2(0, 0);
+//          if (mRefFrame)
+//            mSize = mRefFrame->size() * mScale;
+//          else
+//            mSize = ivec2(0, 0);
         }
         
         if (mSize > ivec2(0, 0))
@@ -587,6 +588,9 @@ namespace fx
     }
     
   private:
+    ivec2 mSize;
+    vec2 mScale;
+    
     GLuint mFrameBufferId; /**< OpenGL handle for a FBO */
     GLWindow *mGLWindow;   /**< Pointer to a GLWindow if owned by a Window or Null otherwise. */
     
