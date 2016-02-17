@@ -28,8 +28,8 @@ GLGraphicSystem::GLGraphicSystem(): mContext(0), mMainWindow(0)
 
 GLGraphicSystem::~GLGraphicSystem()
 {
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    delete itr->second;
+  for (auto &window : mWindows)
+    delete window.second;
 }
 
 Window* GLGraphicSystem::getWindow(const std::string &name)
@@ -106,11 +106,11 @@ bool GLGraphicSystem::init()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   #endif
   
-  for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  for (auto &window : mWindows)
   {
-    success &= itr->second->init();
+    success &= window.second->init();
     if (!mMainWindow && success)
-      mMainWindow = itr->second;
+      mMainWindow = window.second;
   }
   
   cout << glGetString(GL_VERSION) << endl;
@@ -135,11 +135,11 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
   bool success = true;
   if (node)
   {
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+    for (const auto &subNode : *node)
     {
-      string name = (*itr)->attribute("name");
+      string name = subNode->attribute("name");
       if (name != "")
-        mShaderFunctions[name] = (*itr)->contents();
+        mShaderFunctions[name] = subNode->contents();
     }
   }
   return success;
@@ -150,8 +150,8 @@ void GLGraphicSystem::render()
   updateTasks();
   
   // Update the Windows
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->update();
+  for (auto &window : mWindows)
+    window.second->update();
   
   // Process the Graphic Tasks
   processPass(mPreTasks, nullptr);
@@ -160,8 +160,8 @@ void GLGraphicSystem::render()
   processPass(mPostTasks, nullptr);
   
   // Swap the Window Buffers
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->swapBuffers();
+  for (auto &window : mWindows)
+    window.second->swapBuffers();
 }
 
 SDL_Window* GLGraphicSystem::getMainSDLWindow()
@@ -171,8 +171,8 @@ SDL_Window* GLGraphicSystem::getMainSDLWindow()
 
 void GLGraphicSystem::processPass(const TaskPass &pass, const GraphicTask *view)
 {
-  for (TaskPass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
-    processTask(&(*itr), view);
+  for (const GraphicTask &task : pass)
+    processTask(&task, view);
 }
 
 void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
@@ -330,16 +330,16 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
 bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
 {
   bool success = true;
-  if (textureMap != nullptr)
+  if (textureMap)
   {
     int index = 0;
-    for (TextureMap::iterator itr = textureMap->begin(); itr != textureMap->end(); ++itr)
+    for (TextureState &texState : *textureMap)
     {
-      GLTexture *texture = GetResource<GLTexture>(&itr->texture());
+      GLTexture *texture = GetResource<GLTexture>(&texState.texture());
       if (!texture || !texture->loaded())
         success = false;
       else
-        texture->use(index++, itr->sampler());
+        texture->use(index++, texState.sampler());
     }
   }
   return success;

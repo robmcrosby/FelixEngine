@@ -405,6 +405,12 @@ namespace fx
   {
     Viewport(): scissor(0) {}
     
+    void setToXml(const XMLTree::Node &node)
+    {
+      scissor = node.hasAttribute("scissor") && node.attribute("scissor") == "true";
+      position = node.hasAttribute("position") ? node.attribute("position") : ivec2();
+      size = node.hasAttribute("size") ? node.attribute("size") : ivec2();
+    }
     bool useFrame() const {return size == ivec2();}
     
     bool scissor;
@@ -436,6 +442,11 @@ namespace fx
         blendState.setToXml(*node.subNode("BlendState"));
       else
         blendState = BlendState();
+      
+      if (node.hasSubNode("Viewport"))
+        viewport.setToXml(*node.subNode("Viewport"));
+      else
+        viewport = Viewport();
     }
     
     int submesh;
