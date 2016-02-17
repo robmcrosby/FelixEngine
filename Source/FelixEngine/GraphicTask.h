@@ -86,11 +86,11 @@ namespace fx
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  enum CULL_MODE
+  enum CULL_TRI_MODE
   {
-    CULL_NONE,
-    CULL_FRONT,
-    CULL_BACK,
+    CULL_TRI_NONE,
+    CULL_TRI_FRONT,
+    CULL_TRI_BACK,
   };
   
   /**
@@ -401,16 +401,26 @@ namespace fx
     RGBAf color;
   };
   
+  struct Viewport
+  {
+    Viewport(): scissor(0) {}
+    
+    bool useFrame() const {return size == ivec2();}
+    
+    bool scissor;
+    ivec2 position;
+    ivec2 size;
+  };
+  
   
   struct DrawState
   {
-    DrawState(): submesh(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
+    DrawState(): submesh(0), instances(1), cullMode(CULL_TRI_NONE) {}
     
     void setToXml(const XMLTree::Node &node)
     {
       submesh = node.hasAttribute("submesh") ? node.attributeAsInt("submesh") : 0;
       instances = node.hasAttribute("instances") ? node.attributeAsInt("instances") : 1;
-      stereo = GetStereoFlags(node.attribute("stereo"));
       
       if (node.hasSubNode("ClearState"))
         clearState.setToXml(*node.subNode("ClearState"));
@@ -428,28 +438,15 @@ namespace fx
         blendState = BlendState();
     }
     
-    static int GetStereoFlags(const std::string &flags)
-    {
-      if (flags == "left")
-        return STEREO_LEFT;
-      if (flags == "right")
-        return STEREO_RIGHT;
-      if (flags == "binary")
-        return STEREO_BINARY;
-      if (flags == "mono")
-        return STEREO_MONO;
-      return STEREO_ALL;
-    }
-    
     int submesh;
     int instances;
-    int stereo;
     
     ClearState clearState;
     DepthState depthState;
     BlendState blendState;
     
-    CULL_MODE cullMode;
+    Viewport viewport;
+    CULL_TRI_MODE cullMode;
   };
   
   struct GraphicTask
@@ -491,44 +488,6 @@ namespace fx
       return GRAPHIC_TASK_DOWNLOAD;
     return GRAPHIC_TASK_EMPTY;
   }
-  
-//  struct GraphicTask
-//  {
-//    GraphicTask(): frame(0), shader(0), mesh(0), localUniforms(0), materialUniforms(0),
-//    textureMap(0), layer(0), subMesh(0), pass(0), instances(1), stereo(STEREO_ALL), cullMode(CULL_NONE) {}
-//    
-//    bool isViewTask()  const {return frame && !mesh && !shader && pass > 0;}
-//    bool isDrawTask()  const {return mesh && shader && instances > 0;}
-//    bool isClearTask() const {return clearState.flags;}
-//    
-//    void setClearColor(const RGBAf &color, unsigned int index = 0) {clearState.setClearColor(color, index);}
-//    void setClearDepth(float depth = 0.0f) {clearState.setClearDepth(depth);}
-//    void setClearStencil(int value = 0)    {clearState.setClearStencil(value);}
-//    
-//    bool operator<(const GraphicTask &that)  const {return layer < that.layer;}
-//    bool operator==(const GraphicTask &that) const {return layer == that.layer;}
-//    
-//    const Frame  *frame;
-//    const Shader *shader;
-//    const Mesh   *mesh;
-//    
-//    const InternalUniformMap *localUniforms;
-//    const InternalUniformMap *materialUniforms;
-//    
-//    const TextureMap *textureMap;
-//    
-//    int layer;
-//    int pass;
-//    int subMesh;
-//    int instances;
-//    int stereo;
-//    
-//    ClearState clearState;
-//    DepthState depthState;
-//    BlendState blendState;
-//    
-//    CULL_MODE cullMode;
-//  };
 }
 
 #endif /* GraphicTask_h */

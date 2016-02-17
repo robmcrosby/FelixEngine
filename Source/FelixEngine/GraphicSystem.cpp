@@ -88,16 +88,3 @@ void GraphicSystem::updateTaskBuffer(void*)
   sort(mTaskBuffer.begin(), mTaskBuffer.end());
   mTaskBufferMutex.unlock();
 }
-
-int GraphicSystem::GetStereoFlags(const std::string &flags)
-{
-  if (flags == "left")
-    return STEREO_LEFT;
-  if (flags == "right")
-    return STEREO_RIGHT;
-  if (flags == "binary")
-    return STEREO_BINARY;
-  if (flags == "mono")
-    return STEREO_MONO;
-  return STEREO_ALL;
-}

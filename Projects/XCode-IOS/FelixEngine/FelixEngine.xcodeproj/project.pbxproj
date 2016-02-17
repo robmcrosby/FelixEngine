@@ -49,7 +49,6 @@
 		C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD861BED298D007F68E0 /* EventHandler.cpp */; };
 		C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD891BED298D007F68E0 /* FelixEngine.cpp */; };
 		C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD8D1BED298D007F68E0 /* GLGraphicSystem.cpp */; };
-		C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD941BED298D007F68E0 /* GraphicResources.cpp */; };
 		C197CDD21BED298D007F68E0 /* GraphicSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CD961BED298D007F68E0 /* GraphicSystem.cpp */; };
 		C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDA01BED298D007F68E0 /* MeshLoader.cpp */; };
 		C197CDE21BED298D007F68E0 /* SDLEventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CDBC1BED298D007F68E0 /* SDLEventSystem.cpp */; };
@@ -229,7 +228,6 @@
 		C197CD911BED298D007F68E0 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture.h; path = ../../../../Source/FelixEngine/GLTexture.h; sourceTree = "<group>"; };
 		C197CD921BED298D007F68E0 /* GLUniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLUniformMap.h; path = ../../../../Source/FelixEngine/GLUniformMap.h; sourceTree = "<group>"; };
 		C197CD931BED298D007F68E0 /* GLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLWindow.h; path = ../../../../Source/FelixEngine/GLWindow.h; sourceTree = "<group>"; };
-		C197CD941BED298D007F68E0 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = ../../../../Source/FelixEngine/GraphicResources.cpp; sourceTree = "<group>"; };
 		C197CD951BED298D007F68E0 /* GraphicResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicResources.h; path = ../../../../Source/FelixEngine/GraphicResources.h; sourceTree = "<group>"; };
 		C197CD961BED298D007F68E0 /* GraphicSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicSystem.cpp; path = ../../../../Source/FelixEngine/GraphicSystem.cpp; sourceTree = "<group>"; };
 		C197CD971BED298D007F68E0 /* GraphicSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicSystem.h; path = ../../../../Source/FelixEngine/GraphicSystem.h; sourceTree = "<group>"; };
@@ -601,7 +599,6 @@
 				C197CD971BED298D007F68E0 /* GraphicSystem.h */,
 				C197CD961BED298D007F68E0 /* GraphicSystem.cpp */,
 				C197CD951BED298D007F68E0 /* GraphicResources.h */,
-				C197CD941BED298D007F68E0 /* GraphicResources.cpp */,
 				C197CD981BED298D007F68E0 /* GraphicTask.h */,
 				C197CDBA1BED298D007F68E0 /* Sampler.h */,
 				C197CDF01BED2CAD007F68E0 /* OpenGL */,
@@ -1005,7 +1002,6 @@
 				C197CDD01BED298D007F68E0 /* GLGraphicSystem.cpp in Sources */,
 				C10B5D3B1BEDD65000583B8F /* Component.cpp in Sources */,
 				C17195451C14B9AC001DBDC6 /* UbiquityFileSystem.mm in Sources */,
-				C197CDD11BED298D007F68E0 /* GraphicResources.cpp in Sources */,
 				C197CDCE1BED298D007F68E0 /* EventHandler.cpp in Sources */,
 				C197CDD21BED298D007F68E0 /* GraphicSystem.cpp in Sources */,
 				C197CDD41BED298D007F68E0 /* MeshLoader.cpp in Sources */,

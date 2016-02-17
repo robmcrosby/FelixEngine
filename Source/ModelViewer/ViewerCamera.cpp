@@ -117,13 +117,15 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       {
         mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(90*fx::DegToRad));
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
-        mMainWindow->setMode(fx::WINDOW_RIGHT_OVER_LEFT);
+        // TODO: fix this!
+        //mMainWindow->setMode(fx::WINDOW_RIGHT_OVER_LEFT);
       }
       else
       {
         mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(-90*fx::DegToRad));
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
-        mMainWindow->setMode(fx::WINDOW_LEFT_OVER_RIGHT);
+        // TODO: fix this!
+        //mMainWindow->setMode(fx::WINDOW_LEFT_OVER_RIGHT);
       }
       mGyroView->setOrientation(orientation);
       mProjection->setZeroDistance(mOrbitView->distance());
@@ -135,7 +137,8 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       mGyroView->setActive(false);
       mProjection->setSwapAspect(false);
       mRenderSlots->setGlobal("ViewRot", fx::mat4());
-      mMainWindow->setMode(fx::WINDOW_FULL_MONO);
+      // TODO: fix this!
+      //mMainWindow->setMode(fx::WINDOW_FULL_MONO);
     }
   }
 }

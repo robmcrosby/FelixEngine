@@ -36,6 +36,13 @@ namespace fx
     ASPECT_NONE,
   };
   
+  enum STEREO_TYPE
+  {
+    STEREO_MONO,
+    STEREO_LEFT,
+    STEREO_RIGHT,
+  };
+  
   /**
    *
    */
@@ -211,7 +218,7 @@ namespace fx
     }
     
   private:
-    mat4 toMatrix4x4(vec2 size, int flags) const
+    mat4 toMatrix4x4(vec2 size, STEREO_TYPE stereo) const
     {
       lock();
       Volume v = mVolume;
@@ -224,10 +231,10 @@ namespace fx
       if (mSwapAspect)
         size = size.yx();
       
-      if ((flags == STEREO_LEFT || flags == STEREO_RIGHT) && type == PROJ_FRUSTUM)
+      if ((stereo == STEREO_LEFT || stereo == STEREO_RIGHT) && type == PROJ_FRUSTUM)
       {
         float shift = disparity * (v.near/zeroDistance);
-        if (flags == STEREO_LEFT)
+        if (stereo == STEREO_LEFT)
         {
           v.left += shift;
           v.right += shift;

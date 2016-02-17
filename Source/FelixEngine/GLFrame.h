@@ -64,20 +64,30 @@ namespace fx
     
     /**
      * Calls OpenGL to bind the FBO.
-     *
-     * @param stereo Flags to pass to window if used.
      */
-    void bind(int stereo) const
+    void bind() const
     {
       ivec2 size = mSize;
       if (mGLWindow)
-        mGLWindow->setActive(stereo);
+        mGLWindow->setActive();
       else
-      {
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-        glViewport(0, 0, size.w, size.h);
-        glDisable(GL_SCISSOR_TEST);
+    }
+    
+    void setViewport(const Viewport &viewport) const
+    {
+      ivec2 pos = viewport.position;
+      ivec2 size = viewport.useFrame() ? mSize : viewport.size;
+      
+      glViewport(pos.x, pos.y, size.w, size.h);
+      
+      if (viewport.scissor)
+      {
+        glScissor(pos.x, pos.y, size.w, size.h);
+        glEnable(GL_SCISSOR_TEST);
       }
+      else
+        glDisable(GL_SCISSOR_TEST);
     }
     
     /**

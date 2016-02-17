@@ -25,7 +25,7 @@ namespace fx
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0), mMode(WINDOW_FULL_MONO), mScale(1.0f), mFrame(0) {}
+    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0), mScale(1.0f), mFrame(0) {}
     virtual ~GLWindow()
     {
       if (mSDLWindow)
@@ -48,9 +48,8 @@ namespace fx
         updateFrameBufferId();
         #endif
         
-        ivec2 fSize = frameSize();
-        if (mFrame && mFrame->size() != fSize)
-          mFrame->resize(fSize);
+        if (mFrame && mFrame->size() != mSize)
+          mFrame->resize(mSize);
       }
     }
     
@@ -60,35 +59,12 @@ namespace fx
       glGetIntegerv(GL_FRAMEBUFFER_BINDING, &mFrameBufferId);
     }
     
-    void setActive(int stereo)
+    void setActive()
     {
       if (mSDLWindow)
       {
-        ivec2 pos;
-        ivec2 size(mSize);
-        
-        // Adjust the Viewport for Left and Right drawing
-        if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
-        {
-          size.x /= 2;
-          if ((mMode == WINDOW_LEFT_RIGHT && stereo == STEREO_LEFT) ||
-              (mMode == WINDOW_RIGHT_LEFT && stereo == STEREO_RIGHT))
-            pos.x = size.x;
-        }
-        else if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
-        {
-          size.y /= 2;
-          if ((mMode == WINDOW_LEFT_OVER_RIGHT && stereo == STEREO_LEFT) ||
-              (mMode == WINDOW_RIGHT_OVER_LEFT && stereo == STEREO_RIGHT))
-            pos.y = size.y;
-        }
-        
         SDL_GL_MakeCurrent(mSDLWindow, mGLSystem->getContext());
-        
         glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-        glViewport(pos.x, pos.y, size.w, size.h);
-        glScissor(pos.x, pos.y, size.w, size.h);
-        glEnable(GL_SCISSOR_TEST);
       }
     }
     
@@ -121,32 +97,8 @@ namespace fx
     void setFrame(Frame *frame) {Resource::Replace(&mFrame, frame);}
     
     virtual ivec2 position() const {return mPosition;}
-    virtual ivec2 size() const {return mSize;}
-    ivec2 frameSize()
-    {
-      ivec2 size = mSize;
-      if (mMode == WINDOW_LEFT_OVER_RIGHT || mMode == WINDOW_RIGHT_OVER_LEFT)
-        size.y /= 2;
-      else if (mMode == WINDOW_LEFT_RIGHT || mMode == WINDOW_RIGHT_LEFT)
-        size.x /= 2;
-      return size;
-    }
-    
-    virtual vec2 scale() const {return vec2(mScale, mScale);}
-    
-    virtual void setMode(WINDOW_MODE mode) {mMode = mode;}
-    virtual WINDOW_MODE mode() const {return mMode;}
-    
-    int getStereoFlags() const
-    {
-      if (mMode == WINDOW_FULL_MONO)
-        return STEREO_MONO;
-      if (mMode == WINDOW_FULL_LEFT)
-        return STEREO_LEFT;
-      if (mMode == WINDOW_FULL_RIGHT)
-        return STEREO_RIGHT;
-      return STEREO_BINARY;
-    }
+    virtual ivec2 size()     const {return mSize;}
+    virtual vec2  scale()    const {return vec2(mScale, mScale);}
     
   private:
     bool load()
@@ -218,7 +170,6 @@ namespace fx
     std::string mTitle;
     ivec2 mPosition, mSize;
     float mScale;
-    WINDOW_MODE mMode;
     Frame *mFrame;
     
     SDL_Window *mSDLWindow;

@@ -75,24 +75,22 @@ namespace fx
     template <typename T>
     static T* GetResource(Buffer *buffer) {return buffer ? static_cast<T*>(buffer->resource()) : nullptr;}
     
-    void processPass(const TaskPass &pass, const GraphicTask *view, int stereo);
-    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
+    void processPass(const TaskPass &pass, const GraphicTask *view);
+    void processTask(const GraphicTask *task, const GraphicTask *view);
     
     void processUploadTask(const GraphicTask *task);
     void processUnloadTask(const GraphicTask *task);
     void processDownloadTask(const GraphicTask *task);
-    void processViewTask(const GraphicTask *task, int stereo);
-    void processDrawTask(const GraphicTask *task, const GraphicTask *view, int stereo);
+    void processViewTask(const GraphicTask *task);
+    void processDrawTask(const GraphicTask *task, const GraphicTask *view);
     
     bool bindTextureMap(TextureMap *textureMap);
     
-    void setTriangleCullMode(CULL_MODE mode);
+    void setTriangleCullMode(CULL_TRI_MODE mode);
     
     void updateResources();
     bool setVersion(const XMLTree::Node *node);
     bool setShaderFunctions(const XMLTree::Node *node);
-    
-    int getStereoFlags() const;
     
     bool addWindows(const XMLTree::Node *node);
     bool addWindow(const XMLTree::Node *node);

@@ -51,9 +51,6 @@ namespace fx
     
     virtual SDL_Window* getMainSDLWindow() = 0;
     
-  public:
-    static int GetStereoFlags(const std::string &flags);
-    
   private:
     void addTaskToPass(const GraphicTask &task, int pass)
     {

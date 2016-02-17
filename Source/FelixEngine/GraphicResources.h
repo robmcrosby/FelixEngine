@@ -38,23 +38,16 @@ namespace fx
     SHADER_FUNCTION,
   };
   
-  enum WINDOW_MODE {
-    WINDOW_FULL_MONO,
-    WINDOW_FULL_LEFT,
-    WINDOW_FULL_RIGHT,
-    WINDOW_LEFT_RIGHT,
-    WINDOW_RIGHT_LEFT,
-    WINDOW_LEFT_OVER_RIGHT,
-    WINDOW_RIGHT_OVER_LEFT,
-  };
-  
-  enum STEREO_FLAGS
+  /**
+   * Window Resource Interface
+   */
+  struct Window: public Resource
   {
-    STEREO_MONO   = 0x01,
-    STEREO_LEFT   = 0x02,
-    STEREO_RIGHT  = 0x04,
-    STEREO_BINARY = 0x06,
-    STEREO_ALL    = 0x07,
+    virtual ~Window() {}
+    
+    virtual ivec2 position() const = 0;
+    virtual ivec2 size()     const = 0;
+    virtual vec2  scale()    const = 0;
   };
   
   /**
@@ -68,21 +61,6 @@ namespace fx
     virtual vec2 scale() const = 0;
     
     virtual bool resize(const ivec2 &size) = 0;
-  };
-  
-  /**
-   * Window Resource Interface
-   */
-  struct Window: public Resource
-  {
-    virtual ~Window() {}
-    
-    virtual ivec2 position() const = 0;
-    virtual ivec2 size()     const = 0;
-    virtual vec2  scale()    const = 0;
-    
-    virtual void setMode(WINDOW_MODE mode) = 0;
-    virtual WINDOW_MODE mode() const = 0;
   };
   
   /**
