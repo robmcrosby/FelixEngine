@@ -96,8 +96,8 @@ namespace fx
         
         // Load the Shader Parts
         success = true;
-        for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
-          success &= uploadBuffer(*itr, shaderParts);
+        for (const Buffer &buffer : bufferMap)
+          success &= uploadBuffer(buffer, shaderParts);
         
         if (success)
           createProgram(shaderParts);

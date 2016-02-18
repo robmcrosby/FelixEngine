@@ -352,8 +352,8 @@ bool GLGraphicSystem::addWindows(const XMLTree::Node *node)
   if (node)
   {
     success = true;
-    for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
-      success &= addWindow(*itr);
+    for (auto const &subNode : *node)
+      success &= addWindow(subNode);
   }
   return success;
 }

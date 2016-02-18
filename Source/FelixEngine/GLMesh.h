@@ -63,14 +63,14 @@ namespace fx
       if (shader)
       {
         glBindVertexArray(mVertexArray);
-        for (GLBufferMap::const_iterator itr = mVertexBuffers.begin(); itr != mVertexBuffers.end(); ++itr)
+        for (const auto &buffer : mVertexBuffers)
         {
-          GLint index = shader->getAttributeIndex(itr->first);
+          GLint index = shader->getAttributeIndex(buffer.first);
           if (index >= 0)
           {
-            glBindBuffer(GL_ARRAY_BUFFER, itr->second.bufferId);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer.second.bufferId);
             glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, itr->second.components, GL_FLOAT, GL_FALSE, 0, 0);
+            glVertexAttribPointer(index, buffer.second.components, GL_FLOAT, GL_FALSE, 0, 0);
           }
         }
       }
@@ -120,14 +120,14 @@ namespace fx
       glGenVertexArrays(1, &mVertexArray);
       glBindVertexArray(mVertexArray);
       
-      for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
+      for (const Buffer &buffer : bufferMap)
       {
-        if (itr->bufferType() == BUFFER_VERTEX)
-          success &= uploadVertexBuffer(*itr);
-        else if (itr->bufferType() == BUFFER_INDICES)
-          success &= uploadIndexBuffer(*itr);
-        else if (itr->bufferType() == BUFFER_RANGES)
-          success &= setSubMeshes(*itr);
+        if (buffer.bufferType() == BUFFER_VERTEX)
+          success &= uploadVertexBuffer(buffer);
+        else if (buffer.bufferType() == BUFFER_INDICES)
+          success &= uploadIndexBuffer(buffer);
+        else if (buffer.bufferType() == BUFFER_RANGES)
+          success &= setSubMeshes(buffer);
       }
       glBindVertexArray(0);
       
@@ -146,8 +146,8 @@ namespace fx
     void unload()
     {
       // Clear the Vertex Buffers
-      for (GLBufferMap::iterator buffer = mVertexBuffers.begin(); buffer != mVertexBuffers.end(); ++buffer)
-        glDeleteBuffers(1, &buffer->second.bufferId);
+      for (const auto &buffer : mVertexBuffers)
+        glDeleteBuffers(1, &buffer.second.bufferId);
       mVertexBuffers.clear();
       
       // Clear the Index Buffer
