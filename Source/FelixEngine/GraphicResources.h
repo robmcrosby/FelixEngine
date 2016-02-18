@@ -60,6 +60,7 @@ namespace fx
     virtual ivec2 size() const = 0;
     virtual vec2 scale() const = 0;
     
+    virtual void setParrentFrame(const std::string &name) = 0;
     virtual bool resize(const ivec2 &size) = 0;
   };
   

@@ -6,7 +6,7 @@
     </Projection>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" type="pass">
-        <Targets name="DrawFrame" size="1024, 1024">
+        <Targets name="DrawFrame">
           <Target name="DrawTexture" format="rgba"/>
           <Target format="depth"/>
         </Targets>

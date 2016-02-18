@@ -29,12 +29,17 @@ namespace fx
      *
      * @param system Pointer to a GLGraphicSystem.
      */
-    GLFrame(GLGraphicSystem *system): mGLSystem(system), mFrameBufferId(0), mGLWindow(0) {}
+    GLFrame(GLGraphicSystem *system): mGLSystem(system), mFrameBufferId(0), mGLWindow(0), mParrentFrame(0) {}
     
     /**
      * Destructor
      */
-    virtual ~GLFrame() {unload();}
+    virtual ~GLFrame()
+    {
+      clearParrentFrame();
+      clearSubFrames();
+      unload();
+    }
     
     /**
      * Getter for the size of the Frame.
@@ -67,7 +72,6 @@ namespace fx
      */
     void bind() const
     {
-      ivec2 size = mSize;
       if (mGLWindow)
         mGLWindow->setActive();
       else
@@ -363,60 +367,23 @@ namespace fx
      */
     void uploadBufferMap(const BufferMap &bufferMap)
     {
-      bool success = false;
-      unload();
-      
-      GLint curFrameBuffer;
-      glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
-      
-      // Create a new FrameBuffer
-      glGenFramebuffers(1, &mFrameBufferId);
-      if (mFrameBufferId == 0)
-        std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
-      else
+      // Add the Buffers
+      for (const Buffer &buffer : bufferMap)
       {
-        // Determine the Size
-        if (bufferMap.contains("size"))
-          mSize = bufferMap["size"].ivec2Value();
-        else if (bufferMap.contains("reference"))
-        {
-          // TODO: fix this part.
-          //setRefrenceFrame(bufferMap["reference"].stringValue());
-          if (bufferMap.contains("scale"))
-            mScale = bufferMap["scale"].vec2Value();
-          else
-            mScale = vec2(1.0f, 1.0f);
-          
-//          if (mRefFrame)
-//            mSize = mRefFrame->size() * mScale;
-//          else
-//            mSize = ivec2(0, 0);
-        }
-        
-        if (mSize > ivec2(0, 0))
-        {
-          success = true;
-          glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
-          // Add the Targets
-          for (BufferMap::const_iterator itr = bufferMap.begin(); itr != bufferMap.end(); ++itr)
-          {
-            if (itr->bufferType() == BUFFER_TARGET)
-              success &= addBuffer(*itr);
-          }
-          
-          // Set the Color Attachments
-          if (mColorBuffers.size() != 0)
-          {
-            std::vector<GLenum> drawBuffers;
-            for (int i = 0; i < (int)mColorBuffers.size(); ++i)
-              drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
-            glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
-          }
-          
-          glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
-        }
+        if (buffer.bufferType() == BUFFER_TARGET)
+          addBuffer(buffer);
       }
-      setLoaded(success);
+      
+      // Get the Scale
+      mScale = bufferMap.contains("scale") ? bufferMap["scale"].vec2Value() : vec2(1.0f, 1.0f);
+      
+      if (bufferMap.contains("size"))
+        resize(bufferMap["size"].ivec2Value());
+      else if (bufferMap.contains("parrent"))
+        setParrentFrame(bufferMap["parrent"].stringValue());
+      else
+        setParrentFrame(MAIN_WINDOW);
+      
     }
     
     /**
@@ -441,6 +408,46 @@ namespace fx
     }
     
     /**
+     *
+     */
+    void load(const ivec2 &size)
+    {
+      bool success = false;
+      
+      // Get the Current Frame Buffer
+      GLint curFrameBuffer;
+      glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFrameBuffer);
+      
+      // Create a new FrameBuffer
+      glGenFramebuffers(1, &mFrameBufferId);
+      if (mFrameBufferId == 0)
+        std::cerr << "Error Generating OpenGL Framebuffer" << std::endl;
+      else
+      {
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);
+        success = true;
+        
+        // Create the Color Buffers
+        for (GLBuffer &colorBuffer : mColorBuffers)
+          success &= colorBuffer.create(size);
+        
+        // Create the Depth and Stencil Buffers
+        success &= mDepthBuffer.format == COLOR_NONE || mDepthBuffer.create(size);
+        success &= mStencilBuffer.format == COLOR_NONE || mStencilBuffer.create(size);
+        
+        if (success)
+        {
+          setColorAttachments();
+          mSize = size;
+        }
+      }
+      
+      // Restore the Current Frame Buffer
+      glBindFramebuffer(GL_FRAMEBUFFER, curFrameBuffer);
+      setLoaded(success);
+    }
+    
+    /**
      * Resizes all the buffers in the FBO to the given size.
      *
      * @param size Refrence to a 2d intenger vector for the new size.
@@ -448,23 +455,107 @@ namespace fx
      */
     virtual bool resize(const ivec2 &size)
     {
-      bool success = true;
       if (mGLWindow)
         mSize = size;
-      // TODO: Implement resizing
+      else if (mSize != size && size > ivec2(0, 0))
+      {
+        unload();
+        load(size);
+        std::cout << "Resize to: " << mSize << std::endl;
+      }
       
-      return success;
+      if (loaded())
+      {
+        // update the sub-frames
+        for (GLFrame *frame : mSubFrames)
+          frame->resize(frame->scale()*mSize);
+      }
+      return loaded();
+    }
+    
+    /**
+     * Adds the given frame to the sub-frames.
+     *
+     * @param frame Pointer to a GLFrame to add to the sub-frames set
+     * and creating a parrent-child relationship.
+     */
+    void addSubFrame(GLFrame *frame)
+    {
+      if (frame && frame != this && frame->mParrentFrame != this)
+      {
+        // Clear the previous parrent frame first.
+        if (frame->mParrentFrame)
+          frame->mParrentFrame->removeSubFrame(frame);
+        
+        // Add to the set of SubFrames and set the parrent to this.
+        frame->retain();
+        frame->mParrentFrame = this;
+        mSubFrames.insert(frame);
+      }
+    }
+    
+    /**
+     * Removes the given frame from the sub-frames and destroying the
+     * parrent-child relationship.
+     *
+     * @param frame Pointer to a GLFrame to remove from the sub-frames set.
+     */
+    void removeSubFrame(GLFrame *frame)
+    {
+      if (frame && frame->mParrentFrame == this)
+      {
+        mSubFrames.erase(frame);
+        frame->mParrentFrame = nullptr;
+        frame->release();
+      }
+    }
+    
+    /**
+     * Clears the sub-frames and destroying the parrent child relationships.
+     */
+    void clearSubFrames()
+    {
+      for (GLFrame *frame : mSubFrames)
+      {
+        frame->mParrentFrame = nullptr;
+        frame->release();
+      }
+      mSubFrames.clear();
+    }
+    
+    virtual void setParrentFrame(const std::string &name)
+    {
+      setParrentFrame(static_cast<GLFrame*>(mGLSystem->getFrame(name)));
+    }
+    
+    /**
+     * Sets the given frame as the parrent frame.
+     *
+     * @param frame Pointer to a GLFrame to set as the parrent.
+     */
+    void setParrentFrame(GLFrame *frame)
+    {
+      if (frame && frame != this)
+        frame->addSubFrame(this);
+    }
+    
+    /**
+     * Clears the current parrent frame.
+     */
+    void clearParrentFrame()
+    {
+      if (mParrentFrame)
+        mParrentFrame->removeSubFrame(this);
     }
     
   private:
-    
     /**
      * Adds either a Texture or Render buffer defined by the given Buffer.
      *
      * @param buffer Refrence to a Buffer that defines the type of Buffer to add to the FBO.
      * @return true if successfully added or false otherwise.
      */
-    bool addBuffer(const Buffer &buffer)
+    void addBuffer(const Buffer &buffer)
     {
       COLOR_TYPE format = (COLOR_TYPE)buffer.flags();
       if (format == COLOR_RGBA)
@@ -473,21 +564,15 @@ namespace fx
         mColorBuffers.back().index = (int)mColorBuffers.size()-1;
         mColorBuffers.back().format = format;
         setTextureToBuffer(buffer.name(), mColorBuffers.back());
-        return mColorBuffers.back().create(mSize);
       }
-      if (format == COLOR_DEPTH32F)
+      else if (format == COLOR_DEPTH32F)
       {
         format = mGLSystem->majorVersion() == 2 ? COLOR_DEPTH24 : COLOR_DEPTH32F;
         mDepthBuffer.format = format;
         setTextureToBuffer(buffer.name(), mDepthBuffer);
-        return mDepthBuffer.create(mSize);
       }
-      if (format == COLOR_STENCIL8)
-      {
+      else if (format == COLOR_STENCIL8)
         mStencilBuffer.format = format;
-        return mStencilBuffer.create(mSize);
-      }
-      return false;
     }
     
     /**
@@ -495,19 +580,18 @@ namespace fx
      */
     void detachBuffers()
     {
-      for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
-        itr->detach();
+      for (GLBuffer &colorBuffer : mColorBuffers)
+        colorBuffer.detach();
       mDepthBuffer.detach();
     }
     
     /**
-     * Destroys all the buffers and clears out the Color Buffers.
+     * Destroys all the buffers.
      */
     void destroyBuffers()
     {
-      for (std::list<GLBuffer>::iterator itr = mColorBuffers.begin(); itr != mColorBuffers.end(); ++itr)
-        itr->destroy();
-      mColorBuffers.clear();
+      for (GLBuffer &colorBuffer : mColorBuffers)
+        colorBuffer.destroy();
       mDepthBuffer.destroy();
     }
     
@@ -523,6 +607,17 @@ namespace fx
       {
         GLTexture *texture = static_cast<GLTexture*>(mGLSystem->getTexture(name));
         Resource::Replace(&buffer.texture, texture);
+      }
+    }
+    
+    void setColorAttachments()
+    {
+      if (mColorBuffers.size() != 0)
+      {
+        std::vector<GLenum> drawBuffers;
+        for (int i = 0; i < (int)mColorBuffers.size(); ++i)
+          drawBuffers.push_back(GL_COLOR_ATTACHMENT0+i);
+        glDrawBuffers((int)mColorBuffers.size(), &drawBuffers[0]);
       }
     }
     
@@ -608,6 +703,9 @@ namespace fx
     
     GLBuffer mDepthBuffer;   /**< Depth Buffer */
     GLBuffer mStencilBuffer; /**< Stencil Buffer */
+    
+    std::set<GLFrame*> mSubFrames;
+    GLFrame *mParrentFrame;
     
     GLGraphicSystem *mGLSystem; /**< Pointer to the GLGraphicsSystem that owns this Frame */
   };

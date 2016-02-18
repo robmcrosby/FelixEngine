@@ -48,7 +48,7 @@ namespace fx
         updateFrameBufferId();
         #endif
         
-        if (mFrame && mFrame->size() != mSize)
+        if (mFrame)
           mFrame->resize(mSize);
       }
     }
