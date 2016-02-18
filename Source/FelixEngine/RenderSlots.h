@@ -274,14 +274,27 @@ namespace fx
 //  };
   
   
-  
+  enum STEREO_TYPE
+  {
+    STEREO_MONO,
+    STEREO_LEFT,
+    STEREO_RIGHT,
+  };
   
   
   class RenderSlot: public EventHandler
   {
   public:
-    RenderSlot(Scene *scene): mShader(BUFFER_MAP_SHADER), mMesh(BUFFER_MAP_MESH), mTargets(0), mScene(scene),
-    mGraphicSystem(FelixEngine::GetGraphicSystem()), mTextureMap(scene), mLayer(0), mPass(0), mTaskType(GRAPHIC_TASK_DRAW)
+    RenderSlot(Scene *scene):
+      mShader(BUFFER_MAP_SHADER),
+      mMesh(BUFFER_MAP_MESH),
+      mTargets(0), mScene(scene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mTextureMap(scene),
+      mLayer(0),
+      mPass(0),
+      mTaskType(GRAPHIC_TASK_DRAW),
+      mStereoType(STEREO_MONO)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -361,7 +374,6 @@ namespace fx
     {
       setMesh(node.attribute("name"));
       mMesh->setToXml(node);
-      //mGraphicSystem->uploadBuffer(*mMesh);
     }
     BufferMap& mesh() {return *mMesh;}
     const BufferMap& mesh() const {return *mMesh;}
@@ -378,7 +390,6 @@ namespace fx
     {
       setShader(node.attribute("name"));
       mShader->setToXml(node);
-      //mGraphicSystem->uploadBuffer(*mShader);
     }
     BufferMap& shader() {return *mShader;}
     const BufferMap& shader() const {return *mShader;}
@@ -395,7 +406,6 @@ namespace fx
     {
       setUniforms(node.attribute("name"));
       mUniforms->setToXml(node);
-      //mGraphicSystem->uploadBuffer(*mUniforms);
     }
     BufferMap& uniforms()
     {
@@ -404,6 +414,7 @@ namespace fx
       return *mUniforms;
     }
     const BufferMap& uniforms() const {return *mUniforms;}
+    void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
     
     void setTargets(BufferMap &targets) {mTargets = &targets;}
     void setTargets(const std::string &name = "")
@@ -424,6 +435,9 @@ namespace fx
     
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
+    
+    void setStereoType(STEREO_TYPE type) {mStereoType = type;}
+    STEREO_TYPE stereoType() const {return mStereoType;}
     
     void setTaskType(GRAPHIC_TASK_TYPE type) {mTaskType = type;}
     void setTaskType(const std::string &str) {mTaskType = ParseGraphicTaskType(str);}
@@ -466,6 +480,7 @@ namespace fx
     TextureMap mTextureMap;
     
     GRAPHIC_TASK_TYPE mTaskType;
+    STEREO_TYPE mStereoType;
     DrawState mDrawState;
     
     Scene *mScene;
@@ -523,8 +538,8 @@ namespace fx
     
     void setUniform(const std::string &name, const Variant &var)
     {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->uniforms().set(name, var);
+      for (RenderSlot *slot : mSlots)
+        slot->setUniform(name, var);
     }
     
   private:

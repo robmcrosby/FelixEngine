@@ -400,8 +400,15 @@ namespace fx
     bool mUpdated;
     int mFlags;
   };
+  
   typedef std::list<BufferMap*> BufferMapList;
   typedef std::map<std::string, BufferMap*> BufferMapDirectory;
+  
+  template <typename T>
+  static T* GetResource(BufferMap *bufferMap) {return bufferMap ? static_cast<T*>(bufferMap->resource()) : nullptr;}
+  
+  template <typename T>
+  static T* GetResource(Buffer *buffer) {return buffer ? static_cast<T*>(buffer->resource()) : nullptr;}
 }
 
 

@@ -69,12 +69,6 @@ namespace fx
     }
     
   private:
-    template <typename T>
-    static T* GetResource(BufferMap *bufferMap) {return bufferMap ? static_cast<T*>(bufferMap->resource()) : nullptr;}
-    
-    template <typename T>
-    static T* GetResource(Buffer *buffer) {return buffer ? static_cast<T*>(buffer->resource()) : nullptr;}
-    
     void processPass(const TaskPass &pass, const GraphicTask *view);
     void processTask(const GraphicTask *task, const GraphicTask *view);
     

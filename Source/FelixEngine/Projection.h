@@ -36,13 +36,6 @@ namespace fx
     ASPECT_NONE,
   };
   
-  enum STEREO_TYPE
-  {
-    STEREO_MONO,
-    STEREO_LEFT,
-    STEREO_RIGHT,
-  };
-  
   /**
    *
    */
@@ -201,19 +194,13 @@ namespace fx
     {
       if (mRenderSlots)
       {
-        vec2 size(1.0f, 1.0f);
-        mRenderSlots->setUniform("Projection", toMatrix4x4(size, STEREO_MONO));
+        for (RenderSlot *slot : *mRenderSlots)
+        {
+          Frame *frame = GetResource<Frame>(&slot->targets());
+          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+          slot->setUniform("Projection", toMatrix4x4(size, slot->stereoType()));
+        }
       }
-      
-//      if (mRenderSlots)
-//      {
-//        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-//        {
-//          Frame *frame = (*itr)->frame();
-//          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
-//          (*itr)->uniforms().set("Projection", toMatrix4x4(size, (*itr)->stereoFlags()));
-//        }
-//      }
       Component::update();
     }
     
