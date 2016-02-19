@@ -15,6 +15,13 @@
 #include <FelixEngine/GraphicSystem.h>
 
 
+enum RENDER_MODE
+{
+  RENDER_MONO,
+  RENDER_STEREO_LEFT,
+  RENDER_STEREO_RIGHT,
+};
+
 class ViewerCamera: public fx::Camera
 {
 public:
@@ -23,20 +30,28 @@ public:
   
   virtual bool init();
   virtual void handle(const fx::Event &event);
+  virtual void setToXml(const fx::XMLTree::Node &node);
   
 private:
   void handleMouseEvent(const fx::Event &event);
   void handleTouchEvent(const fx::Event &event);
   void handleMotionEvent(const fx::Event &event);
   
+  void setRenderMode(RENDER_MODE mode);
+  
   fx::EventSystem  *mEventSystem;
   fx::MotionSystem *mMotionSystem;
   
-  fx::OrbitView *mOrbitView;
-  fx::GyroView  *mGyroView;
+  //fx::Projection *mProjection;
+  fx::OrbitView  *mOrbitView;
+  fx::GyroView   *mGyroView;
   
   fx::GraphicSystem *mGraphicSystem;
   fx::Window *mMainWindow;
+  
+  RENDER_MODE mRenderMode;
+  std::list<fx::RenderSlot*> mMonoPasses;
+  std::list<fx::RenderSlot*> mStereoPasses;
 };
 
 #endif /* ViewerCamera_h */

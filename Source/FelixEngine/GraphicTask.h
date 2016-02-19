@@ -21,6 +21,9 @@
 #define DRAW_STR     "draw"
 #define COMPUTE_STR  "compute"
 
+#define LEFT_STR  "left"
+#define RIGHT_STR "right"
+
 
 namespace fx
 {
@@ -138,6 +141,12 @@ namespace fx
     BLEND_INPUT_DEST_ALPHA_SHIFT = 20,
   };
   
+  enum STEREO_TYPE
+  {
+    STEREO_MONO,
+    STEREO_LEFT,
+    STEREO_RIGHT,
+  };
   
   
   struct ClearState
@@ -498,6 +507,15 @@ namespace fx
     if (str == DOWNLOAD_STR)
       return GRAPHIC_TASK_DOWNLOAD;
     return GRAPHIC_TASK_EMPTY;
+  }
+  
+  static STEREO_TYPE ParseStereoType(const std::string &str)
+  {
+    if (str == LEFT_STR)
+      return STEREO_LEFT;
+    if (str == RIGHT_STR)
+      return STEREO_RIGHT;
+    return STEREO_MONO;
   }
 }
 

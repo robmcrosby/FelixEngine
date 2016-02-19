@@ -31,10 +31,9 @@
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
-          uniform mat4 ViewRot;
           out vec2 UV;
           void main() {
-            gl_Position = ViewRot * Position;
+            gl_Position = Position;
             UV = UV_0;
           }
         </ShaderFunction>

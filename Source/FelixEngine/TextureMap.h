@@ -25,6 +25,15 @@ namespace fx
   {
   public:
     TextureState(Scene *scene = nullptr): mScene(scene), mTexture(0) {}
+    TextureState(const TextureState &other): mScene(0), mTexture(0) {*this = other;}
+    
+    TextureState& operator=(const TextureState &other)
+    {
+      mScene   = other.mScene;
+      mSampler = other.mSampler;
+      mTexture = other.mTexture;
+      return *this;
+    }
     
     void setToXml(const XMLTree::Node &node)
     {
@@ -64,7 +73,16 @@ namespace fx
   {
   public:
     TextureMap(Scene *scene): mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    TextureMap(const TextureMap &other): mScene(other.mScene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {*this = other;}
     virtual ~TextureMap() {}
+    
+    TextureMap& operator=(const TextureMap &other)
+    {
+      mTextures.clear();
+      for (TextureState &texState : mTextures)
+        mTextures.push_back(texState);
+      return *this;
+    }
     
     void setToXml(const XMLTree::Node &node)
     {

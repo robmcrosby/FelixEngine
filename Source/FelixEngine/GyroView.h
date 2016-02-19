@@ -54,8 +54,8 @@ namespace fx
       {
         quat rotation = mOrientation * event.motionData().orientation;
         rotation.rotate(event.motionData().rotation * mAcceleration);
-        mFwd = rotation * mFwdAxis;
-        mUp = rotation * mUpAxis;
+        mFwd = (rotation * mFwdAxis).normalized();
+        mUp = (rotation * mUpAxis).normalized();
       }
     }
     

@@ -28,6 +28,19 @@ namespace fx
   /**
    *
    */
+  enum PROJ_MODE
+  {
+    PROJ_NORMAL,
+    PROJ_INVERT_X,
+    PROJ_INVERT_Y,
+    PROJ_ROTATE_CW,
+    PROJ_ROTATE_CCW,
+    PROJ_ROTATE_FULL,
+  };
+  
+  /**
+   *
+   */
   enum ASPECT_TYPE
   {
     ASPECT_AUTO,
@@ -68,13 +81,38 @@ namespace fx
   class Projection: public Component
   {
   public:
-    static PROJ_TYPE GetProjectionType(const std::string &str)
+    /**
+     *
+     */
+    static PROJ_TYPE ParseProjectionType(const std::string &str)
     {
       if (str == "ortho")
         return PROJ_ORTHO;
       return PROJ_FRUSTUM;
     }
-    static ASPECT_TYPE GetAspectType(const std::string &str)
+    
+    /**
+     *
+     */
+    static PROJ_MODE ParseProjectionMode(const std::string &str)
+    {
+      if (str == "invert_x")
+        return PROJ_INVERT_X;
+      if (str == "invert_y")
+        return PROJ_INVERT_Y;
+      if (str == "rotate_cw")
+        return PROJ_ROTATE_CW;
+      if (str == "rotate_ccw")
+        return PROJ_ROTATE_CCW;
+      if (str == "rotate_full")
+        return PROJ_ROTATE_FULL;
+      return PROJ_NORMAL;
+    }
+    
+    /**
+     *
+     */
+    static ASPECT_TYPE ParseAspectType(const std::string &str)
     {
       if (str == "auto")
         return ASPECT_AUTO;
@@ -87,7 +125,7 @@ namespace fx
     
   public:
     Projection(Scene *scene): Component(scene), mType(PROJ_ORTHO),
-    mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f), mSwapAspect(0) {}
+    mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f) {}
     virtual ~Projection() {}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -95,6 +133,8 @@ namespace fx
       Component::setToXml(node);
       if (node.hasAttribute("type"))
         setType(node.attribute("type"));
+      if (node.hasAttribute("mode"))
+        setMode(node.attribute("mode"));
       if (node.hasAttribute("aspect"))
         setAspect(node.attribute("aspect"));
       if (node.hasAttribute("disparity"))
@@ -125,7 +165,7 @@ namespace fx
       return ret;
     }
     
-    void setType(const std::string &str) {setType(GetProjectionType(str));}
+    void setType(const std::string &str) {setType(ParseProjectionType(str));}
     void setType(PROJ_TYPE type)
     {
       lock();
@@ -140,7 +180,22 @@ namespace fx
       return ret;
     }
     
-    void setAspect(const std::string &str) {setAspect(GetAspectType(str));}
+    void setMode(const std::string &str) {setMode(ParseProjectionMode(str));}
+    void setMode(PROJ_MODE mode)
+    {
+      lock();
+      mMode = mode;
+      unlock();
+    }
+    PROJ_MODE mode() const
+    {
+      lock();
+      PROJ_MODE ret = mMode;
+      unlock();
+      return ret;
+    }
+    
+    void setAspect(const std::string &str) {setAspect(ParseAspectType(str));}
     void setAspect(ASPECT_TYPE aspect)
     {
       lock();
@@ -183,9 +238,6 @@ namespace fx
       return ret;
     }
     
-    void setSwapAspect(bool swap) {mSwapAspect = swap;}
-    bool aspectSwapped() const {return mSwapAspect;}
-    
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
@@ -196,8 +248,12 @@ namespace fx
       {
         for (RenderSlot *slot : *mRenderSlots)
         {
-          Frame *frame = GetResource<Frame>(&slot->targets());
-          vec2 size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+          vec2 size = slot->drawState().viewport.size;
+          if (size == vec2())
+          {
+            Frame *frame = GetResource<Frame>(&slot->targets());
+            size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+          }
           slot->setUniform("Projection", toMatrix4x4(size, slot->stereoType()));
         }
       }
@@ -211,11 +267,12 @@ namespace fx
       Volume v = mVolume;
       ASPECT_TYPE aspect = mAspect;
       PROJ_TYPE type = mType;
+      PROJ_MODE mode = mMode;
       float disparity = mDisparity/2.0f;
       float zeroDistance = mZeroDistance;
       unlock();
       
-      if (mSwapAspect)
+      if (mode == PROJ_ROTATE_CW || mode == PROJ_ROTATE_CCW)
         size = size.yx();
       
       if ((stereo == STEREO_LEFT || stereo == STEREO_RIGHT) && type == PROJ_FRUSTUM)
@@ -249,15 +306,21 @@ namespace fx
         v.right *= aspectRatio;
       }
       
+      mat4 modeMtx;
+      if (mode == PROJ_ROTATE_CW)
+        modeMtx = mat4::RotZ(90*fx::DegToRad);
+      if (mode == PROJ_ROTATE_CCW)
+        modeMtx = mat4::RotZ(-90*fx::DegToRad);
+      
       if (type == PROJ_ORTHO)
-        return mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
-      return mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
+        return modeMtx * mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
+      return modeMtx * mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
     }
     
     PROJ_TYPE   mType;
+    PROJ_MODE   mMode;
     ASPECT_TYPE mAspect;
     Volume      mVolume;
-    bool        mSwapAspect;
     
     float mDisparity;
     float mZeroDistance;

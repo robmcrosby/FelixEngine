@@ -262,6 +262,7 @@ void GLGraphicSystem::processViewTask(const GraphicTask *task)
   if (frame)
   {
     frame->bind();
+    frame->setViewport(task->drawState.viewport);
     frame->clear(task->drawState.clearState);
   }
   

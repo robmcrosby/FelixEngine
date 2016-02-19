@@ -274,23 +274,17 @@ namespace fx
 //  };
   
   
-  enum STEREO_TYPE
-  {
-    STEREO_MONO,
-    STEREO_LEFT,
-    STEREO_RIGHT,
-  };
-  
-  
   class RenderSlot: public EventHandler
   {
   public:
     RenderSlot(Scene *scene):
+      mScene(scene),
+      mTextureMap(scene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(BUFFER_MAP_SHADER),
       mMesh(BUFFER_MAP_MESH),
-      mTargets(0), mScene(scene),
-      mGraphicSystem(FelixEngine::GetGraphicSystem()),
-      mTextureMap(scene),
+      mTargets(0),
+      mEnabled(true),
       mLayer(0),
       mPass(0),
       mTaskType(GRAPHIC_TASK_DRAW),
@@ -299,14 +293,47 @@ namespace fx
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
     }
+    RenderSlot(const RenderSlot &other):
+      mScene(other.mScene),
+      mTextureMap(other.mScene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mShader(0),
+      mMesh(0),
+      mUniforms(0),
+      mTargets(0)
+    {
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+      *this = other;
+    }
     virtual ~RenderSlot() {}
+    
+    RenderSlot& operator=(const RenderSlot &other)
+    {
+      mEnabled = other.mEnabled;
+      mLayer   = other.mLayer;
+      mPass    = other.mPass;
+      
+      mShader   = other.mShader;
+      mMesh     = other.mMesh;
+      mUniforms = other.mUniforms;
+      mTargets  = other.mTargets;
+      
+      mTextureMap = other.mTextureMap;
+      mTaskType   = other.mTaskType;
+      mStereoType = other.mStereoType;
+      mDrawState  = other.mDrawState;
+      
+      return *this;
+    }
     
     virtual void handle(const Event &event)
     {
       if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
       {
         updateBuffers();
-        render();
+        if (enabled())
+          render();
       }
     }
     
@@ -351,9 +378,17 @@ namespace fx
       if (node.hasAttribute("type"))
         setTaskType(node.attribute("type"));
       
+      // Set the Stereo Type
+      setStereoType(ParseStereoType(node.attribute("stereo")));
+      
       // Set the Draw State
       mDrawState.setToXml(node);
     }
+    
+    void enable() {mEnabled = true;}
+    void disable() {mEnabled = false;}
+    void setEnabled(bool enabled = true) {mEnabled = enabled;}
+    bool enabled() const {return mEnabled;}
     
     void setLayer(int layer) {mLayer = layer;}
     int layer() const {return mLayer;}
@@ -428,13 +463,15 @@ namespace fx
     {
       setTargets(node.attribute("name"));
       mTargets->setToXml(node);
-      //mGraphicSystem->uploadBuffer(*mTargets);
     }
     BufferMap& targets() {return *mTargets;}
     const BufferMap& targets() const {return *mTargets;}
     
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
+    
+    DrawState& drawState() {return mDrawState;}
+    const DrawState& drawState() const {return mDrawState;}
     
     void setStereoType(STEREO_TYPE type) {mStereoType = type;}
     STEREO_TYPE stereoType() const {return mStereoType;}
@@ -469,21 +506,21 @@ namespace fx
         mGraphicSystem->uploadBuffer(*mTargets);
     }
     
-    int mLayer;
-    int mPass;
+    bool mEnabled;
+    int  mLayer;
+    int  mPass;
     
     OwnPtr<BufferMap> mShader;
     OwnPtr<BufferMap> mMesh;
     OwnPtr<BufferMap> mUniforms;
     OwnPtr<BufferMap> mTargets;
     
-    TextureMap mTextureMap;
-    
+    TextureMap        mTextureMap;
     GRAPHIC_TASK_TYPE mTaskType;
-    STEREO_TYPE mStereoType;
-    DrawState mDrawState;
+    STEREO_TYPE       mStereoType;
+    DrawState         mDrawState;
     
-    Scene *mScene;
+    Scene         *mScene;
     GraphicSystem *mGraphicSystem;
   };
   
@@ -528,6 +565,7 @@ namespace fx
     RenderSlot* front() const {return mSlots.size() ? mSlots.front() : nullptr;}
     
     void addSlot() {mSlots.push_back(new RenderSlot(mScene));}
+    void addSlot(RenderSlot *slot) {mSlots.push_back(slot);}
     
     void clear()
     {

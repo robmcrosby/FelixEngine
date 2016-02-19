@@ -461,7 +461,6 @@ namespace fx
       {
         unload();
         load(size);
-        std::cout << "Resize to: " << mSize << std::endl;
       }
       
       if (loaded())
