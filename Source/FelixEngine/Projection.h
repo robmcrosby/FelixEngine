@@ -17,31 +17,40 @@ namespace fx
   class Frame;
   
   /**
-   *
+   * Enum for the diffrent types of projections.
    */
   enum PROJ_TYPE
   {
-    PROJ_ORTHO,
-    PROJ_FRUSTUM,
+    PROJ_ORTHO,   /**< Orthographic or isometric projection */
+    PROJ_FRUSTUM, /**< Frustum or perspective projection */
   };
   
   /**
-   *
+   * Enum for the Aspect type on how the aspect ratio effects the Projection.
    */
   enum ASPECT_TYPE
   {
-    ASPECT_AUTO,
-    ASPECT_WIDTH,
-    ASPECT_HEIGHT,
-    ASPECT_NONE,
+    ASPECT_AUTO,   /**< Adjust to the smallest dimension. */
+    ASPECT_WIDTH,  /**< Adjust to the width. */
+    ASPECT_HEIGHT, /**< Adjust to the height. */
+    ASPECT_NONE,   /**< Do not adjust the Projection. */
   };
   
   /**
-   *
+   * Struct of parameters for a Volume used by a projection.
    */
   struct Volume
   {
+    /**
+     * Constructor initalizes the parameter values to a unit cube.
+     */
     Volume(): near(0), far(1), left(-1), right(1), top(1), bottom(1) {}
+    
+    /**
+     * Sets the parameters to information contained in the given xml node.
+     *
+     * @param node Xml node containing parameter information for the Volume.
+     */
     void setToXml(const XMLTree::Node *node)
     {
       near   = node->attributeAsFloat("near");
@@ -51,25 +60,35 @@ namespace fx
       top    = node->attributeAsFloat("top");
       bottom = node->attributeAsFloat("bottom");
     }
+    
+    /**
+     * Calculates the width of the volume.
+     *
+     * @return Width of the volume.
+     */
     float width() const {return right - left;}
+    
+    /**
+     * Calculates the height of the volume.
+     *
+     * @return Height of the volume.
+     */
     float height() const {return top - bottom;}
     
-    float near;
-    float far;
-    float left;
-    float right;
-    float top;
-    float bottom;
+    float near, far, left, right, top, bottom;
   };
   
   /**
-   *
+   * Manages the projection matrixices and viewports in an Object's RenderSlots.
    */
   class Projection: public Component
   {
   public:
     /**
+     * Parses a Projection type enum value from the given string.
      *
+     * @param str String value to parse.
+     * @return Projection type enum value.
      */
     static PROJ_TYPE ParseProjectionType(const std::string &str)
     {
@@ -79,7 +98,10 @@ namespace fx
     }
     
     /**
+     * Parses an Aspect type enum value from the given string.
      *
+     * @param str String value to parse.
+     * @return Aspect type enum value.
      */
     static ASPECT_TYPE ParseAspectType(const std::string &str)
     {
@@ -94,7 +116,9 @@ namespace fx
     
   public:
     /**
+     * Constructor
      *
+     * @param scene Pointer to the scene that owns this.
      */
     Projection(Scene *scene): Component(scene),
       mType(PROJ_ORTHO),
@@ -107,10 +131,15 @@ namespace fx
     }
     
     /**
-     *
+     * Destructor
      */
     virtual ~Projection() {}
     
+    /**
+     * Sets the information in the given xml node to this Projection.
+     *
+     * @param node Xml node to set this Projection to.
+     */
     virtual void setToXml(const XMLTree::Node &node)
     {
       Component::setToXml(node);
@@ -127,7 +156,9 @@ namespace fx
     }
     
     /**
+     * Used in Object initalization where the pointer for RenderSlots is obtained.
      *
+     * @return true if the RenderSlots are retreived and Component initalization is seccessful, false otherwise.
      */
     virtual bool init()
     {
@@ -136,7 +167,9 @@ namespace fx
     }
     
     /**
+     * Setter for the Volume.
      *
+     * @param volume Unadjusted Volume to be used by this Projection.
      */
     void setVolume(const Volume &volume)
     {
@@ -146,7 +179,9 @@ namespace fx
     }
     
     /**
+     * Getter for the unadjusted Volume to be used by this Projection.
      *
+     * @return Volume used by this Projection.
      */
     Volume volume() const
     {
@@ -157,12 +192,19 @@ namespace fx
     }
     
     /**
+     * Setter for setting the type of Projection by string value.
      *
+     * @param str String value to parse the Projection type from.
      */
-    void setType(const std::string &str) {setType(ParseProjectionType(str));}
+    void setType(const std::string &str)
+    {
+      setType(ParseProjectionType(str));
+    }
     
     /**
+     * Setter for setting the type of Projection, either Orthographic or Frustum.
      *
+     * @param type Projection type enum value.
      */
     void setType(PROJ_TYPE type)
     {
@@ -172,7 +214,9 @@ namespace fx
     }
     
     /**
+     * Getter for getting the type of Projection, either Orthographic or Frustum.
      *
+     * @return Projection type enum value.
      */
     PROJ_TYPE type() const
     {
@@ -183,12 +227,16 @@ namespace fx
     }
     
     /**
+     * Setter for setting the Aspect type by string value.
      *
+     * @param str String to parse the Aspect type from.
      */
     void setAspect(const std::string &str) {setAspect(ParseAspectType(str));}
     
     /**
+     * Setter for setting the aspect type used by this projection.
      *
+     * @param aspect Aspect type enum value
      */
     void setAspect(ASPECT_TYPE aspect)
     {
@@ -198,7 +246,9 @@ namespace fx
     }
     
     /**
+     * Getter for the aspect type used by this projection.
      *
+     * @return Aspect type enum value
      */
     ASPECT_TYPE aspect() const
     {
@@ -209,17 +259,21 @@ namespace fx
     }
     
     /**
+     * Setter for the disparity or eye seperaation distance.
      *
+     * @param disparity Disparity value
      */
-    void setDisparity(float disp)
+    void setDisparity(float disparity)
     {
       lock();
-      mDisparity = disp;
+      mDisparity = disparity;
       unlock();
     }
     
     /**
+     * Getter for the disparity or eye seperaation distance.
      *
+     * @return Disparity value
      */
     float disparity() const
     {
@@ -230,7 +284,9 @@ namespace fx
     }
     
     /**
+     * Setter for distance to the stereo zero plane.
      *
+     * @param dist Distance to the stereo zero plane.
      */
     void setZeroDistance(float dist)
     {
@@ -240,7 +296,9 @@ namespace fx
     }
     
     /**
+     * Getter for distance to the stereo zero plane.
      *
+     * @return Distance to the stereo zero plane.
      */
     float zeroDistance() const
     {
@@ -251,17 +309,21 @@ namespace fx
     }
     
     /**
-     *
+     * Locks reading and writing to the fields.
      */
     void lock() const {SDL_AtomicLock(&mLock);}
     
     /**
-     *
+     * Unlocks reading and writing to the fields.
      */
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
     /**
+     * Creates a projection matrix from the given frame size and projection flags.
      *
+     * @param size 2d vector for the size of the frame to create the projection for.
+     * @param flags Projection flags for adjusting how the projection is created.
+     * @return 4x4 matrix encoded with the projection information.
      */
     mat4 getProjection(vec2 size, int flags) const
     {
@@ -285,7 +347,7 @@ namespace fx
     
   protected:
     /**
-     *
+     * Update method that updates the projections in the RenderSlots.
      */
     virtual void update()
     {
@@ -302,7 +364,9 @@ namespace fx
     
   private:
     /**
+     * Applys the projection matrix and frame spliting to the given RenderSlot.
      *
+     * @param [in, out] slot RenderSlot to adjust
      */
     void applyToSlot(RenderSlot &slot) const
     {
@@ -312,11 +376,15 @@ namespace fx
       if (frame && flags & PROJ_SPLIT)
         applySplit(slot, frame->size());
       
+      // Then apply the projection matrix.
       applyProjection(slot);
     }
     
     /**
+     * Adjusts the Viewport in the given RenderSlot to it's projection flags.
      *
+     * @param [in,out] slot RenderSlot to apply the split on.
+     * @param size 2d vector for the size of the Frame to split.
      */
     void applySplit(RenderSlot &slot, ivec2 size) const
     {
@@ -345,7 +413,9 @@ namespace fx
     }
     
     /**
+     * Applies a projection matrix to the given RenderSlot.
      *
+     * @param [in,out] slot RenderSlot to apply the projection matrix.
      */
     void applyProjection(RenderSlot &slot) const
     {
@@ -366,7 +436,10 @@ namespace fx
     }
     
     /**
+     * Creates a modification matrix from the given flags.
      *
+     * @param flags Projection flags with modification information.
+     * @return 4x4 matrix encoded with the modifications.
      */
     mat4 getModification(int flags) const
     {
@@ -381,7 +454,12 @@ namespace fx
     }
     
     /**
+     * Adjusts the given volume and disparity for stereo rendering.
      *
+     * @param [in,out] volume Volume to adjust for disparity.
+     * @param [in,out] disparity Eye distance value to adjust.
+     * @param zeroDistance Distance to the zero plane.
+     * @param flags Projection flags to get stereo information from.
      */
     void applyDisparity(Volume &volume, float &disparity, float zeroDistance, int flags) const
     {
@@ -411,7 +489,11 @@ namespace fx
     }
     
     /**
+     * Adjusts the given volume to the given size and aspect type.
      *
+     * @param [in,out] volume Volume to adjust.
+     * @param size 2d vector for the frame size.
+     * @param aspect Enum value for the type of aspect to adjust with.
      */
     void applyAspect(Volume &volume, vec2 size, ASPECT_TYPE aspect) const
     {
@@ -429,15 +511,15 @@ namespace fx
       }
     }
     
-    PROJ_TYPE   mType;   /**<  */
-    ASPECT_TYPE mAspect; /**<  */
-    Volume      mVolume; /**<  */
+    PROJ_TYPE   mType;   /**< Projection type, either Orthographic or Frustum. */
+    ASPECT_TYPE mAspect; /**< Aspect type used to scale the projection to the frame. */
+    Volume      mVolume; /**< Parameters to the parts of the projection. */
     
-    float mDisparity;    /**<  */
-    float mZeroDistance; /**<  */
+    float mDisparity;    /**< Distance between the virutal eyes for stereo rendering. */
+    float mZeroDistance; /**< Distance to the zero plane used for stereo rendering. */
     
-    mutable SDL_SpinLock mLock; /**<  */
-    RenderSlots *mRenderSlots;  /**<  */
+    mutable SDL_SpinLock mLock; /**< Spin lock used as a mutex for modifing the above fields. */
+    RenderSlots *mRenderSlots;  /**< Pointer to the RenderSlots used by the parrent Object. */
   };
 }
 
