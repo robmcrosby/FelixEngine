@@ -81,11 +81,13 @@ void ViewerCamera::setToXml(const fx::XMLTree::Node &node)
         mMonoPasses.push_back(slot);
         
         // Setup and add the left pass copy.
+        leftPass->setProjectionFlags(fx::PROJ_LEFT | fx::PROJ_SPLIT);
         leftPass->setStereoType(fx::STEREO_LEFT);
         mRenderSlots->addSlot(leftPass);
         mStereoPasses.push_back(leftPass);
         
         // Setup and add the right pass copy.
+        rightPass->setProjectionFlags(fx::PROJ_RIGHT | fx::PROJ_SPLIT);
         rightPass->setStereoType(fx::STEREO_RIGHT);
         mRenderSlots->addSlot(rightPass);
         mStereoPasses.push_back(rightPass);
@@ -97,6 +99,7 @@ void ViewerCamera::setToXml(const fx::XMLTree::Node &node)
 
 void ViewerCamera::setRenderMode(RENDER_MODE mode)
 {
+  int rotationFlag = mode == RENDER_STEREO_LEFT ? fx::PROJ_ROT_CW : fx::PROJ_ROT_CCW;
   mRenderMode = mode;
   
   if (mode == RENDER_MONO)
@@ -114,21 +117,9 @@ void ViewerCamera::setRenderMode(RENDER_MODE mode)
       slot->disable();
     for (fx::RenderSlot *slot : mStereoPasses)
     {
-      fx::Frame *frame = fx::GetResource<fx::Frame>(&slot->targets());
-      if (frame)
-      {
-        slot->drawState().viewport.scissor = true;
-        slot->drawState().viewport.size = frame->size();
-        slot->drawState().viewport.size.y /= 2;
-        if ((mode == RENDER_STEREO_LEFT && slot->stereoType() == fx::STEREO_LEFT) ||
-            (mode == RENDER_STEREO_RIGHT && slot->stereoType() == fx::STEREO_RIGHT))
-          slot->drawState().viewport.position.y = slot->drawState().viewport.size.y;
-        else
-          slot->drawState().viewport.position.y = 0;
-        slot->enable();
-      }
-      else
-        slot->disable();
+      int projFlags = (slot->projectionFlags() & ~fx::PROJ_ROTATION) | rotationFlag;
+      slot->setProjectionFlags(projFlags);
+      slot->enable();
     }
   }
 }
@@ -189,14 +180,12 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
         mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_RIGHT);
-        mProjection->setMode(fx::PROJ_ROTATE_CW);
       }
       else
       {
         mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_LEFT);
-        mProjection->setMode(fx::PROJ_ROTATE_CCW);
       }
       mGyroView->setOrientation(orientation);
       mProjection->setZeroDistance(mOrbitView->distance());
@@ -205,11 +194,8 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
     {
       mOrbitView->setActive(true);
       mGyroView->setActive(false);
-      mProjection->setMode(fx::PROJ_NORMAL);
       mRenderSlots->setGlobal("ViewRot", fx::mat4());
       setRenderMode(RENDER_MONO);
-      // TODO: fix this!
-      //mMainWindow->setMode(fx::WINDOW_FULL_MONO);
     }
   }
 }

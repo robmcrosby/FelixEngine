@@ -28,19 +28,6 @@ namespace fx
   /**
    *
    */
-  enum PROJ_MODE
-  {
-    PROJ_NORMAL,
-    PROJ_INVERT_X,
-    PROJ_INVERT_Y,
-    PROJ_ROTATE_CW,
-    PROJ_ROTATE_CCW,
-    PROJ_ROTATE_FULL,
-  };
-  
-  /**
-   *
-   */
   enum ASPECT_TYPE
   {
     ASPECT_AUTO,
@@ -94,24 +81,6 @@ namespace fx
     /**
      *
      */
-    static PROJ_MODE ParseProjectionMode(const std::string &str)
-    {
-      if (str == "invert_x")
-        return PROJ_INVERT_X;
-      if (str == "invert_y")
-        return PROJ_INVERT_Y;
-      if (str == "rotate_cw")
-        return PROJ_ROTATE_CW;
-      if (str == "rotate_ccw")
-        return PROJ_ROTATE_CCW;
-      if (str == "rotate_full")
-        return PROJ_ROTATE_FULL;
-      return PROJ_NORMAL;
-    }
-    
-    /**
-     *
-     */
     static ASPECT_TYPE ParseAspectType(const std::string &str)
     {
       if (str == "auto")
@@ -124,8 +93,22 @@ namespace fx
     }
     
   public:
-    Projection(Scene *scene): Component(scene), mType(PROJ_ORTHO),
-    mAspect(ASPECT_NONE), mRenderSlots(0), mLock(0), mDisparity(0), mZeroDistance(1.0f) {}
+    /**
+     *
+     */
+    Projection(Scene *scene): Component(scene),
+      mType(PROJ_ORTHO),
+      mAspect(ASPECT_NONE),
+      mRenderSlots(0),
+      mLock(0),
+      mDisparity(0),
+      mZeroDistance(1.0f)
+    {
+    }
+    
+    /**
+     *
+     */
     virtual ~Projection() {}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -133,8 +116,6 @@ namespace fx
       Component::setToXml(node);
       if (node.hasAttribute("type"))
         setType(node.attribute("type"));
-      if (node.hasAttribute("mode"))
-        setMode(node.attribute("mode"));
       if (node.hasAttribute("aspect"))
         setAspect(node.attribute("aspect"));
       if (node.hasAttribute("disparity"))
@@ -145,18 +126,28 @@ namespace fx
         mVolume.setToXml(node.subNode("Volume"));
     }
     
+    /**
+     *
+     */
     virtual bool init()
     {
       mRenderSlots = getSibling<RenderSlots>();
       return Component::init() && mRenderSlots;
     }
     
+    /**
+     *
+     */
     void setVolume(const Volume &volume)
     {
       lock();
       mVolume = volume;
       unlock();
     }
+    
+    /**
+     *
+     */
     Volume volume() const
     {
       lock();
@@ -165,13 +156,24 @@ namespace fx
       return ret;
     }
     
+    /**
+     *
+     */
     void setType(const std::string &str) {setType(ParseProjectionType(str));}
+    
+    /**
+     *
+     */
     void setType(PROJ_TYPE type)
     {
       lock();
       mType = type;
       unlock();
     }
+    
+    /**
+     *
+     */
     PROJ_TYPE type() const
     {
       lock();
@@ -180,28 +182,24 @@ namespace fx
       return ret;
     }
     
-    void setMode(const std::string &str) {setMode(ParseProjectionMode(str));}
-    void setMode(PROJ_MODE mode)
-    {
-      lock();
-      mMode = mode;
-      unlock();
-    }
-    PROJ_MODE mode() const
-    {
-      lock();
-      PROJ_MODE ret = mMode;
-      unlock();
-      return ret;
-    }
-    
+    /**
+     *
+     */
     void setAspect(const std::string &str) {setAspect(ParseAspectType(str));}
+    
+    /**
+     *
+     */
     void setAspect(ASPECT_TYPE aspect)
     {
       lock();
       mAspect = aspect;
       unlock();
     }
+    
+    /**
+     *
+     */
     ASPECT_TYPE aspect() const
     {
       lock();
@@ -210,12 +208,19 @@ namespace fx
       return ret;
     }
     
+    /**
+     *
+     */
     void setDisparity(float disp)
     {
       lock();
       mDisparity = disp;
       unlock();
     }
+    
+    /**
+     *
+     */
     float disparity() const
     {
       lock();
@@ -224,12 +229,19 @@ namespace fx
       return ret;
     }
     
+    /**
+     *
+     */
     void setZeroDistance(float dist)
     {
       lock();
       mZeroDistance = dist;
       unlock();
     }
+    
+    /**
+     *
+     */
     float zeroDistance() const
     {
       lock();
@@ -238,95 +250,194 @@ namespace fx
       return ret;
     }
     
+    /**
+     *
+     */
     void lock() const {SDL_AtomicLock(&mLock);}
+    
+    /**
+     *
+     */
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
+    /**
+     *
+     */
+    mat4 getProjection(vec2 size, int flags) const
+    {
+      lock();
+      Volume v = mVolume;
+      ASPECT_TYPE aspect = mAspect;
+      PROJ_TYPE type = mType;
+      float disparity = mDisparity/2.0f;
+      float zeroDistance = mZeroDistance;
+      unlock();
+      
+      applyDisparity(v, disparity, zeroDistance, flags);
+      applyAspect(v, size, aspect);
+      
+      mat4 modification = getModification(flags);
+      
+      if (type == PROJ_ORTHO)
+        return modification * mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
+      return modification * mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
+    }
+    
   protected:
+    /**
+     *
+     */
     virtual void update()
     {
       if (mRenderSlots)
       {
         for (RenderSlot *slot : *mRenderSlots)
         {
-          vec2 size = slot->drawState().viewport.size;
-          if (size == vec2())
-          {
-            Frame *frame = GetResource<Frame>(&slot->targets());
-            size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
-          }
-          slot->setUniform("Projection", toMatrix4x4(size, slot->stereoType()));
+          if (slot)
+            applyToSlot(*slot);
         }
       }
       Component::update();
     }
     
   private:
-    mat4 toMatrix4x4(vec2 size, STEREO_TYPE stereo) const
+    /**
+     *
+     */
+    void applyToSlot(RenderSlot &slot) const
     {
-      lock();
-      Volume v = mVolume;
-      ASPECT_TYPE aspect = mAspect;
-      PROJ_TYPE type = mType;
-      PROJ_MODE mode = mMode;
-      float disparity = mDisparity/2.0f;
-      float zeroDistance = mZeroDistance;
-      unlock();
+      // First apply a screen split if set in the projection flags.
+      int flags = slot.projectionFlags();
+      Frame *frame = GetResource<Frame>(&slot.targets());
+      if (frame && flags & PROJ_SPLIT)
+        applySplit(slot, frame->size());
       
-      if (mode == PROJ_ROTATE_CW || mode == PROJ_ROTATE_CCW)
+      applyProjection(slot);
+    }
+    
+    /**
+     *
+     */
+    void applySplit(RenderSlot &slot, ivec2 size) const
+    {
+      int flags = slot.projectionFlags();
+      int rotation = flags & PROJ_ROTATION;
+      ivec2 position;
+      
+      if (rotation == PROJ_ROT_CW || rotation == PROJ_ROT_CCW)
+      {
+        size.y /= 2;
+        if ((flags & PROJ_LEFT  && rotation == PROJ_ROT_CW) ||
+            (flags & PROJ_RIGHT && rotation == PROJ_ROT_CCW))
+          position.y = size.y;
+      }
+      else
+      {
+        size.x /= 2;
+        if ((flags & PROJ_RIGHT && rotation == PROJ_ROT_NONE) ||
+            (flags & PROJ_LEFT && rotation == PROJ_ROT_FULL))
+          position.x = size.x;
+      }
+      
+      slot.drawState().viewport.scissor = true;
+      slot.drawState().viewport.size = size;
+      slot.drawState().viewport.position = position;
+    }
+    
+    /**
+     *
+     */
+    void applyProjection(RenderSlot &slot) const
+    {
+      vec2 size(slot.drawState().viewport.size);
+      if (size == vec2())
+      {
+        Frame *frame = GetResource<Frame>(&slot.targets());
+        size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+      }
+      
+      int flags = slot.projectionFlags();
+      int rotation = flags & PROJ_ROTATION;
+      if (rotation == PROJ_ROT_CW || rotation == PROJ_ROT_CCW)
         size = size.yx();
       
-      if ((stereo == STEREO_LEFT || stereo == STEREO_RIGHT) && type == PROJ_FRUSTUM)
+      mat4 projection = getProjection(size, flags);
+      slot.setUniform("Projection", projection);
+    }
+    
+    /**
+     *
+     */
+    mat4 getModification(int flags) const
+    {
+      int rotation = flags & PROJ_ROTATION;
+      if (rotation == PROJ_ROT_CW)
+        return mat4::RotZ(-90.0f * fx::DegToRad);
+      if (rotation == PROJ_ROT_CCW)
+        return mat4::RotZ(90.0f * fx::DegToRad);
+      if (rotation == PROJ_ROT_FULL)
+        return mat4::RotZ(180.0f * fx::DegToRad);
+      return mat4();
+    }
+    
+    /**
+     *
+     */
+    void applyDisparity(Volume &volume, float &disparity, float zeroDistance, int flags) const
+    {
+      int stereo = flags & PROJ_STEREO;
+      if (stereo == PROJ_MONO)
       {
-        float shift = disparity * (v.near/zeroDistance);
-        if (stereo == STEREO_LEFT)
+        // No Disparity for Mono
+        disparity = 0.0f;
+      }
+      else
+      {
+        float shift = disparity * (volume.near/zeroDistance);
+        if (stereo == PROJ_LEFT)
         {
-          v.left += shift;
-          v.right += shift;
+          // Adjust for the Left Side
+          volume.left += shift;
+          volume.right += shift;
         }
         else
         {
-          v.left -= shift;
-          v.right -= shift;
+          // Adjust for the Right Side
+          volume.left -= shift;
+          volume.right -= shift;
           disparity = -disparity;
         }
       }
-      else
-        disparity = 0.0f;
-      
+    }
+    
+    /**
+     *
+     */
+    void applyAspect(Volume &volume, vec2 size, ASPECT_TYPE aspect) const
+    {
       if (aspect == ASPECT_WIDTH || (aspect == ASPECT_AUTO && size.w < size.h))
       {
         float aspectRatio = size.h/size.w;
-        v.top *= aspectRatio;
-        v.bottom *= aspectRatio;
+        volume.top *= aspectRatio;
+        volume.bottom *= aspectRatio;
       }
       else if (aspect == ASPECT_HEIGHT || (aspect == ASPECT_AUTO && size.h < size.w))
       {
         float aspectRatio = size.w/size.h;
-        v.left *= aspectRatio;
-        v.right *= aspectRatio;
+        volume.left *= aspectRatio;
+        volume.right *= aspectRatio;
       }
-      
-      mat4 modeMtx;
-      if (mode == PROJ_ROTATE_CW)
-        modeMtx = mat4::RotZ(90*fx::DegToRad);
-      if (mode == PROJ_ROTATE_CCW)
-        modeMtx = mat4::RotZ(-90*fx::DegToRad);
-      
-      if (type == PROJ_ORTHO)
-        return modeMtx * mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
-      return modeMtx * mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
     }
     
-    PROJ_TYPE   mType;
-    PROJ_MODE   mMode;
-    ASPECT_TYPE mAspect;
-    Volume      mVolume;
+    PROJ_TYPE   mType;   /**<  */
+    ASPECT_TYPE mAspect; /**<  */
+    Volume      mVolume; /**<  */
     
-    float mDisparity;
-    float mZeroDistance;
+    float mDisparity;    /**<  */
+    float mZeroDistance; /**<  */
     
-    mutable SDL_SpinLock mLock;
-    RenderSlots *mRenderSlots;
+    mutable SDL_SpinLock mLock; /**<  */
+    RenderSlots *mRenderSlots;  /**<  */
   };
 }
 
