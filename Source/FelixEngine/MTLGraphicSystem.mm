@@ -257,8 +257,11 @@ namespace fx
       #if TARGET_OS_IPHONE
       SDL_DisplayMode displayMode;
       SDL_GetDesktopDisplayMode(0, &displayMode);
-      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE);
+      mSDLWindow = SDL_CreateWindow(NULL, 0, 0, displayMode.w, displayMode.h, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
       mSize = ivec2(displayMode.w, displayMode.h);
+      
+      if (mMTLFrame)
+        mMTLFrame->setSize(mSize);
       
       SDL_GL_CreateContext(mSDLWindow);
       
@@ -279,6 +282,8 @@ namespace fx
       #endif
       free(info);
       
+      mScale = (float)[mMTLWindow scale];
+      
       if (success)
         setLoaded();
       return success;
@@ -293,6 +298,7 @@ namespace fx
         [mMTLWindow updateSize:size andScale:scale];
         mSize.w = (int)(size.width*scale);
         mSize.h = (int)(size.height*scale);
+        mScale = (float)scale;
         #endif
       }
       if (mMTLFrame)
@@ -409,7 +415,7 @@ namespace fx
   
   struct MTLUniformMapInterface: InternalUniformMap
   {
-    MTLUniformMapInterface(const UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
+    MTLUniformMapInterface(UniformMap *map): mUniformMap(map) {mMTLUniformMap = nil;}
     virtual ~MTLUniformMapInterface() {mMTLUniformMap = nil;}
     
     virtual void release() {mUniformMap = nullptr;}
@@ -452,7 +458,7 @@ namespace fx
     }
     bool inUse() const {return mUniformMap;}
     
-    const UniformMap *mUniformMap;
+    UniformMap *mUniformMap;
     MTLUniformMap *mMTLUniformMap;
   };
 }
@@ -562,7 +568,7 @@ void MTLGraphicSystem::render()
   updateUniforms();
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   MTLUniformMapInterface *internalUniformMap = new MTLUniformMapInterface(map);
   internalUniformMap->mMTLUniformMap = [[MTLUniformMap alloc] initWithDevice:mContextInfo->mDevice];
@@ -661,7 +667,7 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
     {
       // Get the pipeline state
       [mContextInfo->mPipelineKey setShader:shader->mMTLShader];
-      [mContextInfo->mPipelineKey setBlendingEnabled:task->blendState.isBlendingEnabled()];
+      [mContextInfo->mPipelineKey setBlendFlags:(NSInteger)task->blendState.flags];
       id <MTLRenderPipelineState> pipelineState = [frame->mMTLFrame getPipelineForKey:mContextInfo->mPipelineKey];
       
       // Get the Render Descriptor.
@@ -682,20 +688,20 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
       if (depthState == nil)
       {
         MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
-        depthDesc.depthWriteEnabled = task->depthState.isWritingEnabled();
+        depthDesc.depthWriteEnabled = task->depthState.writingEnabled();
         depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
         
-        if (task->depthState.getTestFunction() == DEPTH_TEST_LESS)
+        if (task->depthState.function() == DEPTH_TEST_LESS)
           depthDesc.depthCompareFunction = MTLCompareFunctionLess;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER)
+        else if (task->depthState.function() == DEPTH_TEST_GREATER)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_EQUAL)
+        else if (task->depthState.function() == DEPTH_TEST_EQUAL)
           depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_LESS_EQ)
+        else if (task->depthState.function() == DEPTH_TEST_LESS_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_GREATER_EQ)
+        else if (task->depthState.function() == DEPTH_TEST_GREATER_EQ)
           depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
-        else if (task->depthState.getTestFunction() == DEPTH_TEST_NEVER)
+        else if (task->depthState.function() == DEPTH_TEST_NEVER)
           depthDesc.depthCompareFunction = MTLCompareFunctionNever;
         
         depthState = [mContextInfo->mDevice newDepthStencilStateWithDescriptor:depthDesc];
@@ -715,6 +721,16 @@ void MTLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *v
         [renderEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         [renderEncoder setDepthStencilState:depthState];
         [renderEncoder setRenderPipelineState:pipelineState];
+        [renderEncoder setBlendColorRed:task->blendState.color.red
+                                  green:task->blendState.color.green
+                                   blue:task->blendState.color.blue
+                                  alpha:task->blendState.color.alpha];
+        
+        // Set the Triangle Cull Mode
+        if (task->cullMode == CULL_FRONT)
+          [renderEncoder setCullMode:MTLCullModeFront];
+        else if (task->cullMode == CULL_BACK)
+          [renderEncoder setCullMode:MTLCullModeBack];
         
         if (view && view->localUniforms)
         {
@@ -902,7 +918,7 @@ void MTLGraphicSystem::render()
 {
 }
 
-InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(const UniformMap *map)
+InternalUniformMap* MTLGraphicSystem::getInternalUniformMap(UniformMap *map)
 {
   return nullptr;
 }

@@ -10,16 +10,90 @@
 #define FileSystem_h
 
 #include "System.h"
+#include "XMLTree.h"
+#include "Image.h"
+#include "VertexBufferMap.h"
+#include <iomanip>
 
 namespace fx
 {
+  class File;
+  typedef std::list<File> Directory;
+  
+  enum FILE_TYPE
+  {
+    FILE_DIR,
+    FILE_TEXT,
+    FILE_XML,
+    FILE_MESH,
+    FILE_SHADER,
+    FILE_IMAGE,
+    FILE_OTHER,
+  };
+  
+  /**
+   *
+   */
+  class File
+  {
+  public:
+    File(const std::string &url = "");
+    
+    std::string name() const;
+    std::string path() const;
+    std::string extension() const;
+    
+    bool exists() const;
+    
+    bool load(Directory &dir) const;
+    bool load(std::string &text) const;
+    bool load(XMLTree &tree) const;
+    bool load(VertexBufferMap &bufferMap) const;
+    
+    bool createDirectory() const;
+    bool write(const std::string &text) const;
+    bool append(const std::string &text) const;
+    
+    bool remove() const;
+    
+    bool addDirectory(const std::string &name) const;
+    
+    FILE_TYPE type() const {return mType;}
+    std::string url() const {return mUrl;}
+    
+    File operator+(const std::string &path) const;
+    File upperDirectory() const;
+    
+  public:
+    friend std::ostream &operator<<(std::ostream &os, const File &f)
+    {
+      os << std::left;
+      os << std::setw(8) << TypeString(f.type()) << f.name();
+      return os << std::right;
+    }
+
+  public:
+    static std::string TypeString(FILE_TYPE type);
+    static FILE_TYPE TypeFromExtension(const std::string &ext);
+    
+  private:
+    void setType();
+    
+  private:
+    FILE_TYPE mType;
+    std::string mUrl;
+  };
+  
   /**
    *
    */
   class FileSystem: public System
   {
   public:
-    static std::string GetLocalPath();
+    virtual ~FileSystem() {}
+    virtual File getDocuments() = 0;
+    
+  public:
     static bool LoadText(std::string &buffer, const std::string &filePath);
     static std::string LoadText(const std::string &filePath);
     
@@ -32,8 +106,11 @@ namespace fx
     static long Read(float *buffer, long size, std::istream &is) {return Read((unsigned int*)buffer, size, is);}
     static long Read(float &f, std::istream &is) {return Read((unsigned int*)&f, 1, is);}
     
-  public:
-    virtual ~FileSystem() {}
+    static File GetResources();
+    static File GetDocuments();
+    
+  protected:
+    static FileSystem *sInstance;
   };
 }
 

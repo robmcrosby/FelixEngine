@@ -11,10 +11,16 @@
 
 using namespace std;
 
-DEFINE_OBJECT_ID(ViewerCamera)
+DEFINE_COMPONENT_ID(ViewerCamera)
 
-ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene), mEventSystem(0),
-mMotionSystem(0), mOrbitView(0), mGyroView(0), mGraphicSystem(0), mMainWindow(0)
+ViewerCamera::ViewerCamera(fx::Scene *scene): fx::Camera(scene),
+  mEventSystem(0),
+  mMotionSystem(0),
+  mOrbitView(0),
+  mGyroView(0),
+  mGraphicSystem(0),
+  mMainWindow(0),
+  mRenderMode(RENDER_MONO)
 {
   #if TARGET_OS_IPHONE
   setEventFlags(fx::EVENT_TOUCH | fx::EVENT_MOTION);
@@ -31,9 +37,6 @@ bool ViewerCamera::init()
     mEventSystem = fx::FelixEngine::GetEventSystem();
     mGraphicSystem = fx::FelixEngine::GetGraphicSystem();
     
-    
-    mRenderSlots->setGlobal("ViewRot", fx::mat4());
-    
     if (mEventSystem)
     {
       mEventSystem->addHandler(this);
@@ -45,19 +48,80 @@ bool ViewerCamera::init()
     {
       mMotionSystem->addHandler(this);
       
-      mGyroView = new fx::GyroView(this);
+      mGyroView = new fx::GyroView(mScene);
+      addChild(mGyroView);
       success &= mGyroView->init();
       mGyroView->setActive(false);
     }
     
-    mOrbitView = new fx::OrbitView(this);
+    mOrbitView = new fx::OrbitView(mScene);
     mOrbitView->setDistance(2.5f);
+    addChild(mOrbitView);
     
     delete mView;
     mView = mOrbitView;
     success &= mOrbitView->init();
   }
   return success;
+}
+
+void ViewerCamera::setToXml(const fx::XMLTree::Node &node)
+{
+  fx::Camera::setToXml(node);
+  if (mRenderSlots)
+  {
+    for (fx::RenderSlot *slot : *mRenderSlots)
+    {
+      if (slot && slot->taskType() == fx::GRAPHIC_TASK_PASS)
+      {
+        fx::RenderSlot *leftPass  = new fx::RenderSlot(*slot);
+        fx::RenderSlot *rightPass = new fx::RenderSlot(*slot);
+        
+        // Add the mono pass.
+        mMonoPasses.push_back(slot);
+        
+        // Setup and add the left pass copy.
+        leftPass->setProjectionFlags(fx::PROJ_LEFT | fx::PROJ_SPLIT);
+        leftPass->setStereoType(fx::STEREO_LEFT);
+        mRenderSlots->addSlot(leftPass);
+        mStereoPasses.push_back(leftPass);
+        
+        // Setup and add the right pass copy.
+        rightPass->setProjectionFlags(fx::PROJ_RIGHT | fx::PROJ_SPLIT);
+        rightPass->setStereoType(fx::STEREO_RIGHT);
+        mRenderSlots->addSlot(rightPass);
+        mStereoPasses.push_back(rightPass);
+      }
+    }
+    setRenderMode(RENDER_MONO);
+  }
+}
+
+void ViewerCamera::setRenderMode(RENDER_MODE mode)
+{
+  int rotationFlag = mode == RENDER_STEREO_LEFT ? fx::PROJ_ROT_CW : fx::PROJ_ROT_CCW;
+  mRenderMode = mode;
+  
+  if (mode == RENDER_MONO)
+  {
+    // Set to Render Mono
+    for (fx::RenderSlot *slot : mMonoPasses)
+      slot->enable();
+    for (fx::RenderSlot *slot : mStereoPasses)
+      slot->disable();
+  }
+  else
+  {
+    // Set to Render Stereo
+    for (fx::RenderSlot *slot : mMonoPasses)
+      slot->disable();
+    for (fx::RenderSlot *slot : mStereoPasses)
+    {
+      int projFlags = (slot->projectionFlags() & ~fx::PROJ_ROTATION) | rotationFlag;
+      slot->setProjectionFlags(projFlags);
+      slot->enable();
+    }
+  }
 }
 
 void ViewerCamera::handle(const fx::Event &event)
@@ -113,27 +177,25 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       orientation *= fx::quat(fx::vec3(0.0f, 0.0f, 1.0f), (mOrbitView->longitude()-180.0f)*fx::DegToRad);
       if (gravity.x > 0.8f)
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(90*fx::DegToRad));
+        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
-        mMainWindow->setMode(fx::WINDOW_RIGHT_OVER_LEFT);
+        setRenderMode(RENDER_STEREO_RIGHT);
       }
       else
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4::RotZ(-90*fx::DegToRad));
+        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
-        mMainWindow->setMode(fx::WINDOW_LEFT_OVER_RIGHT);
+        setRenderMode(RENDER_STEREO_LEFT);
       }
       mGyroView->setOrientation(orientation);
       mProjection->setZeroDistance(mOrbitView->distance());
-      mProjection->setSwapAspect(true);
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
     {
       mOrbitView->setActive(true);
       mGyroView->setActive(false);
-      mProjection->setSwapAspect(false);
       mRenderSlots->setGlobal("ViewRot", fx::mat4());
-      mMainWindow->setMode(fx::WINDOW_FULL_MONO);
+      setRenderMode(RENDER_MONO);
     }
   }
 }

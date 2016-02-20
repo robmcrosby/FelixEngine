@@ -9,11 +9,12 @@
 #ifndef TextureMap_h
 #define TextureMap_h
 
-#include "IndexedMap.h"
 #include "FelixEngine.h"
-#include "GraphicSystem.h"
-#include "GraphicResources.h"
-#include <vector>
+#include "IndexedMap.h"
+#include "BufferMap.h"
+#include "Sampler.h"
+#include "Scene.h"
+#include "OwnPtr.h"
 
 namespace fx
 {
@@ -23,73 +24,117 @@ namespace fx
   class TextureState
   {
   public:
-    TextureState(): mTexture(0) {}
-    TextureState(const std::string &name) {setTexture(name);}
+    TextureState(Scene *scene = nullptr): mScene(scene), mTexture(0) {}
+    TextureState(const TextureState &other): mScene(0), mTexture(0) {*this = other;}
     
-    bool setToXml(const XMLTree::Node &node)
+    TextureState& operator=(const TextureState &other)
     {
-      bool success = false;
-      if (node.hasAttribute("name"))
-      {
-        setTexture(node.attribute("name"));
-        success = mTexture && mSampler.setToXml(node);
-        
-        // Check if the node needs to be set to the texture
-        if (mTexture && node.hasAttribute("file"))
-          success &= mTexture->setToXml(node);
-      }
-      return success;
+      mScene   = other.mScene;
+      mSampler = other.mSampler;
+      mTexture = other.mTexture;
+      return *this;
     }
     
-    void setTexture(Texture *texture) {mTexture = texture;}
+    void setToXml(const XMLTree::Node &node)
+    {
+      mSampler.setToXml(node);
+      setTexture(node);
+    }
+    
+    void setTexture(const BufferMap &texture) {mTexture = texture;}
+    void setTexture(BufferMap *texture) {mTexture = texture;}
     void setTexture(const std::string &name)
     {
-      GraphicSystem *system = FelixEngine::GetGraphicSystem();
-      if (system)
-        setTexture(system->getTexture(name));
+      if (!mScene || name == "")
+        setTexture(&mScene->getBufferMap(name));
+      else
+        setTexture(BUFFER_MAP_TEXTURE);
     }
-    Texture* texture() const {return mTexture;}
+    void setTexture(const XMLTree::Node &node)
+    {
+      setTexture(node.attribute("name"));
+      mTexture->setToXml(node);
+    }
+    BufferMap& texture() {return *mTexture;}
     
-    void setSampler(Sampler sampler) {mSampler = sampler;}
-    Sampler& sampler() {return mSampler;}
+    void setSampler(const Sampler &sampler) {mSampler = sampler;}
     const Sampler& sampler() const {return mSampler;}
     
   private:
-    Texture *mTexture;
-    Sampler  mSampler;
+    Scene *mScene;
+    Sampler mSampler;
+    OwnPtr<BufferMap> mTexture;
   };
   
   /**
    *
    */
-  class TextureMap: public IndexedMap<TextureState>
+  class TextureMap
   {
   public:
-    typedef IndexedMap<TextureState>::iterator iterator;
-    typedef IndexedMap<TextureState>::const_iterator const_iterator;
-    
-  public:
-    TextureMap() {}
+    TextureMap(Scene *scene): mScene(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    TextureMap(const TextureMap &other): mScene(other.mScene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {*this = other;}
     virtual ~TextureMap() {}
     
-    bool setToXml(const XMLTree::Node &node)
+    TextureMap& operator=(const TextureMap &other)
     {
-      bool success = true;
-      
-      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
-      {
-        if ((*itr)->hasAttribute("name"))
-        {
-          push((*itr)->attribute("name"));
-          success &= back().setToXml(**itr);
-        }
-        else
-          success = false;
-      }
-      return success;
+      mTextures.clear();
+      for (TextureState &texState : mTextures)
+        mTextures.push_back(texState);
+      return *this;
     }
+    
+    void setToXml(const XMLTree::Node &node)
+    {
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
+        addTexture(**itr);
+    }
+    
+    void addTexture(const BufferMap &texture = BUFFER_MAP_TEXTURE, Sampler sampler = Sampler())
+    {
+      mTextures.push_back(mScene);
+      mTextures.back().setTexture(texture);
+      mTextures.back().setSampler(sampler);
+    }
+    void addTexture(BufferMap *texture, Sampler sampler = Sampler())
+    {
+      mTextures.push_back(mScene);
+      mTextures.back().setTexture(texture);
+      mTextures.back().setSampler(sampler);
+    }
+    void addTexture(const XMLTree::Node &node)
+    {
+      mTextures.push_back(mScene);
+      mTextures.back().setToXml(node);
+      mGraphicSystem->uploadBuffer(mTextures.back().texture());
+    }
+    
+    size_t size() const {return mTextures.size();}
+    void resize(size_t size)
+    {
+      if (size < mTextures.size())
+        mTextures.resize(size);
+      while (mTextures.size() < size)
+        mTextures.push_back(mScene);
+    }
+    void clearTextures() {mTextures.clear();}
+    
+    TextureState& operator[](int index) {return mTextures.at(index);}
+    const TextureState& operator[](int index) const {return mTextures.at(index);}
+    
+    typedef std::vector<TextureState>::iterator iterator;
+    iterator begin() {return mTextures.begin();}
+    iterator end() {return mTextures.end();}
+    
+    typedef std::vector<TextureState>::const_iterator const_iterator;
+    const_iterator begin() const {return mTextures.begin();}
+    const_iterator end() const {return mTextures.end();}
+    
+  private:
+    Scene *mScene;
+    GraphicSystem *mGraphicSystem;
+    std::vector<TextureState> mTextures;
   };
 }
-
 
 #endif /* TextureMap_h */

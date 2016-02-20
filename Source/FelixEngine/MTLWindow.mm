@@ -41,6 +41,7 @@
     _mtlFrame = nil;
     _layer = nil;
     _drawable = nil;
+    _scale = 1.0;
   }
   
   return self;
@@ -85,7 +86,7 @@
     _layer.presentsWithTransaction = NO;
     _layer.drawsAsynchronously     = YES;
     _layer.needsDisplayOnBoundsChange = YES;
-    _layer.contentsScale = [UIScreen mainScreen].scale;
+    _layer.contentsScale = _scale = [UIScreen mainScreen].scale;
     
     // Change this to NO if the compute encoder is used as the last pass on the drawable texture
     _layer.framebufferOnly = YES;

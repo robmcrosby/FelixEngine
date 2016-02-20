@@ -11,7 +11,7 @@
 
 #include "FelixEngine.h"
 #include "UniformMap.h"
-#include "TextureMap.h"
+//#include "TextureMap.h"
 #include "GraphicTask.h"
 
 
@@ -29,7 +29,7 @@ namespace fx
       if (node.hasAttribute("name"))
       {
         setShader(node.attribute("name"));
-        success = mShader->setToXml(node);
+        //success = mShader->setToXml(node);
       }
       return success;
     }
@@ -41,30 +41,30 @@ namespace fx
     }
     const Shader* shader() const {return mShader;}
     
-    TextureMap& textureMap() {return mTextureMap;}
-    const TextureMap& textures() const {return mTextureMap;}
-    
-    UniformMap& uniforms() {return mUniformMap;}
-    const UniformMap& uniforms() const {return mUniformMap;}
+//    TextureMap& textureMap() {return mTextureMap;}
+//    const TextureMap& textures() const {return mTextureMap;}
+//    
+//    UniformMap& uniforms() {return mUniformMap;}
+//    const UniformMap& uniforms() const {return mUniformMap;}
     
     bool setToXml(const XMLTree::Node *node) {return setToXml(*node);}
     bool setToXml(const XMLTree::Node &node)
     {
       bool success = true;
       
-      // Set the Shader
-      if (node.hasAttribute("shader"))
-        setShader(node.attribute("shader"));
-      else if (node.hasSubNode("Shader"))
-        success &= setShader(*node.subNode("Shader"));
-      
-      // Set the UniformMap
-      if (node.hasSubNode("UniformMap"))
-        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
-      
-      // Set the TextureMap
-      if (node.hasSubNode("TextureMap"))
-        success &= mTextureMap.setToXml(*node.subNode("TextureMap"));
+//      // Set the Shader
+//      if (node.hasAttribute("shader"))
+//        setShader(node.attribute("shader"));
+//      else if (node.hasSubNode("Shader"))
+//        success &= setShader(*node.subNode("Shader"));
+//      
+//      // Set the UniformMap
+//      if (node.hasSubNode("UniformMap"))
+//        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
+//      
+//      // Set the TextureMap
+//      if (node.hasSubNode("TextureMap"))
+//        success &= mTextureMap.setToXml(*node.subNode("TextureMap"));
       return success;
     }
     
@@ -72,16 +72,16 @@ namespace fx
     {
       if (!mShader)
         return false;
-      task.shader = mShader;
-      task.textureMap = &mTextureMap;
-      task.materialUniforms = mUniformMap.getInternalMap();
+//      task.shader = mShader;
+//      task.textureMap = &mTextureMap;
+//      task.materialUniforms = mUniformMap.getInternalMap();
       return true;
     }
     
   private:
     Shader *mShader;
-    UniformMap mUniformMap;
-    TextureMap mTextureMap;
+//    UniformMap mUniformMap;
+//    TextureMap mTextureMap;
     GraphicSystem *mSystem;
   };
 }

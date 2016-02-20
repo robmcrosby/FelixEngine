@@ -317,49 +317,50 @@ void SDLEventSystem::processGestureEvent(const SDL_MultiGestureEvent &event)
 
 void SDLEventSystem::processWindowEvent(const SDL_WindowEvent &event)
 {
-  Event windowEvent;
+  Event windowEvent(EVENT_WINDOW);
   windowEvent.setTimeStamp(event.timestamp);
+  windowEvent.windowData().event = EVENT_WINDOW_NONE;
   windowEvent.windowData().window = event.windowID;
   windowEvent.windowData().data = ivec2(event.data1, event.data2);
   
   switch (event.event)
   {
     case SDL_WINDOWEVENT_SHOWN:
-      windowEvent.setType(EVENT_WINDOW_SHOWN);
+      windowEvent.windowData().event = EVENT_WINDOW_SHOWN;
       break;
     case SDL_WINDOWEVENT_HIDDEN:
-      windowEvent.setType(EVENT_WINDOW_HIDE);
+      windowEvent.windowData().event = EVENT_WINDOW_HIDE;
       break;
     case SDL_WINDOWEVENT_EXPOSED:
-      windowEvent.setType(EVENT_WINDOW_EXPOSED);
+      windowEvent.windowData().event = EVENT_WINDOW_EXPOSED;
       break;
     case SDL_WINDOWEVENT_MOVED:
-      windowEvent.setType(EVENT_WINDOW_MOVED);
+      windowEvent.windowData().event = EVENT_WINDOW_MOVED;
       break;
     case SDL_WINDOWEVENT_RESIZED:
     //case SDL_WINDOWEVENT_SIZE_CHANGED:
-      windowEvent.setType(EVENT_WINDOW_RESIZED);
+      windowEvent.windowData().event = EVENT_WINDOW_RESIZED;
       break;
     case SDL_WINDOWEVENT_MINIMIZED:
-      windowEvent.setType(EVENT_WINDOW_MINIMIZED);
+      windowEvent.windowData().event = EVENT_WINDOW_MINIMIZED;
       break;
     case SDL_WINDOWEVENT_MAXIMIZED:
-      windowEvent.setType(EVENT_WINDOW_MAXIMIZED);
+      windowEvent.windowData().event = EVENT_WINDOW_MAXIMIZED;
       break;
     case SDL_WINDOWEVENT_RESTORED:
-      windowEvent.setType(EVENT_WINDOW_RESTORED);
+      windowEvent.windowData().event = EVENT_WINDOW_RESTORED;
       break;
     case SDL_WINDOWEVENT_ENTER:
-      windowEvent.setType(EVENT_WINDOW_ENTER);
+      windowEvent.windowData().event = EVENT_WINDOW_ENTER;
       break;
     case SDL_WINDOWEVENT_LEAVE:
-      windowEvent.setType(EVENT_WINDOW_LEAVE);
+      windowEvent.windowData().event = EVENT_WINDOW_LEAVE;
       break;
     case SDL_WINDOWEVENT_CLOSE:
-      windowEvent.setType(EVENT_WINDOW_CLOSE);
+      windowEvent.windowData().event = EVENT_WINDOW_CLOSE;
       break;
   }
   
-  if (windowEvent.type())
+  if (windowEvent.windowData().event != EVENT_WINDOW_NONE)
     notify(windowEvent);
 }

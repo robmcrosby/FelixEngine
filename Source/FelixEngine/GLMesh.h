@@ -17,56 +17,76 @@
 namespace fx
 {
   /**
-   *
+   * Resource that manages OpenGL Vertex and Index buffers that make up Meshes.
    */
   class GLMesh: public Mesh
   {
   private:
-    struct GLRange
-    {
-      GLRange(): start(0), end(0) {}
-      GLuint start, end;
-    };
-    typedef std::vector<GLRange> GLRanges;
+    typedef Vector2<GLuint> GLRange;       /**< define a 2d vector using OpenGL's primitives. */
+    typedef std::vector<GLRange> GLRanges; /**< define of a vector of GLRanges */
     
+    /**
+     * Internal struct that bundles information about an OpenGL Vertex buffer.
+     */
     struct GLBuffer
     {
+      /**
+       * Constructor initalizes all the fields to zero.
+       */
       GLBuffer(): components(0), count(0), bufferId(0) {}
-      GLuint components, count, bufferId;
+      GLuint components; /**< Number of components in each Vertex Item */
+      GLuint count;      /**< Number of Vertex Items in the buffer */
+      GLuint bufferId;   /**< OpenGL Vertex buffer handle */
     };
-    typedef std::map<std::string, GLBuffer> GLBufferMap;
+    typedef std::map<std::string, GLBuffer> GLBufferMap; /**< Defines a string to GLBuffer map. */
     
   public:
+    /**
+     * Constructor that initalizes the Mesh.
+     *
+     * @param system Pointer to a GLGraphicsSystem.
+     */
     GLMesh(GLGraphicSystem *system): mGLSystem(system), mIndexBuffer(0) {}
-    virtual ~GLMesh() {clearBuffers();}
     
-    void update()
+    /**
+     * Destructor that calls unload.
+     */
+    virtual ~GLMesh() {unload();}
+    
+    /**
+     * Binds the Mesh to the given shader.
+     *
+     * @param shader Shader to bind this Mesh to.
+     */
+    void bind(const GLShader *shader) const
     {
-      if (loading())
+      if (shader)
       {
-        if (load())
-          setLoaded();
-        else
-          setNotLoading();
+        glBindVertexArray(mVertexArray);
+        for (const auto &buffer : mVertexBuffers)
+        {
+          GLint index = shader->getAttributeIndex(buffer.first);
+          if (index >= 0)
+          {
+            glBindBuffer(GL_ARRAY_BUFFER, buffer.second.bufferId);
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(index, buffer.second.components, GL_FLOAT, GL_FALSE, 0, 0);
+          }
+        }
       }
     }
     
-    void draw(const GLShader *shader, int instances, int index) const
+    /**
+     * Draws the Mesh using OpenGL calls.
+     *
+     * @param instances Number of times the mesh would be drawn.
+     * @param index The sub-mesh to draw.
+     */
+    void draw(int instances, int index) const
     {
-      if (shader && index < (int)mSubMeshes.size())
+      if (index < (int)mSubMeshes.size())
       {
         const GLRange &subMesh = mSubMeshes.at(index);
-        glBindVertexArray(mVertexArray);
-        for (GLBufferMap::const_iterator itr = mVertexBuffers.begin(); itr != mVertexBuffers.end(); ++itr)
-        {
-          GLint index = shader->getAttributeIndex(itr->first);
-          if (index >= 0)
-          {
-            glBindBuffer(GL_ARRAY_BUFFER, itr->second.bufferId);
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, itr->second.components, GL_FLOAT, GL_FALSE, 0, 0);
-          }
-        }
         if (mIndexBuffer)
         {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
@@ -86,48 +106,48 @@ namespace fx
       }
     }
     
-  private:
-    bool load()
+    /**
+     * Uploads the Vertex and Index information from the given Buffer Map to
+     * Video Memory.
+     *
+     * @param bufferMap Refrence to the BufferMap to load from.
+     */
+    void uploadBufferMap(const BufferMap &bufferMap)
     {
-      bool success = false;
-      if (!loaded())
+      bool success = true;
+      unload();
+      
+      glGenVertexArrays(1, &mVertexArray);
+      glBindVertexArray(mVertexArray);
+      
+      for (const Buffer &buffer : bufferMap)
       {
-        success = true;
-        clearBuffers();
-        
-        glGenVertexArrays(1, &mVertexArray);
-        glBindVertexArray(mVertexArray);
-        for (VertexBufferMap::const_iterator buffer = mBufferMap.begin(); buffer != mBufferMap.end(); ++buffer)
-          success &= loadVertexBuffer(buffer->first, buffer->second);
-        if (mBufferMap.indexBuffer().size())
-          success &= loadIndexBuffer(mBufferMap.indexBuffer());
-        glBindVertexArray(0);
-        
-        const Ranges &subMeshes = mBufferMap.subMeshes();
-        if (subMeshes.size())
-        {
-          for (Ranges::const_iterator range = subMeshes.begin(); range != subMeshes.end(); ++range)
-          {
-            mSubMeshes.push_back(GLRange());
-            mSubMeshes.back().start = range->start;
-            mSubMeshes.back().end = range->end;
-          }
-        }
-        else
-        {
-          mSubMeshes.push_back(GLRange());
-          mSubMeshes.back().end = mBufferMap.count();
-        }
-        setGLPrimitiveType(mBufferMap.primitiveType());
+        if (buffer.bufferType() == BUFFER_VERTEX)
+          success &= uploadVertexBuffer(buffer);
+        else if (buffer.bufferType() == BUFFER_INDICES)
+          success &= uploadIndexBuffer(buffer);
+        else if (buffer.bufferType() == BUFFER_RANGES)
+          success &= setSubMeshes(buffer);
       }
-      return success;
+      glBindVertexArray(0);
+      
+      if (mSubMeshes.size() == 0)
+      {
+        mSubMeshes.push_back(GLRange());
+        mSubMeshes.back().end = mVertexBuffers.begin()->second.count;
+      }
+      setGLPrimitiveType((VERTEX_PRIMITIVE)bufferMap.flags());
+      setLoaded(success);
     }
     
-    void clearBuffers()
+    /**
+     * Deletes the Vertex/Index buffers from Video Memory.
+     */
+    void unload()
     {
       // Clear the Vertex Buffers
-      for (GLBufferMap::iterator buffer = mVertexBuffers.begin(); buffer != mVertexBuffers.end(); ++buffer)
-        glDeleteBuffers(1, &buffer->second.bufferId);
+      for (const auto &buffer : mVertexBuffers)
+        glDeleteBuffers(1, &buffer.second.bufferId);
       mVertexBuffers.clear();
       
       // Clear the Index Buffer
@@ -137,9 +157,17 @@ namespace fx
         mIndexBuffer = 0;
       }
       mSubMeshes.clear();
+      setUnloaded();
     }
     
-    bool loadVertexBuffer(const std::string &name, const VertexBuffer &buffer)
+  private:
+    /**
+     * Uploads a Vertex Buffer from the given Buffer to Video Memory.
+     *
+     * @param buffer Refrence to the Buffer to upload.
+     * @return true if successful or false on an error.
+     */
+    bool uploadVertexBuffer(const Buffer &buffer)
     {
       // Create the Vertex Buffer
       GLBuffer glBuffer;
@@ -149,8 +177,16 @@ namespace fx
         std::cerr << "Error Creating Vertex Buffer." << std::endl;
         return false;
       }
-      glBuffer.components = buffer.components();
-      glBuffer.count = buffer.count();
+      
+      // Determine the number of components
+      if (buffer.type() == VAR_FLOAT)
+        glBuffer.components = 1;
+      else if (buffer.type() == VAR_FLOAT_2)
+        glBuffer.components = 2;
+      else if (buffer.type() == VAR_FLOAT_4)
+        glBuffer.components = 4;
+      
+      glBuffer.count = (GLuint)buffer.size();
       
       // Load the Vertices
       glBindBuffer(GL_ARRAY_BUFFER, glBuffer.bufferId);
@@ -159,11 +195,17 @@ namespace fx
       glBufferData(GL_ARRAY_BUFFER, bufSize, ptr, GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       
-      mVertexBuffers[name] = glBuffer;
+      mVertexBuffers[buffer.name()] = glBuffer;
       return true;
     }
     
-    bool loadIndexBuffer(const IndexBuffer &buffer)
+    /**
+     * Uploads an Index Buffer from the given Buffer to Video Memory.
+     *
+     * @param buffer Refrence to the Buffer to upload.
+     * @return true if successful or false on an error.
+     */
+    bool uploadIndexBuffer(const Buffer &buffer)
     {
       // Create the Index Buffer
       glGenBuffers(1, &mIndexBuffer);
@@ -176,28 +218,48 @@ namespace fx
       // Load the Indices.
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
       GLsizeiptr bufSize = buffer.size() * sizeof(unsigned int);
-      const GLvoid *ptr = (const GLvoid*)&buffer.at(0);
+      const GLvoid *ptr = (const GLvoid*)buffer.ptr();
       glBufferData(GL_ELEMENT_ARRAY_BUFFER,  bufSize, ptr, GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
       
       return true;
     }
     
+    /**
+     * Sets the Sub-Mesh ranges from the given Buffer.
+     *
+     * @param buffer Refrence to the Buffer to load the ranges from.
+     * @return true if there were ranges loaded or false if not.
+     */
+    bool setSubMeshes(const Buffer &buffer)
+    {
+      mSubMeshes.clear();
+      ivec2 *ranges = (ivec2*)buffer.ptr();
+      for (int i = 0; i < buffer.size(); ++i)
+        mSubMeshes.push_back(ranges[i]);
+      return mSubMeshes.size() > 0;
+    }
+    
+    /**
+     * Sets the OpenGL primitive type from the given type.
+     *
+     * @param type Enum to either VERTEX_TRIANGLES or GL_TRIANGLE_STRIP.
+     */
     void setGLPrimitiveType(VERTEX_PRIMITIVE type)
     {
       if (type == VERTEX_TRIANGLES)
         mPrimitiveType = GL_TRIANGLES;
-      if (type == VERTEX_TRIANGLE_STRIP)
+      else if (type == VERTEX_TRIANGLE_STRIP)
         mPrimitiveType = GL_TRIANGLE_STRIP;
     }
     
-    GLGraphicSystem *mGLSystem;
+    GLBufferMap mVertexBuffers; /**< Map of Vertex Buffers */
+    GLuint      mIndexBuffer;   /**< OpenGL Index Buffer handle */
+    GLuint      mVertexArray;   /**< OpenGL Vertex Array handle */
+    GLenum      mPrimitiveType; /**< OpenGL Enum for Primitive Type */
+    GLRanges    mSubMeshes;     /**< Vector of Ranges for Sub-Meshes */
     
-    GLBufferMap mVertexBuffers;
-    GLuint      mIndexBuffer;
-    GLuint      mVertexArray;
-    GLenum      mPrimitiveType;
-    GLRanges    mSubMeshes;
+    GLGraphicSystem *mGLSystem; /**< Pointer to the GLGraphicsSystem that owns this Mesh */
   };
 }
 

@@ -10,15 +10,16 @@
 
 
 #if __IPHONEOS__
-//#define SETTINGS_FILE "SettingsGLES2.xml"
+#define SETTINGS_FILE "SettingsGLES2.xml"
 //#define SETTINGS_FILE "SettingsGLES3.xml"
-#define SETTINGS_FILE "SettingsMetal_IOS.xml"
+//#define SETTINGS_FILE "SettingsMetal_IOS.xml"
 #else
-//#define SETTINGS_FILE "SettingsGL41.xml"
-#define SETTINGS_FILE "SettingsMetal.xml"
+#define SETTINGS_FILE "SettingsGL41.xml"
+//#define SETTINGS_FILE "SettingsMetal.xml"
 #endif
 
-#define SCENE_FILE "Scenes/BunnyScene.xml"
+#define SCENE_FILE "MainScene.xml"
+//#define SCENE_FILE "TestUI.xml"
 
 
 using namespace std;

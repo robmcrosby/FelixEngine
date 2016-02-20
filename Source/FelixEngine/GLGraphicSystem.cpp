@@ -14,6 +14,7 @@
 #include "GLShader.h"
 #include "GLMesh.h"
 #include "GLTexture.h"
+#include "GLUniforms.h"
 
 
 using namespace fx;
@@ -27,8 +28,8 @@ GLGraphicSystem::GLGraphicSystem(): mContext(0), mMainWindow(0)
 
 GLGraphicSystem::~GLGraphicSystem()
 {
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    delete itr->second;
+  for (auto &window : mWindows)
+    delete window.second;
 }
 
 Window* GLGraphicSystem::getWindow(const std::string &name)
@@ -39,8 +40,8 @@ Window* GLGraphicSystem::getWindow(const std::string &name)
     mWindows[name] = window;
     
     GLFrame *frame = static_cast<GLFrame*>(getFrame(name));
-    frame->retain();
     frame->setToWindow(window);
+    window->setFrame(frame);
   }
   return mWindows[name];
 }
@@ -105,11 +106,11 @@ bool GLGraphicSystem::init()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
   #endif
   
-  for (map<std::string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
+  for (auto &window : mWindows)
   {
-    success &= itr->second->init();
+    success &= window.second->init();
     if (!mMainWindow && success)
-      mMainWindow = itr->second;
+      mMainWindow = window.second;
   }
   
   cout << glGetString(GL_VERSION) << endl;
@@ -134,11 +135,11 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
   bool success = true;
   if (node)
   {
-    for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
+    for (const auto &subNode : *node)
     {
-      string name = (*itr)->attribute("name");
+      string name = subNode->attribute("name");
       if (name != "")
-        mShaderFunctions[name] = (*itr)->contents();
+        mShaderFunctions[name] = subNode->contents();
     }
   }
   return success;
@@ -146,17 +147,21 @@ bool GLGraphicSystem::setShaderFunctions(const XMLTree::Node *node)
 
 void GLGraphicSystem::render()
 {
-  updateResources();
-  updateUniforms();
-  processTasks();
-}
-
-
-InternalUniformMap* GLGraphicSystem::getInternalUniformMap(const UniformMap *map)
-{
-  GLUniformMap *internalMap = new GLUniformMap(map);
-  mGLUniforms.push_back(internalMap);
-  return internalMap;
+  updateTasks();
+  
+  // Update the Windows
+  for (auto &window : mWindows)
+    window.second->update();
+  
+  // Process the Graphic Tasks
+  processPass(mPreTasks, nullptr);
+  if (mTaskPasses.size())
+      processPass(mTaskPasses.at(0), nullptr);
+  processPass(mPostTasks, nullptr);
+  
+  // Swap the Window Buffers
+  for (auto &window : mWindows)
+    window.second->swapBuffers();
 }
 
 SDL_Window* GLGraphicSystem::getMainSDLWindow()
@@ -164,116 +169,222 @@ SDL_Window* GLGraphicSystem::getMainSDLWindow()
   return mMainWindow ? mMainWindow->getSDLWindow() : nullptr;
 }
 
-void GLGraphicSystem::processTasks()
+void GLGraphicSystem::processPass(const TaskPass &pass, const GraphicTask *view)
 {
-  mPassesMutex.lock();
-  int flags = getStereoFlags();
-  if (mPasses.size())
+  for (const GraphicTask &task : pass)
+    processTask(&task, view);
+}
+
+void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view)
+{
+  switch (task->type)
   {
-    if (flags & STEREO_MONO)
-      processPass(mPasses.at(0), nullptr, STEREO_MONO);
-    if (flags & STEREO_LEFT)
-      processPass(mPasses.at(0), nullptr, STEREO_LEFT);
-    if (flags & STEREO_RIGHT)
-      processPass(mPasses.at(0), nullptr, STEREO_RIGHT);
+    case GRAPHIC_TASK_UPLOAD:
+      processUploadTask(task);
+      break;
+    case GRAPHIC_TASK_UNLOAD:
+      processUnloadTask(task);
+      break;
+    case GRAPHIC_TASK_DOWNLOAD:
+      processDownloadTask(task);
+      break;
+    case GRAPHIC_TASK_PASS:
+      processViewTask(task);
+      break;
+    case GRAPHIC_TASK_DRAW:
+      processDrawTask(task, view);
+    case GRAPHIC_TASK_COMPUTE:
+    case GRAPHIC_TASK_EMPTY:
+      break;
   }
-  mPassesMutex.unlock();
+}
+
+void GLGraphicSystem::processUploadTask(const GraphicTask *task)
+{
+  BufferMap *bufferMap = task->bufferSlots[0];
+  if (bufferMap != nullptr && !bufferMap->updated())
+  {
+    if (bufferMap->type() == BUFFER_MAP_MESH)
+    {
+      bufferMap->setResource(getMesh(bufferMap->name()));
+      GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
+      mesh->uploadBufferMap(*bufferMap);
+    }
+    else if (bufferMap->type() == BUFFER_MAP_SHADER)
+    {
+      bufferMap->setResource(getShader(bufferMap->name()));
+      GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
+      shader->uploadBufferMap(*bufferMap);
+    }
+    else if (bufferMap->type() == BUFFER_MAP_TEXTURE)
+    {
+      bufferMap->setResource(getTexture(bufferMap->name()));
+      if (bufferMap->contains("data"))
+      {
+        GLTexture *texture = GetResource<GLTexture>(bufferMap);
+        texture->uploadBufferMap(*bufferMap);
+      }
+    }
+    else if (bufferMap->type() == BUFFER_MAP_TARGETS)
+    {
+      bufferMap->setResource(getFrame(bufferMap->name()));
+      GLFrame *frame = GetResource<GLFrame>(bufferMap);
+      frame->uploadBufferMap(*bufferMap);
+    }
+    else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
+    {
+      GLUniforms *uniforms = GetResource<GLUniforms>(bufferMap);
+      if (!uniforms || !mUniforms.count(uniforms))
+      {
+        uniforms = new GLUniforms();
+        mUniforms.insert(uniforms);
+        bufferMap->setResource(uniforms);
+      }
+      uniforms->uploadBufferMap(*bufferMap);
+    }
+    bufferMap->setUpdated();
+  }
+}
+
+void GLGraphicSystem::processUnloadTask(const GraphicTask *task)
+{
+  // TODO: Implement this when needed.
+}
+
+void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
+{
+  // TODO: Implement this when needed.
+}
+
+void GLGraphicSystem::processViewTask(const GraphicTask *task)
+{
+  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+  if (frame)
+  {
+    frame->bind();
+    frame->setViewport(task->drawState.viewport);
+    frame->clear(task->drawState.clearState);
+  }
   
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->swapBuffers();
+  if (task->pass < mTaskPasses.size() && task->pass > 0)
+    processPass(mTaskPasses.at(task->pass), task);
 }
 
-void GLGraphicSystem::processPass(const Pass &pass, const GraphicTask *view, int stereo)
+void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask *view)
 {
-  for (Pass::const_iterator itr = pass.begin(); itr != pass.end(); ++itr)
-    processTask(&(*itr), view, stereo);
-}
-
-void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *view, int stereo)
-{
-  if (task->stereo & stereo)
+  const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
+  const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
+  
+  const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+  Viewport viewport;
+  
+  // Get the Render Targets and View Uniforms.
+  const GLFrame  *frame = nullptr;
+  const GLUniforms *viewUniforms = nullptr;
+  if (view)
   {
-    if (task->isViewTask())
-    {
-      const GLFrame *frame = static_cast<const GLFrame*>(task->frame);
-      frame->use(stereo);
-      if (task->isClearTask())
-        frame->clear(task->clearState);
-      
-      if (task->pass < (int)mPasses.size())
-      {
-        const Pass &pass = mPasses.at(task->pass);
-        if (pass.size())
-          processPass(pass, task, stereo);
-      }
-    }
-    else if (task->isDrawTask())
-    {
-      const GLFrame  *frame  = static_cast<const GLFrame*>(view ? view->frame : task->frame);
-      const GLShader *shader = static_cast<const GLShader*>(task->shader);
-      const GLMesh   *mesh   = static_cast<const GLMesh*>(task->mesh);
-      
-      if (frame && frame->loaded() && shader->loaded() && mesh->loaded())
-      {
-        // Set the state for the Frame
-        frame->use(stereo);
-        if (task->isClearTask())
-          frame->clear(task->clearState);
-        frame->setDepthState(task->depthState);
-        frame->setBlendState(task->blendState);
-        
-        // Set the state for the Shader
-        shader->use();
-        if (view && view->localUniforms)
-          static_cast<const GLUniformMap*>(view->localUniforms)->applyToShader(shader);
-        if (task->materialUniforms)
-          static_cast<const GLUniformMap*>(task->materialUniforms)->applyToShader(shader);
-        if (task->localUniforms)
-          static_cast<const GLUniformMap*>(task->localUniforms)->applyToShader(shader);
-        shader->applyTextureMap(task->textureMap);
-        
-        // Draw the Mesh
-        mesh->draw(shader, task->instances, task->subMesh);
-      }
-    }
+    frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_TARGETS]);
+    viewUniforms = GetResource<GLUniforms>(view->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+    viewport = view->drawState.viewport;
+  }
+  else
+  {
+    frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    viewport = task->drawState.viewport;
+  }
+  
+  // If no Render Targets are specified, use the main window.
+  if (!frame)
+    frame = static_cast<GLFrame*>(getFrame("MainWindow"));
+  
+  if (frame && frame->loaded() && shader && shader->loaded() && mesh && mesh->loaded())
+  {
+    setTriangleCullMode(task->drawState.cullMode);
+    
+    // Set the state for the Shader
+    shader->bind();
+    
+    // Set the state for the Frame
+    frame->bind();
+    frame->setViewport(viewport);
+    frame->clear(task->drawState.clearState);
+    frame->setDepthState(task->drawState.depthState);
+    frame->setBlendState(task->drawState.blendState);
+    
+    // Bind the Mesh to the Shader
+    mesh->bind(shader);
+    
+    // Set the Local Uniforms
+    if (localUniforms)
+      localUniforms->applyToShader(shader);
+    
+    // Set the View Uniforms
+    if (viewUniforms)
+      viewUniforms->applyToShader(shader);
+    
+    // Set the Textures and Draw the Mesh
+    if (bindTextureMap(task->textureMap))
+      mesh->draw(task->drawState.instances, task->drawState.submesh);
   }
 }
 
-void GLGraphicSystem::updateResources()
+bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
 {
-  for (map<string, GLWindow*>::iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    itr->second->update();
-  for (map<string, GLFrame*>::iterator itr = mFrames.begin(); itr != mFrames.end(); ++itr)
-    itr->second->update();
-  for (map<string, GLShader*>::iterator itr = mShaders.begin(); itr != mShaders.end(); ++itr)
-    itr->second->update();
-  for (map<string, GLMesh*>::iterator itr = mMeshes.begin(); itr != mMeshes.end(); ++itr)
-    itr->second->update();
-  for (map<string, GLTexture*>::iterator itr = mTextures.begin(); itr != mTextures.end(); ++itr)
-    itr->second->update();
+  bool success = true;
+  if (textureMap)
+  {
+    int index = 0;
+    for (TextureState &texState : *textureMap)
+    {
+      GLTexture *texture = GetResource<GLTexture>(&texState.texture());
+      if (!texture || !texture->loaded())
+        success = false;
+      else
+        texture->use(index++, texState.sampler());
+    }
+  }
+  return success;
 }
 
-void GLGraphicSystem::updateUniforms()
+
+bool GLGraphicSystem::addWindows(const XMLTree::Node *node)
 {
-  for (list<GLUniformMap*>::iterator itr = mGLUniforms.begin(); itr != mGLUniforms.end();)
+  bool success = false;
+  if (node)
   {
-    if ((*itr)->inUse())
+    success = true;
+    for (auto const &subNode : *node)
+      success &= addWindow(subNode);
+  }
+  return success;
+}
+
+bool GLGraphicSystem::addWindow(const XMLTree::Node *node)
+{
+  bool success = false;
+  if (node)
+  {
+    //Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
+    string name = node->hasSubNode("name") ? node->attribute("name") : MAIN_WINDOW;
+    GLWindow *window = static_cast<GLWindow*>(getWindow(name));
+    success = window && window->setToXml(*node);
+  }
+  return success;
+}
+
+
+void GLGraphicSystem::setTriangleCullMode(CULL_TRI_MODE mode)
+{
+  static CULL_TRI_MODE curMode = CULL_TRI_NONE;
+  if (curMode != mode)
+  {
+    curMode = mode;
+    if (mode != CULL_TRI_NONE)
     {
-      (*itr)->update();
-      ++itr;
+      glEnable(GL_CULL_FACE);
+      glCullFace((mode == CULL_TRI_BACK) ? GL_BACK : GL_FRONT);
     }
     else
-    {
-      delete *itr;
-      itr = mGLUniforms.erase(itr);
-    }
+      glDisable(GL_CULL_FACE);
   }
-}
-
-int GLGraphicSystem::getStereoFlags() const
-{
-  int flags = 0;
-  for (map<string, GLWindow*>::const_iterator itr = mWindows.begin(); itr != mWindows.end(); ++itr)
-    flags |= itr->second->getStereoFlags();
-  return flags;
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<Scene name="BunnyScene">
+  <UIScreen name="MainScreen" window="MainWindow">
+    <Projection type="ortho" aspect="none"/>
+    <RenderSlots>
+      <Slot layer="1" pass="UIPass" frame="DrawFrame" stereo="mono"/>
+    </RenderSlots>
+    <UIText name="TestText" text="Test" size="200, 200" offset="-100, 0" font="Fonts/arial.font" pass="UIPass"/>
+    <UIWidget name="TestWidget" size="200, 200" offset="100, -200">
+      <RenderSlots>
+        <Slot layer="0" pass="UIPass">
+          <Mesh name="TestQuad" primitive="plane" size="1.0, 1.0"/>
+          <BlendState color="0.9, 0.2, 0.2, 1.0"/>
+          <Material>
+            <Shader name="TextureShader">
+              <Vertex function="VertexUV"/>
+              <Fragment function="SimpleTexture"/>
+            </Shader>
+            <UniformMap>
+              <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
+            </UniformMap>
+            <TextureMap>
+              <Texture name="Icon" file="Images/Icon.png" min="linear" mag="linear"/>
+            </TextureMap>
+          </Material>
+        </Slot>
+      </RenderSlots>
+    </UIWidget>
+  </UIScreen>
+  <ViewerCamera name="MainCamera">
+    <Projection type="frustum" aspect="auto" disparity="0.2" zero="2.0">
+      <Volume near="1.0" far="10.0" left="-0.5" right="0.5" top="0.5" bottom="-0.5"/>
+    </Projection>
+    <RenderSlots>
+      <Slot layer="0" pass="MainPass">
+        <Frame name="DrawFrame">
+          <Buffer format="rgba" texture="DrawTexture" min="linear" mag="linear"/>
+          <Buffer format="depth"/>
+        </Frame>
+        <ClearState depth="1.0">
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+      </Slot>
+      <Slot layer="2">
+        <Material name="TextureMaterial">
+          <Shader name="FullShader">
+            <Vertex function="SimpleVertexUV"/>
+            <Fragment function="SimpleTexture"/>
+          </Shader>
+          <TextureMap>
+            <Texture name="DrawTexture" min="linear" mag="linear"/>
+          </TextureMap>
+        </Material>
+        <Mesh name="FullQuad" primitive="plane" size="2.0, 2.0"/>
+      </Slot>
+    </RenderSlots>
+  </ViewerCamera>
+  <Model name="Bunny">
+    <Transform>
+      <Scale>0.2, 0.2, 0.2</Scale>
+      <Euler>90.0, 0.0, 0.0</Euler>
+      <Translate>0.0, -0.2, 0.0</Translate>
+    </Transform>
+    <RenderSlots>
+      <Slot layer="0" pass="MainPass" cull="front">
+        <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
+        <DepthState write="true" function="less"/>
+        <Material>
+          <Shader name="DirectLightShader">
+            <Vertex function="SimpleNormal"/>
+            <Fragment function="DirectLight"/>
+          </Shader>
+          <UniformMap>
+            <Uniform name="Color" type="vec4">0.2, 0.2, 0.9, 1.0</Uniform>
+          </UniformMap>
+        </Material>
+      </Slot>
+    </RenderSlots>
+  </Model>
+</Scene>

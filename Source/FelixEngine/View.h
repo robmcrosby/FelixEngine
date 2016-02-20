@@ -10,29 +10,25 @@
 #define View_h
 
 #include "Component.h"
-#include "Object.h"
 #include "RenderSlots.h"
 #include "Matrix.h"
 
 namespace fx
 {
-  class RenderSlots;
-  
   /**
    *
    */
   class View: public Component
   {
   public:
-    View(Object *obj): Component("View", obj), mRenderSlots(0), mActive(true), mLock(0)
+    View(Scene *scene): Component(scene), mRenderSlots(0), mActive(true), mLock(0)
     {
-      mUpdateDelegate = UpdateDelegate::Create<View, &View::update>(this);
     }
     virtual ~View() {}
     
     virtual bool init()
     {
-      mRenderSlots = static_cast<RenderSlots*>(mObject->getComponentByType("RenderSlots"));
+      mRenderSlots = getSibling<RenderSlots>();
       return mRenderSlots ? Component::init() : false;
     }
     
@@ -65,15 +61,14 @@ namespace fx
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   protected:
-    void update(void*)
+    virtual void update()
     {
       lock();
       if (mActive && mRenderSlots)
-      {
-        for (RenderSlots::iterator itr = mRenderSlots->begin(); itr != mRenderSlots->end(); ++itr)
-          (*itr)->uniforms().set("View", mMatrix);
-      }
+        mRenderSlots->setUniform("View", mMatrix);
       unlock();
+      
+      Component::update();
     }
     
   protected:

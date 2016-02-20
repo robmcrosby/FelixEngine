@@ -15,11 +15,12 @@
 #include "EventHandler.h"
 #include "XMLTree.h"
 #include "Delegate.h"
+#include "Mutex.h"
 
 
 namespace fx
 {
-  class Object;
+  class Scene;
   
   /**
    *
@@ -27,32 +28,75 @@ namespace fx
   class Component: public EventHandler
   {
   public:
-    Component(const std::string &type, Object *obj);
+    Component(Scene *scene);
     virtual ~Component();
     
-    virtual bool setToXml(const XMLTree::Node *node)
-    {
-      bool success = false;
-      if (node)
-      {
-        success = true;
-        if (node->hasAttribute("name"))
-          setName(node->attribute("name"));
-      }
-      return success;
-    }
-    virtual bool init() {return true;}
-    
-    void update(void*) {}
-    
-    typedef Delegate<void, void*> UpdateDelegate;
-    UpdateDelegate& getUpdateDelegate() {return mUpdateDelegate;}
+    virtual void setToXml(const XMLTree::Node &node);
+    virtual bool init();
+    virtual void update();
     
     void setName(const std::string &name) {mName = name;}
     std::string name() const {return mName;}
     
-    std::string type() const {return mType;}
-    Object* getObject() const {return mObject;}
+    Component* parrent() const {return mParrent;}
+    
+    void lock() const {mMutex.lock();}
+    void unlock() const {mMutex.unlock();}
+    
+  public:
+    typedef std::list<Component*>::iterator iterator;
+    iterator begin() {return mChildren.begin();}
+    iterator end() {return mChildren.end();}
+    
+    typedef std::list<Component*>::const_iterator const_iterator;
+    const_iterator begin() const {return mChildren.begin();}
+    const_iterator end() const {return mChildren.end();}
+    
+    void addChildren(const XMLTree::Node &node);
+    void addChild(const XMLTree::Node &node);
+    
+    virtual void addChild(Component *child);
+    virtual void removeChild(Component *child);
+    virtual void clearChildren();
+    
+    Component* getChild(const std::string &name) const;
+    Component* getSibling(const std::string &name) const;
+    
+    template <typename T>
+    T* getChild()
+    {
+      T *child = nullptr;
+      for (const_iterator itr = begin(); !child && itr != end(); ++itr)
+        child = dynamic_cast<T*>(*itr);
+      if (!child)
+      {
+        child = new T(mScene);
+        addChild(child);
+      }
+      return child;
+    }
+    
+    template <typename T>
+    T* getChild() const
+    {
+      T *child = nullptr;
+      for (const_iterator itr = begin(); !child && itr != end(); ++itr)
+        child = dynamic_cast<T*>(*itr++);
+      return child;
+    }
+    
+    template <typename T>
+    T* getSibling() const {return mParrent ? mParrent->getChild<T>() : nullptr;}
+    
+    template <typename T>
+    T* getParrent() const
+    {
+      Component *parrent = mParrent;
+      T *ret = dynamic_cast<T*>(parrent);
+      while (!ret && parrent != (Component*)mScene)
+        ret = dynamic_cast<T*>(parrent = parrent->mParrent);
+        return ret;
+    }
     
     /**
      * Internal class used for reflection with xml
@@ -60,42 +104,20 @@ namespace fx
     struct ComponentId
     {
       virtual ~ComponentId() {}
-      virtual Component* create(Object *obj) = 0;
+      virtual Component* create(Scene *scene) = 0;
     };
     static std::map<std::string, ComponentId*>& GetComponentIdMap();
+    static Component* Create(const std::string &type, Scene *scene);
+    static Component* Create(const XMLTree::Node &node, Scene *scene);
     
-    /**
-     *
-     */
-    static Component* Create(const std::string &type, Object *obj)
-    {
-      if (GetComponentIdMap().count(type))
-        return GetComponentIdMap().at(type)->create(obj);
-      std::cerr << "Error: Unknown Object Component: " << type << std::endl;
-      return nullptr;
-    }
-    
-    /**
-     *
-     */
-    static Component* Create(const XMLTree::Node *node, Object *obj)
-    {
-      Component *comp = nullptr;
-      if (node)
-      {
-        comp = Create(node->element(), obj);
-        if (!comp || !comp->setToXml(node))
-        {
-          delete comp;
-          comp = nullptr;
-        }
-      }
-      return comp;
-    }
   protected:
-    std::string mName, mType;
-    Object *mObject;
-    UpdateDelegate mUpdateDelegate;
+    std::string mName;
+    Scene *mScene;
+    
+    Component *mParrent;
+    std::list<Component*> mChildren;
+    
+    mutable Mutex mMutex;
   };
   
   /**
@@ -105,7 +127,7 @@ namespace fx
     struct T##ID: public fx::Component::ComponentId {\
       T##ID() {fx::Component::GetComponentIdMap()[#T] = this;}\
       virtual ~T##ID() {}\
-      virtual fx::Component* create(fx::Object *obj) {return new T(obj);}\
+      virtual fx::Component* create(fx::Scene *scene) {return new T(scene);}\
       static T##ID ID;\
     };\
     T##ID T##ID::ID;

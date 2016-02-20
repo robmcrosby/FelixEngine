@@ -9,9 +9,9 @@
 #ifndef Model_h
 #define Model_h
 
-#include "Object.h"
-#include "Transform.h"
+#include "Component.h"
 #include "RenderSlots.h"
+#include "Transform.h"
 
 
 namespace fx
@@ -19,40 +19,22 @@ namespace fx
   /**
    *
    */
-  class Model: public Object
+  class Model: public Component
   {
   public:
-    Model(Scene *scene): Object("Model", scene), mTransform(0), mRenderSlots(0) {}
+    Model(Scene *scene): Component(scene), mTransform(0), mRenderSlots(0) {}
     virtual ~Model() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = Object::setToXml(node);
-      if (success)
-      {
-        setTransform();
-        setRenderSlots();
-      }
-      return success;
+      Component::setToXml(node);
+      addChildren(node);
+      mTransform = getChild<Transform>();
+      mRenderSlots = getChild<RenderSlots>();
     }
     
     Transform* transform() const {return mTransform;}
     RenderSlots* renderSlots() const {return mRenderSlots;}
-    
-  private:
-    void setTransform()
-    {
-      mTransform = dynamic_cast<Transform*>(getComponentByType("Transform"));
-      if (!mTransform)
-        mTransform = new Transform(this);
-    }
-    
-    void setRenderSlots()
-    {
-      mRenderSlots = dynamic_cast<RenderSlots*>(getComponentByType("RenderSlots"));
-      if (!mRenderSlots)
-        mRenderSlots = new RenderSlots(this);
-    }
     
   protected:
     Transform *mTransform;

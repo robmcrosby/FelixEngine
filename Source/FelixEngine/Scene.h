@@ -10,27 +10,28 @@
 #define Scene_h
 
 
-#include "EventHandler.h"
+#include "Component.h"
 #include "XMLTree.h"
-#include "Object.h"
 #include "Material.h"
+#include "BufferMap.h"
 
 #include <istream>
 #include <list>
 
 namespace fx
 {
-  class Scene: public EventHandler
+  class Scene: public Component
   {
   public:
-    Scene()
+    Scene(): Component(this), mDirectory(FileSystem::GetResources()), mBufferMaps()
     {
+      mScene = this;
       setEventFlags(EVENT_APP_UPDATE);
     }
     ~Scene()
     {
-      clearObjects();
       clearMaterials();
+      clearBufferMaps();
     }
     
     virtual void handle(const Event &event)
@@ -39,22 +40,19 @@ namespace fx
         update();
     }
     
-    bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = false;
-      if (node && node->hasAttribute("name"))
+      Component::setToXml(node);
+      for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
       {
-        success = true;
-        setName(node->attribute("name"));
-        for (XMLTree::const_iterator itr = node->begin(); itr != node->end(); ++itr)
-        {
-          if (**itr == "Resources")
-            success &= addResources(**itr);
-          else
-            success &= (bool)Object::Create(*itr, this);
-        }
+        if (node.tree() && node.tree()->url() != "")
+          mDirectory = node.tree()->url();
+        
+        if (**itr == "Resources")
+          addResources(**itr);
+        else
+          addChild(**itr);
       }
-      return success;
     }
     bool init()
     {
@@ -62,56 +60,6 @@ namespace fx
       for (iterator itr = begin(); itr != end(); ++itr)
         success &= (*itr)->init();
       return success;
-    }
-    void update()
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-        (*itr)->update();
-    }
-    
-    void setName(const std::string &name) {mName = name;}
-    std::string name() const {return mName;}
-    
-    typedef std::list<Object*>::iterator iterator;
-    iterator begin() {return mObjects.begin();}
-    iterator end() {return mObjects.end();}
-    
-    typedef std::list<Object*>::const_iterator const_iterator;
-    const_iterator begin() const {return mObjects.begin();}
-    const_iterator end() const {return mObjects.end();}
-    
-    bool addObject(Object *obj)
-    {
-      if (obj)
-        mObjects.push_back(obj);
-      return obj;
-    }
-    void removeObject(Object *obj) {mObjects.remove(obj);}
-    void clearObjects()
-    {
-      std::list<Object*> tmp = mObjects;
-      mObjects.clear();
-      for (iterator itr = tmp.begin(); itr != tmp.end(); ++itr)
-        delete *itr;
-    }
-    
-    Object* getObjectByName(const std::string &name)
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-      {
-        if ((*itr)->name() == name)
-          return *itr;
-      }
-      return nullptr;
-    }
-    Object* getObjectByType(const std::string &type)
-    {
-      for (iterator itr = begin(); itr != end(); ++itr)
-      {
-        if ((*itr)->type() == type)
-          return *itr;
-      }
-      return nullptr;
     }
     
     Material* getMaterial(const std::string &name)
@@ -127,6 +75,28 @@ namespace fx
       mMaterialMap.clear();
     }
     
+    BufferMap& getBufferMap(const std::string name)
+    {
+      if (!mBufferMaps.count(name))
+        mBufferMaps[name] = new BufferMap(name);
+      return *mBufferMaps[name];
+    }
+    void clearBufferMaps()
+    {
+      for (BufferMapDirectory::iterator itr = mBufferMaps.begin(); itr != mBufferMaps.end(); ++itr)
+        delete itr->second;
+      mBufferMaps.clear();
+    }
+    
+    int getPassIndex(const std::string &name)
+    {
+      if (!mPassNameMap.count(name))
+        mPassNameMap[name] = (int)mPassNameMap.size()+1;
+      return mPassNameMap[name];
+    }
+    
+    File directory() const {return mDirectory;}
+    
   private:
     bool addResources(const XMLTree::Node &node)
     {
@@ -138,31 +108,23 @@ namespace fx
     bool addResource(const XMLTree::Node &node)
     {
       bool success = true;
-      std::string name = node.attribute("name");
-      std::string type = node.element();
-      if (type == "Material")
+      if (node.hasAttribute("name"))
       {
-        Material *material = getMaterial(name);
-        success &= material->setToXml(node);
-      }
-      else
-      {
-        Resource *resource = FelixEngine::GetGraphicSystem()->getResource(type, name);
-        if (resource)
-        {
-          resource->retain();
-          success &= resource->setToXml(node);
-          mResources.push_back(resource);
-        }
+        BufferMap &bufferMap = getBufferMap(node.attribute("name"));
+        bufferMap.setToXml(node);
+        FelixEngine::GetGraphicSystem()->uploadBuffer(bufferMap);
       }
       return success;
     }
     
-    std::string mName;
-    std::list<Object*> mObjects;
-    std::list<Resource*> mResources;
+    File mDirectory;
     
+    std::list<Resource*> mResources;
     std::map<std::string, Material*> mMaterialMap;
+    
+    std::map<std::string, int> mPassNameMap;
+    
+    BufferMapDirectory mBufferMaps;
   };
 }
 

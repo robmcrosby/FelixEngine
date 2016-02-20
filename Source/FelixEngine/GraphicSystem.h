@@ -11,6 +11,7 @@
 
 #include "System.h"
 #include "GraphicResources.h"
+#include "TaskingSystem.h"
 #include "GraphicTask.h"
 #include "MultiVector.h"
 #include "Mutex.h"
@@ -29,8 +30,7 @@ namespace fx
   public:
     GraphicSystem();
     virtual ~GraphicSystem();
-    
-    virtual void handle(const Event &event);
+
     virtual void render() = 0;
     
     virtual Window* getWindow(const std::string &name) = 0;
@@ -40,35 +40,42 @@ namespace fx
     virtual Texture* getTexture(const std::string &name) = 0;
     
     Resource* getResource(const std::string &type, const std::string &name);
-    virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map) = 0;
     
     void addGraphicTask(const GraphicTask &task) {mTaskCollection.append(task);}
+    void uploadBuffer(BufferMap &bufferMap)
+    {
+      GraphicTask task(GRAPHIC_TASK_UPLOAD);
+      task.bufferSlots[0] = &bufferMap;
+      addGraphicTask(task);
+    }
+    
     virtual SDL_Window* getMainSDLWindow() = 0;
     
-  public:
-    static int GetStereoFlags(const std::string &flags);
+  private:
+    void addTaskToPass(const GraphicTask &task, int pass)
+    {
+      if (pass >= mTaskPasses.size())
+        mTaskPasses.resize(pass+1);
+      mTaskPasses.at(pass).push_back(task);
+    }
+    
+  protected:
+    void updateTasks();
+    
+    typedef std::vector<GraphicTask> TaskPass;
+    
+    TaskPass mPreTasks;
+    TaskPass mPostTasks;
+    std::vector<TaskPass> mTaskPasses;
     
   private:
-    void update();
-    void clearPasses();
-    void loadPasses();
+    void updateTaskBuffer(void*);
+    TaskDelegate mUpdateTaskBufferDelgate;
     
-  protected:
-    typedef MultiVector<GraphicTask> TaskCollection;
+    MultiVector<GraphicTask> mTaskCollection;
     
-    typedef std::vector<GraphicTask> Pass;
-    typedef std::vector<Pass> Passes;
-    
-    TaskCollection mTaskCollection;
-    Pass mTaskBuffer;
-    
-    Passes mPasses;
-    Mutex mPassesMutex;
-    Mutex mUpdateMutex;
-    
-  protected:
-    bool addWindows(const XMLTree::Node *node);
-    bool addWindow(const XMLTree::Node *node);
+    TaskPass mTaskBuffer;
+    Mutex mTaskBufferMutex;
   };
 }
 

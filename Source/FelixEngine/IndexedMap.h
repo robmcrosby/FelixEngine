@@ -111,7 +111,7 @@ namespace fx
   private:
     std::vector<T> mArray;
     std::map<std::string, int> mMap;
-    mutable Semaphore mSemephore;
+    mutable IndexedSemaphore mSemephore;
   };
 }
 

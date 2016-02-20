@@ -11,6 +11,7 @@
 
 #include "GraphicSystem.h"
 #include <map>
+#include <set>
 #include <SDL2/SDL.h>
 
 #if __IPHONEOS__
@@ -31,7 +32,7 @@ namespace fx
   class GLShader;
   class GLMesh;
   class GLTexture;
-  class GLUniformMap;
+  class GLUniforms;
   
   /**
    *
@@ -57,29 +58,37 @@ namespace fx
     virtual Mesh*    getMesh(const std::string &name);
     virtual Texture* getTexture(const std::string &name);
     
-    virtual InternalUniformMap* getInternalUniformMap(const UniformMap *map);
-    
     virtual SDL_Window* getMainSDLWindow();
     
     void setContext(SDL_GLContext context) {mContext = context;}
     SDL_GLContext getContext() {return mContext;}
     
-    std::string getShaderFunction(std::string &name)
+    std::string getShaderFunction(const std::string &name)
     {
       return mShaderFunctions.count(name) ? mShaderFunctions.at(name) : "";
     }
     
   private:
-    void processTasks();
-    void processPass(const Pass &pass, const GraphicTask *view, int stereo);
-    void processTask(const GraphicTask *task, const GraphicTask *view, int stereo);
+    void processPass(const TaskPass &pass, const GraphicTask *view);
+    void processTask(const GraphicTask *task, const GraphicTask *view);
+    
+    void processUploadTask(const GraphicTask *task);
+    void processUnloadTask(const GraphicTask *task);
+    void processDownloadTask(const GraphicTask *task);
+    void processViewTask(const GraphicTask *task);
+    void processDrawTask(const GraphicTask *task, const GraphicTask *view);
+    
+    bool bindTextureMap(TextureMap *textureMap);
+    
+    void setTriangleCullMode(CULL_TRI_MODE mode);
     
     void updateResources();
-    void updateUniforms();
     bool setVersion(const XMLTree::Node *node);
     bool setShaderFunctions(const XMLTree::Node *node);
     
-    int getStereoFlags() const;
+    bool addWindows(const XMLTree::Node *node);
+    bool addWindow(const XMLTree::Node *node);
+
     
     std::map<std::string, GLWindow*>  mWindows;
     std::map<std::string, GLFrame*>   mFrames;
@@ -87,7 +96,7 @@ namespace fx
     std::map<std::string, GLMesh*>    mMeshes;
     std::map<std::string, GLTexture*> mTextures;
     
-    std::list<GLUniformMap*> mGLUniforms;
+    std::set<GLUniforms*> mUniforms;
     
     std::map<std::string, std::string> mShaderFunctions;
     

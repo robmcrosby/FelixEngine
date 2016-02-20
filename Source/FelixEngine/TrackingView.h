@@ -20,32 +20,25 @@ namespace fx
   class TrackingView: public View
   {
   public:
-    TrackingView(Object *obj): View(obj), mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f)
-    {
-      mUpdateDelegate = UpdateDelegate::Create<TrackingView, &TrackingView::update>(this);
-    }
+    TrackingView(Scene *scene): View(scene), mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f) {}
     virtual ~TrackingView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-        if (node->hasSubNode("Position"))
-          setPosition(node->subContents("Position"));
-        if (node->hasSubNode("Target"))
-          setTarget(node->subContents("Target"));
-        if (node->hasSubNode("Up"))
-          setUp(node->subContents("Up"));
-      }
-      return success;
+      View::setToXml(node);
+      if (node.hasSubNode("Position"))
+        setPosition(node.subContents("Position"));
+      if (node.hasSubNode("Target"))
+        setTarget(node.subContents("Target"));
+      if (node.hasSubNode("Up"))
+        setUp(node.subContents("Up"));
     }
     
     virtual bool init()
     {
       bool success = View::init();
       if (success)
-        update(nullptr);
+        update();
       return success;
     }
     
@@ -59,12 +52,13 @@ namespace fx
     vec3 up() const {return mUp;}
     
   private:
-    void update(void*)
+    virtual void update()
     {
       setMatrix(mat4::LookAt(mPosition, mTarget, mUp));
-      View::update(nullptr);
+      View::update();
     }
     
+  private:
     vec3 mPosition;
     vec3 mTarget;
     vec3 mUp;

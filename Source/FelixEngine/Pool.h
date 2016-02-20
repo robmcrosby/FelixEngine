@@ -63,7 +63,7 @@ namespace fx
     
   private:
     T *mData;
-    Semaphore mSem;
+    IndexedSemaphore mSem;
     Block *mNext;
   };
   

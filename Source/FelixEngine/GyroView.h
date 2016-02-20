@@ -25,31 +25,26 @@ namespace fx
   class GyroView: public View
   {
   public:
-    GyroView(Object *obj): View(obj), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
+    GyroView(Scene *scene): View(scene), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
       mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f), mAcceleration(DEF_ROT_ACCELERATION)
     {
-      setEventFlags(EVENT_MOTION_COMBINED);
-      mUpdateDelegate = UpdateDelegate::Create<GyroView, &GyroView::update>(this);
+      setEventFlags(EVENT_MOTION);
       mMotionSystem = FelixEngine::GetMotionSystem();
       if (mMotionSystem)
         mMotionSystem->addHandler(this);
     }
     virtual ~GyroView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-      }
-      return success;
+      View::setToXml(node);
     }
     
     virtual bool init()
     {
       bool success = View::init();
       if (success)
-        update(nullptr);
+        update();
       return success;
     }
     
@@ -59,8 +54,8 @@ namespace fx
       {
         quat rotation = mOrientation * event.motionData().orientation;
         rotation.rotate(event.motionData().rotation * mAcceleration);
-        mFwd = rotation * mFwdAxis;
-        mUp = rotation * mUpAxis;
+        mFwd = (rotation * mFwdAxis).normalized();
+        mUp = (rotation * mUpAxis).normalized();
       }
     }
     
@@ -77,11 +72,11 @@ namespace fx
     quat orientation() const {return mOrientation;}
     
   private:
-    void update(void*)
+    virtual void update()
     {
       vec3 pos(mCenter + mFwd*mDistance);
       setMatrix(mat4::LookAt(pos, mCenter, mUp));
-      View::update(nullptr);
+      View::update();
     }
     
     vec3 mCenter;

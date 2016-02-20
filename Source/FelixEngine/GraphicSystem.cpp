@@ -16,35 +16,11 @@ using namespace std;
 
 GraphicSystem::GraphicSystem(): System(SYSTEM_GRAPHICS)
 {
-  setEventFlags(EVENT_APP_UPDATE);
-  mPasses.push_back(Pass());
+  mUpdateTaskBufferDelgate = TaskDelegate::Create<GraphicSystem, &GraphicSystem::updateTaskBuffer>(this);
 }
 
 GraphicSystem::~GraphicSystem()
 {
-}
-
-bool GraphicSystem::addWindows(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    success = true;
-    for (XMLTree::const_iterator itr = node->begin(); success && itr != node->end(); ++itr)
-      success &= addWindow(*itr);
-  }
-  return success;
-}
-
-bool GraphicSystem::addWindow(const XMLTree::Node *node)
-{
-  bool success = false;
-  if (node)
-  {
-    Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
-    success = window && window->setToXml(*node);
-  }
-  return success;
 }
 
 Resource* GraphicSystem::getResource(const std::string &type, const std::string &name)
@@ -62,60 +38,53 @@ Resource* GraphicSystem::getResource(const std::string &type, const std::string 
   return nullptr;
 }
 
-void GraphicSystem::handle(const fx::Event &event)
+void GraphicSystem::updateTasks()
 {
-  if (event == EVENT_APP_UPDATE)
-    update();
-}
-
-void GraphicSystem::update()
-{
-  if (mUpdateMutex.tryLock())
-  {
-    notify(Event(EVENT_APP_RENDER, DISPATCH_SERIAL));
-    
-    mTaskCollection.dump(mTaskBuffer);
-    sort(mTaskBuffer.begin(), mTaskBuffer.end());
-    loadPasses();
-    
-    mUpdateMutex.unlock();
-  }
-}
-
-void GraphicSystem::clearPasses()
-{
-  for (Passes::iterator itr = mPasses.begin(); itr != mPasses.end(); ++itr)
+  // Launch a task start getting new tasks.
+  mTaskBufferMutex.lock();
+  TaskingSystem::Instance()->dispatch(mUpdateTaskBufferDelgate);
+  
+  // Clear the previous Tasks
+  mPreTasks.clear();
+  mPostTasks.clear();
+  for (vector<TaskPass>::iterator itr = mTaskPasses.begin(); itr != mTaskPasses.end(); ++itr)
     itr->clear();
-}
-
-void GraphicSystem::loadPasses()
-{
-  mPassesMutex.lock();
-  clearPasses();
-  for (Pass::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
+  
+  // Organize the new Tasks
+  for (TaskPass::iterator itr = mTaskBuffer.begin(); itr != mTaskBuffer.end(); ++itr)
   {
-    if (itr->isViewTask())
-      mPasses.at(0).push_back(*itr);
-    else
+    switch (itr->type)
     {
-      if (itr->pass >= (int)mPasses.size())
-        mPasses.resize(itr->pass+1);
-      mPasses.at(itr->pass).push_back(*itr);
+      case GRAPHIC_TASK_UPLOAD:
+        mPreTasks.push_back(*itr);
+        break;
+      case GRAPHIC_TASK_UNLOAD:
+      case GRAPHIC_TASK_DOWNLOAD:
+        mPostTasks.push_back(*itr);
+        break;
+      case GRAPHIC_TASK_PASS:
+        addTaskToPass(*itr, 0);
+        break;
+      case GRAPHIC_TASK_DRAW:
+      case GRAPHIC_TASK_COMPUTE:
+        addTaskToPass(*itr, itr->pass);
+        break;
+      case GRAPHIC_TASK_EMPTY:
+        break;
     }
   }
-  mPassesMutex.unlock();
   mTaskBuffer.clear();
+  mTaskBufferMutex.unlock();
 }
 
-int GraphicSystem::GetStereoFlags(const std::string &flags)
+void GraphicSystem::updateTaskBuffer(void*)
 {
-  if (flags == "left")
-    return STEREO_LEFT;
-  if (flags == "right")
-    return STEREO_RIGHT;
-  if (flags == "binary")
-    return STEREO_BINARY;
-  if (flags == "mono")
-    return STEREO_MONO;
-  return STEREO_ALL;
+  notify(Event(EVENT_APP_RENDER, DISPATCH_SERIAL));
+  
+  mTaskBufferMutex.lock();
+  mTaskBuffer.clear();
+  
+  mTaskCollection.dump(mTaskBuffer);
+  sort(mTaskBuffer.begin(), mTaskBuffer.end());
+  mTaskBufferMutex.unlock();
 }

@@ -14,14 +14,13 @@
 
 namespace fx
 {
+  class Resource;
+  
   class Resource
   {
   public:
-    Resource(): mLoaded(0), mLoading(0), mUnloading(0), mRemoved(0) {SDL_AtomicSet(&mCount, 0);}
+    Resource(): mLoaded(0), mRemoved(0) {SDL_AtomicSet(&mCount, 0);}
     virtual ~Resource() {}
-    
-    bool setToXml(const XMLTree::Node *node) {return node && setToXml(*node);}
-    virtual bool setToXml(const XMLTree::Node &node) = 0;
     
     void retain() {SDL_AtomicIncRef(&mCount);}
     void release()
@@ -31,30 +30,31 @@ namespace fx
     }
     
     bool loaded() const {return mLoaded;}
-    bool loading() const {return mLoading;}
-    bool unloading() const {return mUnloading;}
     bool removed() const {return mRemoved;}
     
-    void setToLoad() {mLoading = true;}
-    void setToUnload() {mUnloading = true;}
+    void setLoaded(bool loaded = true) {mLoaded = loaded;}
+    void setUnloaded() {setLoaded(false);}
     
-    void setLoaded()
+  public:
+    static void Replace(Resource **dst, Resource *src)
     {
-      mLoaded = true;
-      mLoading = false;
-    }
-    void setUnloaded()
-    {
-      mLoaded = false;
-      mUnloading = false;
+      if (*dst != src)
+      {
+        if (src != nullptr)
+          src->retain();
+        if (*dst != nullptr)
+          (*dst)->release();
+        *dst = src;
+      }
     }
     
-  protected:
-    void setNotLoading() {mLoading = false;}
-    void setNotUnloading() {mUnloading = false;}
+    template <typename T>
+    static void Replace(T **dst, T *src) {Replace((Resource**)dst, (Resource*)src);}
+    
     
   private:
-    bool mLoaded, mLoading, mUnloading, mRemoved;
+    bool mLoaded;
+    bool mRemoved;
     SDL_atomic_t mCount;
   };
 }

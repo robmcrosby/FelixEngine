@@ -11,8 +11,9 @@
 #include "GCDTaskingSystem.h"
 #include "SDLEventSystem.h"
 #include "GLGraphicSystem.h"
-#include "MTLGraphicSystem.h"
+//#include "MTLGraphicSystem.h"
 #include "IOSMotionSystem.h"
+#include "UbiquityFileSystem.h"
 
 
 using namespace fx;
@@ -22,8 +23,9 @@ DEFINE_SYSTEM_ID(TaskingSystem)
 DEFINE_SYSTEM_ID(GCDTaskingSystem)
 DEFINE_SYSTEM_ID(SDLEventSystem)
 DEFINE_SYSTEM_ID(GLGraphicSystem)
-DEFINE_SYSTEM_ID(MTLGraphicSystem)
+//DEFINE_SYSTEM_ID(MTLGraphicSystem)
 DEFINE_SYSTEM_ID(IOSMotionSystem)
+DEFINE_SYSTEM_ID(UbiquityFileSystem)
 
 TaskingSystem* TaskingSystem::sInstance = nullptr;
 EventSystem* EventSystem::sInstance = nullptr;

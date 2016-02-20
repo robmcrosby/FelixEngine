@@ -24,37 +24,29 @@ namespace fx
   class OrbitView: public View
   {
   public:
-    OrbitView(Object *obj): View(obj), mLatitude(0), mLongitude(0),
-      mPolarLimit(DEF_POLAR_LIMIT), mDistance(DEF_DISTANCE)
-    {
-      mUpdateDelegate = UpdateDelegate::Create<OrbitView, &OrbitView::update>(this);
-    }
+    OrbitView(Scene *scene): View(scene), mLatitude(0), mLongitude(0), mPolarLimit(DEF_POLAR_LIMIT), mDistance(DEF_DISTANCE) {}
     virtual ~OrbitView() {}
     
-    virtual bool setToXml(const XMLTree::Node *node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = View::setToXml(node);
-      if (success)
-      {
-        if (node->hasSubNode("Center"))
-          setCenter(node->subContents("Center"));
-        if (node->hasAttribute("limit"))
-          setPolarLimit(node->attributeAsFloat("limit"));
-        if (node->hasAttribute("latitude"))
-          setLatitude(node->attributeAsFloat("latitude"));
-        if (node->hasAttribute("longitude"))
-          setLongitude(node->attributeAsFloat("longitude"));
-        if (node->hasAttribute("distance"))
-          setDistance(node->attributeAsFloat("distance"));
-      }
-      return success;
+      View::setToXml(node);
+      if (node.hasSubNode("Center"))
+        setCenter(node.subContents("Center"));
+      if (node.hasAttribute("limit"))
+        setPolarLimit(node.attributeAsFloat("limit"));
+      if (node.hasAttribute("latitude"))
+        setLatitude(node.attributeAsFloat("latitude"));
+      if (node.hasAttribute("longitude"))
+        setLongitude(node.attributeAsFloat("longitude"));
+      if (node.hasAttribute("distance"))
+        setDistance(node.attributeAsFloat("distance"));
     }
     
     virtual bool init()
     {
       bool success = View::init();
       if (success)
-        update(nullptr);
+        update();
       return success;
     }
     
@@ -132,17 +124,18 @@ namespace fx
       return ret;
     }
     
-  private:
-    void update(void*)
+  protected:
+    virtual void update()
     {
       lock();
       vec3 dir = mat4::RotY(mLongitude*DegToRad) * mat4::RotX(mLatitude*DegToRad) * vec3(0.0f, 0.0f, 1.0f);
       mMatrix = mat4::LookAt(mCenter-dir*mDistance, mCenter, vec3(0.0f, 1.0f, 0.0f));
       unlock();
       
-      View::update(nullptr);
+      View::update();
     }
     
+  private:
     vec3 mCenter;
     
     float mLatitude;

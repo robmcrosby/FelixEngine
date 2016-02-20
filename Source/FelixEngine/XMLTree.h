@@ -49,26 +49,26 @@ namespace fx
       /**
        * Default constructor.
        */
-      Node(): mLevel(0), mParrent(0) {}
+      Node(): mLevel(0), mParrent(0), mTree(0) {}
       
       /**
        * Construct an Node with an element name.
        * @param element string for the element name.
        */
-      Node(const std::string &element): mElement(element), mLevel(0), mParrent(0) {}
+      Node(const std::string &element): mElement(element), mLevel(0), mParrent(0), mTree(0) {}
       
       /**
        * Construct an Node with an element name and contents.
        * @param element string for the element name.
        * @param contents string for the contents of the new node.
        */
-      Node(const std::string &element, const std::string &contents): mElement(element), mContents(contents), mLevel(0), mParrent(0) {}
+      Node(const std::string &element, const std::string &contents): mElement(element), mContents(contents), mLevel(0), mParrent(0), mTree(0) {}
       
       /**
        * Copy constructor uses assignment operator to copy the given Node.
        * @param node Node to be copied from.
        */
-      Node(const Node &node): mLevel(0), mParrent(0) {*this = node;}
+      Node(const Node &node): mLevel(0), mParrent(0), mTree(0) {*this = node;}
       
       /**
        * Destructor clears the SubNodes.
@@ -114,6 +114,7 @@ namespace fx
         
           node->mLevel = 1 + mLevel;
           node->mParrent = this;
+          node->mTree = mTree;
           
           if (std::find(mSubNodes.begin(), mSubNodes.end(), node) == mSubNodes.end())
             mSubNodes.push_back(node);
@@ -152,7 +153,8 @@ namespace fx
         itr = std::find(mSubNodes.begin(), mSubNodes.end(), node);
         if (itr != mSubNodes.end()) {
           node->mLevel = 0;
-          node->mParrent = NULL;
+          node->mParrent = nullptr;
+          node->mTree = nullptr;
           mSubNodes.erase(itr);
         }
       }
@@ -443,6 +445,12 @@ namespace fx
       size_t numberAttributes() const {return mAttributes.size();}
       
       /**
+       * Gets a pointer to the Tree that owns this node.
+       * @return pointer to an XMLTree or Null if not in a tree.
+       */
+      XMLTree *tree() const {return mTree;}
+      
+      /**
        * Write an Node and its SubNodes to the given output stream.
        * @param os output stream to be written to.
        * @param node Node that will write to the output stream.
@@ -459,6 +467,7 @@ namespace fx
       friend std::istream &operator>>(std::istream &is, Node &node) {return node.read(is);}
       
     private:
+      friend XMLTree;
       
       /**
        * Finds the first occurence of an Node with the given Element name
@@ -537,6 +546,7 @@ namespace fx
        */
       std::istream &read(std::istream &is)
       {
+        bool commented = false;
         std::list<Node *> stack;
         std::string line;
         stack.push_back(this);
@@ -544,10 +554,52 @@ namespace fx
         while (!is.eof() && stack.size())
         {
           getline(is, line);
-          ParseLine(&stack, line);
+          RemoveComments(line, commented);
+          if (line != "")
+            ParseLine(&stack, line);
         }
         
         return is;
+      }
+      
+      /**
+       * Removes the Comments out of a line
+       * @param [in, out] line to edit comments out.
+       * @param [in, out] boolean state to determine if the line is initally commented out.
+       */
+      static void RemoveComments(std::string &line, bool &commented)
+      {
+        std::string::size_type start = 0;
+        std::string::size_type end = 0;
+        do {
+          if (commented)
+          {
+            end = line.find("-->");
+            if (end != std::string::npos)
+            {
+              line = line.substr(end+3, line.size());
+              commented = false;
+            }
+            else
+              line = line.substr(0, start);
+          }
+          else
+          {
+            start = line.find("<!--");
+            if (start != std::string::npos)
+            {
+              end = line.find("-->", start);
+              if (end != std::string::npos)
+                line = line.substr(0, start) + line.substr(end+3, line.size());
+              else
+              {
+                line = line.substr(0, start);
+                commented = true;
+              }
+            }
+          }
+          
+        } while (start != std::string::npos && end != std::string::npos);
       }
       
       /**
@@ -667,13 +719,18 @@ namespace fx
       Node       *mParrent;  /**< Parrent Node or NULL if no Parrent */
       std::string mElement;  /**< Element name */
       std::string mContents; /**< String Contents */
+      XMLTree    *mTree;     /**< the tree containing this node */
       
       std::list<Node*> mSubNodes; /**< Collection of SubNodes */
       std::map<std::string, std::string> mAttributes; /**< Map of Attributes */
     };
     
     
-    XMLTree(): mRootNode("XMLTree") {mRootNode.setLevel(-1);}
+    XMLTree(): mRootNode("XMLTree")
+    {
+      mRootNode.mTree = this;
+      mRootNode.setLevel(-1);
+    }
     ~XMLTree() {}
     
     /**
@@ -736,6 +793,13 @@ namespace fx
       std::fstream fileIn;
       std::string line;
       
+      size_t pos = filePath.find_last_of('/');
+      if (pos != std::string::npos)
+      {
+        mPath = filePath.substr(0, pos+1);
+        mUrl = "file://" + mPath;
+      }
+      
       fileIn.open(filePath.c_str(), std::ios::in);
       if (fileIn.is_open())
       {
@@ -750,9 +814,15 @@ namespace fx
       std::cerr << "error reading XML file: " << filePath << std::endl;
       return false;
     }
+    void setUrl(const std::string &url) {mUrl = url;}
+    
+    std::string url() const {return mUrl;}
+    std::string path() const {return mPath;}
     
   private:
     Node mRootNode;
+    std::string mUrl;
+    std::string mPath;
   };
 }
 
