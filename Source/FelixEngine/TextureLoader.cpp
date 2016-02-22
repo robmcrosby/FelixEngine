@@ -7,7 +7,7 @@
 //
 
 #include "TextureLoader.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 #include "FileSystem.h"
 #include "FreeImage.h"
 

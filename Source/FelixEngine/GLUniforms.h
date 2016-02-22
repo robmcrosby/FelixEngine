@@ -10,7 +10,7 @@
 #define GLUniforms_h
 
 #include "GLShader.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 
 namespace fx
 {

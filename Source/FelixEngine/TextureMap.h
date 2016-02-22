@@ -11,7 +11,7 @@
 
 #include "FelixEngine.h"
 #include "IndexedMap.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 #include "Sampler.h"
 #include "Scene.h"
 #include "OwnPtr.h"

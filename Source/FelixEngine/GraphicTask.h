@@ -11,7 +11,7 @@
 
 #include "Color.h"
 #include "XMLTree.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 #include "GraphicResources.h"
 
 #define UPLOAD_STR   "upload"

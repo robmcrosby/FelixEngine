@@ -13,7 +13,7 @@
 #include "Component.h"
 #include "XMLTree.h"
 #include "Material.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 
 #include <istream>
 #include <list>
