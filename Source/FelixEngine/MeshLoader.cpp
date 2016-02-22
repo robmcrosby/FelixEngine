@@ -222,11 +222,11 @@ bool MeshLoader::LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is
 
 
 
-bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node)
+bool MeshLoader::LoadMeshFromXML(Buffer &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
   
-  bufferMap.setType(BUFFER_MAP_MESH);
+  bufferMap.setBufferType(BUFFER_MESH);
   bufferMap.setName(node.attribute("name"));
   
   if (node.hasAttribute("file"))
@@ -239,7 +239,6 @@ bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node
   else
   {
     success = true;
-    bufferMap.clear();
     bufferMap.setFlags(VertexBufferMap::GetPrimitiveType(node.attribute("primitive")));
     
     for (XMLTree::const_iterator itr = node.begin(); itr != node.end(); ++itr)
@@ -253,7 +252,7 @@ bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node
     }
 
     // Check if any Sub Meshes have been added.
-    if (!bufferMap.contains("SubMeshes"))
+    if (!bufferMap.map().contains("SubMeshes"))
     {
       ivec2 range;
       if (bufferMap.contains(BUFFER_INDICES))
@@ -266,13 +265,11 @@ bool MeshLoader::LoadMeshFromXML(BufferMap &bufferMap, const XMLTree::Node &node
   return success;
 }
 
-bool MeshLoader::LoadMeshFromStream(BufferMap &bufferMap, std::istream &is)
+bool MeshLoader::LoadMeshFromStream(Buffer &bufferMap, std::istream &is)
 {
   bool success = true;
   int primitiveType = 0;
   int numSubMeshes = 0;
-  
-  bufferMap.clear();
   
   if (FileSystem::Read(primitiveType, is) == sizeof(int) && FileSystem::Read(numSubMeshes, is) == sizeof(int))
   {
@@ -311,7 +308,7 @@ bool MeshLoader::LoadMeshFromStream(BufferMap &bufferMap, std::istream &is)
   return success;
 }
 
-bool MeshLoader::LoadMeshFromFile(BufferMap &bufferMap, const std::string &file)
+bool MeshLoader::LoadMeshFromFile(Buffer &bufferMap, const std::string &file)
 {
   bool success = false;
   std::string postfix = StringUtils::GetFilePostfix(file);
@@ -345,7 +342,7 @@ bool MeshLoader::LoadMeshFromFile(BufferMap &bufferMap, const std::string &file)
   return success;
 }
 
-bool MeshLoader::LoadMeshPrimitive(BufferMap &bufferMap, const XMLTree::Node &node)
+bool MeshLoader::LoadMeshPrimitive(Buffer &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
   string primitive = node.attribute("primitive");
@@ -368,9 +365,9 @@ bool MeshLoader::LoadMeshPrimitive(BufferMap &bufferMap, const XMLTree::Node &no
   return success;
 }
 
-bool MeshLoader::LoadMeshPlane(BufferMap &bufferMap, const vec2 &size, const vec2 &offset)
+bool MeshLoader::LoadMeshPlane(Buffer &bufferMap, const vec2 &size, const vec2 &offset)
 {
-  bufferMap.clear();
+  bufferMap.clearMap();
   bufferMap.setFlags((int)VERTEX_TRIANGLE_STRIP);
   bufferMap.getBuffer("SubMeshes", BUFFER_RANGES) = ivec2(0, 4);
   
@@ -399,7 +396,7 @@ bool MeshLoader::LoadMeshPlane(BufferMap &bufferMap, const vec2 &size, const vec
 
 
 
-bool MeshLoader::AddBuffer(BufferMap &bufferMap, const XMLTree::Node &node)
+bool MeshLoader::AddBuffer(Buffer &bufferMap, const XMLTree::Node &node)
 {
   bool success = false;
   int components = node.attributeAsInt("components");
@@ -426,7 +423,7 @@ bool MeshLoader::AddBuffer(BufferMap &bufferMap, const XMLTree::Node &node)
   return success;
 }
 
-bool MeshLoader::AddIndices(BufferMap &bufferMap, const XMLTree::Node &node)
+bool MeshLoader::AddIndices(Buffer &bufferMap, const XMLTree::Node &node)
 {
   // Get the index data from the node Contents.
   vector<int> data;
@@ -453,7 +450,7 @@ bool MeshLoader::AddSubMesh(Buffer &buffer, const XMLTree::Node &node)
   return success;
 }
 
-bool MeshLoader::ReadBufferFromStream(BufferMap &bufferMap, int numVertices, std::istream &is)
+bool MeshLoader::ReadBufferFromStream(Buffer &bufferMap, int numVertices, std::istream &is)
 {
   int compSize = 0;
   

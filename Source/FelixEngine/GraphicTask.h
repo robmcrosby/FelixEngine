@@ -488,7 +488,7 @@ namespace fx
     int layer;
     int pass;
     
-    BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
+    Buffer *bufferSlots[BUFFER_SLOTS_SIZE];
     TextureMap *textureMap;
   };
   

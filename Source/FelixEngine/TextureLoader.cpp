@@ -15,14 +15,14 @@ using namespace fx;
 using namespace std;
 
 
-bool TextureLoader::LoadTextureFromXml(BufferMap &texture, const XMLTree::Node &node)
+bool TextureLoader::LoadTextureFromXml(Buffer &texture, const XMLTree::Node &node)
 {
   if (node.hasAttribute("file"))
     return LoadTextureFromFile(texture, node.tree()->path() + node.attribute("file"));
   return false;
 }
 
-bool TextureLoader::LoadTextureFromFile(BufferMap &texture, const string &file)
+bool TextureLoader::LoadTextureFromFile(Buffer &texture, const string &file)
 {
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType(file.c_str() ,0);
   FIBITMAP* fimage = FreeImage_Load(format, file.c_str());
@@ -36,8 +36,7 @@ bool TextureLoader::LoadTextureFromFile(BufferMap &texture, const string &file)
   unsigned int width  = FreeImage_GetWidth(fimage);
   unsigned int height = FreeImage_GetHeight(fimage);
   
-  texture.clear();
-  texture.setType(BUFFER_MAP_TEXTURE);
+  texture.setBufferType(BUFFER_TEXTURE);
   texture["size"] = ivec2(width, height);
   Buffer &buffer = texture.addBuffer("data", BUFFER_TEXTURE);
   

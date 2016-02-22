@@ -17,14 +17,14 @@
       <Vertex name="SimpleVertexUV"/>
       <Fragment name="SimpleTexture"/>
     </Shader>
-    <Targets name="TestFrame" size="512, 512">
+    <Frame name="TestFrame" size="512, 512">
       <Target format="rgba" name="TestTexture"/>
       <Target format="depth"/>
-    </Targets>
+    </Frame>
   </Resources>
   <Model name="Triangle">
     <RenderSlots>
-      <Slot layer="0" mesh="TriMesh" frame="TestFrame" shader="ColorShader" targets="TestFrame">
+      <Slot layer="0" mesh="TriMesh" frame="TestFrame" shader="ColorShader">
         <DepthState write="true" function="less"/>
         <Uniforms>
           <vec4 name="Color">0.9, 0.2, 0.2, 1.0</vec4>

@@ -75,10 +75,13 @@ namespace fx
       mMaterialMap.clear();
     }
     
-    BufferMap& getBufferMap(const std::string name)
+    Buffer& getBufferMap(const std::string name)
     {
       if (!mBufferMaps.count(name))
-        mBufferMaps[name] = new BufferMap(name);
+      {
+        mBufferMaps[name] = new Buffer();
+        mBufferMaps[name]->setName(name);
+      }
       return *mBufferMaps[name];
     }
     void clearBufferMaps()
@@ -110,7 +113,7 @@ namespace fx
       bool success = true;
       if (node.hasAttribute("name"))
       {
-        BufferMap &bufferMap = getBufferMap(node.attribute("name"));
+        Buffer &bufferMap = getBufferMap(node.attribute("name"));
         bufferMap.setToXml(node);
         FelixEngine::GetGraphicSystem()->uploadBuffer(bufferMap);
       }

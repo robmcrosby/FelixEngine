@@ -10,9 +10,9 @@
             0.0,  0.8, 0.0, 1.0
           </Buffer>
         </Mesh>
-        <Targets name="TestTargets" size="512, 512">
+        <Frame name="TestFrame" size="512, 512">
           <Target name="TestTexture" format="rgba"/>
-        </Targets>
+        </Frame>
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>

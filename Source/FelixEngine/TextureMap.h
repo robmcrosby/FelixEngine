@@ -41,21 +41,21 @@ namespace fx
       setTexture(node);
     }
     
-    void setTexture(const BufferMap &texture) {mTexture = texture;}
-    void setTexture(BufferMap *texture) {mTexture = texture;}
+    void setTexture(const Buffer &texture) {mTexture = texture;}
+    void setTexture(Buffer *texture) {mTexture = texture;}
     void setTexture(const std::string &name)
     {
       if (!mScene || name == "")
         setTexture(&mScene->getBufferMap(name));
       else
-        setTexture(BUFFER_MAP_TEXTURE);
+        setTexture(BUFFER_TEXTURE);
     }
     void setTexture(const XMLTree::Node &node)
     {
       setTexture(node.attribute("name"));
       mTexture->setToXml(node);
     }
-    BufferMap& texture() {return *mTexture;}
+    Buffer& texture() {return *mTexture;}
     
     void setSampler(const Sampler &sampler) {mSampler = sampler;}
     const Sampler& sampler() const {return mSampler;}
@@ -63,7 +63,7 @@ namespace fx
   private:
     Scene *mScene;
     Sampler mSampler;
-    OwnPtr<BufferMap> mTexture;
+    OwnPtr<Buffer> mTexture;
   };
   
   /**
@@ -90,13 +90,13 @@ namespace fx
         addTexture(**itr);
     }
     
-    void addTexture(const BufferMap &texture = BUFFER_MAP_TEXTURE, Sampler sampler = Sampler())
+    void addTexture(const Buffer &texture = BUFFER_TEXTURE, Sampler sampler = Sampler())
     {
       mTextures.push_back(mScene);
       mTextures.back().setTexture(texture);
       mTextures.back().setSampler(sampler);
     }
-    void addTexture(BufferMap *texture, Sampler sampler = Sampler())
+    void addTexture(Buffer *texture, Sampler sampler = Sampler())
     {
       mTextures.push_back(mScene);
       mTextures.back().setTexture(texture);

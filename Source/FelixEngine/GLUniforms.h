@@ -20,14 +20,14 @@ namespace fx
     GLUniforms() {}
     virtual ~GLUniforms() {}
     
-    void uploadBufferMap(const BufferMap &bufferMap) {mBufferMap = bufferMap;}
+    void uploadBufferMap(const Buffer &bufferMap) {mBufferMap = bufferMap;}
     
-    void applyToShader(const GLShader *shader) const
+    void applyToShader(const GLShader *shader)
     {
       if (shader)
       {
-        for (BufferMap::const_iterator itr = mBufferMap.begin(); itr != mBufferMap.end(); ++itr)
-          applyBufferToShader(*itr, shader);
+        for (Buffer &buffer : mBufferMap)
+          applyBufferToShader(buffer, shader);
       }
     }
     
@@ -80,7 +80,7 @@ namespace fx
       }
     }
     
-    BufferMap mBufferMap;
+    Buffer mBufferMap;
   };
 }
 

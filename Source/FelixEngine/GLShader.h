@@ -84,11 +84,11 @@ namespace fx
      *
      * @param bufferMap Refrence to the BufferMap containing the shader source.
      */
-    void uploadBufferMap(const BufferMap &bufferMap)
+    void uploadBufferMap(Buffer &bufferMap)
     {
       bool success = false;
       unload();
-      if (bufferMap.size() >= 2)
+      if (bufferMap.mapSize() >= 2)
       {
         GLuint shaderParts[SHADER_COUNT];
         for (int i = 0; i < SHADER_COUNT; ++i)

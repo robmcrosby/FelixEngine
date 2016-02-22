@@ -6,10 +6,10 @@
     </Projection>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" type="pass">
-        <Targets name="DrawFrame">
+        <Frame name="DrawFrame">
           <Target name="DrawTexture" format="rgba"/>
           <Target format="depth"/>
-        </Targets>
+        </Frame>
         <ClearState depth="1.0">
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>

@@ -365,10 +365,10 @@ namespace fx
      *
      * @param bufferMap Refrence to a BufferMap that defines the Frame.
      */
-    void uploadBufferMap(const BufferMap &bufferMap)
+    void uploadBufferMap(Buffer &bufferMap)
     {
       // Add the Buffers
-      for (const Buffer &buffer : bufferMap)
+      for (Buffer &buffer : bufferMap.map())
       {
         if (buffer.bufferType() == BUFFER_TARGET)
           addBuffer(buffer);

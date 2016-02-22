@@ -201,22 +201,22 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
 
 void GLGraphicSystem::processUploadTask(const GraphicTask *task)
 {
-  BufferMap *bufferMap = task->bufferSlots[0];
+  Buffer *bufferMap = task->bufferSlots[0];
   if (bufferMap != nullptr && !bufferMap->updated())
   {
-    if (bufferMap->type() == BUFFER_MAP_MESH)
+    if (bufferMap->bufferType() == BUFFER_MESH)
     {
       bufferMap->setResource(getMesh(bufferMap->name()));
       GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
       mesh->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_SHADER)
+    else if (bufferMap->bufferType() == BUFFER_PROGRAM)
     {
       bufferMap->setResource(getShader(bufferMap->name()));
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_TEXTURE)
+    else if (bufferMap->bufferType() == BUFFER_TEXTURE)
     {
       bufferMap->setResource(getTexture(bufferMap->name()));
       if (bufferMap->contains("data"))
@@ -225,13 +225,13 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
         texture->uploadBufferMap(*bufferMap);
       }
     }
-    else if (bufferMap->type() == BUFFER_MAP_TARGETS)
+    else if (bufferMap->bufferType() == BUFFER_FRAME)
     {
       bufferMap->setResource(getFrame(bufferMap->name()));
       GLFrame *frame = GetResource<GLFrame>(bufferMap);
       frame->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
+    else if (bufferMap->bufferType() == BUFFER_UNIFORM)
     {
       GLUniforms *uniforms = GetResource<GLUniforms>(bufferMap);
       if (!uniforms || !mUniforms.count(uniforms))
@@ -275,12 +275,12 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
   const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
   const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
   
-  const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+  GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
   Viewport viewport;
   
   // Get the Render Targets and View Uniforms.
   const GLFrame  *frame = nullptr;
-  const GLUniforms *viewUniforms = nullptr;
+  GLUniforms *viewUniforms = nullptr;
   if (view)
   {
     frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_TARGETS]);

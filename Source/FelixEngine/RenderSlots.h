@@ -45,8 +45,8 @@ namespace fx
       mScene(scene),
       mTextureMap(scene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
-      mShader(BUFFER_MAP_SHADER),
-      mMesh(BUFFER_MAP_MESH),
+      mShader(BUFFER_PROGRAM),
+      mMesh(BUFFER_MESH),
       mTargets(0),
       mEnabled(true),
       mLayer(0),
@@ -131,11 +131,11 @@ namespace fx
       if (node.hasSubNode("Uniforms"))
         setUniforms(*node.subNode("Uniforms"));
       
-      // Set the Render Targets
-      if (node.hasAttribute("targets"))
-        setTargets(node.attribute("targets"));
-      if (node.hasSubNode("Targets"))
-        setTargets(*node.subNode("Targets"));
+      // Set the Frame
+      if (node.hasAttribute("frame"))
+        setTargets(node.attribute("frame"));
+      if (node.hasSubNode("Frame"))
+        setTargets(*node.subNode("Frame"));
       
       // Set the Textures
       if (node.hasSubNode("TextureMap"))
@@ -167,11 +167,11 @@ namespace fx
     void setProjectionFlags(int flags) {mProjFlags = flags;}
     int projectionFlags() const {return mProjFlags;}
     
-    void setMesh(BufferMap &mesh) {mMesh = &mesh;}
+    void setMesh(Buffer &mesh) {mMesh = &mesh;}
     void setMesh(const std::string &name = "")
     {
       if (name == "")
-        mMesh = BUFFER_MAP_MESH;
+        mMesh = BUFFER_MESH;
       else
         setMesh(mScene->getBufferMap(name));
     }
@@ -180,14 +180,14 @@ namespace fx
       setMesh(node.attribute("name"));
       mMesh->setToXml(node);
     }
-    BufferMap& mesh() {return *mMesh;}
-    const BufferMap& mesh() const {return *mMesh;}
+    Buffer& mesh() {return *mMesh;}
+    const Buffer& mesh() const {return *mMesh;}
     
-    void setShader(BufferMap &shader) {mShader = &shader;}
+    void setShader(Buffer &shader) {mShader = &shader;}
     void setShader(const std::string &name = "")
     {
       if (name == "")
-        mShader = BUFFER_MAP_SHADER;
+        mShader = BUFFER_PROGRAM;
       else
         setShader(mScene->getBufferMap(name));
     }
@@ -196,14 +196,14 @@ namespace fx
       setShader(node.attribute("name"));
       mShader->setToXml(node);
     }
-    BufferMap& shader() {return *mShader;}
-    const BufferMap& shader() const {return *mShader;}
+    Buffer& shader() {return *mShader;}
+    const Buffer& shader() const {return *mShader;}
     
-    void setUniforms(BufferMap &uniforms) {mUniforms = &uniforms;}
+    void setUniforms(Buffer &uniforms) {mUniforms = &uniforms;}
     void setUniforms(const std::string &name = "")
     {
       if (name == "")
-        mUniforms = BUFFER_MAP_UNIFORMS;
+        mUniforms = BUFFER_UNIFORM;
       else
         setUniforms(mScene->getBufferMap(name));
     }
@@ -212,20 +212,20 @@ namespace fx
       setUniforms(node.attribute("name"));
       mUniforms->setToXml(node);
     }
-    BufferMap& uniforms()
+    Buffer& uniforms()
     {
       if (!mUniforms.ptr())
-        mUniforms = BUFFER_MAP_UNIFORMS;
+        mUniforms = BUFFER_UNIFORM;
       return *mUniforms;
     }
-    const BufferMap& uniforms() const {return *mUniforms;}
+    const Buffer& uniforms() const {return *mUniforms;}
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
     
-    void setTargets(BufferMap &targets) {mTargets = &targets;}
+    void setTargets(Buffer &targets) {mTargets = &targets;}
     void setTargets(const std::string &name = "")
     {
       if (name == "")
-        mTargets = BUFFER_MAP_TARGETS;
+        mTargets = BUFFER_FRAME;
       else
         setTargets(mScene->getBufferMap(name));
     }
@@ -234,8 +234,8 @@ namespace fx
       setTargets(node.attribute("name"));
       mTargets->setToXml(node);
     }
-    BufferMap& targets() {return *mTargets;}
-    const BufferMap& targets() const {return *mTargets;}
+    Buffer& targets() {return *mTargets;}
+    const Buffer& targets() const {return *mTargets;}
     
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
@@ -282,10 +282,10 @@ namespace fx
     
     int mProjFlags;
     
-    OwnPtr<BufferMap> mShader;
-    OwnPtr<BufferMap> mMesh;
-    OwnPtr<BufferMap> mUniforms;
-    OwnPtr<BufferMap> mTargets;
+    OwnPtr<Buffer> mShader;
+    OwnPtr<Buffer> mMesh;
+    OwnPtr<Buffer> mUniforms;
+    OwnPtr<Buffer> mTargets;
     
     TextureMap        mTextureMap;
     GRAPHIC_TASK_TYPE mTaskType;
