@@ -9,8 +9,8 @@
 #ifndef MeshLoader_h
 #define MeshLoader_h
 
-#include "VertexBufferMap.h"
 #include "XMLTree.h"
+#include "GraphicResources.h"
 
 
 namespace fx
@@ -20,16 +20,7 @@ namespace fx
   class MeshLoader
   {
   public:
-    static bool LoadMeshFromXML(VertexBufferMap &bufferMap, const XMLTree::Node &node);
-    static bool LoadMeshFromStream(VertexBufferMap &bufferMap, std::istream &is);
-    
-    static bool LoadMeshFromFile(VertexBufferMap &bufferMap, const std::string &file);
-    
-    static bool LoadMeshPrimitive(VertexBufferMap &bufferMap, const XMLTree::Node &node);
-    static bool LoadMeshPlane(VertexBufferMap &bufferMap, const vec2 &size, const vec2 &offset);
-    
-    
-    
+
     static bool LoadMeshFromXML(Buffer &bufferMap, const XMLTree::Node &node);
     static bool LoadMeshFromStream(Buffer &bufferMap, std::istream &is);
     
@@ -39,21 +30,13 @@ namespace fx
     static bool LoadMeshPlane(Buffer &bufferMap, const vec2 &size, const vec2 &offset);
     
   private:
-    static bool AddBuffer(VertexBufferMap &bufferMap, const XMLTree::Node &node);
-    static bool AddSubMesh(VertexBufferMap &bufferMap, const XMLTree::Node &node);
-    
     static bool ReadBufferFromStream(Buffer &bufferMap, int numVertices, std::istream &is);
-    
-    
     
     static bool AddBuffer(Buffer &bufferMap, const XMLTree::Node &node);
     static bool AddIndices(Buffer &bufferMap, const XMLTree::Node &node);
     static bool AddSubMesh(Buffer &buffer, const XMLTree::Node &node);
 
-    
     static VERTEX_PRIMITIVE GetVertexPrimitive(int value);
-    
-    static bool ReadBufferFromStream(VertexBufferMap &bufferMap, int numVertices, std::istream &is);
   };
 }
 

@@ -239,11 +239,6 @@ bool File::load(fx::XMLTree &tree) const
   return success;
 }
 
-bool File::load(VertexBufferMap &bufferMap) const
-{
-  return MeshLoader::LoadMeshFromFile(bufferMap, path());
-}
-
 File File::operator+(const std::string &path) const
 {
   NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:mUrl.c_str()]];

@@ -48,7 +48,6 @@
 		37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490031BC9D77A00FC97A5 /* GLShader.h */; };
 		37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490071BC9DEE000FC97A5 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; };
-		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; };
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; };
 		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; };
 		37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -210,7 +209,6 @@
 		37B490031BC9D77A00FC97A5 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLShader.h; path = ../../../../Source/FelixEngine/GLShader.h; sourceTree = "<group>"; };
 		37B490071BC9DEE000FC97A5 /* GraphicResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicResources.h; path = ../../../../Source/FelixEngine/GraphicResources.h; sourceTree = "<group>"; };
 		37B4900A1BC9E0A900FC97A5 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture.h; path = ../../../../Source/FelixEngine/GLTexture.h; sourceTree = "<group>"; };
-		37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferMap.h; path = ../../../../Source/FelixEngine/VertexBufferMap.h; sourceTree = "<group>"; };
 		37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = ../../../../Source/FelixEngine/MeshLoader.cpp; sourceTree = "<group>"; };
 		37B490111BC9EB9F00FC97A5 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = ../../../../Source/FelixEngine/MeshLoader.h; sourceTree = "<group>"; };
 		37B490161BCB10B900FC97A5 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Semaphore.h; path = ../../../../Source/FelixEngine/Semaphore.h; sourceTree = "<group>"; };
@@ -457,7 +455,6 @@
 		37B4900D1BC9E7B300FC97A5 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */,
 				37B490111BC9EB9F00FC97A5 /* MeshLoader.h */,
 				37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */,
 				C1E683521C4EEFC600E1705D /* TextureLoader.h */,
@@ -739,7 +736,6 @@
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */,
 				C197CE2E1BED5E62007F68E0 /* Scene.h in Headers */,
-				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
 				C197CCC71BE69D08007F68E0 /* List.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
 				C1E683541C4EEFC600E1705D /* TextureLoader.h in Headers */,

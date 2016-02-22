@@ -12,7 +12,6 @@
 #include "System.h"
 #include "XMLTree.h"
 #include "Image.h"
-#include "VertexBufferMap.h"
 #include <iomanip>
 
 namespace fx
@@ -48,7 +47,6 @@ namespace fx
     bool load(Directory &dir) const;
     bool load(std::string &text) const;
     bool load(XMLTree &tree) const;
-    bool load(VertexBufferMap &bufferMap) const;
     
     bool createDirectory() const;
     bool write(const std::string &text) const;

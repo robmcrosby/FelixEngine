@@ -12,7 +12,6 @@
 #include <set>
 
 #include "Resource.h"
-#include "VertexBufferMap.h"
 #include "XMLTree.h"
 #include "Vector.h"
 #include "Color.h"
@@ -37,6 +36,21 @@ namespace fx
     SHADER_FILE,
     SHADER_FUNCTION,
   };
+  
+  enum VERTEX_PRIMITIVE
+  {
+    VERTEX_TRIANGLES,
+    VERTEX_TRIANGLE_STRIP,
+  };
+  
+  static VERTEX_PRIMITIVE ParsePrimitiveType(const std::string &str)
+  {
+    if (str == "triangles")
+      return VERTEX_TRIANGLES;
+    if (str == "strip")
+      return VERTEX_TRIANGLE_STRIP;
+    return VERTEX_TRIANGLES;
+  }
   
   /**
    * Window Resource Interface
