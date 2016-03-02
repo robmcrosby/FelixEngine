@@ -78,8 +78,8 @@ namespace fx
     virtual void update()
     {
       lock();
-      vec3 pos(mCenter + mFwd*mDistance);
-      mViewMatrix = mat4::LookAt(pos, mCenter, mUp);
+      mPosition = mCenter + mFwd*mDistance;
+      mViewMatrix = mat4::LookAt(mPosition, mCenter, mUp);
       unlock();
       View::update();
     }

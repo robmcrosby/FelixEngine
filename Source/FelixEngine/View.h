@@ -34,11 +34,20 @@ namespace fx
       return ret;
     }
     
+    vec3 getPosition() const
+    {
+      lock();
+      vec3 ret = mPosition;
+      unlock();
+      return ret;
+    }
+    
     void lock() const {SDL_AtomicLock(&mLock);}
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   protected:
     mat4 mViewMatrix;
+    vec3 mPosition;
     
   private:
     mutable SDL_SpinLock mLock;

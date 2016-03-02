@@ -129,7 +129,8 @@ namespace fx
     {
       lock();
       vec3 dir = mat4::RotY(mLongitude*DegToRad) * mat4::RotX(mLatitude*DegToRad) * vec3(0.0f, 0.0f, 1.0f);
-      mViewMatrix = mat4::LookAt(mCenter-dir*mDistance, mCenter, vec3(0.0f, 1.0f, 0.0f));
+      mPosition = mCenter - dir*mDistance;
+      mViewMatrix = mat4::LookAt(mPosition, mCenter, vec3(0.0f, 1.0f, 0.0f));
       unlock();
       
       View::update();

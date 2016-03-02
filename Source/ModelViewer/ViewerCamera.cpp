@@ -177,13 +177,11 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
       orientation *= fx::quat(fx::vec3(0.0f, 0.0f, 1.0f), (mOrbitView->longitude()-180.0f)*fx::DegToRad);
       if (gravity.x > 0.8f)
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_RIGHT);
       }
       else
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_LEFT);
       }
@@ -194,7 +192,6 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
     {
       mGyroView->setActive(false);
       mView = mOrbitView;
-      mRenderSlots->setGlobal("ViewRot", fx::mat4());
       setRenderMode(RENDER_MONO);
     }
   }
