@@ -121,7 +121,27 @@ namespace fx
       std::string source = buffer;
       if (source == "")
         source = mGLSystem->getShaderFunction(buffer.name());
-      return compilePart(type, source.c_str(), parts+part);
+      return preCompile(source) && compilePart(type, source.c_str(), parts+part);
+    }
+    
+    bool preCompile(std::string &src)
+    {
+      size_t start;
+      while ((start = src.find("#include")) != std::string::npos)
+      {
+        size_t cmt = src.find("\"", start);
+        size_t end = src.find("\"", cmt+1);
+        if (cmt == std::string::npos || end == std::string::npos)
+        {
+          std::cerr << "Error parsing include" << std::endl;
+          return false;
+        }
+        
+        std::string name = src.substr(cmt+1, end-cmt-1);
+        std::string header = mGLSystem->getShaderFunction(name);
+        src = src.substr(0, start) + header + src.substr(end+1);
+      }
+      return true;
     }
     
     /**

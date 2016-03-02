@@ -87,7 +87,7 @@ bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
   {
     success = setVersion(node->subNode("Version"));
     success &= addWindows(node->subNode("Windows"));
-    success &= setShaderFunctions(node->subNode("ShaderFunctions"));
+    success &= setShaderFunctions(node->subNode("Shaders"));
   }
   else
     cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
