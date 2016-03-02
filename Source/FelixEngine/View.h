@@ -21,38 +21,15 @@ namespace fx
   class View: public Component
   {
   public:
-    View(Scene *scene): Component(scene), mRenderSlots(0), mActive(true), mLock(0)
+    View(Scene *scene): Component(scene), mLock(0)
     {
     }
     virtual ~View() {}
     
-    virtual bool init()
-    {
-      mRenderSlots = getSibling<RenderSlots>();
-      return mRenderSlots ? Component::init() : false;
-    }
-    
-    void setActive(bool active) {mActive = active;}
-    bool active() const {return mActive;}
-    
-    mat4 matrix4x4() const
+    mat4 getView() const
     {
       lock();
-      mat4 ret = mMatrix;
-      unlock();
-      return ret;
-    }
-    void setMatrix(const mat4 &matrix)
-    {
-      lock();
-      mMatrix = matrix;
-      unlock();
-    }
-    
-    RenderSlots* renderSlots()
-    {
-      lock();
-      RenderSlots *ret = mRenderSlots;
+      mat4 ret = mViewMatrix;
       unlock();
       return ret;
     }
@@ -61,23 +38,10 @@ namespace fx
     void unlock() const {SDL_AtomicUnlock(&mLock);}
     
   protected:
-    virtual void update()
-    {
-      lock();
-      if (mActive && mRenderSlots)
-        mRenderSlots->setUniform("View", mMatrix);
-      unlock();
-      
-      Component::update();
-    }
-    
-  protected:
-    mat4 mMatrix;
-    bool mActive;
+    mat4 mViewMatrix;
     
   private:
     mutable SDL_SpinLock mLock;
-    RenderSlots *mRenderSlots;
   };
 }
 

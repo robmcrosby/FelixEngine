@@ -124,6 +124,12 @@ namespace fx
       return preCompile(source) && compilePart(type, source.c_str(), parts+part);
     }
     
+    /**
+     * Performs some Pre Compiler functions to the given string.
+     *
+     * @param [in,out] src Source to apply the Pre Compiling to.
+     * @return true if seccessful or false if there was a problem.
+     */
     bool preCompile(std::string &src)
     {
       size_t start;

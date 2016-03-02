@@ -12,22 +12,22 @@
           <size>512, 512</size>
         </Window>
       </Windows>
-      <ShaderFunctions>
-        <ShaderFunction name="SimpleVertex" type="vertex">
+      <Shaders>
+        <Shader name="SimpleVertex" type="vertex">
           #version 300 es
           in vec4 Position;
           uniform mat4 Model;
           uniform mat4 View;
           uniform mat4 Projection;
           void main() {gl_Position = Projection * View * Model * Position;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleColor" type="fragment">
+        </Shader>
+        <Shader name="SimpleColor" type="fragment">
           #version 300 es
           uniform mediump vec4 Color;
           out mediump vec4 FragColor;
           void main() {FragColor = Color;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleVertexUV" type="vertex">
+        </Shader>
+        <Shader name="SimpleVertexUV" type="vertex">
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
@@ -36,8 +36,8 @@
             gl_Position = Position;
             UV = UV_0;
           }
-        </ShaderFunction>
-        <ShaderFunction name="VertexUV" type="vertex">
+        </Shader>
+        <Shader name="VertexUV" type="vertex">
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
@@ -49,8 +49,8 @@
             gl_Position = Projection * View * Model * Position;
             UV = UV_0;
           }
-        </ShaderFunction>
-        <ShaderFunction name="TextUV" type="vertex">
+        </Shader>
+        <Shader name="TextUV" type="vertex">
           #version 300 es
           in vec4 Position;
           in vec2 UV_0;
@@ -74,15 +74,15 @@
             gl_Position = Projection * View * Model * adjustPos(Position, Locs);
             UV = adjustUV(UV_0, UVs);
           }
-        </ShaderFunction>
-        <ShaderFunction name="SimpleTexture" type="fragment">
+        </Shader>
+        <Shader name="SimpleTexture" type="fragment">
           #version 300 es
           in mediump vec2 UV;
           uniform sampler2D tex2D;
           out mediump vec4 FragColor;
           void main() {FragColor = texture(tex2D, UV);}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleNormal" type="vertex">
+        </Shader>
+        <Shader name="SimpleNormal" type="vertex">
           #version 300 es
           in vec4 Position;
           in vec4 Normal;
@@ -95,8 +95,8 @@
             gl_Position = Projection * View * Model * Position;
             vNormal = (Rotation * Normal).xyz;
           }
-        </ShaderFunction>
-        <ShaderFunction name="DirectLight" type="fragment">
+        </Shader>
+        <Shader name="DirectLight" type="fragment">
           #version 300 es
           in mediump vec3 vNormal;
           uniform mediump vec4 Color;
@@ -104,8 +104,8 @@
           void main() {
             FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);
           }
-        </ShaderFunction>
-      </ShaderFunctions>
+        </Shader>
+      </Shaders>
     </GLGraphicSystem>
   </Systems>
 </Settings>

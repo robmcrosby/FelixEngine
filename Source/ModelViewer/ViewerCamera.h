@@ -42,7 +42,6 @@ private:
   fx::EventSystem  *mEventSystem;
   fx::MotionSystem *mMotionSystem;
   
-  //fx::Projection *mProjection;
   fx::OrbitView  *mOrbitView;
   fx::GyroView   *mGyroView;
   

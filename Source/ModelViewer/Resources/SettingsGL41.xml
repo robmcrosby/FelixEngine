@@ -13,13 +13,13 @@
       <Shaders>
         <Shader name="Header" type="header">
           #version 410
-          struct ViewStruct {
+          struct Camera {
             mat4 view;
             mat4 projection;
             vec4 position;
           };
           struct ModelStruct {
-            mat4 model;
+            mat4 transform;
             vec4 rotation;
           };
         </Shader>
@@ -51,6 +51,7 @@
           #include "Header"
           in vec4 Position;
           in vec2 UV_0;
+          uniform Camera camera;
           uniform mat4 Model;
           uniform mat4 View;
           uniform mat4 Projection;

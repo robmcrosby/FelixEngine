@@ -54,7 +54,9 @@ namespace fx
   private:
     virtual void update()
     {
-      setMatrix(mat4::LookAt(mPosition, mTarget, mUp));
+      lock();
+      mViewMatrix = mat4::LookAt(mPosition, mTarget, mUp);
+      unlock();
       View::update();
     }
     

@@ -26,7 +26,7 @@ namespace fx
   {
   public:
     GyroView(Scene *scene): View(scene), mDistance(4.0), mCenter(0.0f, 0.0f, 0.0f), mFwd(0.0f, 0.0f, 1.0f), mUp(1.0f, 0.0f, 0.0f),
-      mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f), mAcceleration(DEF_ROT_ACCELERATION)
+      mFwdAxis(0.0f, 0.0f, 1.0f), mUpAxis(1.0f, 0.0f, 0.0f), mAcceleration(DEF_ROT_ACCELERATION), mActive(true)
     {
       setEventFlags(EVENT_MOTION);
       mMotionSystem = FelixEngine::GetMotionSystem();
@@ -71,11 +71,16 @@ namespace fx
     void setOrientation(const quat &orient) {mOrientation = orient;}
     quat orientation() const {return mOrientation;}
     
+    void setActive(bool active = true) {mActive = active;}
+    bool active() const {return mActive;}
+    
   private:
     virtual void update()
     {
+      lock();
       vec3 pos(mCenter + mFwd*mDistance);
-      setMatrix(mat4::LookAt(pos, mCenter, mUp));
+      mViewMatrix = mat4::LookAt(pos, mCenter, mUp);
+      unlock();
       View::update();
     }
     
@@ -87,6 +92,8 @@ namespace fx
     float mDistance;
     float mAcceleration;
     MotionSystem *mMotionSystem;
+    
+    bool mActive;
   };
 }
 

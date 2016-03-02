@@ -36,7 +36,46 @@ namespace fx
     Projection* projection() const {return mProjection;}
     RenderSlots* renderSlots() const {return mRenderSlots;}
     
+    virtual void update()
+    {
+      Component::update();
+      if (mRenderSlots)
+      {
+        for (RenderSlot *slot : *mRenderSlots)
+        {
+          if (slot)
+            applyToSlot(*slot);
+        }
+      }
+    }
+    
   protected:
+    void applyToSlot(RenderSlot &slot)
+    {
+      // Apply the Projection
+      if (mProjection)
+      {
+        mProjection->adjustSlotViewport(slot);
+        vec2 size(slot.drawState().viewport.size);
+        if (size == vec2())
+        {
+          Frame *frame = GetResource<Frame>(&slot.targets());
+          size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
+        }
+        slot.setUniform("Projection", mProjection->getProjection(size, slot.projectionFlags()));
+      }
+      else
+        slot.setUniform("Projection", mat4());
+      
+      // Apply the View
+      if (mView)
+      {
+        slot.setUniform("View", mView->getView());
+      }
+      else
+        slot.setUniform("View", mat4());
+    }
+    
     View *mView;
     Projection *mProjection;
     RenderSlots *mRenderSlots;
