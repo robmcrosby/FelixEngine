@@ -13,13 +13,20 @@
         </Window>
       </Windows>
       <Shaders>
-        <Shader name="SimpleVertex" type="vertex">
+        <Shader name="VertexHeader" type="header">
           #version 100
+          struct Camera {
+          mat4 projection;
+          mat4 view;
+          vec4 position;
+          };
+        </Shader>
+        <Shader name="SimpleVertex" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
-          void main() {gl_Position = Projection * View * Model * Position;}
+          uniform mat4 Camera camera;
+          void main() {gl_Position = camera.projection * camera.view * Model * Position;}
         </Shader>
         <Shader name="SimpleColor" type="fragment">
           #version 100
@@ -27,7 +34,7 @@
           void main() {gl_FragColor = Color;}
         </Shader>
         <Shader name="SimpleVertexUV" type="vertex">
-          #version 100
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
           varying vec2 UV;
@@ -37,27 +44,25 @@
           }
         </Shader>
         <Shader name="VertexUV" type="vertex">
-          #version 100
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform mat4 Camera camera;
           varying vec2 UV;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = camera.projection * camera.view * Model * Position;
             UV = UV_0;
           }
         </Shader>
         <Shader name="TextUV" type="vertex">
-          #version 100
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
           attribute vec4 Locs;
           attribute vec4 UVs;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform mat4 Camera camera;
           varying vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -70,7 +75,7 @@
             return uv;
           }
           void main() {
-            gl_Position = Projection * View * Model * adjustPos(Position, Locs);
+            gl_Position = camera.projection * camera.view * Model * adjustPos(Position, Locs);
             UV = adjustUV(UV_0, UVs);
           }
         </Shader>
@@ -81,16 +86,15 @@
           void main() {gl_FragColor = texture2D(tex2D, UV);}
         </Shader>
         <Shader name="SimpleNormal" type="vertex">
-          #version 100
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec4 Normal;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
           uniform mat4 Rotation;
           varying vec3 vNormal;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = camera.projection * camera.view * Model * Position;
             vNormal = (Rotation * Normal).xyz;
           }
         </Shader>

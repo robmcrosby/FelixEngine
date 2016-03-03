@@ -14,8 +14,8 @@
         <Shader name="Header" type="header">
           #version 410
           struct Camera {
-            mat4 view;
             mat4 projection;
+            mat4 view;
             vec4 position;
           };
           struct ModelStruct {
@@ -26,10 +26,9 @@
         <Shader name="SimpleVertex" type="vertex">
           #include "Header"
           in vec4 Position;
+          uniform Camera camera;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
-          void main() {gl_Position = Projection * View * Model * Position;}
+          void main() {gl_Position = camera.projection * camera.view * Model * Position;}
         </Shader>
         <Shader name="SimpleColor" type="fragment">
           #include "Header"
@@ -53,11 +52,10 @@
           in vec2 UV_0;
           uniform Camera camera;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
           out vec2 UV;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = camera.projection * camera.view * Model * Position;
             UV = UV_0;
           }
         </Shader>
@@ -68,8 +66,7 @@
           in vec4 Locs;
           in vec4 UVs;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
           out vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -82,7 +79,7 @@
             return uv;
           }
           void main() {
-            gl_Position = Projection * View * Model * adjustPos(Position, Locs);
+            gl_Position = camera.projection * camera.view * Model * adjustPos(Position, Locs);
             UV = adjustUV(UV_0, UVs);
           }
         </Shader>
@@ -98,12 +95,11 @@
           in vec4 Position;
           in vec4 Normal;
           uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
           uniform mat4 Rotation;
           out vec3 vNormal;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = camera.projection * camera.view * Model * Position;
             vNormal = (Rotation * Normal).xyz;
           }
         </Shader>

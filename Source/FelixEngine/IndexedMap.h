@@ -56,11 +56,7 @@ namespace fx
       if (itr != mMap.end())
         index = itr->second;
       else
-      {
-        mSemephore.post();
         index = push(key);
-        mSemephore.wait();
-      }
       return mArray[index];
     }
     
