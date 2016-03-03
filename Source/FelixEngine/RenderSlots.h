@@ -47,7 +47,7 @@ namespace fx
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(BUFFER_PROGRAM),
       mMesh(BUFFER_MESH),
-      mTargets(0),
+      mFrame(0),
       mEnabled(true),
       mLayer(0),
       mPass(0),
@@ -65,7 +65,7 @@ namespace fx
       mShader(0),
       mMesh(0),
       mUniforms(0),
-      mTargets(0)
+      mFrame(0)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -84,7 +84,7 @@ namespace fx
       mShader   = other.mShader;
       mMesh     = other.mMesh;
       mUniforms = other.mUniforms;
-      mTargets  = other.mTargets;
+      mFrame    = other.mFrame;
       
       mTextureMap = other.mTextureMap;
       mTaskType   = other.mTaskType;
@@ -133,9 +133,9 @@ namespace fx
       
       // Set the Frame
       if (node.hasAttribute("frame"))
-        setTargets(node.attribute("frame"));
+        setFrame(node.attribute("frame"));
       if (node.hasSubNode("Frame"))
-        setTargets(*node.subNode("Frame"));
+        setFrame(*node.subNode("Frame"));
       
       // Set the Textures
       if (node.hasSubNode("TextureMap"))
@@ -221,21 +221,21 @@ namespace fx
     const Buffer& uniforms() const {return *mUniforms;}
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
     
-    void setTargets(Buffer &targets) {mTargets = &targets;}
-    void setTargets(const std::string &name = "")
+    void setFrame(Buffer &frame) {mFrame = &frame;}
+    void setFrame(const std::string &name = "")
     {
       if (name == "")
-        mTargets = BUFFER_FRAME;
+        mFrame = BUFFER_FRAME;
       else
-        setTargets(mScene->getBufferMap(name));
+        setFrame(mScene->getBufferMap(name));
     }
-    void setTargets(const XMLTree::Node &node)
+    void setFrame(const XMLTree::Node &node)
     {
-      setTargets(node.attribute("name"));
-      mTargets->setToXml(node);
+      setFrame(node.attribute("name"));
+      mFrame->setToXml(node);
     }
-    Buffer& targets() {return *mTargets;}
-    const Buffer& targets() const {return *mTargets;}
+    Buffer& frame() {return *mFrame;}
+    const Buffer& frame() const {return *mFrame;}
     
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}
@@ -260,7 +260,7 @@ namespace fx
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
       task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
-      task.bufferSlots[BUFFER_SLOT_TARGETS]  = mTargets.ptr();
+      task.bufferSlots[BUFFER_SLOT_FRAME]    = mFrame.ptr();
       task.textureMap = &mTextureMap;
       mGraphicSystem->addGraphicTask(task);
     }
@@ -272,8 +272,8 @@ namespace fx
         mGraphicSystem->uploadBuffer(*mMesh);
       if (mUniforms.ptr() && !mUniforms->updated())
         mGraphicSystem->uploadBuffer(*mUniforms);
-      if (mTargets.ptr() && !mTargets->updated())
-        mGraphicSystem->uploadBuffer(*mTargets);
+      if (mFrame.ptr() && !mFrame->updated())
+        mGraphicSystem->uploadBuffer(*mFrame);
     }
     
     bool mEnabled;
@@ -285,7 +285,7 @@ namespace fx
     OwnPtr<Buffer> mShader;
     OwnPtr<Buffer> mMesh;
     OwnPtr<Buffer> mUniforms;
-    OwnPtr<Buffer> mTargets;
+    OwnPtr<Buffer> mFrame;
     
     TextureMap        mTextureMap;
     GRAPHIC_TASK_TYPE mTaskType;

@@ -340,7 +340,7 @@ namespace fx
     void adjustSlotViewport(RenderSlot &slot) const
     {
       int flags = slot.projectionFlags();
-      Frame *frame = GetResource<Frame>(&slot.targets());
+      Frame *frame = GetResource<Frame>(&slot.frame());
       if (frame && flags & PROJ_SPLIT)
         applySplit(slot, frame->size());
     }
@@ -401,7 +401,7 @@ namespace fx
       vec2 size(slot.drawState().viewport.size);
       if (size == vec2())
       {
-        Frame *frame = GetResource<Frame>(&slot.targets());
+        Frame *frame = GetResource<Frame>(&slot.frame());
         size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
       }
       

@@ -258,7 +258,7 @@ void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
 
 void GLGraphicSystem::processViewTask(const GraphicTask *task)
 {
-  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_FRAME]);
   if (frame)
   {
     frame->bind();
@@ -283,13 +283,13 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
   GLUniforms *viewUniforms = nullptr;
   if (view)
   {
-    frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_TARGETS]);
+    frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_FRAME]);
     viewUniforms = GetResource<GLUniforms>(view->bufferSlots[BUFFER_SLOT_UNIFORMS]);
     viewport = view->drawState.viewport;
   }
   else
   {
-    frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_FRAME]);
     viewport = task->drawState.viewport;
   }
   

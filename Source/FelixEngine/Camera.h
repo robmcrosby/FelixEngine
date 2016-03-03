@@ -62,7 +62,7 @@ namespace fx
         vec2 size(slot.drawState().viewport.size);
         if (size == vec2())
         {
-          Frame *frame = GetResource<Frame>(&slot.targets());
+          Frame *frame = GetResource<Frame>(&slot.frame());
           size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
         }
         slot.uniforms()["camera"].set("projection", mProjection->getProjection(size, slot.projectionFlags()));
