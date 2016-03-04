@@ -219,7 +219,13 @@ namespace fx
       return *mUniforms;
     }
     const Buffer& uniforms() const {return *mUniforms;}
+    
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
+    void setStruct(const std::string &name, const std::string &comp, const Variant &var)
+    {
+      uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
+      uniforms().setToUpdate();
+    }
     
     void setFrame(Buffer &frame) {mFrame = &frame;}
     void setFrame(const std::string &name = "")

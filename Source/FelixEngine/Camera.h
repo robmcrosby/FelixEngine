@@ -52,9 +52,6 @@ namespace fx
   protected:
     void applyToSlot(RenderSlot &slot)
     {
-      slot.uniforms()["camera"].setBufferType(BUFFER_STRUCT);
-      slot.uniforms()["camera"].setName("camera");
-      
       // Apply the Projection
       if (mProjection)
       {
@@ -65,25 +62,24 @@ namespace fx
           Frame *frame = GetResource<Frame>(&slot.frame());
           size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
         }
-        slot.uniforms()["camera"].set("projection", mProjection->getProjection(size, slot.projectionFlags()));
+        slot.setStruct("camera", "projection", mProjection->getProjection(size, slot.projectionFlags()));
       }
       else
       {
-        slot.uniforms()["camera"].set("projection", mat4());
+        slot.setStruct("camera", "projection", mat4());
       }
       
       // Apply the View
       if (mView)
       {
-        slot.uniforms()["camera"].set("view", mView->getView());
-        slot.uniforms()["camera"].set("position", vec4(mView->getPosition(), 1.0f));
+        slot.setStruct("camera", "view", mView->getView());
+        slot.setStruct("camera", "position", vec4(mView->getPosition(), 1.0f));
       }
       else
       {
-        slot.uniforms()["camera"].set("view", mat4());
-        slot.uniforms()["camera"].set("position", vec4());
+        slot.setStruct("camera", "view", mat4());
+        slot.setStruct("camera", "position", vec4());
       }
-      slot.uniforms().setToUpdate();
     }
     
     View *mView;
