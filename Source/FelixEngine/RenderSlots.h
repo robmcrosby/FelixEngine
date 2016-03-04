@@ -263,11 +263,13 @@ namespace fx
       task.layer = mLayer;
       task.pass = mPass;
       task.drawState = mDrawState;
-      task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
-      task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
       task.bufferSlots[BUFFER_SLOT_FRAME]    = mFrame.ptr();
+      
+      task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
       task.textureMap = &mTextureMap;
+      
       mGraphicSystem->addGraphicTask(task);
     }
     void updateBuffers()
@@ -288,12 +290,13 @@ namespace fx
     
     int mProjFlags;
     
-    OwnPtr<Buffer> mShader;
     OwnPtr<Buffer> mMesh;
-    OwnPtr<Buffer> mUniforms;
     OwnPtr<Buffer> mFrame;
     
-    TextureMap        mTextureMap;
+    OwnPtr<Buffer> mShader;
+    OwnPtr<Buffer> mUniforms;
+    TextureMap     mTextureMap;
+    
     GRAPHIC_TASK_TYPE mTaskType;
     STEREO_TYPE       mStereoType;
     DrawState         mDrawState;
