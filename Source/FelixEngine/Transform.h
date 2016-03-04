@@ -36,7 +36,7 @@ namespace fx
       IDENITY,
     };
     
-    static TYPE GetType(const std::string &str)
+    static TYPE ParseType(const std::string &str)
     {
       if (str == "Scale")
         return SCALE;
@@ -51,7 +51,7 @@ namespace fx
       return IDENITY;
     }
     
-    static TYPE GetEuler(const std::string &str)
+    static TYPE ParseEuler(const std::string &str)
     {
       if (str == "xyz")
         return EULER_XYZ;
@@ -75,12 +75,13 @@ namespace fx
       Item& operator=(TYPE t) {type = t; return *this;}
       Item& operator=(const vec4 &d) {data = d; return *this;}
       bool operator==(TYPE t) const {return type == t;}
-      void apply(mat4 &matrix) const {matrix *= toMatrix4x4();}
+      void apply(mat4 &matrix) const {matrix *= toMatrix();}
+      void apply(quat &rotation) const {rotation *= toQuaternion();}
       void setToXML(const XMLTree::Node *node)
       {
-        type = GetType(node->element());
+        type = ParseType(node->element());
         if (type == EULER_XYZ && node->hasAttribute("order"))
-          type = GetEuler(node->attribute("order"));
+          type = ParseEuler(node->attribute("order"));
         
         if (type == ANGLE_AXIS)
           data = vec4(vec3(node->contents()), node->attributeAsFloat("angle"));
@@ -89,7 +90,7 @@ namespace fx
         else
           data = vec4(vec3(node->contents()), 0.0f);
       }
-      mat4 toMatrix4x4() const
+      mat4 toMatrix() const
       {
         switch (type)
         {
@@ -104,19 +105,58 @@ namespace fx
           case EULER_XYZ:
             return mat4::RotX(data.x*DegToRad) * mat4::RotY(data.y*DegToRad) * mat4::RotZ(data.z*DegToRad);
           case EULER_XZY:
-            return mat4::RotX(data.x) * mat4::RotZ(data.z) * mat4::RotY(data.y);
+            return mat4::RotX(data.x*DegToRad) * mat4::RotZ(data.z*DegToRad) * mat4::RotY(data.y*DegToRad);
           case EULER_YXZ:
-            return mat4::RotY(data.y) * mat4::RotX(data.x) * mat4::RotZ(data.z);
+            return mat4::RotY(data.y*DegToRad) * mat4::RotX(data.x*DegToRad) * mat4::RotZ(data.z*DegToRad);
           case EULER_YZX:
-            return mat4::RotY(data.y) * mat4::RotZ(data.z) * mat4::RotX(data.x);
+            return mat4::RotY(data.y*DegToRad) * mat4::RotZ(data.z*DegToRad) * mat4::RotX(data.x*DegToRad);
           case EULER_ZXY:
-            return mat4::RotZ(data.z) * mat4::RotX(data.x) * mat4::RotY(data.y);
+            return mat4::RotZ(data.z*DegToRad) * mat4::RotX(data.x*DegToRad) * mat4::RotY(data.y*DegToRad);
           case EULER_ZYX:
-            return mat4::RotZ(data.z) * mat4::RotY(data.y) * mat4::RotX(data.x);
+            return mat4::RotZ(data.z*DegToRad) * mat4::RotY(data.y*DegToRad) * mat4::RotX(data.x*DegToRad);
           case IDENITY:
             return mat4();
         }
         return mat4();
+      }
+      quat toQuaternion() const
+      {
+        switch (type)
+        {
+          case SCALE:
+          case TRANSLATE:
+          case IDENITY:
+            return quat();
+          case ANGLE_AXIS:
+            return quat(data.xyz(), data.w);
+          case QUATERNION:
+            return quat(data);
+          case EULER_XYZ:
+            return quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad)*
+                   quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad)*
+                   quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad);
+          case EULER_XZY:
+            return quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad)*
+                   quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad)*
+                   quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad);
+          case EULER_YXZ:
+            return quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad)*
+                   quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad)*
+                   quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad);
+          case EULER_YZX:
+            return quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad)*
+                   quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad)*
+                   quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad);
+          case EULER_ZXY:
+            return quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad)*
+                   quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad)*
+                   quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad);
+          case EULER_ZYX:
+            return quat(vec3(0.0f, 0.0f, 1.0f), data.z*DegToRad)*
+                   quat(vec3(0.0f, 1.0f, 0.0f), data.y*DegToRad)*
+                   quat(vec3(1.0f, 0.0f, 0.0f), data.x*DegToRad);
+        }
+        return quat();
       }
       
       vec4 data;
@@ -166,27 +206,26 @@ namespace fx
       return Component::init() && mRenderSlots;
     }
     
+  protected:
     void updateMatrices()
     {
-      mModelMatrix = mat4();
-      mRotationMatrix = mat4();
+      mTransform = mat4();
+      mRotation = quat();
       for (const_iterator itr = begin(); itr != end(); ++itr)
       {
-        itr->apply(mModelMatrix);
-        if (itr->type != SCALE && itr->type != TRANSLATE)
-          itr->apply(mRotationMatrix);
+        itr->apply(mTransform);
+        itr->apply(mRotation);
       }
     }
     
-  protected:
     virtual void update()
     {
       lock();
       updateMatrices();
       if (mRenderSlots)
       {
-        mRenderSlots->setUniform("Model", mModelMatrix);
-        mRenderSlots->setUniform("Rotation", mRotationMatrix);
+        mRenderSlots->setStruct("model", "transform", mTransform);
+        mRenderSlots->setStruct("model", "rotation", mRotation.toVec4());
       }
       unlock();
       Component::update();
@@ -194,8 +233,8 @@ namespace fx
     
   private:
     Stack mStack;
-    mat4 mModelMatrix;
-    mat4 mRotationMatrix;
+    mat4 mTransform;
+    quat mRotation;
     
     mutable SDL_SpinLock mLock;
     RenderSlots *mRenderSlots;

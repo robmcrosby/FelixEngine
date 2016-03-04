@@ -18,17 +18,26 @@
             mat4 view;
             vec4 position;
           };
-          struct ModelStruct {
+          struct Model {
             mat4 transform;
             vec4 rotation;
           };
+          vec4 transform(Camera c, Model m, vec4 position) {
+            return c.projection * c.view * m.transform * position;
+          }
+          vec3 rotate(vec4 q, vec3 v) {
+            return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
+          }
+          vec3 rotate(Model m, vec4 normal) {
+            return rotate(m.rotation, normal.xyz);
+          }
         </Shader>
         <Shader name="SimpleVertex" type="vertex">
           #include "Header"
           in vec4 Position;
           uniform Camera camera;
-          uniform mat4 Model;
-          void main() {gl_Position = camera.projection * camera.view * Model * Position;}
+          uniform Model model;
+          void main() {gl_Position = transform(camera, model, Position);}
         </Shader>
         <Shader name="SimpleColor" type="fragment">
           #include "Header"
@@ -51,11 +60,11 @@
           in vec4 Position;
           in vec2 UV_0;
           uniform Camera camera;
-          uniform mat4 Model;
+          uniform Model model;
           uniform Camera camera;
           out vec2 UV;
           void main() {
-            gl_Position = camera.projection * camera.view * Model * Position;
+            gl_Position = transform(camera, model, Position);
             UV = UV_0;
           }
         </Shader>
@@ -65,7 +74,7 @@
           in vec2 UV_0;
           in vec4 Locs;
           in vec4 UVs;
-          uniform mat4 Model;
+          uniform Model model;
           uniform Camera camera;
           out vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
@@ -79,7 +88,7 @@
             return uv;
           }
           void main() {
-            gl_Position = camera.projection * camera.view * Model * adjustPos(Position, Locs);
+            gl_Position = transform(camera, model, adjustPos(Position, Locs));
             UV = adjustUV(UV_0, UVs);
           }
         </Shader>
@@ -94,13 +103,12 @@
           #include "Header"
           in vec4 Position;
           in vec4 Normal;
-          uniform mat4 Model;
+          uniform Model model;
           uniform Camera camera;
-          uniform mat4 Rotation;
           out vec3 vNormal;
           void main() {
-            gl_Position = camera.projection * camera.view * Model * Position;
-            vNormal = (Rotation * Normal).xyz;
+            gl_Position = transform(camera, model, Position);
+            vNormal = rotate(model, Normal);
           }
         </Shader>
         <Shader name="DirectLight" type="fragment">
@@ -109,7 +117,8 @@
           uniform vec4 Color;
           out vec4 FragColor;
           void main() {
-            FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);}
+            FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);
+          }
         </Shader>
       </Shaders>
     </GLGraphicSystem>

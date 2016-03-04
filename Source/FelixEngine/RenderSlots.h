@@ -361,6 +361,11 @@ namespace fx
       for (RenderSlot *slot : mSlots)
         slot->setUniform(name, var);
     }
+    void setStruct(const std::string &name, const std::string &comp, const Variant &var)
+    {
+      for (RenderSlot *slot : mSlots)
+        slot->setStruct(name, comp, var);
+    }
     
   private:
     GraphicSystem *mGraphicSystem;

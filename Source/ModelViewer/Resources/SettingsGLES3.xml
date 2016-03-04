@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
   <Systems>
-    <UbiquityFileSystem/>
     <GCDTaskingSystem/>
     <IOSMotionSystem frequency="60"/>
     <GLGraphicSystem>
@@ -20,13 +19,26 @@
             mat4 view;
             vec4 position;
           };
+          struct Model {
+            mat4 transform;
+            vec4 rotation;
+          };
+          vec4 transform(Camera c, Model m, vec4 position) {
+            return c.projection * c.view * m.transform * position;
+          }
+          vec3 rotate(vec4 q, vec3 v) {
+            return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
+          }
+          vec3 rotate(Model m, vec4 normal) {
+            return rotate(m.rotation, normal.xyz);
+          }
         </Shader>
         <Shader name="SimpleVertex" type="vertex">
           #include "VertexHeader"
           in vec4 Position;
-          uniform mat4 Model;
           uniform Camera camera;
-          void main() {gl_Position = camera.projection * camera.view * Model * Position;}
+          uniform Model  model;
+          void main() {gl_Position = transform(camera, model, Position);}
         </Shader>
         <Shader name="SimpleColor" type="fragment">
           #version 300 es
@@ -48,11 +60,11 @@
           #include "VertexHeader"
           in vec4 Position;
           in vec2 UV_0;
-          uniform mat4 Model;
           uniform Camera camera;
+          uniform Model  model;
           out vec2 UV;
           void main() {
-            gl_Position = camera.projection * camera.view * Model * Position;
+            gl_Position = transform(camera, model, Position);
             UV = UV_0;
           }
         </Shader>
@@ -62,8 +74,8 @@
           in vec2 UV_0;
           in vec4 Locs;
           in vec4 UVs;
-          uniform mat4 Model;
           uniform Camera camera;
+          uniform Model  model;
           out vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -76,7 +88,7 @@
             return uv;
           }
           void main() {
-            gl_Position = camera.projection * camera.view * Model * adjustPos(Position, Locs);
+            gl_Position = transform(camera, model, adjustPos(Position, Locs));
             UV = adjustUV(UV_0, UVs);
           }
         </Shader>
@@ -91,13 +103,12 @@
           #include "VertexHeader"
           in vec4 Position;
           in vec4 Normal;
-          uniform mat4 Model;
           uniform Camera camera;
-          uniform mat4 Rotation;
+          uniform Model  model;
           out vec3 vNormal;
           void main() {
-            gl_Position = camera.projection * camera.view * Model * Position;
-            vNormal = (Rotation * Normal).xyz;
+            gl_Position = transform(camera, model, Position);
+            vNormal = rotate(model, Normal);
           }
         </Shader>
         <Shader name="DirectLight" type="fragment">
