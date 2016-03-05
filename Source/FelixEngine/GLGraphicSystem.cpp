@@ -204,30 +204,26 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
   Buffer *bufferMap = task->bufferSlots[0];
   if (bufferMap != nullptr && !bufferMap->updated())
   {
-    if (bufferMap->bufferType() == BUFFER_MESH)
+    if (bufferMap->bufferType() == BUFFER_MESH && bufferMap->resource())
     {
-      bufferMap->setResource(getMesh(bufferMap->name()));
       GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
       mesh->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->bufferType() == BUFFER_PROGRAM)
+    else if (bufferMap->bufferType() == BUFFER_PROGRAM && bufferMap->resource())
     {
-      bufferMap->setResource(getShader(bufferMap->name()));
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->bufferType() == BUFFER_TEXTURE)
+    else if (bufferMap->bufferType() == BUFFER_TEXTURE && bufferMap->resource())
     {
-      bufferMap->setResource(getTexture(bufferMap->name()));
       if (bufferMap->contains("data"))
       {
         GLTexture *texture = GetResource<GLTexture>(bufferMap);
         texture->uploadBufferMap(*bufferMap);
       }
     }
-    else if (bufferMap->bufferType() == BUFFER_FRAME)
+    else if (bufferMap->bufferType() == BUFFER_FRAME && bufferMap->resource())
     {
-      bufferMap->setResource(getFrame(bufferMap->name()));
       GLFrame *frame = GetResource<GLFrame>(bufferMap);
       frame->uploadBufferMap(*bufferMap);
     }
