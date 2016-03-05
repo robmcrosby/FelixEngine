@@ -17,6 +17,9 @@
 #include "MeshLoader.h"
 #include "TextureMap.h"
 
+#include "MeshLoader.h"
+#include "TextureLoader.h"
+
 namespace fx
 {
   /**
@@ -126,8 +129,6 @@ namespace fx
         setShader(*node.subNode("Shader"));
       
       // Set the Uniforms
-      if (node.hasAttribute("uniforms"))
-        setUniforms(node.attribute("uniforms"));
       if (node.hasSubNode("Uniforms"))
         setUniforms(*node.subNode("Uniforms"));
       
@@ -167,49 +168,57 @@ namespace fx
     void setProjectionFlags(int flags) {mProjFlags = flags;}
     int projectionFlags() const {return mProjFlags;}
     
-    void setMesh(Buffer &mesh) {mMesh = &mesh;}
-    void setMesh(const std::string &name = "")
-    {
-      if (name == "")
-        mMesh = BUFFER_MESH;
-      else
-        setMesh(mScene->getBufferMap(name));
-    }
+    void setMesh(const Buffer &mesh) {mMesh = mesh;}
+    void setMesh(const std::string &name) {mMesh = &mScene->getMeshBuffer(name);}
     void setMesh(const XMLTree::Node &node)
     {
       setMesh(node.attribute("name"));
-      mMesh->setToXml(node);
+      MeshLoader::LoadMeshFromXML(*mMesh, node);
     }
     Buffer& mesh() {return *mMesh;}
     const Buffer& mesh() const {return *mMesh;}
     
-    void setShader(Buffer &shader) {mShader = &shader;}
-    void setShader(const std::string &name = "")
-    {
-      if (name == "")
-        mShader = BUFFER_PROGRAM;
-      else
-        setShader(mScene->getBufferMap(name));
-    }
+    void setShader(const Buffer &shader) {mShader = shader;}
+    void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
     void setShader(const XMLTree::Node &node)
     {
       setShader(node.attribute("name"));
-      mShader->setToXml(node);
+      for (const auto &subNode : node)
+      {
+        Buffer &buffer = mShader->addBuffer(subNode->attribute("name"), BUFFER_SHADER);
+        buffer = subNode->contents();
+        buffer.setFlags((int)Shader::ParseShaderPart(subNode->element()));
+      }
     }
     Buffer& shader() {return *mShader;}
     const Buffer& shader() const {return *mShader;}
     
-    void setUniforms(Buffer &uniforms) {mUniforms = &uniforms;}
-    void setUniforms(const std::string &name = "")
+    void setFrame(const Buffer &frame) {mFrame = frame;}
+    void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
+    void setFrame(const XMLTree::Node &node)
     {
-      if (name == "")
-        mUniforms = BUFFER_UNIFORM;
-      else
-        setUniforms(mScene->getBufferMap(name));
+      setFrame(node.attribute("name"));
+      for (const auto &subNode : node)
+      {
+        Buffer &buffer = mFrame->addBuffer(subNode->attribute("name"), BUFFER_TARGET);
+        buffer.setFlags(ParseColorType(subNode->attribute("format")));
+      }
+      if (node.hasAttribute("size"))
+        mFrame->addBuffer("size", ivec2(node.attribute("size")));
+      else if (node.hasAttribute("reference"))
+      {
+        mFrame->addBuffer("reference", node.attribute("reference"));
+        if (node.hasAttribute("scale"))
+          mFrame->addBuffer("scale", vec2(node.attribute("scale")));
+      }
     }
+    Buffer& frame() {return *mFrame;}
+    const Buffer& frame() const {return *mFrame;}
+    
+    void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
     void setUniforms(const XMLTree::Node &node)
     {
-      setUniforms(node.attribute("name"));
+      mUniforms = BUFFER_UNIFORM;
       mUniforms->setToXml(node);
     }
     Buffer& uniforms()
@@ -226,22 +235,6 @@ namespace fx
       uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
       uniforms().setToUpdate();
     }
-    
-    void setFrame(Buffer &frame) {mFrame = &frame;}
-    void setFrame(const std::string &name = "")
-    {
-      if (name == "")
-        mFrame = BUFFER_FRAME;
-      else
-        setFrame(mScene->getBufferMap(name));
-    }
-    void setFrame(const XMLTree::Node &node)
-    {
-      setFrame(node.attribute("name"));
-      mFrame->setToXml(node);
-    }
-    Buffer& frame() {return *mFrame;}
-    const Buffer& frame() const {return *mFrame;}
     
     TextureMap& textureMap() {return mTextureMap;}
     const TextureMap& textureMap() const {return mTextureMap;}

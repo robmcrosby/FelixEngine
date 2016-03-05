@@ -27,8 +27,7 @@ namespace fx
   public:
     Scene(): Component(this),
       mDirectory(FileSystem::GetResources()),
-      mGraphicSystem(FelixEngine::Instance()->getGraphicSystem()),
-      mBufferMaps()
+      mGraphicSystem(FelixEngine::Instance()->getGraphicSystem())
     {
       mScene = this;
       setEventFlags(EVENT_APP_UPDATE);
@@ -37,8 +36,6 @@ namespace fx
     {
       clearMaterials();
       clearBuffers();
-      
-      clearBufferMaps();
     }
     
     virtual void handle(const Event &event)
@@ -65,6 +62,7 @@ namespace fx
       return success;
     }
     
+    
     Material* getMaterial(const std::string &name)
     {
       if (!mMaterialMap.count(name))
@@ -77,24 +75,6 @@ namespace fx
         delete itr->second;
       mMaterialMap.clear();
     }
-    
-    Buffer& getBufferMap(const std::string name)
-    {
-      if (!mBufferMaps.count(name))
-      {
-        mBufferMaps[name] = new Buffer();
-        mBufferMaps[name]->setName(name);
-      }
-      return *mBufferMaps[name];
-    }
-    void clearBufferMaps()
-    {
-      for (BufferMapDirectory::iterator itr = mBufferMaps.begin(); itr != mBufferMaps.end(); ++itr)
-        delete itr->second;
-      mBufferMaps.clear();
-    }
-    
-    
     
     
     Buffer& getFrameBuffer(const std::string name)
@@ -182,7 +162,6 @@ namespace fx
     
     std::map<std::string, int> mPassNameMap;
     
-    BufferMapDirectory mBufferMaps;
     GraphicSystem *mGraphicSystem;
   };
 }

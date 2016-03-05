@@ -14,9 +14,6 @@
 #include "IndexedMap.h"
 #include "Color.h"
 
-#include "MeshLoader.h"
-#include "TextureLoader.h"
-
 
 #define UNIFORMS_STR  "Uniforms"
 #define UNIFORM_STR   "Uniform"
@@ -242,36 +239,7 @@ namespace fx
       setBufferType(node.element());
       setName(node.attribute("name"));
       
-      if (mBufferType == BUFFER_MESH)
-        MeshLoader::LoadMeshFromXML(*this, node);
-      else if (mBufferType == BUFFER_TEXTURE)
-        TextureLoader::LoadTextureFromXml(*this, node);
-      else if (mBufferType == BUFFER_PROGRAM)
-      {
-        for (const auto &subNode : node)
-        {
-          Buffer &buffer = addBuffer(subNode->attribute("name"), BUFFER_SHADER);
-          buffer = subNode->contents();
-          buffer.setFlags((int)Shader::ParseShaderPart(subNode->element()));
-        }
-      }
-      else if (mBufferType == BUFFER_FRAME)
-      {
-        for (const auto &subNode : node)
-        {
-          Buffer &buffer = addBuffer(subNode->attribute("name"), BUFFER_TARGET);
-          buffer.setFlags(ParseColorType(subNode->attribute("format")));
-        }
-        if (node.hasAttribute("size"))
-          addBuffer("size", ivec2(node.attribute("size")));
-        else if (node.hasAttribute("reference"))
-        {
-          addBuffer("reference", node.attribute("reference"));
-          if (node.hasAttribute("scale"))
-            addBuffer("scale", vec2(node.attribute("scale")));
-        }
-      }
-      else if (mBufferType == BUFFER_UNIFORM)
+      if (mBufferType == BUFFER_UNIFORM)
       {
         Variant::setToXml(node);
         for (const auto &subNode : node)
@@ -401,7 +369,6 @@ namespace fx
   };
   
   typedef std::list<Buffer*> BufferMapList;
-  typedef std::map<std::string, Buffer*> BufferMapDirectory;
   
   template <typename T>
   static T* GetResource(Buffer *buffer) {return buffer ? static_cast<T*>(buffer->resource()) : nullptr;}

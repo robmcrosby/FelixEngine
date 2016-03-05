@@ -16,6 +16,8 @@
 #include "Scene.h"
 #include "OwnPtr.h"
 
+#include "TextureLoader.h"
+
 namespace fx
 {
   /**
@@ -43,17 +45,11 @@ namespace fx
     
     void setTexture(const Buffer &texture) {mTexture = texture;}
     void setTexture(Buffer *texture) {mTexture = texture;}
-    void setTexture(const std::string &name)
-    {
-      if (!mScene || name == "")
-        setTexture(&mScene->getBufferMap(name));
-      else
-        setTexture(BUFFER_TEXTURE);
-    }
+    void setTexture(const std::string &name) {mTexture = &mScene->getTextureBuffer(name);}
     void setTexture(const XMLTree::Node &node)
     {
       setTexture(node.attribute("name"));
-      mTexture->setToXml(node);
+      TextureLoader::LoadTextureFromXml(*mTexture, node);
     }
     Buffer& texture() {return *mTexture;}
     
