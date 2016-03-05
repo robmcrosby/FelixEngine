@@ -16,7 +16,6 @@
 
 #include "MeshLoader.h"
 #include "TextureLoader.h"
-#include "GraphicResources.h"
 
 
 #define UNIFORMS_STR  "Uniforms"
@@ -51,18 +50,19 @@ namespace fx
     BUFFER_STRUCT,    /**< Constant Uniform Struct */
     BUFFER_INSTANCED, /**< Constant Uniform Values for multiple Instances */
     
-    BUFFER_MESH,    /**< Collection of Buffers for a Mesh */
-    BUFFER_VERTEX,  /**< Vertex Buffer */
-    BUFFER_INDICES, /**< Index Buffer */
-    BUFFER_RANGES,  /**< Ranges for Sub-Meshes in a Mesh */
+    BUFFER_MESH,      /**< Collection of Buffers for a Mesh */
+    BUFFER_VERTEX,    /**< Vertex Buffer */
+    BUFFER_INDICES,   /**< Index Buffer */
+    BUFFER_RANGES,    /**< Ranges for Sub-Meshes in a Mesh */
     
-    BUFFER_FRAME,   /**< Frame Buffer with Render Targets */
-    BUFFER_TARGET,  /**< Render Target */
+    BUFFER_FRAME,     /**< Frame Buffer with Render Targets */
+    BUFFER_TARGET,    /**< Render Target */
     
-    BUFFER_PROGRAM, /**< Shader Program */
-    BUFFER_SHADER,  /**< Shader Part */
+    BUFFER_PROGRAM,   /**< Shader Program */
+    BUFFER_SHADER,    /**< Shader Part */
     
-    BUFFER_TEXTURE, /**< Two dimensional image */
+    BUFFER_TEXTURES,  /**< Multiple Textures */
+    BUFFER_TEXTURE,   /**< Two dimensional image */
   };
   
   
@@ -111,6 +111,20 @@ namespace fx
       mUpdated(0),
       mMap(0)
     {
+    }
+    
+    /**
+     * Constructor for a Resource
+     */
+    Buffer(Resource *resource, BUFFER_TYPE bufType, const std::string &name = ""):
+      mName(name),
+      mBufferType(bufType),
+      mResource(0),
+      mFlags(0),
+      mUpdated(0),
+      mMap(0)
+    {
+      setResource(resource);
     }
     
     /**

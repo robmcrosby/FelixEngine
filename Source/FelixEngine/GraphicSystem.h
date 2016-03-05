@@ -19,9 +19,6 @@
 
 namespace fx
 {
-  class UniformMap;
-  class InternalUniformMap;
-
   /**
    *
    */
