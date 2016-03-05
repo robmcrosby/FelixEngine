@@ -174,6 +174,7 @@ namespace fx
     {
       setMesh(node.attribute("name"));
       MeshLoader::LoadMeshFromXML(*mMesh, node);
+      mMesh->setToUpdate();
     }
     Buffer& mesh() {return *mMesh;}
     const Buffer& mesh() const {return *mMesh;}
@@ -189,6 +190,7 @@ namespace fx
         buffer = subNode->contents();
         buffer.setFlags((int)Shader::ParseShaderPart(subNode->element()));
       }
+      mShader->setToUpdate();
     }
     Buffer& shader() {return *mShader;}
     const Buffer& shader() const {return *mShader;}
@@ -211,6 +213,7 @@ namespace fx
         if (node.hasAttribute("scale"))
           mFrame->addBuffer("scale", vec2(node.attribute("scale")));
       }
+      mFrame->setToUpdate();
     }
     Buffer& frame() {return *mFrame;}
     const Buffer& frame() const {return *mFrame;}
@@ -220,6 +223,7 @@ namespace fx
     {
       mUniforms = BUFFER_UNIFORM;
       mUniforms->setToXml(node);
+      mUniforms->setToUpdate();
     }
     Buffer& uniforms()
     {

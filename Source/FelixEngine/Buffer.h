@@ -105,7 +105,7 @@ namespace fx
       mBufferType(bufType),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
     }
@@ -118,7 +118,7 @@ namespace fx
       mBufferType(bufType),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
       setResource(resource);
@@ -131,7 +131,7 @@ namespace fx
       mBufferType(BUFFER_UNIFORM),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
     }
@@ -143,7 +143,7 @@ namespace fx
       mBufferType(BUFFER_UNIFORM),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
     }
@@ -155,7 +155,7 @@ namespace fx
       mBufferType(BUFFER_UNIFORM),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
       setToXml(node);
@@ -168,7 +168,7 @@ namespace fx
       mBufferType(BUFFER_UNIFORM),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
       setToXml(node);
@@ -179,7 +179,7 @@ namespace fx
       mBufferType(BUFFER_UNIFORM),
       mResource(0),
       mFlags(0),
-      mUpdated(0),
+      mUpdated(true),
       mMap(0)
     {
     }
@@ -189,6 +189,7 @@ namespace fx
      */
     Buffer(const Buffer &other):
       mResource(0),
+      mUpdated(true),
       mMap(0)
     {
       *this = other;

@@ -50,6 +50,7 @@ namespace fx
     {
       setTexture(node.attribute("name"));
       TextureLoader::LoadTextureFromXml(*mTexture, node);
+      mTexture->setToUpdate();
     }
     Buffer& texture() {return *mTexture;}
     
