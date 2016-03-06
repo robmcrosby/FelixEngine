@@ -9,9 +9,9 @@
 #ifndef RenderSlots_h
 #define RenderSlots_h
 
+#include "FelixEngine.h"
 #include "EventHandler.h"
 #include "Component.h"
-#include "Material.h"
 #include "Scene.h"
 #include "OwnPtr.h"
 
@@ -307,7 +307,7 @@ namespace fx
   class RenderSlots: public Component
   {
   public:
-    RenderSlots(Scene *scene): Component(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    RenderSlots(Scene *scene): Component(scene) {}
     virtual ~RenderSlots() {clear();}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -361,7 +361,6 @@ namespace fx
     }
     
   private:
-    GraphicSystem *mGraphicSystem;
     std::vector<RenderSlot*> mSlots;
   };
 }

@@ -118,6 +118,7 @@
 		C198925C1BFFE171007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925B1BFFE171007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C19EDC641C0E514A00F997AB /* FileSystem.mm */; };
 		C19EDC671C0E514A00F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC651C0E514A00F997AB /* FileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1AC38061C8CB34C00DCC638 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1AC38051C8CB34C00DCC638 /* Scene.cpp */; };
 		C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E801BF68FDF0060BE21 /* Assets.xcassets */; };
 		C1B00E8A1BF690890060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00E891BF690890060BE21 /* main.cpp */; };
 		C1B00E8B1BF690B00060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
@@ -288,6 +289,7 @@
 		C198925B1BFFE171007DF57A /* GyroView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GyroView.h; path = ../../../../Source/FelixEngine/GyroView.h; sourceTree = "<group>"; };
 		C19EDC641C0E514A00F997AB /* FileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileSystem.mm; path = ../../../../Source/FelixEngine/FileSystem.mm; sourceTree = "<group>"; };
 		C19EDC651C0E514A00F997AB /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileSystem.h; path = ../../../../Source/FelixEngine/FileSystem.h; sourceTree = "<group>"; };
+		C1AC38051C8CB34C00DCC638 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Scene.cpp; path = ../../../../Source/FelixEngine/Scene.cpp; sourceTree = "<group>"; };
 		C1B00E721BF68FDF0060BE21 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B00E801BF68FDF0060BE21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1B00E851BF68FDF0060BE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 				C1250E001C23C05B00C6F7C8 /* Model */,
 				C1250DFF1C23C05400C6F7C8 /* Camera */,
 				C1250DFE1C23C04B00C6F7C8 /* User Interface */,
+				C1AC38051C8CB34C00DCC638 /* Scene.cpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -979,6 +982,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1E683571C4EFB5000E1705D /* TextureLoader.cpp in Sources */,
+				C1AC38061C8CB34C00DCC638 /* Scene.cpp in Sources */,
 				C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */,
 				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
 				C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */,

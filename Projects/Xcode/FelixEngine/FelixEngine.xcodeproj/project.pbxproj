@@ -101,6 +101,7 @@
 		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
 		C1A7D4301BE178200064E84A /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42F1BE178200064E84A /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4321BE2EA360064E84A /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4311BE2EA360064E84A /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1AC38071C8CB37100DCC638 /* Scene.cpp */; };
 		C1B00EB21BF693A60060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EB11BF693A60060BE21 /* Assets.xcassets */; };
 		C1B00EBC1BF693E90060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00EBB1BF693E90060BE21 /* main.cpp */; };
 		C1B00EBD1BF6940B0060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -269,6 +270,7 @@
 		C1A7D42D1BE178020064E84A /* EventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = ../../../../Source/FelixEngine/EventHandler.h; sourceTree = "<group>"; };
 		C1A7D42F1BE178200064E84A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../../../../Source/FelixEngine/Event.h; sourceTree = "<group>"; };
 		C1A7D4311BE2EA360064E84A /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pool.h; path = ../../../../Source/FelixEngine/Pool.h; sourceTree = "<group>"; };
+		C1AC38071C8CB37100DCC638 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Scene.cpp; path = ../../../../Source/FelixEngine/Scene.cpp; sourceTree = "<group>"; };
 		C1B00EA91BF693A60060BE21 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B00EB11BF693A60060BE21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1B00EB61BF693A60060BE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -515,6 +517,7 @@
 				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
 				C10B5D3C1BF0F9DE00583B8F /* Component.cpp */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
+				C1AC38071C8CB37100DCC638 /* Scene.cpp */,
 				C1250DFD1C23B71800C6F7C8 /* RenderSlots */,
 				C1250DFB1C23B61E00C6F7C8 /* Model */,
 				C1250DFA1C23B5FD00C6F7C8 /* Camera */,
@@ -914,6 +917,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1E683531C4EEFC600E1705D /* TextureLoader.cpp in Sources */,
+				C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */,
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
 				C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,

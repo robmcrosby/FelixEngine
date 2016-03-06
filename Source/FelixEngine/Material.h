@@ -10,7 +10,10 @@
 #define Material_h
 
 #include "FelixEngine.h"
-#include "GraphicTask.h"
+#include "Scene.h"
+#include "Buffer.h"
+#include "OwnPtr.h"
+#include "XMLTree.h"
 
 
 namespace fx
@@ -18,69 +21,15 @@ namespace fx
   class Material
   {
   public:
-    Material(): mShader(0), mSystem(FelixEngine::GetGraphicSystem()) {}
+    Material(Scene *scene): mScene(scene) {}
     virtual ~Material() {}
     
-    bool setShader(const XMLTree::Node &node)
+    void setToXml(const XMLTree::Node &node)
     {
-      bool success = false;
-      if (node.hasAttribute("name"))
-      {
-        setShader(node.attribute("name"));
-        //success = mShader->setToXml(node);
-      }
-      return success;
-    }
-    void setShader(Shader *shader) {mShader = shader;}
-    void setShader(const std::string &name)
-    {
-      if (mSystem)
-        setShader(mSystem->getShader(name));
-    }
-    const Shader* shader() const {return mShader;}
-    
-//    TextureMap& textureMap() {return mTextureMap;}
-//    const TextureMap& textures() const {return mTextureMap;}
-//    
-//    UniformMap& uniforms() {return mUniformMap;}
-//    const UniformMap& uniforms() const {return mUniformMap;}
-    
-    bool setToXml(const XMLTree::Node *node) {return setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node)
-    {
-      bool success = true;
-      
-//      // Set the Shader
-//      if (node.hasAttribute("shader"))
-//        setShader(node.attribute("shader"));
-//      else if (node.hasSubNode("Shader"))
-//        success &= setShader(*node.subNode("Shader"));
-//      
-//      // Set the UniformMap
-//      if (node.hasSubNode("UniformMap"))
-//        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
-//      
-//      // Set the TextureMap
-//      if (node.hasSubNode("TextureMap"))
-//        success &= mTextureMap.setToXml(*node.subNode("TextureMap"));
-      return success;
-    }
-    
-    bool applyToTask(GraphicTask &task) const
-    {
-      if (!mShader)
-        return false;
-//      task.shader = mShader;
-//      task.textureMap = &mTextureMap;
-//      task.materialUniforms = mUniformMap.getInternalMap();
-      return true;
     }
     
   private:
-    Shader *mShader;
-//    UniformMap mUniformMap;
-//    TextureMap mTextureMap;
-    GraphicSystem *mSystem;
+    Scene *mScene;
   };
 }
 
