@@ -257,7 +257,7 @@ namespace fx
       task.bufferSlots[BUFFER_SLOT_FRAME]    = mFrame.ptr();
       
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
-      task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS_0] = mUniforms.ptr();
       task.bufferSlots[BUFFER_SLOT_TEXTURES] = mTextures.ptr();
       
       mGraphicSystem->addGraphicTask(task);

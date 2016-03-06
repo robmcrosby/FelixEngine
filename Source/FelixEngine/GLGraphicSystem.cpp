@@ -271,22 +271,24 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
   const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
   const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
   
-  GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
   Viewport viewport;
+  GLUniforms *uniforms[5];
+  for (int i = 0; i < 4; ++i)
+    uniforms[i] = GetResource<GLUniforms>(task->bufferSlots[i]);
   
   // Get the Render Targets and View Uniforms.
   const GLFrame  *frame = nullptr;
-  GLUniforms *viewUniforms = nullptr;
   if (view)
   {
     frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_FRAME]);
-    viewUniforms = GetResource<GLUniforms>(view->bufferSlots[BUFFER_SLOT_UNIFORMS]);
     viewport = view->drawState.viewport;
+    uniforms[4] = GetResource<GLUniforms>(view->bufferSlots[0]);
   }
   else
   {
     frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_FRAME]);
     viewport = task->drawState.viewport;
+    uniforms[4] = nullptr;
   }
   
   // If no Render Targets are specified, use the main window.
@@ -310,13 +312,12 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     // Bind the Mesh to the Shader
     mesh->bind(shader);
     
-    // Set the Local Uniforms
-    if (localUniforms)
-      localUniforms->applyToShader(shader);
-    
-    // Set the View Uniforms
-    if (viewUniforms)
-      viewUniforms->applyToShader(shader);
+    // Apply the Uniforms
+    for (int i = 0; i < 5; ++i)
+    {
+      if (uniforms[i])
+        uniforms[i]->applyToShader(shader);
+    }
     
     // Set the Textures and Draw the Mesh
     if (bindTextures(task->bufferSlots[BUFFER_SLOT_TEXTURES]))
@@ -359,7 +360,6 @@ bool GLGraphicSystem::addWindow(const XMLTree::Node *node)
   bool success = false;
   if (node)
   {
-    //Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
     string name = node->hasSubNode("name") ? node->attribute("name") : MAIN_WINDOW;
     GLWindow *window = static_cast<GLWindow*>(getWindow(name));
     success = window && window->setToXml(*node);
