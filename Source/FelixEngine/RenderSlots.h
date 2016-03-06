@@ -14,7 +14,7 @@
 #include "Material.h"
 #include "Scene.h"
 #include "OwnPtr.h"
-#include "MeshLoader.h"
+
 #include "TextureMap.h"
 
 #include "MeshLoader.h"
@@ -170,51 +170,19 @@ namespace fx
     
     void setMesh(const Buffer &mesh) {mMesh = mesh;}
     void setMesh(const std::string &name) {mMesh = &mScene->getMeshBuffer(name);}
-    void setMesh(const XMLTree::Node &node)
-    {
-      setMesh(node.attribute("name"));
-      MeshLoader::LoadMeshFromXML(*mMesh, node);
-      mMesh->setToUpdate();
-    }
+    void setMesh(const XMLTree::Node &node) {mMesh = &mScene->createMesh(node);}
     Buffer& mesh() {return *mMesh;}
     const Buffer& mesh() const {return *mMesh;}
     
     void setShader(const Buffer &shader) {mShader = shader;}
     void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
-    void setShader(const XMLTree::Node &node)
-    {
-      setShader(node.attribute("name"));
-      for (const auto &subNode : node)
-      {
-        Buffer &buffer = mShader->addBuffer(subNode->attribute("name"), BUFFER_SHADER);
-        buffer = subNode->contents();
-        buffer.setFlags((int)Shader::ParseShaderPart(subNode->element()));
-      }
-      mShader->setToUpdate();
-    }
+    void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
     Buffer& shader() {return *mShader;}
     const Buffer& shader() const {return *mShader;}
     
     void setFrame(const Buffer &frame) {mFrame = frame;}
     void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
-    void setFrame(const XMLTree::Node &node)
-    {
-      setFrame(node.attribute("name"));
-      for (const auto &subNode : node)
-      {
-        Buffer &buffer = mFrame->addBuffer(subNode->attribute("name"), BUFFER_TARGET);
-        buffer.setFlags(ParseColorType(subNode->attribute("format")));
-      }
-      if (node.hasAttribute("size"))
-        mFrame->addBuffer("size", ivec2(node.attribute("size")));
-      else if (node.hasAttribute("reference"))
-      {
-        mFrame->addBuffer("reference", node.attribute("reference"));
-        if (node.hasAttribute("scale"))
-          mFrame->addBuffer("scale", vec2(node.attribute("scale")));
-      }
-      mFrame->setToUpdate();
-    }
+    void setFrame(const XMLTree::Node &node) {mFrame = &mScene->createFrame(node);}
     Buffer& frame() {return *mFrame;}
     const Buffer& frame() const {return *mFrame;}
     

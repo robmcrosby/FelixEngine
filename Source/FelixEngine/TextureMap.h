@@ -46,12 +46,7 @@ namespace fx
     void setTexture(const Buffer &texture) {mTexture = texture;}
     void setTexture(Buffer *texture) {mTexture = texture;}
     void setTexture(const std::string &name) {mTexture = &mScene->getTextureBuffer(name);}
-    void setTexture(const XMLTree::Node &node)
-    {
-      setTexture(node.attribute("name"));
-      TextureLoader::LoadTextureFromXml(*mTexture, node);
-      mTexture->setToUpdate();
-    }
+    void setTexture(const XMLTree::Node &node) {mTexture = &mScene->createTexture(node);}
     Buffer& texture() {return *mTexture;}
     
     void setSampler(const Sampler &sampler) {mSampler = sampler;}

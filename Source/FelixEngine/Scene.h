@@ -16,6 +16,8 @@
 #include "Buffer.h"
 
 #include "GraphicSystem.h"
+#include "MeshLoader.h"
+#include "TextureLoader.h"
 
 #include <istream>
 #include <list>
@@ -87,6 +89,26 @@ namespace fx
       }
       return *mFrameBuffers[name];
     }
+    Buffer& createFrame(const XMLTree::Node &node)
+    {
+      Buffer &frame = getFrameBuffer(node.attribute("name"));
+      for (const auto &subNode : node)
+      {
+        Buffer &buffer = frame.addBuffer(subNode->attribute("name"), BUFFER_TARGET);
+        buffer.setFlags(ParseColorType(subNode->attribute("format")));
+      }
+      if (node.hasAttribute("size"))
+        frame.addBuffer("size", ivec2(node.attribute("size")));
+      else if (node.hasAttribute("reference"))
+      {
+        frame.addBuffer("reference", node.attribute("reference"));
+        if (node.hasAttribute("scale"))
+          frame.addBuffer("scale", vec2(node.attribute("scale")));
+      }
+      frame.setToUpdate();
+      mGraphicSystem->uploadBuffer(frame);
+      return frame;
+    }
 
     Buffer& getShaderBuffer(const std::string name)
     {
@@ -97,6 +119,19 @@ namespace fx
         mShaderBuffers.push(name, buffer);
       }
       return *mShaderBuffers[name];
+    }
+    Buffer& createShader(const XMLTree::Node &node)
+    {
+      Buffer &shader = getShaderBuffer(node.attribute("name"));
+      for (const auto &subNode : node)
+      {
+        Buffer &buffer = shader.addBuffer(subNode->attribute("name"), BUFFER_SHADER);
+        buffer = subNode->contents();
+        buffer.setFlags((int)Shader::ParseShaderPart(subNode->element()));
+      }
+      shader.setToUpdate();
+      mGraphicSystem->uploadBuffer(shader);
+      return shader;
     }
 
     Buffer& getMeshBuffer(const std::string name)
@@ -109,6 +144,14 @@ namespace fx
       }
       return *mMeshBuffers[name];
     }
+    Buffer& createMesh(const XMLTree::Node &node)
+    {
+      Buffer &mesh = getMeshBuffer(node.attribute("name"));
+      MeshLoader::LoadMeshFromXML(mesh, node);
+      mesh.setToUpdate();
+      mGraphicSystem->uploadBuffer(mesh);
+      return mesh;
+    }
     
     Buffer& getTextureBuffer(const std::string name)
     {
@@ -119,6 +162,14 @@ namespace fx
         mTextureBuffers.push(name, buffer);
       }
       return *mTextureBuffers[name];
+    }
+    Buffer& createTexture(const XMLTree::Node &node)
+    {
+      Buffer &texture = getTextureBuffer(node.attribute("name"));
+      TextureLoader::LoadTextureFromXml(texture, node);
+      texture.setToUpdate();
+      mGraphicSystem->uploadBuffer(texture);
+      return texture;
     }
     
     void clearBuffers()
