@@ -20,9 +20,9 @@
           <Vertex name="SimpleVertexUV"/>
           <Fragment name="SimpleTexture"/>
         </Shader>
-        <TextureMap>
+        <Textures>
           <Texture name="DrawTexture" min="linear" mag="linear"/>
-        </TextureMap>
+        </Textures>
       </Slot>
     </RenderSlots>
   </ViewerCamera>

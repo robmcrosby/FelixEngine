@@ -19,9 +19,9 @@
             <UniformMap>
               <Uniform name="Color" type="vec4">0.9, 0.2, 0.2, 1.0</Uniform>
             </UniformMap>
-            <TextureMap>
+            <Textures>
               <Texture name="Icon" file="Images/Icon.png" min="linear" mag="linear"/>
-            </TextureMap>
+            </Textures>
           </Material>
         </Slot>
       </RenderSlots>
@@ -47,9 +47,9 @@
             <Vertex function="SimpleVertexUV"/>
             <Fragment function="SimpleTexture"/>
           </Shader>
-          <TextureMap>
+          <Textures>
             <Texture name="DrawTexture" min="linear" mag="linear"/>
-          </TextureMap>
+          </Textures>
         </Material>
         <Mesh name="FullQuad" primitive="plane" size="2.0, 2.0"/>
       </Slot>

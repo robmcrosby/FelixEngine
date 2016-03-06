@@ -11,7 +11,6 @@
 
 #include "GLGraphicSystem.h"
 #include "GLTexture.h"
-#include "TextureMap.h"
 #include "FileSystem.h"
 
 #define ERROR_MSG_SIZE 512

@@ -48,9 +48,9 @@
   <Model name="TextureQuad">
     <RenderSlots>
       <Slot layer="2" mesh="QuadMesh" shader="TextureShader">
-        <TextureMap>
+        <Textures>
           <Texture name="TestTexture" min="linear" mag="linear"/>
-        </TextureMap>
+        </Textures>
         <ClearState>
           <Color0>0.2, 0.2, 0.2, 1.0</Color0>
         </ClearState>

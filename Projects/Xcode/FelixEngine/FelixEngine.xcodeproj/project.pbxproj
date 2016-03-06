@@ -66,7 +66,6 @@
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */; };
-		37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FD91BCF319A0018BA15 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
@@ -236,7 +235,6 @@
 		37CD4E371BC83E6300DAB4E3 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
 		37DCCD941BD3C563003D9081 /* MTLGraphicSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLGraphicSystem.mm; path = ../../../../Source/FelixEngine/MTLGraphicSystem.mm; sourceTree = "<group>"; };
 		37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLGraphicSystem.h; path = ../../../../Source/FelixEngine/MTLGraphicSystem.h; sourceTree = "<group>"; };
-		37E22FD91BCF319A0018BA15 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
@@ -582,7 +580,6 @@
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
 				C14A956C1C3D85960037D982 /* Buffer.h */,
 				37B490261BCC632E00FC97A5 /* Material.h */,
-				37E22FD91BCF319A0018BA15 /* TextureMap.h */,
 			);
 			name = RenderSlots;
 			sourceTree = "<group>";
@@ -699,7 +696,6 @@
 				37B490271BCC632E00FC97A5 /* Material.h in Headers */,
 				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
 				37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */,
-				37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */,
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
 				C1B00EE11BFBA5950060BE21 /* View.h in Headers */,

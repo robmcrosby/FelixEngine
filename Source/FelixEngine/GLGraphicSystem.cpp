@@ -319,29 +319,28 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
       viewUniforms->applyToShader(shader);
     
     // Set the Textures and Draw the Mesh
-    if (bindTextureMap(task->textureMap))
+    if (bindTextures(task->bufferSlots[BUFFER_SLOT_TEXTURES]))
       mesh->draw(task->drawState.instances, task->drawState.submesh);
   }
 }
 
-bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
+bool GLGraphicSystem::bindTextures(Buffer *textures)
 {
   bool success = true;
-  if (textureMap)
+  if (textures)
   {
     int index = 0;
-    for (TextureState &texState : *textureMap)
+    for (Buffer &buffer : *textures)
     {
-      GLTexture *texture = GetResource<GLTexture>(&texState.texture());
+      GLTexture *texture = GetResource<GLTexture>(&buffer);
       if (!texture || !texture->loaded())
         success = false;
       else
-        texture->use(index++, texState.sampler());
+        texture->use(index, Sampler(buffer.flags()));
     }
   }
   return success;
 }
-
 
 bool GLGraphicSystem::addWindows(const XMLTree::Node *node)
 {

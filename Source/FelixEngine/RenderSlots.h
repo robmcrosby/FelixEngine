@@ -15,8 +15,6 @@
 #include "Scene.h"
 #include "OwnPtr.h"
 
-#include "TextureMap.h"
-
 #include "MeshLoader.h"
 #include "TextureLoader.h"
 
@@ -46,9 +44,9 @@ namespace fx
   public:
     RenderSlot(Scene *scene):
       mScene(scene),
-      mTextureMap(scene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(0),
+      mTextures(0),
       mMesh(0),
       mFrame(0),
       mEnabled(true),
@@ -63,9 +61,9 @@ namespace fx
     }
     RenderSlot(const RenderSlot &other):
       mScene(other.mScene),
-      mTextureMap(other.mScene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(0),
+      mTextures(0),
       mMesh(0),
       mUniforms(0),
       mFrame(0)
@@ -87,9 +85,9 @@ namespace fx
       mShader   = other.mShader;
       mMesh     = other.mMesh;
       mUniforms = other.mUniforms;
+      mTextures = other.mTextures;
       mFrame    = other.mFrame;
       
-      mTextureMap = other.mTextureMap;
       mTaskType   = other.mTaskType;
       mStereoType = other.mStereoType;
       mDrawState  = other.mDrawState;
@@ -139,8 +137,8 @@ namespace fx
         setFrame(*node.subNode("Frame"));
       
       // Set the Textures
-      if (node.hasSubNode("TextureMap"))
-        mTextureMap.setToXml(*node.subNode("TextureMap"));
+      if (node.hasSubNode("Textures"))
+        addTextures(*node.subNode("Textures"));
       
       // Set the Task Type
       if (node.hasAttribute("type"))
@@ -208,8 +206,35 @@ namespace fx
       uniforms().setToUpdate();
     }
     
-    TextureMap& textureMap() {return mTextureMap;}
-    const TextureMap& textureMap() const {return mTextureMap;}
+    void addTexture(const Buffer &texture)
+    {
+      if (!mTextures.ptr())
+        mTextures = BUFFER_TEXTURES;
+      mTextures->addBuffer(texture);
+    }
+    void addTexture(const Buffer &texture, Sampler sampler)
+    {
+      addTexture(texture);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const std::string &name) {addTexture(mScene->getTextureBuffer(name));}
+    void addTexture(const std::string &name, Sampler sampler)
+    {
+      addTexture(name);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("file"))
+        addTexture(mScene->createTexture(node), Sampler(node));
+      else
+        addTexture(node.attribute("name"), Sampler(node));
+    }
+    void addTextures(const XMLTree::Node &node)
+    {
+      for (const auto subNode : node)
+        addTexture(*subNode);
+    }
     
     DrawState& drawState() {return mDrawState;}
     const DrawState& drawState() const {return mDrawState;}
@@ -233,7 +258,7 @@ namespace fx
       
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
-      task.textureMap = &mTextureMap;
+      task.bufferSlots[BUFFER_SLOT_TEXTURES] = mTextures.ptr();
       
       mGraphicSystem->addGraphicTask(task);
     }
@@ -260,7 +285,7 @@ namespace fx
     
     OwnPtr<Buffer> mShader;
     OwnPtr<Buffer> mUniforms;
-    TextureMap     mTextureMap;
+    OwnPtr<Buffer> mTextures;
     
     GRAPHIC_TASK_TYPE mTaskType;
     STEREO_TYPE       mStereoType;

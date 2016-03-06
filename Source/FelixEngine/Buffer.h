@@ -59,7 +59,7 @@ namespace fx
     BUFFER_SHADER,    /**< Shader Part */
     
     BUFFER_TEXTURES,  /**< Multiple Textures */
-    BUFFER_TEXTURE,   /**< Two dimensional image */
+    BUFFER_TEXTURE,   /**< Texture */
   };
   
   
@@ -315,6 +315,8 @@ namespace fx
       map()[index].setName(name);
       return map()[index];
     }
+    Buffer& back() {return map().back();}
+    Buffer& front() {return map().front();}
     
     void clearMap() {map().clear();}
     

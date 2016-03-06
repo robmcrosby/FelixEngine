@@ -30,9 +30,9 @@
             <Vertex function="SimpleVertexUV"/>
             <Fragment function="SimpleTexture"/>
           </Shader>
-          <TextureMap>
+          <Textures>
             <Texture name="MonoTexture" min="linear" mag="linear"/>
-          </TextureMap>
+          </Textures>
         </Material>
         <Mesh name="FullQuad" primitive="strip">
           <Buffer attribute="Position" components="4">

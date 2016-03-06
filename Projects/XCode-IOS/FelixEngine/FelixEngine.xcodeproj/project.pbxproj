@@ -66,7 +66,6 @@
 		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
 		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC51BED298D007F68E0 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE351BED5E98007F68E0 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD831BED298D007F68E0 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE361BED5E9D007F68E0 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC71BED298D007F68E0 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE371BED5EA3007F68E0 /* Projection.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB51BED298D007F68E0 /* Projection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -264,7 +263,6 @@
 		C197CDC21BED298D007F68E0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C197CDC31BED298D007F68E0 /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
 		C197CDC41BED298D007F68E0 /* TaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskingSystem.h; path = ../../../../Source/FelixEngine/TaskingSystem.h; sourceTree = "<group>"; };
-		C197CDC51BED298D007F68E0 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
 		C197CDC71BED298D007F68E0 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
 		C197CDC91BED298D007F68E0 /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = ../../../../Source/FelixEngine/Variant.h; sourceTree = "<group>"; };
 		C197CDCA1BED298D007F68E0 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../../../Source/FelixEngine/Vector.h; sourceTree = "<group>"; };
@@ -422,7 +420,6 @@
 			children = (
 				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
 				C197CD9E1BED298D007F68E0 /* Material.h */,
-				C197CDC51BED298D007F68E0 /* TextureMap.h */,
 			);
 			name = RenderSlots;
 			sourceTree = "<group>";
@@ -783,7 +780,6 @@
 				C197CE351BED5E98007F68E0 /* Component.h in Headers */,
 				C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */,
 				C197CE521BED5FC5007F68E0 /* Image.h in Headers */,
-				C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */,
 				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
 				C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */,
 				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
