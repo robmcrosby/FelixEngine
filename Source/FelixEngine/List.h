@@ -141,7 +141,7 @@ namespace fx
     
   public:
     List(): mLock(0) {SDL_AtomicSet(&mSize, 0);}
-    List(const List &other)
+    List(List &other)
     {
       SDL_AtomicSet(&mSize, 0);
       *this = other;
@@ -156,7 +156,7 @@ namespace fx
       }
     }
     
-    List& operator=(const List &other)
+    List& operator=(List &other)
     {
       if (&other != this)
       {

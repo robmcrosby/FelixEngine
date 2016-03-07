@@ -36,13 +36,13 @@
       <Slot layer="0" pass="MainPass">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
-        <Shader name="DirectLightShader">
-          <Vertex name="SimpleNormal"/>
-          <Fragment name="DirectLight"/>
-        </Shader>
-        <Uniforms>
+        <Material name="TestMaterial">
+          <Shader name="DirectLightShader">
+            <Vertex name="SimpleNormal"/>
+            <Fragment name="DirectLight"/>
+          </Shader>
           <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
-        </Uniforms>
+        </Material>
       </Slot>
     </RenderSlots>
   </Model>

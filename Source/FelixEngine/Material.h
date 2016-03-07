@@ -10,6 +10,7 @@
 #define Material_h
 
 #include "FelixEngine.h"
+#include "EventHandler.h"
 #include "Scene.h"
 #include "Buffer.h"
 #include "OwnPtr.h"
@@ -18,11 +19,45 @@
 
 namespace fx
 {
-  class Material
+  class Material: public EventHandler
   {
   public:
-    Material(Scene *scene): mScene(scene) {}
+    Material(Scene *scene):
+      mScene(scene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mShader(0),
+      mUniforms(0),
+      mTextures(0)
+    {
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+    }
+    Material(const Material &other):
+      mScene(other.mScene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mShader(0),
+      mUniforms(0),
+      mTextures(0)
+    {
+      *this = other;
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+    }
     virtual ~Material() {}
+    
+    Material& operator=(const Material &other)
+    {
+      mShader = other.mShader;
+      mUniforms = other.mUniforms;
+      mTextures = other.mTextures;
+      return *this;
+    }
+    
+    virtual void handle(const Event &event)
+    {
+      if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
+        updateBuffers();
+    }
     
     void setToXml(const XMLTree::Node &node)
     {
@@ -42,27 +77,32 @@ namespace fx
       }
     }
     
+    Buffer& shader()
+    {
+      if (!mShader.ptr())
+        mShader = BUFFER_PROGRAM;
+      return *mShader;
+    }
+    Buffer* shaderPtr() const {return mShader.ptr();}
     void setShader(const Buffer &shader) {mShader = shader;}
     void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
     void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
-    Buffer& shader() {return *mShader;}
-    const Buffer& shader() const {return *mShader;}
+    void clearShader() {mShader.clear();}
     
     
-    void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
-    void setUniforms(const XMLTree::Node &node)
-    {
-      mUniforms = BUFFER_UNIFORM;
-      mUniforms->setToXml(node);
-      mUniforms->setToUpdate();
-    }
     Buffer& uniforms()
     {
       if (!mUniforms.ptr())
         mUniforms = BUFFER_UNIFORM;
       return *mUniforms;
     }
-    const Buffer& uniforms() const {return *mUniforms;}
+    Buffer* uniformsPtr() const {return mUniforms.ptr();}
+    void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
+    void setUniforms(const XMLTree::Node &node)
+    {
+      uniforms().setToXml(node);
+      uniforms().setToUpdate();
+    }
     
     void setUniform(const XMLTree::Node &node) {uniforms().set(node);}
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
@@ -71,14 +111,17 @@ namespace fx
       uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
       uniforms().setToUpdate();
     }
+    void clearUniforms() {mUniforms.clear();}
     
     
-    void addTexture(const Buffer &texture)
+    Buffer& textures()
     {
       if (!mTextures.ptr())
         mTextures = BUFFER_TEXTURES;
-      mTextures->addBuffer(texture);
+      return *mTextures;
     }
+    Buffer* texturesPtr() const {return mTextures.ptr();}
+    void addTexture(const Buffer &texture) {textures().addBuffer(texture);}
     void addTexture(const Buffer &texture, Sampler sampler)
     {
       addTexture(texture);
@@ -102,13 +145,23 @@ namespace fx
       for (const auto subNode : node)
         addTexture(*subNode);
     }
+    void clearTextures() {mTextures.clear();}
     
   private:
+    void updateBuffers()
+    {
+      if (mShader.ptr() && !mShader->updated())
+        mGraphicSystem->uploadBuffer(*mShader);
+      if (mUniforms.ptr() && !mUniforms->updated())
+        mGraphicSystem->uploadBuffer(*mUniforms);
+    }
+    
     OwnPtr<Buffer> mShader;
     OwnPtr<Buffer> mUniforms;
     OwnPtr<Buffer> mTextures;
     
     Scene *mScene;
+    GraphicSystem *mGraphicSystem;
   };
 }
 
