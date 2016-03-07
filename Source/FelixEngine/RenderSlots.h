@@ -48,6 +48,7 @@ namespace fx
       mShader(0),
       mTextures(0),
       mMesh(0),
+      mUniforms(0),
       mFrame(0),
       mEnabled(true),
       mLayer(0),
@@ -107,6 +108,7 @@ namespace fx
     
     void setToXml(const XMLTree::Node &node)
     {
+      // Set the Layer
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
       
@@ -117,28 +119,14 @@ namespace fx
       // Set the Mesh
       if (node.hasAttribute("mesh"))
         setMesh(node.attribute("mesh"));
-      if (node.hasSubNode("Mesh"))
-        setMesh(*node.subNode("Mesh"));
       
       // Set the Shader
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
-      if (node.hasSubNode("Shader"))
-        setShader(*node.subNode("Shader"));
-      
-      // Set the Uniforms
-      if (node.hasSubNode("Uniforms"))
-        setUniforms(*node.subNode("Uniforms"));
       
       // Set the Frame
       if (node.hasAttribute("frame"))
         setFrame(node.attribute("frame"));
-      if (node.hasSubNode("Frame"))
-        setFrame(*node.subNode("Frame"));
-      
-      // Set the Textures
-      if (node.hasSubNode("Textures"))
-        addTextures(*node.subNode("Textures"));
       
       // Set the Task Type
       if (node.hasAttribute("type"))
@@ -149,6 +137,25 @@ namespace fx
       
       // Set the Draw State
       mDrawState.setToXml(node);
+      
+      // Process the Sub-Nodes
+      for (const auto &subNode : node)
+      {
+        if (*subNode == "Mesh")
+          setMesh(*subNode);
+        else if (*subNode == "Shader")
+          setShader(*subNode);
+        else if (*subNode == "Frame")
+          setFrame(*subNode);
+        else if (*subNode == "Textures")
+          addTextures(*subNode);
+        else if (*subNode == "Texture")
+          addTexture(*subNode);
+        else if (*subNode == "Uniforms")
+          setUniforms(*subNode);
+        else
+          setUniform(*subNode);
+      }
     }
     
     void enable() {mEnabled = true;}
@@ -171,18 +178,21 @@ namespace fx
     void setMesh(const XMLTree::Node &node) {mMesh = &mScene->createMesh(node);}
     Buffer& mesh() {return *mMesh;}
     const Buffer& mesh() const {return *mMesh;}
+    void clearMesh() {mMesh.clear();}
     
     void setShader(const Buffer &shader) {mShader = shader;}
     void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
     void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
     Buffer& shader() {return *mShader;}
     const Buffer& shader() const {return *mShader;}
+    void clearShader() {mShader.clear();}
     
     void setFrame(const Buffer &frame) {mFrame = frame;}
     void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
     void setFrame(const XMLTree::Node &node) {mFrame = &mScene->createFrame(node);}
     Buffer& frame() {return *mFrame;}
     const Buffer& frame() const {return *mFrame;}
+    void clearFrame() {mFrame.clear();}
     
     void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
     void setUniforms(const XMLTree::Node &node)
@@ -199,12 +209,14 @@ namespace fx
     }
     const Buffer& uniforms() const {return *mUniforms;}
     
+    void setUniform(const XMLTree::Node &node) {uniforms().set(node);}
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
     void setStruct(const std::string &name, const std::string &comp, const Variant &var)
     {
       uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
       uniforms().setToUpdate();
     }
+    void clearUniforms() {mUniforms.clear();}
     
     void addTexture(const Buffer &texture)
     {
@@ -235,6 +247,7 @@ namespace fx
       for (const auto subNode : node)
         addTexture(*subNode);
     }
+    void clearTextures() {mTextures.clear();}
     
     DrawState& drawState() {return mDrawState;}
     const DrawState& drawState() const {return mDrawState;}
@@ -257,8 +270,9 @@ namespace fx
       task.bufferSlots[BUFFER_SLOT_FRAME]    = mFrame.ptr();
       
       task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
-      task.bufferSlots[BUFFER_SLOT_UNIFORMS_0] = mUniforms.ptr();
       task.bufferSlots[BUFFER_SLOT_TEXTURES] = mTextures.ptr();
+      
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS_0] = mUniforms.ptr();
       
       mGraphicSystem->addGraphicTask(task);
     }

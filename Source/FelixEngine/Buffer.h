@@ -322,8 +322,12 @@ namespace fx
     
     void set(const std::string &name, const Variant &var)
     {
-      Buffer &buffer = getBuffer(name);
-      buffer = var;
+      getBuffer(name) = var;
+      setToUpdate();
+    }
+    void set(const XMLTree::Node &node)
+    {
+      getBuffer(node.attribute("name")) = node;
       setToUpdate();
     }
     
