@@ -283,8 +283,24 @@ namespace fx
     Buffer* materialUniforms() const {return mMaterial.ptr() ? mMaterial->uniformsPtr() : nullptr;}
     void setMaterial(const Material &material) {mMaterial = material;}
     void setMaterial(Material *material) {mMaterial = material;}
-    void setMaterial(const std::string &name) {mMaterial = &mScene->getMaterial(name);}
-    void setMaterial(const XMLTree::Node &node) {mMaterial = &mScene->createMaterial(node);}
+    void setMaterial(const std::string &name)
+    {
+      mMaterial = mScene->getChild<Material>(name);
+      if (!mMaterial.ptr())
+      {
+        mMaterial = new Material(mScene);
+        mMaterial->setName(name);
+        mScene->addChild(mMaterial.ptr());
+      }
+    }
+    void setMaterial(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+        setMaterial(node.attribute("name"));
+      else if (!mMaterial.ptr())
+        mMaterial = mScene;
+      mMaterial->setToXml(node);
+    }
     void clearMaterial() {mMaterial.clear();}
     
     DrawState& drawState() {return mDrawState;}

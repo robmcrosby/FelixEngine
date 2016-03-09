@@ -59,6 +59,8 @@ namespace fx
     
     virtual void setToXml(const XMLTree::Node &node)
     {
+      Component::setToXml(node);
+      
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
       

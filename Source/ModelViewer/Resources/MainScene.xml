@@ -26,6 +26,13 @@
       </Slot>
     </RenderSlots>
   </ViewerCamera>
+  <Material name="ColorMaterial">
+    <Shader name="DirectLightShader">
+      <Vertex name="SimpleNormal"/>
+      <Fragment name="DirectLight"/>
+    </Shader>
+    <vec4 name="Color">0.2, 0.9, 0.2, 1.0</vec4>
+  </Material>
   <Model name="Bunny">
     <Transform>
       <Scale>0.2, 0.2, 0.2</Scale>
@@ -33,16 +40,9 @@
       <Translate>0.0, -0.2, 0.0</Translate>
     </Transform>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
+      <Slot layer="0" pass="MainPass" material="ColorMaterial">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
-        <Material name="ColorMaterial">
-          <Shader name="DirectLightShader">
-            <Vertex name="SimpleNormal"/>
-            <Fragment name="DirectLight"/>
-          </Shader>
-          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
-        </Material>
       </Slot>
     </RenderSlots>
   </Model>

@@ -30,7 +30,6 @@ Scene::Scene(): Component(this),
 
 Scene::~Scene()
 {
-  clearMaterials();
   clearBuffers();
 }
 
@@ -175,29 +174,4 @@ void Scene::clearBuffers()
     delete buffer;
   mTextureBuffers.clear();
 }
-
-Material& Scene::getMaterial(const std::string &name)
-{
-  if (!mMaterials.contains(name))
-  {
-    int index = mMaterials.push(name, new Material(this));
-    return *mMaterials[index];
-  }
-  return *mMaterials[name];
-}
-
-Material& Scene::createMaterial(const XMLTree::Node &node)
-{
-  Material &material = getMaterial(node.attribute("name"));
-  material.setToXml(node);
-  return material;
-}
-
-void Scene::clearMaterials()
-{
-  for (Material *material : mMaterials)
-    delete material;
-  mMaterials.clear();
-}
-
 

@@ -15,6 +15,7 @@
 #include "OrbitView.h"
 #include "GyroView.h"
 #include "Transform.h"
+#include "Material.h"
 
 #include "Model.h"
 #include "Camera.h"
@@ -37,6 +38,8 @@ DEFINE_COMPONENT_ID(Projection)
 
 DEFINE_COMPONENT_ID(Model)
 DEFINE_COMPONENT_ID(Camera)
+DEFINE_COMPONENT_ID(Material)
+
 DEFINE_COMPONENT_ID(UIWidget)
 DEFINE_COMPONENT_ID(UIScreen)
 DEFINE_COMPONENT_ID(UIText)

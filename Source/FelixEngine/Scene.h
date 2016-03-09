@@ -48,10 +48,6 @@ namespace fx
     
     void clearBuffers();
     
-    Material& getMaterial(const std::string &name);
-    Material& createMaterial(const XMLTree::Node &node);
-    void clearMaterials();
-    
     int getPassIndex(const std::string &name)
     {
       if (!mPassMap.count(name))
@@ -69,8 +65,6 @@ namespace fx
     IndexedMap<Buffer*> mShaderBuffers;
     IndexedMap<Buffer*> mMeshBuffers;
     IndexedMap<Buffer*> mTextureBuffers;
-    
-    IndexedMap<Material*> mMaterials;
     
     std::map<std::string, int> mPassMap;
     
