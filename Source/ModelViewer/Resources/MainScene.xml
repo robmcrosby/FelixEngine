@@ -36,7 +36,7 @@
       <Slot layer="0" pass="MainPass">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
-        <Material name="TestMaterial">
+        <Material name="ColorMaterial">
           <Shader name="DirectLightShader">
             <Vertex name="SimpleNormal"/>
             <Fragment name="DirectLight"/>

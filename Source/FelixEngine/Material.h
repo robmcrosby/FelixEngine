@@ -10,7 +10,7 @@
 #define Material_h
 
 #include "FelixEngine.h"
-#include "EventHandler.h"
+#include "Component.h"
 #include "Scene.h"
 #include "Buffer.h"
 #include "OwnPtr.h"
@@ -19,11 +19,10 @@
 
 namespace fx
 {
-  class Material: public EventHandler
+  class Material: public Component
   {
   public:
-    Material(Scene *scene):
-      mScene(scene),
+    Material(Scene *scene): Component(scene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(0),
       mUniforms(0),
@@ -32,8 +31,7 @@ namespace fx
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
     }
-    Material(const Material &other):
-      mScene(other.mScene),
+    Material(const Material &other): Component(other.mScene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(0),
       mUniforms(0),
@@ -59,7 +57,7 @@ namespace fx
         updateBuffers();
     }
     
-    void setToXml(const XMLTree::Node &node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
@@ -160,7 +158,6 @@ namespace fx
     OwnPtr<Buffer> mUniforms;
     OwnPtr<Buffer> mTextures;
     
-    Scene *mScene;
     GraphicSystem *mGraphicSystem;
   };
 }

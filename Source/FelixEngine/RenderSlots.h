@@ -130,6 +130,10 @@ namespace fx
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
       
+      // Set the Material
+      if (node.hasAttribute("material"))
+        setMaterial(node.attribute("material"));
+      
       // Set the Frame
       if (node.hasAttribute("frame"))
         setFrame(node.attribute("frame"));
