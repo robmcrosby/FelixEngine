@@ -8,7 +8,9 @@
 
 #include "Component.h"
 
+#include "Resources.h"
 #include "RenderSlots.h"
+
 #include "Projection.h"
 #include "View.h"
 #include "TrackingView.h"
@@ -28,7 +30,9 @@
 using namespace fx;
 using namespace std;
 
+DEFINE_COMPONENT_ID(Resources)
 DEFINE_COMPONENT_ID(RenderSlots)
+
 DEFINE_COMPONENT_ID(Transform)
 DEFINE_COMPONENT_ID(View)
 DEFINE_COMPONENT_ID(TrackingView)

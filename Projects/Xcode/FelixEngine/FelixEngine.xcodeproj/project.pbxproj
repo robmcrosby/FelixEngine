@@ -247,6 +247,7 @@
 		C1250DED1C20ACB100C6F7C8 /* TestUI.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TestUI.xml; path = ../../../../Source/ModelViewer/Resources/TestUI.xml; sourceTree = "<group>"; };
 		C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
 		C1250DF11C20F16100C6F7C8 /* UIWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIWidget.h; path = ../../../../Source/FelixEngine/UIWidget.h; sourceTree = "<group>"; };
+		C13CF5181CA1EFF300781A3A /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
 		C14A956C1C3D85960037D982 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
 		C15D739C1BF3C619002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
@@ -580,6 +581,7 @@
 		C1250DFD1C23B71800C6F7C8 /* RenderSlots */ = {
 			isa = PBXGroup;
 			children = (
+				C13CF5181CA1EFF300781A3A /* Resources.h */,
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
 				C14A956C1C3D85960037D982 /* Buffer.h */,
 				37B490261BCC632E00FC97A5 /* Material.h */,
