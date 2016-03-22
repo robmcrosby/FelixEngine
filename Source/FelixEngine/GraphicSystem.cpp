@@ -7,7 +7,6 @@
 //
 
 #include "GraphicSystem.h"
-#include "UniformMap.h"
 
 
 using namespace fx;

@@ -48,14 +48,12 @@
 		37B490051BC9D77A00FC97A5 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490031BC9D77A00FC97A5 /* GLShader.h */; };
 		37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490071BC9DEE000FC97A5 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; };
-		37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */; };
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; };
 		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; };
 		37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490191BCB119300FC97A5 /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490181BCB119300FC97A5 /* Mutex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901A1BCB11F200FC97A5 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4901D1BCB127500FC97A5 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901C1BCB127500FC97A5 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901E1BCB12F600FC97A5 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490211BCB13F900FC97A5 /* Color.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490201BCB13F900FC97A5 /* Color.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490231BCB1C7600FC97A5 /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490221BCB1C7600FC97A5 /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490271BCC632E00FC97A5 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490261BCC632E00FC97A5 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -68,7 +66,6 @@
 		37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37CD4E391BC83E6300DAB4E3 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = 37CD4E371BC83E6300DAB4E3 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */; };
-		37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FD91BCF319A0018BA15 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE01BCF3A120018BA15 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FDF1BCF3A120018BA15 /* Image.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 37E22FE31BCF43D10018BA15 /* FreeImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37E22FE61BCF43F50018BA15 /* libfreeimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E22FE51BCF43F50018BA15 /* libfreeimage.a */; };
@@ -79,7 +76,7 @@
 		C1250DEE1C20ACB100C6F7C8 /* TestUI.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1250DED1C20ACB100C6F7C8 /* TestUI.xml */; };
 		C1250DF01C20F14E00C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1250DF21C20F16900C6F7C8 /* UIWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF11C20F16100C6F7C8 /* UIWidget.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C14A956D1C3D85960037D982 /* BufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C14A956C1C3D85960037D982 /* BufferMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C14A956D1C3D85960037D982 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C14A956C1C3D85960037D982 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; };
 		C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */; };
 		C15D73A21BF3C638002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */; };
@@ -104,6 +101,7 @@
 		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
 		C1A7D4301BE178200064E84A /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42F1BE178200064E84A /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4321BE2EA360064E84A /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4311BE2EA360064E84A /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1AC38071C8CB37100DCC638 /* Scene.cpp */; };
 		C1B00EB21BF693A60060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00EB11BF693A60060BE21 /* Assets.xcassets */; };
 		C1B00EBC1BF693E90060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00EBB1BF693E90060BE21 /* main.cpp */; };
 		C1B00EBD1BF6940B0060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 377B9B181BBDF12600440546 /* SDL2.framework */; };
@@ -210,14 +208,12 @@
 		37B490031BC9D77A00FC97A5 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLShader.h; path = ../../../../Source/FelixEngine/GLShader.h; sourceTree = "<group>"; };
 		37B490071BC9DEE000FC97A5 /* GraphicResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicResources.h; path = ../../../../Source/FelixEngine/GraphicResources.h; sourceTree = "<group>"; };
 		37B4900A1BC9E0A900FC97A5 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture.h; path = ../../../../Source/FelixEngine/GLTexture.h; sourceTree = "<group>"; };
-		37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferMap.h; path = ../../../../Source/FelixEngine/VertexBufferMap.h; sourceTree = "<group>"; };
 		37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = ../../../../Source/FelixEngine/MeshLoader.cpp; sourceTree = "<group>"; };
 		37B490111BC9EB9F00FC97A5 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = ../../../../Source/FelixEngine/MeshLoader.h; sourceTree = "<group>"; };
 		37B490161BCB10B900FC97A5 /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Semaphore.h; path = ../../../../Source/FelixEngine/Semaphore.h; sourceTree = "<group>"; };
 		37B490181BCB119300FC97A5 /* Mutex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mutex.h; path = ../../../../Source/FelixEngine/Mutex.h; sourceTree = "<group>"; };
 		37B4901A1BCB11F200FC97A5 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = ../../../../Source/FelixEngine/IndexedMap.h; sourceTree = "<group>"; };
 		37B4901C1BCB127500FC97A5 /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = ../../../../Source/FelixEngine/Variant.h; sourceTree = "<group>"; };
-		37B4901E1BCB12F600FC97A5 /* UniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniformMap.h; path = ../../../../Source/FelixEngine/UniformMap.h; sourceTree = "<group>"; };
 		37B490201BCB13F900FC97A5 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../../../Source/FelixEngine/Color.h; sourceTree = "<group>"; };
 		37B490221BCB1C7600FC97A5 /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = ../../../../Source/FelixEngine/GraphicTask.h; sourceTree = "<group>"; };
 		37B490261BCC632E00FC97A5 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = ../../../../Source/FelixEngine/Material.h; sourceTree = "<group>"; };
@@ -240,7 +236,6 @@
 		37CD4E371BC83E6300DAB4E3 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
 		37DCCD941BD3C563003D9081 /* MTLGraphicSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLGraphicSystem.mm; path = ../../../../Source/FelixEngine/MTLGraphicSystem.mm; sourceTree = "<group>"; };
 		37DCCD951BD3C563003D9081 /* MTLGraphicSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLGraphicSystem.h; path = ../../../../Source/FelixEngine/MTLGraphicSystem.h; sourceTree = "<group>"; };
-		37E22FD91BCF319A0018BA15 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
 		37E22FDF1BCF3A120018BA15 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../../../Source/FelixEngine/Image.h; sourceTree = "<group>"; };
 		37E22FE31BCF43D10018BA15 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FreeImage.h; path = ../../../ThirdParty/Freeimage/OSX/FreeImage.h; sourceTree = "<group>"; };
 		37E22FE51BCF43F50018BA15 /* libfreeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreeimage.a; path = ../../../ThirdParty/Freeimage/OSX/libfreeimage.a; sourceTree = "<group>"; };
@@ -252,7 +247,8 @@
 		C1250DED1C20ACB100C6F7C8 /* TestUI.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TestUI.xml; path = ../../../../Source/ModelViewer/Resources/TestUI.xml; sourceTree = "<group>"; };
 		C1250DEF1C20F14E00C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
 		C1250DF11C20F16100C6F7C8 /* UIWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIWidget.h; path = ../../../../Source/FelixEngine/UIWidget.h; sourceTree = "<group>"; };
-		C14A956C1C3D85960037D982 /* BufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BufferMap.h; path = ../../../../Source/FelixEngine/BufferMap.h; sourceTree = "<group>"; };
+		C13CF5181CA1EFF300781A3A /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
+		C14A956C1C3D85960037D982 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
 		C15D739C1BF3C619002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
 		C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
@@ -275,6 +271,7 @@
 		C1A7D42D1BE178020064E84A /* EventHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = ../../../../Source/FelixEngine/EventHandler.h; sourceTree = "<group>"; };
 		C1A7D42F1BE178200064E84A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = ../../../../Source/FelixEngine/Event.h; sourceTree = "<group>"; };
 		C1A7D4311BE2EA360064E84A /* Pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Pool.h; path = ../../../../Source/FelixEngine/Pool.h; sourceTree = "<group>"; };
+		C1AC38071C8CB37100DCC638 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Scene.cpp; path = ../../../../Source/FelixEngine/Scene.cpp; sourceTree = "<group>"; };
 		C1B00EA91BF693A60060BE21 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B00EB11BF693A60060BE21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1B00EB61BF693A60060BE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -457,7 +454,6 @@
 		37B4900D1BC9E7B300FC97A5 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				37B4900E1BC9E87000FC97A5 /* VertexBufferMap.h */,
 				37B490111BC9EB9F00FC97A5 /* MeshLoader.h */,
 				37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */,
 				C1E683521C4EEFC600E1705D /* TextureLoader.h */,
@@ -522,6 +518,7 @@
 				37CD4E1E1BC5C1AC00DAB4E3 /* Component.h */,
 				C10B5D3C1BF0F9DE00583B8F /* Component.cpp */,
 				37104A001BBF4056003EEC37 /* Scene.h */,
+				C1AC38071C8CB37100DCC638 /* Scene.cpp */,
 				C1250DFD1C23B71800C6F7C8 /* RenderSlots */,
 				C1250DFB1C23B61E00C6F7C8 /* Model */,
 				C1250DFA1C23B5FD00C6F7C8 /* Camera */,
@@ -584,11 +581,10 @@
 		C1250DFD1C23B71800C6F7C8 /* RenderSlots */ = {
 			isa = PBXGroup;
 			children = (
+				C13CF5181CA1EFF300781A3A /* Resources.h */,
 				37B48FE01BC984B500FC97A5 /* RenderSlots.h */,
-				C14A956C1C3D85960037D982 /* BufferMap.h */,
+				C14A956C1C3D85960037D982 /* Buffer.h */,
 				37B490261BCC632E00FC97A5 /* Material.h */,
-				37B4901E1BCB12F600FC97A5 /* UniformMap.h */,
-				37E22FD91BCF319A0018BA15 /* TextureMap.h */,
 			);
 			name = RenderSlots;
 			sourceTree = "<group>";
@@ -705,7 +701,6 @@
 				37B490271BCC632E00FC97A5 /* Material.h in Headers */,
 				370FEA861BC31C6E00440244 /* Matrix.h in Headers */,
 				37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */,
-				37E22FDA1BCF319A0018BA15 /* TextureMap.h in Headers */,
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
 				C1B00EE11BFBA5950060BE21 /* View.h in Headers */,
@@ -732,14 +727,12 @@
 				3722FDED1BDEA1DC00B07476 /* MultiVector.h in Headers */,
 				C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */,
 				C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */,
-				37B4901F1BCB12F600FC97A5 /* UniformMap.h in Headers */,
 				C1D905231C17B1750099974C /* Condition.h in Headers */,
 				C106DB721BFCFECA000065D4 /* Model.h in Headers */,
 				C19892561BFD370F007DF57A /* TrackingView.h in Headers */,
 				37E22FE41BCF43D10018BA15 /* FreeImage.h in Headers */,
 				C197CCCC1BE839C9007F68E0 /* EventHandler.h in Headers */,
 				C197CE2E1BED5E62007F68E0 /* Scene.h in Headers */,
-				37B4900F1BC9E87000FC97A5 /* VertexBufferMap.h in Headers */,
 				C197CCC71BE69D08007F68E0 /* List.h in Headers */,
 				37B490011BC9D75900FC97A5 /* GLMesh.h in Headers */,
 				C1E683541C4EEFC600E1705D /* TextureLoader.h in Headers */,
@@ -760,7 +753,7 @@
 				374A4E2C1BD1EBB300DDF87E /* Resource.h in Headers */,
 				37B490211BCB13F900FC97A5 /* Color.h in Headers */,
 				37CD4E1F1BC5C1AC00DAB4E3 /* Component.h in Headers */,
-				C14A956D1C3D85960037D982 /* BufferMap.h in Headers */,
+				C14A956D1C3D85960037D982 /* Buffer.h in Headers */,
 				37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */,
 				C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */,
 				37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */,
@@ -926,6 +919,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1E683531C4EEFC600E1705D /* TextureLoader.cpp in Sources */,
+				C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */,
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,
 				C10B5D3D1BF0F9DE00583B8F /* Component.cpp in Sources */,
 				37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */,

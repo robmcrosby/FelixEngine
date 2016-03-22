@@ -11,7 +11,6 @@
 
 #include "GLGraphicSystem.h"
 #include "GLTexture.h"
-#include "TextureMap.h"
 #include "FileSystem.h"
 
 #define ERROR_MSG_SIZE 512
@@ -84,11 +83,11 @@ namespace fx
      *
      * @param bufferMap Refrence to the BufferMap containing the shader source.
      */
-    void uploadBufferMap(const BufferMap &bufferMap)
+    void uploadBufferMap(Buffer &bufferMap)
     {
       bool success = false;
       unload();
-      if (bufferMap.size() >= 2)
+      if (bufferMap.mapSize() >= 2)
       {
         GLuint shaderParts[SHADER_COUNT];
         for (int i = 0; i < SHADER_COUNT; ++i)
@@ -121,7 +120,33 @@ namespace fx
       std::string source = buffer;
       if (source == "")
         source = mGLSystem->getShaderFunction(buffer.name());
-      return compilePart(type, source.c_str(), parts+part);
+      return preCompile(source) && compilePart(type, source.c_str(), parts+part);
+    }
+    
+    /**
+     * Performs some Pre Compiler functions to the given string.
+     *
+     * @param [in,out] src Source to apply the Pre Compiling to.
+     * @return true if seccessful or false if there was a problem.
+     */
+    bool preCompile(std::string &src)
+    {
+      size_t start;
+      while ((start = src.find("#include")) != std::string::npos)
+      {
+        size_t cmt = src.find("\"", start);
+        size_t end = src.find("\"", cmt+1);
+        if (cmt == std::string::npos || end == std::string::npos)
+        {
+          std::cerr << "Error parsing include" << std::endl;
+          return false;
+        }
+        
+        std::string name = src.substr(cmt+1, end-cmt-1);
+        std::string header = mGLSystem->getShaderFunction(name);
+        src = src.substr(0, start) + header + src.substr(end+1);
+      }
+      return true;
     }
     
     /**

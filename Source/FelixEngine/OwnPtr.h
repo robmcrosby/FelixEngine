@@ -73,7 +73,7 @@ namespace fx
      */
     OwnPtr& operator=(const OwnPtr &ptr)
     {
-      if (&ptr && this != &ptr)
+      if (this != &ptr)
         return ptr.mHasOwnership ? *this = *ptr.mPtr : *this = ptr.mPtr;
       return *this;
     }
@@ -89,6 +89,7 @@ namespace fx
     }
     
     T* operator->() {return mPtr;}
+    const T* operator->() const {return mPtr;}
     T& operator*() {return *mPtr;}
     const T& operator*() const {return *mPtr;}
     

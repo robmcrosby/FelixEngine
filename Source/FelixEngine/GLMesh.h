@@ -112,7 +112,7 @@ namespace fx
      *
      * @param bufferMap Refrence to the BufferMap to load from.
      */
-    void uploadBufferMap(const BufferMap &bufferMap)
+    void uploadBufferMap(Buffer &bufferMap)
     {
       bool success = true;
       unload();

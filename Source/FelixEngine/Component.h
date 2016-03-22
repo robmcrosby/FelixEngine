@@ -86,7 +86,25 @@ namespace fx
     }
     
     template <typename T>
+    T* getChild(const std::string &name) const
+    {
+      for (Component *comp : mChildren)
+      {
+        if (comp->name() == name)
+        {
+          T *child = dynamic_cast<T*>(comp);
+          if (child)
+            return child;
+        }
+      }
+      return nullptr;
+    }
+    
+    template <typename T>
     T* getSibling() const {return mParrent ? mParrent->getChild<T>() : nullptr;}
+    
+    template <typename T>
+    T* getSibling(const std::string &name) const {return mParrent ? mParrent->getChild<T>(name) : nullptr;}
     
     template <typename T>
     T* getParrent() const

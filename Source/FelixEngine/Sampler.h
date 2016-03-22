@@ -31,34 +31,41 @@ namespace fx
   
   enum SAMPLER_FLAGS
   {
-    SAMPLER_COORD_S_OFFSET = 0,
-    SAMPLER_COORD_T_OFFSET = 2,
-    SAMPLER_COORD_R_OFFSET = 4,
+    SAMPLER_SAMPLES_MASK = 0x00ff,
+    SAMPLER_MAX_SAMPLES  = 32,
     
-    SAMPLER_COORD_S_MASK   = 0x0003,
-    SAMPLER_COORD_T_MASK   = 0x000C,
-    SAMPLER_COORD_R_MASK   = 0x0030,
+    SAMPLER_COORD_S_OFFSET = 8,
+    SAMPLER_COORD_T_OFFSET = 10,
+    SAMPLER_COORD_R_OFFSET = 12,
     
-    SAMPLER_FILTER_MIN_OFFSET = 6,
-    SAMPLER_FILTER_MAG_OFFSET = 7,
-    SAMPLER_FILTER_MIP_OFFSET = 8,
+    SAMPLER_COORD_S_MASK   = 0x0300,
+    SAMPLER_COORD_T_MASK   = 0x0C00,
+    SAMPLER_COORD_R_MASK   = 0x3000,
     
-    SAMPLER_FILTER_MIN_MASK = 0x0040,
-    SAMPLER_FILTER_MAG_MASK = 0x0080,
-    SAMPLER_FILTER_MIP_MASK = 0x0100,
+    SAMPLER_FILTER_MIN_OFFSET = 14,
+    SAMPLER_FILTER_MAG_OFFSET = 15,
+    SAMPLER_FILTER_MIP_OFFSET = 16,
     
-    SAMPLER_MIP_ENABLED   = 0x0200,
-    SAMPLER_UN_NORMALIZED = 0x0400
+    SAMPLER_FILTER_MIN_MASK = 0x004000,
+    SAMPLER_FILTER_MAG_MASK = 0x008000,
+    SAMPLER_FILTER_MIP_MASK = 0x010000,
+    
+    SAMPLER_MIP_ENABLED   = 0x020000,
+    SAMPLER_UN_NORMALIZED = 0x040000
   };
   
   class Sampler
   {
   public:
-    Sampler(): mFlags(0), mSamples(1), mLodMin(0), mLodMax(FLT_MAX) {}
-    Sampler(const XMLTree::Node &node): mFlags(0), mSamples(1), mLodMin(0), mLodMax(FLT_MAX) {setToXml(node);}
+    Sampler(int flags = 0, float min = 0.0f, float max = FLT_MAX): mFlags(flags), mLodMin(min), mLodMax(max) {}
+    Sampler(const XMLTree::Node &node): mFlags(0), mLodMin(0), mLodMax(FLT_MAX) {setToXml(node);}
     
-    void setSamples(unsigned int samples) {mSamples = samples;}
-    unsigned int samples() const {return mSamples;}
+    void setSamples(int samples)
+    {
+      samples = samples < 1 ? 1 : samples > SAMPLER_MAX_SAMPLES ? SAMPLER_MAX_SAMPLES : samples;
+      mFlags = (mFlags & ~SAMPLER_SAMPLES_MASK) | ((samples - 1) & SAMPLER_SAMPLES_MASK);
+    }
+    int samples() const {return (mFlags & ~SAMPLER_SAMPLES_MASK) + 1;}
     
     void setSCoord(SAMPLER_COORD coord) {mFlags = (mFlags & ~SAMPLER_COORD_S_MASK) | (coord << SAMPLER_COORD_S_OFFSET);}
     SAMPLER_COORD sCoord() const {return (SAMPLER_COORD)((mFlags & SAMPLER_COORD_S_MASK) >> SAMPLER_COORD_S_OFFSET);}
@@ -92,19 +99,19 @@ namespace fx
     void setLodMax(float lod) {mLodMax = lod;}
     float lodMax() const {return mLodMax;}
     
+    int flags() const {return mFlags;}
+    
     bool operator<(const Sampler &other) const
     {
       if (mFlags != other.mFlags)
         return mFlags < other.mFlags;
-      if (mSamples != other.mSamples)
-        return mSamples < other.mSamples;
       if (mLodMin != other.mLodMin)
         return mLodMin < other.mLodMin;
       return mLodMax < other.mLodMax;
     }
     bool operator==(const Sampler &other) const
     {
-      return mFlags == other.mFlags && mSamples == other.mSamples && mLodMin == other.mLodMin && mLodMax == other.mLodMax;
+      return mFlags == other.mFlags && mLodMin == other.mLodMin && mLodMax == other.mLodMax;
     }
     
     bool setToXml(const XMLTree::Node &node)
@@ -118,7 +125,6 @@ namespace fx
     
   private:
     int mFlags;
-    int mSamples;
     float mLodMin;
     float mLodMax;
   };

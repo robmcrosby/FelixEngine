@@ -36,7 +36,8 @@
 		C1124BF21BF1865C00CFADD7 /* DefaultLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */; };
 		C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF41C20F4E000C6F7C8 /* UIWidget.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF71C21434300C6F7C8 /* UIScreen.h */; };
-		C14A956F1C3DD57E0037D982 /* BufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C14A956E1C3DD57E0037D982 /* BufferMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C13CF51A1CA1F4F200781A3A /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF5191CA1F4F200781A3A /* Resources.h */; };
+		C13CF51C1CA1F50A00781A3A /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF51B1CA1F50A00781A3A /* Buffer.h */; };
 		C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73911BF3B457002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */; };
 		C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */; };
@@ -64,12 +65,9 @@
 		C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C197CE181BED57B3007F68E0 /* Assets.xcassets */; };
 		C197CE221BED580F007F68E0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CE211BED580F007F68E0 /* main.cpp */; };
 		C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8A1BED298D007F68E0 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE2B1BED5E40007F68E0 /* VertexBufferMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */; };
 		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
 		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC81BED298D007F68E0 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC51BED298D007F68E0 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE351BED5E98007F68E0 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD831BED298D007F68E0 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE361BED5E9D007F68E0 /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC71BED298D007F68E0 /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE371BED5EA3007F68E0 /* Projection.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDB51BED298D007F68E0 /* Projection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,6 +120,7 @@
 		C198925C1BFFE171007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925B1BFFE171007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C19EDC641C0E514A00F997AB /* FileSystem.mm */; };
 		C19EDC671C0E514A00F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC651C0E514A00F997AB /* FileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1AC38061C8CB34C00DCC638 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1AC38051C8CB34C00DCC638 /* Scene.cpp */; };
 		C1B00E811BF68FDF0060BE21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1B00E801BF68FDF0060BE21 /* Assets.xcassets */; };
 		C1B00E8A1BF690890060BE21 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1B00E891BF690890060BE21 /* main.cpp */; };
 		C1B00E8B1BF690B00060BE21 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C197CDF31BED2F2B007F68E0 /* SDL2.framework */; };
@@ -199,7 +198,8 @@
 		C1124BF11BF1865C00CFADD7 /* DefaultLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = DefaultLibrary.metal; path = ../../../../Source/HelloFelix/Resources/DefaultLibrary.metal; sourceTree = "<group>"; };
 		C1250DF41C20F4E000C6F7C8 /* UIWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWidget.h; path = ../../../../Source/FelixEngine/UIWidget.h; sourceTree = "<group>"; };
 		C1250DF71C21434300C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
-		C14A956E1C3DD57E0037D982 /* BufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BufferMap.h; path = ../../../../Source/FelixEngine/BufferMap.h; sourceTree = "<group>"; };
+		C13CF5191CA1F4F200781A3A /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
+		C13CF51B1CA1F50A00781A3A /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
 		C15D73911BF3B457002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
 		C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
@@ -268,12 +268,9 @@
 		C197CDC21BED298D007F68E0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Task.h; path = ../../../../Source/FelixEngine/Task.h; sourceTree = "<group>"; };
 		C197CDC31BED298D007F68E0 /* TaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskGroup.h; path = ../../../../Source/FelixEngine/TaskGroup.h; sourceTree = "<group>"; };
 		C197CDC41BED298D007F68E0 /* TaskingSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskingSystem.h; path = ../../../../Source/FelixEngine/TaskingSystem.h; sourceTree = "<group>"; };
-		C197CDC51BED298D007F68E0 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = ../../../../Source/FelixEngine/TextureMap.h; sourceTree = "<group>"; };
 		C197CDC71BED298D007F68E0 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = ../../../../Source/FelixEngine/Transform.h; sourceTree = "<group>"; };
-		C197CDC81BED298D007F68E0 /* UniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniformMap.h; path = ../../../../Source/FelixEngine/UniformMap.h; sourceTree = "<group>"; };
 		C197CDC91BED298D007F68E0 /* Variant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = ../../../../Source/FelixEngine/Variant.h; sourceTree = "<group>"; };
 		C197CDCA1BED298D007F68E0 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../../../Source/FelixEngine/Vector.h; sourceTree = "<group>"; };
-		C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferMap.h; path = ../../../../Source/FelixEngine/VertexBufferMap.h; sourceTree = "<group>"; };
 		C197CDCD1BED298D007F68E0 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = ../../../../Source/FelixEngine/XMLTree.h; sourceTree = "<group>"; };
 		C197CDF31BED2F2B007F68E0 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../ThirdParty/SDL2/IOS/SDL2.framework; sourceTree = "<group>"; };
 		C197CDF51BED2F42007F68E0 /* freeimage.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = freeimage.a; path = ../../../ThirdParty/Freeimage/IOS/freeimage.a; sourceTree = "<group>"; };
@@ -296,6 +293,7 @@
 		C198925B1BFFE171007DF57A /* GyroView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GyroView.h; path = ../../../../Source/FelixEngine/GyroView.h; sourceTree = "<group>"; };
 		C19EDC641C0E514A00F997AB /* FileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FileSystem.mm; path = ../../../../Source/FelixEngine/FileSystem.mm; sourceTree = "<group>"; };
 		C19EDC651C0E514A00F997AB /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileSystem.h; path = ../../../../Source/FelixEngine/FileSystem.h; sourceTree = "<group>"; };
+		C1AC38051C8CB34C00DCC638 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Scene.cpp; path = ../../../../Source/FelixEngine/Scene.cpp; sourceTree = "<group>"; };
 		C1B00E721BF68FDF0060BE21 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1B00E801BF68FDF0060BE21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1B00E851BF68FDF0060BE21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -426,11 +424,10 @@
 		C1250E011C23C0A300C6F7C8 /* RenderSlots */ = {
 			isa = PBXGroup;
 			children = (
-				C14A956E1C3DD57E0037D982 /* BufferMap.h */,
+				C13CF5191CA1F4F200781A3A /* Resources.h */,
 				C197CDB81BED298D007F68E0 /* RenderSlots.h */,
+				C13CF51B1CA1F50A00781A3A /* Buffer.h */,
 				C197CD9E1BED298D007F68E0 /* Material.h */,
-				C197CDC81BED298D007F68E0 /* UniformMap.h */,
-				C197CDC51BED298D007F68E0 /* TextureMap.h */,
 			);
 			name = RenderSlots;
 			sourceTree = "<group>";
@@ -508,7 +505,6 @@
 		C197CDE51BED29AD007F68E0 /* Loaders */ = {
 			isa = PBXGroup;
 			children = (
-				C197CDCB1BED298D007F68E0 /* VertexBufferMap.h */,
 				C197CDA11BED298D007F68E0 /* MeshLoader.h */,
 				C197CDA01BED298D007F68E0 /* MeshLoader.cpp */,
 				C1E683561C4EFB5000E1705D /* TextureLoader.h */,
@@ -566,6 +562,7 @@
 				C1250E001C23C05B00C6F7C8 /* Model */,
 				C1250DFF1C23C05400C6F7C8 /* Camera */,
 				C1250DFE1C23C04B00C6F7C8 /* User Interface */,
+				C1AC38051C8CB34C00DCC638 /* Scene.cpp */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -773,7 +770,6 @@
 				C197CE4D1BED5FAE007F68E0 /* Color.h in Headers */,
 				C197CE461BED5F2D007F68E0 /* MTLGraphicSystem.h in Headers */,
 				C197CE4E1BED5FB3007F68E0 /* StringUtils.h in Headers */,
-				C197CE2B1BED5E40007F68E0 /* VertexBufferMap.h in Headers */,
 				C198925A1BFD3D5A007DF57A /* OrbitView.h in Headers */,
 				C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */,
 				C197CE441BED5F20007F68E0 /* GLMesh.h in Headers */,
@@ -793,15 +789,12 @@
 				C197CE351BED5E98007F68E0 /* Component.h in Headers */,
 				C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */,
 				C197CE521BED5FC5007F68E0 /* Image.h in Headers */,
-				C197CE341BED5E84007F68E0 /* TextureMap.h in Headers */,
 				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
 				C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */,
 				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
-				C14A956F1C3DD57E0037D982 /* BufferMap.h in Headers */,
 				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,
 				C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */,
 				C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */,
-				C197CE331BED5E80007F68E0 /* UniformMap.h in Headers */,
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
 				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
@@ -818,7 +811,9 @@
 				C106DB7C1BFD0294000065D4 /* Model.h in Headers */,
 				C1D905211C179C540099974C /* Condition.h in Headers */,
 				C197CE3C1BED5F01007F68E0 /* GraphicResources.h in Headers */,
+				C13CF51A1CA1F4F200781A3A /* Resources.h in Headers */,
 				C197CE3E1BED5F0B007F68E0 /* Sampler.h in Headers */,
+				C13CF51C1CA1F50A00781A3A /* Buffer.h in Headers */,
 				C197CE561BED5FD6007F68E0 /* List.h in Headers */,
 				C1E683501C4ED40A00E1705D /* GLUniforms.h in Headers */,
 			);
@@ -995,6 +990,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1E683571C4EFB5000E1705D /* TextureLoader.cpp in Sources */,
+				C1AC38061C8CB34C00DCC638 /* Scene.cpp in Sources */,
 				C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */,
 				C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */,
 				C197CDCF1BED298D007F68E0 /* FelixEngine.cpp in Sources */,

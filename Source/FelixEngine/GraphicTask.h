@@ -11,7 +11,7 @@
 
 #include "Color.h"
 #include "XMLTree.h"
-#include "BufferMap.h"
+#include "Buffer.h"
 #include "GraphicResources.h"
 
 #define UPLOAD_STR   "upload"
@@ -30,7 +30,6 @@ namespace fx
   class Frame;
   class Shader;
   class Mesh;
-  class TextureMap;
   
   class InternalUniformMap;
   
@@ -48,11 +47,15 @@ namespace fx
   
   enum BUFFER_SLOTS
   {
-    BUFFER_SLOT_SHADER   = 0,
-    BUFFER_SLOT_MESH     = 1,
-    BUFFER_SLOT_UNIFORMS = 2,
-    BUFFER_SLOT_TARGETS  = 3,
-    BUFFER_SLOTS_SIZE    = 4,
+    BUFFER_SLOT_UNIFORMS_0,
+    BUFFER_SLOT_UNIFORMS_1,
+    BUFFER_SLOT_UNIFORMS_2,
+    BUFFER_SLOT_UNIFORMS_3,
+    BUFFER_SLOT_SHADER,
+    BUFFER_SLOT_MESH,
+    BUFFER_SLOT_TEXTURES,
+    BUFFER_SLOT_FRAME,
+    BUFFER_SLOTS_SIZE,
   };
   
   enum COLOR_ATTACHMENTS
@@ -471,7 +474,7 @@ namespace fx
   
   struct GraphicTask
   {
-    GraphicTask(GRAPHIC_TASK_TYPE type = GRAPHIC_TASK_EMPTY): type(type), layer(0), pass(0), textureMap(0) {clearBufferSlots();}
+    GraphicTask(GRAPHIC_TASK_TYPE type = GRAPHIC_TASK_EMPTY): type(type), layer(0), pass(0) {clearBufferSlots();}
     void clearBufferSlots()
     {
       for (int i = 0; i < BUFFER_SLOTS_SIZE; ++i)
@@ -488,8 +491,7 @@ namespace fx
     int layer;
     int pass;
     
-    BufferMap *bufferSlots[BUFFER_SLOTS_SIZE];
-    TextureMap *textureMap;
+    Buffer *bufferSlots[BUFFER_SLOTS_SIZE];
   };
   
   static GRAPHIC_TASK_TYPE ParseGraphicTaskType(const std::string &str)

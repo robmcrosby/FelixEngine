@@ -78,7 +78,7 @@ namespace fx
     void processViewTask(const GraphicTask *task);
     void processDrawTask(const GraphicTask *task, const GraphicTask *view);
     
-    bool bindTextureMap(TextureMap *textureMap);
+    bool bindTextures(Buffer *textures);
     
     void setTriangleCullMode(CULL_TRI_MODE mode);
     

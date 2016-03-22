@@ -9,13 +9,16 @@
 #ifndef RenderSlots_h
 #define RenderSlots_h
 
+#include "FelixEngine.h"
 #include "EventHandler.h"
 #include "Component.h"
-#include "Material.h"
 #include "Scene.h"
 #include "OwnPtr.h"
+
+#include "Material.h"
+
 #include "MeshLoader.h"
-#include "TextureMap.h"
+#include "TextureLoader.h"
 
 namespace fx
 {
@@ -43,11 +46,13 @@ namespace fx
   public:
     RenderSlot(Scene *scene):
       mScene(scene),
-      mTextureMap(scene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
-      mShader(BUFFER_MAP_SHADER),
-      mMesh(BUFFER_MAP_MESH),
-      mTargets(0),
+      mShader(0),
+      mTextures(0),
+      mMesh(0),
+      mUniforms(0),
+      mFrame(0),
+      mMaterial(0),
       mEnabled(true),
       mLayer(0),
       mPass(0),
@@ -60,12 +65,13 @@ namespace fx
     }
     RenderSlot(const RenderSlot &other):
       mScene(other.mScene),
-      mTextureMap(other.mScene),
       mGraphicSystem(FelixEngine::GetGraphicSystem()),
       mShader(0),
+      mTextures(0),
       mMesh(0),
       mUniforms(0),
-      mTargets(0)
+      mFrame(0),
+      mMaterial(0)
     {
       setEventFlags(EVENT_APP_RENDER);
       mGraphicSystem->addHandler(this);
@@ -84,9 +90,11 @@ namespace fx
       mShader   = other.mShader;
       mMesh     = other.mMesh;
       mUniforms = other.mUniforms;
-      mTargets  = other.mTargets;
+      mTextures = other.mTextures;
+      mFrame    = other.mFrame;
       
-      mTextureMap = other.mTextureMap;
+      mMaterial = other.mMaterial;
+      
       mTaskType   = other.mTaskType;
       mStereoType = other.mStereoType;
       mDrawState  = other.mDrawState;
@@ -106,6 +114,7 @@ namespace fx
     
     void setToXml(const XMLTree::Node &node)
     {
+      // Set the Layer
       if (node.hasAttribute("layer"))
         setLayer(node.attributeAsInt("layer"));
       
@@ -116,30 +125,18 @@ namespace fx
       // Set the Mesh
       if (node.hasAttribute("mesh"))
         setMesh(node.attribute("mesh"));
-      if (node.hasSubNode("Mesh"))
-        setMesh(*node.subNode("Mesh"));
       
       // Set the Shader
       if (node.hasAttribute("shader"))
         setShader(node.attribute("shader"));
-      if (node.hasSubNode("Shader"))
-        setShader(*node.subNode("Shader"));
       
-      // Set the Uniforms
-      if (node.hasAttribute("uniforms"))
-        setUniforms(node.attribute("uniforms"));
-      if (node.hasSubNode("Uniforms"))
-        setUniforms(*node.subNode("Uniforms"));
+      // Set the Material
+      if (node.hasAttribute("material"))
+        setMaterial(node.attribute("material"));
       
-      // Set the Render Targets
-      if (node.hasAttribute("targets"))
-        setTargets(node.attribute("targets"));
-      if (node.hasSubNode("Targets"))
-        setTargets(*node.subNode("Targets"));
-      
-      // Set the Textures
-      if (node.hasSubNode("TextureMap"))
-        mTextureMap.setToXml(*node.subNode("TextureMap"));
+      // Set the Frame
+      if (node.hasAttribute("frame"))
+        setFrame(node.attribute("frame"));
       
       // Set the Task Type
       if (node.hasAttribute("type"))
@@ -150,95 +147,161 @@ namespace fx
       
       // Set the Draw State
       mDrawState.setToXml(node);
+      
+      // Process the Sub-Nodes
+      for (const auto &subNode : node)
+      {
+        if (*subNode == "Mesh")
+          setMesh(*subNode);
+        else if (*subNode == "Shader")
+          setShader(*subNode);
+        else if (*subNode == "Frame")
+          setFrame(*subNode);
+        else if (*subNode == "Textures")
+          addTextures(*subNode);
+        else if (*subNode == "Texture")
+          addTexture(*subNode);
+        else if (*subNode == "Material")
+          setMaterial(*subNode);
+        else if (*subNode == "Uniforms")
+          setUniforms(*subNode);
+        else
+          setUniform(*subNode);
+      }
     }
     
+    bool enabled() const {return mEnabled;}
     void enable() {mEnabled = true;}
     void disable() {mEnabled = false;}
     void setEnabled(bool enabled = true) {mEnabled = enabled;}
-    bool enabled() const {return mEnabled;}
     
-    void setLayer(int layer) {mLayer = layer;}
     int layer() const {return mLayer;}
+    void setLayer(int layer) {mLayer = layer;}
     
+    int pass() const {return mPass;}
     void setPass(int pass) {mPass = pass;}
     void setPass(const std::string &name) {setPass(mScene->getPassIndex(name));}
-    int pass() const {return mPass;}
     
-    void setProjectionFlags(int flags) {mProjFlags = flags;}
     int projectionFlags() const {return mProjFlags;}
+    void setProjectionFlags(int flags) {mProjFlags = flags;}
     
-    void setMesh(BufferMap &mesh) {mMesh = &mesh;}
-    void setMesh(const std::string &name = "")
+    Buffer& mesh()
     {
-      if (name == "")
-        mMesh = BUFFER_MAP_MESH;
-      else
-        setMesh(mScene->getBufferMap(name));
+      if (!mMesh.ptr())
+        mMesh = BUFFER_MESH;
+      return *mMesh;
     }
-    void setMesh(const XMLTree::Node &node)
-    {
-      setMesh(node.attribute("name"));
-      mMesh->setToXml(node);
-    }
-    BufferMap& mesh() {return *mMesh;}
-    const BufferMap& mesh() const {return *mMesh;}
+    void setMesh(const Buffer &mesh) {mMesh = mesh;}
+    void setMesh(const std::string &name) {mMesh = &mScene->getMeshBuffer(name);}
+    void setMesh(const XMLTree::Node &node) {mMesh = &mScene->createMesh(node);}
+    void clearMesh() {mMesh.clear();}
     
-    void setShader(BufferMap &shader) {mShader = &shader;}
-    void setShader(const std::string &name = "")
+    Buffer& shader()
     {
-      if (name == "")
-        mShader = BUFFER_MAP_SHADER;
-      else
-        setShader(mScene->getBufferMap(name));
+      if (!mShader.ptr())
+        mShader = BUFFER_PROGRAM;
+      return *mShader;
     }
-    void setShader(const XMLTree::Node &node)
-    {
-      setShader(node.attribute("name"));
-      mShader->setToXml(node);
-    }
-    BufferMap& shader() {return *mShader;}
-    const BufferMap& shader() const {return *mShader;}
+    Buffer* shaderPtr() const {return (!mShader.ptr() && mMaterial.ptr()) ? mMaterial->shaderPtr() : mShader.ptr();}
+    void setShader(const Buffer &shader) {mShader = shader;}
+    void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
+    void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
+    void clearShader() {mShader.clear();}
     
-    void setUniforms(BufferMap &uniforms) {mUniforms = &uniforms;}
-    void setUniforms(const std::string &name = "")
+    Buffer& frame()
     {
-      if (name == "")
-        mUniforms = BUFFER_MAP_UNIFORMS;
-      else
-        setUniforms(mScene->getBufferMap(name));
+      if (!mFrame.ptr())
+        mFrame = BUFFER_FRAME;
+      return *mFrame;
     }
-    void setUniforms(const XMLTree::Node &node)
-    {
-      setUniforms(node.attribute("name"));
-      mUniforms->setToXml(node);
-    }
-    BufferMap& uniforms()
+    void setFrame(const Buffer &frame) {mFrame = frame;}
+    void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
+    void setFrame(const XMLTree::Node &node) {mFrame = &mScene->createFrame(node);}
+    void clearFrame() {mFrame.clear();}
+    
+    Buffer& uniforms()
     {
       if (!mUniforms.ptr())
-        mUniforms = BUFFER_MAP_UNIFORMS;
+        mUniforms = BUFFER_UNIFORM;
       return *mUniforms;
     }
-    const BufferMap& uniforms() const {return *mUniforms;}
+    void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
+    void setUniforms(const XMLTree::Node &node)
+    {
+      uniforms().setToXml(node);
+      uniforms().setToUpdate();
+    }
+    
+    void setUniform(const XMLTree::Node &node) {uniforms().set(node);}
     void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
-    
-    void setTargets(BufferMap &targets) {mTargets = &targets;}
-    void setTargets(const std::string &name = "")
+    void setStruct(const std::string &name, const std::string &comp, const Variant &var)
     {
-      if (name == "")
-        mTargets = BUFFER_MAP_TARGETS;
+      uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
+      uniforms().setToUpdate();
+    }
+    void clearUniforms() {mUniforms.clear();}
+    
+    Buffer& textures()
+    {
+      if (!mTextures.ptr())
+        mTextures = BUFFER_TEXTURES;
+      return *mTextures;
+    }
+    Buffer* texturesPtr() const {return (!mTextures.ptr() && mMaterial.ptr()) ? mMaterial->texturesPtr() : mTextures.ptr();}
+    void addTexture(const Buffer &texture) {textures().addBuffer(texture);}
+    void addTexture(const Buffer &texture, Sampler sampler)
+    {
+      addTexture(texture);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const std::string &name) {addTexture(mScene->getTextureBuffer(name));}
+    void addTexture(const std::string &name, Sampler sampler)
+    {
+      addTexture(name);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("file"))
+        addTexture(mScene->createTexture(node), Sampler(node));
       else
-        setTargets(mScene->getBufferMap(name));
+        addTexture(node.attribute("name"), Sampler(node));
     }
-    void setTargets(const XMLTree::Node &node)
+    void addTextures(const XMLTree::Node &node)
     {
-      setTargets(node.attribute("name"));
-      mTargets->setToXml(node);
+      for (const auto subNode : node)
+        addTexture(*subNode);
     }
-    BufferMap& targets() {return *mTargets;}
-    const BufferMap& targets() const {return *mTargets;}
+    void clearTextures() {mTextures.clear();}
     
-    TextureMap& textureMap() {return mTextureMap;}
-    const TextureMap& textureMap() const {return mTextureMap;}
+    Material& material()
+    {
+      if (!mMaterial.ptr())
+        mMaterial = mScene;
+      return *mMaterial;
+    }
+    Buffer* materialUniforms() const {return mMaterial.ptr() ? mMaterial->uniformsPtr() : nullptr;}
+    void setMaterial(const Material &material) {mMaterial = material;}
+    void setMaterial(Material *material) {mMaterial = material;}
+    void setMaterial(const std::string &name)
+    {
+      mMaterial = mScene->getChild<Material>(name);
+      if (!mMaterial.ptr())
+      {
+        mMaterial = new Material(mScene);
+        mMaterial->setName(name);
+        mScene->addChild(mMaterial.ptr());
+      }
+    }
+    void setMaterial(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("name"))
+        setMaterial(node.attribute("name"));
+      else if (!mMaterial.ptr())
+        mMaterial = mScene;
+      mMaterial->setToXml(node);
+    }
+    void clearMaterial() {mMaterial.clear();}
     
     DrawState& drawState() {return mDrawState;}
     const DrawState& drawState() const {return mDrawState;}
@@ -257,11 +320,15 @@ namespace fx
       task.layer = mLayer;
       task.pass = mPass;
       task.drawState = mDrawState;
-      task.bufferSlots[BUFFER_SLOT_SHADER]   = mShader.ptr();
       task.bufferSlots[BUFFER_SLOT_MESH]     = mMesh.ptr();
-      task.bufferSlots[BUFFER_SLOT_UNIFORMS] = mUniforms.ptr();
-      task.bufferSlots[BUFFER_SLOT_TARGETS]  = mTargets.ptr();
-      task.textureMap = &mTextureMap;
+      task.bufferSlots[BUFFER_SLOT_FRAME]    = mFrame.ptr();
+      
+      task.bufferSlots[BUFFER_SLOT_SHADER]   = shaderPtr();
+      task.bufferSlots[BUFFER_SLOT_TEXTURES] = mTextures.ptr();
+      
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS_0] = mUniforms.ptr();
+      task.bufferSlots[BUFFER_SLOT_UNIFORMS_1] = materialUniforms();
+      
       mGraphicSystem->addGraphicTask(task);
     }
     void updateBuffers()
@@ -272,8 +339,8 @@ namespace fx
         mGraphicSystem->uploadBuffer(*mMesh);
       if (mUniforms.ptr() && !mUniforms->updated())
         mGraphicSystem->uploadBuffer(*mUniforms);
-      if (mTargets.ptr() && !mTargets->updated())
-        mGraphicSystem->uploadBuffer(*mTargets);
+      if (mFrame.ptr() && !mFrame->updated())
+        mGraphicSystem->uploadBuffer(*mFrame);
     }
     
     bool mEnabled;
@@ -282,12 +349,15 @@ namespace fx
     
     int mProjFlags;
     
-    OwnPtr<BufferMap> mShader;
-    OwnPtr<BufferMap> mMesh;
-    OwnPtr<BufferMap> mUniforms;
-    OwnPtr<BufferMap> mTargets;
+    OwnPtr<Buffer> mMesh;
+    OwnPtr<Buffer> mFrame;
     
-    TextureMap        mTextureMap;
+    OwnPtr<Buffer> mShader;
+    OwnPtr<Buffer> mUniforms;
+    OwnPtr<Buffer> mTextures;
+    
+    OwnPtr<Material> mMaterial;
+    
     GRAPHIC_TASK_TYPE mTaskType;
     STEREO_TYPE       mStereoType;
     DrawState         mDrawState;
@@ -308,7 +378,7 @@ namespace fx
   class RenderSlots: public Component
   {
   public:
-    RenderSlots(Scene *scene): Component(scene), mGraphicSystem(FelixEngine::GetGraphicSystem()) {}
+    RenderSlots(Scene *scene): Component(scene) {}
     virtual ~RenderSlots() {clear();}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -355,9 +425,13 @@ namespace fx
       for (RenderSlot *slot : mSlots)
         slot->setUniform(name, var);
     }
+    void setStruct(const std::string &name, const std::string &comp, const Variant &var)
+    {
+      for (RenderSlot *slot : mSlots)
+        slot->setStruct(name, comp, var);
+    }
     
   private:
-    GraphicSystem *mGraphicSystem;
     std::vector<RenderSlot*> mSlots;
   };
 }

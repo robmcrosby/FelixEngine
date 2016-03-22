@@ -46,6 +46,7 @@ namespace fx
     const_iterator end()   const {return mArray.end();}
     
     size_t size() const {return mArray.size();}
+    bool contains(const std::string &name) const {return mMap.count(name);}
     
     T& operator[](int index) {return mArray[index];}
     T& operator[](const std::string &key)
@@ -55,11 +56,7 @@ namespace fx
       if (itr != mMap.end())
         index = itr->second;
       else
-      {
-        mSemephore.post();
         index = push(key);
-        mSemephore.wait();
-      }
       return mArray[index];
     }
     

@@ -10,18 +10,18 @@
           <size>512, 512</size>
         </Window>
       </Windows>
-      <ShaderFunctions>
-        <ShaderFunction name="SimpleVertex" type="vertex">
+      <Shaders>
+        <Shader name="SimpleVertex" type="vertex">
           #version 100
           attribute vec4 Position;
           void main() {gl_Position = Position;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleColor" type="fragment">
+        </Shader>
+        <Shader name="SimpleColor" type="fragment">
           #version 100
           uniform mediump vec4 Color;
           void main() {gl_FragColor = Color;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleVertexUV" type="vertex">
+        </Shader>
+        <Shader name="SimpleVertexUV" type="vertex">
           #version 100
           attribute vec4 Position;
           attribute vec2 UV_0;
@@ -30,14 +30,14 @@
             gl_Position = Position;
             UV = UV_0;
           }
-        </ShaderFunction>
-        <ShaderFunction name="SimpleTexture" type="fragment">
+        </Shader>
+        <Shader name="SimpleTexture" type="fragment">
           #version 100
           varying mediump vec2 UV;
           uniform sampler2D tex2D;
           void main() {gl_FragColor = texture2D(tex2D, UV);}
-        </ShaderFunction>
-      </ShaderFunctions>
+        </Shader>
+      </Shaders>
     </GLGraphicSystem>
   </Systems>
 </Settings>

@@ -83,10 +83,10 @@ namespace fx
      *
      * @param bufferMap refrence to the buffer map to upload.
      */
-    void uploadBufferMap(const BufferMap &bufferMap)
+    void uploadBufferMap(Buffer &bufferMap)
     {
       bool success = false;
-      const Buffer &buffer = bufferMap["data"];
+      const Buffer &buffer = bufferMap.map()["data"];
       
       unload();
       if (!mTextureId)

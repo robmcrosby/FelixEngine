@@ -20,7 +20,7 @@ namespace fx
   class TrackingView: public View
   {
   public:
-    TrackingView(Scene *scene): View(scene), mPosition(0.0f, 0.0f, 0.0f), mTarget(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f) {}
+    TrackingView(Scene *scene): View(scene), mTarget(0.0f, 0.0f, -1.0f), mUp(0.0f, 1.0f, 0.0f) {}
     virtual ~TrackingView() {}
     
     virtual void setToXml(const XMLTree::Node &node)
@@ -54,12 +54,13 @@ namespace fx
   private:
     virtual void update()
     {
-      setMatrix(mat4::LookAt(mPosition, mTarget, mUp));
+      lock();
+      mViewMatrix = mat4::LookAt(mPosition, mTarget, mUp);
+      unlock();
       View::update();
     }
     
   private:
-    vec3 mPosition;
     vec3 mTarget;
     vec3 mUp;
   };

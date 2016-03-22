@@ -10,79 +10,157 @@
 #define Material_h
 
 #include "FelixEngine.h"
-#include "UniformMap.h"
-//#include "TextureMap.h"
-#include "GraphicTask.h"
+#include "Component.h"
+#include "Scene.h"
+#include "Buffer.h"
+#include "OwnPtr.h"
+#include "XMLTree.h"
 
 
 namespace fx
 {
-  class Material
+  class Material: public Component
   {
   public:
-    Material(): mShader(0), mSystem(FelixEngine::GetGraphicSystem()) {}
+    Material(Scene *scene): Component(scene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mShader(0),
+      mUniforms(0),
+      mTextures(0)
+    {
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+    }
+    Material(const Material &other): Component(other.mScene),
+      mGraphicSystem(FelixEngine::GetGraphicSystem()),
+      mShader(0),
+      mUniforms(0),
+      mTextures(0)
+    {
+      *this = other;
+      setEventFlags(EVENT_APP_RENDER);
+      mGraphicSystem->addHandler(this);
+    }
     virtual ~Material() {}
     
-    bool setShader(const XMLTree::Node &node)
+    Material& operator=(const Material &other)
     {
-      bool success = false;
-      if (node.hasAttribute("name"))
-      {
-        setShader(node.attribute("name"));
-        //success = mShader->setToXml(node);
-      }
-      return success;
+      mShader = other.mShader;
+      mUniforms = other.mUniforms;
+      mTextures = other.mTextures;
+      return *this;
     }
-    void setShader(Shader *shader) {mShader = shader;}
-    void setShader(const std::string &name)
+    
+    virtual void handle(const Event &event)
     {
-      if (mSystem)
-        setShader(mSystem->getShader(name));
+      if (event == EVENT_APP_RENDER && event.sender() == mGraphicSystem)
+        updateBuffers();
     }
-    const Shader* shader() const {return mShader;}
     
-//    TextureMap& textureMap() {return mTextureMap;}
-//    const TextureMap& textures() const {return mTextureMap;}
-//    
-//    UniformMap& uniforms() {return mUniformMap;}
-//    const UniformMap& uniforms() const {return mUniformMap;}
-    
-    bool setToXml(const XMLTree::Node *node) {return setToXml(*node);}
-    bool setToXml(const XMLTree::Node &node)
+    virtual void setToXml(const XMLTree::Node &node)
     {
-      bool success = true;
+      Component::setToXml(node);
       
-//      // Set the Shader
-//      if (node.hasAttribute("shader"))
-//        setShader(node.attribute("shader"));
-//      else if (node.hasSubNode("Shader"))
-//        success &= setShader(*node.subNode("Shader"));
-//      
-//      // Set the UniformMap
-//      if (node.hasSubNode("UniformMap"))
-//        success &= mUniformMap.setToXml(*node.subNode("UniformMap"));
-//      
-//      // Set the TextureMap
-//      if (node.hasSubNode("TextureMap"))
-//        success &= mTextureMap.setToXml(*node.subNode("TextureMap"));
-      return success;
+      if (node.hasAttribute("shader"))
+        setShader(node.attribute("shader"));
+      
+      for (const auto &subNode : node)
+      {
+        if (*subNode == "Shader")
+          setShader(*subNode);
+        else if (*subNode == "Textures")
+          addTextures(*subNode);
+        else if (*subNode == "Texture")
+          addTexture(*subNode);
+        else
+          setUniform(*subNode);
+      }
     }
     
-    bool applyToTask(GraphicTask &task) const
+    Buffer& shader()
     {
-      if (!mShader)
-        return false;
-//      task.shader = mShader;
-//      task.textureMap = &mTextureMap;
-//      task.materialUniforms = mUniformMap.getInternalMap();
-      return true;
+      if (!mShader.ptr())
+        mShader = BUFFER_PROGRAM;
+      return *mShader;
     }
+    Buffer* shaderPtr() const {return mShader.ptr();}
+    void setShader(const Buffer &shader) {mShader = shader;}
+    void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
+    void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
+    void clearShader() {mShader.clear();}
+    
+    
+    Buffer& uniforms()
+    {
+      if (!mUniforms.ptr())
+        mUniforms = BUFFER_UNIFORM;
+      return *mUniforms;
+    }
+    Buffer* uniformsPtr() const {return mUniforms.ptr();}
+    void setUniforms(const Buffer &uniforms) {mUniforms = uniforms;}
+    void setUniforms(const XMLTree::Node &node)
+    {
+      uniforms().setToXml(node);
+      uniforms().setToUpdate();
+    }
+    
+    void setUniform(const XMLTree::Node &node) {uniforms().set(node);}
+    void setUniform(const std::string &name, const Variant &var) {uniforms().set(name, var);}
+    void setStruct(const std::string &name, const std::string &comp, const Variant &var)
+    {
+      uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
+      uniforms().setToUpdate();
+    }
+    void clearUniforms() {mUniforms.clear();}
+    
+    
+    Buffer& textures()
+    {
+      if (!mTextures.ptr())
+        mTextures = BUFFER_TEXTURES;
+      return *mTextures;
+    }
+    Buffer* texturesPtr() const {return mTextures.ptr();}
+    void addTexture(const Buffer &texture) {textures().addBuffer(texture);}
+    void addTexture(const Buffer &texture, Sampler sampler)
+    {
+      addTexture(texture);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const std::string &name) {addTexture(mScene->getTextureBuffer(name));}
+    void addTexture(const std::string &name, Sampler sampler)
+    {
+      addTexture(name);
+      mTextures->back().setFlags(sampler.flags());
+    }
+    void addTexture(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("file"))
+        addTexture(mScene->createTexture(node), Sampler(node));
+      else
+        addTexture(node.attribute("name"), Sampler(node));
+    }
+    void addTextures(const XMLTree::Node &node)
+    {
+      for (const auto subNode : node)
+        addTexture(*subNode);
+    }
+    void clearTextures() {mTextures.clear();}
     
   private:
-    Shader *mShader;
-//    UniformMap mUniformMap;
-//    TextureMap mTextureMap;
-    GraphicSystem *mSystem;
+    void updateBuffers()
+    {
+      if (mShader.ptr() && !mShader->updated())
+        mGraphicSystem->uploadBuffer(*mShader);
+      if (mUniforms.ptr() && !mUniforms->updated())
+        mGraphicSystem->uploadBuffer(*mUniforms);
+    }
+    
+    OwnPtr<Buffer> mShader;
+    OwnPtr<Buffer> mUniforms;
+    OwnPtr<Buffer> mTextures;
+    
+    GraphicSystem *mGraphicSystem;
   };
 }
 

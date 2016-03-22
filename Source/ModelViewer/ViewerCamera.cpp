@@ -136,7 +136,7 @@ void ViewerCamera::handle(const fx::Event &event)
 
 void ViewerCamera::handleMouseEvent(const fx::Event &event)
 {
-  if (mOrbitView && mOrbitView->active())
+  if (mOrbitView && mOrbitView == mView)
   {
     if (event == fx::EVENT_MOUSE_WHEEL)
       mOrbitView->setDistance(mOrbitView->distance() + event.mouseData().delta.y*0.1f);
@@ -150,7 +150,7 @@ void ViewerCamera::handleMouseEvent(const fx::Event &event)
 
 void ViewerCamera::handleTouchEvent(const fx::Event &event)
 {
-  if (mOrbitView && mOrbitView->active())
+  if (mOrbitView && mOrbitView == mView)
   {
     if (event == fx::EVENT_TOUCH_GESTURE)
       mOrbitView->setDistance(mOrbitView->distance() - event.touchData().delta.y*8.0f);
@@ -167,23 +167,21 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
   if (mOrbitView && mGyroView)
   {
     fx::vec3 gravity = event.motionData().gravity;
-    if (mOrbitView->active() && (gravity.x > 0.8f || gravity.x < -0.8f))
+    if (mOrbitView == mView && (gravity.x > 0.8f || gravity.x < -0.8f))
     {
       mGyroView->setDistance(mOrbitView->distance());
       mGyroView->setActive(true);
-      mOrbitView->setActive(false);
+      mView = mGyroView;
       
       fx::quat orientation(fx::vec3(1.0f, 0.0f, 0.0f), -90.0f*fx::DegToRad);
       orientation *= fx::quat(fx::vec3(0.0f, 0.0f, 1.0f), (mOrbitView->longitude()-180.0f)*fx::DegToRad);
       if (gravity.x > 0.8f)
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(-1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_RIGHT);
       }
       else
       {
-        mRenderSlots->setGlobal("ViewRot", fx::mat4());
         mGyroView->setUpAxis(fx::vec3(1.0, 0.0f, 0.0f));
         setRenderMode(RENDER_STEREO_LEFT);
       }
@@ -192,9 +190,8 @@ void ViewerCamera::handleMotionEvent(const fx::Event &event)
     }
     else if (mGyroView->active() && gravity.y < -0.8f)
     {
-      mOrbitView->setActive(true);
       mGyroView->setActive(false);
-      mRenderSlots->setGlobal("ViewRot", fx::mat4());
+      mView = mOrbitView;
       setRenderMode(RENDER_MONO);
     }
   }

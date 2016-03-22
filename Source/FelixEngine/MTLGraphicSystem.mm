@@ -8,7 +8,6 @@
 
 #include "MTLGraphicSystem.h"
 #include "UniformMap.h"
-#include "TextureMap.h"
 #include "ImageLoader.h"
 
 #include <SDL2/SDL.h>

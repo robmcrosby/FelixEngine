@@ -6,10 +6,10 @@
     </Projection>
     <RenderSlots>
       <Slot layer="0" pass="MainPass" type="pass">
-        <Targets name="DrawFrame">
+        <Frame name="DrawFrame">
           <Target name="DrawTexture" format="rgba"/>
           <Target format="depth"/>
-        </Targets>
+        </Frame>
         <ClearState depth="1.0">
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
@@ -20,12 +20,19 @@
           <Vertex name="SimpleVertexUV"/>
           <Fragment name="SimpleTexture"/>
         </Shader>
-        <TextureMap>
+        <Textures>
           <Texture name="DrawTexture" min="linear" mag="linear"/>
-        </TextureMap>
+        </Textures>
       </Slot>
     </RenderSlots>
   </ViewerCamera>
+  <Material name="ColorMaterial">
+    <Shader name="DirectLightShader">
+      <Vertex name="SimpleNormal"/>
+      <Fragment name="DirectLight"/>
+    </Shader>
+    <vec4 name="Color">0.2, 0.9, 0.2, 1.0</vec4>
+  </Material>
   <Model name="Bunny">
     <Transform>
       <Scale>0.2, 0.2, 0.2</Scale>
@@ -33,16 +40,9 @@
       <Translate>0.0, -0.2, 0.0</Translate>
     </Transform>
     <RenderSlots>
-      <Slot layer="0" pass="MainPass">
+      <Slot layer="0" pass="MainPass" material="ColorMaterial">
         <Mesh name="BunnyMesh" file="Meshes/bunny.mesh"/>
         <DepthState write="true" function="less"/>
-        <Shader name="DirectLightShader">
-          <Vertex name="SimpleNormal"/>
-          <Fragment name="DirectLight"/>
-        </Shader>
-        <Uniforms>
-          <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
-        </Uniforms>
       </Slot>
     </RenderSlots>
   </Model>

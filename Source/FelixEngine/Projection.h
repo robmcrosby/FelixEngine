@@ -123,7 +123,6 @@ namespace fx
     Projection(Scene *scene): Component(scene),
       mType(PROJ_ORTHO),
       mAspect(ASPECT_NONE),
-      mRenderSlots(0),
       mLock(0),
       mDisparity(0),
       mZeroDistance(1.0f)
@@ -153,17 +152,6 @@ namespace fx
         setZeroDistance(node.attributeAsFloat("zero"));
       if (node.hasSubNode("Volume"))
         mVolume.setToXml(node.subNode("Volume"));
-    }
-    
-    /**
-     * Used in Object initalization where the pointer for RenderSlots is obtained.
-     *
-     * @return true if the RenderSlots are retreived and Component initalization is seccessful, false otherwise.
-     */
-    virtual bool init()
-    {
-      mRenderSlots = getSibling<RenderSlots>();
-      return Component::init() && mRenderSlots;
     }
     
     /**
@@ -335,6 +323,10 @@ namespace fx
       float zeroDistance = mZeroDistance;
       unlock();
       
+      int rotation = flags & PROJ_ROTATION;
+      if (rotation == PROJ_ROT_CW || rotation == PROJ_ROT_CCW)
+        size = size.yx();
+      
       applyDisparity(v, disparity, zeroDistance, flags);
       applyAspect(v, size, aspect);
       
@@ -345,21 +337,12 @@ namespace fx
       return modification * mat4::Frustum(v.left, v.right, v.bottom, v.top, v.near, v.far) * mat4::Trans3d(vec3(disparity, 0.0f, 0.0f));
     }
     
-  protected:
-    /**
-     * Update method that updates the projections in the RenderSlots.
-     */
-    virtual void update()
+    void adjustSlotViewport(RenderSlot &slot) const
     {
-      if (mRenderSlots)
-      {
-        for (RenderSlot *slot : *mRenderSlots)
-        {
-          if (slot)
-            applyToSlot(*slot);
-        }
-      }
-      Component::update();
+      int flags = slot.projectionFlags();
+      Frame *frame = GetResource<Frame>(&slot.frame());
+      if (frame && flags & PROJ_SPLIT)
+        applySplit(slot, frame->size());
     }
     
   private:
@@ -370,11 +353,7 @@ namespace fx
      */
     void applyToSlot(RenderSlot &slot) const
     {
-      // First apply a screen split if set in the projection flags.
-      int flags = slot.projectionFlags();
-      Frame *frame = GetResource<Frame>(&slot.targets());
-      if (frame && flags & PROJ_SPLIT)
-        applySplit(slot, frame->size());
+      adjustSlotViewport(slot);
       
       // Then apply the projection matrix.
       applyProjection(slot);
@@ -422,16 +401,11 @@ namespace fx
       vec2 size(slot.drawState().viewport.size);
       if (size == vec2())
       {
-        Frame *frame = GetResource<Frame>(&slot.targets());
+        Frame *frame = GetResource<Frame>(&slot.frame());
         size = frame ? vec2(frame->size()) : vec2(1.0f, 1.0f);
       }
       
-      int flags = slot.projectionFlags();
-      int rotation = flags & PROJ_ROTATION;
-      if (rotation == PROJ_ROT_CW || rotation == PROJ_ROT_CCW)
-        size = size.yx();
-      
-      mat4 projection = getProjection(size, flags);
+      mat4 projection = getProjection(size, slot.projectionFlags());
       slot.setUniform("Projection", projection);
     }
     
@@ -519,7 +493,6 @@ namespace fx
     float mZeroDistance; /**< Distance to the zero plane used for stereo rendering. */
     
     mutable SDL_SpinLock mLock; /**< Spin lock used as a mutex for modifing the above fields. */
-    RenderSlots *mRenderSlots;  /**< Pointer to the RenderSlots used by the parrent Object. */
   };
 }
 

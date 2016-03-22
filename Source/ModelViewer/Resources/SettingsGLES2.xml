@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <Settings>
   <Systems>
-    <UbiquityFileSystem/>
     <GCDTaskingSystem/>
     <IOSMotionSystem frequency="60"/>
     <GLGraphicSystem>
@@ -12,22 +11,42 @@
           <size>512, 512</size>
         </Window>
       </Windows>
-      <ShaderFunctions>
-        <ShaderFunction name="SimpleVertex" type="vertex">
+      <Shaders>
+        <Shader name="VertexHeader" type="header">
           #version 100
+          struct Camera {
+            mat4 projection;
+            mat4 view;
+            vec4 position;
+          };
+          struct Model {
+            mat4 transform;
+            vec4 rotation;
+          };
+          vec4 transform(Camera c, Model m, vec4 position) {
+            return c.projection * c.view * m.transform * position;
+          }
+          vec3 rotate(vec4 q, vec3 v) {
+            return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
+          }
+          vec3 rotate(Model m, vec4 normal) {
+            return rotate(m.rotation, normal.xyz);
+          }
+        </Shader>
+        <Shader name="SimpleVertex" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
-          uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
-          void main() {gl_Position = Projection * View * Model * Position;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleColor" type="fragment">
+          uniform Camera camera;
+          uniform Model  model;
+          void main() {gl_Position = transform(camera, model, Position);}
+        </Shader>
+        <Shader name="SimpleColor" type="fragment">
           #version 100
           uniform mediump vec4 Color;
           void main() {gl_FragColor = Color;}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleVertexUV" type="vertex">
-          #version 100
+        </Shader>
+        <Shader name="SimpleVertexUV" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
           varying vec2 UV;
@@ -35,29 +54,27 @@
             gl_Position = Position;
             UV = UV_0;
           }
-        </ShaderFunction>
-        <ShaderFunction name="VertexUV" type="vertex">
-          #version 100
+        </Shader>
+        <Shader name="VertexUV" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
-          uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
+          uniform Model  model;
           varying vec2 UV;
           void main() {
-            gl_Position = Projection * View * Model * Position;
+            gl_Position = transform(camera, model, Position);
             UV = UV_0;
           }
-        </ShaderFunction>
-        <ShaderFunction name="TextUV" type="vertex">
-          #version 100
+        </Shader>
+        <Shader name="TextUV" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec2 UV_0;
           attribute vec4 Locs;
           attribute vec4 UVs;
-          uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
+          uniform Camera camera;
+          uniform Model  model;
           varying vec2 UV;
           vec4 adjustPos(vec4 pos, vec4 loc) {
             pos.x = (pos.x * loc.z) + loc.x;
@@ -70,39 +87,37 @@
             return uv;
           }
           void main() {
-            gl_Position = Projection * View * Model * adjustPos(Position, Locs);
+            gl_Position = transform(camera, model, adjustPos(Position, Locs));
             UV = adjustUV(UV_0, UVs);
           }
-        </ShaderFunction>
-        <ShaderFunction name="SimpleTexture" type="fragment">
+        </Shader>
+        <Shader name="SimpleTexture" type="fragment">
           #version 100
           varying mediump vec2 UV;
           uniform sampler2D tex2D;
           void main() {gl_FragColor = texture2D(tex2D, UV);}
-        </ShaderFunction>
-        <ShaderFunction name="SimpleNormal" type="vertex">
-          #version 100
+        </Shader>
+        <Shader name="SimpleNormal" type="vertex">
+          #include "VertexHeader"
           attribute vec4 Position;
           attribute vec4 Normal;
-          uniform mat4 Model;
-          uniform mat4 View;
-          uniform mat4 Projection;
-          uniform mat4 Rotation;
+          uniform Camera camera;
+          uniform Model  model;
           varying vec3 vNormal;
           void main() {
-            gl_Position = Projection * View * Model * Position;
-            vNormal = (Rotation * Normal).xyz;
+            gl_Position = transform(camera, model, Position);
+            vNormal = rotate(model, Normal);
           }
-        </ShaderFunction>
-        <ShaderFunction name="DirectLight" type="fragment">
+        </Shader>
+        <Shader name="DirectLight" type="fragment">
           #version 100
           varying mediump vec3 vNormal;
           uniform mediump vec4 Color;
           void main() {
             gl_FragColor = vec4(Color.xyz * dot(vNormal, vec3(0.0, 1.0, 0.0)), Color.w);
           }
-        </ShaderFunction>
-      </ShaderFunctions>
+        </Shader>
+      </Shaders>
     </GLGraphicSystem>
   </Systems>
 </Settings>

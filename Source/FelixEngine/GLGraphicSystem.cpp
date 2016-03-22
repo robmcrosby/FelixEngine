@@ -87,7 +87,7 @@ bool GLGraphicSystem::setToXml(const XMLTree::Node *node)
   {
     success = setVersion(node->subNode("Version"));
     success &= addWindows(node->subNode("Windows"));
-    success &= setShaderFunctions(node->subNode("ShaderFunctions"));
+    success &= setShaderFunctions(node->subNode("Shaders"));
   }
   else
     cerr << "Error: GLGraphicSystem passed a NULL node." << endl;
@@ -201,37 +201,33 @@ void GLGraphicSystem::processTask(const GraphicTask *task, const GraphicTask *vi
 
 void GLGraphicSystem::processUploadTask(const GraphicTask *task)
 {
-  BufferMap *bufferMap = task->bufferSlots[0];
+  Buffer *bufferMap = task->bufferSlots[0];
   if (bufferMap != nullptr && !bufferMap->updated())
   {
-    if (bufferMap->type() == BUFFER_MAP_MESH)
+    if (bufferMap->bufferType() == BUFFER_MESH && bufferMap->resource())
     {
-      bufferMap->setResource(getMesh(bufferMap->name()));
       GLMesh *mesh = static_cast<GLMesh*>(bufferMap->resource());
       mesh->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_SHADER)
+    else if (bufferMap->bufferType() == BUFFER_PROGRAM && bufferMap->resource())
     {
-      bufferMap->setResource(getShader(bufferMap->name()));
       GLShader *shader = static_cast<GLShader*>(bufferMap->resource());
       shader->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_TEXTURE)
+    else if (bufferMap->bufferType() == BUFFER_TEXTURE && bufferMap->resource())
     {
-      bufferMap->setResource(getTexture(bufferMap->name()));
       if (bufferMap->contains("data"))
       {
         GLTexture *texture = GetResource<GLTexture>(bufferMap);
         texture->uploadBufferMap(*bufferMap);
       }
     }
-    else if (bufferMap->type() == BUFFER_MAP_TARGETS)
+    else if (bufferMap->bufferType() == BUFFER_FRAME && bufferMap->resource())
     {
-      bufferMap->setResource(getFrame(bufferMap->name()));
       GLFrame *frame = GetResource<GLFrame>(bufferMap);
       frame->uploadBufferMap(*bufferMap);
     }
-    else if (bufferMap->type() == BUFFER_MAP_UNIFORMS)
+    else if (bufferMap->bufferType() == BUFFER_UNIFORM)
     {
       GLUniforms *uniforms = GetResource<GLUniforms>(bufferMap);
       if (!uniforms || !mUniforms.count(uniforms))
@@ -258,7 +254,7 @@ void GLGraphicSystem::processDownloadTask(const GraphicTask *task)
 
 void GLGraphicSystem::processViewTask(const GraphicTask *task)
 {
-  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+  const GLFrame *frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_FRAME]);
   if (frame)
   {
     frame->bind();
@@ -275,22 +271,24 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
   const GLShader *shader = GetResource<GLShader>(task->bufferSlots[BUFFER_SLOT_SHADER]);
   const GLMesh   *mesh   = GetResource<GLMesh>(task->bufferSlots[BUFFER_SLOT_MESH]);
   
-  const GLUniforms *localUniforms = GetResource<GLUniforms>(task->bufferSlots[BUFFER_SLOT_UNIFORMS]);
   Viewport viewport;
+  GLUniforms *uniforms[5];
+  for (int i = 0; i < 4; ++i)
+    uniforms[i] = GetResource<GLUniforms>(task->bufferSlots[i]);
   
   // Get the Render Targets and View Uniforms.
   const GLFrame  *frame = nullptr;
-  const GLUniforms *viewUniforms = nullptr;
   if (view)
   {
-    frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_TARGETS]);
-    viewUniforms = GetResource<GLUniforms>(view->bufferSlots[BUFFER_SLOT_UNIFORMS]);
+    frame = GetResource<GLFrame>(view->bufferSlots[BUFFER_SLOT_FRAME]);
     viewport = view->drawState.viewport;
+    uniforms[4] = GetResource<GLUniforms>(view->bufferSlots[0]);
   }
   else
   {
-    frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_TARGETS]);
+    frame = GetResource<GLFrame>(task->bufferSlots[BUFFER_SLOT_FRAME]);
     viewport = task->drawState.viewport;
+    uniforms[4] = nullptr;
   }
   
   // If no Render Targets are specified, use the main window.
@@ -314,38 +312,36 @@ void GLGraphicSystem::processDrawTask(const GraphicTask *task, const GraphicTask
     // Bind the Mesh to the Shader
     mesh->bind(shader);
     
-    // Set the Local Uniforms
-    if (localUniforms)
-      localUniforms->applyToShader(shader);
-    
-    // Set the View Uniforms
-    if (viewUniforms)
-      viewUniforms->applyToShader(shader);
+    // Apply the Uniforms
+    for (int i = 0; i < 5; ++i)
+    {
+      if (uniforms[i])
+        uniforms[i]->applyToShader(shader);
+    }
     
     // Set the Textures and Draw the Mesh
-    if (bindTextureMap(task->textureMap))
+    if (bindTextures(task->bufferSlots[BUFFER_SLOT_TEXTURES]))
       mesh->draw(task->drawState.instances, task->drawState.submesh);
   }
 }
 
-bool GLGraphicSystem::bindTextureMap(TextureMap *textureMap)
+bool GLGraphicSystem::bindTextures(Buffer *textures)
 {
   bool success = true;
-  if (textureMap)
+  if (textures)
   {
     int index = 0;
-    for (TextureState &texState : *textureMap)
+    for (Buffer &buffer : *textures)
     {
-      GLTexture *texture = GetResource<GLTexture>(&texState.texture());
+      GLTexture *texture = GetResource<GLTexture>(&buffer);
       if (!texture || !texture->loaded())
         success = false;
       else
-        texture->use(index++, texState.sampler());
+        texture->use(index, Sampler(buffer.flags()));
     }
   }
   return success;
 }
-
 
 bool GLGraphicSystem::addWindows(const XMLTree::Node *node)
 {
@@ -364,7 +360,6 @@ bool GLGraphicSystem::addWindow(const XMLTree::Node *node)
   bool success = false;
   if (node)
   {
-    //Window *window = node->hasSubNode("name") ? getWindow(node->attribute("name")) : getWindow(MAIN_WINDOW);
     string name = node->hasSubNode("name") ? node->attribute("name") : MAIN_WINDOW;
     GLWindow *window = static_cast<GLWindow*>(getWindow(name));
     success = window && window->setToXml(*node);
