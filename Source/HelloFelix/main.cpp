@@ -24,7 +24,8 @@
 //#define SCENE_FILE "TriangleScene.xml"
 //#define SCENE_FILE "TextureScene.xml"
 //#define SCENE_FILE "FrameScene.xml"
-#define SCENE_FILE "DepthScene.xml"
+//#define SCENE_FILE "DepthScene.xml"
+#define SCENE_FILE "TextScene.xml"
 
 using namespace std;
 

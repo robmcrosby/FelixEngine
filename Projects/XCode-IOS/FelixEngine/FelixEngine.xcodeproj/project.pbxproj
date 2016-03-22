@@ -38,6 +38,7 @@
 		C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF71C21434300C6F7C8 /* UIScreen.h */; };
 		C13CF51A1CA1F4F200781A3A /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF5191CA1F4F200781A3A /* Resources.h */; };
 		C13CF51C1CA1F50A00781A3A /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF51B1CA1F50A00781A3A /* Buffer.h */; };
+		C13CF5221CA1FD2D00781A3A /* TextScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C13CF5211CA1FD2D00781A3A /* TextScene.xml */; };
 		C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73911BF3B457002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */; };
 		C15D73971BF3B86E002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */; };
@@ -200,6 +201,7 @@
 		C1250DF71C21434300C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
 		C13CF5191CA1F4F200781A3A /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
 		C13CF51B1CA1F50A00781A3A /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
+		C13CF5211CA1FD2D00781A3A /* TextScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextScene.xml; path = ../../../../Source/HelloFelix/Resources/TextScene.xml; sourceTree = "<group>"; };
 		C15D73911BF3B457002FEEE3 /* MotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = ../../../../Source/FelixEngine/MotionSystem.h; sourceTree = "<group>"; };
 		C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IOSMotionSystem.mm; path = ../../../../Source/FelixEngine/IOSMotionSystem.mm; sourceTree = "<group>"; };
 		C15D73951BF3B86E002FEEE3 /* IOSMotionSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSMotionSystem.h; path = ../../../../Source/FelixEngine/IOSMotionSystem.h; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 				C10B5D3F1BF11BED00583B8F /* FrameScene.xml */,
 				C10B5D361BEDD2A200583B8F /* TextureScene.xml */,
 				C10B5D371BEDD2A200583B8F /* TriangleScene.xml */,
+				C13CF5211CA1FD2D00781A3A /* TextScene.xml */,
 				C10B5D341BEDD28C00583B8F /* SettingsGLES3.xml */,
 				C1124BE41BF16F4B00CFADD7 /* SettingsGLES2.xml */,
 				C1124BE61BF179BB00CFADD7 /* SettingsMetal.xml */,
@@ -942,6 +945,7 @@
 				C10B5D411BF11BED00583B8F /* FrameScene.xml in Resources */,
 				C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */,
 				C10B5D381BEDD2A200583B8F /* TextureScene.xml in Resources */,
+				C13CF5221CA1FD2D00781A3A /* TextScene.xml in Resources */,
 				C10B5D401BF11BED00583B8F /* DepthScene.xml in Resources */,
 				C1124BE51BF16F4B00CFADD7 /* SettingsGLES2.xml in Resources */,
 				C1124BE71BF179BB00CFADD7 /* SettingsMetal.xml in Resources */,

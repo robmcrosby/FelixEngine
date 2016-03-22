@@ -17,7 +17,7 @@
           <Vertex name="SimpleVertex"/>
           <Fragment name="SimpleColor"/>
         </Shader>
-        <vec4 name="Color">0.2, 0.2, 0.9, 1.0</vec4>
+        <vec4 name="Color">0.4, 0.4, 0.4, 1.0</vec4>
       </Slot>
     </RenderSlots>
   </Model>
