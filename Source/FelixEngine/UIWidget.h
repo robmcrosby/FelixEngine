@@ -145,8 +145,8 @@ namespace fx
       
       vec2 thisSize = size();
       vec2 thisCenter = center();
-      for (UIWidgets::iterator itr = mWidgets.begin(); itr != mWidgets.end(); ++itr)
-        (*itr)->updateLayout(thisSize, thisCenter);
+      for (auto &widget : mWidgets)
+        widget->updateLayout(thisSize, thisCenter);
     }
     
     static int GetOriginLayout(const std::string &str)

@@ -21,4 +21,7 @@
       </Slot>
     </RenderSlots>
   </Model>
+  <UIScreen>
+    <UIText/>
+  </UIScreen>
 </Scene>
