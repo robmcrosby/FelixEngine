@@ -196,6 +196,11 @@ namespace fx
     void setMesh(const char *name) {setMesh(std::string(name));}
     void setMesh(const std::string &name) {mMesh = &mScene->getMeshBuffer(name);}
     void setMesh(const XMLTree::Node &node) {mMesh = &mScene->createMesh(node);}
+    void uploadMesh()
+    {
+      if (mMesh.valid())
+        mMesh->setToUpdate();
+    }
     void clearMesh() {mMesh.clear();}
     
     Buffer& shader()
@@ -209,6 +214,11 @@ namespace fx
     void setShader(const char *name) {setShader(std::string(name));}
     void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
     void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
+    void uploadShader()
+    {
+      if (mShader.valid())
+        mShader->setToUpdate();
+    }
     void clearShader() {mShader.clear();}
     
     Buffer& frame()
@@ -221,6 +231,11 @@ namespace fx
     void setFrame(const char *name) {setFrame(std::string(name));}
     void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
     void setFrame(const XMLTree::Node &node) {mFrame = &mScene->createFrame(node);}
+    void uploadFram()
+    {
+      if (mFrame.valid())
+        mFrame->setToUpdate();
+    }
     void clearFrame() {mFrame.clear();}
     
     Buffer& uniforms()
@@ -271,10 +286,22 @@ namespace fx
       else
         addTexture(node.attribute("name"), Sampler(node));
     }
+    void addTexture(const std::string &name, const std::string &file, Sampler sampler = Sampler())
+    {
+      addTexture(mScene->createTexture(name, file), sampler);
+    }
     void addTextures(const XMLTree::Node &node)
     {
       for (const auto subNode : node)
         addTexture(*subNode);
+    }
+    void uploadTextures()
+    {
+      if (mTextures.valid())
+      {
+        for (auto &texture : *mTextures)
+          texture.setToUpdate();
+      }
     }
     void clearTextures() {mTextures.clear();}
     
@@ -337,13 +364,13 @@ namespace fx
     }
     void updateBuffers()
     {
-      if (mShader.ptr() && !mShader->updated())
+      if (mShader.valid() && !mShader->updated())
         mGraphicSystem->uploadBuffer(*mShader);
-      if (mMesh.ptr() && !mMesh->updated())
+      if (mMesh.valid() && !mMesh->updated())
         mGraphicSystem->uploadBuffer(*mMesh);
-      if (mUniforms.ptr() && !mUniforms->updated())
+      if (mUniforms.valid() && !mUniforms->updated())
         mGraphicSystem->uploadBuffer(*mUniforms);
-      if (mFrame.ptr() && !mFrame->updated())
+      if (mFrame.valid() && !mFrame->updated())
         mGraphicSystem->uploadBuffer(*mFrame);
     }
     

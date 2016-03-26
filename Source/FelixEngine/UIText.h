@@ -13,6 +13,7 @@
 #include "UIWidget.h"
 #include "RenderSlots.h"
 #include "MeshLoader.h"
+#include "FileSystem.h"
 #include "Projection.h"
 #include "View.h"
 
@@ -47,16 +48,25 @@ namespace fx
       if (!mRenderSlots)
         return false;
       
-//      mGlyphSlot = mRenderSlots->addSlot();
+      mGlyphSlot = mRenderSlots->addSlot();
       
-//      mGlyphSlot->setMesh("GlyphPlane");
-//      Buffer &mesh = mGlyphSlot->mesh();
-//      MeshLoader::LoadMeshPlane(mesh, vec2(1.0f, 1.0f), vec2(0.0f, 0.0f));
-//      mScene->getGraphicsSystem()->uploadBuffer(mesh);
-//      
-//      mGlyphSlot->setShader("SimpleColor");
-//      mGlyphSlot->setUniform("Color", vec4(0.2f, 0.2f, 0.8f, 1.0f));
-//      mGlyphSlot->setLayer(1);
+      mGlyphSlot->setMesh("GlyphPlane");
+      if (!mGlyphSlot->mesh().loaded())
+      {
+        MeshLoader::LoadMeshPlane(mGlyphSlot->mesh(), vec2(1.0f, 1.0f), vec2(0.0f, 0.0f));
+        mGlyphSlot->uploadMesh();
+      }
+      
+      mGlyphSlot->setShader("TextureShader");
+      
+      std::string file = FileSystem::GetResources().path() + "/Images/arial.png";
+      Sampler sampler;
+      sampler.setMinFilter(SAMPLER_FILTER_LINEAR);
+      sampler.setMagFilter(SAMPLER_FILTER_LINEAR);
+      mGlyphSlot->addTexture("arial", file, sampler);
+      
+      mGlyphSlot->drawState().blendState.setDefaults();
+      mGlyphSlot->setLayer(1);
       
       return true;
     }

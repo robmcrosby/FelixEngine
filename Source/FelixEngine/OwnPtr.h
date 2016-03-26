@@ -88,6 +88,8 @@ namespace fx
       mPtr = nullptr;
     }
     
+    bool valid() const {return mPtr;}
+    
     T* operator->() {return mPtr;}
     const T* operator->() const {return mPtr;}
     T& operator*() {return *mPtr;}

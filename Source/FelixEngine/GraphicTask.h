@@ -107,6 +107,7 @@ namespace fx
     BLEND_EQ_MASK         = 0xff,
     BLEND_EQ_COMP_MASK    = 0xf,
     
+    BLEND_EQ_NONE         = 0x0,
     BLEND_EQ_ADD          = 0x1,
     BLEND_EQ_SUBTRACT     = 0x2,
     BLEND_EQ_REV_SUBTRACT = 0x3,
@@ -344,6 +345,14 @@ namespace fx
           setDstAlpha(dst());
       }
     }
+    
+    void setDefaults()
+    {
+      setEquation(BLEND_EQ_ADD);
+      setSrc(BLEND_INPUT_SRC_ALPHA);
+      setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+    }
+    void disable() {setEquation(BLEND_EQ_NONE);}
     
     void setEquation(int func, int shift = BLEND_EQ_COLOR_SHIFT) {flags = (flags & ~(BLEND_EQ_COMP_MASK << shift)) | ((func << shift) & (BLEND_EQ_COMP_MASK << shift));}
     void setEquationAlpha(int func) {setEquation(func, BLEND_EQ_ALPHA_SHIFT);}

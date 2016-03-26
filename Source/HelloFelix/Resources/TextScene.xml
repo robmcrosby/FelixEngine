@@ -29,13 +29,6 @@
     </RenderSlots>
   </Model>
   <UIScreen>
-    <UIText>
-      <RenderSlots>
-        <Slot layer="1" mesh="QuadMesh" shader="TextureShader">
-          <BlendState/>
-          <Texture name="Icon" file="Images/arial.png" min="linear" mag="linear"/>
-        </Slot>
-      </RenderSlots>
-    </UIText>
+    <UIText/>
   </UIScreen>
 </Scene>

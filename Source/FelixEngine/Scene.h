@@ -45,6 +45,7 @@ namespace fx
     
     Buffer& getTextureBuffer(const std::string &name);
     Buffer& createTexture(const XMLTree::Node &node);
+    Buffer& createTexture(const std::string &name, const std::string &file);
     
     void clearBuffers();
     

@@ -156,6 +156,15 @@ Buffer& Scene::createTexture(const XMLTree::Node &node)
   return texture;
 }
 
+Buffer& Scene::createTexture(const string &name, const string &file)
+{
+  Buffer &texture = getTextureBuffer(name);
+  TextureLoader::LoadTextureFromFile(texture, file);
+  texture.setToUpdate();
+  mGraphicSystem->uploadBuffer(texture);
+  return texture;
+}
+
 void Scene::clearBuffers()
 {
   for (Buffer *buffer : mFrameBuffers)

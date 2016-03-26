@@ -294,6 +294,7 @@ namespace fx
     iterator begin() {return map().begin();}
     iterator end() {return map().end();}
     
+    
     Buffer& operator[](int index) {return map()[index];}
     Buffer& operator[](const std::string &name) {return map()[name];}
     Buffer& operator[](const char *str) {return (*this)[std::string(str)];}
@@ -330,6 +331,8 @@ namespace fx
       getBuffer(node.attribute("name")) = node;
       setToUpdate();
     }
+    
+    bool loaded() const {return mResource && mResource->loaded();}
     
     bool contains(BUFFER_TYPE type) const
     {
