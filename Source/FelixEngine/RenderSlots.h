@@ -191,7 +191,9 @@ namespace fx
         mMesh = BUFFER_MESH;
       return *mMesh;
     }
+    void setMesh(Buffer *mesh) {mMesh = mesh;}
     void setMesh(const Buffer &mesh) {mMesh = mesh;}
+    void setMesh(const char *name) {setMesh(std::string(name));}
     void setMesh(const std::string &name) {mMesh = &mScene->getMeshBuffer(name);}
     void setMesh(const XMLTree::Node &node) {mMesh = &mScene->createMesh(node);}
     void clearMesh() {mMesh.clear();}
@@ -204,6 +206,7 @@ namespace fx
     }
     Buffer* shaderPtr() const {return (!mShader.ptr() && mMaterial.ptr()) ? mMaterial->shaderPtr() : mShader.ptr();}
     void setShader(const Buffer &shader) {mShader = shader;}
+    void setShader(const char *name) {setShader(std::string(name));}
     void setShader(const std::string &name) {mShader = &mScene->getShaderBuffer(name);}
     void setShader(const XMLTree::Node &node) {mShader = &mScene->createShader(node);}
     void clearShader() {mShader.clear();}
@@ -215,6 +218,7 @@ namespace fx
       return *mFrame;
     }
     void setFrame(const Buffer &frame) {mFrame = frame;}
+    void setFrame(const char *name) {setFrame(std::string(name));}
     void setFrame(const std::string &name) {mFrame = &mScene->getFrameBuffer(name);}
     void setFrame(const XMLTree::Node &node) {mFrame = &mScene->createFrame(node);}
     void clearFrame() {mFrame.clear();}
@@ -410,8 +414,13 @@ namespace fx
     RenderSlot* back() const {return mSlots.size() ? mSlots.back() : nullptr;}
     RenderSlot* front() const {return mSlots.size() ? mSlots.front() : nullptr;}
     
-    void addSlot() {mSlots.push_back(new RenderSlot(mScene));}
     void addSlot(RenderSlot *slot) {mSlots.push_back(slot);}
+    RenderSlot* addSlot()
+    {
+      RenderSlot *slot = new RenderSlot(mScene);
+      addSlot(slot);
+      return slot;
+    }
     
     void clear()
     {

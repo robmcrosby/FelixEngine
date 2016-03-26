@@ -12,6 +12,7 @@
 #include "UIWidget.h"
 #include "UIWidget.h"
 #include "RenderSlots.h"
+#include "MeshLoader.h"
 #include "Projection.h"
 #include "View.h"
 
@@ -24,7 +25,9 @@ namespace fx
   class UIText: public UIWidget
   {
   public:
-    UIText(Scene *scene): UIWidget(scene) //, mWindow(0), mRenderSlots(0), mProjection(0), mView(0)
+    UIText(Scene *scene): UIWidget(scene),
+      mRenderSlots(0),
+      mGlyphSlot(0)
     {
       setEventFlags(EVENT_WINDOW);
     }
@@ -32,14 +35,34 @@ namespace fx
     
     virtual void setToXml(const XMLTree::Node &node)
     {
-      std::cout << node << std::endl;
       UIWidget::setToXml(node);
+      mRenderSlots = getChild<RenderSlots>();
     }
     
-    virtual bool init()
+    virtual bool init() {return initGlyphs() && UIWidget::init();}
+    
+  private:
+    bool initGlyphs()
     {
-      return UIWidget::init();
+      if (!mRenderSlots)
+        return false;
+      
+//      mGlyphSlot = mRenderSlots->addSlot();
+      
+//      mGlyphSlot->setMesh("GlyphPlane");
+//      Buffer &mesh = mGlyphSlot->mesh();
+//      MeshLoader::LoadMeshPlane(mesh, vec2(1.0f, 1.0f), vec2(0.0f, 0.0f));
+//      mScene->getGraphicsSystem()->uploadBuffer(mesh);
+//      
+//      mGlyphSlot->setShader("SimpleColor");
+//      mGlyphSlot->setUniform("Color", vec4(0.2f, 0.2f, 0.8f, 1.0f));
+//      mGlyphSlot->setLayer(1);
+      
+      return true;
     }
+    
+    RenderSlots *mRenderSlots;
+    RenderSlot  *mGlyphSlot;
   };
 }
 

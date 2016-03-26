@@ -1,27 +1,41 @@
 <?xml version="1.0"?>
 <Scene name="TriangleScene">
+  <Resources>
+    <Mesh name="QuadMesh" primitive="plane" size="1.0, 1.0"/>
+    <Mesh name="TriMesh" primitive="triangles">
+      <Buffer attribute="Position" components="4">
+        -0.8, -0.6, 0.0, 1.0,
+        0.8, -0.6, 0.0, 1.0,
+        0.0,  0.8, 0.0, 1.0
+      </Buffer>
+    </Mesh>
+    <Shader name="ColorShader">
+      <Vertex name="SimpleVertex"/>
+      <Fragment name="SimpleColor"/>
+    </Shader>
+    <Shader name="TextureShader">
+      <Vertex name="SimpleVertexUV"/>
+      <Fragment name="SimpleTexture"/>
+    </Shader>
+  </Resources>
   <Model name="Triangle">
     <RenderSlots>
-      <Slot layer="0">
-        <Mesh name="TriangleMesh" primitive="triangles">
-          <Buffer attribute="Position" components="4">
-            -0.8, -0.6, 0.0, 1.0,
-            0.8, -0.6, 0.0, 1.0,
-            0.0,  0.8, 0.0, 1.0
-          </Buffer>
-        </Mesh>
+      <Slot layer="0" mesh="TriMesh" shader="ColorShader">
         <ClearState>
           <Color0>0.5, 0.5, 0.5, 1.0</Color0>
         </ClearState>
-        <Shader name="ColorShader">
-          <Vertex name="SimpleVertex"/>
-          <Fragment name="SimpleColor"/>
-        </Shader>
         <vec4 name="Color">0.4, 0.4, 0.4, 1.0</vec4>
       </Slot>
     </RenderSlots>
   </Model>
   <UIScreen>
-    <UIText/>
+    <UIText>
+      <RenderSlots>
+        <Slot layer="1" mesh="QuadMesh" shader="TextureShader">
+          <BlendState/>
+          <Texture name="Icon" file="Images/arial.png" min="linear" mag="linear"/>
+        </Slot>
+      </RenderSlots>
+    </UIText>
   </UIScreen>
 </Scene>
