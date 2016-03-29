@@ -147,7 +147,7 @@ namespace fx
     struct WindowData
     {
       EVENT_WINDOW_TYPE event;
-      int window;
+      int windowId;
       ivec2 data;
     };
     WindowData& windowData() {return *(WindowData*)mData;}

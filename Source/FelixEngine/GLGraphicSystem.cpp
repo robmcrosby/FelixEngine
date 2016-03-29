@@ -32,6 +32,11 @@ GLGraphicSystem::~GLGraphicSystem()
     delete window.second;
 }
 
+Window* GLGraphicSystem::getMainWindow()
+{
+  return getWindow(MAIN_WINDOW);
+}
+
 Window* GLGraphicSystem::getWindow(const std::string &name)
 {
   if (!mWindows.count(name))

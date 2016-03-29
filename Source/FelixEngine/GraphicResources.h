@@ -62,6 +62,7 @@ namespace fx
     virtual ivec2 position() const = 0;
     virtual ivec2 size()     const = 0;
     virtual vec2  scale()    const = 0;
+    virtual int   windowId() const = 0;
   };
   
   /**

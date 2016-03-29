@@ -25,7 +25,16 @@ namespace fx
   class GLWindow: public Window
   {
   public:
-    GLWindow(GLGraphicSystem *system): mGLSystem(system), mSDLWindow(0), mFrameBufferId(0), mScale(1.0f), mFrame(0) {}
+    GLWindow(GLGraphicSystem *system):
+      mGLSystem(system),
+      mSDLWindow(0),
+      mFrameBufferId(0),
+      mScale(1.0f),
+      mFrame(0),
+      mWindowId(0)
+    {
+    }
+    
     virtual ~GLWindow()
     {
       if (mSDLWindow)
@@ -99,6 +108,7 @@ namespace fx
     virtual ivec2 position() const {return mPosition;}
     virtual ivec2 size()     const {return mSize;}
     virtual vec2  scale()    const {return vec2(mScale, mScale);}
+    virtual int   windowId() const {return mWindowId;}
     
   private:
     bool load()
@@ -162,15 +172,21 @@ namespace fx
             std::cerr << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
           #endif
         }
+        
+        // Get the window id
+        mWindowId = SDL_GetWindowID(mSDLWindow);
+        
         success = true;
       }
       return success;
     }
     
     std::string mTitle;
-    ivec2 mPosition, mSize;
+    ivec2 mPosition;
+    ivec2 mSize;
     float mScale;
     Frame *mFrame;
+    int   mWindowId;
     
     SDL_Window *mSDLWindow;
     GLGraphicSystem *mGLSystem;

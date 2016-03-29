@@ -52,6 +52,8 @@ namespace fx
     int majorVersion() const {return mMajorVersion;}
     int minorVersion() const {return mMinorVersion;}
     
+    virtual Window* getMainWindow();
+    
     virtual Window*  getWindow(const std::string &name);
     virtual Frame*   getFrame(const std::string &name);
     virtual Shader*  getShader(const std::string &name);

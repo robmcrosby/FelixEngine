@@ -30,6 +30,8 @@ namespace fx
 
     virtual void render() = 0;
     
+    virtual Window* getMainWindow() = 0;
+    
     virtual Window* getWindow(const std::string &name) = 0;
     virtual Frame* getFrame(const std::string &name) = 0;
     virtual Shader* getShader(const std::string &name) = 0;

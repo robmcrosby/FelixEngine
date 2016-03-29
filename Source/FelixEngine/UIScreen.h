@@ -23,7 +23,13 @@ namespace fx
   class UIScreen: public UIWidget
   {
   public:
-    UIScreen(Scene *scene): UIWidget(scene) //, mWindow(0), mRenderSlots(0), mProjection(0), mView(0)
+    UIScreen(Scene *scene): UIWidget(scene),
+      mWindow(0),
+      mRenderSlots(0),
+      mProjection(0),
+      mView(0),
+      mWindowSize(0, 0),
+      mWindowScale(1.0f, 1.0f)
     {
       setEventFlags(EVENT_WINDOW);
     }
@@ -33,76 +39,86 @@ namespace fx
     {
       UIWidget::setToXml(node);
       
+      mRenderSlots = getChild<RenderSlots>();
+      mProjection = getChild<Projection>();
+      mView = getChild<View>();
       
-//      addChildren(node);
-//      mRenderSlots = getChild<RenderSlots>();
-//      mProjection = getChild<Projection>();
-//      mView = getChild<View>();
-//      
-//      if (node.hasAttribute("window"))
-//        setWindow(FelixEngine::GetGraphicSystem()->getWindow(node.attribute("window")));
-//      else if (node.hasAttribute("size"))
-//        resize(node.attribute("size"));
+      if (node.hasAttribute("window"))
+        setWindow(FelixEngine::GetGraphicSystem()->getWindow(node.attribute("window")));
+      else
+        setWindow(FelixEngine::GetGraphicSystem()->getMainWindow());
     }
     
     virtual bool init()
     {
-//      FelixEngine::GetEventSystem()->addHandler(this);
-//      if (mWindow)
-//        resize(vec2(mWindow->size())/mWindow->scale());
+      FelixEngine::GetEventSystem()->addHandler(this);
+      
+      if (!mWindow)
+        setWindow(FelixEngine::GetGraphicSystem()->getMainWindow());
+      else
+        resize(mWindowSize, mWindowScale);
+      
       return UIWidget::init();
     }
     
     virtual void handle(const Event &event)
     {
-//      if (event == EVENT_WINDOW)
-//        handleWindowEvent(event);
+      if (event == EVENT_WINDOW)
+        handleWindowEvent(event);
     }
     
-    void resize(const vec2 size)
+    void resize(const ivec2 &size, const vec2 &scale)
     {
-//      if (mProjection && mSize != size)
-//      {
-//        mSize = size;
-//        
-//        Volume vol;
-//        vol.right = mSize.w/2.0f;
-//        vol.left = -vol.right;
-//        vol.top = mSize.h/2.0f;
-//        vol.bottom = -vol.top;
-//        mProjection->setVolume(vol);
-//        
-//        updateWidgets();
-//      }
+      mWindowSize = size;
+      mWindowScale = scale;
+      mSize = vec2(size)/scale;
+      
+      if (mProjection)
+      {
+        Volume vol;
+        vol.right = mSize.w/2.0f;
+        vol.left = -vol.right;
+        vol.top = mSize.h/2.0f;
+        vol.bottom = -vol.top;
+        mProjection->setVolume(vol);
+        
+        updateWidgets();
+      }
     }
     
-//    Window* window() const {return mWindow;}
-//    void setWindow(Window *window)
-//    {
-//      mWindow = window;
-//      if (mWindow)
-//        resize(vec2(mWindow->size())/mWindow->scale());
-//    }
+    Window* window() const {return mWindow;}
+    void setWindow(Window *window)
+    {
+      mWindow = window;
+      if (mWindow)
+        resize(mWindow->size(), mWindow->scale());
+    }
     
   protected:
-//    void handleWindowEvent(const Event &event)
-//    {
-//      if (mWindow && event.windowData().event == EVENT_WINDOW_RESIZED)
-//        resize(vec2(event.windowData().data));
-//    }
-//    void updateWidgets()
-//    {
-//      vec2 screenSize = size();
-//      vec2 screenCenter = vec2(0.0f, 0.0f);
-//      for (UIWidgets::iterator itr = mWidgets.begin(); itr != mWidgets.end(); ++itr)
-//        (*itr)->updateLayout(screenSize, screenCenter);
-//    }
+    void handleWindowEvent(const Event &event)
+    {
+      const Event::WindowData& windowData = event.windowData();
+      if (mWindow && mWindow->windowId() == windowData.windowId)
+      {
+        if (windowData.event == EVENT_WINDOW_RESIZED)
+          resize(event.windowData().data, mWindowScale);
+      }
+    }
     
-//    RenderSlots *mRenderSlots;
-//    Projection *mProjection;
-//    View *mView;
-//    
-//    Window *mWindow;
+    void updateWidgets()
+    {
+      for (UIWidget *widget : mWidgets)
+        widget->updateLayout(size(), vec2(0.0f, 0.0f));
+    }
+    
+    RenderSlots *mRenderSlots;
+    Projection *mProjection;
+    View *mView;
+    
+    ivec2 mWindowSize;
+    vec2 mWindowScale;
+    
+    Window *mWindow;
   };
 }
 

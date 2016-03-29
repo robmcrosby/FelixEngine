@@ -320,7 +320,7 @@ void SDLEventSystem::processWindowEvent(const SDL_WindowEvent &event)
   Event windowEvent(EVENT_WINDOW);
   windowEvent.setTimeStamp(event.timestamp);
   windowEvent.windowData().event = EVENT_WINDOW_NONE;
-  windowEvent.windowData().window = event.windowID;
+  windowEvent.windowData().windowId = event.windowID;
   windowEvent.windowData().data = ivec2(event.data1, event.data2);
   
   switch (event.event)
