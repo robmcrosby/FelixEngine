@@ -26,6 +26,7 @@ namespace fx
     UIScreen(Scene *scene): UIWidget(scene),
       mWindow(0),
       mRenderSlots(0),
+      mUIRenderPass(0),
       mProjection(0),
       mView(0),
       mWindowSize(0, 0),
@@ -39,14 +40,8 @@ namespace fx
     {
       UIWidget::setToXml(node);
       
-      mRenderSlots = getChild<RenderSlots>();
-      mProjection = getChild<Projection>();
-      mView = getChild<View>();
-      
       if (node.hasAttribute("window"))
         setWindow(FelixEngine::GetGraphicSystem()->getWindow(node.attribute("window")));
-      else
-        setWindow(FelixEngine::GetGraphicSystem()->getMainWindow());
     }
     
     virtual bool init()
@@ -57,6 +52,15 @@ namespace fx
         setWindow(FelixEngine::GetGraphicSystem()->getMainWindow());
       else
         resize(mWindowSize, mWindowScale);
+      
+      mRenderSlots = getChild<RenderSlots>();
+      mProjection = getChild<Projection>();
+      mView = getChild<View>();
+      
+      mUIRenderPass = mRenderSlots->addSlot();
+      mUIRenderPass->setTaskType(GRAPHIC_TASK_PASS);
+      mUIRenderPass->setPass(UI_PASS);
+      mUIRenderPass->setLayer(1);
       
       return UIWidget::init();
     }
@@ -112,6 +116,8 @@ namespace fx
     }
     
     RenderSlots *mRenderSlots;
+    RenderSlot *mUIRenderPass;
+    
     Projection *mProjection;
     View *mView;
     

@@ -66,6 +66,7 @@ namespace fx
       mGlyphSlot->addTexture("arial", file, sampler);
       
       mGlyphSlot->drawState().blendState.setDefaults();
+      mGlyphSlot->setPass(UI_PASS);
       mGlyphSlot->setLayer(1);
       
       return true;

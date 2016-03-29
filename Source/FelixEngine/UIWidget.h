@@ -12,6 +12,8 @@
 #include "Component.h"
 #include "Transform.h"
 
+#define UI_PASS "UIPass"
+
 namespace fx
 {
   enum LAYOUT_FLAGS
