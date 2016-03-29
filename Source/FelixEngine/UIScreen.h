@@ -27,8 +27,6 @@ namespace fx
       mWindow(0),
       mRenderSlots(0),
       mUIRenderPass(0),
-      mProjection(0),
-      mView(0),
       mWindowSize(0, 0),
       mWindowScale(1.0f, 1.0f)
     {
@@ -38,7 +36,8 @@ namespace fx
     
     virtual void setToXml(const XMLTree::Node &node)
     {
-      UIWidget::setToXml(node);
+      Component::setToXml(node);
+      addChildren(node);
       
       if (node.hasAttribute("window"))
         setWindow(FelixEngine::GetGraphicSystem()->getWindow(node.attribute("window")));
@@ -54,8 +53,6 @@ namespace fx
         resize(mWindowSize, mWindowScale);
       
       mRenderSlots = getChild<RenderSlots>();
-      mProjection = getChild<Projection>();
-      mView = getChild<View>();
       
       mUIRenderPass = mRenderSlots->addSlot();
       mUIRenderPass->setTaskType(GRAPHIC_TASK_PASS);
@@ -71,23 +68,30 @@ namespace fx
         handleWindowEvent(event);
     }
     
-    void resize(const ivec2 &size, const vec2 &scale)
+    virtual void update()
+    {
+      Component::update();
+      if (mRenderSlots)
+      {
+        Volume v;
+        v.right = mSize.x/2.0f;
+        v.left = -v.right;
+        v.top = mSize.y/2.0f;
+        v.bottom = -v.top;
+        
+        mRenderSlots->setStruct("camera", "projection", mat4::Ortho(v.left, v.right, v.bottom, v.top, v.near, v.far));
+        mRenderSlots->setStruct("camera", "view", mat4());
+        mRenderSlots->setStruct("camera", "position", vec4());
+      }
+    }
+    
+    void resize(ivec2 size, vec2 scale)
     {
       mWindowSize = size;
       mWindowScale = scale;
       mSize = vec2(size)/scale;
-      
-      if (mProjection)
-      {
-        Volume vol;
-        vol.right = mSize.w/2.0f;
-        vol.left = -vol.right;
-        vol.top = mSize.h/2.0f;
-        vol.bottom = -vol.top;
-        mProjection->setVolume(vol);
         
-        updateWidgets();
-      }
+      updateWidgets();
     }
     
     Window* window() const {return mWindow;}
@@ -105,7 +109,7 @@ namespace fx
       if (mWindow && mWindow->windowId() == windowData.windowId)
       {
         if (windowData.event == EVENT_WINDOW_RESIZED)
-          resize(event.windowData().data, mWindowScale);
+          resize(event.windowData().data*mWindowScale, mWindowScale);
       }
     }
     
@@ -117,9 +121,6 @@ namespace fx
     
     RenderSlots *mRenderSlots;
     RenderSlot *mUIRenderPass;
-    
-    Projection *mProjection;
-    View *mView;
     
     ivec2 mWindowSize;
     vec2 mWindowScale;

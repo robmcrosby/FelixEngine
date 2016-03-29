@@ -313,7 +313,7 @@ namespace fx
      * @param flags Projection flags for adjusting how the projection is created.
      * @return 4x4 matrix encoded with the projection information.
      */
-    mat4 getProjection(vec2 size, int flags) const
+    mat4 getProjection(vec2 size, int flags = 0) const
     {
       lock();
       Volume v = mVolume;

@@ -57,7 +57,7 @@ namespace fx
         mGlyphSlot->uploadMesh();
       }
       
-      mGlyphSlot->setShader("TextureShader");
+      mGlyphSlot->setShader("Texture");
       
       std::string file = FileSystem::GetResources().path() + "/Images/arial.png";
       Sampler sampler;

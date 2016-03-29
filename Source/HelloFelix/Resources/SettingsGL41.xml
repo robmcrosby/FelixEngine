@@ -39,6 +39,47 @@
           out vec4 FragColor;
           void main() {FragColor = texture(tex2D, UV);}
         </Shader>
+        <Shader name="Header" type="header">
+          #version 410
+          struct Camera {
+            mat4 projection;
+            mat4 view;
+            vec4 position;
+          };
+          struct Model {
+            mat4 transform;
+            vec4 rotation;
+          };
+          vec4 transform(Camera c, Model m, vec4 position) {
+            return c.projection * c.view * m.transform * position;
+          }
+          vec3 rotate(vec4 q, vec3 v) {
+            return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
+          }
+          vec3 rotate(Model m, vec4 normal) {
+            return rotate(m.rotation, normal.xyz);
+          }
+        </Shader>
+        <Shader name="VertexUV" type="vertex">
+          #include "Header"
+          in vec4 Position;
+          in vec2 UV_0;
+          uniform Camera camera;
+          uniform Model model;
+          out vec2 UV;
+          void main() {
+            gl_Position = transform(camera, model, Position);
+            //gl_Position = Position;
+            UV = UV_0;
+          }
+        </Shader>
+        <Shader name="TextureUV" type="fragment">
+          #include "Header"
+          in vec2 UV;
+          uniform sampler2D tex2D;
+          out vec4 FragColor;
+          void main() {FragColor = texture(tex2D, UV);}
+        </Shader>
       </Shaders>
     </GLGraphicSystem>
   </Systems>

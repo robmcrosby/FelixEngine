@@ -61,7 +61,6 @@
           in vec2 UV_0;
           uniform Camera camera;
           uniform Model model;
-          uniform Camera camera;
           out vec2 UV;
           void main() {
             gl_Position = transform(camera, model, Position);

@@ -17,6 +17,10 @@
       <Vertex name="SimpleVertexUV"/>
       <Fragment name="SimpleTexture"/>
     </Shader>
+    <Shader name="Texture">
+      <Vertex name="VertexUV"/>
+      <Fragment name="TextureUV"/>
+    </Shader>
   </Resources>
   <Model name="Triangle">
     <RenderSlots>
@@ -29,6 +33,6 @@
     </RenderSlots>
   </Model>
   <UIScreen>
-    <UIText/>
+    <UIText size="200.0, 200.0"/>
   </UIScreen>
 </Scene>
