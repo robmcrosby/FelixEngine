@@ -267,6 +267,18 @@ namespace fx
       return *mTextures;
     }
     Buffer* texturesPtr() const {return (!mTextures.ptr() && mMaterial.ptr()) ? mMaterial->texturesPtr() : mTextures.ptr();}
+    
+    void setTexture(const Buffer &texture, Sampler sampler = Sampler())
+    {
+      if (!mTextures.valid() || !mTextures->mapSize())
+        addTexture(texture, sampler);
+      else
+      {
+        mTextures->front() = texture;
+        mTextures->front().setFlags(sampler.flags());
+      }
+    }
+    
     void addTexture(const Buffer &texture) {textures().addBuffer(texture);}
     void addTexture(const Buffer &texture, Sampler sampler)
     {
