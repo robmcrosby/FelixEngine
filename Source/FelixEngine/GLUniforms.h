@@ -22,23 +22,17 @@ namespace fx
     
     void uploadBufferMap(const Buffer &bufferMap)
     {
-      IndexedMap<Buffer> *map = bufferMap.mapPtr();
-      if (map)
-      {
-        for (const auto buffer : *map)
-        {
-          
-        }
-      }
-      
-      mBufferMap = bufferMap;
+      int i = 0;
+      mBuffers.resize(bufferMap.mapSize());
+      for (const auto buffer : bufferMap)
+        mBuffers[i++] = buffer;
     }
     
     void applyToShader(const GLShader *shader)
     {
       if (shader)
       {
-        for (Buffer &buffer : mBufferMap)
+        for (Buffer &buffer : mBuffers)
         {
           if (buffer.bufferType() == BUFFER_UNIFORM)
             applyUniformToShader(buffer, shader);
@@ -149,7 +143,7 @@ namespace fx
       }
     }
     
-    Buffer mBufferMap;
+    std::vector<Buffer> mBuffers;
   };
 }
 

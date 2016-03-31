@@ -291,8 +291,12 @@ namespace fx
     size_t mapSize() const {return mMap ? mMap->size() : 0;}
     
     typedef IndexedMap<Buffer>::iterator iterator;
-    iterator begin() {return map().begin();}
-    iterator end() {return map().end();}
+    iterator begin() {return mMap ? mMap->begin() : iterator();}
+    iterator end() {return mMap ? mMap->end() : iterator();}
+    
+    typedef IndexedMap<Buffer>::const_iterator const_iterator;
+    const_iterator begin() const {return mMap ? mMap->begin() : const_iterator();}
+    const_iterator end() const {return mMap ? mMap->end() : const_iterator();}
     
     
     Buffer& operator[](int index) {return map()[index];}

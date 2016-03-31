@@ -45,6 +45,59 @@ namespace fx
     const_iterator begin() const {return mArray.begin();}
     const_iterator end()   const {return mArray.end();}
     
+    class map_iterator
+    {
+    public:
+      map_iterator(): mIndexedMap(0) {}
+      map_iterator(IndexedMap<T> *map, std::map<std::string, int>::iterator itr):
+      mIndexedMap(map), mMapIterator(itr) {}
+      
+      map_iterator& operator++()
+      {
+        if (mIndexedMap)
+          ++mMapIterator;
+      }
+      bool operator==(const map_iterator &other) const
+      {
+        return !mIndexedMap || mMapIterator == other.mMapIterator;
+      }
+      std::string first() const {return mIndexedMap ? mMapIterator->first : "";}
+      T& second() {return (*mIndexedMap)[mMapIterator->second];}
+      const T& second() const {return (*mIndexedMap)[mMapIterator->second];}
+      
+    private:
+      IndexedMap<T> *mIndexedMap;
+      std::map<std::string, int>::iterator mMapIterator;
+    };
+    map_iterator mapBegin() {return MapIterator(this, mMap.begin());}
+    map_iterator mapEnd() {return MapIterator(this, mMap.end());}
+    
+    class const_map_iterator
+    {
+    public:
+      const_map_iterator(): mIndexedMap(0) {}
+      const_map_iterator(const IndexedMap<T> *map, std::map<std::string, int>::iterator itr):
+      mIndexedMap(map), mMapIterator(itr) {}
+      
+      map_iterator& operator++()
+      {
+        if (mIndexedMap)
+          ++mMapIterator;
+      }
+      bool operator==(const map_iterator &other) const
+      {
+        return !mIndexedMap || mMapIterator == other.mMapIterator;
+      }
+      std::string first() const {return mIndexedMap ? mMapIterator->first : "";}
+      const T& second() const {return (*mIndexedMap)[mMapIterator->second];}
+      
+    private:
+      const IndexedMap<T> *mIndexedMap;
+      std::map<std::string, int>::const_iterator mMapIterator;
+    };
+    const_map_iterator mapBegin() const {return MapIterator(this, mMap.begin());}
+    const_map_iterator mapEnd() const {return MapIterator(this, mMap.end());}
+    
     size_t size() const {return mArray.size();}
     bool contains(const std::string &name) const {return mMap.count(name);}
     
