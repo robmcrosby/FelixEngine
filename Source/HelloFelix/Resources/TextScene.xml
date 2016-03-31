@@ -37,6 +37,6 @@
     </RenderSlots>
   </Model>
   <UIScreen>
-    <UIText size="200.0, 200.0" font="arial.font" text="It Works!"/>
+    <UIText size="200.0, 200.0" font="arial.font" scale="0.5" text="It Works!"/>
   </UIScreen>
 </Scene>
