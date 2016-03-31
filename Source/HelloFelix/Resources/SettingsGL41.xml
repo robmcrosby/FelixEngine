@@ -92,10 +92,8 @@
             return uv;
           }
           void main() {
-            //gl_Position = transform(camera, model, adjustPos(Position, AtlasLocs));
-            gl_Position = transform(camera, model, Position);
-            //UV = adjustUV(UV_0, AtlasUVs);
-            UV = UV_0;
+            gl_Position = transform(camera, model, adjustPos(Position, AtlasLocs));
+            UV = adjustUV(UV_0, AtlasUVs);
           }
         </Shader>
         <Shader name="TextureUV" type="fragment">
@@ -104,7 +102,6 @@
           uniform sampler2D tex2D;
           out vec4 FragColor;
           void main() {FragColor = texture(tex2D, UV);}
-          //void main() {FragColor = vec4(1.0, 1.0, 1.0, 1.0);}
         </Shader>
       </Shaders>
     </GLGraphicSystem>

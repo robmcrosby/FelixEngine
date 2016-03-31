@@ -178,7 +178,7 @@ namespace fx
           mGlyphSlot->setInstanced("AtlasLocs", locs);
           mGlyphSlot->setInstanced("AtlasUVs", uvs);
         }
-        //mGlyphSlot->drawState().instances = (int)locs.size();
+        mGlyphSlot->drawState().instances = (int)locs.size();
         
         //std::cout << "Updated Text Locations:" << std::endl;
         //for (std::vector<vec4>::iterator itr = locs.begin(); itr != locs.end(); ++itr)

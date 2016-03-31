@@ -91,6 +91,35 @@ namespace fx
       return 0;
     }
     
+    static size_t GetTypeComponents(VAR_TYPE type)
+    {
+      switch (type)
+      {
+        case VAR_FLOAT:
+        case VAR_INT:
+        case VAR_STRING:
+          return 1;
+        case VAR_FLOAT_2:
+        case VAR_INT_2:
+          return 2;
+        case VAR_FLOAT_3:
+        case VAR_INT_3:
+          return 3;
+        case VAR_FLOAT_4:
+        case VAR_CHAR_4:
+        case VAR_INT_4:
+        case VAR_MTX_2X2:
+          return 4;
+        case VAR_MTX_3X3:
+          return 9;
+        case VAR_MTX_4X4:
+          return 16;
+        case VAR_UNKNOWN:
+          return 0;
+      }
+      return 0;
+    }
+    
     static VAR_TYPE GetVariantType(const std::string &str)
     {
       if (str == RGBA_STR)
@@ -245,6 +274,7 @@ namespace fx
     size_t width() const {return mWidth;}
     size_t height() const {return size()/mWidth;}
     size_t sizeInBytes() const {return mData.size();}
+    size_t components() const {return GetTypeComponents(mType);}
     
     void* ptr() {return mData.size() ? &mData.at(0) : nullptr;}
     const void* ptr() const {return mData.size() ? &mData.at(0) : nullptr;}

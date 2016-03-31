@@ -70,6 +70,30 @@
             UV = UV_0;
           }
         </Shader>
+        <Shader name="AtlasUV" type="vertex">
+          #include "VertexHeader"
+          attribute vec4 Position;
+          attribute vec2 UV_0;
+          attribute vec4 AtlasLocs;
+          attribute vec4 AtlasUVs;
+          uniform Camera camera;
+          uniform Model model;
+          varying vec2 UV;
+          vec4 adjustPos(vec4 pos, vec4 loc) {
+            pos.x = (pos.x * loc.z) + loc.x;
+            pos.y = (pos.y * loc.w) + loc.y;
+            return pos;
+          }
+          vec2 adjustUV(vec2 uv, vec4 adj) {
+            uv.x = (1.0-uv.x) * adj.x + uv.x * adj.z;
+            uv.y = uv.y * adj.y + (1.0-uv.y) * adj.w;
+            return uv;
+          }
+          void main() {
+            gl_Position = transform(camera, model, adjustPos(Position, AtlasLocs));
+            UV = adjustUV(UV_0, AtlasUVs);
+          }
+        </Shader>
         <Shader name="TextureUV" type="fragment">
           #version 100
           varying mediump vec2 UV;
