@@ -258,6 +258,11 @@ namespace fx
       uniforms().getBuffer(name, BUFFER_STRUCT).set(comp, var);
       uniforms().setToUpdate();
     }
+    void setInstanced(const std::string &name, const Variant &var)
+    {
+      uniforms().getBuffer(name, BUFFER_INSTANCED) = var;
+      uniforms().setToUpdate();
+    }
     void clearUniforms() {mUniforms.clear();}
     
     Buffer& textures()

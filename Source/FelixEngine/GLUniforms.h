@@ -9,7 +9,7 @@
 #ifndef GLUniforms_h
 #define GLUniforms_h
 
-#include "GLShader.h"
+#include "GLBuffer.h"
 #include "Buffer.h"
 
 namespace fx
@@ -20,7 +20,19 @@ namespace fx
     GLUniforms() {}
     virtual ~GLUniforms() {}
     
-    void uploadBufferMap(const Buffer &bufferMap) {mBufferMap = bufferMap;}
+    void uploadBufferMap(const Buffer &bufferMap)
+    {
+      IndexedMap<Buffer> *map = bufferMap.mapPtr();
+      if (map)
+      {
+        for (const auto buffer : *map)
+        {
+          
+        }
+      }
+      
+      mBufferMap = bufferMap;
+    }
     
     void applyToShader(const GLShader *shader)
     {

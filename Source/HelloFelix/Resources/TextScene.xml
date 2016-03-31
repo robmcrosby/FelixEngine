@@ -21,6 +21,10 @@
       <Vertex name="VertexUV"/>
       <Fragment name="TextureUV"/>
     </Shader>
+    <Shader name="Atlas">
+      <Vertex name="AtlasUV"/>
+      <Fragment name="TextureUV"/>
+    </Shader>
   </Resources>
   <Model name="Triangle">
     <RenderSlots>
@@ -33,6 +37,6 @@
     </RenderSlots>
   </Model>
   <UIScreen>
-    <UIText size="200.0, 200.0" font="arial.font"/>
+    <UIText size="200.0, 200.0" font="arial.font" text="It Works!"/>
   </UIScreen>
 </Scene>
