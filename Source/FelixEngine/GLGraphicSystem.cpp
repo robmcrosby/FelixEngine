@@ -241,7 +241,7 @@ void GLGraphicSystem::processUploadTask(const GraphicTask *task)
         mUniforms.insert(uniforms);
         bufferMap->setResource(uniforms);
       }
-      uniforms->uploadBufferMap(*bufferMap);
+      uniforms->upload(*bufferMap);
     }
     bufferMap->setUpdated();
   }

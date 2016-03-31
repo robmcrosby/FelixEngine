@@ -28,17 +28,17 @@ namespace fx
     /**
      * Internal struct that bundles information about an OpenGL Vertex buffer.
      */
-    struct GLBuffer
+    struct GLVertexBuffer
     {
       /**
        * Constructor initalizes all the fields to zero.
        */
-      GLBuffer(): components(0), count(0), bufferId(0) {}
+      GLVertexBuffer(): components(0), count(0), bufferId(0) {}
       GLuint components; /**< Number of components in each Vertex Item */
       GLuint count;      /**< Number of Vertex Items in the buffer */
       GLuint bufferId;   /**< OpenGL Vertex buffer handle */
     };
-    typedef std::map<std::string, GLBuffer> GLBufferMap; /**< Defines a string to GLBuffer map. */
+    typedef std::map<std::string, GLVertexBuffer> GLVertexBufferMap; /**< Defines a string to GLVertexBuffer map. */
     
   public:
     /**
@@ -170,9 +170,9 @@ namespace fx
     bool uploadVertexBuffer(const Buffer &buffer)
     {
       // Create the Vertex Buffer
-      GLBuffer glBuffer;
-      glGenBuffers(1, &glBuffer.bufferId);
-      if (!glBuffer.bufferId)
+      GLVertexBuffer vBuffer;
+      glGenBuffers(1, &vBuffer.bufferId);
+      if (!vBuffer.bufferId)
       {
         std::cerr << "Error Creating Vertex Buffer." << std::endl;
         return false;
@@ -180,22 +180,22 @@ namespace fx
       
       // Determine the number of components
       if (buffer.type() == VAR_FLOAT)
-        glBuffer.components = 1;
+        vBuffer.components = 1;
       else if (buffer.type() == VAR_FLOAT_2)
-        glBuffer.components = 2;
+        vBuffer.components = 2;
       else if (buffer.type() == VAR_FLOAT_4)
-        glBuffer.components = 4;
+        vBuffer.components = 4;
       
-      glBuffer.count = (GLuint)buffer.size();
+      vBuffer.count = (GLuint)buffer.size();
       
       // Load the Vertices
-      glBindBuffer(GL_ARRAY_BUFFER, glBuffer.bufferId);
-      GLsizeiptr bufSize = glBuffer.components * glBuffer.count * sizeof(float);
+      glBindBuffer(GL_ARRAY_BUFFER, vBuffer.bufferId);
+      GLsizeiptr bufSize = vBuffer.components * vBuffer.count * sizeof(float);
       const GLvoid *ptr = (const GLvoid*)buffer.ptr();
       glBufferData(GL_ARRAY_BUFFER, bufSize, ptr, GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       
-      mVertexBuffers[buffer.name()] = glBuffer;
+      mVertexBuffers[buffer.name()] = vBuffer;
       return true;
     }
     
@@ -253,11 +253,13 @@ namespace fx
         mPrimitiveType = GL_TRIANGLE_STRIP;
     }
     
-    GLBufferMap mVertexBuffers; /**< Map of Vertex Buffers */
-    GLuint      mIndexBuffer;   /**< OpenGL Index Buffer handle */
-    GLuint      mVertexArray;   /**< OpenGL Vertex Array handle */
-    GLenum      mPrimitiveType; /**< OpenGL Enum for Primitive Type */
-    GLRanges    mSubMeshes;     /**< Vector of Ranges for Sub-Meshes */
+    GLVertexBufferMap mVertexBuffers; /**< Map of Vertex Buffers */
+    
+    GLuint mIndexBuffer;   /**< OpenGL Index Buffer handle */
+    GLuint mVertexArray;   /**< OpenGL Vertex Array handle */
+    GLenum mPrimitiveType; /**< OpenGL Enum for Primitive Type */
+    
+    GLRanges mSubMeshes;     /**< Vector of Ranges for Sub-Meshes */
     
     GLGraphicSystem *mGLSystem; /**< Pointer to the GLGraphicsSystem that owns this Mesh */
   };

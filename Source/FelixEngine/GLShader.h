@@ -105,6 +105,62 @@ namespace fx
       setLoaded(success);
     }
     
+    /**
+     * Applies a Uniform to the shader.
+     *
+     * @param name String value for the uniform location.
+     * @param ptr  Void pointer to the location of the uniform data.
+     * @param size Number of items in the uniform.
+     * @param type Data type.
+     */
+    void applyUniform(const std::string &name, const void *ptr, GLsizei size, VAR_TYPE type) const
+    {
+      GLint loc = getUniformLocation(name);
+      if (ptr && loc != -1)
+      {
+        switch (type)
+        {
+          case VAR_FLOAT:
+            glUniform1fv(loc, size, (const GLfloat*)ptr);
+            break;
+          case VAR_INT:
+            glUniform1iv(loc, size, (const GLint*)ptr);
+            break;
+          case VAR_FLOAT_2:
+            glUniform2fv(loc, size, (const GLfloat*)ptr);
+            break;
+          case VAR_INT_2:
+            glUniform2iv(loc, size, (const GLint*)ptr);
+            break;
+          case VAR_FLOAT_3:
+            glUniform3fv(loc, size, (const GLfloat*)ptr);
+            break;
+          case VAR_INT_3:
+            glUniform3iv(loc, size, (const GLint*)ptr);
+            break;
+          case VAR_FLOAT_4:
+            glUniform4fv(loc, size, (const GLfloat*)ptr);
+            break;
+          case VAR_INT_4:
+            glUniform4iv(loc, size, (const GLint*)ptr);
+            break;
+          case VAR_MTX_2X2:
+            glUniformMatrix2fv(loc, size, GL_FALSE, (const GLfloat*)ptr);
+            break;
+          case VAR_MTX_3X3:
+            glUniformMatrix3fv(loc, size, GL_FALSE, (const GLfloat*)ptr);
+            break;
+          case VAR_MTX_4X4:
+            glUniformMatrix4fv(loc, size, GL_FALSE, (const GLfloat*)ptr);
+            break;
+          case VAR_CHAR_4:
+          case VAR_STRING:
+          case VAR_UNKNOWN:
+            break;
+        }
+      }
+    }
+    
   private:
     /**
      * Loads and Compiles the source of a Shader Part.
