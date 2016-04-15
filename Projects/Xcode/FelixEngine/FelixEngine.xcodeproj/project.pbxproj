@@ -80,7 +80,7 @@
 		C12713DA1CACA8AB002C8EFA /* GLBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C12713D91CACA8A5002C8EFA /* GLBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C13CF51E1CA1FBFA00781A3A /* TextScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C13CF51D1CA1FBFA00781A3A /* TextScene.xml */; };
 		C14A956D1C3D85960037D982 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C14A956C1C3D85960037D982 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; };
+		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D73A11BF3C638002FEEE3 /* IOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739F1BF3C638002FEEE3 /* IOSMotionSystem.h */; };
 		C15D73A21BF3C638002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73A01BF3C638002FEEE3 /* IOSMotionSystem.mm */; };
 		C181A52C1C1D095600A228AE /* UbiquityFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C181A52A1C1D095600A228AE /* UbiquityFileSystem.h */; };
@@ -96,12 +96,12 @@
 		C19892561BFD370F007DF57A /* TrackingView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892551BFD370F007DF57A /* TrackingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19892581BFD3D1B007DF57A /* OrbitView.h in Headers */ = {isa = PBXBuildFile; fileRef = C19892571BFD3D1B007DF57A /* OrbitView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C198925E1C03BD8F007DF57A /* GyroView.h in Headers */ = {isa = PBXBuildFile; fileRef = C198925D1C03BD8F007DF57A /* GyroView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C19EDC6C1C0E5D2300F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC6A1C0E5D2300F997AB /* FileSystem.h */; };
+		C19EDC6C1C0E5D2300F997AB /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C19EDC6A1C0E5D2300F997AB /* FileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19EDC6D1C0E5D2300F997AB /* FileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C19EDC6B1C0E5D2300F997AB /* FileSystem.mm */; };
 		C1A7D4251BDF52AF0064E84A /* Delegate.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4241BDF52AF0064E84A /* Delegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4271BE0502D0064E84A /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4261BE0502D0064E84A /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4291BE05D970064E84A /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4281BE05D970064E84A /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; };
+		C1A7D42C1BE078FF0064E84A /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42B1BE078FF0064E84A /* EventSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4301BE178200064E84A /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D42F1BE178200064E84A /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1A7D4321BE2EA360064E84A /* Pool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A7D4311BE2EA360064E84A /* Pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1AC38071C8CB37100DCC638 /* Scene.cpp */; };
