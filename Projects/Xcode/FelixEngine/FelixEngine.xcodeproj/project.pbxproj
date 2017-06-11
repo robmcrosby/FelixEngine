@@ -49,7 +49,7 @@
 		37B490081BC9DEE000FC97A5 /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490071BC9DEE000FC97A5 /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4900C1BC9E0A900FC97A5 /* GLTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4900A1BC9E0A900FC97A5 /* GLTexture.h */; };
 		37B490121BC9EB9F00FC97A5 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 37B490101BC9EB9F00FC97A5 /* MeshLoader.cpp */; };
-		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; };
+		37B490131BC9EB9F00FC97A5 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490111BC9EB9F00FC97A5 /* MeshLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490171BCB10B900FC97A5 /* Semaphore.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490161BCB10B900FC97A5 /* Semaphore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B490191BCB119300FC97A5 /* Mutex.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B490181BCB119300FC97A5 /* Mutex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		37B4901B1BCB11F200FC97A5 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 37B4901A1BCB11F200FC97A5 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -78,6 +78,8 @@
 		C1250DF21C20F16900C6F7C8 /* UIWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF11C20F16100C6F7C8 /* UIWidget.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C12713D61CAC735C002C8EFA /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C12713D51CAC735C002C8EFA /* Fonts */; };
 		C12713DA1CACA8AB002C8EFA /* GLBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C12713D91CACA8A5002C8EFA /* GLBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12D23F21CC61B6E0048B797 /* TaskGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12D23F01CC61B6E0048B797 /* TaskGroup.cpp */; };
+		C12D23F31CC61B6E0048B797 /* Tasking.h in Headers */ = {isa = PBXBuildFile; fileRef = C12D23F11CC61B6E0048B797 /* Tasking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C13CF51E1CA1FBFA00781A3A /* TextScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C13CF51D1CA1FBFA00781A3A /* TextScene.xml */; };
 		C14A956D1C3D85960037D982 /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C14A956C1C3D85960037D982 /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D739D1BF3C619002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D739C1BF3C619002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -124,7 +126,7 @@
 		C1E6834A1C488D8900E1705D /* OwnPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683491C488D8900E1705D /* OwnPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E6834E1C4ECB2000E1705D /* GLUniforms.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6834D1C4ECB2000E1705D /* GLUniforms.h */; };
 		C1E683531C4EEFC600E1705D /* TextureLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E683511C4EEFC600E1705D /* TextureLoader.cpp */; };
-		C1E683541C4EEFC600E1705D /* TextureLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683521C4EEFC600E1705D /* TextureLoader.h */; };
+		C1E683541C4EEFC600E1705D /* TextureLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E683521C4EEFC600E1705D /* TextureLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,6 +254,8 @@
 		C1250DF11C20F16100C6F7C8 /* UIWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UIWidget.h; path = ../../../../Source/FelixEngine/UIWidget.h; sourceTree = "<group>"; };
 		C12713D51CAC735C002C8EFA /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/HelloFelix/Resources/Fonts; sourceTree = "<group>"; };
 		C12713D91CACA8A5002C8EFA /* GLBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLBuffer.h; path = ../../../../Source/FelixEngine/GLBuffer.h; sourceTree = "<group>"; };
+		C12D23F01CC61B6E0048B797 /* TaskGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaskGroup.cpp; path = ../../../../Source/FelixEngine/TaskGroup.cpp; sourceTree = "<group>"; };
+		C12D23F11CC61B6E0048B797 /* Tasking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tasking.h; path = ../../../../Source/FelixEngine/Tasking.h; sourceTree = "<group>"; };
 		C13CF5181CA1EFF300781A3A /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
 		C13CF51D1CA1FBFA00781A3A /* TextScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextScene.xml; path = ../../../../Source/HelloFelix/Resources/TextScene.xml; sourceTree = "<group>"; };
 		C14A956C1C3D85960037D982 /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
@@ -410,9 +414,11 @@
 		3722FDEE1BDEAF1F00B07476 /* TaskingSystem */ = {
 			isa = PBXGroup;
 			children = (
+				C12D23F11CC61B6E0048B797 /* Tasking.h */,
 				3722FDF01BDEAF9A00B07476 /* TaskingSystem.h */,
 				C1A7D4261BE0502D0064E84A /* Task.h */,
 				C1A7D4281BE05D970064E84A /* TaskGroup.h */,
+				C12D23F01CC61B6E0048B797 /* TaskGroup.cpp */,
 				3722FDF41BDEB47E00B07476 /* GCDTaskingSystem.h */,
 			);
 			name = TaskingSystem;
@@ -713,6 +719,7 @@
 				37E22FE01BCF3A120018BA15 /* Image.h in Headers */,
 				370FEA871BC31C6E00440244 /* Quaternion.h in Headers */,
 				C1B00EE11BFBA5950060BE21 /* View.h in Headers */,
+				C12D23F31CC61B6E0048B797 /* Tasking.h in Headers */,
 				370FEA881BC31C6E00440244 /* StringUtils.h in Headers */,
 				37DCCD971BD3C563003D9081 /* MTLGraphicSystem.h in Headers */,
 				370FEA8E1BC3428900440244 /* GLWindow.h in Headers */,
@@ -930,6 +937,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C12D23F21CC61B6E0048B797 /* TaskGroup.cpp in Sources */,
 				C1E683531C4EEFC600E1705D /* TextureLoader.cpp in Sources */,
 				C1AC38081C8CB37100DCC638 /* Scene.cpp in Sources */,
 				370FEA771BC2F8D900440244 /* System.cpp in Sources */,

@@ -38,8 +38,18 @@
 		C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = C1250DF71C21434300C6F7C8 /* UIScreen.h */; };
 		C12713D81CAC8706002C8EFA /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = C12713D71CAC8706002C8EFA /* Fonts */; };
 		C12713DC1CACE34C002C8EFA /* GLBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C12713DB1CACE34C002C8EFA /* GLBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12924161CC0CF2500F34D71 /* EventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD881BED298D007F68E0 /* EventSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12924171CC0CF2900F34D71 /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD851BED298D007F68E0 /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12924181CC0CF2D00F34D71 /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD871BED298D007F68E0 /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12924191CC0CF3900F34D71 /* SDLEventSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBD1BED298D007F68E0 /* SDLEventSystem.h */; };
+		C129241A1CC0CF7400F34D71 /* TaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC41BED298D007F68E0 /* TaskingSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C129241B1CC0CF7800F34D71 /* Task.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC21BED298D007F68E0 /* Task.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C129241C1CC0CF7D00F34D71 /* TaskGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDC31BED298D007F68E0 /* TaskGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C12D23E91CC5C12C0048B797 /* GCDTaskingSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8B1BED298D007F68E0 /* GCDTaskingSystem.h */; };
+		C12D23ED1CC6156D0048B797 /* TaskGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C12D23EC1CC6156D0048B797 /* TaskGroup.cpp */; };
+		C12D23EF1CC61B500048B797 /* Tasking.h in Headers */ = {isa = PBXBuildFile; fileRef = C12D23EE1CC618B20048B797 /* Tasking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C13CF51A1CA1F4F200781A3A /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF5191CA1F4F200781A3A /* Resources.h */; };
-		C13CF51C1CA1F50A00781A3A /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF51B1CA1F50A00781A3A /* Buffer.h */; };
+		C13CF51C1CA1F50A00781A3A /* Buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C13CF51B1CA1F50A00781A3A /* Buffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C13CF5221CA1FD2D00781A3A /* TextScene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C13CF5211CA1FD2D00781A3A /* TextScene.xml */; };
 		C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C15D73911BF3B457002FEEE3 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15D73961BF3B86E002FEEE3 /* IOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15D73941BF3B86E002FEEE3 /* IOSMotionSystem.mm */; };
@@ -68,7 +78,7 @@
 		C197CE191BED57B3007F68E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C197CE181BED57B3007F68E0 /* Assets.xcassets */; };
 		C197CE221BED580F007F68E0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C197CE211BED580F007F68E0 /* main.cpp */; };
 		C197CE2A1BED5E27007F68E0 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD8A1BED298D007F68E0 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; };
+		C197CE2C1BED5E48007F68E0 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDA11BED298D007F68E0 /* MeshLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE2F1BED5E70007F68E0 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CDBB1BED298D007F68E0 /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE321BED5E7C007F68E0 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD9E1BED298D007F68E0 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C197CE351BED5E98007F68E0 /* Component.h in Headers */ = {isa = PBXBuildFile; fileRef = C197CD831BED298D007F68E0 /* Component.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -203,6 +213,8 @@
 		C1250DF71C21434300C6F7C8 /* UIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIScreen.h; path = ../../../../Source/FelixEngine/UIScreen.h; sourceTree = "<group>"; };
 		C12713D71CAC8706002C8EFA /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../../../../Source/HelloFelix/Resources/Fonts; sourceTree = "<group>"; };
 		C12713DB1CACE34C002C8EFA /* GLBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLBuffer.h; path = ../../../../Source/FelixEngine/GLBuffer.h; sourceTree = "<group>"; };
+		C12D23EC1CC6156D0048B797 /* TaskGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TaskGroup.cpp; path = ../../../../Source/FelixEngine/TaskGroup.cpp; sourceTree = "<group>"; };
+		C12D23EE1CC618B20048B797 /* Tasking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Tasking.h; path = ../../../../Source/FelixEngine/Tasking.h; sourceTree = "<group>"; };
 		C13CF5191CA1F4F200781A3A /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../../../../Source/FelixEngine/Resources.h; sourceTree = "<group>"; };
 		C13CF51B1CA1F50A00781A3A /* Buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Buffer.h; path = ../../../../Source/FelixEngine/Buffer.h; sourceTree = "<group>"; };
 		C13CF5211CA1FD2D00781A3A /* TextScene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = TextScene.xml; path = ../../../../Source/HelloFelix/Resources/TextScene.xml; sourceTree = "<group>"; };
@@ -590,9 +602,11 @@
 		C197CDEC1BED2BDE007F68E0 /* TaskingSystem */ = {
 			isa = PBXGroup;
 			children = (
+				C12D23EE1CC618B20048B797 /* Tasking.h */,
 				C197CDC41BED298D007F68E0 /* TaskingSystem.h */,
 				C197CDC21BED298D007F68E0 /* Task.h */,
 				C197CDC31BED298D007F68E0 /* TaskGroup.h */,
+				C12D23EC1CC6156D0048B797 /* TaskGroup.cpp */,
 				C197CD8B1BED298D007F68E0 /* GCDTaskingSystem.h */,
 			);
 			name = TaskingSystem;
@@ -777,6 +791,7 @@
 				C198925C1BFFE171007DF57A /* GyroView.h in Headers */,
 				C197CE3D1BED5F06007F68E0 /* GraphicTask.h in Headers */,
 				C197CE551BED5FD2007F68E0 /* MultiVector.h in Headers */,
+				C12D23EF1CC61B500048B797 /* Tasking.h in Headers */,
 				C197CE4D1BED5FAE007F68E0 /* Color.h in Headers */,
 				C197CE461BED5F2D007F68E0 /* MTLGraphicSystem.h in Headers */,
 				C197CE4E1BED5FB3007F68E0 /* StringUtils.h in Headers */,
@@ -795,21 +810,29 @@
 				C197CE511BED5FC1007F68E0 /* Mutex.h in Headers */,
 				C197CE501BED5FBB007F68E0 /* Semaphore.h in Headers */,
 				C197CE381BED5EA8007F68E0 /* RenderSlots.h in Headers */,
+				C12924171CC0CF2900F34D71 /* Event.h in Headers */,
+				C12924161CC0CF2500F34D71 /* EventSystem.h in Headers */,
 				C197CE581BED5FDF007F68E0 /* Pool.h in Headers */,
 				C197CE351BED5E98007F68E0 /* Component.h in Headers */,
 				C1250DF81C21434300C6F7C8 /* UIScreen.h in Headers */,
 				C197CE521BED5FC5007F68E0 /* Image.h in Headers */,
 				C197CE541BED5FCD007F68E0 /* Variant.h in Headers */,
+				C12924181CC0CF2D00F34D71 /* EventHandler.h in Headers */,
 				C1250DF61C20F4E000C6F7C8 /* UIWidget.h in Headers */,
 				C197CE4B1BED5FA6007F68E0 /* Matrix.h in Headers */,
 				C197CE361BED5E9D007F68E0 /* Transform.h in Headers */,
+				C129241A1CC0CF7400F34D71 /* TaskingSystem.h in Headers */,
 				C197CE471BED5F31007F68E0 /* MTLGraphicResources.h in Headers */,
 				C1E6834C1C49B4FC00E1705D /* OwnPtr.h in Headers */,
+				C129241C1CC0CF7D00F34D71 /* TaskGroup.h in Headers */,
+				C12D23E91CC5C12C0048B797 /* GCDTaskingSystem.h in Headers */,
+				C12924191CC0CF3900F34D71 /* SDLEventSystem.h in Headers */,
 				C197CE321BED5E7C007F68E0 /* Material.h in Headers */,
 				C197CE401BED5F15007F68E0 /* GLUniformMap.h in Headers */,
 				C197CE571BED5FDB007F68E0 /* Delegate.h in Headers */,
 				C1D3086A1C34507F003286CF /* UIText.h in Headers */,
 				C15D73921BF3B457002FEEE3 /* MotionSystem.h in Headers */,
+				C129241B1CC0CF7800F34D71 /* Task.h in Headers */,
 				C197CE411BED5F19007F68E0 /* GLWindow.h in Headers */,
 				C106DB7B1BFD0294000065D4 /* Camera.h in Headers */,
 				C19892521BFD36A3007DF57A /* TrackingView.h in Headers */,
@@ -1001,6 +1024,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C12D23ED1CC6156D0048B797 /* TaskGroup.cpp in Sources */,
 				C1E683571C4EFB5000E1705D /* TextureLoader.cpp in Sources */,
 				C1AC38061C8CB34C00DCC638 /* Scene.cpp in Sources */,
 				C19EDC661C0E514A00F997AB /* FileSystem.mm in Sources */,

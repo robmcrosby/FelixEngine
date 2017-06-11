@@ -8,6 +8,7 @@
 
 #include "UbiquityFileSystem.h"
 #include "TaskGroup.h"
+#include "TaskingSystem.h"
 #include "Event.h"
 #import <Foundation/Foundation.h>
 

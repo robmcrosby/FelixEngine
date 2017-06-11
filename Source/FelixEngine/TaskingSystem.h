@@ -10,14 +10,12 @@
 #define TaskingSystem_h
 
 #include "System.h"
-#include "Delegate.h"
+#include "Tasking.h"
+
 
 namespace fx
 {
   class TaskGroup;
-  
-  typedef void(TaskFunction)(void*);
-  typedef Delegate<void, void*> TaskDelegate;
   
   class TaskingSystem: public System
   {

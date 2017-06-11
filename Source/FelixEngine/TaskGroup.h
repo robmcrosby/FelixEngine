@@ -9,49 +9,28 @@
 #ifndef TaskGroup_h
 #define TaskGroup_h
 
-#include "TaskingSystem.h"
-#include "Task.h"
+#include "Tasking.h"
 
 
 namespace fx
 {
   class GCDTaskingSystem;
+  class Task;
   
   class TaskGroup
   {
   public:
-    TaskGroup(): mFunction(0), mPtr(0)
-    {
-      mDelegate = TaskDelegate::Create<TaskGroup, &TaskGroup::exec>(this);
-    }
-    virtual ~TaskGroup() {}
+    TaskGroup();
+    virtual ~TaskGroup();
     
     virtual void execute(void*) {}
     
     bool dispatch(Task *task, void *ptr = nullptr) {return task ? dispatch(*task, ptr) : false;}
-    bool dispatch(Task &task, void *ptr = nullptr) {return task.dispatch(ptr, this);}
-    bool dispatch(TaskDelegate delegate, void *ptr = nullptr)
-    {
-      TaskingSystem *taskingSystem = TaskingSystem::Instance();
-      if (!taskingSystem)
-        return false;
-      return taskingSystem->dispatch(delegate, ptr, this);
-    }
-    bool dispatch(TaskFunction *function, void *ptr = nullptr)
-    {
-      TaskingSystem *taskingSystem = TaskingSystem::Instance();
-      if (!taskingSystem)
-        return false;
-      return taskingSystem->dispatch(function, ptr, this);
-    }
+    bool dispatch(Task &task, void *ptr = nullptr);
+    bool dispatch(TaskDelegate delegate, void *ptr = nullptr);
+    bool dispatch(TaskFunction *function, void *ptr = nullptr);
     
-    bool waitOnTasks()
-    {
-      TaskingSystem *taskingSystem = TaskingSystem::Instance();
-      if (!taskingSystem)
-        return false;
-      return taskingSystem->waitOnGroup(this);
-    }
+    bool waitOnTasks();
     
     bool runAfterTasks(void *ptr = nullptr)
     {
@@ -60,21 +39,9 @@ namespace fx
       return runAfterTasks(mDelegate, ptr);
     }
     bool runAfterTasks(Task *task, void *ptr = nullptr) {return task ? runAfterTasks(*task, ptr) : false;}
-    bool runAfterTasks(Task &task, void *ptr = nullptr) {return task.runAfterGroup(this, ptr);}
-    bool runAfterTasks(TaskDelegate delegate, void *ptr = nullptr)
-    {
-      TaskingSystem *taskingSystem = TaskingSystem::Instance();
-      if (!taskingSystem)
-        return false;
-      return taskingSystem->runAfterGroup(delegate, this, ptr);
-    }
-    bool runAfterTasks(TaskFunction *function, void *ptr = nullptr)
-    {
-      TaskingSystem *taskingSystem = TaskingSystem::Instance();
-      if (!taskingSystem)
-        return false;
-      return taskingSystem->runAfterGroup(function, this, ptr);
-    }
+    bool runAfterTasks(Task &task, void *ptr = nullptr);
+    bool runAfterTasks(TaskDelegate delegate, void *ptr = nullptr);
+    bool runAfterTasks(TaskFunction *function, void *ptr = nullptr);
     
     void setDelegate(TaskDelegate delegate) {mDelegate = delegate;}
     void setFunction(TaskFunction *function) {mFunction = function;}

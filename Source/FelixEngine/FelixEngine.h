@@ -58,8 +58,9 @@ namespace fx
     EventSystem* getEventSystem() {return static_cast<EventSystem*>(getSystem(SYSTEM_EVENTS));}
     MotionSystem* getMotionSystem() {return static_cast<MotionSystem*>(getSystem(SYSTEM_MOTION));}
     
-    bool loadScene(const File &file);
-    bool loadScene(const std::string &filePath) {return loadScene(FileSystem::GetResources()+filePath);}
+    Scene* loadScene(const File &file);
+    Scene* loadScene(const std::string &filePath) {return loadScene(FileSystem::GetResources()+filePath);}
+    
     void addScene(Scene *scene);
     void clearScenes();
     void deleteScene(const std::string &name);

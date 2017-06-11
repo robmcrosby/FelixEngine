@@ -57,7 +57,7 @@ namespace fx
       mUIRenderPass = mRenderSlots->addSlot();
       mUIRenderPass->setTaskType(GRAPHIC_TASK_PASS);
       mUIRenderPass->setPass(UI_PASS);
-      mUIRenderPass->setLayer(1);
+      mUIRenderPass->setLayer(10);
       
       return UIWidget::init();
     }

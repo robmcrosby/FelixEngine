@@ -13,6 +13,7 @@
 #include "Pool.h"
 #include "List.h"
 
+#include "TaskGroup.h"
 
 namespace fx
 {
@@ -53,7 +54,21 @@ namespace fx
     virtual void handle(const Event &event) {}
     
     void notify(const Event &event) {notify(event, event.dispatchType());}
-    void notify(const Event &event, DISPATCH_TYPE dispatch);
+    void notify(const Event &event, DISPATCH_TYPE dispatch)
+    {
+      if (dispatch == DISPATCH_SERIAL)
+        notifySerial(event);
+      else if (dispatch == DISPATCH_SINGLE)
+        notifySingle(event);
+      else if (dispatch == DISPATCH_MULTIPLE)
+        notifyMultiple(event, nullptr);
+      else  if (dispatch == DISPATCH_BLOCK)
+      {
+        TaskGroup group;
+        notifyMultiple(event, &group);
+        group.waitOnTasks();
+      }
+    }
     
     static void Cleanup()
     {
@@ -66,12 +81,85 @@ namespace fx
     int eventFlags() const {return SDL_AtomicGet(&mEventFlags);}
     
   private:
-    void notifySerial(Event event);
-    void notifySingle(const Event &event);
-    void notifyMultiple(const Event &event, TaskGroup *group);
+    void notifySerial(Event event)
+    {
+      event.setSender(this);
+      
+      for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
+      {
+        EventHandler *handler = (*itr)->handler();
+        if (handler)
+        {
+          event.setTarget(handler);
+          handler->handle(event);
+          ++itr;
+        }
+        else
+          itr = mObservers.remove(itr);
+      }
+    }
     
-    void dispatchSingle(void *ptr);
-    void dispatchMultiple(void *ptr);
+    void notifySingle(const Event &event);
+    void notifyMultiple(const Event &event, TaskGroup *group)
+    {
+      //TaskingSystem *system = TaskingSystem::Instance();
+      //if (system)
+      //{
+      //  TaskDelegate delegate = TaskDelegate::Create<EventHandler, &EventHandler::dispatchMultiple>(this);
+      std::cout << "notifyMultiple" << std::endl;
+        for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
+        {
+          EventHandler *handler = (*itr)->handler();
+          if (handler)
+          {
+            if (handler->eventFlags() & event.type())
+            {
+              notifyMultipleDispatch(event, group, handler);
+//              Event *copy = event.copy();
+//              copy->setSender(this);
+//              copy->setTarget(handler);
+//              system->dispatch(delegate, (void*)copy, group);
+            }
+            ++itr;
+          }
+          else
+            itr = mObservers.remove(itr);
+        }
+      //}
+    }
+    void notifyMultipleDispatch(const Event &event, TaskGroup *group, EventHandler *handler);
+    
+    void dispatchSingle(void *ptr)
+    {
+      Event &event = *static_cast<Event*>(ptr);
+      event.setSender(this);
+      
+      for (List<Observer*>::Iterator itr = mObservers.begin(); itr != mObservers.end();)
+      {
+        EventHandler *handler = (*itr)->handler();
+        if (handler)
+        {
+          if (handler->eventFlags() & event.type())
+          {
+            event.setTarget(handler);
+            handler->handle(event);
+          }
+          ++itr;
+        }
+        else
+          itr = mObservers.remove(itr);
+      }
+      
+      Event::EventPool().freeItem(&event);
+    }
+    
+    void dispatchMultiple(void *ptr)
+    {
+      Event &event = *static_cast<Event*>(ptr);
+      if (event.target())
+        event.target()->handle(event);
+      Event::EventPool().freeItem(&event);
+    }
     
     mutable SDL_atomic_t mEventFlags;
     Observer *mObserver;

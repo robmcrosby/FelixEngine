@@ -59,19 +59,18 @@ bool FelixEngine::init(const std::string &settingsFile)
   return success;
 }
 
-bool FelixEngine::loadScene(const File &file)
+Scene* FelixEngine::loadScene(const File &file)
 {
-  bool success = false;
   XMLTree::XMLTree tree;
-  
   if (file.load(tree) && !tree.isEmpty())
   {
     Scene *scene = new Scene();
     scene->setToXml(**tree.begin());
     addScene(scene);
-    success = scene->init();
+    if (scene->init())
+      return scene;
   }
-  return success;
+  return nullptr;
 }
 
 void FelixEngine::addScene(Scene *scene)
