@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<Scene name="TriangleScene">
+  <Resources>
+    <Mesh name="QuadMesh" primitive="plane" size="1.0, 1.0"/>
+    <Mesh name="TriMesh" primitive="triangles">
+      <Buffer attribute="Position" components="4">
+        -0.8, -0.6, 0.0, 1.0,
+        0.8, -0.6, 0.0, 1.0,
+        0.0,  0.8, 0.0, 1.0
+      </Buffer>
+    </Mesh>
+    <Shader name="ColorShader">
+      <Vertex name="SimpleVertex"/>
+      <Fragment name="SimpleColor"/>
+    </Shader>
+    <Shader name="TextureShader">
+      <Vertex name="SimpleVertexUV"/>
+      <Fragment name="SimpleTexture"/>
+    </Shader>
+    <Shader name="Texture">
+      <Vertex name="VertexUV"/>
+      <Fragment name="TextureUV"/>
+    </Shader>
+    <Shader name="Atlas">
+      <Vertex name="AtlasUV"/>
+      <Fragment name="TextureUV"/>
+    </Shader>
+  </Resources>
+  <Model name="Triangle">
+    <RenderSlots>
+      <Slot layer="0" mesh="TriMesh" shader="ColorShader">
+        <ClearState>
+          <Color0>0.5, 0.5, 0.5, 1.0</Color0>
+        </ClearState>
+        <vec4 name="Color">0.4, 0.4, 0.4, 1.0</vec4>
+      </Slot>
+    </RenderSlots>
+  </Model>
+  <UIScreen>
+    <UIText size="200.0, 200.0" font="arial.font" scale="0.5" text="It Works!"/>
+  </UIScreen>
+</Scene>
