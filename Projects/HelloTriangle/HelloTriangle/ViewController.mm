@@ -7,9 +7,11 @@
 //
 
 #import "ViewController.h"
-#import <FelixEngine/Engine.h>
+#import "HelloTriangle.h"
 
 @interface ViewController ()
+
+@property HelloTriangle *helloTriApp;
 
 @end
 
@@ -18,13 +20,15 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  [[Engine instance] test];
+  // Create the Cpp Application
+  self.helloTriApp = new HelloTriangle();
+  [self setApplication: self.helloTriApp];
+  self.helloTriApp->start();
 }
 
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
 }
 
 

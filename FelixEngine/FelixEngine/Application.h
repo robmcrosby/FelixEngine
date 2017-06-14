@@ -16,6 +16,8 @@ namespace fx {
   public:
     Application();
     virtual ~Application();
+    
+    virtual void start();
   };
 }
 

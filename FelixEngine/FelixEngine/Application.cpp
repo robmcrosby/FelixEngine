@@ -12,9 +12,13 @@
 using namespace fx;
 
 Application::Application() {
-  
+  printf("Create Application\n");
 }
 
 Application::~Application() {
   
+}
+
+void Application::start() {
+  printf("Application Start");
 }

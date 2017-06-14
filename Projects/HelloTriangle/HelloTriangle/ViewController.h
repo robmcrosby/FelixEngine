@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <FelixEngine/AppViewController.h>
+#import <FelixEngine/iOSViewController.h>
 
-@interface ViewController : AppViewController
+@interface ViewController : iOSViewController
 
 
 @end

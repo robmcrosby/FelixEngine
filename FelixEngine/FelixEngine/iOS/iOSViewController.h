@@ -1,5 +1,5 @@
 //
-//  AppViewController.h
+//  iOSViewController.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 6/13/17.
@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface AppViewController : UIViewController
+@interface iOSViewController : UIViewController
+
+-(void)setApplication:(void*)app;
 
 @end
