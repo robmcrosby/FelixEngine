@@ -7,12 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; };
+		C1136C391EF0BCC600BA1322 /* AppViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* AppViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1136C3B1EF0BE6600BA1322 /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1136C381EF0BCC600BA1322 /* AppViewController.m */; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C17DCCD71EEDF1E1007D1D3D /* Engine.h in Headers */ = {isa = PBXBuildFile; fileRef = C17DCCD51EEDF1E1007D1D3D /* Engine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C17DCCD81EEDF1E1007D1D3D /* Engine.m in Sources */ = {isa = PBXBuildFile; fileRef = C17DCCD61EEDF1E1007D1D3D /* Engine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		C1136C371EF0BCC600BA1322 /* AppViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppViewController.h; path = iOS/AppViewController.h; sourceTree = "<group>"; };
+		C1136C381EF0BCC600BA1322 /* AppViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppViewController.m; path = iOS/AppViewController.m; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,6 +38,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C1136C361EF0BC6500BA1322 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				C1136C371EF0BCC600BA1322 /* AppViewController.h */,
+				C1136C381EF0BCC600BA1322 /* AppViewController.m */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		C15CAEA31EEDEF33004FA3C7 = {
 			isa = PBXGroup;
 			children = (
@@ -54,6 +70,9 @@
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C17DCCD51EEDF1E1007D1D3D /* Engine.h */,
 				C17DCCD61EEDF1E1007D1D3D /* Engine.m */,
+				C1136C331EF0BB6E00BA1322 /* Application.h */,
+				C1136C321EF0BB6E00BA1322 /* Application.cpp */,
+				C1136C361EF0BC6500BA1322 /* iOS */,
 			);
 			path = FelixEngine;
 			sourceTree = "<group>";
@@ -66,7 +85,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C17DCCD71EEDF1E1007D1D3D /* Engine.h in Headers */,
+				C1136C391EF0BCC600BA1322 /* AppViewController.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
+				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1136C3B1EF0BE6600BA1322 /* AppViewController.m in Sources */,
 				C17DCCD81EEDF1E1007D1D3D /* Engine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
