@@ -13,6 +13,12 @@
 		C1136C411EF0E01900BA1322 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1136C401EF0E01900BA1322 /* Foundation.framework */; };
 		C1136C431EF0E06300BA1322 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1136C421EF0E06300BA1322 /* UIKit.framework */; };
 		C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1136C321EF0BB6E00BA1322 /* Application.cpp */; };
+		C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C4C1EF2229400BA1322 /* FileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */; };
+		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; };
+		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -23,6 +29,12 @@
 		C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iOSViewController.mm; path = iOS/iOSViewController.mm; sourceTree = "<group>"; };
 		C1136C401EF0E01900BA1322 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C1136C421EF0E06300BA1322 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C1136C4C1EF2229400BA1322 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileSystem.h; path = Systems/FileSystem/FileSystem.h; sourceTree = "<group>"; };
+		C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSFileSystem.h; path = Systems/FileSystem/iOSFileSystem.h; sourceTree = "<group>"; };
+		C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iOSFileSystem.mm; path = Systems/FileSystem/iOSFileSystem.mm; sourceTree = "<group>"; };
+		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
+		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/MetalGraphics.h; sourceTree = "<group>"; };
+		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/MetalGraphics.mm; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -59,6 +71,43 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C1136C481EF2223C00BA1322 /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				C1136C4A1EF2225500BA1322 /* Graphics */,
+				C1136C491EF2224500BA1322 /* FileSystem */,
+			);
+			name = Systems;
+			sourceTree = "<group>";
+		};
+		C1136C491EF2224500BA1322 /* FileSystem */ = {
+			isa = PBXGroup;
+			children = (
+				C1136C4C1EF2229400BA1322 /* FileSystem.h */,
+				C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */,
+				C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */,
+			);
+			name = FileSystem;
+			sourceTree = "<group>";
+		};
+		C1136C4A1EF2225500BA1322 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				C1136C531EF2246700BA1322 /* Graphics.h */,
+				C1136C551EF224AA00BA1322 /* MetalGraphics */,
+			);
+			name = Graphics;
+			sourceTree = "<group>";
+		};
+		C1136C551EF224AA00BA1322 /* MetalGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				C1136C561EF224F700BA1322 /* MetalGraphics.h */,
+				C1136C571EF224F700BA1322 /* MetalGraphics.mm */,
+			);
+			name = MetalGraphics;
+			sourceTree = "<group>";
+		};
 		C15CAEA31EEDEF33004FA3C7 = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +128,7 @@
 		C15CAEAF1EEDEF33004FA3C7 /* FelixEngine */ = {
 			isa = PBXGroup;
 			children = (
+				C1136C481EF2223C00BA1322 /* Systems */,
 				C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */,
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C1136C331EF0BB6E00BA1322 /* Application.h */,
@@ -96,6 +146,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
+				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
+				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
+				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
 			);
@@ -172,6 +226,8 @@
 			files = (
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
+				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
+				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
