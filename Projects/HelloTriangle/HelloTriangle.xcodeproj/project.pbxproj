@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1136C471EF1FC9E00BA1322 /* HelloTriangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */; };
 		C15CAE8E1EEDEE24004FA3C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE8D1EEDEE24004FA3C7 /* main.m */; };
 		C15CAE911EEDEE24004FA3C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE901EEDEE24004FA3C7 /* AppDelegate.m */; };
-		C15CAE941EEDEE24004FA3C7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE931EEDEE24004FA3C7 /* ViewController.m */; };
+		C15CAE941EEDEE24004FA3C7 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE931EEDEE24004FA3C7 /* ViewController.mm */; };
 		C15CAE971EEDEE24004FA3C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15CAE951EEDEE24004FA3C7 /* Main.storyboard */; };
 		C15CAE991EEDEE24004FA3C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C15CAE981EEDEE24004FA3C7 /* Assets.xcassets */; };
 		C15CAE9C1EEDEE24004FA3C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15CAE9A1EEDEE24004FA3C7 /* LaunchScreen.storyboard */; };
@@ -48,12 +49,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloTriangle.cpp; sourceTree = "<group>"; };
+		C1136C461EF1FC9E00BA1322 /* HelloTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloTriangle.h; sourceTree = "<group>"; };
 		C15CAE891EEDEE24004FA3C7 /* HelloTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloTriangle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAE8D1EEDEE24004FA3C7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C15CAE8F1EEDEE24004FA3C7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C15CAE901EEDEE24004FA3C7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C15CAE921EEDEE24004FA3C7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		C15CAE931EEDEE24004FA3C7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C15CAE931EEDEE24004FA3C7 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		C15CAE961EEDEE24004FA3C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C15CAE981EEDEE24004FA3C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C15CAE9B1EEDEE24004FA3C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -96,7 +99,9 @@
 				C15CAE8F1EEDEE24004FA3C7 /* AppDelegate.h */,
 				C15CAE901EEDEE24004FA3C7 /* AppDelegate.m */,
 				C15CAE921EEDEE24004FA3C7 /* ViewController.h */,
-				C15CAE931EEDEE24004FA3C7 /* ViewController.m */,
+				C15CAE931EEDEE24004FA3C7 /* ViewController.mm */,
+				C1136C461EF1FC9E00BA1322 /* HelloTriangle.h */,
+				C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */,
 				C15CAE951EEDEE24004FA3C7 /* Main.storyboard */,
 				C15CAE981EEDEE24004FA3C7 /* Assets.xcassets */,
 				C15CAE9A1EEDEE24004FA3C7 /* LaunchScreen.storyboard */,
@@ -212,7 +217,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C15CAE941EEDEE24004FA3C7 /* ViewController.m in Sources */,
+				C1136C471EF1FC9E00BA1322 /* HelloTriangle.cpp in Sources */,
+				C15CAE941EEDEE24004FA3C7 /* ViewController.mm in Sources */,
 				C15CAE911EEDEE24004FA3C7 /* AppDelegate.m in Sources */,
 				C15CAE8E1EEDEE24004FA3C7 /* main.m in Sources */,
 			);
