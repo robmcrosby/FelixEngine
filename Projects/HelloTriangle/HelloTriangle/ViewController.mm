@@ -9,6 +9,9 @@
 #import "ViewController.h"
 #import "HelloTriangle.h"
 
+#import <FelixEngine/iOSFileSystem.h>
+#import <FelixEngine/MetalGraphics.h>
+
 @interface ViewController ()
 
 @property HelloTriangle *helloTriApp;
@@ -22,6 +25,13 @@
   
   // Create the Cpp Application
   self.helloTriApp = new HelloTriangle();
+  
+  fx::iOSFileSystem *fileSystem = new fx::iOSFileSystem();
+  self.helloTriApp->setFileSystem(fileSystem);
+  
+  fx::MetalGraphics *graphics = new fx::MetalGraphics();
+  self.helloTriApp->setGraphics(graphics);
+  
   [self setApplication: self.helloTriApp];
   self.helloTriApp->start();
 }

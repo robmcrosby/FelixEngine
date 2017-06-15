@@ -20,3 +20,9 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 
 // C++ Headers
 #import <FelixEngine/Application.h>
+#import <FelixEngine/FileSystem.h>
+#import <FelixEngine/Graphics.h>
+
+// Platform Specific
+#import <FelixEngine/iOSFileSystem.h>
+#import <FelixEngine/MetalGraphics.h>

@@ -14,7 +14,11 @@
 namespace fx {
   
   /** File System */
-  struct FileSystem {
+  class FileSystem {
+  protected:
+    static FileSystem *instance;
+    
+  public:
     virtual ~FileSystem() {}
   };
   

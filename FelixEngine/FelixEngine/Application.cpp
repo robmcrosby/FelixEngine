@@ -11,6 +11,10 @@
 
 using namespace fx;
 
+FileSystem* FileSystem::instance = nullptr;
+Graphics* Graphics::instance = nullptr;
+
+
 Application::Application() {
   printf("Created Application\n");
 }

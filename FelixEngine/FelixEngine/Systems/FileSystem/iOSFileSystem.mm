@@ -12,9 +12,9 @@
 using namespace fx;
 
 iOSFileSystem::iOSFileSystem() {
-  printf("Created iOSFileSystem\n");
+  FileSystem::instance = this;
 }
 
 iOSFileSystem::~iOSFileSystem() {
-  
+
 }

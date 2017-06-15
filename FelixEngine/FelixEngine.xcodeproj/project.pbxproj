@@ -17,7 +17,7 @@
 		C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */; };
 		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; };
+		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */

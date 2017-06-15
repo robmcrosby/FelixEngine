@@ -9,15 +9,26 @@
 #ifndef Application_h
 #define Application_h
 
-#include <stdio.h>
+#include "FileSystem.h"
+#include "Graphics.h"
 
 namespace fx {
   class Application {
+  protected:
+    FileSystem *_fileSystem;
+    Graphics *_graphics;
+    
   public:
     Application();
     virtual ~Application();
     
     virtual void start();
+    
+    FileSystem& fileSystem() const {return *_fileSystem;}
+    void setFileSystem(FileSystem *fileSystem) {_fileSystem = fileSystem;}
+    
+    Graphics& graphics() const {return *_graphics;}
+    void setGraphics(Graphics *graphics) {_graphics = graphics;}
   };
 }
 

@@ -14,7 +14,11 @@
 namespace fx {
   
   /** File System */
-  struct Graphics {
+  class Graphics {
+  protected:
+    static Graphics *instance;
+    
+  public:
     virtual ~Graphics() {}
   };
   

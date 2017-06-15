@@ -12,7 +12,7 @@
 using namespace fx;
 
 MetalGraphics::MetalGraphics() {
-  printf("Created MetalGraphics\n");
+  Graphics::instance = this;
 }
 
 MetalGraphics::~MetalGraphics() {
