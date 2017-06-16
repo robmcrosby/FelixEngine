@@ -12,5 +12,6 @@
 @interface iOSViewController : UIViewController
 
 -(void)setApplication:(void*)app;
+-(void)setupDisplayLink;
 
 @end

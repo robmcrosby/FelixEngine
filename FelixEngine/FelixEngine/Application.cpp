@@ -26,3 +26,7 @@ Application::~Application() {
 void Application::start() {
   
 }
+
+void Application::update() {
+  
+}

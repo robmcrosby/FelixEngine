@@ -12,7 +12,6 @@
 #include <Metal/Metal.h>
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
-#include <QuartzCore/CADisplayLink.h>
 
 namespace fx {
   struct MetalGraphicsData {
