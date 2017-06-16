@@ -73,3 +73,15 @@ bool MetalGraphics::initalize(UIView *view) {
   
   return true;
 }
+
+FrameBuffer* MetalGraphics::getMainWindowBuffer() {
+  return nullptr;
+}
+
+ShaderProgram* MetalGraphics::createShaderProgram() {
+  return nullptr;
+}
+
+VertexMesh* MetalGraphics::createVertexMesh() {
+  return nullptr;
+}

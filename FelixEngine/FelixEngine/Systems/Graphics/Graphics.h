@@ -9,7 +9,7 @@
 #ifndef Graphics_h
 #define Graphics_h
 
-#include <stdio.h>
+#include "GraphicResources.h"
 
 namespace fx {
   
@@ -20,6 +20,10 @@ namespace fx {
     
   public:
     virtual ~Graphics() {}
+    
+    virtual FrameBuffer*   getMainWindowBuffer() = 0;
+    virtual ShaderProgram* createShaderProgram() = 0;
+    virtual VertexMesh*    createVertexMesh()    = 0;
   };
   
 }

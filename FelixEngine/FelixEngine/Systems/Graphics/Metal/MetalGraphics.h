@@ -31,6 +31,10 @@ namespace fx {
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
+    
+    virtual FrameBuffer*   getMainWindowBuffer();
+    virtual ShaderProgram* createShaderProgram();
+    virtual VertexMesh*    createVertexMesh();
   };
   
 }
