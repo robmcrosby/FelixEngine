@@ -22,6 +22,8 @@
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF01EF347370059BA9D /* Metal.framework */; };
+		C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -36,11 +38,13 @@
 		C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSFileSystem.h; path = Systems/FileSystem/iOSFileSystem.h; sourceTree = "<group>"; };
 		C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iOSFileSystem.mm; path = Systems/FileSystem/iOSFileSystem.mm; sourceTree = "<group>"; };
 		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
-		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/MetalGraphics.h; sourceTree = "<group>"; };
-		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/MetalGraphics.mm; sourceTree = "<group>"; };
+		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/Metal/MetalGraphics.h; sourceTree = "<group>"; };
+		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
+		C1443AF01EF347370059BA9D /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -51,6 +55,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */,
+				C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */,
 				C1136C431EF0E06300BA1322 /* UIKit.framework in Frameworks */,
 				C1136C411EF0E01900BA1322 /* Foundation.framework in Frameworks */,
 			);
@@ -71,6 +77,8 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */,
+				C1443AF01EF347370059BA9D /* Metal.framework */,
 				C1136C421EF0E06300BA1322 /* UIKit.framework */,
 				C1136C401EF0E01900BA1322 /* Foundation.framework */,
 			);

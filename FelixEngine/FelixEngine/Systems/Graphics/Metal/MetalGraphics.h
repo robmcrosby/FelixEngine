@@ -7,14 +7,30 @@
 //
 
 #include "Graphics.h"
+//#include <objc/objc-runtime.h>
+
+
+#ifdef __OBJC__
+@class UIView;
+#else
+typedef struct objc_object UIView;
+#endif
+
 
 namespace fx {
   
+  class MetalGraphicsData;
+  
   /** iOS File System */
   class MetalGraphics: public Graphics {
+  private:
+    MetalGraphicsData *_data;
+    
   public:
     MetalGraphics();
     virtual ~MetalGraphics();
+    
+    bool initalize(UIView *view);
   };
   
 }

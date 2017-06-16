@@ -30,6 +30,7 @@
   self.helloTriApp->setFileSystem(fileSystem);
   
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
+  graphics->initalize(self.view);
   self.helloTriApp->setGraphics(graphics);
   
   [self setApplication: self.helloTriApp];
