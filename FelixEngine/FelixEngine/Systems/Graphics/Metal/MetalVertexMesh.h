@@ -12,11 +12,9 @@
 
 
 namespace fx {
-  class MTLVertexMeshData;
-  
   class MetalVertexMesh: public VertexMesh {
-  private:
-    MTLVertexMeshData *_data;
+  public:
+    id <MTLDevice> _device;
     
   public:
     MetalVertexMesh(id <MTLDevice> device);

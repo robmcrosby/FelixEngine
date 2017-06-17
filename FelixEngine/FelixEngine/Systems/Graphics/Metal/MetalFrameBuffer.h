@@ -13,11 +13,9 @@
 
 
 namespace fx {
-  class MTLFrameBufferData;
-  
   class MetalFrameBuffer: public FrameBuffer {
-  private:
-    MTLFrameBufferData *_data;
+  public:
+    id <MTLDevice> _device;
     
   public:
     MetalFrameBuffer(id <MTLDevice> device);

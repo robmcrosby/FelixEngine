@@ -12,11 +12,9 @@
 
 
 namespace fx {
-  class MTLShaderProgramData;
-  
   class MetalShaderProgram: public ShaderProgram {
-  private:
-    MTLShaderProgramData *_data;
+  public:
+    id <MTLDevice> _device;
     
   public:
     MetalShaderProgram(id <MTLDevice> device);

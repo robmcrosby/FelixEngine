@@ -9,23 +9,13 @@
 #include "MetalVertexMesh.h"
 #include <Metal/Metal.h>
 
-
-namespace fx {
-  struct MTLVertexMeshData {
-    id <MTLDevice> device;
-    
-    ~MTLVertexMeshData() {}
-  };
-}
-
-
 using namespace fx;
 using namespace std;
 
-MetalVertexMesh::MetalVertexMesh(id <MTLDevice> device): _data(new MTLVertexMeshData()) {
-  _data->device = device;
+MetalVertexMesh::MetalVertexMesh(id <MTLDevice> device): _device(device) {
+  
 }
 
 MetalVertexMesh::~MetalVertexMesh() {
-  delete _data;
+  
 }

@@ -9,26 +9,16 @@
 #include "MetalFrameBuffer.h"
 #include <Metal/Metal.h>
 
-
-namespace fx {
-  struct MTLFrameBufferData {
-    id <MTLDevice> device;
-    
-    ~MTLFrameBufferData() {}
-  };
-}
-
-
 using namespace fx;
 using namespace std;
 
 
-MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _data(new MTLFrameBufferData()) {
-  _data->device = device;
+MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device) {
+  
 }
 
 MetalFrameBuffer::~MetalFrameBuffer() {
-  delete _data;
+  
 }
 
 ivec2 MetalFrameBuffer::size() const {
