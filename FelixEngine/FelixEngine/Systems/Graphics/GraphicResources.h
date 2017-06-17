@@ -33,10 +33,14 @@ namespace fx {
   
   struct ShaderProgram {
     virtual ~ShaderProgram() {}
+    
+    virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) = 0;
   };
   
   struct VertexMesh {
     virtual ~VertexMesh() {}
+    
+    virtual bool addVertexBuffer(int size, int count, float *buffer) = 0;
   };
 }
 

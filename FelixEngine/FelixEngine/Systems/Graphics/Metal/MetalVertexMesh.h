@@ -7,17 +7,24 @@
 //
 
 #include "GraphicResources.h"
+#include <vector>
 
 @protocol MTLDevice;
+@protocol MTLBuffer;
 
 
 namespace fx {
+  class Buffer;
+  
   class MetalVertexMesh: public VertexMesh {
   public:
     id <MTLDevice> _device;
+    std::vector<Buffer*> _buffers;
     
   public:
     MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
+    
+    virtual bool addVertexBuffer(int size, int count, float *buffer);
   };
 }

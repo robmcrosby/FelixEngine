@@ -13,7 +13,7 @@ using namespace fx;
 using namespace std;
 
 
-MetalShaderProgram::MetalShaderProgram(id <MTLDevice> device): _device(device) {
+MetalShaderProgram::MetalShaderProgram(id <MTLDevice> device): _device(device), _vertex(nil), _fragment(nil) {
   
 }
 
@@ -21,3 +21,11 @@ MetalShaderProgram::~MetalShaderProgram() {
   
 }
 
+bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string &fragment) {
+  id <MTLLibrary> library = [_device newDefaultLibrary];
+  
+  _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
+  _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  
+  return _vertex != nil  && _fragment != nil;
+}

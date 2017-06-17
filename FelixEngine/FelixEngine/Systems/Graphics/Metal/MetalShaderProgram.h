@@ -9,15 +9,20 @@
 #include "GraphicResources.h"
 
 @protocol MTLDevice;
+@protocol MTLFunction;
 
 
 namespace fx {
   class MetalShaderProgram: public ShaderProgram {
   public:
-    id <MTLDevice> _device;
+    id <MTLDevice>   _device;
+    id <MTLFunction> _vertex;
+    id <MTLFunction> _fragment;
     
   public:
     MetalShaderProgram(id <MTLDevice> device);
     virtual ~MetalShaderProgram();
+    
+    virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
   };
 }

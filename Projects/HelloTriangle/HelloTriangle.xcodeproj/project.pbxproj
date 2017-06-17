@@ -10,6 +10,7 @@
 		C1136C471EF1FC9E00BA1322 /* HelloTriangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */; };
 		C1443AF41EF347430059BA9D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF31EF347430059BA9D /* Metal.framework */; };
 		C1443AF81EF34B8E0059BA9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF71EF34B8E0059BA9D /* QuartzCore.framework */; };
+		C1443B0C1EF5A0940059BA9D /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1443B0B1EF5A0940059BA9D /* Shaders.metal */; };
 		C15CAE8E1EEDEE24004FA3C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE8D1EEDEE24004FA3C7 /* main.m */; };
 		C15CAE911EEDEE24004FA3C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE901EEDEE24004FA3C7 /* AppDelegate.m */; };
 		C15CAE941EEDEE24004FA3C7 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C15CAE931EEDEE24004FA3C7 /* ViewController.mm */; };
@@ -55,6 +56,7 @@
 		C1136C461EF1FC9E00BA1322 /* HelloTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloTriangle.h; sourceTree = "<group>"; };
 		C1443AF31EF347430059BA9D /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C1443AF71EF34B8E0059BA9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C1443B0B1EF5A0940059BA9D /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C15CAE891EEDEE24004FA3C7 /* HelloTriangle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloTriangle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAE8D1EEDEE24004FA3C7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C15CAE8F1EEDEE24004FA3C7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				C15CAE9A1EEDEE24004FA3C7 /* LaunchScreen.storyboard */,
 				C15CAE9D1EEDEE24004FA3C7 /* Info.plist */,
 				C15CAE8C1EEDEE24004FA3C7 /* Supporting Files */,
+				C1443B0B1EF5A0940059BA9D /* Shaders.metal */,
 			);
 			path = HelloTriangle;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				C15CAE941EEDEE24004FA3C7 /* ViewController.mm in Sources */,
 				C15CAE911EEDEE24004FA3C7 /* AppDelegate.m in Sources */,
 				C15CAE8E1EEDEE24004FA3C7 /* main.m in Sources */,
+				C1443B0C1EF5A0940059BA9D /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
