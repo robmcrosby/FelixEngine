@@ -8,11 +8,18 @@
 
 #include "GraphicResources.h"
 
+@protocol MTLDevice;
+
 
 namespace fx {
+  class MTLVertexMeshData;
+  
   class MetalVertexMesh: public VertexMesh {
+  private:
+    MTLVertexMeshData *_data;
+    
   public:
-    MetalVertexMesh();
+    MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
   };
 }

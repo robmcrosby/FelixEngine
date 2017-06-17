@@ -8,11 +8,18 @@
 
 #include "GraphicResources.h"
 
+@protocol MTLDevice;
+
 
 namespace fx {
+  class MTLShaderProgramData;
+  
   class MetalShaderProgram: public ShaderProgram {
+  private:
+    MTLShaderProgramData *_data;
+    
   public:
-    MetalShaderProgram();
+    MetalShaderProgram(id <MTLDevice> device);
     virtual ~MetalShaderProgram();
   };
 }

@@ -10,11 +10,19 @@
 #define HelloTriangle_h
 
 #import <FelixEngine/Application.h>
+#import <FelixEngine/Graphics.h>
 
 class HelloTriangle: public fx::Application {
+private:
+  fx::FrameBuffer   *_window;
+  fx::ShaderProgram *_shader;
+  fx::VertexMesh    *_mesh;
+  
 public:
   HelloTriangle();
   virtual ~HelloTriangle();
+  
+  virtual void start();
 };
 
 #endif /* HelloTriangle_h */

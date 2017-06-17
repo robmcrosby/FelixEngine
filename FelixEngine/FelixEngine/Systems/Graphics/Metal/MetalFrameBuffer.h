@@ -7,12 +7,23 @@
 //
 
 #include "GraphicResources.h"
+#include "Macros.h"
+
+@protocol MTLDevice;
 
 
 namespace fx {
+  class MTLFrameBufferData;
+  
   class MetalFrameBuffer: public FrameBuffer {
+  private:
+    MTLFrameBufferData *_data;
+    
   public:
-    MetalFrameBuffer();
+    MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
+    
+    virtual ivec2 size() const;
+    virtual float scale() const;
   };
 }

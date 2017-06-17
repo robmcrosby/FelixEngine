@@ -15,3 +15,11 @@ HelloTriangle::HelloTriangle() {
 HelloTriangle::~HelloTriangle() {
   
 }
+
+void HelloTriangle::start() {
+  fx::Application::start();
+  
+  _window = _graphics->getMainWindowBuffer();
+  _shader = _graphics->createShaderProgram();
+  _mesh = _graphics->createVertexMesh();
+}

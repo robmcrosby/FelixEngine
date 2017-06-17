@@ -13,14 +13,19 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
 
+#include "MetalFrameBuffer.h"
+#include "MetalShaderProgram.h"
+#include "MetalVertexMesh.h"
+
+
 namespace fx {
-  struct MetalGraphicsData {
+  struct MTLGraphicsData {
     id <MTLDevice>       device;
     id <MTLCommandQueue> queue;
     
     CAMetalLayer *layer;
     
-    ~MetalGraphicsData() {
+    ~MTLGraphicsData() {
       device = nil;
       queue  = nil;
       layer  = nil;
@@ -33,7 +38,7 @@ using namespace std;
 using namespace fx;
 
 
-MetalGraphics::MetalGraphics(): _data(new MetalGraphicsData()) {
+MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()) {
   Graphics::instance = this;
 }
 
@@ -75,13 +80,13 @@ bool MetalGraphics::initalize(UIView *view) {
 }
 
 FrameBuffer* MetalGraphics::getMainWindowBuffer() {
-  return nullptr;
+  return new MetalFrameBuffer(_data->device);
 }
 
 ShaderProgram* MetalGraphics::createShaderProgram() {
-  return nullptr;
+  return new MetalShaderProgram(_data->device);
 }
 
 VertexMesh* MetalGraphics::createVertexMesh() {
-  return nullptr;
+  return new MetalVertexMesh(_data->device);
 }
