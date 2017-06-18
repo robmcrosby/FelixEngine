@@ -23,6 +23,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/FileSystem.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicResources.h>
+#import <FelixEngine/GraphicTask.h>
 #import <FelixEngine/Vector.h>
 #import <FelixEngine/Matrix.h>
 #import <FelixEngine/Quaternion.h>

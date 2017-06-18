@@ -10,7 +10,7 @@
 
 @protocol MTLDevice;
 @protocol MTLFunction;
-
+@protocol MTLRenderPipelineState;
 
 namespace fx {
   class MetalShaderProgram: public ShaderProgram {
@@ -18,6 +18,8 @@ namespace fx {
     id <MTLDevice>   _device;
     id <MTLFunction> _vertex;
     id <MTLFunction> _fragment;
+    
+    id <MTLRenderPipelineState> _pipeline;
     
   public:
     MetalShaderProgram(id <MTLDevice> device);

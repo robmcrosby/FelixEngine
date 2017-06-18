@@ -27,5 +27,12 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
   _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
   _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
   
+  MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
+  descriptor.vertexFunction = _vertex;
+  descriptor.fragmentFunction = _fragment;
+  descriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+  
+  _pipeline = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
+  
   return _vertex != nil  && _fragment != nil;
 }

@@ -17,15 +17,23 @@ HelloTriangle::~HelloTriangle() {
 }
 
 void HelloTriangle::start() {
-  float vertexBuffer[] = {0.0,  0.8, 0.0, -0.8, -0.8, 0.0, 0.8, -0.8, 0.0};
+  float vertexBuffer[] = {
+     0.0,  0.8, 0.0, 1.0,
+    -0.8, -0.8, 0.0, 1.0,
+     0.8, -0.8, 0.0, 1.0
+  };
   
-  fx::Application::start();
+  _task.frame = _graphics->getMainWindowBuffer();
   
-  _window = _graphics->getMainWindowBuffer();
+  _task.shader = _graphics->createShaderProgram();
+  _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
-  _shader = _graphics->createShaderProgram();
-  _shader->loadShaderFunctions("basic_vertex", "basic_fragment");
-  
-  _mesh = _graphics->createVertexMesh();
-  _mesh->addVertexBuffer(3, 1, vertexBuffer);
+  _task.mesh = _graphics->createVertexMesh();
+  _task.mesh->addVertexBuffer(4, 3, vertexBuffer);
+}
+
+void HelloTriangle::update() {
+  _graphics->nextFrame();
+  _graphics->addTask(_task);
+  _graphics->render();
 }

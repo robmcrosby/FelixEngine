@@ -19,7 +19,8 @@ namespace fx {
   class MetalVertexMesh: public VertexMesh {
   public:
     id <MTLDevice> _device;
-    std::vector<Buffer*> _buffers;
+    id <MTLBuffer> _buffer;
+    //std::vector<Buffer*> _buffers;
     
   public:
     MetalVertexMesh(id <MTLDevice> device);

@@ -14,15 +14,14 @@
 
 class HelloTriangle: public fx::Application {
 private:
-  fx::FrameBuffer   *_window;
-  fx::ShaderProgram *_shader;
-  fx::VertexMesh    *_mesh;
+  fx::GraphicTask _task;
   
 public:
   HelloTriangle();
   virtual ~HelloTriangle();
   
   virtual void start();
+  virtual void update();
 };
 
 #endif /* HelloTriangle_h */

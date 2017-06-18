@@ -24,12 +24,10 @@ namespace fx {
     id <MTLCommandQueue> queue;
     
     CAMetalLayer *layer;
+    id<CAMetalDrawable>  drawable;
+    id<MTLCommandBuffer> buffer;
     
-    ~MTLGraphicsData() {
-      device = nil;
-      queue  = nil;
-      layer  = nil;
-    }
+    ~MTLGraphicsData() {}
   };
 }
 
@@ -89,4 +87,34 @@ ShaderProgram* MetalGraphics::createShaderProgram() {
 
 VertexMesh* MetalGraphics::createVertexMesh() {
   return new MetalVertexMesh(_data->device);
+}
+
+void MetalGraphics::nextFrame() {
+  _data->drawable = [_data->layer nextDrawable];
+  _data->buffer   = [_data->queue commandBuffer];
+}
+
+void MetalGraphics::addTask(const GraphicTask &task) {
+  MetalFrameBuffer   *frame  = static_cast<MetalFrameBuffer*>(task.frame);
+  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
+  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh);
+  
+  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
+  descriptor.colorAttachments[0].texture = _data->drawable.texture;
+  descriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
+  descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 104.0/255.0, 5.0/255.0, 1.0);
+  
+  id <MTLRenderCommandEncoder> encoder = [_data->buffer renderCommandEncoderWithDescriptor:descriptor];
+  [encoder setRenderPipelineState:shader->_pipeline];
+  [encoder setVertexBuffer:mesh->_buffer offset:0 atIndex:0];
+  [encoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:3 instanceCount:1];
+  [encoder endEncoding];
+}
+
+void MetalGraphics::render() {
+  [_data->buffer presentDrawable:_data->drawable];
+  [_data->buffer commit];
+  
+  _data->drawable = nil;
+  _data->buffer = nil;
 }

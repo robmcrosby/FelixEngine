@@ -32,6 +32,7 @@
 		C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */; };
 		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalVertexMesh.h; path = Systems/Graphics/Metal/MetalVertexMesh.h; sourceTree = "<group>"; };
 		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
 		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
+		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			children = (
 				C1136C531EF2246700BA1322 /* Graphics.h */,
 				C1443AFB1EF496240059BA9D /* GraphicResources.h */,
+				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -198,6 +201,7 @@
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
 				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
