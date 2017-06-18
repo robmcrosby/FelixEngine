@@ -15,11 +15,13 @@ OBJC_CLASS(UIView)
 namespace fx {
   
   class MTLGraphicsData;
+  class MetalFrameBuffer;
   
   /** iOS File System */
   class MetalGraphics: public Graphics {
   private:
-    MTLGraphicsData *_data;
+    MTLGraphicsData  *_data;
+    MetalFrameBuffer *_frame;
     
   public:
     MetalGraphics();

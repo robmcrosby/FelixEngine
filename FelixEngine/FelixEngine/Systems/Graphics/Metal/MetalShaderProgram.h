@@ -11,8 +11,11 @@
 @protocol MTLDevice;
 @protocol MTLFunction;
 @protocol MTLRenderPipelineState;
+@protocol MTLRenderCommandEncoder;
 
 namespace fx {
+  class MetalFrameBuffer;
+  
   class MetalShaderProgram: public ShaderProgram {
   public:
     id <MTLDevice>   _device;
@@ -26,5 +29,6 @@ namespace fx {
     virtual ~MetalShaderProgram();
     
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
+    void encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame);
   };
 }

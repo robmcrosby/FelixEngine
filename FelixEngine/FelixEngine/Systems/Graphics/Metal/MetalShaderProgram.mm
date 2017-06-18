@@ -36,3 +36,7 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
   
   return _vertex != nil  && _fragment != nil;
 }
+
+void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame) {
+  [encoder setRenderPipelineState:_pipeline];
+}

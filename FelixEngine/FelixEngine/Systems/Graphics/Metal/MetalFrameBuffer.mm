@@ -28,3 +28,18 @@ ivec2 MetalFrameBuffer::size() const {
 float MetalFrameBuffer::scale() const {
   return 1.0f;
 }
+
+id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer) {
+  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
+  
+  int index = 0;
+  MTLClearColor clearColor = MTLClearColorMake(0.0, 104.0/255.0, 5.0/255.0, 1.0);
+  for (id <MTLTexture> texture : _textures) {
+    descriptor.colorAttachments[index].texture = texture;
+    descriptor.colorAttachments[index].loadAction = MTLLoadActionClear;
+    descriptor.colorAttachments[index].clearColor = clearColor;
+    ++index;
+  }
+  
+  return [buffer renderCommandEncoderWithDescriptor:descriptor];
+}

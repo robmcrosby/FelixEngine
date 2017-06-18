@@ -74,11 +74,14 @@ bool MetalGraphics::initalize(UIView *view) {
   _data->layer.frame = view.layer.frame;
   [view.layer addSublayer: _data->layer];
   
+  _frame = new MetalFrameBuffer(_data->device);
+  _frame->_textures.push_back(nil);
+  
   return true;
 }
 
 FrameBuffer* MetalGraphics::getMainWindowBuffer() {
-  return new MetalFrameBuffer(_data->device);
+  return _frame;
 }
 
 ShaderProgram* MetalGraphics::createShaderProgram() {
@@ -92,6 +95,7 @@ VertexMesh* MetalGraphics::createVertexMesh() {
 void MetalGraphics::nextFrame() {
   _data->drawable = [_data->layer nextDrawable];
   _data->buffer   = [_data->queue commandBuffer];
+  _frame->_textures.at(0) = _data->drawable.texture;
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
@@ -99,18 +103,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
   MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh);
   
-  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
-  descriptor.colorAttachments[0].texture = _data->drawable.texture;
-  descriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-  descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 104.0/255.0, 5.0/255.0, 1.0);
-  
-  id <MTLRenderCommandEncoder> encoder = [_data->buffer renderCommandEncoderWithDescriptor:descriptor];
-  [encoder setRenderPipelineState:shader->_pipeline];
+  id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer);
+  shader->encode(encoder, frame);
   mesh->encode(encoder, task.instances);
   [encoder endEncoding];
 }
 
 void MetalGraphics::render() {
+  _frame->_textures.at(0) = nil;
   [_data->buffer presentDrawable:_data->drawable];
   [_data->buffer commit];
   

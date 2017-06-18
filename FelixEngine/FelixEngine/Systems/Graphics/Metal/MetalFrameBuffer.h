@@ -8,14 +8,21 @@
 
 #include "GraphicResources.h"
 #include "Macros.h"
+#include <vector>
 
 @protocol MTLDevice;
+@protocol MTLTexture;
+@protocol MTLCommandBuffer;
+@protocol MTLRenderCommandEncoder;
 
 
 namespace fx {
+  typedef std::vector<id <MTLTexture> > textureList;
+  
   class MetalFrameBuffer: public FrameBuffer {
   public:
     id <MTLDevice> _device;
+    textureList    _textures;
     
   public:
     MetalFrameBuffer(id <MTLDevice> device);
@@ -23,5 +30,7 @@ namespace fx {
     
     virtual ivec2 size() const;
     virtual float scale() const;
+    
+    id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer);
   };
 }
