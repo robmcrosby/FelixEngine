@@ -106,8 +106,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   
   id <MTLRenderCommandEncoder> encoder = [_data->buffer renderCommandEncoderWithDescriptor:descriptor];
   [encoder setRenderPipelineState:shader->_pipeline];
-  [encoder setVertexBuffer:mesh->_buffer offset:0 atIndex:0];
-  [encoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:3 instanceCount:1];
+  mesh->encode(encoder, task.instances);
   [encoder endEncoding];
 }
 

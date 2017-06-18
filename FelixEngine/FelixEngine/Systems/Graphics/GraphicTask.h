@@ -17,6 +17,16 @@ namespace fx {
     FrameBuffer   *frame;
     ShaderProgram *shader;
     VertexMesh    *mesh;
+    
+    int instances;
+    
+    GraphicTask() {
+      frame  = nullptr;
+      shader = nullptr;
+      mesh   = nullptr;
+      
+      instances = 1;
+    }
   };
 }
 

@@ -9,17 +9,6 @@
 #include "MetalVertexMesh.h"
 #include <Metal/Metal.h>
 
-//namespace fx {
-//  struct Buffer {
-//    id <MTLBuffer> buffer;
-//    int size, count;
-//    
-//    Buffer(): buffer(nil), size(1), count(0) {}
-//    ~Buffer() {}
-//  };
-//}
-
-
 using namespace fx;
 using namespace std;
 
@@ -34,15 +23,21 @@ MetalVertexMesh::~MetalVertexMesh() {
 }
 
 bool MetalVertexMesh::addVertexBuffer(int size, int count, float *buffer) {
-  //Buffer *buff = new Buffer();
-  
-  //buff->size = size;
-  //buff->count = count;
+  _vertexCount = count;
   
   NSUInteger length = size * count * sizeof(float);
-  //buff->buffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
-  _buffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
+  id <MTLBuffer> mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
+  _buffers.push_back(mtlBuffer);
   
-  //_buffers.push_back(buff);
-  return _buffer != nil; //buff->buffer != nil;
+  return mtlBuffer != nil;
+}
+
+void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, int instances) {
+  NSUInteger index = 0;
+  for (id <MTLBuffer> buffer : _buffers) {
+    [encoder setVertexBuffer:buffer offset:0 atIndex:index];
+    ++index;
+  }
+  
+  [encoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:_vertexCount instanceCount:instances];
 }

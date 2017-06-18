@@ -11,21 +11,23 @@
 
 @protocol MTLDevice;
 @protocol MTLBuffer;
+@protocol MTLRenderCommandEncoder;
 
 
 namespace fx {
-  class Buffer;
+  typedef std::vector<id <MTLBuffer> > bufferList;
   
   class MetalVertexMesh: public VertexMesh {
   public:
     id <MTLDevice> _device;
-    id <MTLBuffer> _buffer;
-    //std::vector<Buffer*> _buffers;
+    bufferList     _buffers;
+    int _vertexCount;
     
   public:
     MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
     
     virtual bool addVertexBuffer(int size, int count, float *buffer);
+    void encode(id <MTLRenderCommandEncoder> encoder, int instances);
   };
 }
