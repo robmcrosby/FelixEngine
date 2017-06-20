@@ -75,7 +75,7 @@ bool MetalGraphics::initalize(UIView *view) {
   [view.layer addSublayer: _data->layer];
   
   _frame = new MetalFrameBuffer(_data->device);
-  _frame->_textures.push_back(nil);
+  _frame->_colorAttachments.push_back(nil);
   
   return true;
 }
@@ -95,7 +95,7 @@ VertexMesh* MetalGraphics::createVertexMesh() {
 void MetalGraphics::nextFrame() {
   _data->drawable = [_data->layer nextDrawable];
   _data->buffer   = [_data->queue commandBuffer];
-  _frame->_textures.at(0) = _data->drawable.texture;
+  _frame->_colorAttachments.at(0) = _data->drawable.texture;
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
@@ -103,14 +103,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
   MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh);
   
-  id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer);
+  id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
   shader->encode(encoder, frame);
   mesh->encode(encoder, task.instances);
   [encoder endEncoding];
 }
 
 void MetalGraphics::render() {
-  _frame->_textures.at(0) = nil;
+  _frame->_colorAttachments.at(0) = nil;
   [_data->buffer presentDrawable:_data->drawable];
   [_data->buffer commit];
   

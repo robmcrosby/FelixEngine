@@ -7,7 +7,6 @@
 //
 
 #include "GraphicResources.h"
-#include "Macros.h"
 #include <vector>
 
 @protocol MTLDevice;
@@ -17,12 +16,15 @@
 
 
 namespace fx {
-  typedef std::vector<id <MTLTexture> > textureList;
+  typedef std::vector<id <MTLTexture> > attachmentsList;
+  class GraphicTask;
   
   class MetalFrameBuffer: public FrameBuffer {
   public:
-    id <MTLDevice> _device;
-    textureList    _textures;
+    id <MTLDevice>  _device;
+    id <MTLTexture> _depthAttachment;
+    id <MTLTexture> _stencilAttachment;
+    attachmentsList _colorAttachments;
     
   public:
     MetalFrameBuffer(id <MTLDevice> device);
@@ -31,6 +33,6 @@ namespace fx {
     virtual ivec2 size() const;
     virtual float scale() const;
     
-    id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer);
+    id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
   };
 }

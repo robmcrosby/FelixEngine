@@ -30,6 +30,8 @@ void HelloTriangle::start() {
   
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->addVertexBuffer(4, 3, vertexBuffer);
+  
+  _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
 
 void HelloTriangle::update() {
