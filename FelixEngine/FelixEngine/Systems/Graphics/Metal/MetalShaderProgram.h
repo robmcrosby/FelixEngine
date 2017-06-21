@@ -7,6 +7,7 @@
 //
 
 #include "GraphicResources.h"
+#include <map>
 
 @protocol MTLDevice;
 @protocol MTLFunction;
@@ -15,14 +16,14 @@
 
 namespace fx {
   class MetalFrameBuffer;
+  typedef std::map<MetalFrameBuffer*, id <MTLRenderPipelineState> > PipelineMap;
   
   class MetalShaderProgram: public ShaderProgram {
   public:
     id <MTLDevice>   _device;
     id <MTLFunction> _vertex;
     id <MTLFunction> _fragment;
-    
-    id <MTLRenderPipelineState> _pipeline;
+    PipelineMap      _pipelines;
     
   public:
     MetalShaderProgram(id <MTLDevice> device);
