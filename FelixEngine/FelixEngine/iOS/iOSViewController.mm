@@ -12,6 +12,7 @@
 @interface iOSViewController ()
 
 @property fx::Application *application;
+@property CADisplayLink *displayLink;
 
 @end
 
@@ -20,15 +21,23 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-  self.application = nil;
+  self.application = nullptr;
+  self.displayLink = nil;
 }
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 }
 
-//-(void)setApplication:(void*)app {
-//  self.application = static_cast<fx::Application*>(app);
-//}
+- (void)setupDisplayLink {
+  self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(frameUpdate:)];
+  [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
+
+- (void)frameUpdate:(CADisplayLink*)displayLink {
+  if (self.application != nullptr) {
+    self.application->update();
+  }
+}
 
 @end

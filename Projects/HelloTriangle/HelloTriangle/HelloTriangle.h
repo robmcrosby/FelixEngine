@@ -10,11 +10,18 @@
 #define HelloTriangle_h
 
 #import <FelixEngine/Application.h>
+#import <FelixEngine/Graphics.h>
 
 class HelloTriangle: public fx::Application {
+private:
+  fx::GraphicTask _task;
+  
 public:
   HelloTriangle();
   virtual ~HelloTriangle();
+  
+  virtual void start();
+  virtual void update();
 };
 
 #endif /* HelloTriangle_h */

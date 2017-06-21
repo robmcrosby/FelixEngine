@@ -19,6 +19,21 @@
 		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
+		C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401C971EF8054200BE9958 /* GraphicStates.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF01EF347370059BA9D /* Metal.framework */; };
+		C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */; };
+		C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AFB1EF496240059BA9D /* GraphicResources.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AFD1EF49A100059BA9D /* MetalFrameBuffer.h */; };
+		C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443AFE1EF49A100059BA9D /* MetalFrameBuffer.mm */; };
+		C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B011EF49A2A0059BA9D /* MetalShaderProgram.h */; };
+		C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B021EF49A2A0059BA9D /* MetalShaderProgram.mm */; };
+		C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */; };
+		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
+		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -33,8 +48,23 @@
 		C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSFileSystem.h; path = Systems/FileSystem/iOSFileSystem.h; sourceTree = "<group>"; };
 		C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iOSFileSystem.mm; path = Systems/FileSystem/iOSFileSystem.mm; sourceTree = "<group>"; };
 		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
-		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/MetalGraphics.h; sourceTree = "<group>"; };
-		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/MetalGraphics.mm; sourceTree = "<group>"; };
+		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/Metal/MetalGraphics.h; sourceTree = "<group>"; };
+		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
+		C1401C971EF8054200BE9958 /* GraphicStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicStates.h; path = Systems/Graphics/GraphicStates.h; sourceTree = "<group>"; };
+		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
+		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
+		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
+		C1443AF01EF347370059BA9D /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C1443AFB1EF496240059BA9D /* GraphicResources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicResources.h; path = Systems/Graphics/GraphicResources.h; sourceTree = "<group>"; };
+		C1443AFD1EF49A100059BA9D /* MetalFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalFrameBuffer.h; path = Systems/Graphics/Metal/MetalFrameBuffer.h; sourceTree = "<group>"; };
+		C1443AFE1EF49A100059BA9D /* MetalFrameBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalFrameBuffer.mm; path = Systems/Graphics/Metal/MetalFrameBuffer.mm; sourceTree = "<group>"; };
+		C1443B011EF49A2A0059BA9D /* MetalShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalShaderProgram.h; path = Systems/Graphics/Metal/MetalShaderProgram.h; sourceTree = "<group>"; };
+		C1443B021EF49A2A0059BA9D /* MetalShaderProgram.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalShaderProgram.mm; path = Systems/Graphics/Metal/MetalShaderProgram.mm; sourceTree = "<group>"; };
+		C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalVertexMesh.h; path = Systems/Graphics/Metal/MetalVertexMesh.h; sourceTree = "<group>"; };
+		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
+		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
+		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -45,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */,
+				C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */,
 				C1136C431EF0E06300BA1322 /* UIKit.framework in Frameworks */,
 				C1136C411EF0E01900BA1322 /* Foundation.framework in Frameworks */,
 			);
@@ -65,6 +97,8 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */,
+				C1443AF01EF347370059BA9D /* Metal.framework */,
 				C1136C421EF0E06300BA1322 /* UIKit.framework */,
 				C1136C401EF0E01900BA1322 /* Foundation.framework */,
 			);
@@ -94,6 +128,9 @@
 			isa = PBXGroup;
 			children = (
 				C1136C531EF2246700BA1322 /* Graphics.h */,
+				C1443AFB1EF496240059BA9D /* GraphicResources.h */,
+				C1401C971EF8054200BE9958 /* GraphicStates.h */,
+				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -104,8 +141,25 @@
 			children = (
 				C1136C561EF224F700BA1322 /* MetalGraphics.h */,
 				C1136C571EF224F700BA1322 /* MetalGraphics.mm */,
+				C1443AFD1EF49A100059BA9D /* MetalFrameBuffer.h */,
+				C1443AFE1EF49A100059BA9D /* MetalFrameBuffer.mm */,
+				C1443B011EF49A2A0059BA9D /* MetalShaderProgram.h */,
+				C1443B021EF49A2A0059BA9D /* MetalShaderProgram.mm */,
+				C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */,
+				C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */,
 			);
 			name = MetalGraphics;
+			sourceTree = "<group>";
+		};
+		C1443AE91EF344830059BA9D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C1443AEA1EF345000059BA9D /* Vector.h */,
+				C1443AEC1EF345570059BA9D /* Matrix.h */,
+				C1443AEE1EF346290059BA9D /* Quaternion.h */,
+				C1443B091EF49E5D0059BA9D /* Macros.h */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 		C15CAEA31EEDEF33004FA3C7 = {
@@ -128,11 +182,12 @@
 		C15CAEAF1EEDEF33004FA3C7 /* FelixEngine */ = {
 			isa = PBXGroup;
 			children = (
-				C1136C481EF2223C00BA1322 /* Systems */,
 				C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */,
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C1136C331EF0BB6E00BA1322 /* Application.h */,
 				C1136C321EF0BB6E00BA1322 /* Application.cpp */,
+				C1443AE91EF344830059BA9D /* Utilities */,
+				C1136C481EF2223C00BA1322 /* Systems */,
 				C1136C361EF0BC6500BA1322 /* iOS */,
 			);
 			path = FelixEngine;
@@ -146,12 +201,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
+				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
+				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
+				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
+				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
 				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
+				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
+				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
+				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
+				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
+				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,9 +290,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
+				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
+				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
+				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

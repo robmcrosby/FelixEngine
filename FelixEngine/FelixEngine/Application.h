@@ -23,6 +23,7 @@ namespace fx {
     virtual ~Application();
     
     virtual void start();
+    virtual void update();
     
     FileSystem& fileSystem() const {return *_fileSystem;}
     void setFileSystem(FileSystem *fileSystem) {_fileSystem = fileSystem;}

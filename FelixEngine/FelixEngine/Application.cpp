@@ -16,7 +16,7 @@ Graphics* Graphics::instance = nullptr;
 
 
 Application::Application() {
-  printf("Created Application\n");
+  
 }
 
 Application::~Application() {
@@ -24,5 +24,9 @@ Application::~Application() {
 }
 
 void Application::start() {
-  printf("Application Start");
+  
+}
+
+void Application::update() {
+  
 }
