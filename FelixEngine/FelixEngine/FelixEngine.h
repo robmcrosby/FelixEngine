@@ -16,7 +16,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 
 
 // Obj-C Headers
-#import <FelixEngine/AppViewController.h>
+#import <FelixEngine/iOSViewController.h>
 
 // C++ Headers
 #import <FelixEngine/Application.h>
