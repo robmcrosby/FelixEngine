@@ -9,7 +9,7 @@
 #ifndef FileSystem_h
 #define FileSystem_h
 
-#include <stdio.h>
+#include <string>
 
 namespace fx {
   
@@ -18,8 +18,18 @@ namespace fx {
   protected:
     static FileSystem *instance;
     
+    virtual std::string resourcesPath() const = 0;
+    virtual std::string documentsPath() const = 0;
+    
   public:
     virtual ~FileSystem() {}
+    
+    static std::string getResourcesPath() {
+      return instance ? instance->resourcesPath() : "";
+    }
+    static std::string getDocumentsPath() {
+      return instance ? instance->documentsPath() : "";
+    }
   };
   
 }

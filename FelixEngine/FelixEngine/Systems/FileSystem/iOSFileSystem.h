@@ -15,6 +15,10 @@ namespace fx {
   public:
     iOSFileSystem();
     virtual ~iOSFileSystem();
+    
+  protected:
+    virtual std::string resourcesPath() const;
+    virtual std::string documentsPath() const;
   };
   
 }
