@@ -7,6 +7,7 @@
 //
 
 #include "Hello3D.h"
+#include <FelixEngine/Variant.h>
 
 Hello3D::Hello3D() {
   printf("Create Hello3D\n");
