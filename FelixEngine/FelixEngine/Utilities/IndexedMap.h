@@ -14,12 +14,12 @@
 
 namespace fx
 {
-  template <typename T>
+  template <typename Key, typename Type>
   class IndexedMap
   {
   private:
-    std::vector<T> mArray;
-    std::map<std::string, unsigned int> mMap;
+    std::vector<Type> _array;
+    std::map<Key, int> _map;
     
   public:
     IndexedMap() {}
@@ -28,119 +28,121 @@ namespace fx
     
     IndexedMap& operator=(const IndexedMap &other)
     {
-      mMap = other.mMap;
-      mArray = other.mArray;
+      _map = other._map;
+      _array = other._array;
       return *this;
     }
     
-    typedef typename std::vector<T>::iterator iterator;
-    iterator begin() {return mArray.begin();}
-    iterator end()   {return mArray.end();}
+    typedef typename std::vector<Type>::iterator iterator;
+    iterator begin() {return _array.begin();}
+    iterator end()   {return _array.end();}
     
-    typedef typename std::vector<T>::const_iterator const_iterator;
-    const_iterator begin() const {return mArray.begin();}
-    const_iterator end()   const {return mArray.end();}
+    typedef typename std::vector<Type>::const_iterator const_iterator;
+    const_iterator begin() const {return _array.begin();}
+    const_iterator end()   const {return _array.end();}
+    
     
     class map_iterator
     {
+    private:
+      IndexedMap<Key, Type> *_indexedMap;
+      typename std::map<Key, int>::iterator _mapIterator;
+      
     public:
-      map_iterator(): mIndexedMap(0) {}
-      map_iterator(IndexedMap<T> *map, std::map<std::string, unsigned int>::iterator itr):
-      mIndexedMap(map), mMapIterator(itr) {}
+      map_iterator(): _indexedMap(0) {}
+      map_iterator(IndexedMap<Key, Type> *map, typename std::map<Key, int>::iterator itr):
+      _indexedMap(map), _mapIterator(itr) {}
       
       map_iterator& operator++()
       {
-        if (mIndexedMap)
-          ++mMapIterator;
+        if (_indexedMap)
+          ++_mapIterator;
       }
       bool operator==(const map_iterator &other) const
       {
-        return !mIndexedMap || mMapIterator == other.mMapIterator;
+        return !_indexedMap || _mapIterator == other._mapIterator;
       }
-      std::string first() const {return mIndexedMap ? mMapIterator->first : "";}
-      T& second() {return (*mIndexedMap)[mMapIterator->second];}
-      const T& second() const {return (*mIndexedMap)[mMapIterator->second];}
-      
-    private:
-      IndexedMap<T> *mIndexedMap;
-      std::map<std::string, unsigned int>::iterator mMapIterator;
+      Key first() const {return _indexedMap ? _mapIterator->first : Key();}
+      Type& second() {return (*_indexedMap)[_mapIterator->second];}
+      const Type& second() const {return (*_indexedMap)[_mapIterator->second];}
     };
-    map_iterator mapBegin() {return MapIterator(this, mMap.begin());}
-    map_iterator mapEnd() {return MapIterator(this, mMap.end());}
+    map_iterator mapBegin() {return MapIterator(this, _map.begin());}
+    map_iterator mapEnd() {return MapIterator(this, _map.end());}
+    
     
     class const_map_iterator
     {
+    private:
+      const IndexedMap<Key, Type> *_indexedMap;
+      typename std::map<Key, int>::const_iterator _mapIterator;
+      
     public:
-      const_map_iterator(): mIndexedMap(0) {}
-      const_map_iterator(const IndexedMap<T> *map, std::map<std::string, unsigned int>::iterator itr):
-      mIndexedMap(map), mMapIterator(itr) {}
+      const_map_iterator(): _indexedMap(0) {}
+      const_map_iterator(const IndexedMap<Key, Type> *map, typename std::map<Key, int>::iterator itr):
+      _indexedMap(map), _mapIterator(itr) {}
       
       map_iterator& operator++()
       {
-        if (mIndexedMap)
-          ++mMapIterator;
+        if (_indexedMap)
+          ++_mapIterator;
       }
       bool operator==(const map_iterator &other) const
       {
-        return !mIndexedMap || mMapIterator == other.mMapIterator;
+        return !_indexedMap || _mapIterator == other._mapIterator;
       }
-      std::string first() const {return mIndexedMap ? mMapIterator->first : "";}
-      const T& second() const {return (*mIndexedMap)[mMapIterator->second];}
-      
-    private:
-      const IndexedMap<T> *mIndexedMap;
-      std::map<std::string, unsigned int>::const_iterator mMapIterator;
+      Key first() const {return _indexedMap ? _mapIterator->first : Key();}
+      const Type& second() const {return (*_indexedMap)[_mapIterator->second];}
     };
-    const_map_iterator mapBegin() const {return MapIterator(this, mMap.begin());}
-    const_map_iterator mapEnd() const {return MapIterator(this, mMap.end());}
+    const_map_iterator mapBegin() const {return MapIterator(this, _map.begin());}
+    const_map_iterator mapEnd() const {return MapIterator(this, _map.end());}
     
-    size_t size() const {return mArray.size();}
-    bool contains(const std::string &name) const {return mMap.count(name);}
+    size_t size() const {return _array.size();}
+    bool contains(const Key &key) const {return _map.count(key);}
     
-    T& operator[](unsigned int index) {return mArray[index];}
-    T& operator[](const std::string &key)
+    Type& operator[](int index) {return _array[index];}
+    Type& operator[](const Key &key)
     {
-      unsigned int index = 0;
-      std::map<std::string, unsigned int>::iterator itr = mMap.find(key);
-      if (itr != mMap.end())
+      int index = 0;
+      typename std::map<Key, int>::iterator itr = _map.find(key);
+      if (itr != _map.end())
         index = itr->second;
       else
         index = push(key);
-      return mArray[index];
+      return _array[index];
     }
     
-    T* at(unsigned int index) {return index < (unsigned int)mArray.size() ? &mArray.at(index) : NULL;}
-    T* at(const std::string &key)
+    Type* at(int index) {return index < (int)_array.size() ? &_array.at(index) : NULL;}
+    Type* at(const Key &key)
     {
-      std::map<std::string, unsigned int>::iterator itr = mMap.find(key);
-      return itr != mMap.end() ? at(itr->second) : NULL;
+      typename std::map<Key, int>::iterator itr = _map.find(key);
+      return itr != _map.end() ? at(itr->second) : NULL;
     }
     
-    const T* at(unsigned int index) const {return index < (unsigned int)mArray.size() ? &mArray.at(index) : NULL;}
-    const T* at(const std::string &key) const
+    const Type* at(int index) const {return index < (int)_array.size() ? &_array.at(index) : NULL;}
+    const Type* at(const Key &key) const
     {
-      std::map<std::string, unsigned int>::const_iterator itr = mMap.find(key);
-      return itr != mMap.end() ? at(itr->second) : NULL;
+      typename std::map<Key, int>::const_iterator itr = _map.find(key);
+      return itr != _map.end() ? at(itr->second) : NULL;
     }
     
-    unsigned int getIndex(const std::string &key) const {return mMap.count(key) ? mMap.at(key) : -1;}
+    int getIndex(const Key &key) const {return _map.count(key) ? _map.at(key) : -1;}
     
-    unsigned int push(const std::string &key = "", const T &item = T())
+    int push(const Key &key = "", const Type &item = Type())
     {
-      unsigned int index = (unsigned int)mArray.size();
+      int index = (int)_array.size();
       if (key != "")
-        mMap[key] = index;
-      mArray.push_back(item);
+        _map[key] = index;
+      _array.push_back(item);
       return index;
     }
     
-    T& back() {return mArray.back();}
-    T& front() {return mArray.front();}
+    Type& back() {return _array.back();}
+    Type& front() {return _array.front();}
     
     void clear()
     {
-      mMap.clear();
-      mArray.clear();
+      _map.clear();
+      _array.clear();
     }
   };
 }
