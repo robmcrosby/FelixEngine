@@ -21,6 +21,8 @@ namespace fx {
     virtual std::string documentsPath() const;
     
     virtual bool loadMeshFile(MeshData &mesh, const std::string &file) const;
+    
+    virtual bool fileExistsAtPath(const std::string &filePath) const;
   };
   
 }

@@ -36,3 +36,7 @@ string iOSFileSystem::documentsPath() const {
 bool iOSFileSystem::loadMeshFile(MeshData &mesh, const std::string &file) const {
   return false;
 }
+
+bool iOSFileSystem::fileExistsAtPath(const std::string &filePath) const {
+  return false;
+}
