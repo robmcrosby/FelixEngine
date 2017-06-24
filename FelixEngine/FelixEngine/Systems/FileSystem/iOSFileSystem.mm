@@ -32,3 +32,7 @@ string iOSFileSystem::documentsPath() const {
   NSURL *url = [paths lastObject];
   return string([[url absoluteString] UTF8String]);
 }
+
+bool iOSFileSystem::loadMeshFile(MeshData &mesh, const std::string &file) const {
+  return false;
+}

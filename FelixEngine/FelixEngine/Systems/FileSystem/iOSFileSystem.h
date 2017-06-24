@@ -19,6 +19,8 @@ namespace fx {
   protected:
     virtual std::string resourcesPath() const;
     virtual std::string documentsPath() const;
+    
+    virtual bool loadMeshFile(MeshData &mesh, const std::string &file) const;
   };
   
 }

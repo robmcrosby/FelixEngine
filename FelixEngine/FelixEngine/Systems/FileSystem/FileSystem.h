@@ -10,8 +10,12 @@
 #define FileSystem_h
 
 #include <string>
+#include "Variant.h"
+#include "IndexedMap.h"
 
 namespace fx {
+  
+  typedef IndexedMap<std::string, Variant> MeshData;
   
   /** File System */
   class FileSystem {
@@ -21,6 +25,8 @@ namespace fx {
     virtual std::string resourcesPath() const = 0;
     virtual std::string documentsPath() const = 0;
     
+    virtual bool loadMeshFile(MeshData &mesh, const std::string &file) const = 0;
+    
   public:
     virtual ~FileSystem() {}
     
@@ -29,6 +35,10 @@ namespace fx {
     }
     static std::string getDocumentsPath() {
       return instance ? instance->documentsPath() : "";
+    }
+    
+    static bool loadMesh(MeshData &mesh, const std::string &file) {
+      return instance ? instance->loadMeshFile(mesh, file) : false;
     }
   };
   
