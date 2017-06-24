@@ -21,6 +21,7 @@
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
 		C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401C971EF8054200BE9958 /* GraphicStates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CF71EFD430400BE9958 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF61EFD42FE00BE9958 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF81EFEDAB700BE9958 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -53,6 +54,7 @@
 		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
 		C1401C971EF8054200BE9958 /* GraphicStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicStates.h; path = Systems/Graphics/GraphicStates.h; sourceTree = "<group>"; };
 		C1401CF61EFD42FE00BE9958 /* Variant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = Utilities/Variant.h; sourceTree = "<group>"; };
+		C1401CF81EFEDAB700BE9958 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = Utilities/IndexedMap.h; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				C1443AEE1EF346290059BA9D /* Quaternion.h */,
 				C1443B091EF49E5D0059BA9D /* Macros.h */,
 				C1401CF61EFD42FE00BE9958 /* Variant.h */,
+				C1401CF81EFEDAB700BE9958 /* IndexedMap.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,

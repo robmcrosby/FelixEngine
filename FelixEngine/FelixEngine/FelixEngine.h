@@ -29,6 +29,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/Matrix.h>
 #import <FelixEngine/Quaternion.h>
 #import <FelixEngine/Variant.h>
+#import <FelixEngine/IndexedMap.h>
 
 // iOS Platform
 #import <FelixEngine/iOSFileSystem.h>
