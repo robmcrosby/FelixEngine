@@ -17,25 +17,16 @@ Hello3D::~Hello3D() {
 }
 
 void Hello3D::start() {
-  float vertexBuffer[] = {
-    0.0,  0.8, 0.0, 1.0,
-    -0.8, -0.8, 0.0, 1.0,
-    0.8, -0.8, 0.0, 1.0
-  };
-  
-  int indexBuffer[] = {0, 1, 2};
-  
   _task.frame = _graphics->getMainWindowBuffer();
   
   _task.shader = _graphics->createShaderProgram();
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
-  fx::VertexMeshData mesh;
-  fx::FileSystem::loadMesh(mesh, "bunny.mesh");
+  fx::VertexMeshData meshData;
+  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->setIndexBuffer(3, indexBuffer);
-  _task.mesh->addVertexBuffer(4, 3, vertexBuffer);
+  _task.mesh->loadData(meshData);
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }

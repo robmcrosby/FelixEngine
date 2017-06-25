@@ -30,6 +30,14 @@ MetalVertexMesh::~MetalVertexMesh() {
 bool MetalVertexMesh::loadData(const VertexMeshData &data) {
   bool success = true;
   
+  setPrimativeType(data.primitiveType);
+  if (data.indices.size() > 0)
+    success = setIndexBuffer(data.indices.size(), &data.indices[0]);
+  
+  if (success) {
+    success = addVertexBuffer(data.buffers.at(1)->size()/data.totalVertices, data.totalVertices, &data.buffers.at(1)->at(0));
+  }
+  
   return success;
 }
 
@@ -40,7 +48,7 @@ void MetalVertexMesh::setPrimativeType(VERTEX_PRIMITIVE type) {
     _primitive = MTLPrimitiveTypeTriangle;
 }
 
-bool MetalVertexMesh::setIndexBuffer(int count, int *buffer) {
+bool MetalVertexMesh::setIndexBuffer(size_t count, const int *buffer) {
   NSUInteger length = count * sizeof(int);
   
   _indexCount = (unsigned long)count;
@@ -48,7 +56,7 @@ bool MetalVertexMesh::setIndexBuffer(int count, int *buffer) {
   return _indices != nil;
 }
 
-bool MetalVertexMesh::addVertexBuffer(int size, int count, float *buffer) {
+bool MetalVertexMesh::addVertexBuffer(size_t size, size_t count, const float *buffer) {
   _vertexCount = count;
   
   NSUInteger length = size * count * sizeof(float);

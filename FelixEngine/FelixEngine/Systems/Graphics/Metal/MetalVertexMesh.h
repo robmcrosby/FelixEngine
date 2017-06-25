@@ -32,8 +32,8 @@ namespace fx {
     
     virtual bool loadData(const VertexMeshData &data);
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
-    virtual bool setIndexBuffer(int count, int *buffer);
-    virtual bool addVertexBuffer(int size, int count, float *buffer);
+    virtual bool setIndexBuffer(size_t count, const int *buffer);
+    virtual bool addVertexBuffer(size_t size, size_t count, const float *buffer);
     
     void encode(id <MTLRenderCommandEncoder> encoder, int instances);
   };
