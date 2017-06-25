@@ -14,6 +14,8 @@
 
 
 namespace fx {
+  class VertexMeshData;
+  
   enum SHADER_PART {
     SHADER_VERTEX,
     SHADER_FRAGMENT,
@@ -41,6 +43,9 @@ namespace fx {
   struct VertexMesh {
     virtual ~VertexMesh() {}
     
+    virtual bool loadData(const VertexMeshData &data) = 0;
+    virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
+    virtual bool setIndexBuffer(int count, int *buffer) = 0;
     virtual bool addVertexBuffer(int size, int count, float *buffer) = 0;
   };
 }

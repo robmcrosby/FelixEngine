@@ -7,6 +7,7 @@
 //
 
 #include "MetalVertexMesh.h"
+#include "VertexMeshData.h"
 #include <Metal/Metal.h>
 
 using namespace fx;
@@ -20,6 +21,18 @@ MetalVertexMesh::~MetalVertexMesh() {
 //  for (Buffer *buffer : _buffers) {
 //    delete buffer;
 //  }
+}
+
+bool MetalVertexMesh::loadData(const VertexMeshData &data) {
+  return false;
+}
+
+void MetalVertexMesh::setPrimativeType(VERTEX_PRIMITIVE type) {
+  
+}
+
+bool MetalVertexMesh::setIndexBuffer(int count, int *buffer) {
+  return false;
 }
 
 bool MetalVertexMesh::addVertexBuffer(int size, int count, float *buffer) {

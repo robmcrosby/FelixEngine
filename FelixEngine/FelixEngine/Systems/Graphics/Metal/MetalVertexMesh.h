@@ -27,7 +27,11 @@ namespace fx {
     MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
     
+    virtual bool loadData(const VertexMeshData &data);
+    virtual void setPrimativeType(VERTEX_PRIMITIVE type);
+    virtual bool setIndexBuffer(int count, int *buffer);
     virtual bool addVertexBuffer(int size, int count, float *buffer);
+    
     void encode(id <MTLRenderCommandEncoder> encoder, int instances);
   };
 }

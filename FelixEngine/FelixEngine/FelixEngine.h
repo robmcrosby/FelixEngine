@@ -30,6 +30,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/Quaternion.h>
 #import <FelixEngine/Variant.h>
 #import <FelixEngine/IndexedMap.h>
+#import <FelixEngine/VertexMeshData.h>
 
 // iOS Platform
 #import <FelixEngine/iOSFileSystem.h>
