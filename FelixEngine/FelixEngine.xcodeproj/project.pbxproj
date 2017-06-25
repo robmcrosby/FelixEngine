@@ -24,6 +24,7 @@
 		C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF81EFEDAB700BE9958 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401CFA1EFF2BF800BE9958 /* MeshLoader.cpp */; };
 		C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CFB1EFF2BF800BE9958 /* MeshLoader.h */; };
+		C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401D021F00122500BE9958 /* FileSystem.cpp */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -59,6 +60,7 @@
 		C1401CF81EFEDAB700BE9958 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = Utilities/IndexedMap.h; sourceTree = "<group>"; };
 		C1401CFA1EFF2BF800BE9958 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = Systems/FileSystem/MeshLoader.cpp; sourceTree = "<group>"; };
 		C1401CFB1EFF2BF800BE9958 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = Systems/FileSystem/MeshLoader.h; sourceTree = "<group>"; };
+		C1401D021F00122500BE9958 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileSystem.cpp; path = Systems/FileSystem/FileSystem.cpp; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				C1136C4C1EF2229400BA1322 /* FileSystem.h */,
+				C1401D021F00122500BE9958 /* FileSystem.cpp */,
 				C1136C4F1EF2232C00BA1322 /* iOSFileSystem.h */,
 				C1136C501EF2232C00BA1322 /* iOSFileSystem.mm */,
 				C1401CFB1EFF2BF800BE9958 /* MeshLoader.h */,
@@ -308,6 +311,7 @@
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
+				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,

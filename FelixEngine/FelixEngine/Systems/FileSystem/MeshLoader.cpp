@@ -28,10 +28,12 @@ bool MeshLoader::loadFromBinaryFile(MeshData &mesh, const std::string &file) {
 }
 
 bool MeshLoader::loadFromBinarySteam(MeshData &mesh, std::istream &is) {
-//  int primitiveType = 0;
-//  int numSubMeshes = 0;
-//  
-//  if (FileSystem::Read(primitiveType, is) == sizeof(int) && FileSystem::Read(numSubMeshes, is) == sizeof(int))
+  int primitiveType = 0;
+  int numSubMeshes = 0;
+  
+  if (FileSystem::read(primitiveType, is) == sizeof(int) && FileSystem::read(numSubMeshes, is) == sizeof(int)) {
+    cout << "Primative Type: " << primitiveType << " Submeshes: " << numSubMeshes << endl;
+  }
 //  {
 //    bufferMap.setFlags(GetVertexPrimitive(primitiveType));
 //    

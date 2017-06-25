@@ -10,6 +10,7 @@
 #define FileSystem_h
 
 #include <string>
+#include <sstream>
 #include "Variant.h"
 #include "IndexedMap.h"
 
@@ -56,13 +57,7 @@ namespace fx {
      * @param fileName  String to extract the file postfix from.
      * @return          Either the postfix string or an empty string if none found.
      */
-    static std::string getFilePostfix(const std::string &fileName)
-    {
-      size_t loc = fileName.rfind(".");
-      if (loc != std::string::npos)
-        return fileName.substr(loc+1);
-      return "";
-    }
+    static std::string getFilePostfix(const std::string &fileName);
     
     /**
      * Extracts the file name from a file path string.
@@ -70,26 +65,17 @@ namespace fx {
      * @param file  String for the path
      * @return      String for the file name or an empty string if not found
      */
-    static std::string getFileName(const std::string &file)
-    {
-      std::string::size_type start, end, npos = std::string::npos;
-      
-      start = file.find_last_of('/');
-      if (start == npos)
-        start = 0;
-      else
-        start++;
-      
-      end = file.find_last_of('.');
-      
-      if (end != npos && start < end)
-        return file.substr(start, end-start);
-      
-      std::cerr << "Unable to get filename from path: " << file << std::endl;
-      return "";
-    }
+    static std::string getFileName(const std::string &file);
+    
+    static size_t read(uint32_t *buffer, size_t size, std::istream &is);
+    static size_t read(uint32_t &i, std::istream &is) {return read(&i, 1, is);}
+    
+    static size_t read(int *buffer, long size, std::istream &is) {return read((uint32_t*)buffer, size, is);}
+    static size_t read(int &i, std::istream &is) {return read((uint32_t*)&i, 1, is);}
+    
+    static size_t read(float *buffer, long size, std::istream &is) {return read((uint32_t*)buffer, size, is);}
+    static size_t read(float &f, std::istream &is) {return read((uint32_t*)&f, 1, is);}
   };
-  
 }
 
 #endif /* FileSystem_h */
