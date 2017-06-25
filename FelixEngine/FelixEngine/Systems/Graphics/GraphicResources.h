@@ -12,6 +12,7 @@
 #include "Vector.h"
 #include "Matrix.h"
 
+
 namespace fx {
   enum SHADER_PART {
     SHADER_VERTEX,

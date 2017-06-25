@@ -11,13 +11,9 @@
 
 #include <string>
 #include <sstream>
-#include "Variant.h"
-#include "IndexedMap.h"
+#include "VertexMeshData.h"
 
 namespace fx {
-  
-  typedef IndexedMap<std::string, Variant> MeshData;
-  
   /** File System */
   class FileSystem {
   protected:
@@ -26,7 +22,7 @@ namespace fx {
     virtual std::string resourcesPath() const = 0;
     virtual std::string documentsPath() const = 0;
     
-    virtual bool loadMeshFile(MeshData &mesh, const std::string &file) const = 0;
+    virtual bool loadMeshFile(VertexMeshData &mesh, const std::string &file) const = 0;
     
     virtual bool fileExistsAtPath(const std::string &filePath) const = 0;
     virtual std::string findPathForFile(const std::string &file) const = 0;
@@ -41,7 +37,7 @@ namespace fx {
       return instance ? instance->documentsPath() : "";
     }
     
-    static bool loadMesh(MeshData &mesh, const std::string &file) {
+    static bool loadMesh(VertexMeshData &mesh, const std::string &file) {
       return instance != nullptr && instance->loadMeshFile(mesh, file);
     }
     

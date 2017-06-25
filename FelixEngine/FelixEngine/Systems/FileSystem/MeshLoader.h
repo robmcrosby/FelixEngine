@@ -15,8 +15,8 @@
 
 namespace fx {
   struct MeshLoader {
-    static bool loadFromBinaryFile(MeshData &mesh, const std::string &file);
-    static bool loadFromBinarySteam(MeshData &mesh, std::istream &is);
+    static bool loadFromBinaryFile(VertexMeshData &mesh, const std::string &file);
+    static bool loadFromBinarySteam(VertexMeshData &mesh, std::istream &is);
   };
 }
 

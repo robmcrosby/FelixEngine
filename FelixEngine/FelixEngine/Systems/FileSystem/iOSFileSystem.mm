@@ -34,7 +34,7 @@ string iOSFileSystem::documentsPath() const {
   return [[url absoluteString] UTF8String];
 }
 
-bool iOSFileSystem::loadMeshFile(MeshData &mesh, const std::string &file) const {
+bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const std::string &file) const {
   string fileType = getFilePostfix(file);
   string filePath = findPathForFile(file);
   

@@ -25,6 +25,7 @@
 		C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401CFA1EFF2BF800BE9958 /* MeshLoader.cpp */; };
 		C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CFB1EFF2BF800BE9958 /* MeshLoader.h */; };
 		C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401D021F00122500BE9958 /* FileSystem.cpp */; };
+		C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D041F001BFC00BE9958 /* VertexMeshData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -61,6 +62,7 @@
 		C1401CFA1EFF2BF800BE9958 /* MeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshLoader.cpp; path = Systems/FileSystem/MeshLoader.cpp; sourceTree = "<group>"; };
 		C1401CFB1EFF2BF800BE9958 /* MeshLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshLoader.h; path = Systems/FileSystem/MeshLoader.h; sourceTree = "<group>"; };
 		C1401D021F00122500BE9958 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FileSystem.cpp; path = Systems/FileSystem/FileSystem.cpp; sourceTree = "<group>"; };
+		C1401D041F001BFC00BE9958 /* VertexMeshData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexMeshData.h; path = Systems/Graphics/VertexMeshData.h; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				C1443AFB1EF496240059BA9D /* GraphicResources.h */,
 				C1401C971EF8054200BE9958 /* GraphicStates.h */,
 				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
+				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -230,6 +233,7 @@
 				C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
+				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,

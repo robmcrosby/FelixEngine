@@ -13,7 +13,7 @@
 using namespace fx;
 using namespace std;
 
-bool MeshLoader::loadFromBinaryFile(MeshData &mesh, const std::string &file) {
+bool MeshLoader::loadFromBinaryFile(VertexMeshData &mesh, const std::string &file) {
   std::ifstream meshFile;
   meshFile.open(file, std::ios::in | std::ios::binary);
   if (meshFile.is_open())
@@ -27,7 +27,7 @@ bool MeshLoader::loadFromBinaryFile(MeshData &mesh, const std::string &file) {
   return false;
 }
 
-bool MeshLoader::loadFromBinarySteam(MeshData &mesh, std::istream &is) {
+bool MeshLoader::loadFromBinarySteam(VertexMeshData &mesh, std::istream &is) {
   int primitiveType = 0;
   int numSubMeshes = 0;
   
