@@ -28,6 +28,7 @@ namespace fx {
     virtual bool loadMeshFile(MeshData &mesh, const std::string &file) const = 0;
     
     virtual bool fileExistsAtPath(const std::string &filePath) const = 0;
+    virtual std::string findPathForFile(const std::string &file) const = 0;
     
   public:
     virtual ~FileSystem() {}
@@ -47,6 +48,10 @@ namespace fx {
       return instance != nullptr && instance->fileExistsAtPath(file);
     }
     
+    static std::string findFile(const std::string &file) {
+      return instance ? instance->findPathForFile(file) : file;
+    }
+    
     /**
      * @param fileName  String to extract the file postfix from.
      * @return          Either the postfix string or an empty string if none found.
@@ -62,29 +67,26 @@ namespace fx {
     /**
      * Extracts the file name from a file path string.
      *
-     * @param path  String for the path.
-     * @param name  String for the file name.
+     * @param file  String for the path
+     * @return      String for the file name or an empty string if not found
      */
-    static bool getFileNameFromPath(const std::string &path, std::string &name)
+    static std::string getFileName(const std::string &file)
     {
-      bool success = false;
       std::string::size_type start, end, npos = std::string::npos;
       
-      start = path.find_last_of('/');
+      start = file.find_last_of('/');
       if (start == npos)
         start = 0;
       else
         start++;
       
-      end = path.find_last_of('.');
+      end = file.find_last_of('.');
       
       if (end != npos && start < end)
-      {
-        name = path.substr(start, end-start);
-        success = true;
-      }
+        return file.substr(start, end-start);
       
-      return success;
+      std::cerr << "Unable to get filename from path: " << file << std::endl;
+      return "";
     }
   };
   

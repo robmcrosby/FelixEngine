@@ -19,6 +19,8 @@
 		C1401CF01EFBF60800BE9958 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1401CE61EFBF5BD00BE9958 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1401CF31EFBF63700BE9958 /* Hello3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401CF11EFBF63700BE9958 /* Hello3D.cpp */; };
 		C1401CF51EFBF71B00BE9958 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1401CF41EFBF71B00BE9958 /* Shaders.metal */; };
+		C1401D001F000BA500BE9958 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFE1F000BA500BE9958 /* bunny.mesh */; };
+		C1401D011F000BA500BE9958 /* cube.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFF1F000BA500BE9958 /* cube.mesh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,8 @@
 		C1401CF11EFBF63700BE9958 /* Hello3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hello3D.cpp; sourceTree = "<group>"; };
 		C1401CF21EFBF63700BE9958 /* Hello3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hello3D.h; sourceTree = "<group>"; };
 		C1401CF41EFBF71B00BE9958 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		C1401CFE1F000BA500BE9958 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+		C1401CFF1F000BA500BE9958 /* cube.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.mesh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,8 @@
 				C1401CD81EFBF56B00BE9958 /* LaunchScreen.storyboard */,
 				C1401CDB1EFBF56B00BE9958 /* Info.plist */,
 				C1401CCA1EFBF56B00BE9958 /* Supporting Files */,
+				C1401CFE1F000BA500BE9958 /* bunny.mesh */,
+				C1401CFF1F000BA500BE9958 /* cube.mesh */,
 				C1401CF41EFBF71B00BE9958 /* Shaders.metal */,
 			);
 			path = Hello3D;
@@ -224,6 +230,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1401CDA1EFBF56B00BE9958 /* LaunchScreen.storyboard in Resources */,
+				C1401D011F000BA500BE9958 /* cube.mesh in Resources */,
+				C1401D001F000BA500BE9958 /* bunny.mesh in Resources */,
 				C1401CD71EFBF56B00BE9958 /* Assets.xcassets in Resources */,
 				C1401CD51EFBF56B00BE9958 /* Main.storyboard in Resources */,
 			);
