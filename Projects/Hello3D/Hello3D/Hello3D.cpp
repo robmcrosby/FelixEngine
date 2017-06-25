@@ -29,7 +29,7 @@ void Hello3D::start() {
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   fx::VertexMeshData mesh;
-  fx::FileSystem::loadMesh(mesh, "cube.mesh");
+  fx::FileSystem::loadMesh(mesh, "bunny.mesh");
   
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->addVertexBuffer(4, 3, vertexBuffer);

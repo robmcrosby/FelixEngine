@@ -9,6 +9,8 @@
 #include "MeshLoader.h"
 #include <fstream>
 
+#define NAME_BUFFER_SIZE 32
+
 
 using namespace fx;
 using namespace std;
@@ -28,45 +30,68 @@ bool MeshLoader::loadFromBinaryFile(VertexMeshData &mesh, const std::string &fil
 }
 
 bool MeshLoader::loadFromBinarySteam(VertexMeshData &mesh, std::istream &is) {
+  bool success = true;
   int primitiveType = 0;
   int numSubMeshes = 0;
   
   if (FileSystem::read(primitiveType, is) == sizeof(int) && FileSystem::read(numSubMeshes, is) == sizeof(int)) {
-    cout << "Primative Type: " << primitiveType << " Submeshes: " << numSubMeshes << endl;
+    // Determin the Primitive Type
+    mesh.primitiveType = primitiveType & 1 ? VERTEX_TRIANGLE_STRIP : VERTEX_TRIANGLES;
+    
+    // Read the Sub Meshes
+    mesh.subMeshes.resize(numSubMeshes);
+    success = FileSystem::read((int*)&mesh.subMeshes[0], numSubMeshes*2, is) == sizeof(int)*numSubMeshes*2;
+    
+    int numVertices, numBuffers;
+    if (success && FileSystem::read(numVertices, is) == sizeof(int) && FileSystem::read(numBuffers, is) == sizeof(int)) {
+      mesh.totalVertices = numVertices;
+      
+      // Read the Vertex Buffers
+      for (int i = 0; i < numBuffers && success; ++i)
+        success |= readBufferBinaryStream(mesh, numVertices, is);
+      
+      if (success && primitiveType & 8) {
+        success = readIndicesBinaryStream(mesh, is);
+      }
+    }
+    else {
+      cerr << "Error Reading Number of Vertices and Number of Buffers" << endl;
+      success = false;
+    }
   }
-//  {
-//    bufferMap.setFlags(GetVertexPrimitive(primitiveType));
-//    
-//    // Load the Sub-Mesh Information
-//    Buffer &subMeshBuffer = bufferMap.getBuffer("SubMeshes", BUFFER_RANGES);
-//    subMeshBuffer.resize(VAR_INT_2, numSubMeshes);
-//    FileSystem::Read((unsigned int*)subMeshBuffer.ptr(), numSubMeshes*2, is);
-//    
-//    int numVertices, numBuffers;
-//    if (success && FileSystem::Read(numVertices, is) == sizeof(int) && FileSystem::Read(numBuffers, is) == sizeof(int))
-//    {
-//      for (int i = 0; i < numBuffers && success; ++i)
-//        success |= ReadBufferFromStream(bufferMap, numVertices, is);
-//    }
-//    else
-//      success = false;
-//    
-//    if (primitiveType == 8 || primitiveType == 9)
-//    {
-//      int numIndices;
-//      if (success && FileSystem::Read(numIndices, is) == sizeof(int))
-//      {
-//        Buffer &indexBuffer = bufferMap.getBuffer("Indices", BUFFER_INDICES);
-//        indexBuffer.resize(VAR_INT, numIndices);
-//        FileSystem::Read((unsigned int*)indexBuffer.ptr(), numIndices, is);
-//      }
-//      else
-//        success = false;
-//    }
-//  }
-//  else
-//    success = false;
-//  
-//  return success;
+  else {
+    cerr << "Error Reading Primitive Type and Number of Submeshes" << endl;
+    success = false;
+  }
+  return success;
+}
+
+bool MeshLoader::readBufferBinaryStream(VertexMeshData &mesh, int vertexCount, std::istream &is) {
+  int compSize = 0;
+  
+  if (FileSystem::read(compSize, is) == sizeof(int))
+  {
+    char name[NAME_BUFFER_SIZE];
+    
+    is.read(name, sizeof(name));
+    if (is.gcount() == NAME_BUFFER_SIZE && name[0] != '\0')
+    {
+      int bufferSize = vertexCount*compSize;
+      VertexBuffer &buffer = mesh.buffers[name];
+      buffer.resize(bufferSize);
+      return FileSystem::read(&buffer[0], bufferSize, is) == sizeof(float)*bufferSize;
+    }
+  }
+  return false;
+}
+
+bool MeshLoader::readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is) {
+  int numIndices;
+  if (FileSystem::read(numIndices, is) == sizeof(int)) {
+    mesh.indices.resize(numIndices);
+    return FileSystem::read(&mesh.indices[0], numIndices, is) == sizeof(int)*numIndices;
+  }
+  
+  cerr << "Error Reading Index Buffer" << endl;
   return false;
 }
