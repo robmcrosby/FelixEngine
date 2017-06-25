@@ -23,6 +23,8 @@ void Hello3D::start() {
     0.8, -0.8, 0.0, 1.0
   };
   
+  int indexBuffer[] = {0, 1, 2};
+  
   _task.frame = _graphics->getMainWindowBuffer();
   
   _task.shader = _graphics->createShaderProgram();
@@ -32,6 +34,7 @@ void Hello3D::start() {
   fx::FileSystem::loadMesh(mesh, "bunny.mesh");
   
   _task.mesh = _graphics->createVertexMesh();
+  _task.mesh->setIndexBuffer(3, indexBuffer);
   _task.mesh->addVertexBuffer(4, 3, vertexBuffer);
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));

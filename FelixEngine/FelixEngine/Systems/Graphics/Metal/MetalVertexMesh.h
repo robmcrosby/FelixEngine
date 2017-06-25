@@ -20,8 +20,11 @@ namespace fx {
   class MetalVertexMesh: public VertexMesh {
   public:
     id <MTLDevice> _device;
+    id <MTLBuffer> _indices;
     bufferList     _buffers;
-    int _vertexCount;
+    unsigned long  _primitive;
+    unsigned long  _indexCount;
+    unsigned long  _vertexCount;
     
   public:
     MetalVertexMesh(id <MTLDevice> device);
