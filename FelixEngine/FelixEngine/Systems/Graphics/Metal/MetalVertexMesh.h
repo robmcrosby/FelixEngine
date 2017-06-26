@@ -7,7 +7,7 @@
 //
 
 #include "GraphicResources.h"
-#include <vector>
+#include <map>
 
 @protocol MTLDevice;
 @protocol MTLBuffer;
@@ -15,13 +15,14 @@
 
 
 namespace fx {
-  typedef std::vector<id <MTLBuffer> > bufferList;
+  class MetalShaderProgram;
+  typedef std::map<std::string, id <MTLBuffer> > MetalBufferMap;
   
   class MetalVertexMesh: public VertexMesh {
   public:
     id <MTLDevice> _device;
     id <MTLBuffer> _indices;
-    bufferList     _buffers;
+    MetalBufferMap _buffers;
     unsigned long  _primitive;
     unsigned long  _indexCount;
     unsigned long  _vertexCount;
@@ -33,8 +34,8 @@ namespace fx {
     virtual bool loadData(const VertexMeshData &data);
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
     virtual bool setIndexBuffer(size_t count, const int *buffer);
-    virtual bool addVertexBuffer(size_t size, size_t count, const float *buffer);
+    virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
     
-    void encode(id <MTLRenderCommandEncoder> encoder, int instances);
+    void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
   };
 }

@@ -25,7 +25,7 @@ iOSFileSystem::~iOSFileSystem() {
 
 string iOSFileSystem::resourcesPath() const {
   NSBundle* mainBundle = [NSBundle mainBundle];
-  return [[[mainBundle resourceURL] path] UTF8String];
+  return string([[mainBundle resourcePath] UTF8String]) + "/";
 }
 
 string iOSFileSystem::documentsPath() const {

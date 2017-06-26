@@ -105,7 +105,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   
   id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
   shader->encode(encoder, frame);
-  mesh->encode(encoder, task.instances);
+  mesh->encode(encoder, shader, task.instances);
   [encoder endEncoding];
 }
 

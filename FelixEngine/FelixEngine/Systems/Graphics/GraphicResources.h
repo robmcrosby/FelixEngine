@@ -46,7 +46,7 @@ namespace fx {
     virtual bool loadData(const VertexMeshData &data) = 0;
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
-    virtual bool addVertexBuffer(size_t size, size_t count, const float *buffer) = 0;
+    virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
   };
 }
 

@@ -10,12 +10,14 @@
 #define VertexMeshData_h
 
 #include "GraphicResources.h"
-#include "IndexedMap.h"
+#include <vector>
+#include <map>
 
 
 namespace fx {
   typedef std::vector<int> IndexBuffer;
   typedef std::vector<float> VertexBuffer;
+  typedef std::map<std::string, VertexBuffer> BufferMap;
   typedef std::vector<ivec2> Ranges;
   
   struct VertexMeshData {
@@ -24,7 +26,7 @@ namespace fx {
     
     IndexBuffer indices;
     Ranges      subMeshes;
-    IndexedMap<std::string, VertexBuffer> buffers;
+    BufferMap   buffers;
     
     VertexMeshData(): primitiveType(VERTEX_TRIANGLES), totalVertices(0) {}
   };

@@ -7,6 +7,7 @@
 //
 
 #include "MetalVertexMesh.h"
+#include "MetalShaderProgram.h"
 #include "VertexMeshData.h"
 #include <Metal/Metal.h>
 
@@ -22,9 +23,7 @@ MetalVertexMesh::MetalVertexMesh(id <MTLDevice> device) {
 }
 
 MetalVertexMesh::~MetalVertexMesh() {
-//  for (Buffer *buffer : _buffers) {
-//    delete buffer;
-//  }
+  
 }
 
 bool MetalVertexMesh::loadData(const VertexMeshData &data) {
@@ -35,7 +34,10 @@ bool MetalVertexMesh::loadData(const VertexMeshData &data) {
     success = setIndexBuffer(data.indices.size(), &data.indices[0]);
   
   if (success) {
-    success = addVertexBuffer(data.buffers.at(1)->size()/data.totalVertices, data.totalVertices, &data.buffers.at(1)->at(0));
+    for (auto buffer : data.buffers) {
+      size_t size = buffer.second.size()/data.totalVertices;
+      success &= addVertexBuffer(buffer.first, size, data.totalVertices, &buffer.second[0]);
+    }
   }
   
   return success;
@@ -56,21 +58,22 @@ bool MetalVertexMesh::setIndexBuffer(size_t count, const int *buffer) {
   return _indices != nil;
 }
 
-bool MetalVertexMesh::addVertexBuffer(size_t size, size_t count, const float *buffer) {
+bool MetalVertexMesh::addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) {
   _vertexCount = count;
   
   NSUInteger length = size * count * sizeof(float);
   id <MTLBuffer> mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
-  _buffers.push_back(mtlBuffer);
+  _buffers[name] = mtlBuffer;
   
   return mtlBuffer != nil;
 }
 
-void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, int instances) {
-  NSUInteger index = 0;
-  for (id <MTLBuffer> buffer : _buffers) {
-    [encoder setVertexBuffer:buffer offset:0 atIndex:index];
-    ++index;
+void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances) {
+  for (auto buffer : _buffers) {
+    if (shader->_vertexIndexMap.count(buffer.first)) {
+      NSUInteger index = shader->_vertexIndexMap.at(buffer.first);
+      [encoder setVertexBuffer:buffer.second offset:0 atIndex:index];
+    }
   }
   
   MTLPrimitiveType primitive = (MTLPrimitiveType)_primitive;
