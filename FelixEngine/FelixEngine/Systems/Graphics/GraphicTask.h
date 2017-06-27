@@ -11,9 +11,13 @@
 
 #include "GraphicResources.h"
 #include "GraphicStates.h"
+#include <vector>
+#include <map>
 
 
 namespace fx {
+  typedef std::map<std::string, UniformBuffer*> UniformMap;
+  
   struct GraphicTask {
     FrameBuffer   *frame;
     ShaderProgram *shader;
@@ -23,6 +27,8 @@ namespace fx {
     
     AttachmentState colorAttachments[MAX_COLOR_ATTACHEMENTS];
     AttachmentState depthStencilAttachment;
+    
+    UniformMap uniforms;
     
     GraphicTask() {
       frame  = nullptr;

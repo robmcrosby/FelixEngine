@@ -52,7 +52,7 @@ namespace fx {
   struct UniformBuffer {
     virtual ~UniformBuffer() {}
     
-    virtual bool setNumberOfBuffers(int count) = 0;
+    virtual bool load(const void *data, size_t size) = 0;
     virtual bool update(const void *data, size_t size) = 0;
   };
 }

@@ -110,7 +110,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   
   id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
   shader->encode(encoder, frame);
+  
+  for (auto uniform : task.uniforms) {
+    MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
+    mtlUniform->encode(encoder, uniform.first, shader);
+  }
+  
   mesh->encode(encoder, shader, task.instances);
+  
   [encoder endEncoding];
 }
 

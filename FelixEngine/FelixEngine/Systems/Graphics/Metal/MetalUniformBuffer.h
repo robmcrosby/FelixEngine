@@ -15,16 +15,20 @@
 
 
 namespace fx {
+  class MetalShaderProgram;
   
   class MetalUniformBuffer: public UniformBuffer {
   public:
     id <MTLDevice> _device;
+    id <MTLBuffer> _buffer;
     
   public:
     MetalUniformBuffer(id <MTLDevice> device);
     virtual ~MetalUniformBuffer();
     
-    virtual bool setNumberOfBuffers(int count);
+    virtual bool load(const void *data, size_t size);
     virtual bool update(const void *data, size_t size);
+    
+    void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
   };
 }

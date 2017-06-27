@@ -8,6 +8,7 @@
 
 #include "Hello3D.h"
 
+
 Hello3D::Hello3D() {
   printf("Create Hello3D\n");
 }
@@ -27,6 +28,15 @@ void Hello3D::start() {
   
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->loadData(meshData);
+  
+  float width = 2.0f;
+  float height = 2.0f;
+  _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, 1, 100.0f);
+  _mvpUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
+  _mvpUniform.model = fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  
+  _task.uniforms["MVP"] = _graphics->createUniformBuffer();
+  _task.uniforms["MVP"]->load(&_mvpUniform, sizeof(MVPUniform));
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
