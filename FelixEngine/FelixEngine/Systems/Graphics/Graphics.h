@@ -26,6 +26,7 @@ namespace fx {
     virtual FrameBuffer*   getMainWindowBuffer() = 0;
     virtual ShaderProgram* createShaderProgram() = 0;
     virtual VertexMesh*    createVertexMesh()    = 0;
+    virtual UniformBuffer* createUniformBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;

@@ -48,6 +48,13 @@ namespace fx {
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
     virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
   };
+  
+  struct UniformBuffer {
+    virtual ~UniformBuffer() {}
+    
+    virtual bool setNumberOfBuffers(int count) = 0;
+    virtual bool update(const void *data, size_t size) = 0;
+  };
 }
 
 

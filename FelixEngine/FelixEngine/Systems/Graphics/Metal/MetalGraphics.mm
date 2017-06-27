@@ -16,6 +16,7 @@
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
+#include "MetalUniformBuffer.h"
 
 
 namespace fx {
@@ -90,6 +91,10 @@ ShaderProgram* MetalGraphics::createShaderProgram() {
 
 VertexMesh* MetalGraphics::createVertexMesh() {
   return new MetalVertexMesh(_data->device);
+}
+
+UniformBuffer* MetalGraphics::createUniformBuffer() {
+  return new MetalUniformBuffer(_data->device);
 }
 
 void MetalGraphics::nextFrame() {
