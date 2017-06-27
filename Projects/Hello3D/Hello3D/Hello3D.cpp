@@ -29,11 +29,12 @@ void Hello3D::start() {
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->loadData(meshData);
   
+  fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
-  float height = 2.0f;
-  _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, 1, 100.0f);
+  float height = 2.0f * size.h/size.w;
+  _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _mvpUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
-  _mvpUniform.model = fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  _mvpUniform.model = fx::mat4::RotX(M_PI/2.0f) * fx::mat4::RotZ(M_PI/2.0f) * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   _task.uniforms["MVP"] = _graphics->createUniformBuffer();
   _task.uniforms["MVP"]->load(&_mvpUniform, sizeof(MVPUniform));

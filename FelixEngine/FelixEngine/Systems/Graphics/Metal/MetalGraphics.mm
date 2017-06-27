@@ -77,6 +77,8 @@ bool MetalGraphics::initalize(UIView *view) {
   
   _frame = new MetalFrameBuffer(_data->device);
   _frame->_colorAttachments.push_back(nil);
+  _frame->_size.w = (int)view.bounds.size.width;
+  _frame->_size.h = (int)view.bounds.size.height;
   
   return true;
 }

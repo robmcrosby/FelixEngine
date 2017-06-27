@@ -21,12 +21,17 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  
   self.application = nullptr;
   self.displayLink = nil;
 }
 
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
+}
+
+- (BOOL)prefersStatusBarHidden {
+  return YES;
 }
 
 -(void)setApplication:(void*)app {

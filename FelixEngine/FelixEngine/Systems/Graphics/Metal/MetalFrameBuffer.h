@@ -26,6 +26,9 @@ namespace fx {
     id <MTLTexture> _stencilAttachment;
     attachmentsList _colorAttachments;
     
+    ivec2 _size;
+    float _scale;
+    
   public:
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();

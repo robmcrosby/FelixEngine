@@ -36,7 +36,8 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 
 
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
-  
+  _size = ivec2(0, 0);
+  _scale = 1.0f;
 }
 
 MetalFrameBuffer::~MetalFrameBuffer() {
@@ -44,11 +45,11 @@ MetalFrameBuffer::~MetalFrameBuffer() {
 }
 
 ivec2 MetalFrameBuffer::size() const {
-  return ivec2();
+  return _size;
 }
 
 float MetalFrameBuffer::scale() const {
-  return 1.0f;
+  return _scale;
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
