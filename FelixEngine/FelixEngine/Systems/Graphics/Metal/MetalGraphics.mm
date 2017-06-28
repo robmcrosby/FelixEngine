@@ -61,6 +61,9 @@ bool MetalGraphics::initalize(UIView *view) {
     return false;
   }
   
+  CGSize size = [UIScreen mainScreen].nativeBounds.size;
+  CGFloat scale = [UIScreen mainScreen].nativeScale;
+  
   // Setup the Metal Layer
   _data->layer = [[CAMetalLayer alloc] init];
   if (_data->layer == nil) {
@@ -72,13 +75,15 @@ bool MetalGraphics::initalize(UIView *view) {
   _data->layer.device = _data->device;
   _data->layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
   _data->layer.framebufferOnly = YES;
-  _data->layer.frame = view.layer.frame;
+  _data->layer.frame = view.bounds;
+  _data->layer.contentsScale = scale;
   [view.layer addSublayer: _data->layer];
   
   _frame = new MetalFrameBuffer(_data->device);
   _frame->_colorAttachments.push_back(nil);
-  _frame->_size.w = (int)view.bounds.size.width;
-  _frame->_size.h = (int)view.bounds.size.height;
+  _frame->_size.w = (int)size.width;
+  _frame->_size.h = (int)size.height;
+  _frame->_scale = (float)scale;
   
   return true;
 }
