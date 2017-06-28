@@ -52,6 +52,16 @@ float MetalFrameBuffer::scale() const {
   return _scale;
 }
 
+bool MetalFrameBuffer::addDepthBuffer() {
+  MTLTextureDescriptor *descriptor = [[MTLTextureDescriptor alloc] init];
+  descriptor.width = (NSUInteger)_size.w;
+  descriptor.height = (NSUInteger)_size.h;
+  descriptor.pixelFormat = MTLPixelFormatDepth32Float;
+  
+  _depthAttachment = [_device newTextureWithDescriptor:descriptor];
+  return _depthAttachment != nil;
+}
+
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
   MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
   

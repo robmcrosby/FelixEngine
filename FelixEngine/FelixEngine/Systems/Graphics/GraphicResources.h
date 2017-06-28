@@ -32,6 +32,8 @@ namespace fx {
     
     virtual ivec2 size() const = 0;
     virtual float scale() const = 0;
+    
+    virtual bool addDepthBuffer() = 0;
   };
   
   struct ShaderProgram {

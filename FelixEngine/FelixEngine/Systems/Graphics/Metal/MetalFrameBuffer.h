@@ -36,6 +36,8 @@ namespace fx {
     virtual ivec2 size() const;
     virtual float scale() const;
     
+    virtual bool addDepthBuffer();
+    
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
   };
 }

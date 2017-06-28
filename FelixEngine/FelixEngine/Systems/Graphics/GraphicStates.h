@@ -42,6 +42,58 @@ namespace fx {
       clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
   };
+  
+  
+  enum DEPTH_FLAGS
+  {
+    DEPTH_ENABLE_MASK     = 0x0f, // 0000 1111
+    DEPTH_ENABLE_WRITING  = 0x01, // 0000 0001
+    DEPTH_ENABLE_TESTING  = 0x02, // 0000 0010
+    
+    DEPTH_TEST_MASK       = 0xf0, // 1111 0000
+    DEPTH_TEST_ALWAYS     = 0x00, // 0000 0000
+    DEPTH_TEST_NEVER      = 0x70, // 0111 0000
+    
+    DEPTH_TEST_EQUAL      = 0x50, // 0101 0000
+    DEPTH_TEST_LESS       = 0x60, // 0110 0000
+    DEPTH_TEST_GREATER    = 0x30, // 0011 0000
+    
+    DEPTH_TEST_LESS_EQ    = 0x40, // 0100 0000
+    DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
+  };
+  
+  struct DepthState
+  {
+    DepthState(): flags(0) {}
+    void setWriting(bool writing = true) {
+      if (writing)
+        flags |= DEPTH_ENABLE_WRITING;
+      else
+        flags &= ~DEPTH_ENABLE_WRITING;
+    }
+    void enableWriting() {setWriting(true);}
+    void disableWriting() {setWriting(false);}
+    
+    void setTesting(bool testing = true) {
+      if (testing)
+        flags |= DEPTH_ENABLE_TESTING;
+      else
+        flags &= ~DEPTH_ENABLE_TESTING;
+    }
+    void enableTesting() {setTesting(true);}
+    void disableTesting() {setTesting(false);}
+    
+    void setFunction(int function) {
+      flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);
+    }
+    
+    bool enabled() const {return writingEnabled() || testingEnabled();}
+    bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
+    bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
+    int  function()  const {return flags & DEPTH_TEST_MASK;}
+    
+    int flags;
+  };
 }
 
 #endif /* GraphicStates_h */

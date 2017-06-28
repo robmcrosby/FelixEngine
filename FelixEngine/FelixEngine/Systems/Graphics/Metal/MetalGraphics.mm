@@ -28,6 +28,8 @@ namespace fx {
     id<CAMetalDrawable>  drawable;
     id<MTLCommandBuffer> buffer;
     
+    std::map<int, id<MTLDepthStencilState> > depthStencilStates;
+    
     ~MTLGraphicsData() {}
   };
 }
@@ -132,6 +134,30 @@ void MetalGraphics::addTask(const GraphicTask &task) {
     [encoder setCullMode:MTLCullModeFront];
   else if (task.cullMode == CULL_BACK)
     [encoder setCullMode:MTLCullModeBack];
+  
+  // Set the Depth State
+  int index = task.depthState.flags;
+  if (_data->depthStencilStates.count(index) == 0) {
+    MTLDepthStencilDescriptor *depthDesc = [MTLDepthStencilDescriptor new];
+    depthDesc.depthWriteEnabled = task.depthState.writingEnabled();
+    depthDesc.depthCompareFunction = MTLCompareFunctionAlways;
+    
+    if (task.depthState.function() == DEPTH_TEST_LESS)
+      depthDesc.depthCompareFunction = MTLCompareFunctionLess;
+    else if (task.depthState.function() == DEPTH_TEST_GREATER)
+      depthDesc.depthCompareFunction = MTLCompareFunctionGreater;
+    else if (task.depthState.function() == DEPTH_TEST_EQUAL)
+      depthDesc.depthCompareFunction = MTLCompareFunctionEqual;
+    else if (task.depthState.function() == DEPTH_TEST_LESS_EQ)
+      depthDesc.depthCompareFunction = MTLCompareFunctionLessEqual;
+    else if (task.depthState.function() == DEPTH_TEST_GREATER_EQ)
+      depthDesc.depthCompareFunction = MTLCompareFunctionGreaterEqual;
+    else if (task.depthState.function() == DEPTH_TEST_NEVER)
+      depthDesc.depthCompareFunction = MTLCompareFunctionNever;
+    
+    _data->depthStencilStates[index] = [_data->device newDepthStencilStateWithDescriptor:depthDesc];
+  }
+  [encoder setDepthStencilState:_data->depthStencilStates.at(index)];
   
   // Encode the Vertex Buffers
   mesh->encode(encoder, shader, task.instances);
