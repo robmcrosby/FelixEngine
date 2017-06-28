@@ -41,6 +41,7 @@ void Hello3D::start() {
   _task.uniforms["MVP"]->load(&_mvpUniform, sizeof(MVPUniform));
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _task.cullMode = fx::CULL_BACK;
 }
 
 void Hello3D::update() {

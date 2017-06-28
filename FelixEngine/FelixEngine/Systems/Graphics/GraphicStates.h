@@ -27,6 +27,12 @@ namespace fx {
     STORE_DISCARD,
   };
   
+  enum CULL_MODE {
+    CULL_NONE,
+    CULL_FRONT,
+    CULL_BACK,
+  };
+  
   struct AttachmentState {
     LOAD_ACTION  loadAction;
     STORE_ACTION storeAction;

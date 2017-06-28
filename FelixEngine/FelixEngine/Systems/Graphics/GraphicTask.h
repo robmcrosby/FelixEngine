@@ -30,12 +30,16 @@ namespace fx {
     
     UniformMap uniforms;
     
+    CULL_MODE cullMode;
+    
     GraphicTask() {
       frame  = nullptr;
       shader = nullptr;
       mesh   = nullptr;
       
       instances = 1;
+      
+      cullMode = CULL_NONE;
     }
     
     void setClearColor(const vec4 &color) {
