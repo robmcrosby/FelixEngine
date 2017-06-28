@@ -161,6 +161,16 @@ namespace fx
       return os << "(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
     }
     
+    static Quaternion RotX(T r) {
+      return Quaternion(vec3(1, 0, 0), r);
+    }
+    static Quaternion RotY(T r) {
+      return Quaternion(vec3(0, 1, 0), r);
+    }
+    static Quaternion RotZ(T r) {
+      return Quaternion(vec3(0, 0, 1), r);
+    }
+    
     static Quaternion ParseFloat(const std::string &str)
     {
       Quaternion q;

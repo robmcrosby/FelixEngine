@@ -11,10 +11,12 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
+#import <FelixEngine/Quaternion.h>
 
 
 struct MVPUniform {
   fx::mat4 projection, view, model;
+  fx::quat rotation;
 };
 
 class Hello3D: public fx::Application {
