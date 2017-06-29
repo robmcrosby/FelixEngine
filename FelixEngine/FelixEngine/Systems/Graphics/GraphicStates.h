@@ -62,9 +62,11 @@ namespace fx {
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  struct DepthState
+  struct DepthStencilState
   {
-    DepthState(): flags(0) {}
+    int flags;
+    
+    DepthStencilState(int flags = 0): flags(flags) {}
     void setWriting(bool writing = true) {
       if (writing)
         flags |= DEPTH_ENABLE_WRITING;
@@ -91,8 +93,6 @@ namespace fx {
     bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
     bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
     int  function()  const {return flags & DEPTH_TEST_MASK;}
-    
-    int flags;
   };
 }
 

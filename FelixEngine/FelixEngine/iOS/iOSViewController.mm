@@ -9,7 +9,7 @@
 #import "iOSViewController.h"
 #import "Application.h"
 
-@interface iOSViewController ()
+@interface iOSViewController()
 
 @property fx::Application *cppApplication;
 @property CADisplayLink *displayLink;

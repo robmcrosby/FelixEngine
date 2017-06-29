@@ -31,7 +31,7 @@ namespace fx {
     UniformMap uniforms;
     
     CULL_MODE cullMode;
-    DepthState depthState;
+    DepthStencilState depthStencilState;
     
     GraphicTask() {
       frame  = nullptr;

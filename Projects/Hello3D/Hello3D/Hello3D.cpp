@@ -45,9 +45,9 @@ void Hello3D::start() {
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   _task.setClearDepthStencil();
   
-  _task.depthState.enableTesting();
-  _task.depthState.enableWriting();
-  _task.depthState.setFunction(fx::DEPTH_TEST_LESS);
+  _task.depthStencilState.enableTesting();
+  _task.depthStencilState.enableWriting();
+  _task.depthStencilState.setFunction(fx::DEPTH_TEST_LESS);
 }
 
 void Hello3D::update() {

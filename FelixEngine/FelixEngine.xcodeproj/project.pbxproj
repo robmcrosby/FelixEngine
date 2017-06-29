@@ -28,6 +28,8 @@
 		C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D041F001BFC00BE9958 /* VertexMeshData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D061F01E26E00BE9958 /* MetalUniformBuffer.h */; };
 		C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */; };
+		C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */; };
+		C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,6 +69,8 @@
 		C1401D041F001BFC00BE9958 /* VertexMeshData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexMeshData.h; path = Systems/Graphics/VertexMeshData.h; sourceTree = "<group>"; };
 		C1401D061F01E26E00BE9958 /* MetalUniformBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalUniformBuffer.h; path = Systems/Graphics/Metal/MetalUniformBuffer.h; sourceTree = "<group>"; };
 		C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalUniformBuffer.mm; path = Systems/Graphics/Metal/MetalUniformBuffer.mm; sourceTree = "<group>"; };
+		C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalDepthStencil.h; path = Systems/Graphics/Metal/MetalDepthStencil.h; sourceTree = "<group>"; };
+		C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalDepthStencil.mm; path = Systems/Graphics/Metal/MetalDepthStencil.mm; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 				C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */,
 				C1401D061F01E26E00BE9958 /* MetalUniformBuffer.h */,
 				C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */,
+				C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */,
+				C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */,
 			);
 			name = MetalGraphics;
 			sourceTree = "<group>";
@@ -238,6 +244,7 @@
 				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
 				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
 				C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */,
+				C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
@@ -326,6 +333,7 @@
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
+				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,
 			);
