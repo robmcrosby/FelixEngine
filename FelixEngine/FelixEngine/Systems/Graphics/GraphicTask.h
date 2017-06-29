@@ -25,8 +25,8 @@ namespace fx {
     
     int instances;
     
-    AttachmentState colorAttachments[MAX_COLOR_ATTACHEMENTS];
-    AttachmentState depthStencilAttachment;
+    ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
+    ActionState depthStencilAction;
     
     UniformMap uniforms;
     
@@ -45,14 +45,14 @@ namespace fx {
     
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
-        colorAttachments[i].loadAction = LOAD_CLEAR;
-        colorAttachments[i].clearColor = color;
+        colorActions[i].loadAction = LOAD_CLEAR;
+        colorActions[i].clearColor = color;
       }
     }
     
     void setClearDepthStencil(float depth = 1.0f, int stencil = 0) {
-      depthStencilAttachment.loadAction = LOAD_CLEAR;
-      depthStencilAttachment.clearColor = vec4(depth, (float)stencil, 0.0f, 0.0f);
+      depthStencilAction.loadAction = LOAD_CLEAR;
+      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 0.0f);
     }
   };
 }

@@ -33,12 +33,12 @@ namespace fx {
     CULL_BACK,
   };
   
-  struct AttachmentState {
+  struct ActionState {
     LOAD_ACTION  loadAction;
     STORE_ACTION storeAction;
     vec4 clearColor;
     
-    AttachmentState(): loadAction(LOAD_LAST), storeAction(STORE_SAVE) {
+    ActionState(): loadAction(LOAD_LAST), storeAction(STORE_SAVE) {
       clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
   };
