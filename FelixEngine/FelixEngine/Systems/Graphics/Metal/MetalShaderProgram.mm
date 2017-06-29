@@ -8,6 +8,8 @@
 
 #include "MetalShaderProgram.h"
 #include "MetalFrameBuffer.h"
+#include "MetalUniformBuffer.h"
+#include "GraphicTask.h"
 #include <Metal/Metal.h>
 
 using namespace fx;
@@ -53,6 +55,38 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrame
   }
   
   [encoder setRenderPipelineState:_pipelines.at(frame)];
+}
+
+void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
+  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame);
+  if (!_pipelines.count(frame))
+    addPipelineForFrame(frame);
+  [encoder setRenderPipelineState:_pipelines.at(frame)];
+  
+  for (auto uniform : task.uniforms) {
+    MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
+    mtlUniform->encode(encoder, uniform.first, this);
+  }
+}
+
+void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {
+  MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
+  descriptor.vertexFunction = _vertex;
+  descriptor.fragmentFunction = _fragment;
+  
+  int index = 0;
+  for (id <MTLTexture> attachment : frame->_colorAttachments) {
+    descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
+  }
+  
+  if (frame->_depthAttachment != nil) {
+    descriptor.depthAttachmentPixelFormat = frame->_depthAttachment.pixelFormat;
+  }
+  if (frame->_stencilAttachment != nil) {
+    descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
+  }
+  
+  _pipelines[frame] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
 }
 
 void MetalShaderProgram::extractIndexMaps() {

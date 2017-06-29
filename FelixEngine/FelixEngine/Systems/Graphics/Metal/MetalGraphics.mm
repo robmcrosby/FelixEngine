@@ -123,28 +123,15 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   // Create Render Encoder
   id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
   
-  // Encode the Shader Program and Render Pipeline
-  shader->encode(encoder, frame);
-  
-  // Encode the Uniform Buffers
-  for (auto uniform : task.uniforms) {
-    MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
-    mtlUniform->encode(encoder, uniform.first, shader);
-  }
-  
-  // Set the Triangle Culling Mode
-  if (task.cullMode == CULL_FRONT)
-    [encoder setCullMode:MTLCullModeFront];
-  else if (task.cullMode == CULL_BACK)
-    [encoder setCullMode:MTLCullModeBack];
+  // Encode the Shader Program, Render Pipeline, and Uniform Buffers
+  shader->encode(encoder, task);
   
   // Set the Depth/Stencil State
   int flags = task.depthStencilState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
-  // Encode the Vertex Buffers
+  // Encode the Vertex Buffers and End Encoding
   mesh->encode(encoder, shader, task.instances);
-  
   [encoder endEncoding];
 }
 

@@ -16,6 +16,7 @@
 
 namespace fx {
   class MetalShaderProgram;
+  class GraphicTask;
   typedef std::map<std::string, id <MTLBuffer> > MetalBufferMap;
   
   class MetalVertexMesh: public VertexMesh {
@@ -37,5 +38,6 @@ namespace fx {
     virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
     
     void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
+    void encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task);
   };
 }
