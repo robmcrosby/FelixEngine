@@ -9,6 +9,7 @@
 #ifndef GraphicTask_h
 #define GraphicTask_h
 
+#include "Graphics.h"
 #include "GraphicResources.h"
 #include "GraphicStates.h"
 #include <vector>
@@ -59,6 +60,12 @@ namespace fx {
       depthStencilState.enableTesting();
       depthStencilState.enableWriting();
       depthStencilState.setFunction(fx::DEPTH_TEST_LESS);
+    }
+    
+    UniformBuffer& operator[](const std::string name) {
+      if (uniforms.count(name) == 0)
+        uniforms[name] = Graphics::getInstance().createUniformBuffer();
+      return *uniforms.at(name);
     }
   };
 }

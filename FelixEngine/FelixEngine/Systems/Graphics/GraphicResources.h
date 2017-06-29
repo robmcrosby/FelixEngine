@@ -54,6 +54,12 @@ namespace fx {
     
     virtual bool load(const void *data, size_t size) = 0;
     virtual bool update(const void *data, size_t size) = 0;
+    
+    template <typename T>
+    const T& operator=(const T &data) {
+      load(&data, sizeof(T));
+      return data;
+    }
   };
 }
 

@@ -11,6 +11,7 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
+#import <FelixEngine/GraphicTask.h>
 #import <FelixEngine/Quaternion.h>
 
 

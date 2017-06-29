@@ -9,16 +9,21 @@
 #ifndef Graphics_h
 #define Graphics_h
 
-#include "GraphicResources.h"
-#include "GraphicTask.h"
-#include <vector>
 
 namespace fx {
+  class FrameBuffer;
+  class ShaderProgram;
+  class VertexMesh;
+  class UniformBuffer;
+  class GraphicTask;
   
   /** File System */
   class Graphics {
   protected:
     static Graphics *instance;
+    
+  public:
+    static Graphics& getInstance() {return *instance;}
     
   public:
     virtual ~Graphics() {}

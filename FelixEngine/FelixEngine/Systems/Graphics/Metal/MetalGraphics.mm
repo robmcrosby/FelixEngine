@@ -13,6 +13,9 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
 
+#include "GraphicResources.h"
+#include "GraphicTask.h"
+
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
