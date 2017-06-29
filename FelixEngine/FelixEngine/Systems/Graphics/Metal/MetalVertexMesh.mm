@@ -27,7 +27,7 @@ MetalVertexMesh::~MetalVertexMesh() {
   
 }
 
-bool MetalVertexMesh::loadData(const VertexMeshData &data) {
+bool MetalVertexMesh::load(const VertexMeshData &data) {
   bool success = true;
   
   setPrimativeType(data.primitiveType);

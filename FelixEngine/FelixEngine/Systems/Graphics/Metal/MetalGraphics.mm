@@ -86,7 +86,6 @@ bool MetalGraphics::initalize(UIView *view) {
   _frame->_colorAttachments.push_back(nil);
   _frame->_size.w = (int)size.width;
   _frame->_size.h = (int)size.height;
-  _frame->_scale = (float)scale;
   
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
   

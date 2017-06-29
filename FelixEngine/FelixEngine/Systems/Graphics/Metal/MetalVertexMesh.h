@@ -32,7 +32,7 @@ namespace fx {
     MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
     
-    virtual bool loadData(const VertexMeshData &data);
+    virtual bool load(const VertexMeshData &data);
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
     virtual bool setIndexBuffer(size_t count, const int *buffer);
     virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);

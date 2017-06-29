@@ -27,15 +27,12 @@ namespace fx {
     attachmentsList _colorAttachments;
     
     ivec2 _size;
-    float _scale;
     
   public:
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
     
     virtual ivec2 size() const;
-    virtual float scale() const;
-    
     virtual bool addDepthBuffer();
     
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);

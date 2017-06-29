@@ -27,7 +27,7 @@ void Hello3D::start() {
   fx::FileSystem::loadMesh(meshData, "bunny.mesh");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->loadData(meshData);
+  _task.mesh->load(meshData);
   
   fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
@@ -45,9 +45,7 @@ void Hello3D::start() {
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   _task.setClearDepthStencil();
   
-  _task.depthStencilState.enableTesting();
-  _task.depthStencilState.enableWriting();
-  _task.depthStencilState.setFunction(fx::DEPTH_TEST_LESS);
+  _task.enableDepthTesting();
 }
 
 void Hello3D::update() {

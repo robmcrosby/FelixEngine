@@ -37,7 +37,7 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
                                               unsigned int   vid      [[ vertex_id ]]) {
   VertexOutput output;
   float4 normal = Normal[vid];
-  output.normal   = rotate_quat(MVP->rotation, normal.xyz);
+  output.normal = rotate_quat(MVP->rotation, normal.xyz);
   output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
   return output;
 }
