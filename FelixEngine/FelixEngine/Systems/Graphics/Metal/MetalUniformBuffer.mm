@@ -22,12 +22,14 @@ MetalUniformBuffer::~MetalUniformBuffer() {
   
 }
 
-bool MetalUniformBuffer::load(const void *data, size_t size) {
+bool MetalUniformBuffer::load(void *data, size_t size) {
+  _size = size;
+  _data = data;
   _buffer = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
   return _buffer != nil;
 }
 
-bool MetalUniformBuffer::update(const void *data, size_t size) {
+bool MetalUniformBuffer::update() {
   return false;
 }
 

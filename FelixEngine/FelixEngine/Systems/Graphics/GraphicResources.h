@@ -53,17 +53,17 @@ namespace fx {
   struct UniformBuffer {
     virtual ~UniformBuffer() {}
     
-    virtual bool load(const void *data, size_t size) = 0;
-    virtual bool update(const void *data, size_t size) = 0;
+    virtual bool load(void *data, size_t size) = 0;
+    virtual bool update() = 0;
     
     template <typename T>
-    const T& operator=(const T &data) {
+    T& operator=(T &data) {
       load(&data, sizeof(T));
       return data;
     }
     
     template <typename T>
-    const std::vector<T>& operator=(const std::vector<T> &data) {
+    std::vector<T>& operator=(std::vector<T> &data) {
       load(&data.at(0), data.size()*sizeof(T));
       return data;
     }

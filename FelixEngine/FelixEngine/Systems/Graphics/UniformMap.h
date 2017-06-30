@@ -29,6 +29,11 @@ namespace fx {
     std::map<std::string, UniformBuffer*>::const_iterator begin() const {return _map.begin();}
     std::map<std::string, UniformBuffer*>::const_iterator end() const {return _map.end();}
     
+    void update() {
+      for (auto uniform : _map)
+        uniform.second->update();
+    }
+    
     UniformBuffer& operator[](const std::string name) {
       if (_map.count(name) == 0)
         _map[name] = Graphics::getInstance().createUniformBuffer();

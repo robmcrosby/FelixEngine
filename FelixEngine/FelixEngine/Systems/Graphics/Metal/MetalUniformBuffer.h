@@ -22,12 +22,15 @@ namespace fx {
     id <MTLDevice> _device;
     id <MTLBuffer> _buffer;
     
+    size_t _size;
+    void *_data;
+    
   public:
     MetalUniformBuffer(id <MTLDevice> device);
     virtual ~MetalUniformBuffer();
     
-    virtual bool load(const void *data, size_t size);
-    virtual bool update(const void *data, size_t size);
+    virtual bool load(void *data, size_t size);
+    virtual bool update();
     
     void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
   };
