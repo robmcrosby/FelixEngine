@@ -11,6 +11,7 @@
 
 #include "Vector.h"
 #include "Matrix.h"
+#include <vector>
 
 
 namespace fx {
@@ -58,6 +59,12 @@ namespace fx {
     template <typename T>
     const T& operator=(const T &data) {
       load(&data, sizeof(T));
+      return data;
+    }
+    
+    template <typename T>
+    const std::vector<T>& operator=(const std::vector<T> &data) {
+      load(&data.at(0), data.size()*sizeof(T));
       return data;
     }
   };
