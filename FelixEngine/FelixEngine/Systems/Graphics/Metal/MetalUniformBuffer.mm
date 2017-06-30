@@ -15,29 +15,43 @@ using namespace std;
 
 
 MetalUniformBuffer::MetalUniformBuffer(id <MTLDevice> device): _device(device) {
-  _buffer = nil;
+  _current = 0;
+  clearBuffers();
 }
 
 MetalUniformBuffer::~MetalUniformBuffer() {
-  
+  clearBuffers();
 }
 
 bool MetalUniformBuffer::load(void *data, size_t size) {
+  bool success = true;
   _size = size;
   _data = data;
-  _buffer = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
-  return _buffer != nil;
+  
+  for (int i = 0; i < MAX_BUFFERS; ++i) {
+    _buffers[i] = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
+    success &= _buffers[i] != nil;
+  }
+  return success;
 }
 
-bool MetalUniformBuffer::update() {
-  return false;
+void MetalUniformBuffer::update() {
+  if (_buffers[_current] != nil) {
+    _current = _current + 1 % MAX_BUFFERS;
+    memcpy(_buffers[_current].contents, _data, _size);
+  }
 }
 
 void MetalUniformBuffer::encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader) {
   if (shader->_vertexIndexMap.count(name)) {
-    [encoder setVertexBuffer:_buffer offset:0 atIndex:shader->_vertexIndexMap[name]];
+    [encoder setVertexBuffer:_buffers[_current] offset:0 atIndex:shader->_vertexIndexMap[name]];
   }
   if (shader->_fragmentIndexMap.count(name)) {
-    [encoder setFragmentBuffer:_buffer offset:0 atIndex:shader->_vertexIndexMap[name]];
+    [encoder setFragmentBuffer:_buffers[_current] offset:0 atIndex:shader->_vertexIndexMap[name]];
   }
+}
+
+void MetalUniformBuffer::clearBuffers() {
+  for (int i = 0; i < MAX_BUFFERS; ++i)
+    _buffers[i] = nil;
 }

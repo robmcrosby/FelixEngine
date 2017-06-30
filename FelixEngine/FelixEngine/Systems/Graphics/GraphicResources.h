@@ -54,7 +54,7 @@ namespace fx {
     virtual ~UniformBuffer() {}
     
     virtual bool load(void *data, size_t size) = 0;
-    virtual bool update() = 0;
+    virtual void update() = 0;
     
     template <typename T>
     T& operator=(T &data) {

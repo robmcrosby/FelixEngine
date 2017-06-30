@@ -9,6 +9,8 @@
 #include "GraphicResources.h"
 #include <map>
 
+#define MAX_BUFFERS 3
+
 @protocol MTLDevice;
 @protocol MTLBuffer;
 @protocol MTLRenderCommandEncoder;
@@ -20,17 +22,22 @@ namespace fx {
   class MetalUniformBuffer: public UniformBuffer {
   public:
     id <MTLDevice> _device;
-    id <MTLBuffer> _buffer;
+    id <MTLBuffer> _buffers[MAX_BUFFERS];
     
     size_t _size;
     void *_data;
+    
+    int _current;
+    
+  private:
+    void clearBuffers();
     
   public:
     MetalUniformBuffer(id <MTLDevice> device);
     virtual ~MetalUniformBuffer();
     
     virtual bool load(void *data, size_t size);
-    virtual bool update();
+    virtual void update();
     
     void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
   };
