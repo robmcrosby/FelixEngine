@@ -37,7 +37,7 @@ void Hello3D::start() {
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
-  _task["MVP"] = _mvpUniform;
+  _task.uniforms["MVP"] = _mvpUniform;
   
   _task.cullMode = fx::CULL_BACK;
   

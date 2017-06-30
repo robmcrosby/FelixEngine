@@ -30,6 +30,7 @@
 		C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */; };
 		C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */; };
 		C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */; };
+		C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D131F05CCED00BE9958 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -71,6 +72,7 @@
 		C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalUniformBuffer.mm; path = Systems/Graphics/Metal/MetalUniformBuffer.mm; sourceTree = "<group>"; };
 		C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalDepthStencil.h; path = Systems/Graphics/Metal/MetalDepthStencil.h; sourceTree = "<group>"; };
 		C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalDepthStencil.mm; path = Systems/Graphics/Metal/MetalDepthStencil.mm; sourceTree = "<group>"; };
+		C1401D131F05CCED00BE9958 /* UniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniformMap.h; path = Systems/Graphics/UniformMap.h; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				C1443AFB1EF496240059BA9D /* GraphicResources.h */,
 				C1401C971EF8054200BE9958 /* GraphicStates.h */,
 				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
+				C1401D131F05CCED00BE9958 /* UniformMap.h */,
 				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
@@ -248,6 +251,7 @@
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
+				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
