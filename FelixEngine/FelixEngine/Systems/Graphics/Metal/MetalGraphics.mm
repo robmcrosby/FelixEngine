@@ -137,7 +137,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   [encoder endEncoding];
 }
 
-void MetalGraphics::render() {
+void MetalGraphics::presentFrame() {
   _frame->_colorAttachments.at(0) = nil;
   [_data->buffer presentDrawable:_data->drawable];
   [_data->buffer commit];

@@ -23,10 +23,24 @@ Application::~Application() {
   
 }
 
-void Application::start() {
+void Application::initalize() {
   
 }
 
 void Application::update() {
   
+}
+
+void Application::render() {
+  
+}
+
+void Application::processFrame() {
+  update();
+  
+  if (_graphics != nullptr) {
+    _graphics->nextFrame();
+    render();
+    _graphics->presentFrame();
+  }
 }

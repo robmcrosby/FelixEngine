@@ -36,7 +36,7 @@ namespace fx {
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);
-    virtual void render();
+    virtual void presentFrame();
   };
   
 }

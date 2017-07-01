@@ -11,6 +11,7 @@
 
 
 namespace fx {
+  class Application;
   class FrameBuffer;
   class ShaderProgram;
   class VertexMesh;
@@ -35,7 +36,7 @@ namespace fx {
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;
-    virtual void render() = 0;
+    virtual void presentFrame() = 0;
   };
   
 }

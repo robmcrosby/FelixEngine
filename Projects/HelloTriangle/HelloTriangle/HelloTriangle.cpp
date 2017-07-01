@@ -16,7 +16,7 @@ HelloTriangle::~HelloTriangle() {
   
 }
 
-void HelloTriangle::start() {
+void HelloTriangle::initalize() {
   float vertexBuffer[] = {
      0.0,  0.8, 0.0, 1.0,
     -0.8, -0.8, 0.0, 1.0,
@@ -34,8 +34,6 @@ void HelloTriangle::start() {
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
 
-void HelloTriangle::update() {
-  _graphics->nextFrame();
+void HelloTriangle::render() {
   _graphics->addTask(_task);
-  _graphics->render();
 }

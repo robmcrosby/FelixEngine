@@ -29,8 +29,9 @@ public:
   Hello3D();
   virtual ~Hello3D();
   
-  virtual void start();
+  virtual void initalize();
   virtual void update();
+  virtual void render();
 };
 
 #endif /* Hello3D_h */

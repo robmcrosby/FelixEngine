@@ -39,7 +39,7 @@
   
   // Set the Application
   [self setApplication: self.helloTriApp];
-  self.helloTriApp->start();
+  self.helloTriApp->initalize();
   
   // Start Display Link
   [self setupDisplayLink];

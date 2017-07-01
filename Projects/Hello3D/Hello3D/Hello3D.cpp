@@ -17,7 +17,7 @@ Hello3D::~Hello3D() {
   
 }
 
-void Hello3D::start() {
+void Hello3D::initalize() {
   _task.frame = _graphics->getMainWindowBuffer();
   
   _task.shader = _graphics->createShaderProgram();
@@ -48,8 +48,14 @@ void Hello3D::start() {
 }
 
 void Hello3D::update() {
-  _graphics->nextFrame();
-  _graphics->addTask(_task);
-  _graphics->render();
+  // Rotate the Model
+  _mvpUniform.rotation *= fx::quat::RotZ(0.02f);
+  _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  
+  // Update the Model Uniforms
+  _task.uniforms.update();
 }
 
+void Hello3D::render() {
+  _graphics->addTask(_task);
+}

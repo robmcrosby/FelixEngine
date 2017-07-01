@@ -22,8 +22,11 @@ namespace fx {
     Application();
     virtual ~Application();
     
-    virtual void start();
+    virtual void initalize();
     virtual void update();
+    virtual void render();
+    
+    void processFrame();
     
     FileSystem& fileSystem() const {return *_fileSystem;}
     void setFileSystem(FileSystem *fileSystem) {_fileSystem = fileSystem;}

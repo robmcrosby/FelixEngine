@@ -45,7 +45,7 @@
 
 - (void)frameUpdate:(CADisplayLink*)displayLink {
   if (self.cppApplication != nullptr) {
-    self.cppApplication->update();
+    self.cppApplication->processFrame();
   }
 }
 

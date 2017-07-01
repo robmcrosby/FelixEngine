@@ -37,7 +37,7 @@ bool MetalUniformBuffer::load(void *data, size_t size) {
 
 void MetalUniformBuffer::update() {
   if (_buffers[_current] != nil) {
-    _current = _current + 1 % MAX_BUFFERS;
+    _current = (_current + 1) % MAX_BUFFERS;
     memcpy(_buffers[_current].contents, _data, _size);
   }
 }
