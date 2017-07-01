@@ -36,10 +36,9 @@ void Application::render() {
 }
 
 void Application::processFrame() {
-  update();
-  
   if (_graphics != nullptr) {
     _graphics->nextFrame();
+    update();
     render();
     _graphics->presentFrame();
   }

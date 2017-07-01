@@ -22,6 +22,7 @@
 #include "MetalUniformBuffer.h"
 #include "MetalDepthStencil.h"
 
+#define MAX_INFLIGHT_FRAMES 3
 
 namespace fx {
   struct MTLGraphicsData {
@@ -30,6 +31,8 @@ namespace fx {
     id <MTLCommandBuffer> buffer;
     
     MetalDepthStencil *depthStencilStates;
+    
+    dispatch_semaphore_t frameBoundarySemaphore;
     
     ~MTLGraphicsData() {}
   };
@@ -83,7 +86,11 @@ bool MetalGraphics::initalize(UIView *view) {
   _frame = new MetalFrameBuffer(_data->device);
   _frame->setMetalLayer(layer);
   
+  // Create an instance of MetalDepthStencil
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
+  
+  // setup the Frame Boundry Semaphore
+  _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
   
   return true;
 }
@@ -105,7 +112,8 @@ UniformBuffer* MetalGraphics::createUniformBuffer() {
 }
 
 void MetalGraphics::nextFrame() {
-  _data->buffer   = [_data->queue commandBuffer];
+  dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+  _data->buffer = [_data->queue commandBuffer];
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
@@ -130,6 +138,11 @@ void MetalGraphics::addTask(const GraphicTask &task) {
 
 void MetalGraphics::presentFrame() {
   _frame->present(_data->buffer);
+  
+  __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
+  [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+    dispatch_semaphore_signal(semaphore);
+  }];
   
   [_data->buffer commit];
   _data->buffer = nil;
