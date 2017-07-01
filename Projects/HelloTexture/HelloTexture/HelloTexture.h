@@ -13,9 +13,14 @@
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicTask.h>
 
+struct MVPUniform {
+  fx::mat4 projection, view, model;
+};
+
 class HelloTexture: public fx::Application {
 private:
   fx::GraphicTask _task;
+  MVPUniform _mvpUniform;
   
 public:
   HelloTexture();

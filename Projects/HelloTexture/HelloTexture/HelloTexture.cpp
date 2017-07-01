@@ -18,9 +18,17 @@ HelloTexture::~HelloTexture() {
 
 void HelloTexture::initalize() {
   float vertexBuffer[] = {
-    0.0,  0.8, 0.0, 1.0,
-    -0.8, -0.8, 0.0, 1.0,
-    0.8, -0.8, 0.0, 1.0
+    -1.0f, -1.0f, 0.0f, 1.0f,
+    -1.0f,  1.0f, 0.0f, 1.0f,
+     1.0f, -1.0f, 0.0f, 1.0f,
+     1.0f,  1.0f, 0.0f, 1.0f
+  };
+  
+  float uvBuffer[] = {
+    0.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f
   };
   
   _task.frame = _graphics->getMainWindowBuffer();
@@ -29,7 +37,18 @@ void HelloTexture::initalize() {
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
+  _task.mesh->addVertexBuffer("Position", 4, 4, vertexBuffer);
+  _task.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
+  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  
+  fx::vec2 size = fx::vec2(_task.frame->size());
+  float width = 2.0f;
+  float height = 2.0f * size.h/size.w;
+  _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
+  _mvpUniform.view = fx::mat4();
+  _mvpUniform.model = fx::mat4::Scale(fx::vec3(0.8f, 0.8f, 0.8f));
+  
+  _task.uniforms["MVP"] = _mvpUniform;
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }

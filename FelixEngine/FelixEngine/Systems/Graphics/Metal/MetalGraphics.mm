@@ -131,6 +131,11 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   int flags = task.depthStencilState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
+  if (task.cullMode == CULL_BACK)
+    [encoder setCullMode:MTLCullModeBack];
+  else if (task.cullMode == CULL_FRONT)
+    [encoder setCullMode:MTLCullModeFront];
+  
   // Encode the Vertex Buffers and End Encoding
   mesh->encode(encoder, shader, task.instances);
   [encoder endEncoding];

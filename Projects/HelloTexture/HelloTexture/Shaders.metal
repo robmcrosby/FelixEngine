@@ -9,11 +9,32 @@
 #include <metal_stdlib>
 using namespace metal;
 
-vertex float4 basic_vertex(const device packed_float4* vertex_array [[ buffer(0) ]],
-                           unsigned int   vid          [[ vertex_id ]]) {
-  return float4(vertex_array[vid]);
+struct MVPUniform {
+  float4x4 projection;
+  float4x4 view;
+  float4x4 model;
+};
+
+struct VertexOutput {
+  float4 position [[position]];
+  float2 uv       [[user(uv)]];
+};
+
+struct FragmentInput {
+  float2 uv [[user(uv)]];
+};
+
+vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
+                                 const device packed_float2 *UV       [[ buffer(1) ]],
+                                 constant     MVPUniform    *MVP      [[ buffer(2) ]],
+                                        unsigned int   vid      [[ vertex_id ]]) {
+  VertexOutput output;
+  output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
+  output.uv = float2(UV[vid]);
+  return output;
 }
 
-fragment half4 basic_fragment() {
-  return half4(1.0);
+fragment half4 basic_fragment(FragmentInput input [[ stage_in ]]) {
+  float2 uv = input.uv;
+  return half4(uv.x, uv.y, 1.0, 1.0);
 }
