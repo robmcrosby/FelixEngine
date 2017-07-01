@@ -1,20 +1,20 @@
 //
 //  ViewController.m
-//  Hello3D
+//  HelloTexture
 //
-//  Created by Robert Crosby on 6/22/17.
+//  Created by Robert Crosby on 7/1/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "Hello3D.h"
+#import "HelloTexture.h"
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
 
 @interface ViewController ()
 
-@property Hello3D *helloTriApp;
+@property HelloTexture *helloTexApp;
 
 @end
 
@@ -24,27 +24,29 @@
   [super viewDidLoad];
   
   // Create the Cpp Application
-  self.helloTriApp = new Hello3D();
+  self.helloTexApp = new HelloTexture();
   
   // Add iOS File System
   fx::iOSFileSystem *fileSystem = new fx::iOSFileSystem();
-  self.helloTriApp->setFileSystem(fileSystem);
+  self.helloTexApp->setFileSystem(fileSystem);
   
   // Add and initalize Metal Graphics
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
   graphics->initalize(self.view);
-  self.helloTriApp->setGraphics(graphics);
+  self.helloTexApp->setGraphics(graphics);
   
   // Set the Application
-  [self setApplication: self.helloTriApp];
-  self.helloTriApp->initalize();
+  [self setApplication: self.helloTexApp];
+  self.helloTexApp->initalize();
   
   // Start Display Link
   [self setupDisplayLink];
 }
 
+
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 }
+
 
 @end
