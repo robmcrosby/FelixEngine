@@ -13,19 +13,26 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
 
+#include "GraphicResources.h"
+#include "GraphicTask.h"
+
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
+#include "MetalUniformBuffer.h"
+#include "MetalDepthStencil.h"
 
+#define MAX_INFLIGHT_FRAMES 3
 
 namespace fx {
   struct MTLGraphicsData {
-    id <MTLDevice>       device;
-    id <MTLCommandQueue> queue;
+    id <MTLDevice>        device;
+    id <MTLCommandQueue>  queue;
+    id <MTLCommandBuffer> buffer;
     
-    CAMetalLayer *layer;
-    id<CAMetalDrawable>  drawable;
-    id<MTLCommandBuffer> buffer;
+    MetalDepthStencil *depthStencilStates;
+    
+    dispatch_semaphore_t frameBoundarySemaphore;
     
     ~MTLGraphicsData() {}
   };
@@ -61,21 +68,29 @@ bool MetalGraphics::initalize(UIView *view) {
   }
   
   // Setup the Metal Layer
-  _data->layer = [[CAMetalLayer alloc] init];
-  if (_data->layer == nil) {
+  CAMetalLayer *layer = [[CAMetalLayer alloc] init];
+  if (layer == nil) {
     cerr << "Error Creating Metal Layer" << endl;
     _data->device = nil;
     _data->queue  = nil;
     return false;
   }
-  _data->layer.device = _data->device;
-  _data->layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-  _data->layer.framebufferOnly = YES;
-  _data->layer.frame = view.layer.frame;
-  [view.layer addSublayer: _data->layer];
+  layer.device = _data->device;
+  layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+  layer.framebufferOnly = YES;
+  layer.frame = view.bounds;
+  layer.contentsScale = [UIScreen mainScreen].nativeScale;
+  [view.layer addSublayer: layer];
   
+  // Set the Metal Layer to a Frame Buffer
   _frame = new MetalFrameBuffer(_data->device);
-  _frame->_colorAttachments.push_back(nil);
+  _frame->setMetalLayer(layer);
+  
+  // Create an instance of MetalDepthStencil
+  _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
+  
+  // setup the Frame Boundry Semaphore
+  _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
   
   return true;
 }
@@ -92,10 +107,13 @@ VertexMesh* MetalGraphics::createVertexMesh() {
   return new MetalVertexMesh(_data->device);
 }
 
+UniformBuffer* MetalGraphics::createUniformBuffer() {
+  return new MetalUniformBuffer(_data->device);
+}
+
 void MetalGraphics::nextFrame() {
-  _data->drawable = [_data->layer nextDrawable];
-  _data->buffer   = [_data->queue commandBuffer];
-  _frame->_colorAttachments.at(0) = _data->drawable.texture;
+  dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+  _data->buffer = [_data->queue commandBuffer];
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
@@ -103,17 +121,29 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
   MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh);
   
+  // Create Render Encoder
   id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
-  shader->encode(encoder, frame);
-  mesh->encode(encoder, task.instances);
+  
+  // Encode the Shader Program, Render Pipeline, and Uniform Buffers
+  shader->encode(encoder, task);
+  
+  // Set the Depth/Stencil State
+  int flags = task.depthStencilState.flags;
+  [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
+  
+  // Encode the Vertex Buffers and End Encoding
+  mesh->encode(encoder, shader, task.instances);
   [encoder endEncoding];
 }
 
-void MetalGraphics::render() {
-  _frame->_colorAttachments.at(0) = nil;
-  [_data->buffer presentDrawable:_data->drawable];
-  [_data->buffer commit];
+void MetalGraphics::presentFrame() {
+  _frame->present(_data->buffer);
   
-  _data->drawable = nil;
+  __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
+  [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+    dispatch_semaphore_signal(semaphore);
+  }];
+  
+  [_data->buffer commit];
   _data->buffer = nil;
 }

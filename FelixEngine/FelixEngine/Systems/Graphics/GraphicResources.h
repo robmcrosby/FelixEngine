@@ -11,8 +11,12 @@
 
 #include "Vector.h"
 #include "Matrix.h"
+#include <vector>
+
 
 namespace fx {
+  class VertexMeshData;
+  
   enum SHADER_PART {
     SHADER_VERTEX,
     SHADER_FRAGMENT,
@@ -28,7 +32,7 @@ namespace fx {
     virtual ~FrameBuffer() {}
     
     virtual ivec2 size() const = 0;
-    virtual float scale() const = 0;
+    virtual bool addDepthBuffer() = 0;
   };
   
   struct ShaderProgram {
@@ -40,7 +44,29 @@ namespace fx {
   struct VertexMesh {
     virtual ~VertexMesh() {}
     
-    virtual bool addVertexBuffer(int size, int count, float *buffer) = 0;
+    virtual bool load(const VertexMeshData &data) = 0;
+    virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
+    virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
+    virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
+  };
+  
+  struct UniformBuffer {
+    virtual ~UniformBuffer() {}
+    
+    virtual bool load(void *data, size_t size) = 0;
+    virtual void update() = 0;
+    
+    template <typename T>
+    T& operator=(T &data) {
+      load(&data, sizeof(T));
+      return data;
+    }
+    
+    template <typename T>
+    std::vector<T>& operator=(std::vector<T> &data) {
+      load(&data.at(0), data.size()*sizeof(T));
+      return data;
+    }
   };
 }
 

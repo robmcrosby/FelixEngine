@@ -9,11 +9,14 @@
 #ifndef Graphics_h
 #define Graphics_h
 
-#include "GraphicResources.h"
-#include "GraphicTask.h"
-#include <vector>
 
 namespace fx {
+  class Application;
+  class FrameBuffer;
+  class ShaderProgram;
+  class VertexMesh;
+  class UniformBuffer;
+  class GraphicTask;
   
   /** File System */
   class Graphics {
@@ -21,15 +24,19 @@ namespace fx {
     static Graphics *instance;
     
   public:
+    static Graphics& getInstance() {return *instance;}
+    
+  public:
     virtual ~Graphics() {}
     
     virtual FrameBuffer*   getMainWindowBuffer() = 0;
     virtual ShaderProgram* createShaderProgram() = 0;
     virtual VertexMesh*    createVertexMesh()    = 0;
+    virtual UniformBuffer* createUniformBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;
-    virtual void render() = 0;
+    virtual void presentFrame() = 0;
   };
   
 }

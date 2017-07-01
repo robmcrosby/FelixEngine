@@ -1,13 +1,13 @@
 //
 //  ViewController.m
-//  HelloTriangle
+//  Hello3D
 //
-//  Created by Robert Crosby on 6/11/17.
+//  Created by Robert Crosby on 6/22/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "HelloTriangle.h"
+#import "Hello3D.h"
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
@@ -16,7 +16,7 @@
 
 @interface ViewController ()
 
-@property HelloTriangle *helloTriApp;
+@property Hello3D *helloTriApp;
 
 @end
 
@@ -26,7 +26,7 @@
   [super viewDidLoad];
   
   // Create the Cpp Application
-  self.helloTriApp = new HelloTriangle();
+  self.helloTriApp = new Hello3D();
   
   // Add iOS File System
   fx::iOSFileSystem *fileSystem = new fx::iOSFileSystem();
@@ -48,6 +48,5 @@
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
 }
-
 
 @end

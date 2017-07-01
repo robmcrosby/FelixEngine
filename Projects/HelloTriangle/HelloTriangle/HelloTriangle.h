@@ -11,6 +11,7 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
+#import <FelixEngine/GraphicTask.h>
 
 class HelloTriangle: public fx::Application {
 private:
@@ -20,8 +21,8 @@ public:
   HelloTriangle();
   virtual ~HelloTriangle();
   
-  virtual void start();
-  virtual void update();
+  virtual void initalize();
+  virtual void render();
 };
 
 #endif /* HelloTriangle_h */

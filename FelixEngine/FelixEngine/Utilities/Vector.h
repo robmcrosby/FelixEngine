@@ -399,6 +399,9 @@ namespace fx
   typedef Vector2<float> vec2;
   typedef Vector3<float> vec3;
   typedef Vector4<float> vec4;
+  
+  typedef Vector4<unsigned char> RGBA;
+  typedef Vector4<float> RGBAf;
 }
 
 #endif /* Vector_h */

@@ -32,10 +32,11 @@ namespace fx {
     virtual FrameBuffer*   getMainWindowBuffer();
     virtual ShaderProgram* createShaderProgram();
     virtual VertexMesh*    createVertexMesh();
+    virtual UniformBuffer* createUniformBuffer();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);
-    virtual void render();
+    virtual void presentFrame();
   };
   
 }

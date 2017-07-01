@@ -9,9 +9,9 @@
 #import "iOSViewController.h"
 #import "Application.h"
 
-@interface iOSViewController ()
+@interface iOSViewController()
 
-@property fx::Application *application;
+@property fx::Application *cppApplication;
 @property CADisplayLink *displayLink;
 
 @end
@@ -21,6 +21,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+  
   self.application = nullptr;
   self.displayLink = nil;
 }
@@ -29,14 +30,22 @@
   [super didReceiveMemoryWarning];
 }
 
+- (BOOL)prefersStatusBarHidden {
+  return YES;
+}
+
+-(void)setApplication:(void*)app {
+  self.cppApplication = (fx::Application*)app;
+}
+
 - (void)setupDisplayLink {
   self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(frameUpdate:)];
   [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
 - (void)frameUpdate:(CADisplayLink*)displayLink {
-  if (self.application != nullptr) {
-    self.application->update();
+  if (self.cppApplication != nullptr) {
+    self.cppApplication->processFrame();
   }
 }
 

@@ -13,6 +13,11 @@
 @protocol MTLTexture;
 @protocol MTLCommandBuffer;
 @protocol MTLRenderCommandEncoder;
+@protocol CAMetalDrawable;
+@protocol MTLCommandBuffer;
+
+
+@class CAMetalLayer;
 
 
 namespace fx {
@@ -26,13 +31,24 @@ namespace fx {
     id <MTLTexture> _stencilAttachment;
     attachmentsList _colorAttachments;
     
+    CAMetalLayer *_metalLayer;
+    id <CAMetalDrawable> _drawable;
+    
+    ivec2 _size;
+    
   public:
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
     
     virtual ivec2 size() const;
-    virtual float scale() const;
+    virtual bool addDepthBuffer();
+    
+    void setMetalLayer(CAMetalLayer *layer);
+    void present(id <MTLCommandBuffer> buffer);
     
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
+    
+  private:
+    void getNextDrawable();
   };
 }

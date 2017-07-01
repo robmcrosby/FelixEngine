@@ -1,0 +1,428 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C1401CCC1EFBF56B00BE9958 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401CCB1EFBF56B00BE9958 /* main.m */; };
+		C1401CCF1EFBF56B00BE9958 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401CCE1EFBF56B00BE9958 /* AppDelegate.m */; };
+		C1401CD21EFBF56B00BE9958 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401CD11EFBF56B00BE9958 /* ViewController.mm */; };
+		C1401CD51EFBF56B00BE9958 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1401CD31EFBF56B00BE9958 /* Main.storyboard */; };
+		C1401CD71EFBF56B00BE9958 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1401CD61EFBF56B00BE9958 /* Assets.xcassets */; };
+		C1401CDA1EFBF56B00BE9958 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1401CD81EFBF56B00BE9958 /* LaunchScreen.storyboard */; };
+		C1401CEB1EFBF5E500BE9958 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401CEA1EFBF5E500BE9958 /* QuartzCore.framework */; };
+		C1401CED1EFBF5EB00BE9958 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401CEC1EFBF5EB00BE9958 /* Metal.framework */; };
+		C1401CEE1EFBF5F000BE9958 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401CE61EFBF5BD00BE9958 /* FelixEngine.framework */; };
+		C1401CF01EFBF60800BE9958 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1401CE61EFBF5BD00BE9958 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1401CF31EFBF63700BE9958 /* Hello3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1401CF11EFBF63700BE9958 /* Hello3D.cpp */; };
+		C1401CF51EFBF71B00BE9958 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1401CF41EFBF71B00BE9958 /* Shaders.metal */; };
+		C1401D001F000BA500BE9958 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFE1F000BA500BE9958 /* bunny.mesh */; };
+		C1401D011F000BA500BE9958 /* cube.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFF1F000BA500BE9958 /* cube.mesh */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C1401CE51EFBF5BD00BE9958 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1401CE11EFBF5BD00BE9958 /* FelixEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C15CAEAD1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+		C1401CE71EFBF5C800BE9958 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1401CE11EFBF5BD00BE9958 /* FelixEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C15CAEAC1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C1401CEF1EFBF5FD00BE9958 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C1401CF01EFBF60800BE9958 /* FelixEngine.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C1401CC71EFBF56B00BE9958 /* Hello3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hello3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1401CCB1EFBF56B00BE9958 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C1401CCD1EFBF56B00BE9958 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C1401CCE1EFBF56B00BE9958 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C1401CD01EFBF56B00BE9958 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C1401CD11EFBF56B00BE9958 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		C1401CD41EFBF56B00BE9958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C1401CD61EFBF56B00BE9958 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C1401CD91EFBF56B00BE9958 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C1401CDB1EFBF56B00BE9958 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1401CE11EFBF5BD00BE9958 /* FelixEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FelixEngine.xcodeproj; path = ../../FelixEngine/FelixEngine.xcodeproj; sourceTree = "<group>"; };
+		C1401CEA1EFBF5E500BE9958 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C1401CEC1EFBF5EB00BE9958 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C1401CF11EFBF63700BE9958 /* Hello3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hello3D.cpp; sourceTree = "<group>"; };
+		C1401CF21EFBF63700BE9958 /* Hello3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hello3D.h; sourceTree = "<group>"; };
+		C1401CF41EFBF71B00BE9958 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		C1401CFE1F000BA500BE9958 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+		C1401CFF1F000BA500BE9958 /* cube.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.mesh; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C1401CC41EFBF56B00BE9958 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1401CEE1EFBF5F000BE9958 /* FelixEngine.framework in Frameworks */,
+				C1401CED1EFBF5EB00BE9958 /* Metal.framework in Frameworks */,
+				C1401CEB1EFBF5E500BE9958 /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C1401CBE1EFBF56B00BE9958 = {
+			isa = PBXGroup;
+			children = (
+				C1401CE11EFBF5BD00BE9958 /* FelixEngine.xcodeproj */,
+				C1401CC91EFBF56B00BE9958 /* Hello3D */,
+				C1401CC81EFBF56B00BE9958 /* Products */,
+				C1401CE91EFBF5E500BE9958 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C1401CC81EFBF56B00BE9958 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1401CC71EFBF56B00BE9958 /* Hello3D.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C1401CC91EFBF56B00BE9958 /* Hello3D */ = {
+			isa = PBXGroup;
+			children = (
+				C1401CCD1EFBF56B00BE9958 /* AppDelegate.h */,
+				C1401CCE1EFBF56B00BE9958 /* AppDelegate.m */,
+				C1401CD01EFBF56B00BE9958 /* ViewController.h */,
+				C1401CD11EFBF56B00BE9958 /* ViewController.mm */,
+				C1401CF21EFBF63700BE9958 /* Hello3D.h */,
+				C1401CF11EFBF63700BE9958 /* Hello3D.cpp */,
+				C1401CD31EFBF56B00BE9958 /* Main.storyboard */,
+				C1401CD61EFBF56B00BE9958 /* Assets.xcassets */,
+				C1401CD81EFBF56B00BE9958 /* LaunchScreen.storyboard */,
+				C1401CDB1EFBF56B00BE9958 /* Info.plist */,
+				C1401CCA1EFBF56B00BE9958 /* Supporting Files */,
+				C1401CFE1F000BA500BE9958 /* bunny.mesh */,
+				C1401CFF1F000BA500BE9958 /* cube.mesh */,
+				C1401CF41EFBF71B00BE9958 /* Shaders.metal */,
+			);
+			path = Hello3D;
+			sourceTree = "<group>";
+		};
+		C1401CCA1EFBF56B00BE9958 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C1401CCB1EFBF56B00BE9958 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C1401CE21EFBF5BD00BE9958 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1401CE61EFBF5BD00BE9958 /* FelixEngine.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C1401CE91EFBF5E500BE9958 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1401CEC1EFBF5EB00BE9958 /* Metal.framework */,
+				C1401CEA1EFBF5E500BE9958 /* QuartzCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C1401CC61EFBF56B00BE9958 /* Hello3D */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1401CDE1EFBF56B00BE9958 /* Build configuration list for PBXNativeTarget "Hello3D" */;
+			buildPhases = (
+				C1401CC31EFBF56B00BE9958 /* Sources */,
+				C1401CC41EFBF56B00BE9958 /* Frameworks */,
+				C1401CC51EFBF56B00BE9958 /* Resources */,
+				C1401CEF1EFBF5FD00BE9958 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C1401CE81EFBF5C800BE9958 /* PBXTargetDependency */,
+			);
+			name = Hello3D;
+			productName = Hello3D;
+			productReference = C1401CC71EFBF56B00BE9958 /* Hello3D.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C1401CBF1EFBF56B00BE9958 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Robert Crosby";
+				TargetAttributes = {
+					C1401CC61EFBF56B00BE9958 = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = K62X7R9XCJ;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C1401CC21EFBF56B00BE9958 /* Build configuration list for PBXProject "Hello3D" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C1401CBE1EFBF56B00BE9958;
+			productRefGroup = C1401CC81EFBF56B00BE9958 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C1401CE21EFBF5BD00BE9958 /* Products */;
+					ProjectRef = C1401CE11EFBF5BD00BE9958 /* FelixEngine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C1401CC61EFBF56B00BE9958 /* Hello3D */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C1401CE61EFBF5BD00BE9958 /* FelixEngine.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FelixEngine.framework;
+			remoteRef = C1401CE51EFBF5BD00BE9958 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C1401CC51EFBF56B00BE9958 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1401CDA1EFBF56B00BE9958 /* LaunchScreen.storyboard in Resources */,
+				C1401D011F000BA500BE9958 /* cube.mesh in Resources */,
+				C1401D001F000BA500BE9958 /* bunny.mesh in Resources */,
+				C1401CD71EFBF56B00BE9958 /* Assets.xcassets in Resources */,
+				C1401CD51EFBF56B00BE9958 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C1401CC31EFBF56B00BE9958 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C1401CD21EFBF56B00BE9958 /* ViewController.mm in Sources */,
+				C1401CCF1EFBF56B00BE9958 /* AppDelegate.m in Sources */,
+				C1401CCC1EFBF56B00BE9958 /* main.m in Sources */,
+				C1401CF31EFBF63700BE9958 /* Hello3D.cpp in Sources */,
+				C1401CF51EFBF71B00BE9958 /* Shaders.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1401CE81EFBF5C800BE9958 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FelixEngine;
+			targetProxy = C1401CE71EFBF5C800BE9958 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C1401CD31EFBF56B00BE9958 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C1401CD41EFBF56B00BE9958 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C1401CD81EFBF56B00BE9958 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C1401CD91EFBF56B00BE9958 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C1401CDC1EFBF56B00BE9958 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C1401CDD1EFBF56B00BE9958 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C1401CDF1EFBF56B00BE9958 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Hello3D/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.Hello3D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C1401CE01EFBF56B00BE9958 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Hello3D/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.Hello3D;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C1401CC21EFBF56B00BE9958 /* Build configuration list for PBXProject "Hello3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1401CDC1EFBF56B00BE9958 /* Debug */,
+				C1401CDD1EFBF56B00BE9958 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1401CDE1EFBF56B00BE9958 /* Build configuration list for PBXNativeTarget "Hello3D" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1401CDF1EFBF56B00BE9958 /* Debug */,
+				C1401CE01EFBF56B00BE9958 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C1401CBF1EFBF56B00BE9958 /* Project object */;
+}

@@ -16,7 +16,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 
 
 // Obj-C Headers
-#import <FelixEngine/AppViewController.h>
+#import <FelixEngine/iOSViewController.h>
 
 // C++ Headers
 #import <FelixEngine/Application.h>
@@ -28,6 +28,10 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/Vector.h>
 #import <FelixEngine/Matrix.h>
 #import <FelixEngine/Quaternion.h>
+#import <FelixEngine/Variant.h>
+#import <FelixEngine/IndexedMap.h>
+#import <FelixEngine/VertexMeshData.h>
+#import <FelixEngine/UniformMap.h>
 
 // iOS Platform
 #import <FelixEngine/iOSFileSystem.h>

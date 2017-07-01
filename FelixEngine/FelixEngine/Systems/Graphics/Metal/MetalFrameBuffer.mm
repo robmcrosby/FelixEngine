@@ -8,7 +8,9 @@
 
 #include "MetalFrameBuffer.h"
 #include "GraphicTask.h"
+
 #include <Metal/Metal.h>
+#include <QuartzCore/CAMetalLayer.h>
 
 using namespace fx;
 using namespace std;
@@ -36,7 +38,9 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 
 
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
-  
+  _metalLayer = nil;
+  _drawable = nil;
+  _size = ivec2(0, 0);
 }
 
 MetalFrameBuffer::~MetalFrameBuffer() {
@@ -44,21 +48,29 @@ MetalFrameBuffer::~MetalFrameBuffer() {
 }
 
 ivec2 MetalFrameBuffer::size() const {
-  return ivec2();
+  return _size;
 }
 
-float MetalFrameBuffer::scale() const {
-  return 1.0f;
+bool MetalFrameBuffer::addDepthBuffer() {
+  MTLTextureDescriptor *descriptor = [[MTLTextureDescriptor alloc] init];
+  descriptor.width = (NSUInteger)_size.w;
+  descriptor.height = (NSUInteger)_size.h;
+  descriptor.pixelFormat = MTLPixelFormatDepth32Float;
+  
+  _depthAttachment = [_device newTextureWithDescriptor:descriptor];
+  return _depthAttachment != nil;
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
-  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
+  if (_metalLayer != nil && _drawable == nil)
+    getNextDrawable();
   
+  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
   int index = 0;
   for (id <MTLTexture> colorAttachment : _colorAttachments) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.colorAttachments[index].loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.colorAttachments[index].storeAction);
-    vec4 color = task.colorAttachments[index].clearColor;
+    MTLLoadAction loadAction = getMetalLoadAction(task.colorActions[index].loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(task.colorActions[index].storeAction);
+    vec4 color = task.colorActions[index].clearColor;
     
     descriptor.colorAttachments[index].texture     = colorAttachment;
     descriptor.colorAttachments[index].loadAction  = loadAction;
@@ -68,24 +80,45 @@ id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer
   }
   
   if (_depthAttachment != nil) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAttachment.loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAttachment.storeAction);
+    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAction.loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAction.storeAction);
     
     descriptor.depthAttachment.texture     = _depthAttachment;
     descriptor.depthAttachment.loadAction  = loadAction;
     descriptor.depthAttachment.storeAction = storeAction;
-    descriptor.depthAttachment.clearDepth  = (double)task.depthStencilAttachment.clearColor.r;
+    descriptor.depthAttachment.clearDepth  = (double)task.depthStencilAction.clearColor.r;
   }
   
   if (_stencilAttachment != nil) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAttachment.loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAttachment.storeAction);
+    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAction.loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAction.storeAction);
     
     descriptor.stencilAttachment.texture      = _stencilAttachment;
     descriptor.stencilAttachment.loadAction   = loadAction;
     descriptor.stencilAttachment.storeAction  = storeAction;
-    descriptor.stencilAttachment.clearStencil = (uint32_t)task.depthStencilAttachment.clearColor.g;
+    descriptor.stencilAttachment.clearStencil = (uint32_t)task.depthStencilAction.clearColor.g;
   }
   
   return [buffer renderCommandEncoderWithDescriptor:descriptor];
+}
+
+void MetalFrameBuffer::setMetalLayer(CAMetalLayer *layer) {
+  _metalLayer = layer;
+  
+  _colorAttachments.push_back(nil);
+  _size.w = (int)(_metalLayer.bounds.size.width * _metalLayer.contentsScale);
+  _size.h = (int)(_metalLayer.bounds.size.height * _metalLayer.contentsScale);
+}
+
+void MetalFrameBuffer::present(id <MTLCommandBuffer> buffer) {
+  if (_metalLayer != nil && _drawable != nil) {
+    [buffer presentDrawable:_drawable];
+    _colorAttachments.at(0) = nil;
+    _drawable = nil;
+  }
+}
+
+void MetalFrameBuffer::getNextDrawable() {
+  _drawable = [_metalLayer nextDrawable];
+  _colorAttachments.at(0) = _drawable.texture;
 }
