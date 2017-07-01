@@ -25,12 +25,9 @@
 
 namespace fx {
   struct MTLGraphicsData {
-    id <MTLDevice>       device;
-    id <MTLCommandQueue> queue;
-    
-    CAMetalLayer *layer;
-    id<CAMetalDrawable>  drawable;
-    id<MTLCommandBuffer> buffer;
+    id <MTLDevice>        device;
+    id <MTLCommandQueue>  queue;
+    id <MTLCommandBuffer> buffer;
     
     MetalDepthStencil *depthStencilStates;
     
@@ -67,28 +64,24 @@ bool MetalGraphics::initalize(UIView *view) {
     return false;
   }
   
-  CGSize size = [UIScreen mainScreen].nativeBounds.size;
-  CGFloat scale = [UIScreen mainScreen].nativeScale;
-  
   // Setup the Metal Layer
-  _data->layer = [[CAMetalLayer alloc] init];
-  if (_data->layer == nil) {
+  CAMetalLayer *layer = [[CAMetalLayer alloc] init];
+  if (layer == nil) {
     cerr << "Error Creating Metal Layer" << endl;
     _data->device = nil;
     _data->queue  = nil;
     return false;
   }
-  _data->layer.device = _data->device;
-  _data->layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-  _data->layer.framebufferOnly = YES;
-  _data->layer.frame = view.bounds;
-  _data->layer.contentsScale = scale;
-  [view.layer addSublayer: _data->layer];
+  layer.device = _data->device;
+  layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+  layer.framebufferOnly = YES;
+  layer.frame = view.bounds;
+  layer.contentsScale = [UIScreen mainScreen].nativeScale;
+  [view.layer addSublayer: layer];
   
+  // Set the Metal Layer to a Frame Buffer
   _frame = new MetalFrameBuffer(_data->device);
-  _frame->_colorAttachments.push_back(nil);
-  _frame->_size.w = (int)size.width;
-  _frame->_size.h = (int)size.height;
+  _frame->setMetalLayer(layer);
   
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
   
@@ -112,9 +105,7 @@ UniformBuffer* MetalGraphics::createUniformBuffer() {
 }
 
 void MetalGraphics::nextFrame() {
-  _data->drawable = [_data->layer nextDrawable];
   _data->buffer   = [_data->queue commandBuffer];
-  _frame->_colorAttachments.at(0) = _data->drawable.texture;
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
@@ -138,10 +129,8 @@ void MetalGraphics::addTask(const GraphicTask &task) {
 }
 
 void MetalGraphics::presentFrame() {
-  _frame->_colorAttachments.at(0) = nil;
-  [_data->buffer presentDrawable:_data->drawable];
-  [_data->buffer commit];
+  _frame->present(_data->buffer);
   
-  _data->drawable = nil;
+  [_data->buffer commit];
   _data->buffer = nil;
 }

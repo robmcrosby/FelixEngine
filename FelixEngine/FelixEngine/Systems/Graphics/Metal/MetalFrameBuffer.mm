@@ -8,7 +8,9 @@
 
 #include "MetalFrameBuffer.h"
 #include "GraphicTask.h"
+
 #include <Metal/Metal.h>
+#include <QuartzCore/CAMetalLayer.h>
 
 using namespace fx;
 using namespace std;
@@ -36,6 +38,8 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 
 
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
+  _metalLayer = nil;
+  _drawable = nil;
   _size = ivec2(0, 0);
 }
 
@@ -58,8 +62,10 @@ bool MetalFrameBuffer::addDepthBuffer() {
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
-  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
+  if (_metalLayer != nil && _drawable == nil)
+    getNextDrawable();
   
+  MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
   int index = 0;
   for (id <MTLTexture> colorAttachment : _colorAttachments) {
     MTLLoadAction loadAction = getMetalLoadAction(task.colorActions[index].loadAction);
@@ -94,4 +100,25 @@ id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer
   }
   
   return [buffer renderCommandEncoderWithDescriptor:descriptor];
+}
+
+void MetalFrameBuffer::setMetalLayer(CAMetalLayer *layer) {
+  _metalLayer = layer;
+  
+  _colorAttachments.push_back(nil);
+  _size.w = (int)(_metalLayer.bounds.size.width * _metalLayer.contentsScale);
+  _size.h = (int)(_metalLayer.bounds.size.height * _metalLayer.contentsScale);
+}
+
+void MetalFrameBuffer::present(id <MTLCommandBuffer> buffer) {
+  if (_metalLayer != nil && _drawable != nil) {
+    [buffer presentDrawable:_drawable];
+    _colorAttachments.at(0) = nil;
+    _drawable = nil;
+  }
+}
+
+void MetalFrameBuffer::getNextDrawable() {
+  _drawable = [_metalLayer nextDrawable];
+  _colorAttachments.at(0) = _drawable.texture;
 }
