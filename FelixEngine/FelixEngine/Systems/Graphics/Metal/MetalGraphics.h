@@ -33,6 +33,7 @@ namespace fx {
     virtual ShaderProgram* createShaderProgram();
     virtual VertexMesh*    createVertexMesh();
     virtual UniformBuffer* createUniformBuffer();
+    virtual TextureBuffer* createTextureBuffer();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);

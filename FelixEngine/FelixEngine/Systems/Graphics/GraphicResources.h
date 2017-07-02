@@ -68,6 +68,12 @@ namespace fx {
       return data;
     }
   };
+  
+  struct TextureBuffer {
+    virtual ~TextureBuffer() {}
+    
+    virtual ivec2 size() const = 0;
+  };
 }
 
 

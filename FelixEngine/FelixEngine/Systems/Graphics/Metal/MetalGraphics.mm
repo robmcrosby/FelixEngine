@@ -20,6 +20,7 @@
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
 #include "MetalUniformBuffer.h"
+#include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
 
 #define MAX_INFLIGHT_FRAMES 3
@@ -111,6 +112,10 @@ UniformBuffer* MetalGraphics::createUniformBuffer() {
   return new MetalUniformBuffer(_data->device);
 }
 
+TextureBuffer* MetalGraphics::createTextureBuffer() {
+  return new MetalTextureBuffer(_data->device);
+}
+
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   _data->buffer = [_data->queue commandBuffer];
@@ -131,6 +136,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   int flags = task.depthStencilState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
+  // Set Culling Mode
   if (task.cullMode == CULL_BACK)
     [encoder setCullMode:MTLCullModeBack];
   else if (task.cullMode == CULL_FRONT)
