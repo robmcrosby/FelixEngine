@@ -17,6 +17,7 @@ namespace fx {
   class VertexMesh;
   class UniformBuffer;
   class GraphicTask;
+  class TextureBuffer;
   
   /** File System */
   class Graphics {
@@ -33,6 +34,7 @@ namespace fx {
     virtual ShaderProgram* createShaderProgram() = 0;
     virtual VertexMesh*    createVertexMesh()    = 0;
     virtual UniformBuffer* createUniformBuffer() = 0;
+    virtual TextureBuffer* createTextureBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;

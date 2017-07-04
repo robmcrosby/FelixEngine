@@ -44,8 +44,7 @@ namespace fx {
   };
   
   
-  enum DEPTH_FLAGS
-  {
+  enum DEPTH_FLAGS {
     DEPTH_ENABLE_MASK     = 0x0f, // 0000 1111
     DEPTH_ENABLE_WRITING  = 0x01, // 0000 0001
     DEPTH_ENABLE_TESTING  = 0x02, // 0000 0010
@@ -62,8 +61,7 @@ namespace fx {
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  struct DepthStencilState
-  {
+  struct DepthStencilState {
     int flags;
     
     DepthStencilState(int flags = 0): flags(flags) {}
@@ -93,6 +91,85 @@ namespace fx {
     bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
     bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
     int  function()  const {return flags & DEPTH_TEST_MASK;}
+  };
+  
+  
+  enum COORD_TYPE
+  {
+    COORD_CLAMP_EDGE  = 0,
+    COORD_REPEAT      = 1,
+    COORD_MIRROR      = 2,
+    COORD_CLAMP_ZERO  = 3,
+  };
+  
+  enum FILTER_TYPE
+  {
+    FILTER_NEAREST = 0,
+    FILTER_LINEAR  = 1,
+  };
+  
+  enum SAMPLER_FLAGS
+  {
+    SAMPLER_SAMPLES_MASK = 0x00ff,
+    SAMPLER_MAX_SAMPLES  = 32,
+    
+    SAMPLER_COORD_S_OFFSET = 8,
+    SAMPLER_COORD_T_OFFSET = 10,
+    SAMPLER_COORD_R_OFFSET = 12,
+    
+    SAMPLER_COORD_S_MASK   = 0x0300,
+    SAMPLER_COORD_T_MASK   = 0x0C00,
+    SAMPLER_COORD_R_MASK   = 0x3000,
+    
+    SAMPLER_FILTER_MIN_OFFSET = 14,
+    SAMPLER_FILTER_MAG_OFFSET = 15,
+    SAMPLER_FILTER_MIP_OFFSET = 16,
+    
+    SAMPLER_FILTER_MIN_MASK = 0x004000,
+    SAMPLER_FILTER_MAG_MASK = 0x008000,
+    SAMPLER_FILTER_MIP_MASK = 0x010000,
+    
+    SAMPLER_MIP_ENABLED   = 0x020000,
+    SAMPLER_UN_NORMALIZED = 0x040000
+  };
+  
+  struct SamplerState {
+    int flags;
+    
+    SamplerState(int flags = 0): flags(flags) {}
+    
+    void setSamples(int samples)
+    {
+      samples = samples < 1 ? 1 : samples > SAMPLER_MAX_SAMPLES ? SAMPLER_MAX_SAMPLES : samples;
+      flags = (flags & ~SAMPLER_SAMPLES_MASK) | ((samples - 1) & SAMPLER_SAMPLES_MASK);
+    }
+    int samples() const {return (flags & ~SAMPLER_SAMPLES_MASK) + 1;}
+    
+    void setSCoord(COORD_TYPE coord) {flags = (flags & ~SAMPLER_COORD_S_MASK) | (coord << SAMPLER_COORD_S_OFFSET);}
+    COORD_TYPE sCoord() const {return (COORD_TYPE)((flags & SAMPLER_COORD_S_MASK) >> SAMPLER_COORD_S_OFFSET);}
+    
+    void setTCoord(COORD_TYPE coord) {flags = (flags & ~SAMPLER_COORD_T_MASK) | (coord << SAMPLER_COORD_T_OFFSET);}
+    COORD_TYPE tCoord() const {return (COORD_TYPE)((flags & SAMPLER_COORD_T_MASK) >> SAMPLER_COORD_T_OFFSET);}
+    
+    void setRCoord(COORD_TYPE coord) {flags = (flags & ~SAMPLER_COORD_R_MASK) | (coord << SAMPLER_COORD_R_OFFSET);}
+    COORD_TYPE rCoord() const {return (COORD_TYPE)((flags & SAMPLER_COORD_R_MASK) >> SAMPLER_COORD_R_OFFSET);}
+    
+    void setMinFilter(FILTER_TYPE filter) {flags = (flags & ~SAMPLER_FILTER_MIN_MASK ) | (filter << SAMPLER_FILTER_MIN_OFFSET);}
+    FILTER_TYPE minFilter() const {return (FILTER_TYPE)((flags & SAMPLER_FILTER_MIN_MASK) >> SAMPLER_FILTER_MIN_OFFSET);}
+    
+    void setMagFilter(FILTER_TYPE filter) {flags = (flags & ~SAMPLER_FILTER_MAG_MASK ) | (filter << SAMPLER_FILTER_MAG_OFFSET);}
+    FILTER_TYPE magFilter() const {return (FILTER_TYPE)((flags & SAMPLER_FILTER_MAG_MASK) >> SAMPLER_FILTER_MAG_OFFSET);}
+    
+    void setMipFilter(FILTER_TYPE filter) {flags = (flags & ~SAMPLER_FILTER_MIP_MASK ) | (filter << SAMPLER_FILTER_MIP_OFFSET);}
+    FILTER_TYPE mipFilter() const {return (FILTER_TYPE)((flags & SAMPLER_FILTER_MIP_MASK) >> SAMPLER_FILTER_MIP_OFFSET);}
+    
+    void enableMipMapping() {flags |= SAMPLER_MIP_ENABLED;}
+    void disableMipMapping() {flags &= ~SAMPLER_MIP_ENABLED;}
+    bool mipMappingEnabled() const {return flags & SAMPLER_MIP_ENABLED;}
+    
+    void setNormalized() {flags &= ~SAMPLER_UN_NORMALIZED;}
+    void setUnNormalized() {flags |= SAMPLER_UN_NORMALIZED;}
+    bool isNormalized() const {return !(flags & SAMPLER_UN_NORMALIZED);}
   };
 }
 

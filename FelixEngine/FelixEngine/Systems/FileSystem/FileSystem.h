@@ -12,6 +12,7 @@
 #include <string>
 #include <sstream>
 #include "VertexMeshData.h"
+#include "ImageBufferData.h"
 
 namespace fx {
   /** File System */
@@ -23,6 +24,7 @@ namespace fx {
     virtual std::string documentsPath() const = 0;
     
     virtual bool loadMeshFile(VertexMeshData &mesh, const std::string &file) const = 0;
+    virtual bool loadImageData(ImageBufferData &image, const std::string &file) const = 0;
     
     virtual bool fileExistsAtPath(const std::string &filePath) const = 0;
     virtual std::string findPathForFile(const std::string &file) const = 0;
@@ -39,6 +41,10 @@ namespace fx {
     
     static bool loadMesh(VertexMeshData &mesh, const std::string &file) {
       return instance != nullptr && instance->loadMeshFile(mesh, file);
+    }
+    
+    static bool loadImage(ImageBufferData &image, const std::string &file) {
+      return instance != nullptr && instance->loadImageData(image, file);
     }
     
     static bool fileExists(const std::string &file) {

@@ -31,6 +31,13 @@
 		C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */; };
 		C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */; };
 		C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D131F05CCED00BE9958 /* UniformMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D4F1F08A07500BE9958 /* MetalTextureBuffer.h */; };
+		C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */; };
+		C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D551F0BE28900BE9958 /* ImageBufferData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1401D5A1F0BE8CB00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */; };
+		C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D5F1F0BEB1600BE9958 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */; };
+		C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -73,6 +80,13 @@
 		C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalDepthStencil.h; path = Systems/Graphics/Metal/MetalDepthStencil.h; sourceTree = "<group>"; };
 		C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalDepthStencil.mm; path = Systems/Graphics/Metal/MetalDepthStencil.mm; sourceTree = "<group>"; };
 		C1401D131F05CCED00BE9958 /* UniformMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UniformMap.h; path = Systems/Graphics/UniformMap.h; sourceTree = "<group>"; };
+		C1401D4F1F08A07500BE9958 /* MetalTextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalTextureBuffer.h; path = Systems/Graphics/Metal/MetalTextureBuffer.h; sourceTree = "<group>"; };
+		C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalTextureBuffer.mm; path = Systems/Graphics/Metal/MetalTextureBuffer.mm; sourceTree = "<group>"; };
+		C1401D551F0BE28900BE9958 /* ImageBufferData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageBufferData.h; path = Systems/Graphics/ImageBufferData.h; sourceTree = "<group>"; };
+		C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C1401D5F1F0BEB1600BE9958 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = Systems/Graphics/TextureMap.h; sourceTree = "<group>"; };
+		C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalTextureSampler.h; path = Systems/Graphics/Metal/MetalTextureSampler.h; sourceTree = "<group>"; };
+		C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalTextureSampler.mm; path = Systems/Graphics/Metal/MetalTextureSampler.mm; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -97,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1401D5A1F0BE8CB00BE9958 /* CoreGraphics.framework in Frameworks */,
 				C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */,
 				C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */,
 				C1136C431EF0E06300BA1322 /* UIKit.framework in Frameworks */,
@@ -119,6 +134,7 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */,
 				C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */,
 				C1443AF01EF347370059BA9D /* Metal.framework */,
 				C1136C421EF0E06300BA1322 /* UIKit.framework */,
@@ -157,7 +173,9 @@
 				C1401C971EF8054200BE9958 /* GraphicStates.h */,
 				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
 				C1401D131F05CCED00BE9958 /* UniformMap.h */,
+				C1401D5F1F0BEB1600BE9958 /* TextureMap.h */,
 				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
+				C1401D551F0BE28900BE9958 /* ImageBufferData.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -178,6 +196,10 @@
 				C1401D071F01E26E00BE9958 /* MetalUniformBuffer.mm */,
 				C1401D0E1F04861200BE9958 /* MetalDepthStencil.h */,
 				C1401D0F1F04861200BE9958 /* MetalDepthStencil.mm */,
+				C1401D4F1F08A07500BE9958 /* MetalTextureBuffer.h */,
+				C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */,
+				C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */,
+				C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */,
 			);
 			name = MetalGraphics;
 			sourceTree = "<group>";
@@ -238,6 +260,7 @@
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
+				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
@@ -250,12 +273,15 @@
 				C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
+				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
 				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
+				C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
+				C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */,
 				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -330,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
+				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
@@ -339,6 +366,7 @@
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
+				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,
 				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

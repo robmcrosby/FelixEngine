@@ -12,8 +12,6 @@
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
 
-#import <QuartzCore/CADisplayLink.h>
-
 @interface ViewController ()
 
 @property HelloTriangle *helloTriApp;

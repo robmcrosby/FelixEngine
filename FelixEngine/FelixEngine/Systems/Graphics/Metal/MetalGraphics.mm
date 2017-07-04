@@ -20,7 +20,9 @@
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
 #include "MetalUniformBuffer.h"
+#include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
+#include "MetalTextureSampler.h"
 
 #define MAX_INFLIGHT_FRAMES 3
 
@@ -31,6 +33,7 @@ namespace fx {
     id <MTLCommandBuffer> buffer;
     
     MetalDepthStencil *depthStencilStates;
+    MetalTextureSampler *samplerStates;
     
     dispatch_semaphore_t frameBoundarySemaphore;
     
@@ -89,6 +92,9 @@ bool MetalGraphics::initalize(UIView *view) {
   // Create an instance of MetalDepthStencil
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
   
+  // Create an instance of MetalTextureSampler
+  _data->samplerStates = [[MetalTextureSampler alloc] initWithDevice:_data->device];
+  
   // setup the Frame Boundry Semaphore
   _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
   
@@ -111,6 +117,10 @@ UniformBuffer* MetalGraphics::createUniformBuffer() {
   return new MetalUniformBuffer(_data->device);
 }
 
+TextureBuffer* MetalGraphics::createTextureBuffer() {
+  return new MetalTextureBuffer(_data->device);
+}
+
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   _data->buffer = [_data->queue commandBuffer];
@@ -130,6 +140,21 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   // Set the Depth/Stencil State
   int flags = task.depthStencilState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
+  
+  // Set Culling Mode
+  if (task.cullMode == CULL_BACK)
+    [encoder setCullMode:MTLCullModeBack];
+  else if (task.cullMode == CULL_FRONT)
+    [encoder setCullMode:MTLCullModeFront];
+  
+  // Set the Textures
+  int index = 0;
+  for (auto texture : task.textures) {
+    id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
+    MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer);
+    mtlTextureBuffer->encode(encoder, sampler, index);
+    ++index;
+  }
   
   // Encode the Vertex Buffers and End Encoding
   mesh->encode(encoder, shader, task.instances);
