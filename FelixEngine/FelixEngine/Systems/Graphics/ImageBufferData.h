@@ -19,6 +19,13 @@ namespace fx {
   struct ImageBufferData {
     ImageBuffer buffer;
     ivec2 size;
+    
+    void resize(int width, int height) {
+      size = ivec2(width, height);
+      buffer.resize(width*height);
+    }
+    
+    void* ptr() {return (void*)&buffer.at(0);}
   };
 }
 

@@ -20,6 +20,7 @@
 		C1401D4C1F08409B00BE9958 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D4B1F08409B00BE9958 /* QuartzCore.framework */; };
 		C1401D4E1F0840A100BE9958 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D4D1F0840A100BE9958 /* Metal.framework */; };
 		C1401D541F0BE23A00BE9958 /* bunnies.png in Resources */ = {isa = PBXBuildFile; fileRef = C1401D531F0BE23A00BE9958 /* bunnies.png */; };
+		C1401D581F0BE8BB00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D571F0BE8BB00BE9958 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		C1401D4B1F08409B00BE9958 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C1401D4D1F0840A100BE9958 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C1401D531F0BE23A00BE9958 /* bunnies.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bunnies.png; sourceTree = "<group>"; };
+		C1401D571F0BE8BB00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1401D581F0BE8BB00BE9958 /* CoreGraphics.framework in Frameworks */,
 				C1401D4C1F08409B00BE9958 /* QuartzCore.framework in Frameworks */,
 				C1401D4E1F0840A100BE9958 /* Metal.framework in Frameworks */,
 				C1401D451F083D7A00BE9958 /* FelixEngine.framework in Frameworks */,
@@ -143,6 +146,7 @@
 		C1401D4A1F08409B00BE9958 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1401D571F0BE8BB00BE9958 /* CoreGraphics.framework */,
 				C1401D4D1F0840A100BE9958 /* Metal.framework */,
 				C1401D4B1F08409B00BE9958 /* QuartzCore.framework */,
 			);

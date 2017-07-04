@@ -41,6 +41,9 @@ void HelloTexture::initalize() {
   _task.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
+  fx::ImageBufferData image;
+  fx::FileSystem::loadImage(image, "bunnies.png");
+  
   fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
   float height = 2.0f * size.h/size.w;

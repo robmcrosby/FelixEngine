@@ -34,6 +34,7 @@
 		C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D4F1F08A07500BE9958 /* MetalTextureBuffer.h */; };
 		C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */; };
 		C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D551F0BE28900BE9958 /* ImageBufferData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1401D5A1F0BE8CB00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -79,6 +80,7 @@
 		C1401D4F1F08A07500BE9958 /* MetalTextureBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalTextureBuffer.h; path = Systems/Graphics/Metal/MetalTextureBuffer.h; sourceTree = "<group>"; };
 		C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalTextureBuffer.mm; path = Systems/Graphics/Metal/MetalTextureBuffer.mm; sourceTree = "<group>"; };
 		C1401D551F0BE28900BE9958 /* ImageBufferData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageBufferData.h; path = Systems/Graphics/ImageBufferData.h; sourceTree = "<group>"; };
+		C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1401D5A1F0BE8CB00BE9958 /* CoreGraphics.framework in Frameworks */,
 				C1443AF61EF34B7F0059BA9D /* QuartzCore.framework in Frameworks */,
 				C1443AF11EF347370059BA9D /* Metal.framework in Frameworks */,
 				C1136C431EF0E06300BA1322 /* UIKit.framework in Frameworks */,
@@ -125,6 +128,7 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */,
 				C1443AF51EF34B7F0059BA9D /* QuartzCore.framework */,
 				C1443AF01EF347370059BA9D /* Metal.framework */,
 				C1136C421EF0E06300BA1322 /* UIKit.framework */,
