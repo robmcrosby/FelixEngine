@@ -11,6 +11,7 @@
 @protocol MTLDevice;
 @protocol MTLBuffer;
 @protocol MTLRenderCommandEncoder;
+@protocol MTLSamplerState;
 
 
 namespace fx {
@@ -24,5 +25,7 @@ namespace fx {
     
     virtual bool load(const ImageBufferData &data);
     virtual ivec2 size() const;
+    
+    void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
   };
 }

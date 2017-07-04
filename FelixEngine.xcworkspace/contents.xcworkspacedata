@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Projects/HelloTexture/HelloTexture.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Projects/Hello3D/Hello3D.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Projects/HelloTriangle/HelloTriangle.xcodeproj">
    </FileRef>
    <FileRef

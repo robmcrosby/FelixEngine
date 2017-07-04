@@ -28,3 +28,7 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
 ivec2 MetalTextureBuffer::size() const {
   return ivec2();
 }
+
+void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index) {
+  
+}
