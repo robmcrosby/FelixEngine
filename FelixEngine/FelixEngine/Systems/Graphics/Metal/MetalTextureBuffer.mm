@@ -26,8 +26,11 @@ MetalTextureBuffer::~MetalTextureBuffer() {
 bool MetalTextureBuffer::load(const ImageBufferData &data) {
   _width = data.size.w;
   _height = data.size.h;
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:_width height:_height mipmapped:NO];
-  [descriptor setUsage:MTLTextureUsageShaderRead];
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+                                                                                        width:_width
+                                                                                       height:_height
+                                                                                    mipmapped:NO];
+  //[descriptor setUsage:MTLTextureUsageShaderRead];
   
   _texture = [_device newTextureWithDescriptor:descriptor];
   if (_texture != nil) {
@@ -45,6 +48,6 @@ ivec2 MetalTextureBuffer::size() const {
 }
 
 void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index) {
-  //[encoder setFragmentTexture:nil atIndex:index];
-  //[encoder setFragmentSamplerState:sampler atIndex:index];
+  [encoder setFragmentTexture:_texture atIndex:index];
+  [encoder setFragmentSamplerState:sampler atIndex:index];
 }

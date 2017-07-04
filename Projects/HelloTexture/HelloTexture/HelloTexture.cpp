@@ -42,7 +42,7 @@ void HelloTexture::initalize() {
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
   fx::ImageBufferData image;
-  fx::FileSystem::loadImage(image, "bunnies.png");
+  fx::FileSystem::loadImage(image, "test.png");
   _task.textures.addTexture(image);
   
   fx::vec2 size = fx::vec2(_task.frame->size());

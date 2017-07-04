@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C11B29181F0C07150042D306 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = C11B29171F0C07150042D306 /* test.png */; };
 		C1401D251F083C9700BE9958 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401D241F083C9700BE9958 /* main.m */; };
 		C1401D281F083C9700BE9958 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401D271F083C9700BE9958 /* AppDelegate.m */; };
 		C1401D2B1F083C9700BE9958 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D2A1F083C9700BE9958 /* ViewController.mm */; };
@@ -54,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C11B29171F0C07150042D306 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test.png; sourceTree = "<group>"; };
 		C1401D201F083C9600BE9958 /* HelloTexture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloTexture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1401D241F083C9700BE9958 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C1401D261F083C9700BE9958 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 		C1401D221F083C9600BE9958 /* HelloTexture */ = {
 			isa = PBXGroup;
 			children = (
+				C11B29171F0C07150042D306 /* test.png */,
 				C1401D531F0BE23A00BE9958 /* bunnies.png */,
 				C1401D261F083C9700BE9958 /* AppDelegate.h */,
 				C1401D271F083C9700BE9958 /* AppDelegate.m */,
@@ -231,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1401D331F083C9700BE9958 /* LaunchScreen.storyboard in Resources */,
+				C11B29181F0C07150042D306 /* test.png in Resources */,
 				C1401D301F083C9700BE9958 /* Assets.xcassets in Resources */,
 				C1401D541F0BE23A00BE9958 /* bunnies.png in Resources */,
 				C1401D2E1F083C9700BE9958 /* Main.storyboard in Resources */,
@@ -419,6 +423,7 @@
 				C1401D391F083C9700BE9958 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

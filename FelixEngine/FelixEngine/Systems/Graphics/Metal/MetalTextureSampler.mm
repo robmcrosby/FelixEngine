@@ -40,6 +40,7 @@ using namespace fx;
     
     descriptor.minFilter = state.minFilter() == FILTER_LINEAR ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
     descriptor.magFilter = state.magFilter() == FILTER_LINEAR ? MTLSamplerMinMagFilterLinear : MTLSamplerMinMagFilterNearest;
+    descriptor.normalizedCoordinates = YES;
     
     samplerState = [self.device newSamplerStateWithDescriptor:descriptor];
     [self.samplerStates setObject:samplerState forKey:key];

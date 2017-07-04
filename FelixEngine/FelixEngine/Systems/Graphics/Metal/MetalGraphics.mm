@@ -92,6 +92,9 @@ bool MetalGraphics::initalize(UIView *view) {
   // Create an instance of MetalDepthStencil
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
   
+  // Create an instance of MetalTextureSampler
+  _data->samplerStates = [[MetalTextureSampler alloc] initWithDevice:_data->device];
+  
   // setup the Frame Boundry Semaphore
   _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
   
@@ -145,7 +148,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
     [encoder setCullMode:MTLCullModeFront];
   
   // Set the Textures
-  NSUInteger index = 0;
+  int index = 0;
   for (auto texture : task.textures) {
     id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
     MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer);
