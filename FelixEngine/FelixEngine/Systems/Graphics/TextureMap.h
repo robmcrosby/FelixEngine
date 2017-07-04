@@ -42,6 +42,11 @@ namespace fx {
       _textures.push_back(texture);
       return loaded;
     }
+    
+    void addTexture(TextureBuffer *buffer, SamplerState sampler = SamplerState()) {
+      Texture texture = Texture(buffer, sampler);
+      _textures.push_back(texture);
+    }
   };
 }
 

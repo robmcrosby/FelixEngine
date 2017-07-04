@@ -23,6 +23,7 @@ namespace fx {
  
   public:
     MetalTextureBuffer(id <MTLDevice> device);
+    MetalTextureBuffer(id <MTLDevice> device, id <MTLTexture> texture);
     virtual ~MetalTextureBuffer();
     
     virtual bool load(const ImageBufferData &data);

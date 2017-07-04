@@ -78,10 +78,10 @@ void HelloFBO::setupSecondTask() {
   };
   
   float uvBuffer[] = {
-    0.0f, 0.0f,
     0.0f, 1.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
   };
   
   _secondTask.frame = _graphics->getMainWindowBuffer();
@@ -94,10 +94,10 @@ void HelloFBO::setupSecondTask() {
   _secondTask.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
   _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
-  fx::ImageBufferData image;
-  fx::FileSystem::loadImage(image, "test.png");
-  _secondTask.textures.addTexture(image);
-  //_secondTask.textures.addTexture(_firstTask.frame->getColorTexture(0));
+  //fx::ImageBufferData image;
+  //fx::FileSystem::loadImage(image, "test.png");
+  //_secondTask.textures.addTexture(image);
+  _secondTask.textures.addTexture(_firstTask.frame->getColorTexture(0));
   
   fx::vec2 size = fx::vec2(_secondTask.frame->size());
   float width = 2.0f;

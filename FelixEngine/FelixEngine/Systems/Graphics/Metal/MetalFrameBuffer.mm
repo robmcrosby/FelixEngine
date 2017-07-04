@@ -76,13 +76,12 @@ bool MetalFrameBuffer::addColorTexture() {
                                                                                         width:(NSUInteger)_size.w
                                                                                        height:(NSUInteger)_size.h
                                                                                     mipmapped:NO];
-  [descriptor setUsage:MTLTextureUsageRenderTarget];
   _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
   return _colorAttachments.back() != nil;
 }
 
 TextureBuffer* MetalFrameBuffer::getColorTexture(int index) {
-  return nullptr; //_colorAttachments.at(0);
+  return new MetalTextureBuffer(_device, _colorAttachments.at(index));
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {

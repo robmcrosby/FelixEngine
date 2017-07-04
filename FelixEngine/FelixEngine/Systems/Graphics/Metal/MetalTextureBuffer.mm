@@ -19,6 +19,11 @@ MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device): _device(device), 
   _height = 0;
 }
 
+MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device, id <MTLTexture> texture): _device(device), _texture(texture) {
+  _width = (int)_texture.width;
+  _height = (int)_texture.height;
+}
+
 MetalTextureBuffer::~MetalTextureBuffer() {
   
 }
