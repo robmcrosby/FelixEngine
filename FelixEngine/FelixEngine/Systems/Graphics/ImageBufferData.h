@@ -26,6 +26,7 @@ namespace fx {
     }
     
     void* ptr() {return (void*)&buffer.at(0);}
+    const void* ptr() const {return (void*)&buffer.at(0);}
   };
 }
 

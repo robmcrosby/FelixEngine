@@ -9,7 +9,7 @@
 #include "GraphicResources.h"
 
 @protocol MTLDevice;
-@protocol MTLBuffer;
+@protocol MTLTexture;
 @protocol MTLRenderCommandEncoder;
 @protocol MTLSamplerState;
 
@@ -18,6 +18,8 @@ namespace fx {
   class MetalTextureBuffer: public TextureBuffer {
   public:
     id <MTLDevice> _device;
+    id <MTLTexture> _texture;
+    int _width, _height;
  
   public:
     MetalTextureBuffer(id <MTLDevice> device);
