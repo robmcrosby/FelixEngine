@@ -22,6 +22,7 @@
 #include "MetalUniformBuffer.h"
 #include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
+#include "MetalTextureSampler.h"
 
 #define MAX_INFLIGHT_FRAMES 3
 
@@ -32,6 +33,7 @@ namespace fx {
     id <MTLCommandBuffer> buffer;
     
     MetalDepthStencil *depthStencilStates;
+    MetalTextureSampler *samplerStates;
     
     dispatch_semaphore_t frameBoundarySemaphore;
     
