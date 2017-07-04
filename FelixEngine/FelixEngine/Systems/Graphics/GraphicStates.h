@@ -44,8 +44,7 @@ namespace fx {
   };
   
   
-  enum DEPTH_FLAGS
-  {
+  enum DEPTH_FLAGS {
     DEPTH_ENABLE_MASK     = 0x0f, // 0000 1111
     DEPTH_ENABLE_WRITING  = 0x01, // 0000 0001
     DEPTH_ENABLE_TESTING  = 0x02, // 0000 0010
@@ -62,8 +61,7 @@ namespace fx {
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  struct DepthStencilState
-  {
+  struct DepthStencilState {
     int flags;
     
     DepthStencilState(int flags = 0): flags(flags) {}
@@ -93,6 +91,39 @@ namespace fx {
     bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
     bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
     int  function()  const {return flags & DEPTH_TEST_MASK;}
+  };
+  
+  
+  enum FILTER_TYPE {
+    FILTER_NEAREST,
+    FILTER_LINEAR,
+  };
+  
+  enum SAMPLER_FLAGS {
+    SAMPLER_MIN_LINEAR =     0x01,
+    SAMPLER_MAG_LINEAR =     0x02,
+    SAMPLER_MIPMAP_NEAREST = 0x04,
+    SAMPLER_MIPMAP_LINEAR =  0x08,
+  };
+  
+  struct SamplerState {
+    int flags;
+    
+    SamplerState(int flags = 0): flags(flags) {}
+    
+    void setMinFilter(FILTER_TYPE type) {
+      flags = (type == FILTER_NEAREST) ? flags & ~SAMPLER_MIN_LINEAR : flags | SAMPLER_MIN_LINEAR;
+    }
+    FILTER_TYPE minFilter() const {
+      return (flags & SAMPLER_MIN_LINEAR) ? FILTER_LINEAR : FILTER_NEAREST;
+    }
+    
+    void setMagFilter(FILTER_TYPE type) {
+      flags = (type == FILTER_NEAREST) ? flags & ~SAMPLER_MAG_LINEAR : flags | SAMPLER_MAG_LINEAR;
+    }
+    FILTER_TYPE magFilter() const {
+      return (flags & SAMPLER_MAG_LINEAR) ? FILTER_LINEAR : FILTER_NEAREST;
+    }
   };
 }
 
