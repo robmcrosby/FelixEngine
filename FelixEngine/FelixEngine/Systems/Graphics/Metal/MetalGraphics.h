@@ -30,6 +30,7 @@ namespace fx {
     bool initalize(UIView *view);
     
     virtual FrameBuffer*   getMainWindowBuffer();
+    virtual FrameBuffer*   createFrameBuffer();
     virtual ShaderProgram* createShaderProgram();
     virtual VertexMesh*    createVertexMesh();
     virtual UniformBuffer* createUniformBuffer();

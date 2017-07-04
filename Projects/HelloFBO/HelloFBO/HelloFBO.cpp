@@ -37,7 +37,10 @@ void HelloFBO::render() {
 }
 
 void HelloFBO::setupFirstTask() {
-  _firstTask.frame = _graphics->getMainWindowBuffer();
+  _firstTask.frame = _graphics->createFrameBuffer();
+  _firstTask.frame->resize(1024, 1024);
+  _firstTask.frame->addColorTexture();
+  _firstTask.frame->addDepthBuffer();
   
   _firstTask.shader = _graphics->createShaderProgram();
   _firstTask.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
@@ -94,6 +97,7 @@ void HelloFBO::setupSecondTask() {
   fx::ImageBufferData image;
   fx::FileSystem::loadImage(image, "test.png");
   _secondTask.textures.addTexture(image);
+  //_secondTask.textures.addTexture(_firstTask.frame->getColorTexture(0));
   
   fx::vec2 size = fx::vec2(_secondTask.frame->size());
   float width = 2.0f;
@@ -104,5 +108,5 @@ void HelloFBO::setupSecondTask() {
   
   _secondTask.uniforms["MVP"] = _secondUniform;
   
-  //_secondTask.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _secondTask.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }

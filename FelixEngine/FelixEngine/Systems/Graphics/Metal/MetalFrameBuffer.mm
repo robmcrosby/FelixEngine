@@ -7,6 +7,7 @@
 //
 
 #include "MetalFrameBuffer.h"
+#include "MetalTextureBuffer.h"
 #include "GraphicTask.h"
 
 #include <Metal/Metal.h>
@@ -47,18 +48,41 @@ MetalFrameBuffer::~MetalFrameBuffer() {
   
 }
 
+bool MetalFrameBuffer::resize(int width, int height) {
+  if (_metalLayer == nil && (width != _size.w || height != _size.h)) {
+    _size = ivec2(width, height);
+    
+    // TODO: Add Resizing of existing buffers
+  }
+  return true;
+}
+
 ivec2 MetalFrameBuffer::size() const {
   return _size;
 }
 
 bool MetalFrameBuffer::addDepthBuffer() {
-  MTLTextureDescriptor *descriptor = [[MTLTextureDescriptor alloc] init];
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor new];
   descriptor.width = (NSUInteger)_size.w;
   descriptor.height = (NSUInteger)_size.h;
   descriptor.pixelFormat = MTLPixelFormatDepth32Float;
   
   _depthAttachment = [_device newTextureWithDescriptor:descriptor];
   return _depthAttachment != nil;
+}
+
+bool MetalFrameBuffer::addColorTexture() {
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+                                                                                        width:(NSUInteger)_size.w
+                                                                                       height:(NSUInteger)_size.h
+                                                                                    mipmapped:NO];
+  [descriptor setUsage:MTLTextureUsageRenderTarget];
+  _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
+  return _colorAttachments.back() != nil;
+}
+
+TextureBuffer* MetalFrameBuffer::getColorTexture(int index) {
+  return nullptr; //_colorAttachments.at(0);
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
