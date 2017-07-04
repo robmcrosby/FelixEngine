@@ -30,7 +30,7 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
                                                                                         width:_width
                                                                                        height:_height
                                                                                     mipmapped:NO];
-  //[descriptor setUsage:MTLTextureUsageShaderRead];
+  [descriptor setUsage:MTLTextureUsageShaderRead];
   
   _texture = [_device newTextureWithDescriptor:descriptor];
   if (_texture != nil) {
