@@ -21,6 +21,7 @@
 		C1401CF51EFBF71B00BE9958 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1401CF41EFBF71B00BE9958 /* Shaders.metal */; };
 		C1401D001F000BA500BE9958 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFE1F000BA500BE9958 /* bunny.mesh */; };
 		C1401D011F000BA500BE9958 /* cube.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1401CFF1F000BA500BE9958 /* cube.mesh */; };
+		C1401D5C1F0BE9FD00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D5B1F0BE9FD00BE9958 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		C1401CF41EFBF71B00BE9958 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C1401CFE1F000BA500BE9958 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
 		C1401CFF1F000BA500BE9958 /* cube.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.mesh; sourceTree = "<group>"; };
+		C1401D5B1F0BE9FD00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1401D5C1F0BE9FD00BE9958 /* CoreGraphics.framework in Frameworks */,
 				C1401CEE1EFBF5F000BE9958 /* FelixEngine.framework in Frameworks */,
 				C1401CED1EFBF5EB00BE9958 /* Metal.framework in Frameworks */,
 				C1401CEB1EFBF5E500BE9958 /* QuartzCore.framework in Frameworks */,
@@ -146,6 +149,7 @@
 		C1401CE91EFBF5E500BE9958 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1401D5B1F0BE9FD00BE9958 /* CoreGraphics.framework */,
 				C1401CEC1EFBF5EB00BE9958 /* Metal.framework */,
 				C1401CEA1EFBF5E500BE9958 /* QuartzCore.framework */,
 			);
@@ -421,6 +425,7 @@
 				C1401CE01EFBF56B00BE9958 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

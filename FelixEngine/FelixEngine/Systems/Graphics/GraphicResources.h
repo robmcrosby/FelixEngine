@@ -16,6 +16,7 @@
 
 namespace fx {
   class VertexMeshData;
+  class ImageBufferData;
   
   enum SHADER_PART {
     SHADER_VERTEX,
@@ -72,6 +73,7 @@ namespace fx {
   struct TextureBuffer {
     virtual ~TextureBuffer() {}
     
+    virtual bool load(const ImageBufferData &data) = 0;
     virtual ivec2 size() const = 0;
   };
 }

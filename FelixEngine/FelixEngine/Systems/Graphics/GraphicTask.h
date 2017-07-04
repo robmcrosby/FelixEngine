@@ -13,6 +13,7 @@
 #include "GraphicResources.h"
 #include "GraphicStates.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
 
 
 namespace fx {
@@ -27,6 +28,7 @@ namespace fx {
     ActionState depthStencilAction;
     
     UniformMap uniforms;
+    TextureMap textures;
     
     CULL_MODE cullMode;
     DepthStencilState depthStencilState;

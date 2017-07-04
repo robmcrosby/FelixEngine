@@ -21,6 +21,10 @@ MetalTextureBuffer::~MetalTextureBuffer() {
   
 }
 
+bool MetalTextureBuffer::load(const ImageBufferData &data) {
+  return false;
+}
+
 ivec2 MetalTextureBuffer::size() const {
   return ivec2();
 }

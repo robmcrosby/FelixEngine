@@ -22,6 +22,7 @@ namespace fx {
     MetalTextureBuffer(id <MTLDevice> device);
     virtual ~MetalTextureBuffer();
     
+    virtual bool load(const ImageBufferData &data);
     virtual ivec2 size() const;
   };
 }

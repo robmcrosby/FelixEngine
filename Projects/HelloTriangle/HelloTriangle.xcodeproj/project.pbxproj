@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C1136C471EF1FC9E00BA1322 /* HelloTriangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */; };
+		C1401D5E1F0BEA0C00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D5D1F0BEA0C00BE9958 /* CoreGraphics.framework */; };
 		C1443AF41EF347430059BA9D /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF31EF347430059BA9D /* Metal.framework */; };
 		C1443AF81EF34B8E0059BA9D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1443AF71EF34B8E0059BA9D /* QuartzCore.framework */; };
 		C1443B0C1EF5A0940059BA9D /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1443B0B1EF5A0940059BA9D /* Shaders.metal */; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		C1136C451EF1FC9E00BA1322 /* HelloTriangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloTriangle.cpp; sourceTree = "<group>"; };
 		C1136C461EF1FC9E00BA1322 /* HelloTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloTriangle.h; sourceTree = "<group>"; };
+		C1401D5D1F0BEA0C00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C1443AF31EF347430059BA9D /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C1443AF71EF34B8E0059BA9D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C1443B0B1EF5A0940059BA9D /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1401D5E1F0BEA0C00BE9958 /* CoreGraphics.framework in Frameworks */,
 				C1443AF81EF34B8E0059BA9D /* QuartzCore.framework in Frameworks */,
 				C1443AF41EF347430059BA9D /* Metal.framework in Frameworks */,
 				C17DCCE11EEDFF91007D1D3D /* FelixEngine.framework in Frameworks */,
@@ -87,6 +90,7 @@
 		C1443AF21EF347430059BA9D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1401D5D1F0BEA0C00BE9958 /* CoreGraphics.framework */,
 				C1443AF71EF34B8E0059BA9D /* QuartzCore.framework */,
 				C1443AF31EF347430059BA9D /* Metal.framework */,
 			);

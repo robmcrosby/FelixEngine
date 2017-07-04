@@ -43,6 +43,7 @@ void HelloTexture::initalize() {
   
   fx::ImageBufferData image;
   fx::FileSystem::loadImage(image, "bunnies.png");
+  _task.textures.addTexture(image);
   
   fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
