@@ -26,6 +26,10 @@ namespace fx {
     virtual void update();
     virtual void render();
     
+    virtual void willEnterBackground();
+    virtual void willEnterForeground();
+    virtual void willTerminate();
+    
     void processFrame();
     
     FileSystem& fileSystem() const {return *_fileSystem;}

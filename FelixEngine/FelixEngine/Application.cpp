@@ -35,6 +35,18 @@ void Application::render() {
   
 }
 
+void Application::willEnterBackground() {
+  
+}
+
+void Application::willEnterForeground() {
+  
+}
+
+void Application::willTerminate() {
+  
+}
+
 void Application::processFrame() {
   if (_graphics != nullptr) {
     _graphics->nextFrame();

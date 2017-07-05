@@ -24,6 +24,10 @@
   
   self.application = nullptr;
   self.displayLink = nil;
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,7 +38,7 @@
   return YES;
 }
 
--(void)setApplication:(void*)app {
+- (void)setApplication:(void*)app {
   self.cppApplication = (fx::Application*)app;
 }
 
@@ -48,5 +52,24 @@
     self.cppApplication->processFrame();
   }
 }
+
+- (void)appWillResignActive:(NSNotification*)note {
+  [self.displayLink setPaused:YES];
+  self.cppApplication->willEnterBackground();
+}
+
+- (void)appWillEnterForeground:(NSNotification*)note {
+  self.cppApplication->willEnterForeground();
+  [self.displayLink setPaused:NO];
+}
+
+- (void)appWillTerminate:(NSNotification*)note {
+  self.cppApplication->willTerminate();
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+  
+}
+
 
 @end
