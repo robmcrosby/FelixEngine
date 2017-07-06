@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10D82621F0E6B8B0005629F /* Scene.cpp */; };
+		C10D82651F0E6B8B0005629F /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D82631F0E6B8B0005629F /* Scene.h */; };
+		C10D82681F0E6C6D0005629F /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10D82661F0E6C6D0005629F /* Object.cpp */; };
+		C10D82691F0E6C6D0005629F /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D82671F0E6C6D0005629F /* Object.h */; };
 		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* iOSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */; };
@@ -56,6 +60,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C10D82621F0E6B8B0005629F /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		C10D82631F0E6B8B0005629F /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		C10D82661F0E6C6D0005629F /* Object.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
+		C10D82671F0E6C6D0005629F /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		C1136C371EF0BCC600BA1322 /* iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSViewController.h; path = iOS/iOSViewController.h; sourceTree = "<group>"; };
@@ -122,6 +130,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C10D82611F0E6B610005629F /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				C10D82631F0E6B8B0005629F /* Scene.h */,
+				C10D82621F0E6B8B0005629F /* Scene.cpp */,
+				C10D82671F0E6C6D0005629F /* Object.h */,
+				C10D82661F0E6C6D0005629F /* Object.cpp */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 		C1136C361EF0BC6500BA1322 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,6 +260,7 @@
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C1136C331EF0BB6E00BA1322 /* Application.h */,
 				C1136C321EF0BB6E00BA1322 /* Application.cpp */,
+				C10D82611F0E6B610005629F /* Scene */,
 				C1443AE91EF344830059BA9D /* Utilities */,
 				C1136C481EF2223C00BA1322 /* Systems */,
 				C1136C361EF0BC6500BA1322 /* iOS */,
@@ -258,6 +278,7 @@
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
+				C10D82691F0E6C6D0005629F /* Object.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
@@ -277,6 +298,7 @@
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
 				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
+				C10D82651F0E6B8B0005629F /* Scene.h in Headers */,
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
 				C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
@@ -363,6 +385,8 @@
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
+				C10D82681F0E6C6D0005629F /* Object.cpp in Sources */,
+				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
