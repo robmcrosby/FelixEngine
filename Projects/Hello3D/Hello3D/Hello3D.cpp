@@ -19,6 +19,7 @@ Hello3D::~Hello3D() {
 
 void Hello3D::initalize() {
   _task.frame = _graphics->getMainWindowBuffer();
+  _task.frame->addDepthBuffer();
   
   _task.shader = _graphics->createShaderProgram();
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");

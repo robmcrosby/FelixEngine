@@ -25,10 +25,10 @@ void HelloTexture::initalize() {
   };
   
   float uvBuffer[] = {
-    0.0f, 0.0f,
     0.0f, 1.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
   };
   
   _task.frame = _graphics->getMainWindowBuffer();

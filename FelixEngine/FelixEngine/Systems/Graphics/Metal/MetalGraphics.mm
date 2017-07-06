@@ -105,6 +105,10 @@ FrameBuffer* MetalGraphics::getMainWindowBuffer() {
   return _frame;
 }
 
+FrameBuffer* MetalGraphics::createFrameBuffer() {
+  return new MetalFrameBuffer(_data->device);
+}
+
 ShaderProgram* MetalGraphics::createShaderProgram() {
   return new MetalShaderProgram(_data->device);
 }

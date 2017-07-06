@@ -31,6 +31,7 @@ namespace fx {
     virtual ~Graphics() {}
     
     virtual FrameBuffer*   getMainWindowBuffer() = 0;
+    virtual FrameBuffer*   createFrameBuffer()   = 0;
     virtual ShaderProgram* createShaderProgram() = 0;
     virtual VertexMesh*    createVertexMesh()    = 0;
     virtual UniformBuffer* createUniformBuffer() = 0;

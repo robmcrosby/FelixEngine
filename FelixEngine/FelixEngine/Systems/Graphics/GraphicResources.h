@@ -29,13 +29,6 @@ namespace fx {
     VERTEX_TRIANGLE_STRIP,
   };
   
-  struct FrameBuffer {
-    virtual ~FrameBuffer() {}
-    
-    virtual ivec2 size() const = 0;
-    virtual bool addDepthBuffer() = 0;
-  };
-  
   struct ShaderProgram {
     virtual ~ShaderProgram() {}
     
@@ -75,6 +68,18 @@ namespace fx {
     
     virtual bool load(const ImageBufferData &data) = 0;
     virtual ivec2 size() const = 0;
+  };
+  
+  struct FrameBuffer {
+    virtual ~FrameBuffer() {}
+    
+    virtual bool resize(int width, int height) = 0;
+    virtual ivec2 size() const = 0;
+    
+    virtual bool addDepthBuffer() = 0;
+    virtual bool addColorTexture() = 0;
+    
+    virtual TextureBuffer* getColorTexture(int index) = 0;
   };
 }
 

@@ -40,8 +40,13 @@ namespace fx {
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
     
+    virtual bool resize(int width, int height);
     virtual ivec2 size() const;
+    
     virtual bool addDepthBuffer();
+    virtual bool addColorTexture();
+    
+    virtual TextureBuffer* getColorTexture(int index);
     
     void setMetalLayer(CAMetalLayer *layer);
     void present(id <MTLCommandBuffer> buffer);
@@ -49,6 +54,7 @@ namespace fx {
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
     
   private:
+    id <MTLTexture> resizeTexture(id <MTLTexture> texture, ivec2 size);
     void getNextDrawable();
   };
 }

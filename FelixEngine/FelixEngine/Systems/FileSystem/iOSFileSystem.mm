@@ -71,8 +71,8 @@ bool iOSFileSystem::loadImageData(ImageBufferData &image, const string &file) co
     CGColorSpaceRelease(colorSpace);
     
     // Flip the image
-    CGContextTranslateCTM(context, 0, height);
-    CGContextScaleCTM(context, 1, -1);
+    //CGContextTranslateCTM(context, 0, height);
+    //CGContextScaleCTM(context, 1, -1);
     
     // Draw the image to the Image Buffer
     CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
