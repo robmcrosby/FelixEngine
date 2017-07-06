@@ -11,6 +11,7 @@
 #include "GraphicTask.h"
 
 #include <Metal/Metal.h>
+#include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
 
 using namespace fx;
@@ -41,7 +42,9 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
   _metalLayer = nil;
   _drawable = nil;
-  _size = ivec2(0, 0);
+  
+  CGSize size = [[UIScreen mainScreen] nativeBounds].size;
+  _size = ivec2((int)size.width, (int)size.height);
 }
 
 MetalFrameBuffer::~MetalFrameBuffer() {
@@ -49,12 +52,39 @@ MetalFrameBuffer::~MetalFrameBuffer() {
 }
 
 bool MetalFrameBuffer::resize(int width, int height) {
+  bool success = true;
+  
   if (_metalLayer == nil && (width != _size.w || height != _size.h)) {
     _size = ivec2(width, height);
     
-    // TODO: Add Resizing of existing buffers
+    // Resize the Color Attachments
+    for (auto attachment : _colorAttachments) {
+      attachment = resizeTexture(attachment, _size);
+      success &= attachment != nil;
+    }
+    
+    // Resize the Depth Atacment
+    if (_depthAttachment != nil) {
+      _depthAttachment = resizeTexture(_depthAttachment, _size);
+      success &= _depthAttachment != nil;
+    }
+    
+    // Resize the Stencil Atacment
+    if (_stencilAttachment != nil) {
+      _stencilAttachment = resizeTexture(_stencilAttachment, _size);
+      success &= _stencilAttachment != nil;
+    }
   }
-  return true;
+  return success;
+}
+
+id <MTLTexture> MetalFrameBuffer::resizeTexture(id <MTLTexture> texture, ivec2 size) {
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:texture.pixelFormat
+                                                                                        width:size.w
+                                                                                       height:size.h
+                                                                                    mipmapped:NO];
+  descriptor.usage = texture.usage;
+  return [_device newTextureWithDescriptor:descriptor];
 }
 
 ivec2 MetalFrameBuffer::size() const {
@@ -62,10 +92,10 @@ ivec2 MetalFrameBuffer::size() const {
 }
 
 bool MetalFrameBuffer::addDepthBuffer() {
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor new];
-  descriptor.width = (NSUInteger)_size.w;
-  descriptor.height = (NSUInteger)_size.h;
-  descriptor.pixelFormat = MTLPixelFormatDepth32Float;
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
+                                                                                        width:(NSUInteger)_size.w
+                                                                                       height:(NSUInteger)_size.h
+                                                                                    mipmapped:NO];
   descriptor.usage = MTLTextureUsageRenderTarget;
   
   _depthAttachment = [_device newTextureWithDescriptor:descriptor];

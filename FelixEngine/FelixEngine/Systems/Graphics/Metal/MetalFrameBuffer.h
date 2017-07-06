@@ -54,6 +54,7 @@ namespace fx {
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
     
   private:
+    id <MTLTexture> resizeTexture(id <MTLTexture> texture, ivec2 size);
     void getNextDrawable();
   };
 }
