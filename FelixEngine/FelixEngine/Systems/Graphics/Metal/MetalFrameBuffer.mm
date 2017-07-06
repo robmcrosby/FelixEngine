@@ -66,6 +66,7 @@ bool MetalFrameBuffer::addDepthBuffer() {
   descriptor.width = (NSUInteger)_size.w;
   descriptor.height = (NSUInteger)_size.h;
   descriptor.pixelFormat = MTLPixelFormatDepth32Float;
+  descriptor.usage = MTLTextureUsageRenderTarget;
   
   _depthAttachment = [_device newTextureWithDescriptor:descriptor];
   return _depthAttachment != nil;
@@ -76,6 +77,7 @@ bool MetalFrameBuffer::addColorTexture() {
                                                                                         width:(NSUInteger)_size.w
                                                                                        height:(NSUInteger)_size.h
                                                                                     mipmapped:NO];
+  descriptor.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
   _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
   return _colorAttachments.back() != nil;
 }
