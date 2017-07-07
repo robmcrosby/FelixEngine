@@ -12,10 +12,14 @@
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/Model.h>
+#import <FelixEngine/Camera.h>
 
 class ExampleScene: public fx::Application {
   private:
   fx::GraphicTask _task;
+  fx::Model  _model;
+  fx::Camera _camera;
   
   public:
   ExampleScene();

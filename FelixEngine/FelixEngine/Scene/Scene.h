@@ -12,6 +12,10 @@
 #include <stdio.h>
 
 namespace fx {
+  class Model;
+  class Material;
+  class Light;
+  class Camera;
   
   class Scene {
   public:
