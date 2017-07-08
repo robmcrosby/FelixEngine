@@ -38,7 +38,8 @@ void Hello3D::initalize() {
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
-  _task.uniforms["MVP"] = _mvpUniform;
+  _uniformMap["MVP"] = _mvpUniform;
+  _task.uniforms = &_uniformMap;
   
   _task.cullMode = fx::CULL_BACK;
   
@@ -54,7 +55,7 @@ void Hello3D::update() {
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   // Update the Model Uniforms
-  _task.uniforms.update();
+  _uniformMap.update();
 }
 
 void Hello3D::render() {

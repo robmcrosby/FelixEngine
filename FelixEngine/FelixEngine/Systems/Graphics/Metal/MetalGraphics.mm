@@ -152,12 +152,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
     [encoder setCullMode:MTLCullModeFront];
   
   // Set the Textures
-  int index = 0;
-  for (auto texture : task.textures) {
-    id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
-    MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer);
-    mtlTextureBuffer->encode(encoder, sampler, index);
-    ++index;
+  if (task.textures != nullptr) {
+    int index = 0;
+    for (auto texture : *task.textures) {
+      id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
+      MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer);
+      mtlTextureBuffer->encode(encoder, sampler, index);
+      ++index;
+    }
   }
   
   // Encode the Vertex Buffers and End Encoding

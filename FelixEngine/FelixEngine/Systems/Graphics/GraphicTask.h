@@ -22,13 +22,13 @@ namespace fx {
     ShaderProgram *shader;
     VertexMesh    *mesh;
     
+    UniformMap *uniforms;
+    TextureMap *textures;
+    
     int instances;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
     ActionState depthStencilAction;
-    
-    UniformMap uniforms;
-    TextureMap textures;
     
     CULL_MODE cullMode;
     DepthStencilState depthStencilState;
@@ -37,6 +37,9 @@ namespace fx {
       frame  = nullptr;
       shader = nullptr;
       mesh   = nullptr;
+      
+      uniforms = nullptr;
+      textures = nullptr;
       
       instances = 1;
       

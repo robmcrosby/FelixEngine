@@ -28,7 +28,7 @@ void HelloFBO::update() {
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   // Update the Model Uniforms
-  _firstTask.uniforms.update();
+  _firstUniformMap.update();
 }
 
 void HelloFBO::render() {
@@ -58,8 +58,8 @@ void HelloFBO::setupFirstTask() {
   _firstUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _firstUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
-  
-  _firstTask.uniforms["MVP"] = _firstUniform;
+  _firstUniformMap["MVP"] = _firstUniform;
+  _firstTask.uniforms = &_firstUniformMap;
   
   _firstTask.cullMode = fx::CULL_BACK;
   
@@ -94,10 +94,8 @@ void HelloFBO::setupSecondTask() {
   _secondTask.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
   _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
-  //fx::ImageBufferData image;
-  //fx::FileSystem::loadImage(image, "test.png");
-  //_secondTask.textures.addTexture(image);
-  _secondTask.textures.addTexture(_firstTask.frame->getColorTexture(0));
+  _secondTextureMap.addTexture(_firstTask.frame->getColorTexture(0));
+  _secondTask.textures = &_secondTextureMap;
   
   fx::vec2 size = fx::vec2(_secondTask.frame->size());
   float width = 2.0f;
@@ -105,8 +103,8 @@ void HelloFBO::setupSecondTask() {
   _secondUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _secondUniform.view = fx::mat4();
   _secondUniform.model = fx::mat4::Scale(fx::vec3(0.8f, 0.8f, 0.8f));
-  
-  _secondTask.uniforms["MVP"] = _secondUniform;
+  _secondUniformMap["MVP"] = _secondUniform;
+  _secondTask.uniforms = &_secondUniformMap;
   
   _secondTask.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
