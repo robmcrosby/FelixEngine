@@ -41,7 +41,10 @@ namespace fx {
     ModelData& data() {return _data.at(0);}
     
     void setMesh(VertexMesh *mesh) {_mesh = mesh;}
-    VertexMesh* mesh() {return _mesh;}
+    VertexMesh* mesh() const {return _mesh;}
+    
+    void setMaterial(Material *material) {_material = material;}
+    Material* material() const {return _material;}
     
     void setShader(ShaderProgram *shader);
   };

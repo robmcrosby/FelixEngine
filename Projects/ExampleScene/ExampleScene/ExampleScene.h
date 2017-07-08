@@ -24,6 +24,7 @@ class ExampleScene: public fx::Application {
   virtual ~ExampleScene();
   
   virtual void initalize();
+  virtual void update();
   virtual void render();
 };
 

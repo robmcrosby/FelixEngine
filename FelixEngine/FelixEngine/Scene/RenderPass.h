@@ -9,23 +9,44 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
+#include "GraphicTask.h"
+#include "UniformMap.h"
 #include <vector>
 #include <string>
+#include <list>
 
 namespace fx {
   class Camera;
   class Model;
   
-  typedef std::vector<Model*> Models;
-  
-  struct RenderPass {
-    std::string name;
-    int layer;
-    Camera *camera;
-    Models models;
+  struct RenderItem {
+    Model *model;
+    UniformMap uniforms;
+    GraphicTask task;
     
-    RenderPass(): layer(0), camera(nullptr) {}
-    RenderPass(const std::string name): name(name), layer(0), camera(nullptr) {}
+    RenderItem(Model *model = nullptr): model(model) {task.uniforms = &uniforms;}
+    RenderItem(const RenderItem &other) {*this = other;}
+    RenderItem& operator=(const RenderItem &other);
+  };
+  typedef std::list<RenderItem> RenderItems;
+  
+  class RenderPass {
+    std::string _name;
+    Camera *_camera;
+    RenderItems _items;
+    
+  public:
+    RenderPass(const std::string name);
+    std::string name() {return _name;}
+    
+    void setCamera(Camera *camera);
+    Camera *camera() const {return _camera;}
+    
+    void addModel(Model *model);
+    void removeModel(Model *model);
+    
+    void update();
+    void render();
   };
   
   class RenderPasses {
@@ -36,6 +57,7 @@ namespace fx {
     RenderPasses();
     ~RenderPasses();
     
+    void update();
     void render();
     RenderPass& operator[](const std::string &name);
   };

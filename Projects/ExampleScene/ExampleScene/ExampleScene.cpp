@@ -39,15 +39,23 @@ void ExampleScene::initalize() {
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   
   
+  fx::Camera *camera = _scene.getCamera("camera");
+  camera->setFrame(frame);
+  camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  
   fx::Model *model = _scene.getModel("model");
   model->setMesh(mesh);
   model->setShader(shader);
   
-  fx::Camera *camera = _scene.getCamera("camera");
-  camera->setFrame(frame);
-  camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _scene.renderPasses()["MainPass"].setCamera(camera);
+  _scene.renderPasses()["MainPass"].addModel(model);
+}
+
+void ExampleScene::update() {
+  _scene.update();
 }
 
 void ExampleScene::render() {
-  _graphics->addTask(_task);
+  //_graphics->addTask(_task);
+  _scene.render();
 }

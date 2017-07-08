@@ -29,6 +29,7 @@ void Scene::update() {
     model.second->update();
   for (auto camera : _cameras)
     camera.second->update();
+  _renderPasses.update();
 }
 
 void Scene::render() {
