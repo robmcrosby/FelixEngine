@@ -55,6 +55,8 @@
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1CC9D191F110CCB00A938D0 /* RenderPasses.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPasses.cpp */; };
+		C1CC9D1A1F110CCB00A938D0 /* RenderPasses.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPasses.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
 		C1E60EA81F0F080B0021F704 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EA61F0F080B0021F704 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -114,6 +116,8 @@
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1CC9D171F110CCB00A938D0 /* RenderPasses.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPasses.cpp; sourceTree = "<group>"; };
+		C1CC9D181F110CCB00A938D0 /* RenderPasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPasses.h; sourceTree = "<group>"; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		C1E60EA61F0F080B0021F704 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
@@ -143,6 +147,8 @@
 			children = (
 				C10D82631F0E6B8B0005629F /* Scene.h */,
 				C10D82621F0E6B8B0005629F /* Scene.cpp */,
+				C1CC9D181F110CCB00A938D0 /* RenderPasses.h */,
+				C1CC9D171F110CCB00A938D0 /* RenderPasses.cpp */,
 				C1E60EA61F0F080B0021F704 /* Model.h */,
 				C1E60EA51F0F080B0021F704 /* Model.cpp */,
 				C1E60EB21F0F09860021F704 /* Camera.h */,
@@ -300,6 +306,7 @@
 				C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
 				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
+				C1CC9D1A1F110CCB00A938D0 /* RenderPasses.h in Headers */,
 				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
 				C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */,
 				C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */,
@@ -399,6 +406,7 @@
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
+				C1CC9D191F110CCB00A938D0 /* RenderPasses.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,

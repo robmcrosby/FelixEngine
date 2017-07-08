@@ -9,21 +9,22 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include <stdio.h>
+#include "RenderPasses.h"
 
 namespace fx {
-  class Model;
-  class Material;
-  class Light;
-  class Camera;
   
   class Scene {
+  protected:
+    RenderPasses _renderPasses;
+    
   public:
     Scene();
     virtual ~Scene();
     
     virtual void update();
     virtual void render();
+    
+    RenderPasses& renderPasses() {return _renderPasses;}
   };
   
 }
