@@ -26,18 +26,12 @@ void ExampleScene::initalize() {
   };
   
   fx::FrameBuffer *frame = _graphics->getMainWindowBuffer();
-  _task.frame = frame;
   
   fx::ShaderProgram *shader = _graphics->createShaderProgram();
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
-  _task.shader = shader;
   
   fx::VertexMesh *mesh = _graphics->createVertexMesh();
   mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
-  _task.mesh = mesh;
-  
-  _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
-  
   
   fx::Camera *camera = _scene.getCamera("camera");
   camera->setFrame(frame);
@@ -56,6 +50,5 @@ void ExampleScene::update() {
 }
 
 void ExampleScene::render() {
-  //_graphics->addTask(_task);
   _scene.render();
 }
