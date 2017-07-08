@@ -7,6 +7,7 @@
 //
 
 #include "Model.h"
+#include "Material.h"
 
 
 using namespace fx;
@@ -23,4 +24,10 @@ Model::~Model() {
 
 void Model::update() {
   
+}
+
+void Model::setShader(ShaderProgram *shader) {
+  if (_material == nullptr)
+    _material = new Material();
+  _material->setShader(shader);
 }

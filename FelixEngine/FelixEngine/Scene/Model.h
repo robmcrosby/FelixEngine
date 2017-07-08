@@ -15,6 +15,7 @@
 namespace fx {
   class Material;
   class VertexMesh;
+  class ShaderProgram;
   
   struct ModelData {
     mat4 model;
@@ -41,6 +42,8 @@ namespace fx {
     
     void setMesh(VertexMesh *mesh) {_mesh = mesh;}
     VertexMesh* mesh() {return _mesh;}
+    
+    void setShader(ShaderProgram *shader);
   };
   
 }

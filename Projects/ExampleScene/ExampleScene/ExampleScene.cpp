@@ -7,6 +7,8 @@
 //
 
 #include "ExampleScene.h"
+#import <FelixEngine/Model.h>
+#import <FelixEngine/Camera.h>
 
 ExampleScene::ExampleScene() {
   printf("Create HelloTriangle\n");
@@ -23,15 +25,27 @@ void ExampleScene::initalize() {
     0.8, -0.8, 0.0, 1.0
   };
   
-  _task.frame = _graphics->getMainWindowBuffer();
+  fx::FrameBuffer *frame = _graphics->getMainWindowBuffer();
+  _task.frame = frame;
   
-  _task.shader = _graphics->createShaderProgram();
-  _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
+  fx::ShaderProgram *shader = _graphics->createShaderProgram();
+  shader->loadShaderFunctions("basic_vertex", "basic_fragment");
+  _task.shader = shader;
   
-  _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
+  fx::VertexMesh *mesh = _graphics->createVertexMesh();
+  mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
+  _task.mesh = mesh;
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  
+  
+  fx::Model *model = _scene.getModel("model");
+  model->setMesh(mesh);
+  model->setShader(shader);
+  
+  fx::Camera *camera = _scene.getCamera("camera");
+  camera->setFrame(frame);
+  camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
 
 void ExampleScene::render() {

@@ -14,6 +14,8 @@
 
 namespace fx {
   class LightRig;
+  class FrameBuffer;
+  class ShaderProgram;
   
   struct CameraData {
     mat4 projection;
@@ -25,6 +27,14 @@ namespace fx {
   protected:
     CameraData _data;
     LightRig *_lightRig;
+    FrameBuffer *_frame;
+    ShaderProgram *_shader;
+    
+    bool _clearFrameColor;
+    vec4 _clearColor;
+    
+    bool _clearFrameDepth;
+    float _clearDepth;
     
   public:
     Camera();
@@ -47,6 +57,15 @@ namespace fx {
     void setFrustum(float left, float right, float bottom, float top, float near, float far) {
       _data.projection = mat4::Frustum(left, right, bottom, top, near, far);
     }
+    
+    void setFrame(FrameBuffer *frame) {_frame = frame;}
+    FrameBuffer* frame() {return _frame;}
+    
+    void setShader(ShaderProgram *shader) {_shader = shader;}
+    ShaderProgram* shader() {return _shader;}
+    
+    void setClearColor(const vec4 &color = vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    void setClearDepth(float depth = 1.0f);
   };
   
 }
