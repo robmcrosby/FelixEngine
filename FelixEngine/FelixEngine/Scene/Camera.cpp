@@ -7,3 +7,16 @@
 //
 
 #include "Camera.h"
+#include "LightRig.h"
+
+
+using namespace fx;
+using namespace std;
+
+Camera::Camera(): _lightRig(nullptr) {
+
+}
+
+Camera::~Camera() {
+  
+}

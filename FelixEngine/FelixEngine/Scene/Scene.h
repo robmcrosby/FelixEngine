@@ -9,13 +9,24 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include "RenderPasses.h"
+#include "RenderPass.h"
+#include <map>
+#include <string>
 
 namespace fx {
+  class Model;
+  class Camera;
+  class Material;
+  class LightRig;
   
   class Scene {
   protected:
     RenderPasses _renderPasses;
+    
+    std::map<std::string, Model*>    _models;
+    std::map<std::string, Camera*>   _cameras;
+    std::map<std::string, Material*> _materials;
+    std::map<std::string, LightRig*> _lights;
     
   public:
     Scene();
@@ -25,6 +36,18 @@ namespace fx {
     virtual void render();
     
     RenderPasses& renderPasses() {return _renderPasses;}
+    
+    Model* getModel(const std::string &name);
+    Model* setModel(Model *model, const std::string &name);
+    
+    Camera* getCamera(const std::string &name);
+    Camera* setCamera(Camera *camera, const std::string &name);
+    
+    Material* getMaterial(const std::string &name);
+    Material* setMaterial(Material *material, const std::string &name);
+    
+    LightRig* getLightRig(const std::string &name);
+    LightRig* setLightRig(LightRig *light, const std::string &name);
   };
   
 }

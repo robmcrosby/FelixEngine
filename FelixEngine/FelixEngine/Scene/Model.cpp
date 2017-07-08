@@ -7,3 +7,16 @@
 //
 
 #include "Model.h"
+
+
+using namespace fx;
+using namespace std;
+
+
+Model::Model(): _data(1), _material(nullptr), _mesh(nullptr) {
+
+}
+
+Model::~Model() {
+
+}

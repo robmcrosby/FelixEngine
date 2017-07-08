@@ -1,12 +1,12 @@
 //
-//  RenderPasses.cpp
+//  RenderPass.cpp
 //  FelixEngine
 //
 //  Created by Robert Crosby on 7/8/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "RenderPasses.h"
+#include "RenderPass.h"
 
 
 using namespace fx;

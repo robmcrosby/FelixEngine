@@ -1,13 +1,13 @@
 //
-//  RenderPasses.h
+//  RenderPass.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 7/8/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#ifndef RenderPasses_h
-#define RenderPasses_h
+#ifndef RenderPass_h
+#define RenderPass_h
 
 #include <vector>
 #include <string>
@@ -41,4 +41,4 @@ namespace fx {
   };
 }
 
-#endif /* RenderPasses_h */
+#endif /* RenderPass_h */

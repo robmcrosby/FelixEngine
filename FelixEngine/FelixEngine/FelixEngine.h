@@ -34,9 +34,9 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/ImageBufferData.h>
 #import <FelixEngine/UniformMap.h>
 #import <FelixEngine/TextureMap.h>
-#import <FelixEngine/RenderPasses.h>
 
 #import <FelixEngine/Scene.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/Material.h>

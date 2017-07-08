@@ -9,12 +9,12 @@
 #ifndef Model_h
 #define Model_h
 
-#include "Material.h"
 #include "Quaternion.h"
 #include <vector>
 
 namespace fx {
-  class Scene;
+  class Material;
+  class VertexMesh;
   
   struct ModelData {
     mat4 model;
@@ -23,17 +23,14 @@ namespace fx {
   typedef std::vector<ModelData> InstanceModels;
   
   class Model {
-  private:
-    Scene *_scene;
-    
   protected:
     InstanceModels _data;
-    Material _material;
+    Material *_material;
     VertexMesh *_mesh;
     
   public:
-    Model(Scene *scene): _scene(scene), _data(1) {}
-    virtual ~Model() {}
+    Model();
+    virtual ~Model();
     
     void setInstances(int instances) {_data.resize(instances);}
     int instances() const {return (int)_data.size();}
