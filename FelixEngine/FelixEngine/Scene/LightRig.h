@@ -22,7 +22,7 @@ namespace fx {
   
   typedef std::vector<LightData> LightList;
   
-  class LighRig {
+  class LightRig {
   private:
     LightList _lights;
     
@@ -30,6 +30,7 @@ namespace fx {
     LightRig() {}
     
     LightList& lights() {return _lights;}
+    LightData& data() {return _lights.at(0);}
   };
 }
 

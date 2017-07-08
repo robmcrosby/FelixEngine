@@ -22,6 +22,8 @@ namespace fx {
     Scene();
     virtual ~Scene();
     
+    virtual void update();
+    virtual void render();
   };
   
 }

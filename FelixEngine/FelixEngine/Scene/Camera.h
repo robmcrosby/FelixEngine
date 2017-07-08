@@ -9,10 +9,12 @@
 #ifndef Camera_h
 #define Camera_h
 
+#include "LightRig.h"
 #include "Matrix.h"
 
 
 namespace fx {
+  class Scene;
   
   struct CameraData {
     mat4 projection;
@@ -22,13 +24,18 @@ namespace fx {
   
   class Camera {
   private:
+    Scene *_scene;
+    
+  protected:
     CameraData _data;
+    LightRig _lightRig;
     
   public:
-    Camera() {}
-    ~Camera() {}
+    Camera(Scene *scene): _scene(scene) {}
+    virtual ~Camera() {}
     
     CameraData& data() {return _data;}
+    LightRig& lightRig() {return _lightRig;}
     
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
       _data.view = mat4::LookAt(eye, center, up);

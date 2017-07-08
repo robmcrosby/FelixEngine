@@ -14,6 +14,7 @@
 #include <vector>
 
 namespace fx {
+  class Scene;
   
   struct ModelData {
     mat4 model;
@@ -23,17 +24,24 @@ namespace fx {
   
   class Model {
   private:
+    Scene *_scene;
+    
+  protected:
     InstanceModels _data;
     Material _material;
+    VertexMesh *_mesh;
     
   public:
-    Model(): _data(1) {}
+    Model(Scene *scene): _scene(scene), _data(1) {}
     virtual ~Model() {}
     
     void setInstances(int instances) {_data.resize(instances);}
     int instances() const {return (int)_data.size();}
     
     ModelData& data() {return _data.at(0);}
+    
+    void setMesh(VertexMesh *mesh) {_mesh = mesh;}
+    VertexMesh* mesh() {return _mesh;}
   };
   
 }
