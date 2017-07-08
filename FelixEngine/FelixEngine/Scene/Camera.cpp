@@ -20,3 +20,7 @@ Camera::Camera(): _lightRig(nullptr) {
 Camera::~Camera() {
   
 }
+
+void Camera::update() {
+  
+}

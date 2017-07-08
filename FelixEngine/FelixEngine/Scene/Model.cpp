@@ -20,3 +20,7 @@ Model::Model(): _data(1), _material(nullptr), _mesh(nullptr) {
 Model::~Model() {
 
 }
+
+void Model::update() {
+  
+}

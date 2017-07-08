@@ -32,6 +32,8 @@ namespace fx {
     Model();
     virtual ~Model();
     
+    virtual void update();
+    
     void setInstances(int instances) {_data.resize(instances);}
     int instances() const {return (int)_data.size();}
     

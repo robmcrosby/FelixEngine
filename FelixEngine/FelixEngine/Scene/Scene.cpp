@@ -7,6 +7,10 @@
 //
 
 #include "Scene.h"
+#include "Model.h"
+#include "Camera.h"
+#include "Material.h"
+#include "LightRig.h"
 
 
 using namespace fx;
@@ -21,42 +25,61 @@ Scene::~Scene() {
 }
 
 void Scene::update() {
-  
+  for (auto model : _models)
+    model.second->update();
+  for (auto camera : _cameras)
+    camera.second->update();
 }
 
 void Scene::render() {
-  
+  _renderPasses.render();
 }
 
 
-Model* getModel(const std::string &name) {
-  return nullptr;
+Model* Scene::getModel(const std::string &name) {
+  if (_models.count(name) == 0)
+    _models[name] = new Model();
+  return _models[name];
 }
 
-Model* setModel(Model *model, const std::string &name) {
-  return model;
+Model* Scene::setModel(Model *model, const std::string &name) {
+  if (_models.count(name) == 0 && _models.at(name) != model)
+    delete _models.at(name);
+  return _models[name] = model;
 }
 
-Camera* getCamera(const std::string &name) {
-  return nullptr;
+Camera* Scene::getCamera(const std::string &name) {
+  if (_cameras.count(name) == 0)
+    _cameras[name] = new Camera();
+  return _cameras[name];
 }
 
-Camera* setCamera(Camera *camera, const std::string &name) {
-  return camera;
+Camera* Scene::setCamera(Camera *camera, const std::string &name) {
+  if (_cameras.count(name) == 0 && _cameras.at(name) != camera)
+    delete _cameras.at(name);
+  return _cameras[name] = camera;
 }
 
-Material* getMaterial(const std::string &name) {
-  return nullptr;
+Material* Scene::getMaterial(const std::string &name) {
+  if (_materials.count(name) == 0)
+    _materials[name] = new Material();
+  return _materials[name];
 }
 
-Material* setMaterial(Material *material, const std::string &name) {
-  return material;
+Material* Scene::setMaterial(Material *material, const std::string &name) {
+  if (_materials.count(name) == 0 && _materials.at(name) != material)
+    delete _materials.at(name);
+  return _materials[name] = material;
 }
 
-LightRig* getLightRig(const std::string &name) {
-  return nullptr;
+LightRig* Scene::getLightRig(const std::string &name) {
+  if (_lights.count(name) == 0)
+    _lights[name] = new LightRig();
+  return _lights[name];
 }
 
-LightRig* setLightRig(LightRig *light, const std::string &name) {
-  return light;
+LightRig* Scene::setLightRig(LightRig *light, const std::string &name) {
+  if (_lights.count(name) == 0 && _lights.at(name) != light)
+    delete _lights.at(name);
+  return _lights[name] = light;
 }

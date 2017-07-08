@@ -30,6 +30,8 @@ namespace fx {
     Camera();
     virtual ~Camera();
     
+    virtual void update();
+    
     CameraData& data() {return _data;}
     LightRig* lightRig() {return _lightRig;}
     
