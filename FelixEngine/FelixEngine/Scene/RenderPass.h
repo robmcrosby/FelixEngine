@@ -27,6 +27,9 @@ namespace fx {
     RenderItem(Model *model = nullptr): model(model) {task.uniforms = &uniforms;}
     RenderItem(const RenderItem &other) {*this = other;}
     RenderItem& operator=(const RenderItem &other);
+    bool active() const;
+    void setClearOperations(Camera *camera);
+    void setDefaultOperations();
   };
   typedef std::list<RenderItem> RenderItems;
   

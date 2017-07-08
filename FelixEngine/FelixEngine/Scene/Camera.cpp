@@ -17,8 +17,8 @@ Camera::Camera() {
   _lightRig = nullptr;
   _frame = nullptr;
   
-  _clearFrameColor = false;
-  _clearFrameDepth = false;
+  _isClearingColor = false;
+  _isClearingDepth = false;
 }
 
 Camera::~Camera() {
@@ -30,11 +30,11 @@ void Camera::update() {
 }
 
 void Camera::setClearColor(const vec4 &color) {
-  _clearFrameColor = true;
+  _isClearingColor = true;
   _clearColor = color;
 }
 
 void Camera::setClearDepth(float depth) {
-  _clearFrameDepth = true;
+  _isClearingDepth = true;
   _clearDepth = depth;
 }

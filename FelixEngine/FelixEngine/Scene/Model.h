@@ -29,6 +29,9 @@ namespace fx {
     Material *_material;
     VertexMesh *_mesh;
     
+    bool _hidden;
+    int _layer;
+    
   public:
     Model();
     virtual ~Model();
@@ -47,6 +50,12 @@ namespace fx {
     Material* material() const {return _material;}
     
     void setShader(ShaderProgram *shader);
+    
+    void setHidden(bool hidden = true) {_hidden = hidden;}
+    bool hidden() const {return _hidden;}
+    
+    void setLayer(int layer) {_layer = layer;}
+    int layer() const {return _layer;}
   };
   
 }

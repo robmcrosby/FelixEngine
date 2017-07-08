@@ -30,10 +30,10 @@ namespace fx {
     FrameBuffer *_frame;
     ShaderProgram *_shader;
     
-    bool _clearFrameColor;
+    bool _isClearingColor;
     vec4 _clearColor;
     
-    bool _clearFrameDepth;
+    bool _isClearingDepth;
     float _clearDepth;
     
   public:
@@ -65,7 +65,12 @@ namespace fx {
     ShaderProgram* shader() {return _shader;}
     
     void setClearColor(const vec4 &color = vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    vec4 clearColor() const {return _clearColor;}
+    bool isClearingColor() const {return _isClearingColor;}
+    
     void setClearDepth(float depth = 1.0f);
+    float clearDepth() const {return _clearDepth;}
+    bool isClearingDepth() const {return _isClearingDepth;}
   };
   
 }

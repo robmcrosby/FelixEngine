@@ -53,9 +53,23 @@ namespace fx {
       }
     }
     
+    void setDefaultColorActions() {
+      for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
+        colorActions[i].loadAction = LOAD_LAST;
+        colorActions[i].storeAction = STORE_SAVE;
+        colorActions[i].clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      }
+    }
+    
     void setClearDepthStencil(float depth = 1.0f, int stencil = 0) {
       depthStencilAction.loadAction = LOAD_CLEAR;
-      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 0.0f);
+      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 1.0f);
+    }
+    
+    void setDefaultDepthStencilActions() {
+      depthStencilAction.loadAction = LOAD_LAST;
+      depthStencilAction.storeAction = STORE_SAVE;
+      depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
     void enableDepthTesting() {

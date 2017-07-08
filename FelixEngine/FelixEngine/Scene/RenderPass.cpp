@@ -26,6 +26,31 @@ RenderItem& RenderItem::operator=(const RenderItem &other) {
   return *this;
 }
 
+bool RenderItem::active() const {
+  return !model->hidden() && task.mesh != nullptr && task.shader != nullptr && task.frame != nullptr;
+}
+
+void RenderItem::setClearOperations(Camera *camera) {
+  if (camera != nullptr) {
+    // Set Clear Color
+    if (camera->isClearingColor())
+      task.setClearColor(camera->clearColor());
+    else
+      task.setDefaultColorActions();
+    
+    // Set Clear Depth
+    if (camera->isClearingDepth())
+      task.setClearDepthStencil(camera->clearDepth());
+    else
+      task.setDefaultDepthStencilActions();
+  }
+}
+
+void RenderItem::setDefaultOperations() {
+  task.setDefaultColorActions();
+  task.setDefaultDepthStencilActions();
+}
+
 
 RenderPass::RenderPass(const std::string name): _name(name), _camera(nullptr) {
   
@@ -71,8 +96,18 @@ void RenderPass::update() {
 
 void RenderPass::render() {
   Graphics &graphics = Graphics::getInstance();
+  bool firstItem = true;
+  
   for (auto item : _items) {
-    graphics.addTask(item.task);
+    if (item.active()) {
+      if (firstItem) {
+        item.setClearOperations(_camera);
+        firstItem = false;
+      }
+      else
+        item.setDefaultOperations();
+      graphics.addTask(item.task);
+    }
   }
 }
 
