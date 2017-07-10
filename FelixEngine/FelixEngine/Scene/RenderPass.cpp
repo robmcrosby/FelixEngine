@@ -12,11 +12,17 @@
 #include "Camera.h"
 #include "Model.h"
 #include "Material.h"
+#include "LightRig.h"
 
 
 using namespace fx;
 using namespace std;
 
+RenderItem::RenderItem(Camera *camera, Model *model): model(model) {
+  task.uniforms = &uniforms;
+  setCamera(camera);
+  setModel(model);
+}
 
 RenderItem& RenderItem::operator=(const RenderItem &other) {
   model = other.model;
@@ -51,6 +57,32 @@ void RenderItem::setDefaultOperations() {
   task.setDefaultDepthStencilActions();
 }
 
+void RenderItem::setCamera(Camera *camera) {
+  if (camera != nullptr) {
+    uniforms["camera"] = camera->data();
+    task.frame = camera->frame();
+    
+    LightRig *lightRig = camera->lightRig();
+    if (lightRig != nullptr)
+      uniforms["lights"].load(&lightRig->data(), lightRig->size());
+  }
+}
+
+void RenderItem::setModel(Model *newModel) {
+  if (model != nullptr) {
+    model = newModel;
+    uniforms["model"] = model->data();
+    task.mesh = model->mesh();
+    
+    Material *material = model->material();
+    if (material != nullptr) {
+      uniforms["material"] = material->data();
+      task.textures = &material->textures();
+      task.shader = material->shader();
+    }
+  }
+}
+
 
 RenderPass::RenderPass(const std::string name): _name(name), _camera(nullptr) {
   
@@ -58,31 +90,12 @@ RenderPass::RenderPass(const std::string name): _name(name), _camera(nullptr) {
 
 void RenderPass::setCamera(Camera *camera) {
   _camera = camera;
-  for (auto item : _items) {
-    item.uniforms["Camera"] = _camera->data();
-    item.task.frame = _camera->frame();
-  }
+  for (auto item : _items)
+    item.setCamera(_camera);
 }
 
 void RenderPass::addModel(Model *model) {
-  RenderItem item;
-  item.model = model;
-  item.uniforms["Model"] = model->data();
-  item.task.mesh = model->mesh();
-  
-  Material *material = model->material();
-  if (material != nullptr) {
-    item.uniforms["Material"] = material->data();
-    item.task.textures = &material->textures();
-    item.task.shader = material->shader();
-  }
-  
-  if (_camera != nullptr) {
-    item.uniforms["Camera"] = _camera->data();
-    item.task.frame = _camera->frame();
-  }
-  
-  _items.push_back(item);
+  _items.push_back(RenderItem(_camera, model));
 }
 
 void RenderPass::removeModel(Model *model) {

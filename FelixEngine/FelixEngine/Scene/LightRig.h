@@ -31,6 +31,7 @@ namespace fx {
     
     LightList& lights() {return _lights;}
     LightData& data() {return _lights.at(0);}
+    size_t size() const {return _lights.size() * sizeof(LightData);}
   };
 }
 
