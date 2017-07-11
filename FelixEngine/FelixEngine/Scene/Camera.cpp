@@ -8,6 +8,7 @@
 
 #include "Camera.h"
 #include "LightRig.h"
+#include "GraphicResources.h"
 
 
 using namespace fx;
@@ -27,6 +28,13 @@ Camera::~Camera() {
 
 void Camera::update() {
   
+}
+
+void Camera::setOrthographic(float scale, float near, float far) {
+  fx::vec2 size = _frame != nullptr ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
+  float width = scale/2.0f;
+  float height = (scale * size.h/size.w)/2.0f;
+  setOrthographic(-width, width, -height, height, near, far);
 }
 
 void Camera::setClearColor(const vec4 &color) {

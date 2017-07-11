@@ -30,16 +30,23 @@ void ExampleScene::initalize() {
   fx::ShaderProgram *shader = _graphics->createShaderProgram();
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
+  fx::VertexMeshData meshData;
+  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
+  
   fx::VertexMesh *mesh = _graphics->createVertexMesh();
-  mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
+  mesh->load(meshData);
+  //mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
   
   fx::Camera *camera = _scene.getCamera("camera");
   camera->setFrame(frame);
+  camera->setOrthographic(2.0f, -100.0f, 100.0f);
+  camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   
   fx::Model *model = _scene.getModel("model");
   model->setMesh(mesh);
   model->setShader(shader);
+  model->data().model = fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   _scene.renderPasses()["MainPass"].setCamera(camera);
   _scene.renderPasses()["MainPass"].addModel(model);

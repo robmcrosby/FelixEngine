@@ -51,6 +51,7 @@ namespace fx {
     }
     vec3 position() const {return _data.position.xyz();}
     
+    void setOrthographic(float scale, float near, float far);
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
       _data.projection = mat4::Ortho(left, right, bottom, top, near, far);
     }

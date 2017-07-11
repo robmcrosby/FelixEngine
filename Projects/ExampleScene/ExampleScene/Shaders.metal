@@ -36,9 +36,11 @@ struct Light {
 
 
 
-vertex float4 basic_vertex(const device packed_float4* vertex_array [[ buffer(0) ]],
-                           unsigned int   vid          [[ vertex_id ]]) {
-  return float4(vertex_array[vid]);
+vertex float4 basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
+                           constant     Camera        *camera   [[ buffer(1) ]],
+                           constant     Model         *model    [[ buffer(2) ]],
+                                        unsigned int   vid      [[ vertex_id ]]) {
+  return camera->projection * camera->view * model->model * float4(Position[vid]);
 }
 
 fragment half4 basic_fragment() {
