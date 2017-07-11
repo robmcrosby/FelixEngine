@@ -19,13 +19,8 @@ ExampleScene::~ExampleScene() {
 }
 
 void ExampleScene::initalize() {
-  float vertexBuffer[] = {
-    0.0,  0.8, 0.0, 1.0,
-    -0.8, -0.8, 0.0, 1.0,
-    0.8, -0.8, 0.0, 1.0
-  };
-  
   fx::FrameBuffer *frame = _graphics->getMainWindowBuffer();
+  frame->addDepthBuffer();
   
   fx::ShaderProgram *shader = _graphics->createShaderProgram();
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
@@ -35,24 +30,29 @@ void ExampleScene::initalize() {
   
   fx::VertexMesh *mesh = _graphics->createVertexMesh();
   mesh->load(meshData);
-  //mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
   
   fx::Camera *camera = _scene.getCamera("camera");
   camera->setFrame(frame);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  camera->setClearDepth();
   
-  fx::Model *model = _scene.getModel("model");
-  model->setMesh(mesh);
-  model->setShader(shader);
-  model->data().model = fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  _model = _scene.getModel("model");
+  _model->setMesh(mesh);
+  _model->setShader(shader);
+  _model->setScale(0.2f);
+  _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
+  _model->update();
   
   _scene.renderPasses()["MainPass"].setCamera(camera);
-  _scene.renderPasses()["MainPass"].addModel(model);
+  _scene.renderPasses()["MainPass"].addModel(_model);
 }
 
 void ExampleScene::update() {
+  _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
+  _model->update();
+  
   _scene.update();
 }
 

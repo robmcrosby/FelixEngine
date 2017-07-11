@@ -29,6 +29,10 @@ namespace fx {
     Material *_material;
     VertexMesh *_mesh;
     
+    float _scale;
+    quat _orientation;
+    vec3 _position;
+    
     bool _hidden;
     int _layer;
     
@@ -56,6 +60,15 @@ namespace fx {
     
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
+    
+    void setScale(float scale) {_scale = scale;}
+    float scale() const {return _scale;}
+    
+    void setOrientation(const quat &orientation) {_orientation = orientation;}
+    quat orientation() const {return _orientation;}
+    
+    void setPosition(const vec3 &position) {_position = position;}
+    vec3 position() const {return _position;}
   };
   
 }
