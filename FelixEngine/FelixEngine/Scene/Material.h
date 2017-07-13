@@ -29,6 +29,8 @@ namespace fx {
     TextureMap _textures;
     ShaderProgram *_shader;
     
+    DepthStencilState _depthStencilState;
+    
   public:
     Material(): _shader(nullptr) {}
     ~Material() {delete _shader;}
@@ -42,6 +44,9 @@ namespace fx {
     TextureMap& textures() {return _textures;}
     
     MaterialData& data() {return _data;}
+    
+    DepthStencilState& depthStencilState() {return _depthStencilState;}
+    void enableDepthTesting() {_depthStencilState.enableDepthTesting();}
     
     void setAmbiant(const vec3 &color, float factor) {_data.ambiant = vec4(color, factor);}
     vec3 ambiantColor() const {return _data.ambiant.xyz();}

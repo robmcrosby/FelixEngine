@@ -54,6 +54,7 @@ namespace fx {
     Material* material() const {return _material;}
     
     void setShader(ShaderProgram *shader);
+    void enableDepthTesting();
     
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}

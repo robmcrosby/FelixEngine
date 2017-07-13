@@ -82,6 +82,12 @@ namespace fx {
     void enableTesting() {setTesting(true);}
     void disableTesting() {setTesting(false);}
     
+    void enableDepthTesting() {
+      enableTesting();
+      enableWriting();
+      setFunction(fx::DEPTH_TEST_LESS);
+    }
+    
     void setFunction(int function) {
       flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);
     }

@@ -8,6 +8,7 @@
 
 #include "ExampleScene.h"
 #import <FelixEngine/Model.h>
+#import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
 
 ExampleScene::ExampleScene() {
@@ -41,6 +42,7 @@ void ExampleScene::initalize() {
   _model = _scene.getModel("model");
   _model->setMesh(mesh);
   _model->setShader(shader);
+  _model->enableDepthTesting();
   _model->setScale(0.2f);
   _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
   _model->update();

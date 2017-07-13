@@ -73,13 +73,13 @@ void RenderItem::setModel(Model *newModel) {
     model = newModel;
     uniforms["model"] = model->data();
     task.mesh = model->mesh();
-    task.enableDepthTesting();
     
     Material *material = model->material();
     if (material != nullptr) {
       uniforms["material"] = material->data();
       task.textures = &material->textures();
       task.shader = material->shader();
+      task.depthStencilState = material->depthStencilState();
     }
   }
 }

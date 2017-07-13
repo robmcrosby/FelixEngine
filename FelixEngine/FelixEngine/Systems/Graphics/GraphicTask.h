@@ -72,11 +72,7 @@ namespace fx {
       depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
-    void enableDepthTesting() {
-      depthStencilState.enableTesting();
-      depthStencilState.enableWriting();
-      depthStencilState.setFunction(fx::DEPTH_TEST_LESS);
-    }
+    void enableDepthTesting() {depthStencilState.enableDepthTesting();}
   };
 }
 

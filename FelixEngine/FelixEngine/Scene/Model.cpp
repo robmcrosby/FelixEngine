@@ -32,3 +32,9 @@ void Model::setShader(ShaderProgram *shader) {
     _material = new Material();
   _material->setShader(shader);
 }
+
+void Model::enableDepthTesting() {
+  if (_material == nullptr)
+    _material = new Material();
+  _material->enableDepthTesting();
+}
