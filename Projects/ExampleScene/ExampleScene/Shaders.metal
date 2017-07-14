@@ -60,7 +60,8 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
   return output;
 }
 
-fragment half4 basic_fragment(FragmentInput input [[ stage_in ]]) {
-  float d = dot(input.normal, float3(1.0, 0.0, 0.0));
+fragment half4 basic_fragment(FragmentInput input    [[ stage_in ]],
+                     constant Light        *lights   [[ buffer(0) ]]) {
+  float d = dot(input.normal, lights->position.xyz);
   return half4(d, d, d, 1.0);
 }

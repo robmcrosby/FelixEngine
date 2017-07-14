@@ -10,6 +10,7 @@
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
+#import <FelixEngine/LightRig.h>
 
 ExampleScene::ExampleScene() {
   printf("Create HelloTriangle\n");
@@ -38,6 +39,10 @@ void ExampleScene::initalize() {
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   camera->setClearDepth();
+  
+  fx::LightRig *lightRig = _scene.getLightRig("Lights");
+  lightRig->addDirectionalLight(fx::vec3(1.0f, 1.0f, 0.0f), fx::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f);
+  camera->setLightRig(lightRig);
   
   _model = _scene.getModel("model");
   _model->setMesh(mesh);

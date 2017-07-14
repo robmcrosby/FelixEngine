@@ -43,6 +43,8 @@ namespace fx {
     virtual void update();
     
     CameraData& data() {return _data;}
+    
+    void setLightRig(LightRig *rig) {_lightRig = rig;}
     LightRig* lightRig() {return _lightRig;}
     
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {

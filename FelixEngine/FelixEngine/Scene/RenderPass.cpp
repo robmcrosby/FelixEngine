@@ -62,9 +62,9 @@ void RenderItem::setCamera(Camera *camera) {
     uniforms["camera"] = camera->data();
     task.frame = camera->frame();
     
-//    LightRig *lightRig = camera->lightRig();
-//    if (lightRig != nullptr)
-//      uniforms["lights"].load(&lightRig->data(), lightRig->size());
+    LightRig *lightRig = camera->lightRig();
+    if (lightRig != nullptr && lightRig->size() > 0)
+      uniforms["lights"].load(&lightRig->data(), lightRig->size());
   }
 }
 
