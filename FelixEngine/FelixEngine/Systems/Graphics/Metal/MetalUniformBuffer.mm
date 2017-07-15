@@ -43,12 +43,11 @@ void MetalUniformBuffer::update() {
 }
 
 void MetalUniformBuffer::encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader) {
-  if (shader->_vertexIndexMap.count(name)) {
+  if (shader->_vertexIndexMap.count(name))
     [encoder setVertexBuffer:_buffers[_current] offset:0 atIndex:shader->_vertexIndexMap[name]];
-  }
-  if (shader->_fragmentIndexMap.count(name)) {
-    [encoder setFragmentBuffer:_buffers[_current] offset:0 atIndex:shader->_vertexIndexMap[name]];
-  }
+  
+  if (shader->_fragmentIndexMap.count(name))
+    [encoder setFragmentBuffer:_buffers[_current] offset:0 atIndex:shader->_fragmentIndexMap[name]];
 }
 
 void MetalUniformBuffer::clearBuffers() {

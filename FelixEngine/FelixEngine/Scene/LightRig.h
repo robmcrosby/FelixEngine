@@ -33,11 +33,19 @@ namespace fx {
     LightData& data() {return _lights.at(0);}
     size_t size() const {return _lights.size() * sizeof(LightData);}
     
-    void addDirectionalLight(vec3 direction, vec4 color, float energy) {
+    void addDirectionalLight(vec3 direction, vec3 color, float energy) {
       LightData light;
       light.position = vec4(direction.normalized(), 0.0f);
-      light.color = color;
-      light.factors = vec4(energy, 0.0f, 0.0f, 0.0f);
+      light.color = vec4(color, energy);
+      light.factors = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+      _lights.push_back(light);
+    }
+    
+    void addPointLight(vec3 position, vec3 color, float energy) {
+      LightData light;
+      light.position = vec4(position, 1.0);
+      light.color = vec4(color, energy);
+      light.factors = vec4(0.0f, 0.0f, 0.0f, 0.0f);
       _lights.push_back(light);
     }
   };

@@ -37,16 +37,24 @@ void ExampleScene::initalize() {
   camera->setFrame(frame);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
-  camera->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
   camera->setClearDepth();
   
   fx::LightRig *lightRig = _scene.getLightRig("Lights");
-  lightRig->addDirectionalLight(fx::vec3(1.0f, 1.0f, 0.0f), fx::vec4(1.0f, 1.0f, 1.0f, 1.0f), 1.0f);
+  lightRig->addDirectionalLight(fx::vec3(-1.0f, -1.0f, 0.0f), fx::vec3(0.8f, 0.9f, 1.0f), 0.8f);
+  lightRig->addPointLight(fx::vec3(1.0f, -1.0f, 2.0f), fx::vec3(0.4f, 0.4f, 1.0f), 0.4f);
+  lightRig->addPointLight(fx::vec3(-4.0f, 1.0f, -6.0f), fx::vec3(1.0f, 1.0f, 1.0f), 1.0f);
   camera->setLightRig(lightRig);
+  
+  fx::Material *material = _scene.getMaterial("Material");
+  material->setShader(shader);
+  material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
+  material->setDiffuse(fx::vec3(0.7, 0.7, 0.7), 0.8);
+  material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6, 20.0);
   
   _model = _scene.getModel("model");
   _model->setMesh(mesh);
-  _model->setShader(shader);
+  _model->setMaterial(material);
   _model->enableDepthTesting();
   _model->setScale(0.2f);
   _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));

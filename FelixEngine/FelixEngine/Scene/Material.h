@@ -56,9 +56,13 @@ namespace fx {
     vec3 diffuseColor() const {return _data.diffuse.xyz();}
     float diffuseFactor() const {return _data.diffuse.a;}
     
-    void setSpecular(const vec3 &color, float factor) {_data.specular = vec4(color, factor);}
+    void setSpecular(const vec3 &color, float factor, float hardness) {
+      _data.specular = vec4(color, factor);
+      _data.factors.x = hardness;
+    }
     vec3 specularColor() const {return _data.specular.xyz();}
     float specularFactor() const {return _data.specular.a;}
+    float hardness() const {return _data.factors.x;}
   };
   
 }
