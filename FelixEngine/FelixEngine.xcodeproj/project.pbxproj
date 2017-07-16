@@ -55,6 +55,7 @@
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */; };
 		C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
@@ -116,6 +117,7 @@
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
 		C1CC9D181F110CCB00A938D0 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				C1443B091EF49E5D0059BA9D /* Macros.h */,
 				C1401CF61EFD42FE00BE9958 /* Variant.h */,
 				C1401CF81EFEDAB700BE9958 /* IndexedMap.h */,
+				C1BB4F291F1C255E008FDF01 /* XMLTree.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,

@@ -30,6 +30,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/Quaternion.h>
 #import <FelixEngine/Variant.h>
 #import <FelixEngine/IndexedMap.h>
+#import <FelixEngine/XMLTree.h>
 #import <FelixEngine/VertexMeshData.h>
 #import <FelixEngine/ImageBufferData.h>
 #import <FelixEngine/UniformMap.h>

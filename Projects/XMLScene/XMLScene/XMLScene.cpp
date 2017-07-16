@@ -7,6 +7,7 @@
 //
 
 #include "XMLScene.h"
+#include <FelixEngine/XMLTree.h>
 
 XMLScene::XMLScene() {
   printf("Create XMLScene\n");
@@ -22,6 +23,8 @@ void XMLScene::initalize() {
     -0.8, -0.8, 0.0, 1.0,
     0.8, -0.8, 0.0, 1.0
   };
+  
+  fx::XMLTree tree;
   
   _task.frame = _graphics->getMainWindowBuffer();
   
