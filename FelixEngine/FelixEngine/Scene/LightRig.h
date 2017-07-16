@@ -15,9 +15,53 @@
 namespace fx {
   
   struct LightData {
-    vec4 position;
-    vec4 color;
-    vec4 factors;
+    vec4 _position;
+    vec4 _direction;
+    vec4 _color;
+    vec4 _factors;
+    
+    void setPosition(vec3 pos) {
+      _position = vec4(pos, _position.w);
+    }
+    void setDirection(vec3 dir) {
+      _direction = vec4(dir.normalized(), _direction.w);
+    }
+    
+    void setColor(vec3 color) {_color = vec4(color, energy());}
+    vec3 color() const {return _color.xyz();}
+    
+    void setEnergy(float energy) {_color.w = energy;}
+    float energy() const {return _color.w;}
+    
+    void setLinearAttenuation(float attenuation) {_factors.x = attenuation;}
+    float linearAttenuation() const {return _factors.x;}
+    
+    void setSquareAttenuation(float attenuation) {_factors.y = attenuation;}
+    float squareAttenuation() const {return _factors.y;}
+    
+    void setDistance(float dist) {_direction.w = dist;}
+    float distance() const {return _direction.w;}
+    
+    void setConeAngle(float angle) {_factors.z = angle;}
+    float coneAngle() const {return _factors.z;}
+    
+    void setSoftAngle(float angle) {_factors.w = angle;}
+    float softAngle() const {return _factors.w;}
+    
+    void setAsDirectionalLight() {_position.w = 0.0f;}
+    void setAsDirectionalLight(vec3 direction, vec3 color, float energy) {
+      setAsDirectionalLight();
+      setDirection(direction);
+      setColor(color);
+      setEnergy(energy);
+    }
+    void setAsPointLight() {_position.w = 1.0f;}
+    void setAsPointLight(vec3 position, vec3 color, float energy) {
+      setAsPointLight();
+      setPosition(position);
+      setColor(color);
+      setEnergy(energy);
+    }
   };
   
   typedef std::vector<LightData> LightList;
@@ -35,17 +79,13 @@ namespace fx {
     
     void addDirectionalLight(vec3 direction, vec3 color, float energy) {
       LightData light;
-      light.position = vec4(direction.normalized(), 0.0f);
-      light.color = vec4(color, energy);
-      light.factors = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+      light.setAsDirectionalLight(direction, color, energy);
       _lights.push_back(light);
     }
     
     void addPointLight(vec3 position, vec3 color, float energy) {
       LightData light;
-      light.position = vec4(position, 1.0);
-      light.color = vec4(color, energy);
-      light.factors = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+      light.setAsPointLight(position, color, energy);
       _lights.push_back(light);
     }
   };

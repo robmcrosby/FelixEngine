@@ -7,6 +7,9 @@
 //
 
 #include <metal_stdlib>
+
+#define NUM_LIGHTS 3
+
 using namespace metal;
 
 
@@ -30,12 +33,14 @@ struct Material {
 
 struct Light {
   float4 position;
+  float4 direction;
   float4 color;
   float4 factors;
 };
 
 
 device float3 rotate_quat(float4 rot, float3 v);
+device float light_attenuation(float distance, float2 factors);
 device float shade_diffuse(float3 normal, float3 light);
 device float shade_specular(float3 normal, float3 view, float3 light, float hardness);
 
@@ -55,6 +60,10 @@ struct FragmentInput {
 
 device float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
+}
+
+device float light_attenuation(float distance, float2 factors) {
+  return 1.0 / (1.0 + distance*factors.x + distance*distance*factors.y);
 }
 
 device float shade_diffuse(float3 normal, float3 light) {
@@ -88,20 +97,21 @@ fragment half4 basic_fragment(FragmentInput      input    [[ stage_in  ]],
   float3 normal = normalize(input.normal);
   float3 view = normalize(input.view);
   
-  for (int i = 0; i < 3; ++i) {
+  for (int i = 0; i < NUM_LIGHTS; ++i) {
     Light light = lights[i];
-    float3 lightDirection = light.position.w ? light.position.xyz - input.location : -light.position.xyz;
+    float3 lightDirection = light.position.w ? light.position.xyz - input.location : -light.direction.xyz;
     float lightDistance = length(lightDirection);
+    float attenuation = light_attenuation(lightDistance, light.factors.xy);
     
     lightDirection /= lightDistance;
     
     // Add Light Diffuse
     float diffuse = shade_diffuse(normal, lightDirection) * light.color.w * material->diffuse.w;
-    color += material->diffuse.xyz * light.color.xyz * diffuse;
+    color += material->diffuse.xyz * light.color.xyz * diffuse * attenuation;
     
     // Add Light Specular
     float specular = shade_specular(normal, view, lightDirection, material->factors.x) * light.color.w * material->specular.w;
-    color += material->specular.xyz * light.color.xyz * specular;
+    color += material->specular.xyz * light.color.xyz * specular * attenuation;
   }
   
   return half4(color.x, color.y, color.z, 1.0);
