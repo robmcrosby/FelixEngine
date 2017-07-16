@@ -43,7 +43,8 @@ void HelloTexture::initalize() {
   
   fx::ImageBufferData image;
   fx::FileSystem::loadImage(image, "test.png");
-  _task.textures.addTexture(image);
+  _textureMap.addTexture(image);
+  _task.textures = &_textureMap;
   
   fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
@@ -51,8 +52,8 @@ void HelloTexture::initalize() {
   _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _mvpUniform.view = fx::mat4();
   _mvpUniform.model = fx::mat4::Scale(fx::vec3(0.8f, 0.8f, 0.8f));
-  
-  _task.uniforms["MVP"] = _mvpUniform;
+  _uniformMap["MVP"] = _mvpUniform;
+  _task.uniforms = &_uniformMap;
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }

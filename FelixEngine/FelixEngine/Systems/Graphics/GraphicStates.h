@@ -27,12 +27,6 @@ namespace fx {
     STORE_DISCARD,
   };
   
-  enum CULL_MODE {
-    CULL_NONE,
-    CULL_FRONT,
-    CULL_BACK,
-  };
-  
   struct ActionState {
     LOAD_ACTION  loadAction;
     STORE_ACTION storeAction;
@@ -43,6 +37,11 @@ namespace fx {
     }
   };
   
+  enum CULL_MODE {
+    CULL_NONE,
+    CULL_FRONT,
+    CULL_BACK,
+  };
   
   enum DEPTH_FLAGS {
     DEPTH_ENABLE_MASK     = 0x0f, // 0000 1111
@@ -82,6 +81,12 @@ namespace fx {
     }
     void enableTesting() {setTesting(true);}
     void disableTesting() {setTesting(false);}
+    
+    void enableDepthTesting() {
+      enableTesting();
+      enableWriting();
+      setFunction(fx::DEPTH_TEST_LESS);
+    }
     
     void setFunction(int function) {
       flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);

@@ -23,6 +23,7 @@ struct MVPUniform {
 class Hello3D: public fx::Application {
 private:
   fx::GraphicTask _task;
+  fx::UniformMap _uniformMap;
   MVPUniform _mvpUniform;
   
 public:

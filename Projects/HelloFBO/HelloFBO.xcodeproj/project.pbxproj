@@ -423,6 +423,7 @@
 				C11B293E1F0C1A700042D306 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

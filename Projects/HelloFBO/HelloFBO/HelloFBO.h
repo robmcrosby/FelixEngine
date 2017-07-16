@@ -22,9 +22,12 @@ struct MVPUniform {
 class HelloFBO: public fx::Application {
 private:
   fx::GraphicTask _firstTask;
+  fx::UniformMap _firstUniformMap;
   MVPUniform _firstUniform;
   
   fx::GraphicTask _secondTask;
+  fx::UniformMap _secondUniformMap;
+  fx::TextureMap _secondTextureMap;
   MVPUniform _secondUniform;
   
 public:

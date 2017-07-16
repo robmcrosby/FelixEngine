@@ -20,6 +20,8 @@ struct MVPUniform {
 class HelloTexture: public fx::Application {
 private:
   fx::GraphicTask _task;
+  fx::UniformMap _uniformMap;
+  fx::TextureMap _textureMap;
   MVPUniform _mvpUniform;
   
 public:

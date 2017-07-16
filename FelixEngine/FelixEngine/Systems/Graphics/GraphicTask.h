@@ -22,13 +22,13 @@ namespace fx {
     ShaderProgram *shader;
     VertexMesh    *mesh;
     
+    UniformMap *uniforms;
+    TextureMap *textures;
+    
     int instances;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
     ActionState depthStencilAction;
-    
-    UniformMap uniforms;
-    TextureMap textures;
     
     CULL_MODE cullMode;
     DepthStencilState depthStencilState;
@@ -37,6 +37,9 @@ namespace fx {
       frame  = nullptr;
       shader = nullptr;
       mesh   = nullptr;
+      
+      uniforms = nullptr;
+      textures = nullptr;
       
       instances = 1;
       
@@ -50,16 +53,26 @@ namespace fx {
       }
     }
     
-    void setClearDepthStencil(float depth = 1.0f, int stencil = 0) {
-      depthStencilAction.loadAction = LOAD_CLEAR;
-      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 0.0f);
+    void setDefaultColorActions() {
+      for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
+        colorActions[i].loadAction = LOAD_LAST;
+        colorActions[i].storeAction = STORE_SAVE;
+        colorActions[i].clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      }
     }
     
-    void enableDepthTesting() {
-      depthStencilState.enableTesting();
-      depthStencilState.enableWriting();
-      depthStencilState.setFunction(fx::DEPTH_TEST_LESS);
+    void setClearDepthStencil(float depth = 1.0f, int stencil = 0) {
+      depthStencilAction.loadAction = LOAD_CLEAR;
+      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 1.0f);
     }
+    
+    void setDefaultDepthStencilActions() {
+      depthStencilAction.loadAction = LOAD_LAST;
+      depthStencilAction.storeAction = STORE_SAVE;
+      depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+    
+    void enableDepthTesting() {depthStencilState.enableDepthTesting();}
   };
 }
 
