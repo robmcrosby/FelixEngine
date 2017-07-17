@@ -25,6 +25,8 @@ void XMLScene::initalize() {
   };
   
   fx::XMLTree tree;
+  fx::FileSystem::loadXMLTree(tree, "Scene.xml");
+  std::cout << tree << std::endl;
   
   _task.frame = _graphics->getMainWindowBuffer();
   

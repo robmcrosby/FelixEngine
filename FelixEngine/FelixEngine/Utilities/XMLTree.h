@@ -15,7 +15,7 @@
 #include <list>
 #include <fstream>
 
-//#include "StringUtils.h"
+#include "StringUtils.h"
 #include "Vector.h"
 
 
@@ -49,26 +49,26 @@ namespace fx
       /**
        * Default constructor.
        */
-      Node(): mLevel(0), mParrent(0), mTree(0) {}
+      Node(): _level(0), _parrent(0), _tree(0) {}
       
       /**
        * Construct an Node with an element name.
        * @param element string for the element name.
        */
-      Node(const std::string &element): mElement(element), mLevel(0), mParrent(0), mTree(0) {}
+      Node(const std::string &element): _element(element), _level(0), _parrent(0), _tree(0) {}
       
       /**
        * Construct an Node with an element name and contents.
        * @param element string for the element name.
        * @param contents string for the contents of the new node.
        */
-      Node(const std::string &element, const std::string &contents): mElement(element), mContents(contents), mLevel(0), mParrent(0), mTree(0) {}
+      Node(const std::string &element, const std::string &contents): _element(element), _contents(contents), _level(0), _parrent(0), _tree(0) {}
       
       /**
        * Copy constructor uses assignment operator to copy the given Node.
        * @param node Node to be copied from.
        */
-      Node(const Node &node): mLevel(0), mParrent(0), mTree(0) {*this = node;}
+      Node(const Node &node): _level(0), _parrent(0), _tree(0) {*this = node;}
       
       /**
        * Destructor clears the SubNodes.
@@ -80,15 +80,15 @@ namespace fx
        */
       void clearSubNodes()
       {
-        for (std::list<Node*>::iterator node = mSubNodes.begin(); node != mSubNodes.end(); ++node)
+        for (std::list<Node*>::iterator node = _subNodes.begin(); node != _subNodes.end(); ++node)
           delete *node;
-        mSubNodes.clear();
+        _subNodes.clear();
       }
       
       /**
        * Clears the Attributes.
        */
-      void clearAttributes() {mAttributes.clear();}
+      void clearAttributes() {_Attributes.clear();}
       
       /**
        * Clears both SubNodes and Attributes.
@@ -109,15 +109,15 @@ namespace fx
       {
         if (node != this)
         {
-          if (node->mParrent && node->mParrent != this)
-            node->mParrent->removeSubNode(node);
+          if (node->_parrent && node->_parrent != this)
+            node->_parrent->removeSubNode(node);
           
-          node->mLevel = 1 + mLevel;
-          node->mParrent = this;
-          node->mTree = mTree;
+          node->_level = 1 + _level;
+          node->_parrent = this;
+          node->_tree = _tree;
           
-          if (std::find(mSubNodes.begin(), mSubNodes.end(), node) == mSubNodes.end())
-            mSubNodes.push_back(node);
+          if (std::find(_subNodes.begin(), _subNodes.end(), node) == _subNodes.end())
+            _subNodes.push_back(node);
         }
       }
       
@@ -137,7 +137,7 @@ namespace fx
        */
       void copyAttributes(const Node &node)
       {
-        mAttributes = node.mAttributes;
+        _Attributes = node._Attributes;
       }
       
       
@@ -150,12 +150,12 @@ namespace fx
       {
         std::list<Node*>::iterator itr;
         
-        itr = std::find(mSubNodes.begin(), mSubNodes.end(), node);
-        if (itr != mSubNodes.end()) {
-          node->mLevel = 0;
-          node->mParrent = nullptr;
-          node->mTree = nullptr;
-          mSubNodes.erase(itr);
+        itr = std::find(_subNodes.begin(), _subNodes.end(), node);
+        if (itr != _subNodes.end()) {
+          node->_level = 0;
+          node->_parrent = nullptr;
+          node->_tree = nullptr;
+          _subNodes.erase(itr);
         }
       }
       
@@ -190,20 +190,20 @@ namespace fx
        * @param name string for the name/key of the Attribute.
        * @param value string for the value of the Attribute.
        */
-      void setAttribute(const std::string &name, const std::string &value) {mAttributes[name] = value;}
+      void setAttribute(const std::string &name, const std::string &value) {_Attributes[name] = value;}
       
       /**
        * Removes an Attribute with the given name.
        * @param name string for the name/key of the Attribute to remove.
        */
-      void removeAttribute(const std::string &name) {mAttributes.erase(name);}
+      void removeAttribute(const std::string &name) {_Attributes.erase(name);}
       
       
       /**
        * Getter for the number of Nodes that wrap this Node.
        * @return int for the level.
        */
-      int level() const {return mLevel;}
+      int level() const {return _level;}
       
       /**
        * Sets the level of this Node and updates is SubNodes.
@@ -211,9 +211,9 @@ namespace fx
        */
       void setLevel(int level)
       {
-        mLevel = level;
+        _level = level;
         for (iterator itr = begin(); itr != end(); ++itr)
-          (*itr)->setLevel(mLevel + 1);
+          (*itr)->setLevel(_level + 1);
       }
       
       
@@ -223,9 +223,9 @@ namespace fx
        */
       void operator=(const Node &node)
       {
-        mElement = node.mElement;
-        mContents = node.mContents;
-        mAttributes = node.mAttributes;
+        _element = node._element;
+        _contents = node._contents;
+        _Attributes = node._Attributes;
         clearSubNodes();
         copySubNodes(node);
       }
@@ -236,52 +236,52 @@ namespace fx
        * @param element string to compare with Element name.
        * @return true if the strings match or false if not.
        */
-      bool operator==(const std::string &element) const {return mElement == element;}
+      bool operator==(const std::string &element) const {return _element == element;}
       
       /**
        * Comparison of Node element with the given string.
        * @param element string to compare with Element name.
        * @return false if the strings match or true if not.
        */
-      bool operator!=(const std::string &element) const {return mElement != element;}
+      bool operator!=(const std::string &element) const {return _element != element;}
       
       /**
        * Set the contents of this Node.
        * @param contents string for the new contents.
        */
-      void setContents(const std::string &contents) {mContents = contents;}
+      void setContents(const std::string &contents) {_contents = contents;}
       
       /**
        * Append to the contents of this Node.
        * @param contents string to append to the contents.
        */
-      void appendContents(const std::string &contents) {mContents = mContents + contents;}
+      void appendContents(const std::string &contents) {_contents = _contents + contents;}
       
       
       /**
        * Gets the begining iterator for the SubNodes collection.
        * @return iterator to the begining of the SubNodes.
        */
-      iterator begin() {return mSubNodes.begin();}
+      iterator begin() {return _subNodes.begin();}
       
       /**
        * Gets the ending iterator for the SubNodes collection.
        * @return iterator to the ending of the SubNodes.
        */
-      iterator end() {return mSubNodes.end();}
+      iterator end() {return _subNodes.end();}
       
       
       /**
        * Gets the begining const iterator for the SubNodes collection.
        * @return const iterator to the begining of the SubNodes.
        */
-      const_iterator begin() const {return mSubNodes.begin();}
+      const_iterator begin() const {return _subNodes.begin();}
       
       /**
        * Gets the const ending iterator for the SubNodes collection.
        * @return const iterator to the ending of the SubNodes.
        */
-      const_iterator end() const {return mSubNodes.end();}
+      const_iterator end() const {return _subNodes.end();}
       
       
       /**
@@ -325,13 +325,13 @@ namespace fx
        * Gets the Element name of this Node.
        * @return string for the Element name.
        */
-      std::string element() const {return mElement;}
+      std::string element() const {return _element;}
       
       /**
        * Gets the Contents of this Node.
        * @return string for the Contents.
        */
-      std::string contents() const {return mContents;}
+      std::string contents() const {return _contents;}
       
       /**
        * Gets the Attribute value for the given name/key.
@@ -340,8 +340,8 @@ namespace fx
        */
       std::string attribute(const std::string &name) const
       {
-        std::map<std::string, std::string>::const_iterator itr = mAttributes.find(name);
-        return itr != mAttributes.end() ? itr->second : "";
+        std::map<std::string, std::string>::const_iterator itr = _Attributes.find(name);
+        return itr != _Attributes.end() ? itr->second : "";
       }
       
       /**
@@ -364,8 +364,7 @@ namespace fx
       int attributeAsInt(const std::string &name) const
       {
         int value = 0;
-        // TODO: Fix This
-        //StringUtils::ParseIntenger(value, attribute(name));
+        fx::StringUtils::parseInt(value, attribute(name));
         return value;
       }
       
@@ -377,8 +376,7 @@ namespace fx
       float attributeAsFloat(const std::string &name) const
       {
         float value = 0;
-        // TODO: Fix This
-        //StringUtils::ParseFloat(value, attribute(name));
+        fx::StringUtils::parseFloat(value, attribute(name));
         return value;
       }
       
@@ -424,7 +422,7 @@ namespace fx
        * @param attribute string attribute value to check for.
        * @return true if the Attribute is in the Attribute Map or false if not.
        */
-      bool hasAttribute(const std::string &attribute) const {return mAttributes.find(attribute) != mAttributes.end();}
+      bool hasAttribute(const std::string &attribute) const {return _Attributes.find(attribute) != _Attributes.end();}
       
       /**
        * Checks if the SubNodes collection contains an Node with the given element
@@ -438,19 +436,19 @@ namespace fx
        * Gets the number of SubNodes in the Node.
        * @return number of SubNodes.
        */
-      size_t numberSubNodes() const {return mSubNodes.size();}
+      size_t numberSubNodes() const {return _subNodes.size();}
       
       /**
        * Gets the number of Attributes in the Node.
        * @return number of Attributes.
        */
-      size_t numberAttributes() const {return mAttributes.size();}
+      size_t numberAttributes() const {return _Attributes.size();}
       
       /**
        * Gets a pointer to the Tree that owns this node.
        * @return pointer to an XMLTree or Null if not in a tree.
        */
-      XMLTree *tree() const {return mTree;}
+      XMLTree *tree() const {return _tree;}
       
       /**
        * Write an Node and its SubNodes to the given output stream.
@@ -512,22 +510,22 @@ namespace fx
         std::map<std::string, std::string>::const_iterator attItr;
         
         /* write the Element name in the opening node. */
-        os << std::string(mLevel*2, ' ') << "<" << mElement;
+        os << std::string(_level*2, ' ') << "<" << _element;
         
         /* write the Attributes in the opening node. */
-        for (attItr = mAttributes.begin(); attItr != mAttributes.end(); ++attItr)
+        for (attItr = _Attributes.begin(); attItr != _Attributes.end(); ++attItr)
           os << " " << attItr->first << "=\"" << attItr->second << "\"";
         
-        if (mSubNodes.size())
+        if (_subNodes.size())
         {
           /* Recursively write the SubNodes between the opening an closing tags
            * assuming an empty Contents string. */
           os << ">" << std::endl;
           for (const_iterator sub = begin(); sub != end(); ++sub)
             os << **sub;
-          os << std::string(mLevel*2, ' ') << "</" << mElement << ">" << std::endl;
+          os << std::string(_level*2, ' ') << "</" << _element << ">" << std::endl;
         }
-        else if (mContents == "")
+        else if (_contents == "")
         {
           /* close to a single tag if no Contents. */
           os << " />" << std::endl;
@@ -535,7 +533,7 @@ namespace fx
         else
         {
           /* write the Contents between opening and closing tags */
-          os << ">" << mContents << "</" << mElement << ">" << std::endl;
+          os << ">" << _contents << "</" << _element << ">" << std::endl;
         }
         
         return os;
@@ -717,21 +715,21 @@ namespace fx
         return node;
       }
       
-      int         mLevel;    /**< Level of the Node */
-      Node       *mParrent;  /**< Parrent Node or NULL if no Parrent */
-      std::string mElement;  /**< Element name */
-      std::string mContents; /**< String Contents */
-      XMLTree    *mTree;     /**< the tree containing this node */
+      int         _level;    /**< Level of the Node */
+      Node       *_parrent;  /**< Parrent Node or NULL if no Parrent */
+      std::string _element;  /**< Element name */
+      std::string _contents; /**< String Contents */
+      XMLTree    *_tree;     /**< the tree containing this node */
       
-      std::list<Node*> mSubNodes; /**< Collection of SubNodes */
-      std::map<std::string, std::string> mAttributes; /**< Map of Attributes */
+      std::list<Node*> _subNodes; /**< Collection of SubNodes */
+      std::map<std::string, std::string> _Attributes; /**< Map of Attributes */
     };
     
     
-    XMLTree(): mRootNode("XMLTree")
+    XMLTree(): _rootNode("XMLTree")
     {
-      mRootNode.mTree = this;
-      mRootNode.setLevel(-1);
+      _rootNode._tree = this;
+      _rootNode.setLevel(-1);
     }
     ~XMLTree() {}
     
@@ -739,37 +737,37 @@ namespace fx
      * Gets the number of Base Nodes in the Tree.
      * @return number of Base Nodes.
      */
-    size_t numberBaseNodes() const {return mRootNode.numberSubNodes();}
+    size_t numberBaseNodes() const {return _rootNode.numberSubNodes();}
     
     /**
      * Checks if the Tree is empty of Base Nodes.
      * @return true if empty or false otherwise.
      */
-    bool isEmpty() const {return mRootNode.numberSubNodes() == 0;}
+    bool isEmpty() const {return _rootNode.numberSubNodes() == 0;}
     
     /**
      * Gets the begining iterator for the SubNodes in the Root Node.
      * @return iterator to the begining of the Root Node's SubNodes.
      */
-    iterator begin() {return mRootNode.begin();}
+    iterator begin() {return _rootNode.begin();}
     
     /**
      * Gets the ending iterator for the SubNodes in the Root Node.
      * @return iterator to the ending of the RootNode's SubNodes.
      */
-    iterator end() {return mRootNode.end();}
+    iterator end() {return _rootNode.end();}
     
     /**
      * Gets the begining iterator for the SubNodes in the Root Node.
      * @return iterator to the begining of the Root Node's SubNodes.
      */
-    const_iterator begin() const {return mRootNode.begin();}
+    const_iterator begin() const {return _rootNode.begin();}
     
     /**
      * Gets the ending iterator for the SubNodes in the Root Node.
      * @return iterator to the ending of the RootNode's SubNodes.
      */
-    const_iterator end() const {return mRootNode.end();}
+    const_iterator end() const {return _rootNode.end();}
     
     /**
      * Write the Root Node and its SubNodes to the given output stream.
@@ -798,17 +796,17 @@ namespace fx
       size_t pos = filePath.find_last_of('/');
       if (pos != std::string::npos)
       {
-        mPath = filePath.substr(0, pos+1);
-        mUrl = "file://" + mPath;
+        _path = filePath.substr(0, pos+1);
+        _url = "file://" + _path;
       }
       
       fileIn.open(filePath.c_str(), std::ios::in);
       if (fileIn.is_open())
       {
-        mRootNode.clearSubNodes();
+        _rootNode.clearSubNodes();
         getline(fileIn, line);
         
-        fileIn >> mRootNode;
+        fileIn >> _rootNode;
         fileIn.close();
         return true;
       }
@@ -816,15 +814,15 @@ namespace fx
       std::cerr << "error reading XML file: " << filePath << std::endl;
       return false;
     }
-    void setUrl(const std::string &url) {mUrl = url;}
+    void setUrl(const std::string &url) {_url = url;}
     
-    std::string url() const {return mUrl;}
-    std::string path() const {return mPath;}
+    std::string url() const {return _url;}
+    std::string path() const {return _path;}
     
   private:
-    Node mRootNode;
-    std::string mUrl;
-    std::string mPath;
+    Node _rootNode;
+    std::string _url;
+    std::string _path;
   };
 }
 

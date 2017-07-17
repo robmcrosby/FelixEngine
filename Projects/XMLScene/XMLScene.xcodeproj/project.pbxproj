@@ -20,6 +20,7 @@
 		C1BB4F231F1C2130008FDF01 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1BB4F171F1C20EB008FDF01 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1BB4F261F1C2148008FDF01 /* XMLScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F241F1C2148008FDF01 /* XMLScene.cpp */; };
 		C1BB4F281F1C225E008FDF01 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F271F1C225E008FDF01 /* Shaders.metal */; };
+		C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1BB4F2B1F1C3049008FDF01 /* Scene.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		C1BB4F241F1C2148008FDF01 /* XMLScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLScene.cpp; sourceTree = "<group>"; };
 		C1BB4F251F1C2148008FDF01 /* XMLScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLScene.h; sourceTree = "<group>"; };
 		C1BB4F271F1C225E008FDF01 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		C1BB4F2B1F1C3049008FDF01 /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				C1BB4F0C1F1C2068008FDF01 /* Info.plist */,
 				C1BB4EFB1F1C2068008FDF01 /* Supporting Files */,
 				C1BB4F271F1C225E008FDF01 /* Shaders.metal */,
+				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
 			);
 			path = XMLScene;
 			sourceTree = "<group>";
@@ -229,6 +232,7 @@
 			files = (
 				C1BB4F0B1F1C2068008FDF01 /* LaunchScreen.storyboard in Resources */,
 				C1BB4F081F1C2068008FDF01 /* Assets.xcassets in Resources */,
+				C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */,
 				C1BB4F061F1C2068008FDF01 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
