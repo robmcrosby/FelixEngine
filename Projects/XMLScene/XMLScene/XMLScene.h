@@ -10,11 +10,13 @@
 #define XMLScene_h
 
 #import <FelixEngine/Application.h>
+#import <FelixEngine/Scene.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicTask.h>
 
 class XMLScene: public fx::Application {
 private:
+  fx::Scene _scene;
   fx::GraphicTask _task;
   
 public:

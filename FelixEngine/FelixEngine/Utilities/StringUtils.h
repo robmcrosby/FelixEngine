@@ -10,6 +10,7 @@
 #define StringUtils_h
 
 #include <string>
+#include <sstream>
 #include <vector>
 
 

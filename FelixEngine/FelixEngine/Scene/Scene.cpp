@@ -11,6 +11,7 @@
 #include "Camera.h"
 #include "Material.h"
 #include "LightRig.h"
+#include "FileSystem.h"
 
 
 using namespace fx;
@@ -34,6 +35,38 @@ void Scene::update() {
 
 void Scene::render() {
   _renderPasses.render();
+}
+
+bool Scene::loadXMLFile(const std::string &file) {
+  XMLTree tree;
+  if (FileSystem::loadXMLTree(tree, file)) {
+    for (auto node : tree) {
+      if (*node == "Scene")
+        return loadXML(*node);
+    }
+  }
+  return false;
+}
+
+bool Scene::loadXML(const XMLTree::Node &node) {
+  bool success = true;
+  
+  for (auto subNode : node) {
+    if (*subNode == "ShaderProgram")
+      printf("Add Shader Program\n");
+    else if (*subNode == "VertexMesh")
+      printf("Add Vertex Mesh\n");
+    else if (*subNode == "LightRig")
+      printf("Add Light Rig\n");
+    else if (*subNode == "Material")
+      printf("Add Material\n");
+    else if (*subNode == "Camera")
+      printf("Add Camera\n");
+    else if (*subNode == "Model")
+      printf("Add Model\n");
+  }
+  
+  return success;
 }
 
 

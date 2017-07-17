@@ -10,6 +10,7 @@
 #define Scene_h
 
 #include "RenderPass.h"
+#include "XMLTree.h"
 #include <map>
 #include <string>
 
@@ -34,6 +35,9 @@ namespace fx {
     
     virtual void update();
     virtual void render();
+    
+    bool loadXMLFile(const std::string &file);
+    bool loadXML(const XMLTree::Node &node);
     
     RenderPasses& renderPasses() {return _renderPasses;}
     

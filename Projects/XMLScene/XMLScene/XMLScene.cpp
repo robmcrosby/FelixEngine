@@ -7,7 +7,7 @@
 //
 
 #include "XMLScene.h"
-#include <FelixEngine/XMLTree.h>
+
 
 XMLScene::XMLScene() {
   printf("Create XMLScene\n");
@@ -24,9 +24,11 @@ void XMLScene::initalize() {
     0.8, -0.8, 0.0, 1.0
   };
   
-  fx::XMLTree tree;
-  fx::FileSystem::loadXMLTree(tree, "Scene.xml");
-  std::cout << tree << std::endl;
+//  fx::XMLTree tree;
+//  fx::FileSystem::loadXMLTree(tree, "Scene.xml");
+//  std::cout << tree << std::endl;
+  
+  _scene.loadXMLFile("Scene.xml");
   
   _task.frame = _graphics->getMainWindowBuffer();
   
