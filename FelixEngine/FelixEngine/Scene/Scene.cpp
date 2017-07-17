@@ -53,22 +53,77 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   
   for (auto subNode : node) {
     if (*subNode == "ShaderProgram")
-      printf("Add Shader Program\n");
+      success &= addShader(*subNode);
     else if (*subNode == "VertexMesh")
-      printf("Add Vertex Mesh\n");
+      success &= addMesh(*subNode);
     else if (*subNode == "LightRig")
-      printf("Add Light Rig\n");
+      success &= addLightRig(*subNode);
     else if (*subNode == "Material")
-      printf("Add Material\n");
-    else if (*subNode == "Camera")
-      printf("Add Camera\n");
-    else if (*subNode == "Model")
-      printf("Add Model\n");
+      success &= addMaterial(*subNode);
+    else
+      success &= addModel(*subNode) || addCamera(*subNode);
   }
   
   return success;
 }
 
+bool Scene::addShader(const XMLTree::Node &node) {
+  //printf("Add Shader: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+bool Scene::addMesh(const XMLTree::Node &node) {
+  //printf("Add Mesh: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+bool Scene::addLightRig(const XMLTree::Node &node) {
+  //printf("Add Light Rig: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+bool Scene::addMaterial(const XMLTree::Node &node) {
+  //printf("Add Material: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+bool Scene::addCamera(const XMLTree::Node &node) {
+  if (node != "Camera")
+    return false;
+  
+  //printf("Add Camera: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+bool Scene::addModel(const XMLTree::Node &node) {
+  if (node != "Model")
+    return false;
+  
+  //printf("Add Model: %s\n", node.attribute("name").c_str());
+  return true;
+}
+
+ShaderProgram* Scene::getShader(const std::string &name) {
+  if (name != "" && _shaders.count(name) > 0)
+    return _shaders.at(name);
+  else {
+    ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
+    if (name != "")
+      _shaders[name] = shader;
+    return shader;
+  }
+}
+
+VertexMesh* Scene::getMesh(const std::string &name) {
+  if (name != "" && _meshes.count(name) > 0)
+    return _meshes.at(name);
+  else {
+    VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
+    if (name != "")
+      _meshes[name] = mesh;
+    return mesh;
+  }
+}
 
 Model* Scene::getModel(const std::string &name) {
   if (_models.count(name) == 0)

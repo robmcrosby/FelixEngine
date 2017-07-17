@@ -24,10 +24,25 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
+    std::map<std::string, ShaderProgram*> _shaders;
+    std::map<std::string, VertexMesh*>    _meshes;
+    
     std::map<std::string, Model*>    _models;
     std::map<std::string, Camera*>   _cameras;
     std::map<std::string, Material*> _materials;
     std::map<std::string, LightRig*> _lights;
+    
+  public:
+    bool loadXMLFile(const std::string &file);
+    bool loadXML(const XMLTree::Node &node);
+    
+  private:
+    bool addShader(const XMLTree::Node &node);
+    bool addMesh(const XMLTree::Node &node);
+    bool addLightRig(const XMLTree::Node &node);
+    bool addMaterial(const XMLTree::Node &node);
+    bool addCamera(const XMLTree::Node &node);
+    bool addModel(const XMLTree::Node &node);
     
   public:
     Scene();
@@ -36,10 +51,10 @@ namespace fx {
     virtual void update();
     virtual void render();
     
-    bool loadXMLFile(const std::string &file);
-    bool loadXML(const XMLTree::Node &node);
-    
     RenderPasses& renderPasses() {return _renderPasses;}
+    
+    ShaderProgram* getShader(const std::string &name);
+    VertexMesh* getMesh(const std::string &name);
     
     Model* getModel(const std::string &name);
     Model* setModel(Model *model, const std::string &name);
