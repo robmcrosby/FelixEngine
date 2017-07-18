@@ -40,6 +40,7 @@ namespace fx {
     
     bool loadXML(const XMLTree::Node &node);
     
+    void setShader(const std::string &name);
     void setShader(ShaderProgram *shader) {_shader = shader;}
     ShaderProgram* shader() {return _shader;}
     
@@ -51,21 +52,21 @@ namespace fx {
     DepthStencilState& depthStencilState() {return _depthStencilState;}
     void enableDepthTesting() {_depthStencilState.enableDepthTesting();}
     
+    bool setAmbiant(const XMLTree::Node &node);
     void setAmbiant(const vec3 &color, float factor) {_data.ambiant = vec4(color, factor);}
     vec3 ambiantColor() const {return _data.ambiant.xyz();}
     float ambiantFactor() const {return _data.ambiant.a;}
-    bool setAmbiant(const XMLTree::Node &node);
     
+    bool setDiffuse(const XMLTree::Node &node);
     void setDiffuse(const vec3 &color, float factor) {_data.diffuse = vec4(color, factor);}
     vec3 diffuseColor() const {return _data.diffuse.xyz();}
     float diffuseFactor() const {return _data.diffuse.a;}
-    bool setDiffuse(const XMLTree::Node &node);
     
+    bool setSpecular(const XMLTree::Node &node);
     void setSpecular(const vec3 &color, float factor, float hardness);
     vec3 specularColor() const {return _data.specular.xyz();}
     float specularFactor() const {return _data.specular.a;}
     float hardness() const {return _data.factors.x;}
-    bool setSpecular(const XMLTree::Node &node);
   };
   
 }

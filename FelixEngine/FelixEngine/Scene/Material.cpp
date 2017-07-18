@@ -23,6 +23,10 @@ Material::~Material() {
 
 bool Material::loadXML(const XMLTree::Node &node) {
   bool success = true;
+  
+  if (node.hasAttribute("shader"))
+    setShader(node.attribute("shader"));
+  
   for (auto subNode : node) {
     if (subNode->element() == "Ambiant")
       success &= setAmbiant(*subNode);
@@ -32,6 +36,10 @@ bool Material::loadXML(const XMLTree::Node &node) {
       success &= setSpecular(*subNode);
   }
   return success;
+}
+
+void Material::setShader(const string &name) {
+  setShader(_scene->getShader(name));
 }
 
 void Material::addTexture(TextureBuffer *texture, SamplerState sampler) {
