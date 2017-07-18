@@ -14,10 +14,12 @@ using namespace std;
 
 
 bool ShaderProgram::loadXML(const XMLTree::Node &node) {
+  cout << node << endl;
   return true;
 }
 
 
 bool VertexMesh::loadXML(const XMLTree::Node &node) {
+  cout << node << endl;
   return true;
 }

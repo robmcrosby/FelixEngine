@@ -11,6 +11,7 @@
 
 #include "RenderPass.h"
 #include "XMLTree.h"
+#include "IndexedMap.h"
 #include <set>
 #include <map>
 #include <string>
@@ -25,16 +26,13 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
-    std::set<ShaderProgram*> _shaders;
-    std::map<std::string, ShaderProgram*> _shaderMap;
+    IndexedMap<std::string, ShaderProgram*> _shaders;
+    IndexedMap<std::string, VertexMesh*>    _meshes;
     
-    std::set<VertexMesh*> _meshes;
-    std::map<std::string, VertexMesh*> _mesheMap;
-    
-    std::map<std::string, Model*>    _models;
-    std::map<std::string, Camera*>   _cameras;
-    std::map<std::string, Material*> _materials;
-    std::map<std::string, LightRig*> _lights;
+    IndexedMap<std::string, Model*>    _models;
+    IndexedMap<std::string, Camera*>   _cameras;
+    IndexedMap<std::string, Material*> _materials;
+    IndexedMap<std::string, LightRig*> _lights;
     
   public:
     bool loadXMLFile(const std::string &file);
@@ -61,16 +59,9 @@ namespace fx {
     VertexMesh* getMesh(const std::string &name);
     
     Model* getModel(const std::string &name);
-    Model* setModel(Model *model, const std::string &name);
-    
     Camera* getCamera(const std::string &name);
-    Camera* setCamera(Camera *camera, const std::string &name);
-    
     Material* getMaterial(const std::string &name);
-    Material* setMaterial(Material *material, const std::string &name);
-    
     LightRig* getLightRig(const std::string &name);
-    LightRig* setLightRig(LightRig *light, const std::string &name);
   };
   
 }

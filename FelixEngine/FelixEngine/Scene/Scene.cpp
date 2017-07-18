@@ -27,9 +27,9 @@ Scene::~Scene() {
 
 void Scene::update() {
   for (auto model : _models)
-    model.second->update();
+    model->update();
   for (auto camera : _cameras)
-    camera.second->update();
+    camera->update();
   _renderPasses.update();
 }
 
@@ -102,73 +102,61 @@ bool Scene::addModel(const XMLTree::Node &node) {
 }
 
 ShaderProgram* Scene::getShader(const std::string &name) {
-  if (name != "" && _shaderMap.count(name) > 0)
-    return _shaderMap.at(name);
+  if (_shaders.contains(name))
+    return _shaders[name];
   else {
     ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
-    _shaders.insert(shader);
-    if (name != "")
-      _shaderMap[name] = shader;
+    _shaders.push(name, shader);
     return shader;
   }
 }
 
 VertexMesh* Scene::getMesh(const std::string &name) {
-  if (name != "" && _mesheMap.count(name) > 0)
-    return _mesheMap.at(name);
+  if (_meshes.contains(name))
+    return _meshes[name];
   else {
     VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
-    _meshes.insert(mesh);
-    if (name != "")
-      _mesheMap[name] = mesh;
+    _meshes.push(name, mesh);
     return mesh;
   }
 }
 
 Model* Scene::getModel(const std::string &name) {
-  if (_models.count(name) == 0)
-    _models[name] = new Model();
-  return _models[name];
-}
-
-Model* Scene::setModel(Model *model, const std::string &name) {
-  if (_models.count(name) == 0 && _models.at(name) != model)
-    delete _models.at(name);
-  return _models[name] = model;
+  if (_models.contains(name))
+    return _models[name];
+  else {
+    Model *model = new Model();
+    _models.push(name, model);
+    return model;
+  }
 }
 
 Camera* Scene::getCamera(const std::string &name) {
-  if (_cameras.count(name) == 0)
-    _cameras[name] = new Camera();
-  return _cameras[name];
-}
-
-Camera* Scene::setCamera(Camera *camera, const std::string &name) {
-  if (_cameras.count(name) == 0 && _cameras.at(name) != camera)
-    delete _cameras.at(name);
-  return _cameras[name] = camera;
+  if (_cameras.contains(name))
+    return _cameras[name];
+  else {
+    Camera *camera = new Camera();
+    _cameras.push(name, camera);
+    return camera;
+  }
 }
 
 Material* Scene::getMaterial(const std::string &name) {
-  if (_materials.count(name) == 0)
-    _materials[name] = new Material();
-  return _materials[name];
-}
-
-Material* Scene::setMaterial(Material *material, const std::string &name) {
-  if (_materials.count(name) == 0 && _materials.at(name) != material)
-    delete _materials.at(name);
-  return _materials[name] = material;
+  if (_materials.contains(name))
+    return _materials[name];
+  else {
+    Material *material = new Material();
+    _materials.push(name, material);
+    return material;
+  }
 }
 
 LightRig* Scene::getLightRig(const std::string &name) {
-  if (_lights.count(name) == 0)
-    _lights[name] = new LightRig();
-  return _lights[name];
-}
-
-LightRig* Scene::setLightRig(LightRig *light, const std::string &name) {
-  if (_lights.count(name) == 0 && _lights.at(name) != light)
-    delete _lights.at(name);
-  return _lights[name] = light;
+  if (_lights.contains(name))
+    return _lights[name];
+  else {
+    LightRig *light = new LightRig();
+    _lights.push(name, light);
+    return light;
+  }
 }
