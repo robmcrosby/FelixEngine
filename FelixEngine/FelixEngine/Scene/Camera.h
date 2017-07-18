@@ -10,6 +10,7 @@
 #define Camera_h
 
 #include "Matrix.h"
+#include "XMLTree.h"
 
 
 namespace fx {
@@ -41,6 +42,7 @@ namespace fx {
     virtual ~Camera();
     
     virtual void update();
+    virtual bool loadXML(const XMLTree::Node &node);
     
     CameraData& data() {return _data;}
     

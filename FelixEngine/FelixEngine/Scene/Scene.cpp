@@ -76,29 +76,23 @@ bool Scene::addMesh(const XMLTree::Node &node) {
 }
 
 bool Scene::addLightRig(const XMLTree::Node &node) {
-  //printf("Add Light Rig: %s\n", node.attribute("name").c_str());
-  return true;
+  return getLightRig(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addMaterial(const XMLTree::Node &node) {
-  //printf("Add Material: %s\n", node.attribute("name").c_str());
-  return true;
+  return getMaterial(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addCamera(const XMLTree::Node &node) {
   if (node != "Camera")
     return false;
-  
-  //printf("Add Camera: %s\n", node.attribute("name").c_str());
-  return true;
+  return getCamera(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addModel(const XMLTree::Node &node) {
   if (node != "Model")
     return false;
-  
-  //printf("Add Model: %s\n", node.attribute("name").c_str());
-  return true;
+  return getModel(node.attribute("name"))->loadXML(node);
 }
 
 ShaderProgram* Scene::getShader(const std::string &name) {

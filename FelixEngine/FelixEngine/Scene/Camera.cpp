@@ -30,6 +30,11 @@ void Camera::update() {
   
 }
 
+bool Camera::loadXML(const XMLTree::Node &node) {
+  cout << node << endl;
+  return true;
+}
+
 void Camera::setOrthographic(float scale, float near, float far) {
   fx::vec2 size = _frame != nullptr ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
   float width = scale/2.0f;

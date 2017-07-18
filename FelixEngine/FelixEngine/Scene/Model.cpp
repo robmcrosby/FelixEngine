@@ -27,6 +27,11 @@ void Model::update() {
   _data[0].rotation = _orientation;
 }
 
+bool Model::loadXML(const XMLTree::Node &node) {
+  cout << node << endl;
+  return true;
+}
+
 void Model::setShader(ShaderProgram *shader) {
   if (_material == nullptr)
     _material = new Material();

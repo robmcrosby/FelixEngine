@@ -35,6 +35,11 @@ namespace fx {
     Material(): _shader(nullptr) {}
     ~Material() {delete _shader;}
     
+    bool loadXML(const XMLTree::Node &node) {
+      std::cout << node << std::endl;
+      return true;
+    }
+    
     void setShader(ShaderProgram *shader) {_shader = shader;}
     ShaderProgram* shader() {return _shader;}
     

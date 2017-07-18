@@ -77,6 +77,11 @@ namespace fx {
     LightData& data() {return _lights.at(0);}
     size_t size() const {return _lights.size() * sizeof(LightData);}
     
+    bool loadXML(const XMLTree::Node &node) {
+      std::cout << node << std::endl;
+      return true;
+    }
+    
     void addDirectionalLight(vec3 direction, vec3 color, float energy) {
       LightData light;
       light.setAsDirectionalLight(direction, color, energy);

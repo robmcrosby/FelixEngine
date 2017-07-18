@@ -10,6 +10,7 @@
 #define Model_h
 
 #include "Quaternion.h"
+#include "XMLTree.h"
 #include <vector>
 
 namespace fx {
@@ -41,6 +42,7 @@ namespace fx {
     virtual ~Model();
     
     virtual void update();
+    virtual bool loadXML(const XMLTree::Node &node);
     
     void setInstances(int instances) {_data.resize(instances);}
     int instances() const {return (int)_data.size();}
