@@ -58,6 +58,7 @@
 		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */; };
+		C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F331F1ECF23008FDF01 /* Material.cpp */; };
 		C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */; };
 		C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
@@ -122,6 +123,7 @@
 		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = Utilities/StringUtils.h; sourceTree = "<group>"; };
 		C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = Systems/Graphics/GraphicResources.cpp; sourceTree = "<group>"; };
+		C1BB4F331F1ECF23008FDF01 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
 		C1CC9D181F110CCB00A938D0 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				C1E60EB21F0F09860021F704 /* Camera.h */,
 				C1E60EB11F0F09860021F704 /* Camera.cpp */,
 				C1E60EAA1F0F08370021F704 /* Material.h */,
+				C1BB4F331F1ECF23008FDF01 /* Material.cpp */,
 				C1E60EAE1F0F08510021F704 /* LightRig.h */,
 			);
 			name = Components;
@@ -418,6 +421,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */,
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
