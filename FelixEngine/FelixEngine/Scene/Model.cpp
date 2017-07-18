@@ -7,6 +7,7 @@
 //
 
 #include "Model.h"
+#include "Scene.h"
 #include "Material.h"
 
 
@@ -14,8 +15,7 @@ using namespace fx;
 using namespace std;
 
 
-Model::Model(): _data(1), _material(nullptr), _mesh(nullptr), _hidden(false) {
-
+Model::Model(Scene *scene): _scene(scene), _data(1), _material(nullptr), _mesh(nullptr), _hidden(false) {
 }
 
 Model::~Model() {
@@ -34,12 +34,12 @@ bool Model::loadXML(const XMLTree::Node &node) {
 
 void Model::setShader(ShaderProgram *shader) {
   if (_material == nullptr)
-    _material = new Material();
+    _material = _scene->getMaterial();
   _material->setShader(shader);
 }
 
 void Model::enableDepthTesting() {
   if (_material == nullptr)
-    _material = new Material();
+    _material = _scene->getMaterial();
   _material->enableDepthTesting();
 }

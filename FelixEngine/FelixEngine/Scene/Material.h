@@ -15,6 +15,7 @@
 
 
 namespace fx {
+  class Scene;
   
   struct MaterialData {
     vec4 ambiant;
@@ -25,6 +26,8 @@ namespace fx {
   
   class Material {
   private:
+    Scene *_scene;
+    
     MaterialData _data;
     TextureMap _textures;
     ShaderProgram *_shader;
@@ -32,7 +35,7 @@ namespace fx {
     DepthStencilState _depthStencilState;
     
   public:
-    Material();
+    Material(Scene *scene);
     ~Material();
     
     bool loadXML(const XMLTree::Node &node);

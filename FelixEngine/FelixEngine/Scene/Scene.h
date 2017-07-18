@@ -58,10 +58,10 @@ namespace fx {
     ShaderProgram* getShader(const std::string &name);
     VertexMesh* getMesh(const std::string &name);
     
-    Model* getModel(const std::string &name);
-    Camera* getCamera(const std::string &name);
-    Material* getMaterial(const std::string &name);
-    LightRig* getLightRig(const std::string &name);
+    Model* getModel(const std::string &name = "");
+    Camera* getCamera(const std::string &name = "");
+    Material* getMaterial(const std::string &name = "");
+    LightRig* getLightRig(const std::string &name = "");
   };
   
 }

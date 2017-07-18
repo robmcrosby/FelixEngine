@@ -14,6 +14,7 @@
 
 
 namespace fx {
+  class Scene;
   class LightRig;
   class FrameBuffer;
   class ShaderProgram;
@@ -26,6 +27,8 @@ namespace fx {
   
   class Camera {
   protected:
+    Scene *_scene;
+    
     CameraData _data;
     LightRig *_lightRig;
     FrameBuffer *_frame;
@@ -38,7 +41,7 @@ namespace fx {
     float _clearDepth;
     
   public:
-    Camera();
+    Camera(Scene *scene);
     virtual ~Camera();
     
     virtual void update();

@@ -7,13 +7,14 @@
 //
 
 #include "Material.h"
+#include "Scene.h"
 
 
 using namespace fx;
 using namespace std;
 
 
-Material::Material(): _shader(nullptr) {
+Material::Material(Scene *scene): _scene(scene), _shader(nullptr) {
 }
 
 Material::~Material() {

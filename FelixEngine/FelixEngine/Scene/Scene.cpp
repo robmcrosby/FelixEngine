@@ -119,7 +119,7 @@ Model* Scene::getModel(const std::string &name) {
   if (_models.contains(name))
     return _models[name];
   else {
-    Model *model = new Model();
+    Model *model = new Model(this);
     _models.push(name, model);
     return model;
   }
@@ -129,7 +129,7 @@ Camera* Scene::getCamera(const std::string &name) {
   if (_cameras.contains(name))
     return _cameras[name];
   else {
-    Camera *camera = new Camera();
+    Camera *camera = new Camera(this);
     _cameras.push(name, camera);
     return camera;
   }
@@ -139,7 +139,7 @@ Material* Scene::getMaterial(const std::string &name) {
   if (_materials.contains(name))
     return _materials[name];
   else {
-    Material *material = new Material();
+    Material *material = new Material(this);
     _materials.push(name, material);
     return material;
   }

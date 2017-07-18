@@ -7,6 +7,7 @@
 //
 
 #include "Camera.h"
+#include "Scene.h"
 #include "LightRig.h"
 #include "GraphicResources.h"
 
@@ -14,7 +15,7 @@
 using namespace fx;
 using namespace std;
 
-Camera::Camera() {
+Camera::Camera(Scene *scene): _scene(scene) {
   _lightRig = nullptr;
   _frame = nullptr;
   

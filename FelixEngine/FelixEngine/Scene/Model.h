@@ -14,6 +14,7 @@
 #include <vector>
 
 namespace fx {
+  class Scene;
   class Material;
   class VertexMesh;
   class ShaderProgram;
@@ -26,6 +27,8 @@ namespace fx {
   
   class Model {
   protected:
+    Scene *_scene;
+    
     InstanceModels _data;
     Material *_material;
     VertexMesh *_mesh;
@@ -38,7 +41,7 @@ namespace fx {
     int _layer;
     
   public:
-    Model();
+    Model(Scene *scene);
     virtual ~Model();
     
     virtual void update();
