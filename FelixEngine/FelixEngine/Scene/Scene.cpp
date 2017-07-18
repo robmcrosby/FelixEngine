@@ -68,13 +68,11 @@ bool Scene::loadXML(const XMLTree::Node &node) {
 }
 
 bool Scene::addShader(const XMLTree::Node &node) {
-  //printf("Add Shader: %s\n", node.attribute("name").c_str());
-  return true;
+  return getShader(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addMesh(const XMLTree::Node &node) {
-  //printf("Add Mesh: %s\n", node.attribute("name").c_str());
-  return true;
+  return getMesh(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addLightRig(const XMLTree::Node &node) {
@@ -104,23 +102,25 @@ bool Scene::addModel(const XMLTree::Node &node) {
 }
 
 ShaderProgram* Scene::getShader(const std::string &name) {
-  if (name != "" && _shaders.count(name) > 0)
-    return _shaders.at(name);
+  if (name != "" && _shaderMap.count(name) > 0)
+    return _shaderMap.at(name);
   else {
     ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
+    _shaders.insert(shader);
     if (name != "")
-      _shaders[name] = shader;
+      _shaderMap[name] = shader;
     return shader;
   }
 }
 
 VertexMesh* Scene::getMesh(const std::string &name) {
-  if (name != "" && _meshes.count(name) > 0)
-    return _meshes.at(name);
+  if (name != "" && _mesheMap.count(name) > 0)
+    return _mesheMap.at(name);
   else {
     VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
+    _meshes.insert(mesh);
     if (name != "")
-      _meshes[name] = mesh;
+      _mesheMap[name] = mesh;
     return mesh;
   }
 }

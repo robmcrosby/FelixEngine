@@ -11,6 +11,7 @@
 
 #include "RenderPass.h"
 #include "XMLTree.h"
+#include <set>
 #include <map>
 #include <string>
 
@@ -24,8 +25,11 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
-    std::map<std::string, ShaderProgram*> _shaders;
-    std::map<std::string, VertexMesh*>    _meshes;
+    std::set<ShaderProgram*> _shaders;
+    std::map<std::string, ShaderProgram*> _shaderMap;
+    
+    std::set<VertexMesh*> _meshes;
+    std::map<std::string, VertexMesh*> _mesheMap;
     
     std::map<std::string, Model*>    _models;
     std::map<std::string, Camera*>   _cameras;

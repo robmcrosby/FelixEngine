@@ -9,6 +9,7 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
+#include "XMLTree.h"
 #include "Vector.h"
 #include "Matrix.h"
 #include <vector>
@@ -32,12 +33,14 @@ namespace fx {
   struct ShaderProgram {
     virtual ~ShaderProgram() {}
     
+    virtual bool loadXML(const XMLTree::Node &node);
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) = 0;
   };
   
   struct VertexMesh {
     virtual ~VertexMesh() {}
     
+    virtual bool loadXML(const XMLTree::Node &node);
     virtual bool load(const VertexMeshData &data) = 0;
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
