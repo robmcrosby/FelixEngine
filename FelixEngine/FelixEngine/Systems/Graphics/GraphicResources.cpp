@@ -7,6 +7,7 @@
 //
 
 #include "GraphicResources.h"
+#include "FileSystem.h"
 
 
 using namespace fx;
@@ -14,12 +15,17 @@ using namespace std;
 
 
 bool ShaderProgram::loadXML(const XMLTree::Node &node) {
-  cout << node << endl;
-  return true;
+  if (node.hasAttribute("vertexFunction") && node.hasAttribute("fragmentFunction"))
+    return loadShaderFunctions(node.attribute("vertexFunction"), node.attribute("fragmentFunction"));
+  return false;
 }
 
 
 bool VertexMesh::loadXML(const XMLTree::Node &node) {
-  cout << node << endl;
-  return true;
+  if (node.hasAttribute("file")) {
+    fx::VertexMeshData meshData;
+    if (fx::FileSystem::loadMesh(meshData, node.attribute("file")))
+      return load(meshData);
+  }
+  return false;
 }
