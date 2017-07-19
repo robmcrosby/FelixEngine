@@ -34,6 +34,8 @@ bool Material::loadXML(const XMLTree::Node &node) {
       success &= setDiffuse(*subNode);
     else if (subNode->element() == "Specular")
       success &= setSpecular(*subNode);
+    else if (subNode->element() == "DepthState")
+      success &= _depthState.loadXml(*subNode);
   }
   return success;
 }

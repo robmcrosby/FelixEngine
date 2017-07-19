@@ -32,7 +32,7 @@ namespace fx {
     TextureMap _textures;
     ShaderProgram *_shader;
     
-    DepthStencilState _depthStencilState;
+    DepthState _depthState;
     
   public:
     Material(Scene *scene);
@@ -49,8 +49,8 @@ namespace fx {
     
     MaterialData& data() {return _data;}
     
-    DepthStencilState& depthStencilState() {return _depthStencilState;}
-    void enableDepthTesting() {_depthStencilState.enableDepthTesting();}
+    DepthState& depthState() {return _depthState;}
+    void enableDepthTesting() {_depthState.enableDefaultTesting();}
     
     bool setAmbiant(const XMLTree::Node &node);
     void setAmbiant(const vec3 &color, float factor) {_data.ambiant = vec4(color, factor);}

@@ -79,7 +79,7 @@ void RenderItem::setModel(Model *newModel) {
       uniforms["material"] = material->data();
       task.textures = &material->textures();
       task.shader = material->shader();
-      task.depthStencilState = material->depthStencilState();
+      task.depthState = material->depthState();
     }
   }
 }

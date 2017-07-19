@@ -142,7 +142,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   shader->encode(encoder, task);
   
   // Set the Depth/Stencil State
-  int flags = task.depthStencilState.flags;
+  int flags = task.depthState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
   // Set Culling Mode
