@@ -14,6 +14,7 @@
 #include <map>
 #include <list>
 #include <fstream>
+#include <cstdarg>
 
 #include "StringUtils.h"
 #include "Vector.h"
@@ -423,6 +424,16 @@ namespace fx
        * @return true if the Attribute is in the Attribute Map or false if not.
        */
       bool hasAttribute(const std::string &attribute) const {return _Attributes.find(attribute) != _Attributes.end();}
+      
+      template <typename T>
+      bool hasAttributes(T arg) const {
+        return hasAttribute(arg);
+      }
+      
+      template <typename T, typename... R>
+      bool hasAttributes(T arg, R... rest) const {
+        return hasAttribute(arg) && hasAttributes(rest...);
+      }
       
       /**
        * Checks if the SubNodes collection contains an Node with the given element

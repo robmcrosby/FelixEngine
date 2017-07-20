@@ -49,7 +49,7 @@ void Material::addTexture(TextureBuffer *texture, SamplerState sampler) {
 }
 
 bool Material::setAmbiant(const XMLTree::Node &node) {
-  if (node.hasAttribute("color") && node.hasAttribute("factor")) {
+  if (node.hasAttributes("color", "factor")) {
     setAmbiant(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
   }
@@ -57,7 +57,7 @@ bool Material::setAmbiant(const XMLTree::Node &node) {
 }
 
 bool Material::setDiffuse(const XMLTree::Node &node) {
-  if (node.hasAttribute("color") && node.hasAttribute("factor")) {
+  if (node.hasAttributes("color", "factor")) {
     setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
   }
@@ -70,7 +70,7 @@ void Material::setSpecular(const vec3 &color, float factor, float hardness) {
 }
 
 bool Material::setSpecular(const XMLTree::Node &node) {
-  if (node.hasAttribute("color") && node.hasAttribute("factor") && node.hasAttribute("hardness")) {
+  if (node.hasAttributes("color", "factor", "hardness")) {
     setSpecular(node.attribute("color"), node.attributeAsFloat("factor"), node.attributeAsFloat("hardness"));
     return true;
   }

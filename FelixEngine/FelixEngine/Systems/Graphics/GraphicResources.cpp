@@ -15,7 +15,7 @@ using namespace std;
 
 
 bool ShaderProgram::loadXML(const XMLTree::Node &node) {
-  if (node.hasAttribute("vertexFunction") && node.hasAttribute("fragmentFunction"))
+  if (node.hasAttributes("vertexFunction", "fragmentFunction"))
     return loadShaderFunctions(node.attribute("vertexFunction"), node.attribute("fragmentFunction"));
   return false;
 }

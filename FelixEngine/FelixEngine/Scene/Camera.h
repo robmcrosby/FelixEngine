@@ -49,6 +49,7 @@ namespace fx {
     
     CameraData& data() {return _data;}
     
+    void setLightRig(const std::string &name);
     void setLightRig(LightRig *rig) {_lightRig = rig;}
     LightRig* lightRig() {return _lightRig;}
     
@@ -58,10 +59,13 @@ namespace fx {
     }
     vec3 position() const {return _data.position.xyz();}
     
+    bool setProjection(const XMLTree::Node &node);
     void setOrthographic(float scale, float near, float far);
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
       _data.projection = mat4::Ortho(left, right, bottom, top, near, far);
     }
+    
+    void setFrustum(float scale, float near, float far);
     void setFrustum(float left, float right, float bottom, float top, float near, float far) {
       _data.projection = mat4::Frustum(left, right, bottom, top, near, far);
     }

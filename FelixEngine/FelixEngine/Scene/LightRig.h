@@ -85,7 +85,7 @@ namespace fx {
     }
     
     bool addLight(const XMLTree::Node &node) {
-      if (node.hasAttribute("color") && node.hasAttribute("energy")) {
+      if (node.hasAttributes("color", "energy")) {
         vec3 color = node.attribute("color");
         float energy = node.attributeAsFloat("energy");
         
