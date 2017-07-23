@@ -53,10 +53,14 @@ namespace fx {
     ModelData& data() {return _data.at(0);}
     
     void setMesh(VertexMesh *mesh) {_mesh = mesh;}
+    void setMesh(const std::string &name);
     VertexMesh* mesh() const {return _mesh;}
     
     void setMaterial(Material *material) {_material = material;}
+    void setMaterial(const std::string &name);
     Material* material() const {return _material;}
+    
+    bool setTransform(const XMLTree::Node &node);
     
     void setShader(ShaderProgram *shader);
     void enableDepthTesting();

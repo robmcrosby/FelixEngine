@@ -19,6 +19,7 @@ namespace fx
   {
     Quaternion(): x(0), y(0), z(0), w(1) {}
     Quaternion(T x, T y, T z, T w): x(x), y(y), z(z), w(w) {}
+    Quaternion(const std::string &str): x(0), y(0), z(0), w(1) {parse(str);}
     Quaternion(const Vector4<T> &v): x(v.x), y(v.y), z(v.z), w(v.w) {}
     Quaternion(const Vector3<T> &v): x(v.x), y(v.y), z(v.z)
     {
@@ -134,6 +135,17 @@ namespace fx
       
       result = *this * std::cos(theta) + q2 * std::sin(theta);
       return result.Normalized();
+    }
+    bool parse(const std::string &str)
+    {
+      float fx = 0.0f, fy = 0.0f, fz = 0.0f, fw = 1.0f;
+      int res = sscanf(str.c_str(), " %f , %f , %f , %f", &fx, &fy, &fz, &fw);
+      
+      x = (T)fx;
+      y = (T)fy;
+      z = (T)fz;
+      w = (T)fw;
+      return res = 4;
     }
     Matrix3<T> toMat3() const
     {

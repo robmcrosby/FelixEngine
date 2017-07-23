@@ -28,14 +28,43 @@ void Model::update() {
 }
 
 bool Model::loadXML(const XMLTree::Node &node) {
-  cout << node << endl;
-  return true;
+  bool success = true;
+  
+  if (node.hasAttribute("mesh"))
+    setMesh(node.attribute("mesh"));
+  if (node.hasAttribute("material"))
+    setMaterial(node.attribute("material"));
+  
+  for (auto subNode : node) {
+    if (*subNode == "Transform")
+      success &= setTransform(*subNode);
+    //TODO: add sub models, Meshes, Shaders, etc.
+  }
+  return success;
+}
+
+void Model::setMesh(const string &name) {
+  setMesh(_scene->getMesh(name));
+}
+
+void Model::setMaterial(const string &name) {
+  setMaterial(_scene->getMaterial(name));
 }
 
 void Model::setShader(ShaderProgram *shader) {
   if (_material == nullptr)
     _material = _scene->getMaterial();
   _material->setShader(shader);
+}
+
+bool Model::setTransform(const XMLTree::Node &node) {
+  if (node.hasAttribute("position"))
+    setPosition(node.attribute("position"));
+  else if (node.hasAttribute("orientation"))
+    setOrientation(node.attribute("orientation"));
+  else if (node.hasAttribute("scale"))
+    setScale(node.attributeAsFloat("scale"));
+  return true;
 }
 
 void Model::enableDepthTesting() {
