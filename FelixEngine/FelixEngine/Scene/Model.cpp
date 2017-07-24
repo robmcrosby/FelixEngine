@@ -66,6 +66,7 @@ bool Model::setTransform(const XMLTree::Node &node) {
     setOrientation(node.attribute("orientation"));
   else if (node.hasAttribute("scale"))
     setScale(node.attributeAsFloat("scale"));
+  //update();
   return true;
 }
 

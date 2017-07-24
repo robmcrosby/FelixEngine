@@ -38,14 +38,34 @@ bool Camera::loadXML(const XMLTree::Node &node) {
     setLightRig(node.attribute("lights"));
   if (node.hasAttribute("pass"))
     _scene->renderPasses()[node.attribute("pass")].setCamera(this);
+  
   for (auto subnode : node) {
     if (subnode->element() == "Projection")
       success &= setProjection(*subnode);
+    else if (subnode->element() == "View")
+      success &= setView(*subnode);
+    else if (subnode->element() == "Clear")
+      success &= setClearState(*subnode);
   }
   return success;
   
   //cout << node << endl;
   //return true;
+}
+
+void Camera::addDepthBuffer() {
+  _frame->addDepthBuffer();
+}
+
+bool Camera::setView(const XMLTree::Node &node) {
+  if (node.hasAttributes("eye", "center", "up")) {
+    vec3 eye(node.attribute("eye"));
+    vec3 center(node.attribute("center"));
+    vec3 up(node.attribute("up"));
+    lookAt(eye, center, up);
+    return true;
+  }
+  return false;
 }
 
 bool Camera::setProjection(const XMLTree::Node &node) {
@@ -59,6 +79,14 @@ bool Camera::setProjection(const XMLTree::Node &node) {
     else if (type == "frustum")
       setFrustum(scale, near, far);
   }
+  return true;
+}
+
+bool Camera::setClearState(const XMLTree::Node &node) {
+  if (node.hasAttribute("color"))
+    setClearColor(node.attribute("color"));
+  if (node.hasAttribute("depth"))
+    setClearDepth(node.attributeAsFloat("depth"));
   return true;
 }
 

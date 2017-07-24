@@ -7,6 +7,7 @@
 //
 
 #include "XMLScene.h"
+#include <FelixEngine/Camera.h>
 #include <FelixEngine/Model.h>
 
 
@@ -27,7 +28,15 @@ void XMLScene::initalize() {
   };*/
   
   _scene.loadXMLFile("Scene.xml");
+  fx::Camera *camera = _scene.getCamera("Camera");
+  camera->addDepthBuffer();
+  //camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
+  
   _model = _scene.getModel("Model");
+  //_model->enableDepthTesting();
+  _model->setScale(0.2f);
+  _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
+  _model->update();
   
   /*
   _task.frame = _graphics->getMainWindowBuffer();

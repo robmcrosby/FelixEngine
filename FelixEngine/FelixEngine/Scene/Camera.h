@@ -53,11 +53,15 @@ namespace fx {
     void setLightRig(LightRig *rig) {_lightRig = rig;}
     LightRig* lightRig() {return _lightRig;}
     
+    bool setView(const XMLTree::Node &node);
+    
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
       _data.view = mat4::LookAt(eye, center, up);
       _data.position = vec4(eye, 1.0);
     }
     vec3 position() const {return _data.position.xyz();}
+    
+    void addDepthBuffer();
     
     bool setProjection(const XMLTree::Node &node);
     void setOrthographic(float scale, float near, float far);
@@ -75,6 +79,8 @@ namespace fx {
     
     void setShader(ShaderProgram *shader) {_shader = shader;}
     ShaderProgram* shader() {return _shader;}
+    
+    bool setClearState(const XMLTree::Node &node);
     
     void setClearColor(const vec4 &color = vec4(0.0f, 0.0f, 0.0f, 1.0f));
     vec4 clearColor() const {return _clearColor;}
