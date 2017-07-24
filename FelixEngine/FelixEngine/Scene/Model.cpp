@@ -34,6 +34,8 @@ bool Model::loadXML(const XMLTree::Node &node) {
     setMesh(node.attribute("mesh"));
   if (node.hasAttribute("material"))
     setMaterial(node.attribute("material"));
+  if (node.hasAttribute("pass"))
+    _scene->renderPasses()[node.attribute("pass")].addModel(this);
   
   for (auto subNode : node) {
     if (*subNode == "Transform")

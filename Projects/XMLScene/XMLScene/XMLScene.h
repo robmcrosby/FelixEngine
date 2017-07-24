@@ -17,13 +17,16 @@
 class XMLScene: public fx::Application {
 private:
   fx::Scene _scene;
-  fx::GraphicTask _task;
+  fx::Model *_model;
+  
+  //fx::GraphicTask _task;
   
 public:
   XMLScene();
   virtual ~XMLScene();
   
   virtual void initalize();
+  virtual void update();
   virtual void render();
 };
 

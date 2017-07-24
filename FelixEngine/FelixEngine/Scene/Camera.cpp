@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "LightRig.h"
+#include "Graphics.h"
 #include "GraphicResources.h"
 
 
@@ -16,8 +17,8 @@ using namespace fx;
 using namespace std;
 
 Camera::Camera(Scene *scene): _scene(scene) {
+  _frame = Graphics::getInstance().getMainWindowBuffer();
   _lightRig = nullptr;
-  _frame = nullptr;
   
   _isClearingColor = false;
   _isClearingDepth = false;
@@ -35,6 +36,8 @@ bool Camera::loadXML(const XMLTree::Node &node) {
   bool success = true;
   if (node.hasAttribute("lights"))
     setLightRig(node.attribute("lights"));
+  if (node.hasAttribute("pass"))
+    _scene->renderPasses()[node.attribute("pass")].setCamera(this);
   for (auto subnode : node) {
     if (subnode->element() == "Projection")
       success &= setProjection(*subnode);

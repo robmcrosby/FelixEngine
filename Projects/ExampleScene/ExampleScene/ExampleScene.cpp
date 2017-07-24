@@ -34,7 +34,6 @@ void ExampleScene::initalize() {
   mesh->load(meshData);
   
   fx::Camera *camera = _scene.getCamera("camera");
-  camera->setFrame(frame);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));

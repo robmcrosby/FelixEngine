@@ -7,7 +7,7 @@
     <PointLight position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4"/>
     <PointLight position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0"/>
   </LightRig>
-  <Camera name="Camera" pass="MainPass" lights="Lights">
+  <Camera name="Camera" lights="Lights" pass="MainPass">
     <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
     <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
@@ -18,7 +18,7 @@
     <Specular color="1.0, 1.0, 1.0" factor="0.6" hardness="20.0"/>
     <DepthState write="true" function="less"/>
   </Material>
-  <Model name="Model" mesh="Mesh" material="Material">
+  <Model name="Model" mesh="Mesh" material="Material" pass="MainPass">
     <Transform scale="0.2" orientation="0.5, -0.5, 0.5, 0.5"/>
   </Model>
 </Scene>
