@@ -62,11 +62,11 @@ void Model::setShader(ShaderProgram *shader) {
 bool Model::setTransform(const XMLTree::Node &node) {
   if (node.hasAttribute("position"))
     setPosition(node.attribute("position"));
-  else if (node.hasAttribute("orientation"))
+  if (node.hasAttribute("orientation"))
     setOrientation(node.attribute("orientation"));
-  else if (node.hasAttribute("scale"))
+  if (node.hasAttribute("scale"))
     setScale(node.attributeAsFloat("scale"));
-  //update();
+  update();
   return true;
 }
 

@@ -19,8 +19,6 @@ private:
   fx::Scene _scene;
   fx::Model *_model;
   
-  //fx::GraphicTask _task;
-  
 public:
   XMLScene();
   virtual ~XMLScene();
