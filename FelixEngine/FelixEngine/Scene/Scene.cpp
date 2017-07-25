@@ -52,7 +52,9 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   bool success = true;
   
   for (auto subNode : node) {
-    if (*subNode == "ShaderProgram")
+    if (*subNode == "FrameBuffer")
+      success &= addFrame(*subNode);
+    else if (*subNode == "ShaderProgram")
       success &= addShader(*subNode);
     else if (*subNode == "VertexMesh")
       success &= addMesh(*subNode);
@@ -65,6 +67,15 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   }
   
   return success;
+}
+
+bool Scene::addFrame(const XMLTree::Node &node) {
+  string name = node.attribute("name");
+  if (node.hasAttribute("window")) {
+    int index = node.attributeAsInt("window");
+    return getWindow(name, index)->loadXML(node);
+  }
+  return getFrame(name)->loadXML(node);
 }
 
 bool Scene::addShader(const XMLTree::Node &node) {
@@ -93,6 +104,22 @@ bool Scene::addModel(const XMLTree::Node &node) {
   if (node != "Model")
     return false;
   return getModel(node.attribute("name"))->loadXML(node);
+}
+
+FrameBuffer* Scene::getWindow(const std::string &name, int index) {
+  if (_frames.contains(name))
+    return _frames[name];
+  FrameBuffer *buffer = Graphics::getInstance().getMainWindowBuffer();
+  _frames.push(name, buffer);
+  return buffer;
+}
+
+FrameBuffer* Scene::getFrame(const std::string &name) {
+  if (_frames.contains(name))
+    return _frames[name];
+  FrameBuffer *buffer = Graphics::getInstance().createFrameBuffer();
+  _frames.push(name, buffer);
+  return buffer;
 }
 
 ShaderProgram* Scene::getShader(const std::string &name) {

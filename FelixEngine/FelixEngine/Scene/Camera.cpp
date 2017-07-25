@@ -38,6 +38,10 @@ bool Camera::loadXML(const XMLTree::Node &node) {
     setLightRig(node.attribute("lights"));
   if (node.hasAttribute("pass"))
     _scene->renderPasses()[node.attribute("pass")].setCamera(this);
+  if (node.hasAttribute("frame"))
+    setFrame(node.attribute("frame"));
+  if (node.hasAttribute("shader"))
+    setShader(node.attribute("shader"));
   
   for (auto subnode : node) {
     if (subnode->element() == "Projection")
@@ -92,6 +96,14 @@ bool Camera::setClearState(const XMLTree::Node &node) {
 
 void Camera::setLightRig(const string &name) {
   setLightRig(_scene->getLightRig(name));
+}
+
+void Camera::setFrame(const string &name) {
+  setFrame(_scene->getFrame(name));
+}
+
+void Camera::setShader(const string &name) {
+  setShader(_scene->getShader(name));
 }
 
 void Camera::setOrthographic(float scale, float near, float far) {

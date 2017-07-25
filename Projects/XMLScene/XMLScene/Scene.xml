@@ -7,7 +7,10 @@
     <PointLight position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4"/>
     <PointLight position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0"/>
   </LightRig>
-  <Camera name="Camera" lights="Lights" pass="MainPass">
+  <FrameBuffer name="Frame" window="0">
+    <Buffer type="depth"/>
+  </FrameBuffer>
+  <Camera name="Camera" frame="Frame" lights="Lights" pass="MainPass">
     <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
     <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>

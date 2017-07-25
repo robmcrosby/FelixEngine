@@ -29,3 +29,14 @@ bool VertexMesh::loadXML(const XMLTree::Node &node) {
   }
   return false;
 }
+
+bool FrameBuffer::loadXML(const XMLTree::Node &node) {
+  bool success = true;
+  for (auto subnode : node) {
+    if (subnode->attribute("type") == "depth")
+      addDepthBuffer();
+    else
+      addColorTexture();
+  }
+  return success;
+}

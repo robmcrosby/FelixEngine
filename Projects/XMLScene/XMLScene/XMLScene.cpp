@@ -21,9 +21,6 @@ XMLScene::~XMLScene() {
 
 void XMLScene::initalize() {
   _scene.loadXMLFile("Scene.xml");
-  fx::Camera *camera = _scene.getCamera("Camera");
-  camera->addDepthBuffer();
-  
   _model = _scene.getModel("Model");
 }
 

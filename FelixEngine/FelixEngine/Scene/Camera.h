@@ -74,9 +74,11 @@ namespace fx {
       _data.projection = mat4::Frustum(left, right, bottom, top, near, far);
     }
     
+    void setFrame(const std::string &name);
     void setFrame(FrameBuffer *frame) {_frame = frame;}
     FrameBuffer* frame() {return _frame;}
     
+    void setShader(const std::string &name);
     void setShader(ShaderProgram *shader) {_shader = shader;}
     ShaderProgram* shader() {return _shader;}
     

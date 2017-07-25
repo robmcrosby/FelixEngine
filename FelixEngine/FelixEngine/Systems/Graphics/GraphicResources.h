@@ -76,6 +76,8 @@ namespace fx {
   struct FrameBuffer {
     virtual ~FrameBuffer() {}
     
+    virtual bool loadXML(const XMLTree::Node &node);
+    
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
     

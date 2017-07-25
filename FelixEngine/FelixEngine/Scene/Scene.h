@@ -26,6 +26,7 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
+    IndexedMap<std::string, FrameBuffer*>   _frames;
     IndexedMap<std::string, ShaderProgram*> _shaders;
     IndexedMap<std::string, VertexMesh*>    _meshes;
     
@@ -39,6 +40,7 @@ namespace fx {
     bool loadXML(const XMLTree::Node &node);
     
   private:
+    bool addFrame(const XMLTree::Node &node);
     bool addShader(const XMLTree::Node &node);
     bool addMesh(const XMLTree::Node &node);
     bool addLightRig(const XMLTree::Node &node);
@@ -55,11 +57,13 @@ namespace fx {
     
     RenderPasses& renderPasses() {return _renderPasses;}
     
+    FrameBuffer*   getWindow(const std::string &name, int index);
+    FrameBuffer*   getFrame(const std::string &name);
     ShaderProgram* getShader(const std::string &name);
-    VertexMesh* getMesh(const std::string &name);
+    VertexMesh*    getMesh(const std::string &name);
     
-    Model* getModel(const std::string &name = "");
-    Camera* getCamera(const std::string &name = "");
+    Model*    getModel(const std::string &name = "");
+    Camera*   getCamera(const std::string &name = "");
     Material* getMaterial(const std::string &name = "");
     LightRig* getLightRig(const std::string &name = "");
   };
