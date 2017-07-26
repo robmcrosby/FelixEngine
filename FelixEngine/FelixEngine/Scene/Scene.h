@@ -57,7 +57,6 @@ namespace fx {
     
     RenderPasses& renderPasses() {return _renderPasses;}
     
-    FrameBuffer*   getWindow(const std::string &name, int index);
     FrameBuffer*   getFrame(const std::string &name);
     ShaderProgram* getShader(const std::string &name);
     VertexMesh*    getMesh(const std::string &name);

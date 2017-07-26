@@ -70,12 +70,7 @@ bool Scene::loadXML(const XMLTree::Node &node) {
 }
 
 bool Scene::addFrame(const XMLTree::Node &node) {
-  string name = node.attribute("name");
-  if (node.hasAttribute("window")) {
-    int index = node.attributeAsInt("window");
-    return getWindow(name, index)->loadXML(node);
-  }
-  return getFrame(name)->loadXML(node);
+  return getFrame(node.attribute("name"))->loadXML(node);
 }
 
 bool Scene::addShader(const XMLTree::Node &node) {
@@ -106,14 +101,6 @@ bool Scene::addModel(const XMLTree::Node &node) {
   return getModel(node.attribute("name"))->loadXML(node);
 }
 
-FrameBuffer* Scene::getWindow(const std::string &name, int index) {
-  if (_frames.contains(name))
-    return _frames[name];
-  FrameBuffer *buffer = Graphics::getInstance().getMainWindowBuffer();
-  _frames.push(name, buffer);
-  return buffer;
-}
-
 FrameBuffer* Scene::getFrame(const std::string &name) {
   if (_frames.contains(name))
     return _frames[name];
@@ -125,59 +112,47 @@ FrameBuffer* Scene::getFrame(const std::string &name) {
 ShaderProgram* Scene::getShader(const std::string &name) {
   if (_shaders.contains(name))
     return _shaders[name];
-  else {
-    ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
-    _shaders.push(name, shader);
-    return shader;
-  }
+  ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
+  _shaders.push(name, shader);
+  return shader;
 }
 
 VertexMesh* Scene::getMesh(const std::string &name) {
   if (_meshes.contains(name))
     return _meshes[name];
-  else {
-    VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
-    _meshes.push(name, mesh);
-    return mesh;
-  }
+  VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
+  _meshes.push(name, mesh);
+  return mesh;
 }
 
 Model* Scene::getModel(const std::string &name) {
   if (_models.contains(name))
     return _models[name];
-  else {
-    Model *model = new Model(this);
-    _models.push(name, model);
-    return model;
-  }
+  Model *model = new Model(this);
+  _models.push(name, model);
+  return model;
 }
 
 Camera* Scene::getCamera(const std::string &name) {
   if (_cameras.contains(name))
     return _cameras[name];
-  else {
-    Camera *camera = new Camera(this);
-    _cameras.push(name, camera);
-    return camera;
-  }
+  Camera *camera = new Camera(this);
+  _cameras.push(name, camera);
+  return camera;
 }
 
 Material* Scene::getMaterial(const std::string &name) {
   if (_materials.contains(name))
     return _materials[name];
-  else {
-    Material *material = new Material(this);
-    _materials.push(name, material);
-    return material;
-  }
+  Material *material = new Material(this);
+  _materials.push(name, material);
+  return material;
 }
 
 LightRig* Scene::getLightRig(const std::string &name) {
   if (_lights.contains(name))
     return _lights[name];
-  else {
-    LightRig *light = new LightRig();
-    _lights.push(name, light);
-    return light;
-  }
+  LightRig *lightRig = new LightRig();
+  _lights.push(name, lightRig);
+  return lightRig;
 }

@@ -8,6 +8,7 @@
 
 #include "MetalFrameBuffer.h"
 #include "MetalTextureBuffer.h"
+#include "MetalGraphics.h"
 #include "GraphicTask.h"
 
 #include <Metal/Metal.h>
@@ -49,6 +50,11 @@ MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _dep
 
 MetalFrameBuffer::~MetalFrameBuffer() {
   
+}
+
+bool MetalFrameBuffer::setToWindow(int index) {
+  MetalGraphics &graphics = static_cast<MetalGraphics&>(Graphics::getInstance());
+  return graphics.setWindowBuffer(this, index);
 }
 
 bool MetalFrameBuffer::resize(int width, int height) {
