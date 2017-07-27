@@ -48,6 +48,9 @@ namespace fx {
     bool addCamera(const XMLTree::Node &node);
     bool addModel(const XMLTree::Node &node);
     
+    Model* createModel(const std::string &name);
+    Camera* createCamera(const std::string &name);
+    
   public:
     Scene();
     virtual ~Scene();

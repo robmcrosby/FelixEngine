@@ -15,9 +15,24 @@
 
 namespace fx {
   class Scene;
+  class Model;
   class Material;
   class VertexMesh;
   class ShaderProgram;
+  
+  struct iModelBuilder {
+    virtual ~iModelBuilder() {}
+    virtual Model* build(Scene *scene) = 0;
+  };
+  typedef std::map<std::string, iModelBuilder*> ModelBuilderMap;
+  
+  #define DEFINE_MODEL_BUILDER(name) \
+    struct name##Builder: fx::iModelBuilder { \
+      static name##Builder intance; \
+      name##Builder() {fx::Model::builders()[#name] = this;} \
+      virtual fx::Model* build(fx::Scene *scene) {return new fx::name(scene);} \
+    }; \
+    name##Builder name##Builder::intance;
   
   struct ModelData {
     mat4 model;
@@ -79,6 +94,10 @@ namespace fx {
     
     void setPosition(const vec3 &position) {_position = position;}
     vec3 position() const {return _position;}
+    
+  public:
+    static Model* build(const std::string &type, Scene *scene);
+    static ModelBuilderMap& builders();
   };
   
 }

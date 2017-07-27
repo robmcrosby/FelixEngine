@@ -90,18 +90,36 @@ bool Scene::addMaterial(const XMLTree::Node &node) {
 }
 
 bool Scene::addCamera(const XMLTree::Node &node) {
-  if (node != "Camera")
-    return false;
-  return getCamera(node.attribute("name"))->loadXML(node);
+  Camera *camera = createCamera(node.element());
+  if (camera != nullptr) {
+    _cameras.push(node.attribute("name"), camera);
+    return camera->loadXML(node);
+  }
+  return false;
 }
 
 bool Scene::addModel(const XMLTree::Node &node) {
-  if (node != "Model")
-    return false;
-  return getModel(node.attribute("name"))->loadXML(node);
+  Model *model = Model::build(node.element(), this); //createModel(node.element());
+  if (model != nullptr) {
+    _models.push(node.attribute("name"), model);
+    return model->loadXML(node);
+  }
+  return false;
 }
 
-FrameBuffer* Scene::getFrame(const std::string &name) {
+Model* Scene::createModel(const string &name) {
+  if (name == "Model")
+    return new Model(this);
+  return nullptr;
+}
+
+Camera* Scene::createCamera(const string &name) {
+  if (name == "Camera")
+    return new Camera(this);
+  return nullptr;
+}
+
+FrameBuffer* Scene::getFrame(const string &name) {
   if (_frames.contains(name))
     return _frames[name];
   FrameBuffer *buffer = Graphics::getInstance().createFrameBuffer();
@@ -109,7 +127,7 @@ FrameBuffer* Scene::getFrame(const std::string &name) {
   return buffer;
 }
 
-ShaderProgram* Scene::getShader(const std::string &name) {
+ShaderProgram* Scene::getShader(const string &name) {
   if (_shaders.contains(name))
     return _shaders[name];
   ShaderProgram *shader = Graphics::getInstance().createShaderProgram();

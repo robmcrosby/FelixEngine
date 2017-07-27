@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include "Material.h"
 
+DEFINE_MODEL_BUILDER(Model)
+
 
 using namespace fx;
 using namespace std;
@@ -74,4 +76,15 @@ void Model::enableDepthTesting() {
   if (_material == nullptr)
     _material = _scene->getMaterial();
   _material->enableDepthTesting();
+}
+
+Model* Model::build(const string &type, Scene *scene) {
+  if (builders().count(type))
+    return builders().at(type)->build(scene);
+  return nullptr;
+}
+
+ModelBuilderMap& Model::builders() {
+  static ModelBuilderMap builderMap;
+  return builderMap;
 }
