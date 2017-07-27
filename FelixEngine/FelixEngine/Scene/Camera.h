@@ -12,12 +12,26 @@
 #include "Matrix.h"
 #include "XMLTree.h"
 
+#define DEFINE_CAMERA_BUILDER(name) \
+  struct name##Builder: fx::iCameraBuilder { \
+    static name##Builder intance; \
+    name##Builder() {fx::Camera::builders()[#name] = this;} \
+    virtual fx::Camera* build(fx::Scene *scene) {return new fx::name(scene);} \
+  }; \
+  name##Builder name##Builder::intance;
 
 namespace fx {
   class Scene;
+  class Camera;
   class LightRig;
   class FrameBuffer;
   class ShaderProgram;
+  
+  struct iCameraBuilder {
+    virtual ~iCameraBuilder() {}
+    virtual Camera* build(Scene *scene) = 0;
+  };
+  typedef std::map<std::string, iCameraBuilder*> CameraBuilderMap;
   
   struct CameraData {
     mat4 projection;
@@ -91,6 +105,10 @@ namespace fx {
     void setClearDepth(float depth = 1.0f);
     float clearDepth() const {return _clearDepth;}
     bool isClearingDepth() const {return _isClearingDepth;}
+    
+  public:
+    static Camera* build(const std::string &type, Scene *scene);
+    static CameraBuilderMap& builders();
   };
   
 }

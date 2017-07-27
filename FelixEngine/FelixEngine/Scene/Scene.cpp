@@ -90,7 +90,7 @@ bool Scene::addMaterial(const XMLTree::Node &node) {
 }
 
 bool Scene::addCamera(const XMLTree::Node &node) {
-  Camera *camera = createCamera(node.element());
+  Camera *camera = Camera::build(node.element(), this);
   if (camera != nullptr) {
     _cameras.push(node.attribute("name"), camera);
     return camera->loadXML(node);
@@ -99,7 +99,7 @@ bool Scene::addCamera(const XMLTree::Node &node) {
 }
 
 bool Scene::addModel(const XMLTree::Node &node) {
-  Model *model = Model::build(node.element(), this); //createModel(node.element());
+  Model *model = Model::build(node.element(), this);
   if (model != nullptr) {
     _models.push(node.attribute("name"), model);
     return model->loadXML(node);

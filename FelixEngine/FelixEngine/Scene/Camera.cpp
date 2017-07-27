@@ -12,6 +12,8 @@
 #include "Graphics.h"
 #include "GraphicResources.h"
 
+DEFINE_CAMERA_BUILDER(Camera)
+
 
 using namespace fx;
 using namespace std;
@@ -128,4 +130,15 @@ void Camera::setClearColor(const vec4 &color) {
 void Camera::setClearDepth(float depth) {
   _isClearingDepth = true;
   _clearDepth = depth;
+}
+
+Camera* Camera::build(const string &type, Scene *scene) {
+  if (builders().count(type))
+    return builders().at(type)->build(scene);
+  return nullptr;
+}
+
+CameraBuilderMap& Camera::builders() {
+  static CameraBuilderMap builderMap;
+  return builderMap;
 }
