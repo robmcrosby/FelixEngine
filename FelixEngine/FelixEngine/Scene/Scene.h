@@ -10,6 +10,9 @@
 #define Scene_h
 
 #include "RenderPass.h"
+#include "XMLTree.h"
+#include "IndexedMap.h"
+#include <set>
 #include <map>
 #include <string>
 
@@ -23,10 +26,30 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
-    std::map<std::string, Model*>    _models;
-    std::map<std::string, Camera*>   _cameras;
-    std::map<std::string, Material*> _materials;
-    std::map<std::string, LightRig*> _lights;
+    IndexedMap<std::string, FrameBuffer*>   _frames;
+    IndexedMap<std::string, ShaderProgram*> _shaders;
+    IndexedMap<std::string, VertexMesh*>    _meshes;
+    
+    IndexedMap<std::string, Model*>    _models;
+    IndexedMap<std::string, Camera*>   _cameras;
+    IndexedMap<std::string, Material*> _materials;
+    IndexedMap<std::string, LightRig*> _lights;
+    
+  public:
+    bool loadXMLFile(const std::string &file);
+    bool loadXML(const XMLTree::Node &node);
+    
+  private:
+    bool addFrame(const XMLTree::Node &node);
+    bool addShader(const XMLTree::Node &node);
+    bool addMesh(const XMLTree::Node &node);
+    bool addLightRig(const XMLTree::Node &node);
+    bool addMaterial(const XMLTree::Node &node);
+    bool addCamera(const XMLTree::Node &node);
+    bool addModel(const XMLTree::Node &node);
+    
+    Model* createModel(const std::string &name);
+    Camera* createCamera(const std::string &name);
     
   public:
     Scene();
@@ -37,17 +60,14 @@ namespace fx {
     
     RenderPasses& renderPasses() {return _renderPasses;}
     
-    Model* getModel(const std::string &name);
-    Model* setModel(Model *model, const std::string &name);
+    FrameBuffer*   getFrame(const std::string &name);
+    ShaderProgram* getShader(const std::string &name);
+    VertexMesh*    getMesh(const std::string &name);
     
-    Camera* getCamera(const std::string &name);
-    Camera* setCamera(Camera *camera, const std::string &name);
-    
-    Material* getMaterial(const std::string &name);
-    Material* setMaterial(Material *material, const std::string &name);
-    
-    LightRig* getLightRig(const std::string &name);
-    LightRig* setLightRig(LightRig *light, const std::string &name);
+    Model*    getModel(const std::string &name = "");
+    Camera*   getCamera(const std::string &name = "");
+    Material* getMaterial(const std::string &name = "");
+    LightRig* getLightRig(const std::string &name = "");
   };
   
 }

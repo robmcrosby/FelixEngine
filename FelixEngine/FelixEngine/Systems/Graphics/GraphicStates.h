@@ -10,6 +10,7 @@
 #define GraphicStates_h
 
 #include "Matrix.h"
+#include "XMLTree.h"
 
 #define MAX_COLOR_ATTACHEMENTS 4
 
@@ -60,10 +61,10 @@ namespace fx {
     DEPTH_TEST_GREATER_EQ = 0x10, // 0001 0000
   };
   
-  struct DepthStencilState {
+  struct DepthState {
     int flags;
     
-    DepthStencilState(int flags = 0): flags(flags) {}
+    DepthState(int flags = 0): flags(flags) {}
     void setWriting(bool writing = true) {
       if (writing)
         flags |= DEPTH_ENABLE_WRITING;
@@ -82,14 +83,44 @@ namespace fx {
     void enableTesting() {setTesting(true);}
     void disableTesting() {setTesting(false);}
     
-    void enableDepthTesting() {
+    void enableDefaultTesting() {
       enableTesting();
       enableWriting();
-      setFunction(fx::DEPTH_TEST_LESS);
+      setFunction(DEPTH_TEST_LESS);
     }
     
     void setFunction(int function) {
       flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);
+    }
+    
+    bool loadXml(const XMLTree::Node &node)
+    {
+      setWriting(node.attributeAsBoolean("write"));
+      if (node.hasAttribute("function")) {
+        std::string func = node.attribute("function");
+        std::transform(func.begin(), func.end(), func.begin(), ::tolower);
+        
+        enableTesting();
+        if (func == "less_equal")
+          setFunction(DEPTH_TEST_LESS_EQ);
+        else if (func == "greater_equal")
+          setFunction(DEPTH_TEST_GREATER_EQ);
+        else if (func == "less")
+          setFunction(DEPTH_TEST_LESS);
+        else if (func == "greater")
+          setFunction(DEPTH_TEST_GREATER);
+        else if (func == "equal")
+          setFunction(DEPTH_TEST_EQUAL);
+        else if (func == "never")
+          setFunction(DEPTH_TEST_NEVER);
+        else
+          setFunction(DEPTH_TEST_ALWAYS);
+      }
+      else {
+        disableTesting();
+        setFunction(DEPTH_TEST_ALWAYS);
+      }
+      return true;
     }
     
     bool enabled() const {return writingEnabled() || testingEnabled();}

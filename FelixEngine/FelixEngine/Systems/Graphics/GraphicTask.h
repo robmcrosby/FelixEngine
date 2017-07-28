@@ -31,7 +31,7 @@ namespace fx {
     ActionState depthStencilAction;
     
     CULL_MODE cullMode;
-    DepthStencilState depthStencilState;
+    DepthState depthState;
     
     GraphicTask() {
       frame  = nullptr;
@@ -72,7 +72,7 @@ namespace fx {
       depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
-    void enableDepthTesting() {depthStencilState.enableDepthTesting();}
+    void enableDepthTesting() {depthState.enableDefaultTesting();}
   };
 }
 

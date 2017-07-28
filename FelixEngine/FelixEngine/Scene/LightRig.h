@@ -77,6 +77,32 @@ namespace fx {
     LightData& data() {return _lights.at(0);}
     size_t size() const {return _lights.size() * sizeof(LightData);}
     
+    bool loadXML(const XMLTree::Node &node) {
+      bool success = true;
+      for (auto subNode : node)
+        success &= addLight(*subNode);
+      return success;
+    }
+    
+    bool addLight(const XMLTree::Node &node) {
+      if (node.hasAttributes("color", "energy")) {
+        vec3 color = node.attribute("color");
+        float energy = node.attributeAsFloat("energy");
+        
+        if (node.element() == "DirectionalLight") {
+          vec3 direction = node.attribute("direction");
+          addDirectionalLight(direction, color, energy);
+          return true;
+        }
+        if (node.element() == "PointLight") {
+          vec3 position = node.attribute("position");
+          addPointLight(position, color, energy);
+          return true;
+        }
+      }
+      return false;
+    }
+    
     void addDirectionalLight(vec3 direction, vec3 color, float energy) {
       LightData light;
       light.setAsDirectionalLight(direction, color, energy);

@@ -8,6 +8,7 @@
 
 #include "iOSFileSystem.h"
 #include "MeshLoader.h"
+#include "XMLTree.h"
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -84,6 +85,11 @@ bool iOSFileSystem::loadImageData(ImageBufferData &image, const string &file) co
     cerr << "Error Loading Image File: " << file << endl;
   }
   return false;
+}
+
+bool iOSFileSystem::loadXMLTreeFile(XMLTree &tree, const std::string &file) const {
+  string filePath = findPathForFile(file);
+  return tree.loadFile(filePath);
 }
 
 bool iOSFileSystem::fileExistsAtPath(const std::string &filePath) const {

@@ -35,7 +35,7 @@ using namespace fx;
   id <MTLDepthStencilState> depthStencilState = [self.depthStencilStates objectForKey:key];
   
   if (depthStencilState == nil) {
-    DepthStencilState state(flags);
+    DepthState state(flags);
     MTLDepthStencilDescriptor *descriptor = [MTLDepthStencilDescriptor new];
     
     descriptor.depthWriteEnabled = state.writingEnabled();

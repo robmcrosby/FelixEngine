@@ -21,13 +21,14 @@ namespace fx {
   class MetalGraphics: public Graphics {
   private:
     MTLGraphicsData  *_data;
-    MetalFrameBuffer *_frame;
+    MetalFrameBuffer *_windowBuffer;
     
   public:
     MetalGraphics();
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
+    bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
     virtual FrameBuffer*   getMainWindowBuffer();
     virtual FrameBuffer*   createFrameBuffer();

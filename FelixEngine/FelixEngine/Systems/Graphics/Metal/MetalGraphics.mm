@@ -32,6 +32,7 @@ namespace fx {
     id <MTLCommandQueue>  queue;
     id <MTLCommandBuffer> buffer;
     
+    CAMetalLayer *metalLayer;
     MetalDepthStencil *depthStencilStates;
     MetalTextureSampler *samplerStates;
     
@@ -46,7 +47,7 @@ using namespace std;
 using namespace fx;
 
 
-MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()) {
+MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()), _windowBuffer(nullptr) {
   Graphics::instance = this;
 }
 
@@ -71,23 +72,23 @@ bool MetalGraphics::initalize(UIView *view) {
   }
   
   // Setup the Metal Layer
-  CAMetalLayer *layer = [[CAMetalLayer alloc] init];
-  if (layer == nil) {
+  _data->metalLayer = [[CAMetalLayer alloc] init];
+  if (_data->metalLayer == nil) {
     cerr << "Error Creating Metal Layer" << endl;
     _data->device = nil;
     _data->queue  = nil;
     return false;
   }
-  layer.device = _data->device;
-  layer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-  layer.framebufferOnly = YES;
-  layer.frame = view.bounds;
-  layer.contentsScale = [UIScreen mainScreen].nativeScale;
-  [view.layer addSublayer: layer];
+  _data->metalLayer.device = _data->device;
+  _data->metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+  _data->metalLayer.framebufferOnly = YES;
+  _data->metalLayer.frame = view.bounds;
+  _data->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
+  [view.layer addSublayer: _data->metalLayer];
   
   // Set the Metal Layer to a Frame Buffer
-  _frame = new MetalFrameBuffer(_data->device);
-  _frame->setMetalLayer(layer);
+  //_frame = new MetalFrameBuffer(_data->device);
+  //_frame->setMetalLayer(layer);
   
   // Create an instance of MetalDepthStencil
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
@@ -101,8 +102,16 @@ bool MetalGraphics::initalize(UIView *view) {
   return true;
 }
 
+bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
+  _windowBuffer = buffer;
+  _windowBuffer->setMetalLayer(_data->metalLayer);
+  return true;
+}
+
 FrameBuffer* MetalGraphics::getMainWindowBuffer() {
-  return _frame;
+  if (_windowBuffer == nullptr)
+    setWindowBuffer(new MetalFrameBuffer(_data->device));
+  return _windowBuffer;
 }
 
 FrameBuffer* MetalGraphics::createFrameBuffer() {
@@ -142,7 +151,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   shader->encode(encoder, task);
   
   // Set the Depth/Stencil State
-  int flags = task.depthStencilState.flags;
+  int flags = task.depthState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
   // Set Culling Mode
@@ -168,7 +177,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
 }
 
 void MetalGraphics::presentFrame() {
-  _frame->present(_data->buffer);
+  _windowBuffer->present(_data->buffer);
   
   __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
   [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
