@@ -13,15 +13,27 @@
 
 
 namespace fx {
+  enum TRACKING_STATUS {
+    TRACKING_NOT_AVALIBLE,
+    TRACKING_LIMITED,
+    TRACKING_NORMAL,
+  };
+  
   class TrackerSystem {
   protected:
     static TrackerSystem *instance;
+    
+  protected:
+    TRACKING_STATUS _trackingStatus;
     
   public:
     static TrackerSystem& getInstance() {return *instance;}
     
   public:
+    TrackerSystem(): _trackingStatus(TRACKING_NOT_AVALIBLE) {}
     virtual ~TrackerSystem() {}
+    
+    TRACKING_STATUS trackingStatus() const {return _trackingStatus;}
     
     virtual mat4 getCameraView() = 0;
     virtual mat4 getCameraProjection() = 0;

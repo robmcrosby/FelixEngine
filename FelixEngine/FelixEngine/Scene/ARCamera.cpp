@@ -26,7 +26,7 @@ ARCamera::~ARCamera() {
 
 void ARCamera::update() {
   TrackerSystem *tracker = &TrackerSystem::getInstance();
-  if (tracker != nullptr) {
+  if (tracker != nullptr && tracker->trackingStatus() != TRACKING_NOT_AVALIBLE) {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());
   }

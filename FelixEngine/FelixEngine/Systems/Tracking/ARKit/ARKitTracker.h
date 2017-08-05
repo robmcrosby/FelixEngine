@@ -14,6 +14,7 @@
 
 OBJC_CLASS(ARSession)
 OBJC_CLASS(ARDelegate)
+OBJC_CLASS(ARAnchor)
 
 namespace fx {
   class MetalGraphics;
@@ -24,6 +25,7 @@ namespace fx {
     MetalGraphics *_graphics;
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
+    ARAnchor      *_firstAnchor;
     
   public:
     ARKitTracker();
@@ -38,6 +40,7 @@ namespace fx {
     void arSessionFailed();
     void arSessionInterupted();
     void arSessionInteruptEnd();
+    void setTrackingStatus(TRACKING_STATUS status);
   };
   
 }
