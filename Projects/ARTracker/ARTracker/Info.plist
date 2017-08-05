@@ -24,8 +24,11 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This application will use the camera for Augmented Reality.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
+		<string>metal</string>
 		<string>armv7</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
