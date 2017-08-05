@@ -10,11 +10,11 @@
   <FrameBuffer name="Frame" window="0">
     <Buffer type="depth"/>
   </FrameBuffer>
-  <Camera name="Camera" frame="Frame" lights="Lights" pass="MainPass">
+  <ARCamera name="Camera" frame="Frame" lights="Lights" pass="MainPass">
     <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
     <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
-  </Camera>
+  </ARCamera>
   <Material name="Material" shader="Shader">
     <Ambiant color="0.7, 0.7, 0.7" factor="0.2"/>
     <Diffuse color="0.7, 0.7, 0.7" factor="0.8"/>
@@ -22,6 +22,6 @@
     <DepthState write="true" function="less"/>
   </Material>
   <Model name="Model" mesh="Mesh" material="Material" pass="MainPass">
-    <Transform scale="0.2" orientation="0.5, -0.5, 0.5, 0.5"/>
+    <Transform scale="0.02" orientation="0.5, -0.5, 0.5, 0.5"/>
   </Model>
 </Scene>

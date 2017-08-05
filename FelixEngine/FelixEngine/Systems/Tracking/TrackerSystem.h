@@ -9,7 +9,8 @@
 #ifndef TrackerSystem_h
 #define TrackerSystem_h
 
-#include <string>
+#include "Matrix.h"
+
 
 namespace fx {
   class TrackerSystem {
@@ -21,6 +22,9 @@ namespace fx {
     
   public:
     virtual ~TrackerSystem() {}
+    
+    virtual mat4 getCameraView() = 0;
+    virtual mat4 getCameraProjection() = 0;
   };
 }
 

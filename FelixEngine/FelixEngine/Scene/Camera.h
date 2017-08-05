@@ -68,7 +68,11 @@ namespace fx {
     LightRig* lightRig() {return _lightRig;}
     
     bool setView(const XMLTree::Node &node);
-    
+    void setView(const mat4 &view) {
+      _data.view = view;
+      _data.position = view.inverse() * vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      _data.position.w = 1.0f;
+    }
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
       _data.view = mat4::LookAt(eye, center, up);
       _data.position = vec4(eye, 1.0);
@@ -78,6 +82,7 @@ namespace fx {
     void addDepthBuffer();
     
     bool setProjection(const XMLTree::Node &node);
+    void setProjection(const mat4 &projection) {_data.projection = projection;}
     void setOrthographic(float scale, float near, float far);
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
       _data.projection = mat4::Ortho(left, right, bottom, top, near, far);

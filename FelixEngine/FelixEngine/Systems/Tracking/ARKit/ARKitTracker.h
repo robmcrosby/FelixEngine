@@ -31,6 +31,9 @@ namespace fx {
     
     bool initalize(MetalGraphics *graphics);
     
+    virtual mat4 getCameraView();
+    virtual mat4 getCameraProjection();
+    
   public:
     void arSessionFailed();
     void arSessionInterupted();

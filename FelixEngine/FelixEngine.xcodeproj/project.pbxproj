@@ -58,6 +58,8 @@
 		C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08B1F353CD600212AAA /* TrackerSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08E1F353ECD00212AAA /* ARKitTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = C160E08F1F353ECD00212AAA /* ARKitTracker.mm */; };
+		C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A5E3801F3659620071D515 /* ARCamera.cpp */; };
+		C1A5E3831F3659620071D515 /* ARCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A5E3811F3659620071D515 /* ARCamera.h */; };
 		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */; };
@@ -127,6 +129,8 @@
 		C160E08B1F353CD600212AAA /* TrackerSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrackerSystem.h; path = Systems/Tracking/TrackerSystem.h; sourceTree = "<group>"; };
 		C160E08E1F353ECD00212AAA /* ARKitTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKitTracker.h; path = Systems/Tracking/ARKit/ARKitTracker.h; sourceTree = "<group>"; };
 		C160E08F1F353ECD00212AAA /* ARKitTracker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARKitTracker.mm; path = Systems/Tracking/ARKit/ARKitTracker.mm; sourceTree = "<group>"; };
+		C1A5E3801F3659620071D515 /* ARCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARCamera.cpp; sourceTree = "<group>"; };
+		C1A5E3811F3659620071D515 /* ARCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARCamera.h; sourceTree = "<group>"; };
 		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = Utilities/StringUtils.h; sourceTree = "<group>"; };
 		C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = Systems/Graphics/GraphicResources.cpp; sourceTree = "<group>"; };
@@ -312,13 +316,31 @@
 			name = ARKitTracking;
 			sourceTree = "<group>";
 		};
-		C1CC9D1B1F11144C00A938D0 /* Components */ = {
+		C1A5E3841F36596D0071D515 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				C1E60EA61F0F080B0021F704 /* Model.h */,
 				C1E60EA51F0F080B0021F704 /* Model.cpp */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		C1A5E3851F3659740071D515 /* Cameras */ = {
+			isa = PBXGroup;
+			children = (
 				C1E60EB21F0F09860021F704 /* Camera.h */,
 				C1E60EB11F0F09860021F704 /* Camera.cpp */,
+				C1A5E3811F3659620071D515 /* ARCamera.h */,
+				C1A5E3801F3659620071D515 /* ARCamera.cpp */,
+			);
+			name = Cameras;
+			sourceTree = "<group>";
+		};
+		C1CC9D1B1F11144C00A938D0 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				C1A5E3851F3659740071D515 /* Cameras */,
+				C1A5E3841F36596D0071D515 /* Models */,
 				C1E60EAA1F0F08370021F704 /* Material.h */,
 				C1BB4F331F1ECF23008FDF01 /* Material.cpp */,
 				C1E60EAE1F0F08510021F704 /* LightRig.h */,
@@ -365,6 +387,7 @@
 				C1E60EAC1F0F08370021F704 /* Material.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
+				C1A5E3831F3659620071D515 /* ARCamera.h in Headers */,
 				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
 				C1E60EB01F0F08510021F704 /* LightRig.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
@@ -453,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */,
+				C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */,
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,

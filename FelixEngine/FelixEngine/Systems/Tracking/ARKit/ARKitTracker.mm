@@ -59,6 +59,21 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   return true;
 }
 
+mat4 ARKitTracker::getCameraView() {
+  matrix_float4x4 view = _arSession.currentFrame.camera.transform;
+  return (float*)&view.columns[0];
+}
+
+mat4 ARKitTracker::getCameraProjection() {
+  CGSize viewport = UIScreen.mainScreen.bounds.size;
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  matrix_float4x4 proj = [_arSession.currentFrame.camera projectionMatrixWithViewportSize:viewport
+                                                                              orientation:orientation
+                                                                                    zNear:0.001
+                                                                                     zFar:1000.0];
+  return (float*)&proj.columns[0];
+}
+
 void ARKitTracker::arSessionFailed() {
   cout << "AR Session Failed With Error" << endl;
 }

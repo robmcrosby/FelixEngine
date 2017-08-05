@@ -25,8 +25,8 @@ void ARTracker::initalize() {
 }
 
 void ARTracker::update() {
-  _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
-  _model->update();
+  //_model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
+  //_model->update();
   
   _scene.update();
 }
