@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/GraphicResources.h>
 #import <FelixEngine/GraphicStates.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/TrackerSystem.h>
 #import <FelixEngine/Vector.h>
 #import <FelixEngine/Matrix.h>
 #import <FelixEngine/Quaternion.h>
@@ -47,3 +48,5 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 // iOS Platform
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
+#import <FelixEngine/ARKitTracker.h>
+

@@ -22,6 +22,7 @@
 		C1F7D9D11F3539B60005367E /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1F7D9D01F3539770005367E /* Scene.xml */; };
 		C1F7D9D21F3539B60005367E /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1F7D9CE1F3539660005367E /* bunny.mesh */; };
 		C1F7D9D31F3539BA0005367E /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1F7D9CF1F35396F0005367E /* Shaders.metal */; };
+		C1F7D9D51F353A0F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D41F353A060005367E /* ARKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C1F7D9CE1F3539660005367E /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
 		C1F7D9CF1F35396F0005367E /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C1F7D9D01F3539770005367E /* Scene.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
+		C1F7D9D41F353A060005367E /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1F7D9D51F353A0F0005367E /* ARKit.framework in Frameworks */,
 				C17A6C021F353723007901A6 /* CoreGraphics.framework in Frameworks */,
 				C17A6C001F353712007901A6 /* QuartzCore.framework in Frameworks */,
 				C17A6BFE1F3536FC007901A6 /* Metal.framework in Frameworks */,
@@ -141,6 +144,7 @@
 		C17A6BFC1F3536DB007901A6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1F7D9D41F353A060005367E /* ARKit.framework */,
 				C17A6C011F35371B007901A6 /* CoreGraphics.framework */,
 				C17A6BFF1F353709007901A6 /* QuartzCore.framework */,
 				C17A6BFD1F3536DB007901A6 /* Metal.framework */,

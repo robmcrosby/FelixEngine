@@ -11,6 +11,7 @@
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
+#import <FelixEngine/ARKitTracker.h>
 
 @interface ViewController ()
 
@@ -34,6 +35,10 @@
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
   graphics->initalize(self.view);
   self.arTrackerApp->setGraphics(graphics);
+  
+  // Add and initalize ARKit
+  fx::ARKitTracker *tracker = new fx::ARKitTracker();
+  self.arTrackerApp->setTrackerSystem(tracker);
   
   // Set the Application
   [self setApplication: self.arTrackerApp];

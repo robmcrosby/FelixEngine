@@ -11,12 +11,14 @@
 
 #include "FileSystem.h"
 #include "Graphics.h"
+#include "TrackerSystem.h"
 
 namespace fx {
   class Application {
   protected:
     FileSystem *_fileSystem;
     Graphics *_graphics;
+    TrackerSystem *_tracker;
     
   public:
     Application();
@@ -37,6 +39,9 @@ namespace fx {
     
     Graphics& graphics() const {return *_graphics;}
     void setGraphics(Graphics *graphics) {_graphics = graphics;}
+    
+    TrackerSystem& trackerSystem() const {return *_tracker;}
+    void setTrackerSystem(TrackerSystem *tracker) {_tracker = tracker;}
   };
 }
 

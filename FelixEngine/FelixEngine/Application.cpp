@@ -13,6 +13,7 @@ using namespace fx;
 
 FileSystem* FileSystem::instance = nullptr;
 Graphics* Graphics::instance = nullptr;
+TrackerSystem* TrackerSystem::instance = nullptr;
 
 
 Application::Application() {
