@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1412E601F37D8B5001E8D83 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1412E5F1F37D8AB001E8D83 /* CoreVideo.framework */; };
 		C17A6BCF1F353425007901A6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C17A6BCE1F353425007901A6 /* AppDelegate.m */; };
 		C17A6BD21F353425007901A6 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C17A6BD11F353425007901A6 /* ViewController.mm */; };
 		C17A6BD51F353425007901A6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C17A6BD31F353425007901A6 /* Main.storyboard */; };
@@ -56,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C1412E5F1F37D8AB001E8D83 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C17A6BCA1F353425007901A6 /* ARTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C17A6BCD1F353425007901A6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C17A6BCE1F353425007901A6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1412E601F37D8B5001E8D83 /* CoreVideo.framework in Frameworks */,
 				C1F7D9D51F353A0F0005367E /* ARKit.framework in Frameworks */,
 				C17A6C021F353723007901A6 /* CoreGraphics.framework in Frameworks */,
 				C17A6C001F353712007901A6 /* QuartzCore.framework in Frameworks */,
@@ -144,6 +147,7 @@
 		C17A6BFC1F3536DB007901A6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1412E5F1F37D8AB001E8D83 /* CoreVideo.framework */,
 				C1F7D9D41F353A060005367E /* ARKit.framework */,
 				C17A6C011F35371B007901A6 /* CoreGraphics.framework */,
 				C17A6BFF1F353709007901A6 /* QuartzCore.framework */,

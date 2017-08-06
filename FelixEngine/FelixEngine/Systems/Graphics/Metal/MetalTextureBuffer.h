@@ -30,5 +30,6 @@ namespace fx {
     virtual ivec2 size() const;
     
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
+    void setMetalTexture(id <MTLTexture> texture);
   };
 }

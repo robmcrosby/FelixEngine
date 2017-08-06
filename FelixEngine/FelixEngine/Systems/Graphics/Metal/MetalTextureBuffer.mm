@@ -56,3 +56,9 @@ void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSam
   [encoder setFragmentTexture:_texture atIndex:index];
   [encoder setFragmentSamplerState:sampler atIndex:index];
 }
+
+void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {
+  _texture = texture;
+  _width = (int)_texture.width;
+  _height = (int)_texture.height;
+}

@@ -7,12 +7,15 @@
 //
 
 #include "ARKitTracker.h"
+#include "MetalGraphics.h"
+#include "MetalTextureBuffer.h"
 #include <iostream>
 #include <ARKit/ARKit.h>
 
 
 @interface ARDelegate : NSObject <ARSessionDelegate>
 @property (nonatomic, assign) fx::ARKitTracker *tracker;
+@property (nonatomic) CVMetalTextureCacheRef textureCache;
 @end
 
 @implementation ARDelegate
@@ -38,6 +41,10 @@
     self.tracker->setTrackingStatus(fx::TRACKING_NOT_AVALIBLE);
 }
 
+- (void)session:(ARSession *)session didUpdateFrame:(ARFrame *)frame {
+  self.tracker->arSessionUpdateFrame(frame);
+}
+
 @end
 
 
@@ -47,8 +54,10 @@ using namespace std;
 ARKitTracker::ARKitTracker() {
   instance = this;
   
-  _graphics = nullptr;
-  _firstAnchor = nil;
+  _graphics        = nullptr;
+  _cameraImageY    = nullptr;
+  _cameraImageCbCr = nullptr;
+  _firstAnchor     = nil;
   
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
@@ -63,6 +72,9 @@ ARKitTracker::~ARKitTracker() {
 
 bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _graphics = graphics;
+  
+  _cameraImageY = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
+  _cameraImageCbCr = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   
   ARSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
   [_arSession runWithConfiguration: configuration];
@@ -85,6 +97,14 @@ mat4 ARKitTracker::getCameraProjection() {
   return (float*)&proj.columns[0];
 }
 
+TextureBuffer* ARKitTracker::getCameraImageY() {
+  return _cameraImageY;
+}
+
+TextureBuffer* ARKitTracker::getCameraImageCbCr() {
+  return _cameraImageCbCr;
+}
+
 void ARKitTracker::arSessionFailed() {
   cout << "AR Session Failed With Error" << endl;
 }
@@ -95,6 +115,28 @@ void ARKitTracker::arSessionInterupted() {
 
 void ARKitTracker::arSessionInteruptEnd() {
   cout << "AR Session Interuption End" << endl;
+}
+
+void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
+  CVPixelBufferRef pixelBuffer = frame.capturedImage;
+  
+  if (CVPixelBufferGetPlaneCount(pixelBuffer) >= 2) {
+    CVMetalTextureRef texture = NULL;
+    
+    size_t width = CVPixelBufferGetWidthOfPlane(pixelBuffer, 0);
+    size_t height = CVPixelBufferGetHeightOfPlane(pixelBuffer, 0);
+    CVReturn status = CVMetalTextureCacheCreateTextureFromImage(NULL, _arDelegate.textureCache, pixelBuffer, NULL, MTLPixelFormatR8Unorm, width, height, 0, &texture);
+    if(status == kCVReturnSuccess) {
+      _cameraImageY->setMetalTexture(CVMetalTextureGetTexture(texture));
+      CFRelease(texture);
+    }
+    
+    status = CVMetalTextureCacheCreateTextureFromImage(NULL, _arDelegate.textureCache, pixelBuffer, NULL, MTLPixelFormatRG8Unorm, width, height, 1, &texture);
+    if(status == kCVReturnSuccess) {
+      _cameraImageCbCr->setMetalTexture(CVMetalTextureGetTexture(texture));
+      CFRelease(texture);
+    }
+  }
 }
 
 void ARKitTracker::setTrackingStatus(TRACKING_STATUS status) {

@@ -13,6 +13,8 @@
 
 
 namespace fx {
+  class TextureBuffer;
+  
   enum TRACKING_STATUS {
     TRACKING_NOT_AVALIBLE,
     TRACKING_LIMITED,
@@ -37,6 +39,9 @@ namespace fx {
     
     virtual mat4 getCameraView() = 0;
     virtual mat4 getCameraProjection() = 0;
+    
+    virtual TextureBuffer* getCameraImageY() = 0;
+    virtual TextureBuffer* getCameraImageCbCr() = 0;
   };
 }
 

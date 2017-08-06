@@ -13,11 +13,13 @@
 #define ARKitTracker_h
 
 OBJC_CLASS(ARSession)
+OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
 OBJC_CLASS(ARAnchor)
 
 namespace fx {
   class MetalGraphics;
+  class MetalTextureBuffer;
   
   /** iOS File System */
   class ARKitTracker: public TrackerSystem {
@@ -26,6 +28,9 @@ namespace fx {
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     ARAnchor      *_firstAnchor;
+    
+    MetalTextureBuffer *_cameraImageY;
+    MetalTextureBuffer *_cameraImageCbCr;
     
   public:
     ARKitTracker();
@@ -36,10 +41,14 @@ namespace fx {
     virtual mat4 getCameraView();
     virtual mat4 getCameraProjection();
     
+    virtual TextureBuffer* getCameraImageY();
+    virtual TextureBuffer* getCameraImageCbCr();
+    
   public:
     void arSessionFailed();
     void arSessionInterupted();
     void arSessionInteruptEnd();
+    void arSessionUpdateFrame(ARFrame *frame);
     void setTrackingStatus(TRACKING_STATUS status);
   };
   
