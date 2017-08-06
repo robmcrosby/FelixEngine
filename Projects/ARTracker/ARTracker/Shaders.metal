@@ -116,3 +116,33 @@ fragment half4 basic_fragment(FragmentInput      input    [[ stage_in  ]],
   
   return half4(color.x, color.y, color.z, 1.0);
 }
+
+
+
+
+
+struct TextureOutput {
+  float4 position [[position]];
+  float2 uv       [[user(uv)]];
+};
+
+struct TextureInput {
+  float2 uv [[user(uv)]];
+};
+
+vertex TextureOutput texture_vertex(const device packed_float4 *Position [[ buffer(0) ]],
+                                    const device packed_float2 *UV       [[ buffer(1) ]],
+                                    unsigned int                vid      [[ vertex_id ]]) {
+  TextureOutput output;
+  output.position = float4(Position[vid]);
+  output.uv = float2(UV[vid]);
+  return output;
+}
+
+fragment half4 texture_fragment(TextureInput input [[ stage_in ]]) {
+  //float4 color = texture2D.sample(sampler2D, input.uv);
+  //return half4(color.r, color.g, color.b, color.a);
+  return half4(input.uv.x, input.uv.y, 1.0, 1.0);
+}
+
+

@@ -70,7 +70,7 @@ namespace fx {
     bool setView(const XMLTree::Node &node);
     void setView(const mat4 &view) {
       _data.view = view;
-      _data.position = view.inverse() * vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      _data.position = view * vec4(0.0f, 0.0f, 0.0f, 1.0f);
       _data.position /= _data.position.w;
     }
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
