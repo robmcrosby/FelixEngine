@@ -38,6 +38,8 @@ bool Model::loadXML(const XMLTree::Node &node) {
     setMaterial(node.attribute("material"));
   if (node.hasAttribute("pass"))
     _scene->renderPasses()[node.attribute("pass")].addModel(this);
+  if (node.hasAttribute("hidden"))
+    setHidden(node.attributeAsBoolean("hidden"));
   
   for (auto subNode : node) {
     if (*subNode == "Transform")

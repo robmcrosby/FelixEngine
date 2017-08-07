@@ -48,6 +48,10 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
   return false;
 }
 
+bool MetalTextureBuffer::loaded() const {
+  return _texture != nil;
+}
+
 ivec2 MetalTextureBuffer::size() const {
   return ivec2(_width, _height);
 }

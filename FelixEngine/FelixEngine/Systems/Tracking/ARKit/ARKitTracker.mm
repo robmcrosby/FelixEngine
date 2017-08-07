@@ -73,6 +73,11 @@ ARKitTracker::~ARKitTracker() {
 bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _graphics = graphics;
   
+  id <MTLDevice> device = MTLCreateSystemDefaultDevice();
+  CVMetalTextureCacheRef textureCache;
+  CVMetalTextureCacheCreate(NULL, NULL, device, NULL, &textureCache);
+  _arDelegate.textureCache = textureCache;
+  
   _cameraImageY = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   _cameraImageCbCr = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   
@@ -131,6 +136,8 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
       CFRelease(texture);
     }
     
+    width = CVPixelBufferGetWidthOfPlane(pixelBuffer, 1);
+    height = CVPixelBufferGetHeightOfPlane(pixelBuffer, 1);
     status = CVMetalTextureCacheCreateTextureFromImage(NULL, _arDelegate.textureCache, pixelBuffer, NULL, MTLPixelFormatRG8Unorm, width, height, 1, &texture);
     if(status == kCVReturnSuccess) {
       _cameraImageCbCr->setMetalTexture(CVMetalTextureGetTexture(texture));

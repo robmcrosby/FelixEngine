@@ -9,6 +9,7 @@
 #include "ARTracker.h"
 #include <FelixEngine/Camera.h>
 #include <FelixEngine/Model.h>
+#include <FelixEngine/Material.h>
 
 
 ARTracker::ARTracker() {
@@ -21,12 +22,21 @@ ARTracker::~ARTracker() {
 
 void ARTracker::initalize() {
   _scene.loadXMLFile("Scene.xml");
-  _model = _scene.getModel("Model");
+  
+  _model = _scene.getModel("Plane");
+  
+  // Set the Camera Textures
+  fx::TrackerSystem &tracker = fx::TrackerSystem::getInstance();
+  fx::Material *material = _model->material();
+  material->addTexture(tracker.getCameraImageY());
+  material->addTexture(tracker.getCameraImageCbCr());
 }
 
 void ARTracker::update() {
-  //_model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
-  //_model->update();
+  if (_model->hidden()) {
+    fx::TextureBuffer *firstTexture = _model->material()->textures().begin()->buffer;
+    _model->setHidden(!firstTexture->loaded());
+  }
   
   _scene.update();
 }

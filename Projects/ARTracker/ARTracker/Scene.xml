@@ -11,10 +11,10 @@
        1.0,  1.0, 0.0, 1.0
     </Buffer>
     <Buffer name="UV">
-      0.0, 1.0,
-      0.0, 0.0,
       1.0, 1.0,
-      1.0, 0.0
+      0.0, 1.0,
+      1.0, 0.0,
+      0.0, 0.0
     </Buffer>
   </VertexMesh>
   <LightRig name="Lights">
@@ -37,7 +37,7 @@
     <Specular color="1.0, 1.0, 1.0" factor="0.6" hardness="20.0"/>
     <DepthState write="true" function="less"/>
   </Material>
-  <Model name="Plane" mesh="Plane" material="Texture" pass="MainPass"/>
+  <Model name="Plane" mesh="Plane" material="Texture" pass="MainPass" hidden="true"/>
   <Model name="Model" mesh="Mesh" material="Material" pass="MainPass">
     <Transform scale="0.01" orientation="0.5, -0.5, 0.5, 0.5"/>
   </Model>
