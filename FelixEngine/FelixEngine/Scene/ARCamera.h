@@ -10,14 +10,26 @@
 #define ARCamera_h
 
 #include "Camera.h"
+#include "GraphicTask.h"
 
 namespace fx {
   class ARCamera: public Camera {
+  private:
+    GraphicTask _task;
+    TextureMap _textureMap;
+    TextureBuffer *_imageY;
+    TextureBuffer *_imageCbCr;
+    
+  private:
+    void setupPreDraw();
+    bool cameraImagesReady();
+    
   public:
     ARCamera(Scene *scene);
     virtual ~ARCamera();
     
     virtual void update();
+    virtual bool preDraw();
   };
 }
 

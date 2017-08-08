@@ -17,7 +17,6 @@
 class ARTracker: public fx::Application {
 private:
   fx::Scene _scene;
-  fx::Model *_model;
   
 public:
   ARTracker();

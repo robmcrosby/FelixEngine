@@ -16,18 +16,72 @@ using namespace std;
 DEFINE_CAMERA_BUILDER(ARCamera)
 
 
-ARCamera::ARCamera(Scene *scene): Camera(scene) {
-  cout << "Created ARCamera" << endl;
+ARCamera::ARCamera(Scene *scene): Camera(scene), _imageY(0), _imageCbCr(0) {
+  TrackerSystem *tracker = &TrackerSystem::getInstance();
+  if (tracker != nullptr) {
+    _imageY = tracker->getCameraImageY();
+    _imageCbCr = tracker->getCameraImageCbCr();
+    setupPreDraw();
+  }
 }
 
 ARCamera::~ARCamera() {
   
 }
 
+void ARCamera::setupPreDraw() {
+  float positionBuffer[] = {
+    -1.0f, -1.0f, 0.0f, 1.0f,
+    -1.0f,  1.0f, 0.0f, 1.0f,
+     1.0f, -1.0f, 0.0f, 1.0f,
+     1.0f,  1.0f, 0.0f, 1.0f
+  };
+  
+  float uvBuffer[] = {
+    1.0f, 1.0f,
+    0.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f
+  };
+  
+  Graphics &graphics = Graphics::getInstance();
+  _task.frame = graphics.getMainWindowBuffer();
+  
+  _task.shader = graphics.createShaderProgram();
+  _task.shader->loadShaderFunctions("texture_vertex", "texture_fragment");
+  
+  _task.mesh = graphics.createVertexMesh();
+  _task.mesh->addVertexBuffer("Position", 4, 4, positionBuffer);
+  _task.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
+  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  
+  _textureMap.addTexture(_imageY);
+  _textureMap.addTexture(_imageCbCr);
+  _task.textures = &_textureMap;
+  _task.setClearDepthStencil();
+  
+  _task.colorActions[0].loadAction = LOAD_NONE;
+}
+
+bool ARCamera::cameraImagesReady() {
+  return _imageY && _imageY->loaded() && _imageCbCr && _imageCbCr->loaded();
+}
+
 void ARCamera::update() {
   TrackerSystem *tracker = &TrackerSystem::getInstance();
-  if (tracker != nullptr && tracker->trackingStatus() != TRACKING_NOT_AVALIBLE) {
+  if (tracker != nullptr) {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());
   }
+}
+
+bool ARCamera::preDraw() {
+  if (cameraImagesReady()) {
+    _task.frame = _frame;
+    if (isClearingDepth())
+      _task.setClearDepthStencil(clearDepth());
+    Graphics::getInstance().addTask(_task);
+    return true;
+  }
+  return false;
 }

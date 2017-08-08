@@ -110,7 +110,7 @@ void RenderPass::update() {
 
 void RenderPass::render() {
   Graphics &graphics = Graphics::getInstance();
-  bool firstItem = true;
+  bool firstItem = !_camera->preDraw();
   
   for (auto item : _items) {
     if (item.active()) {

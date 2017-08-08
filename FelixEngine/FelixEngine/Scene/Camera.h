@@ -61,6 +61,8 @@ namespace fx {
     virtual void update();
     virtual bool loadXML(const XMLTree::Node &node);
     
+    virtual bool preDraw();
+    
     CameraData& data() {return _data;}
     
     void setLightRig(const std::string &name);
