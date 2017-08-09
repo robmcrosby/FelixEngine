@@ -9,8 +9,10 @@
 #include "Graphics.h"
 #include "Macros.h"
 
-OBJC_CLASS(UIView)
+#ifndef MetalGraphics_h
+#define MetalGraphics_h
 
+OBJC_CLASS(UIView)
 
 namespace fx {
   
@@ -43,3 +45,5 @@ namespace fx {
   };
   
 }
+
+#endif /* MetalGraphics_h */

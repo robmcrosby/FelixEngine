@@ -22,9 +22,14 @@ bool ShaderProgram::loadXML(const XMLTree::Node &node) {
 
 
 bool VertexMesh::loadXML(const XMLTree::Node &node) {
+  VertexMeshData meshData;
+  
   if (node.hasAttribute("file")) {
-    fx::VertexMeshData meshData;
     if (fx::FileSystem::loadMesh(meshData, node.attribute("file")))
+      return load(meshData);
+  }
+  else {
+    if (meshData.loadXML(node))
       return load(meshData);
   }
   return false;

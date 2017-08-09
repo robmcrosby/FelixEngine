@@ -48,6 +48,10 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
   return false;
 }
 
+bool MetalTextureBuffer::loaded() const {
+  return _texture != nil;
+}
+
 ivec2 MetalTextureBuffer::size() const {
   return ivec2(_width, _height);
 }
@@ -55,4 +59,10 @@ ivec2 MetalTextureBuffer::size() const {
 void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index) {
   [encoder setFragmentTexture:_texture atIndex:index];
   [encoder setFragmentSamplerState:sampler atIndex:index];
+}
+
+void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {
+  _texture = texture;
+  _width = (int)_texture.width;
+  _height = (int)_texture.height;
 }

@@ -10,6 +10,7 @@
 #define VertexMeshData_h
 
 #include "GraphicResources.h"
+#include "StringUtils.h"
 #include <vector>
 #include <map>
 
@@ -29,6 +30,23 @@ namespace fx {
     BufferMap   buffers;
     
     VertexMeshData(): primitiveType(VERTEX_TRIANGLES), totalVertices(0) {}
+    bool loadXML(const XMLTree::Node &node) {
+      bool success = true;
+      
+      if (node.hasAttribute("type") && node.attribute("type") == "strip")
+        primitiveType = VERTEX_TRIANGLE_STRIP;
+      if (node.hasAttribute("total"))
+        totalVertices = node.attributeAsInt("total");
+      
+      for (auto subNode : node)
+        success &= addBuffer(*subNode);
+      return success;
+    }
+    bool addBuffer(const XMLTree::Node &node) {
+      if (node == "Buffer")
+        StringUtils::parseFloats(buffers[node.attribute("name")], node.contents());
+      return true;
+    }
   };
 }
 

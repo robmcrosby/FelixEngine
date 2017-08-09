@@ -54,9 +54,10 @@ bool Camera::loadXML(const XMLTree::Node &node) {
       success &= setClearState(*subnode);
   }
   return success;
-  
-  //cout << node << endl;
-  //return true;
+}
+
+bool Camera::preDraw() {
+  return false;
 }
 
 void Camera::addDepthBuffer() {

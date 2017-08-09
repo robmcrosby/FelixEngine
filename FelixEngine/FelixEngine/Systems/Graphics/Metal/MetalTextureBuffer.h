@@ -27,8 +27,10 @@ namespace fx {
     virtual ~MetalTextureBuffer();
     
     virtual bool load(const ImageBufferData &data);
+    virtual bool loaded() const;
     virtual ivec2 size() const;
     
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
+    void setMetalTexture(id <MTLTexture> texture);
   };
 }
