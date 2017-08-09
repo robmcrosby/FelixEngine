@@ -57,7 +57,6 @@ ARKitTracker::ARKitTracker() {
   _graphics        = nullptr;
   _cameraImageY    = nullptr;
   _cameraImageCbCr = nullptr;
-  _firstAnchor     = nil;
   
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
@@ -147,13 +146,5 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
 }
 
 void ARKitTracker::setTrackingStatus(TRACKING_STATUS status) {
-  if (_firstAnchor == nil && status == TRACKING_NORMAL) {
-    ARFrame *frame = _arSession.currentFrame;
-    if (frame != nil) {
-      matrix_float4x4 transform = frame.camera.transform;
-      _firstAnchor = [[ARAnchor alloc] initWithTransform:transform];
-      [_arSession addAnchor:_firstAnchor];
-    }
-  }
   _trackingStatus = status;
 }

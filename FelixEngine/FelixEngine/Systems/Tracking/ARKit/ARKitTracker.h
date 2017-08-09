@@ -27,7 +27,6 @@ namespace fx {
     MetalGraphics *_graphics;
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
-    ARAnchor      *_firstAnchor;
     
     MetalTextureBuffer *_cameraImageY;
     MetalTextureBuffer *_cameraImageCbCr;
