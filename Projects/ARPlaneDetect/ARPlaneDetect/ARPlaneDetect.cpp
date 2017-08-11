@@ -37,18 +37,18 @@ void ARPlaneDetect::render() {
 
 void ARPlaneDetect::trackedPlaneAdded(fx::TrackedPlane plane) {
   if (_model != nullptr) {
-    _model->setPosition(plane.center);
+    fx::mat4 transform = fx::mat4::Trans3d(fx::vec3(0.0f, 0.04f, 0.0f)) * plane.transform;
+    _model->setPosition(transform * plane.center);
     _model->update();
   }
-  cout << "Plane Added: " << plane.center << endl;
 }
 
 void ARPlaneDetect::trackedPlaneUpdated(fx::TrackedPlane plane) {
   if (_model != nullptr) {
-    _model->setPosition(plane.center);
+    fx::mat4 transform = fx::mat4::Trans3d(fx::vec3(0.0f, 0.04f, 0.0f)) * plane.transform;
+    _model->setPosition(transform * plane.center);
     _model->update();
   }
-  cout << "Plane Updated: " << plane.center << endl;
 }
 
 void ARPlaneDetect::trackedPlaneRemoved(fx::TrackedPlane plane) {

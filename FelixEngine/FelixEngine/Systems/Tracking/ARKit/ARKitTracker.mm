@@ -176,7 +176,8 @@ void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
   vector_float3 center = anchor.center;
   
   TrackedPlane plane;
-  plane.center = mat4((float*)&transform.columns[0]) * vec3(center.x, center.y, center.z);
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   if (_delegate != nullptr)
@@ -188,7 +189,8 @@ void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
   vector_float3 center = anchor.center;
   
   TrackedPlane plane;
-  plane.center = mat4((float*)&transform.columns[0]) * vec3(center.x, center.y, center.z);
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   if (_delegate != nullptr)
@@ -196,8 +198,12 @@ void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
 }
 
 void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
   TrackedPlane plane;
-  plane.center = vec3(-anchor.center.x, -anchor.center.y, -anchor.center.z);
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   if (_delegate != nullptr)

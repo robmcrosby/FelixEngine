@@ -22,6 +22,6 @@
     <DepthState write="true" function="less"/>
   </Material>
   <Model name="Model" mesh="Mesh" material="Material" pass="MainPass">
-    <Transform scale="0.01" orientation="0.5, -0.5, 0.5, 0.5"/>
+    <Transform scale="0.02" orientation="0.5, -0.5, 0.5, 0.5"/>
   </Model>
 </Scene>

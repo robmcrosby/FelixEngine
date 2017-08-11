@@ -23,6 +23,7 @@ namespace fx {
   
   struct TrackedPlane {
     int identifier;
+    mat4 transform;
     vec3 center;
     vec2 extent;
   };
