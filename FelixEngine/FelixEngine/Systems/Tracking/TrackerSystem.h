@@ -27,12 +27,13 @@ namespace fx {
     
   protected:
     TRACKING_STATUS _trackingStatus;
+    bool _planeDetectionEnabled;
     
   public:
     static TrackerSystem& getInstance() {return *instance;}
     
   public:
-    TrackerSystem(): _trackingStatus(TRACKING_NOT_AVALIBLE) {}
+    TrackerSystem(): _trackingStatus(TRACKING_NOT_AVALIBLE), _planeDetectionEnabled(false) {}
     virtual ~TrackerSystem() {}
     
     TRACKING_STATUS trackingStatus() const {return _trackingStatus;}
@@ -42,6 +43,9 @@ namespace fx {
     
     virtual TextureBuffer* getCameraImageY() = 0;
     virtual TextureBuffer* getCameraImageCbCr() = 0;
+    
+    virtual void enablePlaneDetection(bool enable = true) {_planeDetectionEnabled = enable;}
+    bool planeDetectionEnabled() const {return _planeDetectionEnabled;}
   };
 }
 

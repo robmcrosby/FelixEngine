@@ -16,6 +16,7 @@ OBJC_CLASS(ARSession)
 OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
 OBJC_CLASS(ARAnchor)
+OBJC_CLASS(ARPlaneAnchor)
 
 namespace fx {
   class MetalGraphics;
@@ -49,6 +50,10 @@ namespace fx {
     void arSessionInteruptEnd();
     void arSessionUpdateFrame(ARFrame *frame);
     void setTrackingStatus(TRACKING_STATUS status);
+    
+    void planeAnchorAdded(ARPlaneAnchor *anchor);
+    void planeAnchorUpdated(ARPlaneAnchor *anchor);
+    void planeAnchorRemoved(ARPlaneAnchor *anchor);
   };
   
 }

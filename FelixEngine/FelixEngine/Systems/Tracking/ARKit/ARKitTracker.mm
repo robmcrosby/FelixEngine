@@ -45,6 +45,27 @@
   self.tracker->arSessionUpdateFrame(frame);
 }
 
+- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorAdded((ARPlaneAnchor*)anchor);
+  }
+}
+
+- (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorUpdated((ARPlaneAnchor*)anchor);
+  }
+}
+
+- (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorRemoved((ARPlaneAnchor*)anchor);
+  }
+}
+
 @end
 
 
@@ -80,7 +101,8 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageY = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   _cameraImageCbCr = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   
-  ARSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
+  ARWorldTrackingSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
+  configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
   [_arSession runWithConfiguration: configuration];
   
   return true;
@@ -147,4 +169,16 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
 
 void ARKitTracker::setTrackingStatus(TRACKING_STATUS status) {
   _trackingStatus = status;
+}
+
+void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
+  cout << "Plane Anchor Added: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+}
+
+void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
+  cout << "Plane Anchor Updated: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+}
+
+void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
+  cout << "Plane Anchor Removed: " << [[anchor.identifier UUIDString] UTF8String] << endl;
 }
