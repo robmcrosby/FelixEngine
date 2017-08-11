@@ -39,6 +39,7 @@
   // Add and initalize ARKit
   fx::ARKitTracker *tracker = new fx::ARKitTracker();
   tracker->enablePlaneDetection();
+  tracker->setDelegate(self.arTrackerApp);
   tracker->initalize(graphics);
   self.arTrackerApp->setTrackerSystem(tracker);
   

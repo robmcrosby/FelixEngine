@@ -172,13 +172,34 @@ void ARKitTracker::setTrackingStatus(TRACKING_STATUS status) {
 }
 
 void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
-  cout << "Plane Anchor Added: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
+  TrackedPlane plane;
+  plane.center = mat4((float*)&transform.columns[0]) * vec3(center.x, center.y, center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneAdded(plane);
 }
 
 void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
-  cout << "Plane Anchor Updated: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
+  TrackedPlane plane;
+  plane.center = mat4((float*)&transform.columns[0]) * vec3(center.x, center.y, center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneUpdated(plane);
 }
 
 void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
-  cout << "Plane Anchor Removed: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+  TrackedPlane plane;
+  plane.center = vec3(-anchor.center.x, -anchor.center.y, -anchor.center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneRemoved(plane);
 }
