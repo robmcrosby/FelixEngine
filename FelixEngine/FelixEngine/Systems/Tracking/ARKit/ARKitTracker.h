@@ -16,6 +16,7 @@ OBJC_CLASS(ARSession)
 OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
 OBJC_CLASS(ARAnchor)
+OBJC_CLASS(ARPlaneAnchor)
 
 namespace fx {
   class MetalGraphics;
@@ -31,6 +32,8 @@ namespace fx {
     MetalTextureBuffer *_cameraImageY;
     MetalTextureBuffer *_cameraImageCbCr;
     
+    TrackedPlanes _trackedPlanes;
+    
   public:
     ARKitTracker();
     virtual ~ARKitTracker();
@@ -43,12 +46,21 @@ namespace fx {
     virtual TextureBuffer* getCameraImageY();
     virtual TextureBuffer* getCameraImageCbCr();
     
+    virtual const TrackedPlanes& trackedPlanes() const;
+    
   public:
     void arSessionFailed();
     void arSessionInterupted();
     void arSessionInteruptEnd();
     void arSessionUpdateFrame(ARFrame *frame);
     void setTrackingStatus(TRACKING_STATUS status);
+    
+    void planeAnchorAdded(ARPlaneAnchor *anchor);
+    void planeAnchorUpdated(ARPlaneAnchor *anchor);
+    void planeAnchorRemoved(ARPlaneAnchor *anchor);
+    
+  private:
+    void updateTrackedPlane(const TrackedPlane &plane);
   };
   
 }

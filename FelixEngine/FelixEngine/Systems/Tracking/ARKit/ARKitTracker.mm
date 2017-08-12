@@ -45,6 +45,27 @@
   self.tracker->arSessionUpdateFrame(frame);
 }
 
+- (void)session:(ARSession *)session didAddAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorAdded((ARPlaneAnchor*)anchor);
+  }
+}
+
+- (void)session:(ARSession *)session didUpdateAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorUpdated((ARPlaneAnchor*)anchor);
+  }
+}
+
+- (void)session:(ARSession *)session didRemoveAnchors:(NSArray<ARAnchor *> *)anchors {
+  for (ARAnchor *anchor : anchors) {
+    if ([anchor isKindOfClass:[ARPlaneAnchor class]])
+      self.tracker->planeAnchorRemoved((ARPlaneAnchor*)anchor);
+  }
+}
+
 @end
 
 
@@ -80,7 +101,8 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageY = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   _cameraImageCbCr = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
   
-  ARSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
+  ARWorldTrackingSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
+  configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
   [_arSession runWithConfiguration: configuration];
   
   return true;
@@ -107,6 +129,10 @@ TextureBuffer* ARKitTracker::getCameraImageY() {
 
 TextureBuffer* ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
+}
+
+const TrackedPlanes& ARKitTracker::trackedPlanes() const {
+  return _trackedPlanes;
 }
 
 void ARKitTracker::arSessionFailed() {
@@ -147,4 +173,59 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
 
 void ARKitTracker::setTrackingStatus(TRACKING_STATUS status) {
   _trackingStatus = status;
+}
+
+void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
+  TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  updateTrackedPlane(plane);
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneAdded(plane);
+}
+
+void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
+  TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  updateTrackedPlane(plane);
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneUpdated(plane);
+}
+
+void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
+  matrix_float4x4 transform = anchor.transform;
+  vector_float3 center = anchor.center;
+  
+  TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
+  plane.transform = mat4((float*)&transform.columns[0]);
+  plane.center = vec3(center.x, center.y, center.z);
+  plane.extent = vec2(anchor.extent.x, anchor.extent.z);
+  
+  updateTrackedPlane(plane);
+  if (_delegate != nullptr)
+    _delegate->trackedPlaneRemoved(plane);
+}
+
+void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
+  for (auto tracked : _trackedPlanes) {
+    if (tracked.uuid == plane.uuid) {
+      tracked = plane;
+      return;
+    }
+  }
+  _trackedPlanes.push_back(plane);
 }
