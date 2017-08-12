@@ -32,6 +32,8 @@ namespace fx {
     MetalTextureBuffer *_cameraImageY;
     MetalTextureBuffer *_cameraImageCbCr;
     
+    TrackedPlanes _trackedPlanes;
+    
   public:
     ARKitTracker();
     virtual ~ARKitTracker();
@@ -44,6 +46,8 @@ namespace fx {
     virtual TextureBuffer* getCameraImageY();
     virtual TextureBuffer* getCameraImageCbCr();
     
+    virtual const TrackedPlanes& trackedPlanes() const;
+    
   public:
     void arSessionFailed();
     void arSessionInterupted();
@@ -54,6 +58,9 @@ namespace fx {
     void planeAnchorAdded(ARPlaneAnchor *anchor);
     void planeAnchorUpdated(ARPlaneAnchor *anchor);
     void planeAnchorRemoved(ARPlaneAnchor *anchor);
+    
+  private:
+    void updateTrackedPlane(const TrackedPlane &plane);
   };
   
 }

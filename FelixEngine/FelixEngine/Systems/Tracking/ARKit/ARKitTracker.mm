@@ -131,6 +131,10 @@ TextureBuffer* ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
 
+const TrackedPlanes& ARKitTracker::trackedPlanes() const {
+  return _trackedPlanes;
+}
+
 void ARKitTracker::arSessionFailed() {
   cout << "AR Session Failed With Error" << endl;
 }
@@ -176,10 +180,12 @@ void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
   vector_float3 center = anchor.center;
   
   TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
+  updateTrackedPlane(plane);
   if (_delegate != nullptr)
     _delegate->trackedPlaneAdded(plane);
 }
@@ -189,10 +195,12 @@ void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
   vector_float3 center = anchor.center;
   
   TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
+  updateTrackedPlane(plane);
   if (_delegate != nullptr)
     _delegate->trackedPlaneUpdated(plane);
 }
@@ -202,10 +210,22 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
   vector_float3 center = anchor.center;
   
   TrackedPlane plane;
+  plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
+  updateTrackedPlane(plane);
   if (_delegate != nullptr)
     _delegate->trackedPlaneRemoved(plane);
+}
+
+void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
+  for (auto tracked : _trackedPlanes) {
+    if (tracked.uuid == plane.uuid) {
+      tracked = plane;
+      return;
+    }
+  }
+  _trackedPlanes.push_back(plane);
 }

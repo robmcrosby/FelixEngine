@@ -10,6 +10,7 @@
 #define TrackerSystem_h
 
 #include "Matrix.h"
+#include <vector>
 
 
 namespace fx {
@@ -22,11 +23,12 @@ namespace fx {
   };
   
   struct TrackedPlane {
-    int identifier;
+    std::string uuid;
     mat4 transform;
     vec3 center;
     vec2 extent;
   };
+  typedef std::vector<TrackedPlane> TrackedPlanes;
   
   struct TrackerDelegate {
     virtual ~TrackerDelegate() {}
@@ -43,6 +45,7 @@ namespace fx {
   protected:
     TRACKING_STATUS _trackingStatus;
     TrackerDelegate *_delegate;
+    
     bool _planeDetectionEnabled;
     
   public:
@@ -67,6 +70,8 @@ namespace fx {
     
     virtual void enablePlaneDetection(bool enable = true) {_planeDetectionEnabled = enable;}
     bool planeDetectionEnabled() const {return _planeDetectionEnabled;}
+    
+    virtual const TrackedPlanes& trackedPlanes() const = 0;
   };
 }
 
