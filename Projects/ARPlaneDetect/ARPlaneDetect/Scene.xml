@@ -2,6 +2,20 @@
 <Scene name="scene">
   <ShaderProgram name="Shader" vertexFunction="basic_vertex" fragmentFunction="basic_fragment"/>
   <VertexMesh name="Mesh" file="bunny.mesh"/>
+  <VertexMesh name="Plane" type="strip" total="4">
+    <Buffer name="Position">
+      -0.5, 0.0, -0.5, 1.0,
+      -0.5, 0.0,  0.5, 1.0,
+       0.5, 0.0, -0.5, 1.0,
+       0.5, 0.0,  0.5, 1.0
+    </Buffer>
+    <Buffer name="Normal">
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0
+    </Buffer>
+  </VertexMesh>
   <LightRig name="Lights">
     <DirectionalLight direction="-1.0, -1.0, 0.0" color="0.8, 0.9, 1.0" energy="0.8"/>
     <PointLight position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4"/>
@@ -24,4 +38,5 @@
   <Model name="Model" mesh="Mesh" material="Material" pass="MainPass">
     <Transform scale="0.02" orientation="0.5, -0.5, 0.5, 0.5"/>
   </Model>
+  <Model name="Plane" mesh="Plane" material="Material" pass="MainPass"/>
 </Scene>

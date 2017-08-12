@@ -25,7 +25,7 @@ Model::~Model() {
 }
 
 void Model::update() {
-  _data[0].model = mat4::Trans3d(_position) * _orientation.toMat4() * mat4::Scale(vec3(_scale, _scale, _scale));
+  _data[0].model = mat4::Trans3d(_position) * _orientation.toMat4() * mat4::Scale(_scale);
   _data[0].rotation = _orientation;
 }
 
