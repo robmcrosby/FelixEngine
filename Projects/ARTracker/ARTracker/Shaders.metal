@@ -130,12 +130,14 @@ struct TextureInput {
   float2 uv [[user(uv)]];
 };
 
-vertex TextureOutput texture_vertex(const device packed_float4 *Position [[ buffer(0) ]],
-                                    const device packed_float2 *UV       [[ buffer(1) ]],
-                                    unsigned int                vid      [[ vertex_id ]]) {
+vertex TextureOutput texture_vertex(const device packed_float4 *Position  [[ buffer(0) ]],
+                                    const device packed_float2 *UV        [[ buffer(1) ]],
+                                    constant     float4x4      *Transform [[ buffer(2) ]],
+                                    unsigned int                vid       [[ vertex_id ]]) {
   TextureOutput output;
+  float4 texture = *Transform * float4(UV[vid], 0.0, 1.0);
   output.position = float4(Position[vid]);
-  output.uv = float2(UV[vid]);
+  output.uv = texture.xy; //float2(UV[vid]);
   return output;
 }
 

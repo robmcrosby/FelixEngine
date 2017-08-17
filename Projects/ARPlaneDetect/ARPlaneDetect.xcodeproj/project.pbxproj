@@ -431,6 +431,7 @@
 				C1412E8A1F3BCACE001E8D83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -31,6 +31,7 @@ namespace fx {
     
     MetalTextureBuffer *_cameraImageY;
     MetalTextureBuffer *_cameraImageCbCr;
+    mat4 _imageTransform;
     
     TrackedPlanes _trackedPlanes;
     
@@ -42,6 +43,7 @@ namespace fx {
     
     virtual mat4 getCameraView();
     virtual mat4 getCameraProjection();
+    virtual mat4 getImageTransform();
     
     virtual TextureBuffer* getCameraImageY();
     virtual TextureBuffer* getCameraImageCbCr();

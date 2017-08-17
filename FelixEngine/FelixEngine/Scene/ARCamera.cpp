@@ -38,10 +38,10 @@ void ARCamera::setupPreDraw() {
   };
   
   float uvBuffer[] = {
-    1.0f, 1.0f,
     0.0f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
   };
   
   Graphics &graphics = Graphics::getInstance();
@@ -60,6 +60,10 @@ void ARCamera::setupPreDraw() {
   _task.textures = &_textureMap;
   _task.setClearDepthStencil();
   
+  _uniformMap["Transform"].load(_imageTransform.ptr(), sizeof(mat4));
+  _uniformMap.update();
+  _task.uniforms = &_uniformMap;
+  
   _task.colorActions[0].loadAction = LOAD_NONE;
 }
 
@@ -72,6 +76,8 @@ void ARCamera::update() {
   if (tracker != nullptr) {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());
+    _imageTransform = tracker->getImageTransform();
+    _uniformMap.update();
   }
 }
 

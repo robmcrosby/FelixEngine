@@ -123,6 +123,24 @@ mat4 ARKitTracker::getCameraProjection() {
   return (float*)&proj.columns[0];
 }
 
+mat4 ARKitTracker::getImageTransform() {
+  //return _imageTransform;
+  mat4 transform;
+  ARFrame *frame = _arSession.currentFrame;
+  if (frame != nil) {
+    CGSize viewport = UIScreen.mainScreen.bounds.size;
+    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
+    affine = CGAffineTransformInvert(affine);
+    transform.x.x = affine.a;
+    transform.x.y = affine.b;
+    transform.y.x = affine.c;
+    transform.y.y = affine.d;
+    transform.w.x = affine.tx;
+    transform.w.y = affine.ty;
+  }
+  return transform;
+}
+
 TextureBuffer* ARKitTracker::getCameraImageY() {
   return _cameraImageY;
 }

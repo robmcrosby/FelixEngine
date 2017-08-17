@@ -49,7 +49,7 @@ void ARPlaneDetect::trackedPlaneAdded(fx::TrackedPlane plane) {
     _plane->setPosition(plane.transform * plane.center);
     _plane->setScale(fx::vec3(plane.extent.x, 1.0, plane.extent.y));
     _plane->update();
-    _plane->setHidden(false);
+    //_plane->setHidden(false);
   }
 }
 

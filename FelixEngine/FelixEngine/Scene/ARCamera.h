@@ -20,6 +20,9 @@ namespace fx {
     TextureBuffer *_imageY;
     TextureBuffer *_imageCbCr;
     
+    mat4 _imageTransform;
+    UniformMap _uniformMap;
+    
   private:
     void setupPreDraw();
     bool cameraImagesReady();
