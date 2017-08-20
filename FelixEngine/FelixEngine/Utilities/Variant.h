@@ -30,6 +30,7 @@
 #define IVEC4_STR "ivec4"
 
 #define STRING_STR "string"
+#define STRUCT_STR "struct"
 
 
 namespace fx
@@ -54,11 +55,18 @@ namespace fx
     
     VARIANT_STRING,
     
+    VARIANT_STRUCT,
     VARIANT_UNKNOWN,
   };
   
   class Variant
   {
+  private:
+    VARIANT_TYPE _type;
+    size_t _typeSize;
+    size_t _width;
+    std::vector<uint8_t> _data;
+    
   public:
     static size_t getTypeSize(VARIANT_TYPE type)
     {
@@ -84,6 +92,7 @@ namespace fx
           return 16*sizeof(uint32_t);
         case VARIANT_STRING:
           return sizeof(uint8_t);
+        case VARIANT_STRUCT:
         case VARIANT_UNKNOWN:
           return 0;
       }
@@ -113,6 +122,7 @@ namespace fx
           return 9;
         case VARIANT_MTX_4X4:
           return 16;
+        case VARIANT_STRUCT:
         case VARIANT_UNKNOWN:
           return 0;
       }
@@ -141,6 +151,8 @@ namespace fx
         return VARIANT_INT_4;
       if (str == STRING_STR)
         return VARIANT_STRING;
+      if (str == STRUCT_STR)
+        return VARIANT_STRUCT;
       return VARIANT_UNKNOWN;
     }
     
@@ -208,6 +220,15 @@ namespace fx
     
     void setValues(const char *ptr) {setValues(VARIANT_STRING, ptr, strlen(ptr)+1);}
     
+    template <typename T>
+    void setValues(const T *ptr, size_t width = 1, size_t height = 1) {
+      _type = VARIANT_STRUCT;
+      _typeSize = sizeof(T);
+      _width = width;
+      _data.resize(_typeSize * width * height);
+      memcpy(&_data.at(0), (const void *)ptr, sizeInBytes());
+    }
+    
     void append(VARIANT_TYPE type, const void *ptr)
     {
       resize(type, size()+1);
@@ -245,6 +266,9 @@ namespace fx
     
     Variant& operator=(const std::string &value) {setValues(value.c_str()); return *this;}
     Variant& operator=(const char *value) {setValues(value); return *this;}
+    
+    template <typename T>
+    Variant& operator=(const T &value) {setValues(&value); return *this;}
     
     bool operator==(const Variant &other) const
     {
@@ -418,12 +442,6 @@ namespace fx
         }
       }
     }
-    
-  private:
-    VARIANT_TYPE _type;
-    size_t _typeSize;
-    size_t _width;
-    std::vector<uint8_t> _data;
   };
   
   typedef std::map<std::string, Variant> VariantMap;
