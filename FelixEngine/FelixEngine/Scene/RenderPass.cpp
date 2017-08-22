@@ -121,8 +121,8 @@ void RenderPass::removeModel(Model *model) {
 }
 
 void RenderPass::update() {
-  for (auto item : _items)
-    item.update();
+  for (auto itr = _items.begin(); itr != _items.end(); ++itr)
+    itr->update();
 }
 
 void RenderPass::render() {
@@ -153,13 +153,13 @@ RenderPasses::~RenderPasses() {
 }
 
 void RenderPasses::update() {
-  for (auto pass : _renderPasses)
-    pass.update();
+  for (auto itr = _renderPasses.begin(); itr != _renderPasses.end(); ++itr)
+    itr->update();
 }
 
 void RenderPasses::render() {
-  for (auto pass : _renderPasses)
-    pass.render();
+  for (auto itr = _renderPasses.begin(); itr != _renderPasses.end(); ++itr)
+    itr->render();
 }
 
 RenderPass& RenderPasses::operator[](const std::string &name) {

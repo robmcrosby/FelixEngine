@@ -17,7 +17,7 @@
 namespace fx {
   class MetalFrameBuffer;
   class GraphicTask;
-  class Uniform;
+  class Variant;
   typedef std::map<MetalFrameBuffer*, id <MTLRenderPipelineState> > PipelineMap;
   
   typedef std::map<std::string, unsigned long> IndexMap;
@@ -42,7 +42,7 @@ namespace fx {
     
   private:
     void addPipelineForFrame(MetalFrameBuffer *frame);
-    void setUniform(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Uniform &uniform);
+    void setUniform(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Variant &uniform);
     void extractIndexMaps();
   };
 }

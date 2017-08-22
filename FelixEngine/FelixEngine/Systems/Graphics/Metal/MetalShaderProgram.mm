@@ -73,7 +73,7 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
   }
 }
 
-void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {
+void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Variant &uniform) {
   if (_vertexIndexMap.count(name) > 0)
     [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
   if (_fragmentIndexMap.count(name) > 0)

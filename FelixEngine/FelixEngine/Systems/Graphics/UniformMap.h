@@ -18,49 +18,50 @@
 
 namespace fx {
   
-  class Uniform: public Variant {
-  private:
-    UniformBuffer *_buffer;
-    
-  public:
-    Uniform(): Variant(), _buffer(0) {}
-    virtual ~Uniform() {}
-    
-    void update() {
-      if (_buffer != nullptr)
-        _buffer->update();
-    }
-    
-    template <typename T>
-    Uniform& operator=(const T &value) {setValues(&value); return *this;}
-    
-    template <typename T>
-    Uniform& operator=(const std::vector<T> &values) {
-      setValues(&values.at(0), values.size());
-      return *this;
-    }
-  };
+//  class Uniform: public Variant {
+//  private:
+//    UniformBuffer *_buffer;
+//
+//  public:
+//    Uniform(): Variant(), _buffer(0) {}
+//    virtual ~Uniform() {}
+//
+//    void update() {
+//      if (_buffer != nullptr)
+//        _buffer->update();
+//    }
+//
+//    template <typename T>
+//    Uniform& operator=(const T &value) {setValues(&value); return *this;}
+//
+//    template <typename T>
+//    Uniform& operator=(const std::vector<T> &values) {
+//      setValues(&values.at(0), values.size());
+//      return *this;
+//    }
+//  };
+  //typedef Variant Uniform;
   
   class UniformMap {
   private:
-    std::map<std::string, Uniform> _map;
+    std::map<std::string, Variant> _map;
     
   public:
     UniformMap() {}
     ~UniformMap() {}
     
-    std::map<std::string, Uniform>::iterator begin() {return _map.begin();}
-    std::map<std::string, Uniform>::iterator end() {return _map.end();}
+    std::map<std::string, Variant>::iterator begin() {return _map.begin();}
+    std::map<std::string, Variant>::iterator end() {return _map.end();}
     
-    std::map<std::string, Uniform>::const_iterator begin() const {return _map.begin();}
-    std::map<std::string, Uniform>::const_iterator end() const {return _map.end();}
+    std::map<std::string, Variant>::const_iterator begin() const {return _map.begin();}
+    std::map<std::string, Variant>::const_iterator end() const {return _map.end();}
     
     void update() {
-      for (auto uniform : _map)
-        uniform.second.update();
+      //for (auto uniform : _map)
+      //  uniform.second.update();
     }
     
-    Uniform& operator[](const std::string name) {
+    Variant& operator[](const std::string name) {
       return _map[name];
 //      if (_map.count(name) == 0)
 //        _map[name] = Graphics::getInstance().createUniformBuffer();
