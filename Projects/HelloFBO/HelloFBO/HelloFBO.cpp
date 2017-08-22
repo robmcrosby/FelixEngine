@@ -28,6 +28,7 @@ void HelloFBO::update() {
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   // Update the Model Uniforms
+  _firstUniformMap["MVP"] = _firstUniform;
   _firstUniformMap.update();
 }
 

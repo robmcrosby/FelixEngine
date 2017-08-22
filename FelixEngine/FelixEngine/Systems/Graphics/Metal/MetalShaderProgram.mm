@@ -10,6 +10,7 @@
 #include "MetalFrameBuffer.h"
 #include "MetalUniformBuffer.h"
 #include "GraphicTask.h"
+#include "UniformMap.h"
 #include <Metal/Metal.h>
 
 using namespace fx;
@@ -65,10 +66,18 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
   
   if (task.uniforms != nullptr) {
     for (auto uniform : *task.uniforms) {
-      MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
-      mtlUniform->encode(encoder, uniform.first, this);
+      setUniform(encoder, uniform.first, uniform.second);
+      //MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
+      //mtlUniform->encode(encoder, uniform.first, this);
     }
   }
+}
+
+void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {
+  if (_vertexIndexMap.count(name) > 0)
+    [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
+  if (_fragmentIndexMap.count(name) > 0)
+    [encoder setFragmentBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_fragmentIndexMap.at(name)];
 }
 
 void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {

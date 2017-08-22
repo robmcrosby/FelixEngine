@@ -18,7 +18,7 @@
 using namespace fx;
 using namespace std;
 
-RenderItem::RenderItem(Camera *camera, Model *model): model(model) {
+RenderItem::RenderItem(Camera *camera, Model *model): camera(camera), model(model) {
   task.uniforms = &uniforms;
   setCamera(camera);
   setModel(model);
@@ -26,6 +26,7 @@ RenderItem::RenderItem(Camera *camera, Model *model): model(model) {
 
 RenderItem& RenderItem::operator=(const RenderItem &other) {
   model = other.model;
+  camera = other.camera;
   uniforms = other.uniforms;
   task = other.task;
   task.uniforms = &uniforms;
@@ -57,14 +58,14 @@ void RenderItem::setDefaultOperations() {
   task.setDefaultDepthStencilActions();
 }
 
-void RenderItem::setCamera(Camera *camera) {
+void RenderItem::setCamera(Camera *newCamera) {
   if (camera != nullptr) {
     uniforms["camera"] = camera->data();
     task.frame = camera->frame();
     
     LightRig *lightRig = camera->lightRig();
     if (lightRig != nullptr && lightRig->size() > 0)
-      uniforms["lights"].load(&lightRig->data(), lightRig->size());
+      uniforms["lights"] = lightRig->lights();
   }
 }
 
@@ -82,6 +83,22 @@ void RenderItem::setModel(Model *newModel) {
       task.depthState = material->depthState();
     }
   }
+}
+
+void RenderItem::update() {
+  if (model != nullptr) {
+    uniforms["model"] = model->data();
+    Material *material = model->material();
+    if (material != nullptr)
+      uniforms["material"] = material->data();
+  }
+  if (camera != nullptr) {
+    uniforms["camera"] = camera->data();
+    LightRig *lightRig = camera->lightRig();
+    if (lightRig != nullptr && lightRig->size() > 0)
+      uniforms["lights"] = lightRig->lights();
+  }
+  uniforms.update();
 }
 
 
@@ -105,7 +122,7 @@ void RenderPass::removeModel(Model *model) {
 
 void RenderPass::update() {
   for (auto item : _items)
-    item.uniforms.update();
+    item.update();
 }
 
 void RenderPass::render() {

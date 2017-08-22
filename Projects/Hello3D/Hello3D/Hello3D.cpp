@@ -55,6 +55,7 @@ void Hello3D::update() {
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   // Update the Model Uniforms
+  _uniformMap["MVP"] = _mvpUniform;
   _uniformMap.update();
 }
 

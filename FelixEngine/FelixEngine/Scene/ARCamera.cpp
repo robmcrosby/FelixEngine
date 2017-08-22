@@ -60,7 +60,8 @@ void ARCamera::setupPreDraw() {
   _task.textures = &_textureMap;
   _task.setClearDepthStencil();
   
-  _uniformMap["Transform"].load(_imageTransform.ptr(), sizeof(mat4));
+  //_uniformMap["Transform"].load(_imageTransform.ptr(), sizeof(mat4));
+  _uniformMap["Transform"] = _imageTransform;
   _uniformMap.update();
   _task.uniforms = &_uniformMap;
   

@@ -21,14 +21,16 @@ namespace fx {
   
   struct RenderItem {
     Model *model;
+    Camera *camera;
     UniformMap uniforms;
     GraphicTask task;
     
-    RenderItem(Model *model = nullptr): model(model) {task.uniforms = &uniforms;}
+    RenderItem(Model *model = nullptr): camera(0), model(model) {task.uniforms = &uniforms;}
     RenderItem(const RenderItem &other) {*this = other;}
     RenderItem(Camera *camera, Model *model);
     RenderItem& operator=(const RenderItem &other);
     
+    void update();
     bool active() const;
     
     void setClearOperations(Camera *camera);
