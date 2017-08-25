@@ -32,6 +32,7 @@ namespace fx {
     
     CULL_MODE cullMode;
     DepthState depthState;
+    BlendState blendState;
     
     GraphicTask() {
       frame  = nullptr;
@@ -73,6 +74,7 @@ namespace fx {
     }
     
     void enableDepthTesting() {depthState.enableDefaultTesting();}
+    void enableBlending() {blendState.enableDefaultBlending();}
   };
 }
 

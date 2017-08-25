@@ -88,6 +88,10 @@ namespace fx {
       enableWriting();
       setFunction(DEPTH_TEST_LESS);
     }
+    void disable() {
+      disableWriting();
+      disableTesting();
+    }
     
     void setFunction(int function) {
       flags = (function & DEPTH_TEST_MASK) | (flags & DEPTH_ENABLE_MASK);
@@ -127,6 +131,180 @@ namespace fx {
     bool writingEnabled() const {return flags & DEPTH_ENABLE_WRITING;}
     bool testingEnabled() const {return flags & DEPTH_ENABLE_TESTING;}
     int  function()  const {return flags & DEPTH_TEST_MASK;}
+  };
+  
+  
+  /**
+   * 0000 0000 0000 0000 0000 0000 #### ####
+   */
+  enum BLEND_EQ
+  {
+    BLEND_EQ_MASK         = 0xff,
+    BLEND_EQ_COMP_MASK    = 0xf,
+    
+    BLEND_EQ_NONE         = 0x0,
+    BLEND_EQ_ADD          = 0x1,
+    BLEND_EQ_SUBTRACT     = 0x2,
+    BLEND_EQ_REV_SUBTRACT = 0x3,
+    BLEND_EQ_MIN          = 0x4,
+    BLEND_EQ_MAX          = 0x5,
+    
+    BLEND_EQ_COLOR_SHIFT  = 0,
+    BLEND_EQ_ALPHA_SHIFT  = 4,
+  };
+  
+  /**
+   * 0000 0000 #### #### #### #### 0000 0000
+   */
+  enum BLEND_INPUTS {
+    BLEND_INPUT_MASK        = 0xffff00,
+    BLEND_INPUT_COMP_MASK   = 0xf,
+    
+    BLEND_INPUT_SRC_COLOR   = 0x1, // 0001
+    BLEND_INPUT_SRC_ALPHA   = 0x2, // 0010
+    BLEND_INPUT_DST_COLOR   = 0x3, // 0011
+    BLEND_INPUT_DST_ALPHA   = 0x4, // 0100
+    BLEND_INPUT_CONST_COLOR = 0x5, // 0101
+    BLEND_INPUT_CONST_ALPHA = 0x6, // 0110
+    
+    BLEND_INPUT_ONE_MINUS   = 0x8, // 1000
+    
+    BLEND_INPUT_ZERO        = 0x8, // 1000
+    BLEND_INPUT_ONE         = 0x0, // 0000
+    
+    BLEND_INPUT_SRC_ALPHA_SATURATE = 0xf, // 1111
+    
+    BLEND_INPUT_SRC_COLOR_SHIFT  = 8,
+    BLEND_INPUT_DEST_COLOR_SHIFT = 12,
+    BLEND_INPUT_SRC_ALPHA_SHIFT  = 16,
+    BLEND_INPUT_DEST_ALPHA_SHIFT = 20,
+  };
+  
+  struct BlendState
+  {
+    int   flags;
+    RGBAf color;
+    
+    BlendState(int f = 0): flags(f) {}
+    
+    void enableDefaultBlending()
+    {
+      setEquation(BLEND_EQ_ADD);
+      setSrc(BLEND_INPUT_SRC_ALPHA);
+      setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+    }
+    void disable() {setEquation(BLEND_EQ_NONE);}
+    
+    void setEquation(int func, int shift = BLEND_EQ_COLOR_SHIFT) {
+      flags = (flags & ~(BLEND_EQ_COMP_MASK << shift)) | ((func << shift) & (BLEND_EQ_COMP_MASK << shift));
+    }
+    void setEquationAlpha(int func) {setEquation(func, BLEND_EQ_ALPHA_SHIFT);}
+    
+    void setEquation(const std::string &str, int shift = BLEND_EQ_COLOR_SHIFT) {setEquation(getEquationFlag(str), shift);}
+    void setEquationAlpha(const std::string &str) {setEquation(str, BLEND_EQ_ALPHA_SHIFT);}
+    
+    void setInput(int input, int shift)
+    {
+      int mask = BLEND_INPUT_MASK << shift;
+      flags = (flags & ~mask) | ((input << shift) & mask);
+    }
+    void setSrc(int input) {setInput(input, BLEND_INPUT_SRC_COLOR_SHIFT);}
+    void setDst(int input) {setInput(input, BLEND_INPUT_DEST_COLOR_SHIFT);}
+    void setSrcAlpha(int input) {setInput(input, BLEND_INPUT_SRC_ALPHA_SHIFT);}
+    void setDstAlpha(int input) {setInput(input, BLEND_INPUT_DEST_ALPHA_SHIFT);}
+    
+    void setSrc(const std::string &str) {setSrc(getInputFlag(str));}
+    void setDst(const std::string &str) {setDst(getInputFlag(str));}
+    void setSrcAlpha(const std::string &str) {setSrcAlpha(getInputFlag(str));}
+    void setDstAlpha(const std::string &str) {setDstAlpha(getInputFlag(str));}
+    
+    int equation() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_COMP_MASK;}
+    int equationAlpha() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}
+    
+    int src() const {return (flags >> BLEND_INPUT_SRC_COLOR_SHIFT) & BLEND_INPUT_MASK;}
+    int dst() const {return (flags >> BLEND_INPUT_DEST_COLOR_SHIFT) & BLEND_INPUT_MASK;}
+    int srcAlpha() const {return (flags >> BLEND_INPUT_SRC_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    int dstAlpha() const {return (flags >> BLEND_INPUT_DEST_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    
+    bool enabled() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_MASK;}
+    bool seperate() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}
+    
+    static int getInputFlag(const std::string &str)
+    {
+      if (str == "saturate")
+        return BLEND_INPUT_SRC_ALPHA_SATURATE;
+      if (str == "0")
+        return BLEND_INPUT_ZERO;
+      if (str == "1")
+        return BLEND_INPUT_ONE;
+      
+      int mod = (str.find("1-") == 0) ? BLEND_INPUT_ONE_MINUS : 0;
+      if (str.find("src") != std::string::npos)
+        return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_SRC_ALPHA : BLEND_INPUT_SRC_COLOR);
+      if (str.find("dst") != std::string::npos)
+        return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_DST_ALPHA : BLEND_INPUT_DST_COLOR);
+      return mod | ((str.find("alpha") != std::string::npos) ? BLEND_INPUT_CONST_ALPHA : BLEND_INPUT_CONST_COLOR);
+    }
+    
+    static int getEquationFlag(const std::string &str)
+    {
+      if (str == "add")
+        return BLEND_EQ_ADD;
+      if (str == "subtract")
+        return BLEND_EQ_SUBTRACT;
+      if (str == "reverse")
+        return BLEND_EQ_REV_SUBTRACT;
+      if (str == "min")
+        return BLEND_EQ_MIN;
+      if (str == "max")
+        return BLEND_EQ_MAX;
+      return 0;
+    }
+    
+    bool loadXml(const XMLTree::Node &node)
+    {
+      if (node.hasAttribute("equation"))
+        setEquation(node.attribute("equation"));
+      else
+        setEquation(BLEND_EQ_ADD);
+      
+      if (node.hasAttribute("src"))
+        setSrc(node.attribute("src"));
+      else
+        setSrc(BLEND_INPUT_SRC_ALPHA);
+      
+      if (node.hasAttribute("dst"))
+        setDst(node.attribute("dst"));
+      else
+        setDst(BLEND_INPUT_ONE_MINUS | BLEND_INPUT_SRC_ALPHA);
+      
+      if (node.hasAttribute("color"))
+        color = node.attribute("color");
+      else if (node.hasSubNode("Color"))
+        color = node.subContents("Color");
+      else
+        color = RGBAf(0.0f, 0.0f, 0.0f, 1.0f);
+      
+      const XMLTree::Node *alpha = node.subNode("Alpha");
+      if (alpha)
+      {
+        if (alpha->hasAttribute("equation"))
+          setEquationAlpha(alpha->attribute("equation"));
+        else
+          setEquationAlpha(equation());
+        
+        if (alpha->hasAttribute("src"))
+          setSrcAlpha(alpha->attribute("src"));
+        else
+          setSrcAlpha(src());
+        
+        if (alpha->hasAttribute("dst"))
+          setDstAlpha(alpha->attribute("dst"));
+        else
+          setDstAlpha(dst());
+      }
+      return true;
+    }
   };
   
   

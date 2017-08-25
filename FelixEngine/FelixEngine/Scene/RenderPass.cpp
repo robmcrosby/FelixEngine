@@ -81,6 +81,7 @@ void RenderItem::setModel(Model *newModel) {
       task.textures = &material->textures();
       task.shader = material->shader();
       task.depthState = material->depthState();
+      task.blendState = material->blendState();
     }
   }
 }

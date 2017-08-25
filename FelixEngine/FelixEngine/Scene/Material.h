@@ -33,6 +33,7 @@ namespace fx {
     ShaderProgram *_shader;
     
     DepthState _depthState;
+    BlendState _blendState;
     
   public:
     Material(Scene *scene);
@@ -51,6 +52,11 @@ namespace fx {
     
     DepthState& depthState() {return _depthState;}
     void enableDepthTesting() {_depthState.enableDefaultTesting();}
+    void disableDepthTesting() {_depthState.disable();}
+    
+    BlendState& blendState() {return _blendState;}
+    void enableBlending() {_blendState.enableDefaultBlending();}
+    void disableBlending() {_blendState.disable();}
     
     bool setAmbiant(const XMLTree::Node &node);
     void setAmbiant(const vec3 &color, float factor) {_data.ambiant = vec4(color, factor);}
