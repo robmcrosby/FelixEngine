@@ -179,20 +179,6 @@ namespace fx
     Variant(const std::string &value): _type(VARIANT_UNKNOWN) {setValues(value.c_str());}
     Variant(const char *value): _type(VARIANT_UNKNOWN) {setValues(value);}
     
-    Variant(const Variant &other) {
-      _type = other._type;
-      _typeSize = other._typeSize;
-      _width = other._width;
-      _data = other._data;
-    }
-    Variant& operator=(const Variant &other) {
-      _type = other._type;
-      _typeSize = other._typeSize;
-      _width = other._width;
-      _data = other._data;
-      return *this;
-    }
-    
     virtual ~Variant() {}
     
     void resize(size_t width, size_t height = 1)

@@ -65,19 +65,22 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
   [encoder setRenderPipelineState:_pipelines.at(frame)];
   
   if (task.uniforms != nullptr) {
-    for (auto uniform : *task.uniforms) {
-      setUniform(encoder, uniform.first, uniform.second);
-      //MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
-      //mtlUniform->encode(encoder, uniform.first, this);
-    }
+    for (auto itr : *task.uniforms)
+      setUniform(encoder, itr.first, itr.second);
   }
 }
 
-void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Variant &uniform) {
-  if (_vertexIndexMap.count(name) > 0)
-    [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
-  if (_fragmentIndexMap.count(name) > 0)
-    [encoder setFragmentBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_fragmentIndexMap.at(name)];
+void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {
+  if (uniform.usingBuffer()) {
+    MetalUniformBuffer *buffer = static_cast<MetalUniformBuffer*>(uniform.buffer());
+    buffer->encodeCurrent(encoder, name, this);
+  }
+  else {
+    if (_vertexIndexMap.count(name) > 0)
+      [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
+    if (_fragmentIndexMap.count(name) > 0)
+      [encoder setFragmentBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_fragmentIndexMap.at(name)];
+  }
 }
 
 void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {

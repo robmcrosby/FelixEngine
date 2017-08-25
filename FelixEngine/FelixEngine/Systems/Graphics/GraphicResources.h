@@ -47,21 +47,27 @@ namespace fx {
     virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
   };
   
+  enum BUFFER_COUNT {
+    BUFFER_SINGLE = 1,
+    BUFFER_DOUBLE = 2,
+    BUFFER_TRIPLE = 3,
+  };
+  
   struct UniformBuffer {
     virtual ~UniformBuffer() {}
     
-    virtual bool load(void *data, size_t size) = 0;
-    virtual void update() = 0;
+    virtual bool load(void *data, size_t size, BUFFER_COUNT count) = 0;
+    virtual void update(void *data, size_t size) = 0;
     
     template <typename T>
     T& operator=(T &data) {
-      load(&data, sizeof(T));
+      update(&data, sizeof(T));
       return data;
     }
     
     template <typename T>
     std::vector<T>& operator=(std::vector<T> &data) {
-      load(&data.at(0), data.size()*sizeof(T));
+      update(&data.at(0), data.size()*sizeof(T));
       return data;
     }
   };

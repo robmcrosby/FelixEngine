@@ -24,10 +24,10 @@ namespace fx {
     id <MTLDevice> _device;
     id <MTLBuffer> _buffers[MAX_BUFFERS];
     
-    size_t _size;
-    void *_data;
-    
-    int _current;
+    size_t _bufferSize;
+    int _currentBuffer;
+    int _lastBuffer;
+    int _bufferCount;
     
   private:
     void clearBuffers();
@@ -36,9 +36,11 @@ namespace fx {
     MetalUniformBuffer(id <MTLDevice> device);
     virtual ~MetalUniformBuffer();
     
-    virtual bool load(void *data, size_t size);
-    virtual void update();
+    virtual bool load(void *data, size_t size, BUFFER_COUNT count);
+    virtual void update(void *data, size_t size);
     
-    void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
+    void encodeCurrent(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
+    void encodeLast(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
+    void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader, int buffer);
   };
 }
