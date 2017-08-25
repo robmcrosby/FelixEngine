@@ -35,6 +35,7 @@ namespace fx {
     id <CAMetalDrawable> _drawable;
     
     ivec2 _size;
+    int _idFlag;
     
   public:
     MetalFrameBuffer(id <MTLDevice> device);

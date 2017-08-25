@@ -34,35 +34,12 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
   return _vertex != nil  && _fragment != nil;
 }
 
-void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame) {
-  if (!_pipelines.count(frame)) {
-    MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
-    descriptor.vertexFunction = _vertex;
-    descriptor.fragmentFunction = _fragment;
-    
-    int index = 0;
-    for (id <MTLTexture> attachment : frame->_colorAttachments) {
-      descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
-    }
-    
-    if (frame->_depthAttachment != nil) {
-      descriptor.depthAttachmentPixelFormat = frame->_depthAttachment.pixelFormat;
-    }
-    if (frame->_stencilAttachment != nil) {
-      descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
-    }
-    
-    _pipelines[frame] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
-  }
-  
-  [encoder setRenderPipelineState:_pipelines.at(frame)];
-}
-
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
   MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame);
-  if (!_pipelines.count(frame))
-    addPipelineForFrame(frame);
-  [encoder setRenderPipelineState:_pipelines.at(frame)];
+  int frameId = frame->_idFlag | task.blendState.flags;
+  if (!_pipelines.count(frameId))
+    addPipeline(frame, task.blendState);
+  [encoder setRenderPipelineState:_pipelines.at(frameId)];
   
   if (task.uniforms != nullptr) {
     for (auto itr : *task.uniforms)
@@ -83,7 +60,7 @@ void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const 
   }
 }
 
-void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {
+void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &blending) {
   MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
@@ -100,7 +77,8 @@ void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {
     descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
   }
   
-  _pipelines[frame] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
+  int frameId = frame->_idFlag | blending.flags;
+  _pipelines[frameId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
 }
 
 void MetalShaderProgram::extractIndexMaps() {

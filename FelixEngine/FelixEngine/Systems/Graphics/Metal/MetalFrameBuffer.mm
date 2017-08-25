@@ -15,6 +15,8 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CAMetalLayer.h>
 
+#define ID_FLAG_OFFSET 24
+
 using namespace fx;
 using namespace std;
 
@@ -41,6 +43,9 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 
 
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
+  static int bufferCount = 1;
+  _idFlag = bufferCount++ << ID_FLAG_OFFSET;
+  
   _metalLayer = nil;
   _drawable = nil;
   
