@@ -36,10 +36,10 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
   MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame);
-  int frameId = frame->_idFlag | task.blendState.flags;
-  if (!_pipelines.count(frameId))
+  int pipelineId = frame->pipelineId(task.blendState);
+  if (!_pipelines.count(pipelineId))
     addPipeline(frame, task.blendState);
-  [encoder setRenderPipelineState:_pipelines.at(frameId)];
+  [encoder setRenderPipelineState:_pipelines.at(pipelineId)];
   
   if (task.uniforms != nullptr) {
     for (auto itr : *task.uniforms)
@@ -65,8 +65,8 @@ void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
   
-  int frameId = frame->_idFlag | blending.flags;
-  _pipelines[frameId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
+  int pipelineId = frame->pipelineId(blending);
+  _pipelines[pipelineId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
 }
 
 void MetalShaderProgram::extractIndexMaps() {

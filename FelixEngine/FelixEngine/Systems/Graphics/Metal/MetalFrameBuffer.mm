@@ -127,6 +127,10 @@ TextureBuffer* MetalFrameBuffer::getColorTexture(int index) {
   return new MetalTextureBuffer(_device, _colorAttachments.at(index));
 }
 
+int MetalFrameBuffer::pipelineId(const BlendState &blending) const {
+  return _idFlag | blending.flags;
+}
+
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
   if (_metalLayer != nil && _drawable == nil)
     getNextDrawable();

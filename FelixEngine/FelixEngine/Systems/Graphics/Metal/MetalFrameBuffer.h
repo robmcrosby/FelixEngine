@@ -56,6 +56,8 @@ namespace fx {
     void setMetalLayer(CAMetalLayer *layer);
     void present(id <MTLCommandBuffer> buffer);
     
+    int pipelineId(const BlendState &blending) const;
+    
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
     MTLRenderPipelineDescriptor* createPipelineDescriptor(const BlendState &blending) const;
     
