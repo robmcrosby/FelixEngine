@@ -18,11 +18,13 @@
 
 
 @class CAMetalLayer;
+@class MTLRenderPipelineDescriptor;
 
 
 namespace fx {
   typedef std::vector<id <MTLTexture> > attachmentsList;
   class GraphicTask;
+  class BlendState;
   
   class MetalFrameBuffer: public FrameBuffer {
   public:
@@ -55,9 +57,12 @@ namespace fx {
     void present(id <MTLCommandBuffer> buffer);
     
     id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
+    MTLRenderPipelineDescriptor* createPipelineDescriptor(const BlendState &blending) const;
     
   private:
     id <MTLTexture> resizeTexture(id <MTLTexture> texture, ivec2 size);
     void getNextDrawable();
+    int metalBlendFactor(int factor);
+    int metalBlendOperation(int operation);
   };
 }

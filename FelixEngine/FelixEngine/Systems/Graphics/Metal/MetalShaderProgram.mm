@@ -61,21 +61,9 @@ void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const 
 }
 
 void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &blending) {
-  MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
+  MTLRenderPipelineDescriptor *descriptor = frame->createPipelineDescriptor(blending);
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
-  
-  int index = 0;
-  for (id <MTLTexture> attachment : frame->_colorAttachments) {
-    descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
-  }
-  
-  if (frame->_depthAttachment != nil) {
-    descriptor.depthAttachmentPixelFormat = frame->_depthAttachment.pixelFormat;
-  }
-  if (frame->_stencilAttachment != nil) {
-    descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
-  }
   
   int frameId = frame->_idFlag | blending.flags;
   _pipelines[frameId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];

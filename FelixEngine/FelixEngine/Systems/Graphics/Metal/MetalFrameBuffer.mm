@@ -184,7 +184,72 @@ void MetalFrameBuffer::present(id <MTLCommandBuffer> buffer) {
   }
 }
 
+MTLRenderPipelineDescriptor* MetalFrameBuffer::createPipelineDescriptor(const BlendState &blending) const {
+  MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
+  
+  int index = 0;
+  for (id <MTLTexture> attachment : _colorAttachments) {
+    descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
+    if (blending.enabled()) {
+      
+    }
+  }
+  
+  if (_depthAttachment != nil) {
+    descriptor.depthAttachmentPixelFormat = _depthAttachment.pixelFormat;
+  }
+  if (_stencilAttachment != nil) {
+    descriptor.stencilAttachmentPixelFormat = _stencilAttachment.pixelFormat;
+  }
+  
+  return descriptor;
+}
+
 void MetalFrameBuffer::getNextDrawable() {
   _drawable = [_metalLayer nextDrawable];
   _colorAttachments.at(0) = _drawable.texture;
+}
+
+int MetalFrameBuffer::metalBlendFactor(int factor) {
+  if (factor == BLEND_INPUT_SRC_ALPHA_SATURATE)
+    return MTLBlendFactorSourceAlphaSaturated;
+  if (factor & BLEND_INPUT_ONE_MINUS)
+  {
+    factor &= ~BLEND_INPUT_ONE_MINUS;
+    switch (factor)
+    {
+      case BLEND_INPUT_SRC_COLOR:   return MTLBlendFactorOneMinusSourceColor;
+      case BLEND_INPUT_SRC_ALPHA:   return MTLBlendFactorOneMinusSourceAlpha;
+      case BLEND_INPUT_DST_COLOR:   return MTLBlendFactorOneMinusDestinationColor;
+      case BLEND_INPUT_DST_ALPHA:   return MTLBlendFactorOneMinusDestinationAlpha;
+      case BLEND_INPUT_CONST_COLOR: return MTLBlendFactorOneMinusBlendColor;
+      case BLEND_INPUT_CONST_ALPHA: return MTLBlendFactorOneMinusBlendAlpha;
+    }
+  }
+  else
+  {
+    switch (factor)
+    {
+      case BLEND_INPUT_SRC_COLOR:   return MTLBlendFactorSourceColor;
+      case BLEND_INPUT_SRC_ALPHA:   return MTLBlendFactorSourceAlpha;
+      case BLEND_INPUT_DST_COLOR:   return MTLBlendFactorDestinationColor;
+      case BLEND_INPUT_DST_ALPHA:   return MTLBlendFactorDestinationAlpha;
+      case BLEND_INPUT_CONST_COLOR: return MTLBlendFactorBlendColor;
+      case BLEND_INPUT_CONST_ALPHA: return MTLBlendFactorBlendAlpha;
+      case BLEND_INPUT_ZERO:        return MTLBlendFactorZero;
+    }
+  }
+  return MTLBlendFactorOne;
+}
+
+int MetalFrameBuffer::metalBlendOperation(int operation) {
+  switch (operation)
+  {
+    case BLEND_EQ_ADD:          return MTLBlendOperationAdd;
+    case BLEND_EQ_SUBTRACT:     return MTLBlendOperationSubtract;
+    case BLEND_EQ_REV_SUBTRACT: return MTLBlendOperationReverseSubtract;
+    case BLEND_EQ_MIN:          return MTLBlendOperationMin;
+    case BLEND_EQ_MAX:          return MTLBlendOperationMax;
+  }
+  return MTLBlendOperationAdd;
 }
