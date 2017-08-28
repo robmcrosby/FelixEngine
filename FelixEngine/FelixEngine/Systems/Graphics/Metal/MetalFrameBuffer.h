@@ -62,7 +62,7 @@ namespace fx {
   private:
     id <MTLTexture> resizeTexture(id <MTLTexture> texture, ivec2 size);
     void getNextDrawable();
-    int metalBlendFactor(int factor);
-    int metalBlendOperation(int operation);
+    int metalBlendFactor(int factor) const;
+    int metalBlendOperation(int operation) const;
   };
 }

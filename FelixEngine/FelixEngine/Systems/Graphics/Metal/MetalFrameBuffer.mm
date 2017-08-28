@@ -189,9 +189,18 @@ MTLRenderPipelineDescriptor* MetalFrameBuffer::createPipelineDescriptor(const Bl
   
   int index = 0;
   for (id <MTLTexture> attachment : _colorAttachments) {
-    descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
+    MTLRenderPipelineColorAttachmentDescriptor *color = descriptor.colorAttachments[index];
+    color.pixelFormat = attachment.pixelFormat;
     if (blending.enabled()) {
-      
+      color.blendingEnabled = YES;
+      color.rgbBlendOperation = (MTLBlendOperation)metalBlendOperation(blending.equation());
+      color.sourceRGBBlendFactor = (MTLBlendFactor)metalBlendFactor(blending.src());
+      color.destinationRGBBlendFactor = (MTLBlendFactor)metalBlendFactor(blending.dst());
+      if (blending.seperate()) {
+        color.alphaBlendOperation = (MTLBlendOperation)metalBlendOperation(blending.equationAlpha());
+        color.sourceAlphaBlendFactor = (MTLBlendFactor)metalBlendFactor(blending.srcAlpha());
+        color.destinationAlphaBlendFactor = (MTLBlendFactor)metalBlendFactor(blending.dstAlpha());
+      }
     }
   }
   
@@ -210,7 +219,7 @@ void MetalFrameBuffer::getNextDrawable() {
   _colorAttachments.at(0) = _drawable.texture;
 }
 
-int MetalFrameBuffer::metalBlendFactor(int factor) {
+int MetalFrameBuffer::metalBlendFactor(int factor) const {
   if (factor == BLEND_INPUT_SRC_ALPHA_SATURATE)
     return MTLBlendFactorSourceAlphaSaturated;
   if (factor & BLEND_INPUT_ONE_MINUS)
@@ -242,7 +251,7 @@ int MetalFrameBuffer::metalBlendFactor(int factor) {
   return MTLBlendFactorOne;
 }
 
-int MetalFrameBuffer::metalBlendOperation(int operation) {
+int MetalFrameBuffer::metalBlendOperation(int operation) const {
   switch (operation)
   {
     case BLEND_EQ_ADD:          return MTLBlendOperationAdd;

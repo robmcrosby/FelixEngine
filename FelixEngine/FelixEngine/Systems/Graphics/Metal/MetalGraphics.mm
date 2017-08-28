@@ -154,6 +154,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   int flags = task.depthState.flags;
   [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
   
+  // Set Blending Color
+  if (task.blendState.enabled()) {
+    [encoder setBlendColorRed:task.blendState.color.r
+                        green:task.blendState.color.g
+                         blue:task.blendState.color.b
+                        alpha:task.blendState.color.a];
+  }
+  
   // Set Culling Mode
   if (task.cullMode == CULL_BACK)
     [encoder setCullMode:MTLCullModeBack];
