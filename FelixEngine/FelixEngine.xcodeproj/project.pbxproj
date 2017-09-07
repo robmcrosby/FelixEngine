@@ -21,6 +21,8 @@
 		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
+		C13EBCAE1F5C65D100C3BB9D /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */; };
+		C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401C971EF8054200BE9958 /* GraphicStates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CF71EFD430400BE9958 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF61EFD42FE00BE9958 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF81EFEDAB700BE9958 /* IndexedMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -61,6 +63,7 @@
 		C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = C160E08F1F353ECD00212AAA /* ARKitTracker.mm */; };
 		C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A5E3801F3659620071D515 /* ARCamera.cpp */; };
 		C1A5E3831F3659620071D515 /* ARCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A5E3811F3659620071D515 /* ARCamera.h */; };
+		C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3FDC21F54E8BB001F7DB5 /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */; };
@@ -91,6 +94,8 @@
 		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
 		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/Metal/MetalGraphics.h; sourceTree = "<group>"; };
 		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
+		C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = Systems/Events/EventHandler.cpp; sourceTree = "<group>"; };
+		C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = Systems/Events/EventHandler.h; sourceTree = "<group>"; };
 		C1401C971EF8054200BE9958 /* GraphicStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicStates.h; path = Systems/Graphics/GraphicStates.h; sourceTree = "<group>"; };
 		C1401CF61EFD42FE00BE9958 /* Variant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = Utilities/Variant.h; sourceTree = "<group>"; };
 		C1401CF81EFEDAB700BE9958 /* IndexedMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IndexedMap.h; path = Utilities/IndexedMap.h; sourceTree = "<group>"; };
@@ -133,6 +138,7 @@
 		C160E08F1F353ECD00212AAA /* ARKitTracker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARKitTracker.mm; path = Systems/Tracking/ARKit/ARKitTracker.mm; sourceTree = "<group>"; };
 		C1A5E3801F3659620071D515 /* ARCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARCamera.cpp; sourceTree = "<group>"; };
 		C1A5E3811F3659620071D515 /* ARCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARCamera.h; sourceTree = "<group>"; };
+		C1B3FDC21F54E8BB001F7DB5 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Systems/Events/Event.h; sourceTree = "<group>"; };
 		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = Utilities/StringUtils.h; sourceTree = "<group>"; };
 		C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = Systems/Graphics/GraphicResources.cpp; sourceTree = "<group>"; };
@@ -204,6 +210,7 @@
 		C1136C481EF2223C00BA1322 /* Systems */ = {
 			isa = PBXGroup;
 			children = (
+				C1B3FDC11F54E81B001F7DB5 /* Events */,
 				C1136C4A1EF2225500BA1322 /* Graphics */,
 				C1136C491EF2224500BA1322 /* FileSystem */,
 				C1F7D9D81F353C580005367E /* TrackerSystem */,
@@ -340,6 +347,16 @@
 			name = Cameras;
 			sourceTree = "<group>";
 		};
+		C1B3FDC11F54E81B001F7DB5 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				C1B3FDC21F54E8BB001F7DB5 /* Event.h */,
+				C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */,
+				C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */,
+			);
+			name = Events;
+			sourceTree = "<group>";
+		};
 		C1CC9D1B1F11144C00A938D0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,7 +391,9 @@
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
+				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
+				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
@@ -488,6 +507,7 @@
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
+				C13EBCAE1F5C65D100C3BB9D /* EventHandler.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,
