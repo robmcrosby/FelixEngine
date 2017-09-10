@@ -272,6 +272,7 @@ namespace fx
     
     template <typename T>
     Variant& operator=(const std::vector<T> &values) {
+      
       setValues(&values.at(0), values.size());
       return *this;
     }

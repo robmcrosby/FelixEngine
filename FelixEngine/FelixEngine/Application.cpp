@@ -28,6 +28,17 @@ void Application::initalize() {
   
 }
 
+void Application::handle(const Event &event) {
+  if (event.catagory == EVENT_INPUT) {
+    if (event.type == INPUT_TOUCH_DOWN) {
+      for (int i = 0; i < event.message.size(); ++i) {
+        const Touch &touch = (const Touch&)event.message[i];
+        std::cout << touch.location << std::endl;
+      }
+    }
+  }
+}
+
 void Application::update() {
   
 }

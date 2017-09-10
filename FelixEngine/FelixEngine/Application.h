@@ -9,12 +9,13 @@
 #ifndef Application_h
 #define Application_h
 
+#include "EventHandler.h"
 #include "FileSystem.h"
 #include "Graphics.h"
 #include "TrackerSystem.h"
 
 namespace fx {
-  class Application {
+  class Application: public EventHandler {
   protected:
     FileSystem *_fileSystem;
     Graphics *_graphics;
@@ -23,6 +24,8 @@ namespace fx {
   public:
     Application();
     virtual ~Application();
+    
+    virtual void handle(const Event &event);
     
     virtual void initalize();
     virtual void update();
