@@ -9,6 +9,7 @@
 #ifndef Scene_h
 #define Scene_h
 
+#include "EventHandler.h"
 #include "RenderPass.h"
 #include "XMLTree.h"
 #include "IndexedMap.h"
@@ -22,7 +23,7 @@ namespace fx {
   class Material;
   class LightRig;
   
-  class Scene {
+  class Scene: public EventHandler {
   protected:
     RenderPasses _renderPasses;
     

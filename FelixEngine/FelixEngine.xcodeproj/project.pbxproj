@@ -21,7 +21,6 @@
 		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
-		C13EBCAE1F5C65D100C3BB9D /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */; };
 		C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401C971EF8054200BE9958 /* GraphicStates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CF71EFD430400BE9958 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF61EFD42FE00BE9958 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -57,6 +56,9 @@
 		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C14B817B1F66BBDA0022D070 /* EventListener.h in Headers */ = {isa = PBXBuildFile; fileRef = C14B817A1F66BBDA0022D070 /* EventListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */ = {isa = PBXBuildFile; fileRef = C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */ = {isa = PBXBuildFile; fileRef = C15C16C21F695E8B007E2C1E /* EventSubject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08B1F353CD600212AAA /* TrackerSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08E1F353ECD00212AAA /* ARKitTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -94,7 +96,6 @@
 		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
 		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/Metal/MetalGraphics.h; sourceTree = "<group>"; };
 		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
-		C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventHandler.cpp; path = Systems/Events/EventHandler.cpp; sourceTree = "<group>"; };
 		C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = Systems/Events/EventHandler.h; sourceTree = "<group>"; };
 		C1401C971EF8054200BE9958 /* GraphicStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicStates.h; path = Systems/Graphics/GraphicStates.h; sourceTree = "<group>"; };
 		C1401CF61EFD42FE00BE9958 /* Variant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = Utilities/Variant.h; sourceTree = "<group>"; };
@@ -130,6 +131,9 @@
 		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
 		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
 		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
+		C14B817A1F66BBDA0022D070 /* EventListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = Systems/Events/EventListener.h; sourceTree = "<group>"; };
+		C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventListenerSet.h; path = Systems/Events/EventListenerSet.h; sourceTree = "<group>"; };
+		C15C16C21F695E8B007E2C1E /* EventSubject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventSubject.h; path = Systems/Events/EventSubject.h; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FelixEngine.h; sourceTree = "<group>"; };
 		C15CAEB11EEDEF33004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -351,8 +355,10 @@
 			isa = PBXGroup;
 			children = (
 				C1B3FDC21F54E8BB001F7DB5 /* Event.h */,
+				C14B817A1F66BBDA0022D070 /* EventListener.h */,
+				C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */,
 				C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */,
-				C13EBCAC1F5C65D100C3BB9D /* EventHandler.cpp */,
+				C15C16C21F695E8B007E2C1E /* EventSubject.h */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -385,7 +391,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */,
 				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
+				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
@@ -394,6 +402,7 @@
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
+				C14B817B1F66BBDA0022D070 /* EventListener.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
@@ -507,7 +516,6 @@
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
-				C13EBCAE1F5C65D100C3BB9D /* EventHandler.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,

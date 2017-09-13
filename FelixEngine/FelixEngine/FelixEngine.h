@@ -38,7 +38,10 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/UniformMap.h>
 #import <FelixEngine/TextureMap.h>
 #import <FelixEngine/Event.h>
+#import <FelixEngine/EventListener.h>
+#import <FelixEngine/EventListenerSet.h>
 #import <FelixEngine/EventHandler.h>
+#import <FelixEngine/EventSubject.h>
 
 #import <FelixEngine/Scene.h>
 #import <FelixEngine/RenderPass.h>

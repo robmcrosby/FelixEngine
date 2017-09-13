@@ -12,7 +12,9 @@
 #include "Variant.h"
 
 namespace fx {
-  class EventHandler;
+  class iEventHandler;
+  class iEventSubject;
+  class EventListener;
   
   enum EVENT_CATAGORY {
     EVENT_ALL   = 0xffff,
@@ -51,14 +53,31 @@ namespace fx {
   
   struct Event {
     unsigned int catagory, type;
-    EventHandler *sender;
+    iEventSubject *subject;
     Variant message;
     
-    Event(): catagory(0), type(0), sender(0) {}
+    Event(): catagory(0), type(0), subject(0) {}
     Event(USER_TYPE t): catagory(EVENT_USER), type(t) {}
     Event(INPUT_TYPE t, Touches touches): catagory(EVENT_INPUT), type(t) {
       message = touches;
     }
+  };
+  
+  /** Interface for handling Events */
+  struct iEventHandler {
+    virtual ~iEventHandler() {}
+    virtual unsigned int eventFlags() const = 0;
+    virtual void handle(const Event &event) = 0;
+    virtual EventListener* listener() const = 0;
+  };
+  
+  /** Interface for Event Subject */
+  struct iEventSubject {
+    virtual ~iEventSubject() {}
+    virtual void notifyEventHandlers(const Event &event) = 0;
+    virtual void addEventHandler(iEventHandler *handler) = 0;
+    virtual void removeEventHandler(iEventHandler *handler) = 0;
+    virtual void clearEventHandlers() = 0;
   };
 }
 

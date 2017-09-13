@@ -9,13 +9,13 @@
 #ifndef Application_h
 #define Application_h
 
-#include "EventHandler.h"
+#include "EventSubject.h"
 #include "FileSystem.h"
 #include "Graphics.h"
 #include "TrackerSystem.h"
 
 namespace fx {
-  class Application: public EventHandler {
+  class Application: public EventSubject {
   protected:
     FileSystem *_fileSystem;
     Graphics *_graphics;

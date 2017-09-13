@@ -10,36 +10,35 @@
 #define EventHandler_h
 
 #include <list>
-#include "Event.h"
+#include "EventListenerSet.h"
 
 
 namespace fx {
-  class EventListener;
-  typedef std::list<EventListener*> EventListeners;
   
-  class EventHandler {
+  /** Concrete class that implements iEventHandler */
+  class EventHandler: public iEventHandler {
   private:
-    EventListeners _listeners;
     EventListener *_listener;
     
   protected:
     unsigned int _eventFlags;
     
   public:
-    EventHandler();
-    EventHandler(const EventHandler &other);
-    virtual ~EventHandler();
+    EventHandler(): _eventFlags(EVENT_ALL) {_listener = new EventListener(this);}
+    EventHandler(const EventHandler &other) {
+      _listener = new EventListener(this);
+      *this = other;
+    }
+    virtual ~EventHandler() {_listener->setEmpty();}
     
-    virtual EventHandler& operator=(const EventHandler &handler);
+    virtual EventHandler& operator=(const EventHandler &other) {
+      _eventFlags = other._eventFlags;
+      return *this;
+    }
     
-    void notify(Event event);
-    
-    unsigned int eventFlags() const {return _eventFlags;}
-    virtual void handle(const Event &event);
-    
-    void addListener(EventHandler *handler);
-    void removeListener(EventHandler *handler);
-    void clearListeners();
+    virtual unsigned int eventFlags() const {return _eventFlags;}
+    virtual void handle(const Event &event) {}
+    virtual EventListener* listener() const {return _listener;}
   };
 }
 
