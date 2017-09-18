@@ -9,7 +9,7 @@
 #ifndef EventListenerSet_h
 #define EventListenerSet_h
 
-#include "EventListener.h"
+#include "Event.h"
 
 namespace fx {
   
@@ -22,54 +22,44 @@ namespace fx {
     EventListenerSet() {}
     ~EventListenerSet() {clear();}
     
-    void clear() {
-      for (EventListeners::iterator itr = _listeners.begin(); itr != _listeners.end(); ++itr)
-        (*itr)->release();
-      _listeners.clear();
-    }
+    void clear() {_listeners.clear();}
     
     void clean() {
       EventListeners::iterator itr = _listeners.begin();
       while (itr != _listeners.end()) {
-        EventListener *listener = *itr;
-        if (listener->isEmpty()) {
+        if ((*itr)->isEmpty())
           itr = _listeners.erase(itr);
-          listener->release();
-        }
       }
     }
     
     void notify(const Event &event) {
       EventListeners::iterator itr = _listeners.begin();
       while (itr != _listeners.end()) {
-        EventListener *listener = *itr;
-        if (listener->isEmpty()) {
+        if ((*itr)->isEmpty()) {
           itr = _listeners.erase(itr);
-          listener->release();
         }
         else {
-          listener->handle(event);
+          (*itr)->handle(event);
           ++itr;
         }
       }
     }
     
-    void add(EventListener *listener) {
+    void add(EventListener listener) {
       for (EventListeners::iterator itr = _listeners.begin(); itr != _listeners.end(); ++itr) {
         if (*itr == listener)
           return;
       }
-      listener->retain();
       _listeners.push_back(listener);
     }
     
-    void remove(EventListener *listener) {
-      for (EventListeners::iterator itr = _listeners.begin(); itr != _listeners.end(); ++itr) {
-        EventListener *listner = *itr;
-        if (listner == listener) {
-          _listeners.erase(itr);
-          listner->release();
-        }
+    void remove(EventListener listener) {
+      EventListeners::iterator itr = _listeners.begin();
+      while (itr != _listeners.end()) {
+        if (*itr == listener)
+          itr = _listeners.erase(itr);
+        else
+          ++itr;
       }
     }
   };

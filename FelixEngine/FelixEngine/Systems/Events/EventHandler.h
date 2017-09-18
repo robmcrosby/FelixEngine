@@ -18,15 +18,14 @@ namespace fx {
   /** Concrete class that implements iEventHandler */
   class EventHandler: public iEventHandler {
   private:
-    EventListener *_listener;
+    EventListener _listener;
     
   protected:
     unsigned int _eventFlags;
     
   public:
-    EventHandler(): _eventFlags(EVENT_ALL) {_listener = new EventListener(this);}
-    EventHandler(const EventHandler &other) {
-      _listener = new EventListener(this);
+    EventHandler(): _eventFlags(EVENT_ALL), _listener(new Listener(this)) {}
+    EventHandler(const EventHandler &other): _listener(new Listener(this)) {
       *this = other;
     }
     virtual ~EventHandler() {_listener->setEmpty();}
@@ -38,7 +37,7 @@ namespace fx {
     
     virtual unsigned int eventFlags() const {return _eventFlags;}
     virtual void handle(const Event &event) {}
-    virtual EventListener* listener() const {return _listener;}
+    virtual EventListener listener() const {return _listener;}
   };
 }
 

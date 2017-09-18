@@ -10,11 +10,12 @@
 #define Event_h
 
 #include "Variant.h"
+#include <memory>
 
 namespace fx {
   class iEventHandler;
   class iEventSubject;
-  class EventListener;
+  class Listener;
   
   enum EVENT_CATAGORY {
     EVENT_ALL   = 0xffff,
@@ -63,12 +64,14 @@ namespace fx {
     }
   };
   
+  typedef std::shared_ptr<Listener> EventListener;
+  
   /** Interface for handling Events */
   struct iEventHandler {
     virtual ~iEventHandler() {}
     virtual unsigned int eventFlags() const = 0;
     virtual void handle(const Event &event) = 0;
-    virtual EventListener* listener() const = 0;
+    virtual EventListener listener() const = 0;
   };
   
   /** Interface for Event Subject */
@@ -79,6 +82,22 @@ namespace fx {
     virtual void removeEventHandler(iEventHandler *handler) = 0;
     virtual void clearEventHandlers() = 0;
   };
+  
+  /** Listener Class that keeps an EventHandler refrence */
+  struct Listener {
+    iEventHandler *handler;
+    
+    Listener(iEventHandler *handler): handler(handler) {}
+    void setEmpty() {handler = nullptr;}
+    bool isEmpty() const {return handler == nullptr;}
+    void handle(const Event &event) {
+      if (handler != nullptr && handler->eventFlags() & event.catagory)
+        handler->handle(event);
+    }
+  };
+  
+  /** Container for Listeners */
+  typedef std::list<EventListener> EventListeners;
 }
 
 
