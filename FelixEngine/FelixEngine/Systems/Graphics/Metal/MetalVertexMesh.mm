@@ -96,7 +96,7 @@ void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderPr
 }
 
 void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
+  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
   
   // Set the Triangle Culling Mode
   if (task.cullMode == CULL_FRONT)

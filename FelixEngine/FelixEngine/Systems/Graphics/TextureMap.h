@@ -16,10 +16,10 @@
 
 namespace fx {
   struct Texture {
-    TextureBuffer *buffer;
+    TexturePtr   buffer;
     SamplerState sampler;
     
-    Texture(TextureBuffer *b, SamplerState s): buffer(b), sampler(s) {}
+    Texture(TexturePtr b, SamplerState s): buffer(b), sampler(s) {}
   };
   
   class TextureMap {
@@ -43,7 +43,7 @@ namespace fx {
       return loaded;
     }
     
-    void addTexture(TextureBuffer *buffer, SamplerState sampler = SamplerState()) {
+    void addTexture(TexturePtr buffer, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(buffer, sampler);
       _textures.push_back(texture);
     }

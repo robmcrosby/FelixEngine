@@ -11,6 +11,7 @@
 
 #include "Quaternion.h"
 #include "XMLTree.h"
+#include "Graphics.h"
 #include <vector>
 
 #define DEFINE_MODEL_BUILDER(name) \
@@ -47,7 +48,7 @@ namespace fx {
     
     InstanceModels _data;
     Material *_material;
-    VertexMesh *_mesh;
+    VertexPtr _mesh;
     
     vec3 _scale;
     quat _orientation;
@@ -68,9 +69,9 @@ namespace fx {
     
     ModelData& data() {return _data.at(0);}
     
-    void setMesh(VertexMesh *mesh) {_mesh = mesh;}
+    void setMesh(VertexPtr &mesh) {_mesh = mesh;}
     void setMesh(const std::string &name);
-    VertexMesh* mesh() const {return _mesh;}
+    VertexPtr mesh() const {return _mesh;}
     
     void setMaterial(Material *material) {_material = material;}
     void setMaterial(const std::string &name);
@@ -78,7 +79,7 @@ namespace fx {
     
     bool setTransform(const XMLTree::Node &node);
     
-    void setShader(ShaderProgram *shader);
+    void setShader(ShaderPtr &shader);
     void enableDepthTesting();
     
     void setHidden(bool hidden = true) {_hidden = hidden;}

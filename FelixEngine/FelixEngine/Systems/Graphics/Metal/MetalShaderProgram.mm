@@ -35,7 +35,7 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
 }
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame);
+  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame.get());
   int pipelineId = frame->pipelineId(task.blendState);
   if (!_pipelines.count(pipelineId))
     addPipeline(frame, task.blendState);

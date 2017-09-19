@@ -98,8 +98,8 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   CVMetalTextureCacheCreate(NULL, NULL, device, NULL, &textureCache);
   _arDelegate.textureCache = textureCache;
   
-  _cameraImageY = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
-  _cameraImageCbCr = static_cast<MetalTextureBuffer*>(graphics->createTextureBuffer());
+  _cameraImageY = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
+  _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   
   ARWorldTrackingSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
   configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
@@ -141,11 +141,11 @@ mat4 ARKitTracker::getImageTransform() {
   return transform;
 }
 
-TextureBuffer* ARKitTracker::getCameraImageY() {
+TexturePtr ARKitTracker::getCameraImageY() {
   return _cameraImageY;
 }
 
-TextureBuffer* ARKitTracker::getCameraImageCbCr() {
+TexturePtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
 

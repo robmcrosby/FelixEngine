@@ -30,7 +30,7 @@ namespace fx {
     
     MaterialData _data;
     TextureMap _textures;
-    ShaderProgram *_shader;
+    ShaderPtr  _shader;
     
     DepthState _depthState;
     BlendState _blendState;
@@ -42,10 +42,10 @@ namespace fx {
     bool loadXML(const XMLTree::Node &node);
     
     void setShader(const std::string &name);
-    void setShader(ShaderProgram *shader) {_shader = shader;}
-    ShaderProgram* shader() {return _shader;}
+    void setShader(ShaderPtr &shader) {_shader = shader;}
+    ShaderPtr shader() {return _shader;}
     
-    void addTexture(TextureBuffer *texture, SamplerState sampler = SamplerState());
+    void addTexture(TexturePtr &texture, SamplerState sampler = SamplerState());
     TextureMap& textures() {return _textures;}
     
     MaterialData& data() {return _data;}

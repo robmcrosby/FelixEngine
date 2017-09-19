@@ -103,35 +103,44 @@ bool MetalGraphics::initalize(UIView *view) {
 }
 
 bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
-  _windowBuffer = buffer;
-  _windowBuffer->setMetalLayer(_data->metalLayer);
+  //_windowBuffer = buffer;
+  //_windowBuffer->setMetalLayer(_data->metalLayer);
+  buffer->setMetalLayer(_data->metalLayer);
   return true;
 }
 
-FrameBuffer* MetalGraphics::getMainWindowBuffer() {
-  if (_windowBuffer == nullptr)
-    setWindowBuffer(new MetalFrameBuffer(_data->device));
+FramePtr MetalGraphics::getMainWindowBuffer() {
+  if (!_windowBuffer) {
+    shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device);
+    setWindowBuffer(frame.get());
+    _windowBuffer = frame;
+  }
   return _windowBuffer;
 }
 
-FrameBuffer* MetalGraphics::createFrameBuffer() {
-  return new MetalFrameBuffer(_data->device);
+FramePtr MetalGraphics::createFrameBuffer() {
+  shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device);
+  return frame;
 }
 
-ShaderProgram* MetalGraphics::createShaderProgram() {
-  return new MetalShaderProgram(_data->device);
+ShaderPtr MetalGraphics::createShaderProgram() {
+  shared_ptr<MetalShaderProgram> shader = make_shared<MetalShaderProgram>(_data->device);
+  return shader;
 }
 
-VertexMesh* MetalGraphics::createVertexMesh() {
-  return new MetalVertexMesh(_data->device);
+VertexPtr MetalGraphics::createVertexMesh() {
+  shared_ptr<MetalVertexMesh> mesh = make_shared<MetalVertexMesh>(_data->device);
+  return mesh;
 }
 
-UniformBuffer* MetalGraphics::createUniformBuffer() {
-  return new MetalUniformBuffer(_data->device);
+UniformPtr MetalGraphics::createUniformBuffer() {
+  shared_ptr<MetalUniformBuffer> buffer = make_shared<MetalUniformBuffer>(_data->device);
+  return buffer;
 }
 
-TextureBuffer* MetalGraphics::createTextureBuffer() {
-  return new MetalTextureBuffer(_data->device);
+TexturePtr MetalGraphics::createTextureBuffer() {
+  shared_ptr<MetalTextureBuffer> texture = make_shared<MetalTextureBuffer>(_data->device);
+  return texture;
 }
 
 void MetalGraphics::nextFrame() {
@@ -140,9 +149,9 @@ void MetalGraphics::nextFrame() {
 }
 
 void MetalGraphics::addTask(const GraphicTask &task) {
-  MetalFrameBuffer   *frame  = static_cast<MetalFrameBuffer*>(task.frame);
-  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
-  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh);
+  MetalFrameBuffer   *frame  = static_cast<MetalFrameBuffer*>(task.frame.get());
+  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
+  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh.get());
   
   // Create Render Encoder
   id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
@@ -173,7 +182,7 @@ void MetalGraphics::addTask(const GraphicTask &task) {
     int index = 0;
     for (auto texture : *task.textures) {
       id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
-      MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer);
+      MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
       mtlTextureBuffer->encode(encoder, sampler, index);
       ++index;
     }

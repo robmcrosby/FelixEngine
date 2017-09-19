@@ -17,8 +17,8 @@ namespace fx {
   private:
     GraphicTask _task;
     TextureMap _textureMap;
-    TextureBuffer *_imageY;
-    TextureBuffer *_imageCbCr;
+    TexturePtr _imageY;
+    TexturePtr _imageCbCr;
     
     mat4 _imageTransform;
     UniformMap _uniformMap;

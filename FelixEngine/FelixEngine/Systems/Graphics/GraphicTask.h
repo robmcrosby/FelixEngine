@@ -18,9 +18,9 @@
 
 namespace fx {
   struct GraphicTask {
-    FrameBuffer   *frame;
-    ShaderProgram *shader;
-    VertexMesh    *mesh;
+    FramePtr   frame;
+    ShaderPtr  shader;
+    VertexPtr  mesh;
     
     UniformMap *uniforms;
     TextureMap *textures;

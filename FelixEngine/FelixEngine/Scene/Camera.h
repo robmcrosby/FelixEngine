@@ -11,6 +11,7 @@
 
 #include "Matrix.h"
 #include "XMLTree.h"
+#include "Graphics.h"
 
 #define DEFINE_CAMERA_BUILDER(name) \
   struct name##Builder: fx::iCameraBuilder { \
@@ -45,8 +46,8 @@ namespace fx {
     
     CameraData _data;
     LightRig *_lightRig;
-    FrameBuffer *_frame;
-    ShaderProgram *_shader;
+    FramePtr  _frame;
+    ShaderPtr _shader;
     
     bool _isClearingColor;
     vec4 _clearColor;
@@ -96,12 +97,12 @@ namespace fx {
     }
     
     void setFrame(const std::string &name);
-    void setFrame(FrameBuffer *frame) {_frame = frame;}
-    FrameBuffer* frame() {return _frame;}
+    void setFrame(FramePtr &frame) {_frame = frame;}
+    FramePtr frame() {return _frame;}
     
     void setShader(const std::string &name);
-    void setShader(ShaderProgram *shader) {_shader = shader;}
-    ShaderProgram* shader() {return _shader;}
+    void setShader(ShaderPtr &shader) {_shader = shader;}
+    ShaderPtr shader() {return _shader;}
     
     bool setClearState(const XMLTree::Node &node);
     

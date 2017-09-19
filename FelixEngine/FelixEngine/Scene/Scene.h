@@ -27,9 +27,9 @@ namespace fx {
   protected:
     RenderPasses _renderPasses;
     
-    IndexedMap<std::string, FrameBuffer*>   _frames;
-    IndexedMap<std::string, ShaderProgram*> _shaders;
-    IndexedMap<std::string, VertexMesh*>    _meshes;
+    IndexedMap<std::string, FramePtr>  _frames;
+    IndexedMap<std::string, ShaderPtr> _shaders;
+    IndexedMap<std::string, VertexPtr> _meshes;
     
     IndexedMap<std::string, Model*>    _models;
     IndexedMap<std::string, Camera*>   _cameras;
@@ -61,9 +61,9 @@ namespace fx {
     
     RenderPasses& renderPasses() {return _renderPasses;}
     
-    FrameBuffer*   getFrame(const std::string &name);
-    ShaderProgram* getShader(const std::string &name);
-    VertexMesh*    getMesh(const std::string &name);
+    FramePtr  getFrame(const std::string &name);
+    ShaderPtr getShader(const std::string &name);
+    VertexPtr getMesh(const std::string &name);
     
     Model*    getModel(const std::string &name = "");
     Camera*   getCamera(const std::string &name = "");

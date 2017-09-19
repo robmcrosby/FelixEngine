@@ -119,26 +119,26 @@ Camera* Scene::createCamera(const string &name) {
   return nullptr;
 }
 
-FrameBuffer* Scene::getFrame(const string &name) {
+FramePtr Scene::getFrame(const string &name) {
   if (_frames.contains(name))
     return _frames[name];
-  FrameBuffer *buffer = Graphics::getInstance().createFrameBuffer();
+  FramePtr buffer = Graphics::getInstance().createFrameBuffer();
   _frames.push(name, buffer);
   return buffer;
 }
 
-ShaderProgram* Scene::getShader(const string &name) {
+ShaderPtr Scene::getShader(const string &name) {
   if (_shaders.contains(name))
     return _shaders[name];
-  ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
+  ShaderPtr shader = Graphics::getInstance().createShaderProgram();
   _shaders.push(name, shader);
   return shader;
 }
 
-VertexMesh* Scene::getMesh(const std::string &name) {
+VertexPtr Scene::getMesh(const std::string &name) {
   if (_meshes.contains(name))
     return _meshes[name];
-  VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
+  VertexPtr mesh = Graphics::getInstance().createVertexMesh();
   _meshes.push(name, mesh);
   return mesh;
 }

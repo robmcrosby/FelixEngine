@@ -102,11 +102,13 @@ void Camera::setLightRig(const string &name) {
 }
 
 void Camera::setFrame(const string &name) {
-  setFrame(_scene->getFrame(name));
+  FramePtr frame = _scene->getFrame(name);
+  setFrame(frame);
 }
 
 void Camera::setShader(const string &name) {
-  setShader(_scene->getShader(name));
+  ShaderPtr shader = _scene->getShader(name);
+  setShader(shader);
 }
 
 void Camera::setOrthographic(float scale, float near, float far) {

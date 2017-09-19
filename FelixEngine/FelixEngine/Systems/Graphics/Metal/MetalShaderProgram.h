@@ -19,8 +19,8 @@ namespace fx {
   class GraphicTask;
   class Uniform;
   class BlendState;
-  typedef std::map<int, id <MTLRenderPipelineState> > PipelineMap;
   
+  typedef std::map<int, id <MTLRenderPipelineState> > PipelineMap;
   typedef std::map<std::string, unsigned long> IndexMap;
   
   class MetalShaderProgram: public ShaderProgram {

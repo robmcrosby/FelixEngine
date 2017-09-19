@@ -50,14 +50,15 @@ bool Model::loadXML(const XMLTree::Node &node) {
 }
 
 void Model::setMesh(const string &name) {
-  setMesh(_scene->getMesh(name));
+  VertexPtr mesh = _scene->getMesh(name);
+  setMesh(mesh);
 }
 
 void Model::setMaterial(const string &name) {
   setMaterial(_scene->getMaterial(name));
 }
 
-void Model::setShader(ShaderProgram *shader) {
+void Model::setShader(ShaderPtr &shader) {
   if (_material == nullptr)
     _material = _scene->getMaterial();
   _material->setShader(shader);

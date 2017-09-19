@@ -9,15 +9,24 @@
 #ifndef Graphics_h
 #define Graphics_h
 
+#include <memory>
+
 
 namespace fx {
   class Application;
+  class GraphicTask;
+  
   class FrameBuffer;
   class ShaderProgram;
   class VertexMesh;
   class UniformBuffer;
-  class GraphicTask;
   class TextureBuffer;
+  
+  typedef std::shared_ptr<FrameBuffer>   FramePtr;
+  typedef std::shared_ptr<ShaderProgram> ShaderPtr;
+  typedef std::shared_ptr<VertexMesh>    VertexPtr;
+  typedef std::shared_ptr<UniformBuffer> UniformPtr;
+  typedef std::shared_ptr<TextureBuffer> TexturePtr;
   
   /** File System */
   class Graphics {
@@ -30,12 +39,12 @@ namespace fx {
   public:
     virtual ~Graphics() {}
     
-    virtual FrameBuffer*   getMainWindowBuffer() = 0;
-    virtual FrameBuffer*   createFrameBuffer()   = 0;
-    virtual ShaderProgram* createShaderProgram() = 0;
-    virtual VertexMesh*    createVertexMesh()    = 0;
-    virtual UniformBuffer* createUniformBuffer() = 0;
-    virtual TextureBuffer* createTextureBuffer() = 0;
+    virtual FramePtr   getMainWindowBuffer() = 0;
+    virtual FramePtr   createFrameBuffer()   = 0;
+    virtual ShaderPtr  createShaderProgram() = 0;
+    virtual VertexPtr  createVertexMesh()    = 0;
+    virtual UniformPtr createUniformBuffer() = 0;
+    virtual TexturePtr createTextureBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;

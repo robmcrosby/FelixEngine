@@ -23,7 +23,7 @@ namespace fx {
   class MetalGraphics: public Graphics {
   private:
     MTLGraphicsData  *_data;
-    MetalFrameBuffer *_windowBuffer;
+    std::shared_ptr<MetalFrameBuffer> _windowBuffer;
     
   public:
     MetalGraphics();
@@ -32,12 +32,12 @@ namespace fx {
     bool initalize(UIView *view);
     bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
-    virtual FrameBuffer*   getMainWindowBuffer();
-    virtual FrameBuffer*   createFrameBuffer();
-    virtual ShaderProgram* createShaderProgram();
-    virtual VertexMesh*    createVertexMesh();
-    virtual UniformBuffer* createUniformBuffer();
-    virtual TextureBuffer* createTextureBuffer();
+    virtual FramePtr   getMainWindowBuffer();
+    virtual FramePtr   createFrameBuffer();
+    virtual ShaderPtr  createShaderProgram();
+    virtual VertexPtr  createVertexMesh();
+    virtual UniformPtr createUniformBuffer();
+    virtual TexturePtr createTextureBuffer();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);
