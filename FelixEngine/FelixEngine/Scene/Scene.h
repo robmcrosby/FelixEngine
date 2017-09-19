@@ -41,6 +41,7 @@ namespace fx {
     bool loadXML(const XMLTree::Node &node);
     
   private:
+    bool addWindow(const XMLTree::Node &node);
     bool addFrame(const XMLTree::Node &node);
     bool addShader(const XMLTree::Node &node);
     bool addMesh(const XMLTree::Node &node);

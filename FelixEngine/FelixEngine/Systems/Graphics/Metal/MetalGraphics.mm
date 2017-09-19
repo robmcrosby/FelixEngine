@@ -102,18 +102,16 @@ bool MetalGraphics::initalize(UIView *view) {
   return true;
 }
 
-bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
-  //_windowBuffer = buffer;
-  //_windowBuffer->setMetalLayer(_data->metalLayer);
-  buffer->setMetalLayer(_data->metalLayer);
-  return true;
-}
+//bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
+//  _windowBuffer = buffer;
+//  _windowBuffer->setMetalLayer(_data->metalLayer);
+//  return true;
+//}
 
 FramePtr MetalGraphics::getMainWindowBuffer() {
   if (!_windowBuffer) {
-    shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device);
-    setWindowBuffer(frame.get());
-    _windowBuffer = frame;
+    _windowBuffer = make_shared<MetalFrameBuffer>(_data->device);
+    _windowBuffer->setMetalLayer(_data->metalLayer);
   }
   return _windowBuffer;
 }

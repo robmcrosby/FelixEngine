@@ -9,6 +9,7 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
+#include "Graphics.h"
 #include "XMLTree.h"
 #include "Vector.h"
 #include "Matrix.h"
@@ -84,7 +85,7 @@ namespace fx {
     virtual ~FrameBuffer() {}
     
     virtual bool loadXML(const XMLTree::Node &node);
-    virtual bool setToWindow(int index) = 0;
+    //virtual bool setToWindow(int index) = 0;
     
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
@@ -92,7 +93,7 @@ namespace fx {
     virtual bool addDepthBuffer() = 0;
     virtual bool addColorTexture() = 0;
     
-    virtual TextureBuffer* getColorTexture(int index) = 0;
+    virtual TexturePtr getColorTexture(int index) = 0;
   };
 }
 

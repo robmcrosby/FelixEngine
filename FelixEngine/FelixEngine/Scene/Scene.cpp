@@ -52,8 +52,12 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   bool success = true;
   
   for (auto subNode : node) {
-    if (*subNode == "FrameBuffer")
-      success &= addFrame(*subNode);
+    if (*subNode == "FrameBuffer") {
+      if (subNode->hasAttribute("window"))
+        success &= addWindow(*subNode);
+      else
+        success &= addFrame(*subNode);
+    }
     else if (*subNode == "ShaderProgram")
       success &= addShader(*subNode);
     else if (*subNode == "VertexMesh")
@@ -67,6 +71,12 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   }
   
   return success;
+}
+
+bool Scene::addWindow(const XMLTree::Node &node) {
+  fx::FramePtr window = Graphics::getInstance().getMainWindowBuffer();
+  _frames[node.attribute("name")] = window;
+  return window->loadXML(node);
 }
 
 bool Scene::addFrame(const XMLTree::Node &node) {

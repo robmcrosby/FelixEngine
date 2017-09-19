@@ -43,7 +43,7 @@ namespace fx {
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
     
-    virtual bool setToWindow(int index);
+    //virtual bool setToWindow(int index);
     
     virtual bool resize(int width, int height);
     virtual ivec2 size() const;
@@ -51,7 +51,7 @@ namespace fx {
     virtual bool addDepthBuffer();
     virtual bool addColorTexture();
     
-    virtual TextureBuffer* getColorTexture(int index);
+    virtual TexturePtr getColorTexture(int index);
     
     void setMetalLayer(CAMetalLayer *layer);
     void present(id <MTLCommandBuffer> buffer);

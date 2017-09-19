@@ -30,7 +30,7 @@ namespace fx {
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
-    bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
+    //bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
     virtual FramePtr   getMainWindowBuffer();
     virtual FramePtr   createFrameBuffer();

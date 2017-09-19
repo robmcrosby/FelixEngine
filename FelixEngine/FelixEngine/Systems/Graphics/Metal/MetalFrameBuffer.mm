@@ -57,10 +57,10 @@ MetalFrameBuffer::~MetalFrameBuffer() {
   
 }
 
-bool MetalFrameBuffer::setToWindow(int index) {
-  MetalGraphics &graphics = static_cast<MetalGraphics&>(Graphics::getInstance());
-  return graphics.setWindowBuffer(this, index);
-}
+//bool MetalFrameBuffer::setToWindow(int index) {
+//  MetalGraphics &graphics = static_cast<MetalGraphics&>(Graphics::getInstance());
+//  return graphics.setWindowBuffer(this, index);
+//}
 
 bool MetalFrameBuffer::resize(int width, int height) {
   bool success = true;
@@ -123,8 +123,8 @@ bool MetalFrameBuffer::addColorTexture() {
   return _colorAttachments.back() != nil;
 }
 
-TextureBuffer* MetalFrameBuffer::getColorTexture(int index) {
-  return new MetalTextureBuffer(_device, _colorAttachments.at(index));
+TexturePtr MetalFrameBuffer::getColorTexture(int index) {
+  return make_shared<MetalTextureBuffer>(_device, _colorAttachments.at(index)); //new MetalTextureBuffer(_device, _colorAttachments.at(index));
 }
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {

@@ -21,13 +21,13 @@ ExampleScene::~ExampleScene() {
 }
 
 void ExampleScene::initalize() {
-  fx::ShaderProgram *shader = _graphics->createShaderProgram();
+  fx::ShaderPtr shader = _graphics->createShaderProgram();
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   fx::VertexMeshData meshData;
   fx::FileSystem::loadMesh(meshData, "bunny.mesh");
   
-  fx::VertexMesh *mesh = _graphics->createVertexMesh();
+  fx::VertexPtr mesh = _graphics->createVertexMesh();
   mesh->load(meshData);
   
   fx::Camera *camera = _scene.getCamera("camera");
