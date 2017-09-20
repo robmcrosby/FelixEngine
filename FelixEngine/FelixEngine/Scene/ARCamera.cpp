@@ -78,6 +78,7 @@ void ARCamera::update() {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());
     _imageTransform = tracker->getImageTransform();
+    _uniformMap["Transform"] = _imageTransform;
     _uniformMap.update();
   }
 }

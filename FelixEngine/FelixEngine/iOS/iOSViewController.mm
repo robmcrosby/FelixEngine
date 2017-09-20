@@ -42,6 +42,10 @@
   return YES;
 }
 
+- (BOOL)shouldAutorotate {
+  return NO;
+}
+
 - (void)setApplication:(void*)app {
   self.cppApplication = (fx::Application*)app;
 }

@@ -21,6 +21,7 @@
 @implementation ARDelegate
 
 - (void)session:(ARSession *)session didFailWithError:(NSError *)error {
+  NSLog(@"%@", error.localizedRecoverySuggestion);
   self.tracker->arSessionFailed();
 }
 
@@ -75,10 +76,7 @@ using namespace std;
 ARKitTracker::ARKitTracker() {
   instance = this;
   
-  _graphics        = nullptr;
-  _cameraImageY    = nullptr;
-  _cameraImageCbCr = nullptr;
-  
+  _graphics = nullptr;
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
   
@@ -101,7 +99,7 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageY = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   
-  ARWorldTrackingSessionConfiguration *configuration = [ARWorldTrackingSessionConfiguration new];
+  ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
   configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
   [_arSession runWithConfiguration: configuration];
   
@@ -116,10 +114,11 @@ mat4 ARKitTracker::getCameraView() {
 mat4 ARKitTracker::getCameraProjection() {
   CGSize viewport = UIScreen.mainScreen.bounds.size;
   UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-  matrix_float4x4 proj = [_arSession.currentFrame.camera projectionMatrixWithViewportSize:viewport
-                                                                              orientation:orientation
-                                                                                    zNear:0.001
-                                                                                     zFar:1000.0];
+  matrix_float4x4 proj = [_arSession.currentFrame.camera projectionMatrixForOrientation:orientation
+                                                    viewportSize:viewport
+                                                           zNear:0.001
+                                                            zFar:1000.0];
+  
   return (float*)&proj.columns[0];
 }
 
