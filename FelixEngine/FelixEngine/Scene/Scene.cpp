@@ -177,10 +177,10 @@ Material* Scene::getMaterial(const std::string &name) {
   return material;
 }
 
-LightRig* Scene::getLightRig(const std::string &name) {
+LightRigPtr Scene::getLightRig(const std::string &name) {
   if (_lights.contains(name))
     return _lights[name];
-  LightRig *lightRig = new LightRig();
+  LightRigPtr lightRig = make_shared<LightRig>();
   _lights.push(name, lightRig);
   return lightRig;
 }

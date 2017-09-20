@@ -115,6 +115,8 @@ namespace fx {
       _lights.push_back(light);
     }
   };
+  
+  typedef std::shared_ptr<LightRig> LightRigPtr;
 }
 
 #endif /* LightRig_h */

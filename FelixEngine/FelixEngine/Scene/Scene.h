@@ -13,6 +13,7 @@
 #include "RenderPass.h"
 #include "XMLTree.h"
 #include "IndexedMap.h"
+#include "LightRig.h"
 #include <set>
 #include <map>
 #include <string>
@@ -21,7 +22,6 @@ namespace fx {
   class Model;
   class Camera;
   class Material;
-  class LightRig;
   
   class Scene: public EventHandler {
   protected:
@@ -34,7 +34,7 @@ namespace fx {
     IndexedMap<std::string, Model*>    _models;
     IndexedMap<std::string, Camera*>   _cameras;
     IndexedMap<std::string, Material*> _materials;
-    IndexedMap<std::string, LightRig*> _lights;
+    IndexedMap<std::string, LightRigPtr> _lights;
     
   public:
     bool loadXMLFile(const std::string &file);
@@ -69,7 +69,7 @@ namespace fx {
     Model*    getModel(const std::string &name = "");
     Camera*   getCamera(const std::string &name = "");
     Material* getMaterial(const std::string &name = "");
-    LightRig* getLightRig(const std::string &name = "");
+    LightRigPtr getLightRig(const std::string &name = "");
   };
   
 }

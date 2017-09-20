@@ -98,7 +98,8 @@ bool Camera::setClearState(const XMLTree::Node &node) {
 }
 
 void Camera::setLightRig(const string &name) {
-  setLightRig(_scene->getLightRig(name));
+  LightRigPtr lightRig = _scene->getLightRig(name);
+  setLightRig(lightRig);
 }
 
 void Camera::setFrame(const string &name) {

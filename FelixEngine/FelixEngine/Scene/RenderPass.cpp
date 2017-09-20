@@ -61,8 +61,8 @@ void RenderItem::setCamera(Camera *newCamera) {
     (*task.uniforms)["camera"] = camera->data();
     task.frame = camera->frame();
     
-    LightRig *lightRig = camera->lightRig();
-    if (lightRig != nullptr && lightRig->size() > 0)
+    LightRigPtr lightRig = camera->lightRig();
+    if (lightRig && lightRig->size() > 0)
       (*task.uniforms)["lights"] = lightRig->lights();
   }
 }
@@ -93,8 +93,8 @@ void RenderItem::update() {
   }
   if (camera != nullptr) {
     (*task.uniforms)["camera"] = camera->data();
-    LightRig *lightRig = camera->lightRig();
-    if (lightRig != nullptr && lightRig->size() > 0)
+    LightRigPtr lightRig = camera->lightRig();
+    if (lightRig && lightRig->size() > 0)
       (*task.uniforms)["lights"] = lightRig->lights();
   }
   task.uniforms->update();

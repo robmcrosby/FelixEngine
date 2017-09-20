@@ -12,6 +12,7 @@
 #include "Matrix.h"
 #include "XMLTree.h"
 #include "Graphics.h"
+#include "LightRig.h"
 
 #define DEFINE_CAMERA_BUILDER(name) \
   struct name##Builder: fx::iCameraBuilder { \
@@ -24,7 +25,6 @@
 namespace fx {
   class Scene;
   class Camera;
-  class LightRig;
   class FrameBuffer;
   class ShaderProgram;
   
@@ -44,10 +44,10 @@ namespace fx {
   protected:
     Scene *_scene;
     
-    CameraData _data;
-    LightRig *_lightRig;
-    FramePtr  _frame;
-    ShaderPtr _shader;
+    CameraData  _data;
+    LightRigPtr _lightRig;
+    FramePtr    _frame;
+    ShaderPtr   _shader;
     
     bool _isClearingColor;
     vec4 _clearColor;
@@ -67,8 +67,8 @@ namespace fx {
     CameraData& data() {return _data;}
     
     void setLightRig(const std::string &name);
-    void setLightRig(LightRig *rig) {_lightRig = rig;}
-    LightRig* lightRig() {return _lightRig;}
+    void setLightRig(LightRigPtr &rig) {_lightRig = rig;}
+    LightRigPtr lightRig() {return _lightRig;}
     
     bool setView(const XMLTree::Node &node);
     void setView(const mat4 &view) {
