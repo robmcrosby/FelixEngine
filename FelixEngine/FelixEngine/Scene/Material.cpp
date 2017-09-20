@@ -15,6 +15,7 @@ using namespace std;
 
 
 Material::Material(Scene *scene): _scene(scene) {
+  _textures = make_shared<TextureMap>();
 }
 
 Material::~Material() {}
@@ -46,7 +47,7 @@ void Material::setShader(const string &name) {
 }
 
 void Material::addTexture(TexturePtr &texture, SamplerState sampler) {
-  _textures.addTexture(texture, sampler);
+  _textures->addTexture(texture, sampler);
 }
 
 bool Material::setAmbiant(const XMLTree::Node &node) {

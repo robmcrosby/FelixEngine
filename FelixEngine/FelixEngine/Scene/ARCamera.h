@@ -16,7 +16,6 @@ namespace fx {
   class ARCamera: public Camera {
   private:
     GraphicTask _task;
-    TextureMap _textureMap;
     TexturePtr _imageY;
     TexturePtr _imageCbCr;
     

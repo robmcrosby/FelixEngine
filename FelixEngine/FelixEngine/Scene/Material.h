@@ -29,8 +29,8 @@ namespace fx {
     Scene *_scene;
     
     MaterialData _data;
-    TextureMap _textures;
-    ShaderPtr  _shader;
+    TexturesPtr  _textures;
+    ShaderPtr    _shader;
     
     DepthState _depthState;
     BlendState _blendState;
@@ -46,7 +46,7 @@ namespace fx {
     ShaderPtr shader() {return _shader;}
     
     void addTexture(TexturePtr &texture, SamplerState sampler = SamplerState());
-    TextureMap& textures() {return _textures;}
+    TexturesPtr textures() {return _textures;}
     
     MaterialData& data() {return _data;}
     

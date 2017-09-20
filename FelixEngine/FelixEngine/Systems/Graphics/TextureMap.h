@@ -48,6 +48,8 @@ namespace fx {
       _textures.push_back(texture);
     }
   };
+  
+  typedef std::shared_ptr<TextureMap> TexturesPtr;
 }
 
 #endif /* TextureMap_h */

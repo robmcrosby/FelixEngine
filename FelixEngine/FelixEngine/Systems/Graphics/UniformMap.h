@@ -71,6 +71,8 @@ namespace fx {
 //      return *_map.at(name);
     }
   };
+  
+  typedef std::shared_ptr<UniformMap> UniformsPtr;
 }
 
 #endif /* UniformMap_h */

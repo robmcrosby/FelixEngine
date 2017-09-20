@@ -22,8 +22,8 @@ namespace fx {
     ShaderPtr  shader;
     VertexPtr  mesh;
     
-    UniformMap *uniforms;
-    TextureMap *textures;
+    UniformsPtr uniforms;
+    TexturesPtr textures;
     
     int instances;
     
@@ -34,18 +34,7 @@ namespace fx {
     DepthState depthState;
     BlendState blendState;
     
-    GraphicTask() {
-      frame  = nullptr;
-      shader = nullptr;
-      mesh   = nullptr;
-      
-      uniforms = nullptr;
-      textures = nullptr;
-      
-      instances = 1;
-      
-      cullMode = CULL_NONE;
-    }
+    GraphicTask(): instances(1), cullMode(CULL_NONE) {}
     
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {

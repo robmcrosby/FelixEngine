@@ -19,7 +19,7 @@ using namespace fx;
 using namespace std;
 
 RenderItem::RenderItem(Camera *camera, Model *model): camera(camera), model(model) {
-  task.uniforms = &uniforms;
+  task.uniforms = make_shared<UniformMap>();
   setCamera(camera);
   setModel(model);
 }
@@ -27,9 +27,7 @@ RenderItem::RenderItem(Camera *camera, Model *model): camera(camera), model(mode
 RenderItem& RenderItem::operator=(const RenderItem &other) {
   model = other.model;
   camera = other.camera;
-  uniforms = other.uniforms;
   task = other.task;
-  task.uniforms = &uniforms;
   return *this;
 }
 
@@ -60,25 +58,25 @@ void RenderItem::setDefaultOperations() {
 
 void RenderItem::setCamera(Camera *newCamera) {
   if (camera != nullptr) {
-    uniforms["camera"] = camera->data();
+    (*task.uniforms)["camera"] = camera->data();
     task.frame = camera->frame();
     
     LightRig *lightRig = camera->lightRig();
     if (lightRig != nullptr && lightRig->size() > 0)
-      uniforms["lights"] = lightRig->lights();
+      (*task.uniforms)["lights"] = lightRig->lights();
   }
 }
 
 void RenderItem::setModel(Model *newModel) {
   if (model != nullptr) {
     model = newModel;
-    uniforms["model"] = model->data();
+    (*task.uniforms)["model"] = model->data();
     task.mesh = model->mesh();
     
     Material *material = model->material();
     if (material != nullptr) {
-      uniforms["material"] = material->data();
-      task.textures = &material->textures();
+      (*task.uniforms)["material"] = material->data();
+      task.textures = material->textures();
       task.shader = material->shader();
       task.depthState = material->depthState();
       task.blendState = material->blendState();
@@ -88,18 +86,18 @@ void RenderItem::setModel(Model *newModel) {
 
 void RenderItem::update() {
   if (model != nullptr) {
-    uniforms["model"] = model->data();
+    (*task.uniforms)["model"] = model->data();
     Material *material = model->material();
     if (material != nullptr)
-      uniforms["material"] = material->data();
+      (*task.uniforms)["material"] = material->data();
   }
   if (camera != nullptr) {
-    uniforms["camera"] = camera->data();
+    (*task.uniforms)["camera"] = camera->data();
     LightRig *lightRig = camera->lightRig();
     if (lightRig != nullptr && lightRig->size() > 0)
-      uniforms["lights"] = lightRig->lights();
+      (*task.uniforms)["lights"] = lightRig->lights();
   }
-  uniforms.update();
+  task.uniforms->update();
 }
 
 

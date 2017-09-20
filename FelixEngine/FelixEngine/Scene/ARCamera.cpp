@@ -55,15 +55,14 @@ void ARCamera::setupPreDraw() {
   _task.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
-  _textureMap.addTexture(_imageY);
-  _textureMap.addTexture(_imageCbCr);
-  _task.textures = &_textureMap;
+  _task.textures = make_shared<TextureMap>();
+  _task.textures->addTexture(_imageY);
+  _task.textures->addTexture(_imageCbCr);
   _task.setClearDepthStencil();
   
-  //_uniformMap["Transform"].load(_imageTransform.ptr(), sizeof(mat4));
-  _uniformMap["Transform"] = _imageTransform;
-  _uniformMap.update();
-  _task.uniforms = &_uniformMap;
+  _task.uniforms = make_shared<UniformMap>();
+  (*_task.uniforms)["Transform"] = _imageTransform;
+  _task.uniforms->update();
   
   _task.colorActions[0].loadAction = LOAD_NONE;
 }
