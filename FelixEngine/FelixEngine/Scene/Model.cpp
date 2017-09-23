@@ -6,7 +6,25 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-//#include "Model.h"
+#include "Model.h"
+
+
+using namespace fx;
+using namespace std;
+
+Model::Model() {
+  cout << "Created Model" << endl;
+}
+
+Model::~Model() {
+  
+}
+
+void Model::update(float dt) {
+  
+}
+
+
 //#include "Scene.h"
 //#include "Material.h"
 //

@@ -9,6 +9,26 @@
 #ifndef Model_h
 #define Model_h
 
+#include "Scene.h"
+
+namespace fx {
+  class Model;
+  typedef std::shared_ptr<Model> ModelPtr;
+  
+  class Model: public iObject {
+  private:
+    
+  public:
+    Model();
+    virtual ~Model();
+    
+    virtual void update(float dt);
+    
+  public:
+    static ModelPtr create(Scene *scene, const std::string &name = "");
+  };
+}
+
 //#include "Quaternion.h"
 //#include "XMLTree.h"
 //#include "Graphics.h"

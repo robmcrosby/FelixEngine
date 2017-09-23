@@ -9,6 +9,50 @@
 #ifndef Scene_h
 #define Scene_h
 
+#include "EventSubject.h"
+#include <memory>
+#include <string>
+#include <set>
+#include <map>
+
+
+namespace fx {
+  
+  struct iObject {
+    virtual ~iObject() {}
+    virtual void update(float dt) = 0;
+  };
+  typedef std::shared_ptr<iObject> SharedObject;
+  typedef std::weak_ptr<iObject> WeakObject;
+  
+  typedef std::set<SharedObject> Objects;
+  typedef std::map<std::string, WeakObject> ObjectMap;
+  
+  
+  class Scene: public EventSubject {
+  private:
+    Objects   _objects;
+    ObjectMap _objectMap;
+    
+  public:
+    Scene();
+    ~Scene();
+    
+    template <typename T, typename... Args>
+    std::shared_ptr<T> make(const std::string &name, Args... args) {
+      std::shared_ptr<T> item = std::make_shared<T>(args...);
+      SharedObject obj = std::static_pointer_cast<iObject>(item);
+      addObject(obj, name);
+      return item;
+    }
+    
+    void addObject(SharedObject &obj, const std::string &name = "");
+    void removeObject(SharedObject &obj);
+    void removeObject(const std::string &name);
+  };
+}
+
+
 //#include "EventHandler.h"
 //#include "RenderPass.h"
 //#include "XMLTree.h"

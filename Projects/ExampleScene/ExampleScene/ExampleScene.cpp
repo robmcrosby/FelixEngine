@@ -12,6 +12,9 @@
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/LightRig.h>
 
+#include <set>
+#include <map>
+
 ExampleScene::ExampleScene() {
   printf("Create HelloTriangle\n");
 }
@@ -36,6 +39,8 @@ void ExampleScene::initalize() {
   _task.mesh->addVertexBuffer("vertex_array", 4, 3, vertexBuffer);
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  
+  _model = _scene.make<fx::Model>("Bunny");
   
   
 //  fx::ShaderPtr shader = _graphics->createShaderProgram();

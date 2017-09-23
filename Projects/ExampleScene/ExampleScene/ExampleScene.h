@@ -11,13 +11,15 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/Scene.h>
+#import <FelixEngine/Model.h>
 
 class ExampleScene: public fx::Application {
   private:
   fx::GraphicTask _task;
   
-  //fx::Scene _scene;
-  //fx::Model *_model;
+  fx::Scene _scene;
+  fx::ModelPtr _model;
   
   public:
   ExampleScene();

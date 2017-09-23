@@ -43,6 +43,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/EventSubject.h>
 
 #import <FelixEngine/Scene.h>
+#import <FelixEngine/Object.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Camera.h>

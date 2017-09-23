@@ -6,6 +6,40 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+
+#include "Scene.h"
+
+using namespace fx;
+using namespace std;
+
+Scene::Scene() {
+  
+}
+
+Scene::~Scene() {
+  
+}
+
+void Scene::addObject(SharedObject &obj, const string &name) {
+  _objects.insert(obj);
+  if (name != "")
+    _objectMap[name] = obj;
+}
+
+void Scene::removeObject(SharedObject &obj) {
+  _objects.erase(obj);
+}
+
+void Scene::removeObject(const string &name) {
+  if (name != "") {
+    SharedObject obj = _objectMap[name].lock();
+    if (obj)
+      _objects.erase(obj);
+    _objectMap.erase(name);
+  }
+}
+
+
 //#include "Scene.h"
 //#include "Model.h"
 //#include "Camera.h"

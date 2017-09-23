@@ -77,6 +77,7 @@
 		C1E60EB01F0F08510021F704 /* LightRig.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAE1F0F08510021F704 /* LightRig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EB11F0F09860021F704 /* Camera.cpp */; };
 		C1E60EB41F0F09860021F704 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EB21F0F09860021F704 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E625201F75465E0019BDD2 /* Object.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6251F1F7546580019BDD2 /* Object.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D61F353A680005367E /* ARKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -153,6 +154,7 @@
 		C1E60EAE1F0F08510021F704 /* LightRig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightRig.h; sourceTree = "<group>"; };
 		C1E60EB11F0F09860021F704 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		C1E60EB21F0F09860021F704 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		C1E6251F1F7546580019BDD2 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
 		C1F7D9D61F353A680005367E /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -179,6 +181,7 @@
 			children = (
 				C10D82631F0E6B8B0005629F /* Scene.h */,
 				C10D82621F0E6B8B0005629F /* Scene.cpp */,
+				C1E6251F1F7546580019BDD2 /* Object.h */,
 				C1CC9D181F110CCB00A938D0 /* RenderPass.h */,
 				C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */,
 				C1CC9D1B1F11144C00A938D0 /* Components */,
@@ -393,6 +396,7 @@
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
+				C1E625201F75465E0019BDD2 /* Object.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
