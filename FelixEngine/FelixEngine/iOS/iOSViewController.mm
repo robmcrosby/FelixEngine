@@ -16,6 +16,9 @@
 @property(nonatomic) CADisplayLink *displayLink;
 @property(nonatomic) std::vector<id> touchNumbers;
 
+@property(nonatomic) BOOL nextDeltaTimeZero;
+@property(nonatomic) CFTimeInterval lastTimeStamp;
+
 @end
 
 
@@ -26,12 +29,18 @@
   
   self.application = nullptr;
   self.displayLink = nil;
+  self.nextDeltaTimeZero = YES;
+  self.lastTimeStamp = 0.0;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
   
   [self.view setMultipleTouchEnabled:YES];
+}
+
+- (void)dealloc {
+  [self removeDisplayLink];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,12 +62,34 @@
 - (void)setupDisplayLink {
   self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(frameUpdate:)];
   [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+  self.nextDeltaTimeZero = YES;
+}
+
+- (void)removeDisplayLink {
+  if (self.displayLink != nil) {
+    [self.displayLink removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    self.displayLink = nil;
+    self.nextDeltaTimeZero = YES;
+  }
 }
 
 - (void)frameUpdate:(CADisplayLink*)displayLink {
-  if (self.cppApplication != nullptr) {
-    self.cppApplication->processFrame();
-  }
+  CFTimeInterval currentTime = [displayLink timestamp];
+  
+  // calculate delta time
+  CFTimeInterval deltaTime;
+  if(_nextDeltaTimeZero) {
+    _nextDeltaTimeZero = NO;
+    deltaTime = 0.0;
+  } else
+    deltaTime = currentTime - _lastTimeStamp;
+  
+  // store the timestamp
+  _lastTimeStamp = currentTime;
+  
+  // process the frame with delta time
+  if (self.cppApplication != nullptr)
+    self.cppApplication->processFrame((float)deltaTime);
 }
 
 - (void)appWillResignActive:(NSNotification*)note {

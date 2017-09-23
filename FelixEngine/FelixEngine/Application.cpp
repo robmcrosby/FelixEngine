@@ -39,7 +39,7 @@ void Application::handle(const Event &event) {
   }
 }
 
-void Application::update() {
+void Application::update(float td) {
   
 }
 
@@ -59,10 +59,10 @@ void Application::willTerminate() {
   
 }
 
-void Application::processFrame() {
+void Application::processFrame(float td) {
   if (_graphics != nullptr) {
     _graphics->nextFrame();
-    update();
+    update(td);
     render();
     _graphics->presentFrame();
   }

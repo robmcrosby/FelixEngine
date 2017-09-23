@@ -83,11 +83,9 @@ void ExampleScene::initalize() {
 //  _scene.renderPasses()["MainPass"].addModel(_model);
 }
 
-void ExampleScene::update() {
+void ExampleScene::update(float td) {
 //  _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
-//  _model->update();
-//
-//  _scene.update();
+  _scene.update(td);
 }
 
 void ExampleScene::render() {

@@ -20,6 +20,10 @@ Model::~Model() {
   
 }
 
+void Model::setScene(Scene *scene) {
+  
+}
+
 void Model::update(float dt) {
   
 }

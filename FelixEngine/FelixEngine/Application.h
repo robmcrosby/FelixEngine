@@ -28,14 +28,14 @@ namespace fx {
     virtual void handle(const Event &event);
     
     virtual void initalize();
-    virtual void update();
+    virtual void update(float td);
     virtual void render();
     
     virtual void willEnterBackground();
     virtual void willEnterForeground();
     virtual void willTerminate();
     
-    void processFrame();
+    void processFrame(float td);
     
     FileSystem& fileSystem() const {return *_fileSystem;}
     void setFileSystem(FileSystem *fileSystem) {_fileSystem = fileSystem;}

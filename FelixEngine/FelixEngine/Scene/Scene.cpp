@@ -21,6 +21,7 @@ Scene::~Scene() {
 }
 
 void Scene::addObject(SharedObject &obj, const string &name) {
+  obj->setScene(this);
   _objects.insert(obj);
   if (name != "")
     _objectMap[name] = obj;
@@ -36,6 +37,14 @@ void Scene::removeObject(const string &name) {
     if (obj)
       _objects.erase(obj);
     _objectMap.erase(name);
+  }
+}
+
+void Scene::update(float td) {
+  Objects::iterator itr = _objects.begin();
+  while (itr != _objects.end()) {
+    (*itr)->update(td);
+    ++itr;
   }
 }
 

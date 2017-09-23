@@ -22,6 +22,7 @@ namespace fx {
     Model();
     virtual ~Model();
     
+    virtual void setScene(Scene *scene);
     virtual void update(float dt);
     
   public:

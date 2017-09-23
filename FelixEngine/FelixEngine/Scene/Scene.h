@@ -17,9 +17,11 @@
 
 
 namespace fx {
+  class Scene;
   
   struct iObject {
     virtual ~iObject() {}
+    virtual void setScene(Scene *scene) = 0;
     virtual void update(float dt) = 0;
   };
   typedef std::shared_ptr<iObject> SharedObject;
@@ -49,6 +51,8 @@ namespace fx {
     void addObject(SharedObject &obj, const std::string &name = "");
     void removeObject(SharedObject &obj);
     void removeObject(const std::string &name);
+    
+    void update(float td);
   };
 }
 
