@@ -10,6 +10,9 @@
 #define Model_h
 
 #include "Scene.h"
+#include "Material.h"
+#include "Graphics.h"
+#include "Quaternion.h"
 
 namespace fx {
   class Model;
@@ -17,16 +20,43 @@ namespace fx {
   
   class Model: public iObject {
   private:
+    Scene *_scene;
+    
+    MaterialPtr _material;
+    VertexPtr   _mesh;
+    
+    vec3 _scale;
+    quat _orientation;
+    vec3 _position;
+    
+    bool _hidden;
+    int _layer;
     
   public:
     Model();
     virtual ~Model();
     
-    virtual void setScene(Scene *scene);
+    virtual void setScene(Scene *scene) {_scene = scene;}
+    virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     
-  public:
-    static ModelPtr create(Scene *scene, const std::string &name = "");
+    void setMaterial(const std::string &name);
+    void setMaterial(MaterialPtr &material) {_material = material;}
+    MaterialPtr material() const {return _material;}
+    
+    void setMesh(const std::string &name);
+    void setMesh(VertexPtr &mesh) {_mesh = mesh;}
+    VertexPtr mesh() const {return _mesh;}
+    
+    void setScale(float scale) {_scale = vec3(scale, scale, scale);}
+    void setScale(const vec3 &scale) {_scale = scale;}
+    vec3 scale() const {return _scale;}
+    
+    void setOrientation(const quat &orientation) {_orientation = orientation;}
+    quat orientation() const {return _orientation;}
+    
+    void setPosition(const vec3 &position) {_position = position;}
+    vec3 position() const {return _position;}
   };
 }
 

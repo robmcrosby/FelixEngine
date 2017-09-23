@@ -6,7 +6,67 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-//#include "Material.h"
+#include "Material.h"
+
+
+using namespace fx;
+using namespace std;
+
+Material::Material(): _scene(0) {
+  
+}
+
+Material::~Material() {
+  
+}
+
+bool Material::loadXML(const XMLTree::Node &node) {
+  return true;
+}
+
+void Material::update(float dt) {
+  
+}
+
+void Material::setShader(const string &name) {
+  _shader = Graphics::getInstance().getShaderProgram(name);
+}
+
+void Material::addTexture(TexturePtr &texture, SamplerState sampler) {
+  _textures->addTexture(texture, sampler);
+}
+
+bool Material::setAmbiant(const XMLTree::Node &node) {
+  if (node.hasAttributes("color", "factor")) {
+    setAmbiant(node.attribute("color"), node.attributeAsFloat("factor"));
+    return true;
+  }
+  return false;
+}
+
+bool Material::setDiffuse(const XMLTree::Node &node) {
+  if (node.hasAttributes("color", "factor")) {
+    setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
+    return true;
+  }
+  return false;
+}
+
+void Material::setSpecular(const vec3 &color, float factor, float hardness) {
+  _properties.specular = vec4(color, factor);
+  _properties.factors.x = hardness;
+}
+
+bool Material::setSpecular(const XMLTree::Node &node) {
+  if (node.hasAttributes("color", "factor", "hardness")) {
+    setSpecular(node.attribute("color"), node.attributeAsFloat("factor"), node.attributeAsFloat("hardness"));
+    return true;
+  }
+  return false;
+}
+
+
+
 //#include "Scene.h"
 //
 //

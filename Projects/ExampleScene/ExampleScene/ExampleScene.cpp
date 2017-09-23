@@ -40,9 +40,40 @@ void ExampleScene::initalize() {
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   
+  
+  // Setup the Camera
+  fx::CameraPtr camera = _scene.get<fx::Camera>("Camera");
+  camera->addDepthBuffer();
+  camera->setOrthographic(2.0f, -100.0f, 100.0f);
+  camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
+  camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+  camera->setClearDepth();
+  
+  // Load the Shader
+  fx::ShaderPtr shader = _graphics->createShaderProgram();
+  shader->loadShaderFunctions("basic_vertex", "basic_fragment");
+  
+  // Load the Bunny Mesh
+  fx::VertexMeshData meshData;
+  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
+  fx::VertexPtr mesh = _graphics->createVertexMesh();
+  mesh->load(meshData);
+  
+  // Setup the Material
+  fx::MaterialPtr material = _scene.get<fx::Material>("Material");
+  material->setShader(shader);
+  material->enableDepthTesting();
+  material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
+  material->setDiffuse(fx::vec3(0.7, 0.7, 0.7), 0.8);
+  material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6, 20.0);
+  
+  // Setup the Bunny Model
   _model = _scene.get<fx::Model>("Bunny");
-  
-  
+  _model->setMesh(mesh);
+  _model->setMaterial(material);
+  _model->setScale(0.2f);
+  _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
+
   
 //  fx::ShaderPtr shader = _graphics->createShaderProgram();
 //  shader->loadShaderFunctions("basic_vertex", "basic_fragment");

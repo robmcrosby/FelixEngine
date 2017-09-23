@@ -13,19 +13,29 @@ using namespace fx;
 using namespace std;
 
 Model::Model() {
-  cout << "Created Model" << endl;
+  _scene = nullptr;
+  _scale = vec3(1.0f, 1.0f, 1.0f);
 }
 
 Model::~Model() {
   
 }
 
-void Model::setScene(Scene *scene) {
-  
+bool Model::loadXML(const XMLTree::Node &node) {
+  return true;
 }
 
 void Model::update(float dt) {
   
+}
+
+void Model::setMaterial(const std::string &name) {
+  if (_scene)
+    _material = _scene->get<Material>(name);
+}
+
+void Model::setMesh(const std::string &name) {
+  _mesh = Graphics::getInstance().getVertexMesh(name);
 }
 
 

@@ -10,6 +10,7 @@
 #define Scene_h
 
 #include "EventSubject.h"
+#include "XMLTree.h"
 #include <memory>
 #include <string>
 #include <set>
@@ -22,6 +23,7 @@ namespace fx {
   struct iObject {
     virtual ~iObject() {}
     virtual void setScene(Scene *scene) = 0;
+    virtual bool loadXML(const XMLTree::Node &node) = 0;
     virtual void update(float dt) = 0;
   };
   typedef std::shared_ptr<iObject> SharedObject;

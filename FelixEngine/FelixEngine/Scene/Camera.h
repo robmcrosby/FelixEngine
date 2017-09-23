@@ -9,6 +9,96 @@
 #ifndef Camera_h
 #define Camera_h
 
+#include "Scene.h"
+#include "Graphics.h"
+
+
+namespace fx {
+  class Camera;
+  typedef std::shared_ptr<Camera> CameraPtr;
+  
+  struct CameraProperties {
+    mat4 projection;
+    mat4 view;
+    vec4 position;
+  };
+
+  
+  class Camera: public iObject {
+  private:
+    Scene *_scene;
+    
+    CameraProperties _properties;
+    
+    FramePtr  _frame;
+    ShaderPtr _shader;
+    
+    bool _isClearingColor;
+    vec4 _clearColor;
+    
+    bool _isClearingDepth;
+    float _clearDepth;
+    
+  public:
+    Camera();
+    virtual ~Camera();
+    
+    virtual void setScene(Scene *scene) {_scene = scene;}
+    virtual bool loadXML(const XMLTree::Node &node);
+    virtual void update(float dt);
+    
+    virtual bool preDraw();
+    
+    CameraProperties& properties() {return _properties;}
+    
+    bool setView(const XMLTree::Node &node);
+    void setView(const mat4 &view) {
+      _properties.view = view;
+      _properties.position = view * vec4(0.0f, 0.0f, 0.0f, 1.0f);
+      _properties.position /= _properties.position.w;
+    }
+    void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
+      _properties.view = mat4::LookAt(eye, center, up);
+      _properties.position = vec4(eye, 1.0);
+    }
+    vec3 position() const {return _properties.position.xyz();}
+    
+    void addDepthBuffer();
+    
+    bool setProjection(const XMLTree::Node &node);
+    void setProjection(const mat4 &projection) {_properties.projection = projection;}
+    void setOrthographic(float scale, float near, float far);
+    void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
+      _properties.projection = mat4::Ortho(left, right, bottom, top, near, far);
+    }
+    
+    void setFrustum(float scale, float near, float far);
+    void setFrustum(float left, float right, float bottom, float top, float near, float far) {
+      _properties.projection = mat4::Frustum(left, right, bottom, top, near, far);
+    }
+    
+    void setFrame(const std::string &name);
+    void setFrame(FramePtr &frame) {_frame = frame;}
+    FramePtr frame() {return _frame;}
+    
+    void setShader(const std::string &name);
+    void setShader(ShaderPtr &shader) {_shader = shader;}
+    ShaderPtr shader() {return _shader;}
+    
+    bool setClearState(const XMLTree::Node &node);
+    
+    void setClearColor(const vec4 &color = vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    vec4 clearColor() const {return _clearColor;}
+    bool isClearingColor() const {return _isClearingColor;}
+    
+    void setClearDepth(float depth = 1.0f);
+    float clearDepth() const {return _clearDepth;}
+    bool isClearingDepth() const {return _isClearingDepth;}
+
+  };
+}
+
+
 //#include "Matrix.h"
 //#include "XMLTree.h"
 //#include "Graphics.h"
