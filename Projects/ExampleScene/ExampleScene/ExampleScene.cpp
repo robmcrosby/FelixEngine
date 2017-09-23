@@ -40,7 +40,8 @@ void ExampleScene::initalize() {
   
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   
-  _model = _scene.make<fx::Model>("Bunny");
+  _model = _scene.get<fx::Model>("Bunny");
+  
   
   
 //  fx::ShaderPtr shader = _graphics->createShaderProgram();

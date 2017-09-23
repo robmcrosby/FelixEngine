@@ -48,6 +48,19 @@ namespace fx {
       return item;
     }
     
+    template <typename T>
+    std::shared_ptr<T> get(const std::string &name) {
+      if (name != "") {
+        SharedObject obj = _objectMap[name].lock();
+        if (obj) {
+          std::shared_ptr<T> item = std::dynamic_pointer_cast<T>(obj);
+          if (item)
+            return item;
+        }
+      }
+      return make<T>(name);
+    }
+    
     void addObject(SharedObject &obj, const std::string &name = "");
     void removeObject(SharedObject &obj);
     void removeObject(const std::string &name);

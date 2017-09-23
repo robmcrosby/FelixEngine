@@ -10,6 +10,7 @@
 #define Graphics_h
 
 #include <memory>
+#include <map>
 
 
 namespace fx {
@@ -30,6 +31,13 @@ namespace fx {
   
   /** File System */
   class Graphics {
+  private:
+    std::map<std::string, std::weak_ptr<FrameBuffer> >   frameMap;
+    std::map<std::string, std::weak_ptr<ShaderProgram> > shaderMap;
+    std::map<std::string, std::weak_ptr<VertexMesh> >    vertexMap;
+    std::map<std::string, std::weak_ptr<UniformBuffer> > uniformMap;
+    std::map<std::string, std::weak_ptr<TextureBuffer> > textureMap;
+    
   protected:
     static Graphics *instance;
     
@@ -49,6 +57,51 @@ namespace fx {
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;
     virtual void presentFrame() = 0;
+    
+    FramePtr getFrameBuffer(const std::string &name) {
+      FramePtr frame = frameMap[name].lock();
+      if (!frame) {
+        frame = createFrameBuffer();
+        frameMap[name] = frame;
+      }
+      return frame;
+    }
+    
+    ShaderPtr  getShaderProgram(const std::string &name) {
+      ShaderPtr shader = shaderMap[name].lock();
+      if (!shader) {
+        shader = createShaderProgram();
+        shaderMap[name] = shader;
+      }
+      return shader;
+    }
+    
+    VertexPtr  getVertexMesh(const std::string &name) {
+      VertexPtr mesh = vertexMap[name].lock();
+      if (!mesh) {
+        mesh = createVertexMesh();
+        vertexMap[name] = mesh;
+      }
+      return mesh;
+    }
+    
+    UniformPtr getUniformBuffer(const std::string &name) {
+      UniformPtr uniform = uniformMap[name].lock();
+      if (!uniform) {
+        uniform = createUniformBuffer();
+        uniformMap[name] = uniform;
+      }
+      return uniform;
+    }
+    
+    TexturePtr getTextureBuffer(const std::string &name) {
+      TexturePtr texture = textureMap[name].lock();
+      if (!texture) {
+        texture = createTextureBuffer();
+        textureMap[name] = texture;
+      }
+      return texture;
+    }
   };
   
 }
