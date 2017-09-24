@@ -22,7 +22,7 @@ namespace fx {
     ShaderPtr  shader;
     VertexPtr  mesh;
     
-    UniformsPtr uniforms;
+    UniformsList uniforms;
     TexturesPtr textures;
     
     int instances;

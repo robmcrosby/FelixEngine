@@ -73,6 +73,7 @@ namespace fx {
   };
   
   typedef std::shared_ptr<UniformMap> UniformsPtr;
+  typedef std::list<UniformsPtr> UniformsList;
 }
 
 #endif /* UniformMap_h */

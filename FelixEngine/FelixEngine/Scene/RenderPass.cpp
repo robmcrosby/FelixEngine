@@ -6,6 +6,32 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#include "RenderPass.h"
+
+
+using namespace fx;
+using namespace std;
+
+RenderPass::RenderPass() {
+  
+}
+
+RenderPass::~RenderPass() {
+  
+}
+
+void RenderPass::render() {
+  
+  _camera.reset();
+}
+
+RenderPassPtr RenderPass::getMainRenderPass() {
+  static RenderPassPtr mainInstance = std::make_shared<RenderPass>();
+  return mainInstance;
+}
+
+
+
 //#include "RenderPass.h"
 //#include "Graphics.h"
 //

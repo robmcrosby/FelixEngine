@@ -41,9 +41,11 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
     addPipeline(frame, task.blendState);
   [encoder setRenderPipelineState:_pipelines.at(pipelineId)];
   
-  if (task.uniforms != nullptr) {
-    for (auto itr : *task.uniforms)
-      setUniform(encoder, itr.first, itr.second);
+  UniformsList::const_iterator itr = task.uniforms.begin();
+  while (itr != task.uniforms.end()) {
+    for (auto uniform : **itr)
+      setUniform(encoder, uniform.first, uniform.second);
+    ++itr;
   }
 }
 

@@ -9,6 +9,40 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
+#include "GraphicTask.h"
+#include "UniformMap.h"
+#include "Camera.h"
+#include "Model.h"
+#include "Light.h"
+
+
+namespace fx {
+  class RenderPass;
+  typedef std::shared_ptr<RenderPass> RenderPassPtr;
+  
+  class RenderPass {
+  private:
+    CameraPtr _camera;
+    std::vector<ModelPtr> _models;
+    std::vector<LightPtr> _lights;
+    
+  public:
+    RenderPass();
+    ~RenderPass();
+    
+    void setCamera(CameraPtr &camera) {_camera = camera;}
+    void addModel(ModelPtr &model) {_models.push_back(model);}
+    void addLight(LightPtr &light) {_lights.push_back(light);}
+    
+    void render();
+    
+  public:
+    static RenderPassPtr getMainRenderPass();
+  };
+}
+
+
+
 //#include "GraphicTask.h"
 //#include "UniformMap.h"
 //#include <vector>
