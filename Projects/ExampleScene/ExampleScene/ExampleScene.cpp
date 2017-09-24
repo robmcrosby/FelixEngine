@@ -10,7 +10,7 @@
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
-#import <FelixEngine/LightRig.h>
+#import <FelixEngine/Light.h>
 
 #include <set>
 #include <map>
@@ -48,6 +48,16 @@ void ExampleScene::initalize() {
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
   camera->setClearDepth();
+  
+  // Setup the Lights
+  fx::LightPtr lightA = _scene.get<fx::Light>("LightA");
+  lightA->setAsDirectionalLight(fx::vec3(-1.0f, -1.0f, 0.0f), fx::vec3(0.8f, 0.9f, 1.0f), 0.8f);
+  
+  fx::LightPtr lightB = _scene.get<fx::Light>("LightB");
+  lightB->setAsPointLight(fx::vec3(1.0f, -1.0f, 2.0f), fx::vec3(0.4f, 0.4f, 1.0f), 0.4f);
+  
+  fx::LightPtr lightC = _scene.get<fx::Light>("LightC");
+  lightB->setAsPointLight(fx::vec3(-4.0f, 1.0f, -6.0f), fx::vec3(1.0f, 1.0f, 1.0f), 1.0f);
   
   // Load the Shader
   fx::ShaderPtr shader = _graphics->createShaderProgram();
@@ -116,11 +126,12 @@ void ExampleScene::initalize() {
 }
 
 void ExampleScene::update(float td) {
-//  _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
+  _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
   _scene.update(td);
 }
 
 void ExampleScene::render() {
   _graphics->addTask(_task);
+  
  // _scene.render();
 }
