@@ -40,6 +40,8 @@ namespace fx {
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     
+    virtual void applyToTask(GraphicTask &task);
+    
     void setMaterial(const std::string &name);
     void setMaterial(MaterialPtr &material) {_material = material;}
     MaterialPtr material() const {return _material;}

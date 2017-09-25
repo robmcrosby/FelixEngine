@@ -29,6 +29,10 @@ void Model::update(float dt) {
   
 }
 
+void Model::applyToTask(fx::GraphicTask &task) {
+  
+}
+
 void Model::setMaterial(const std::string &name) {
   if (_scene)
     _material = _scene->get<Material>(name);

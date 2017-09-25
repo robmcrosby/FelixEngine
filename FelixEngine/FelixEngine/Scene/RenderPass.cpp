@@ -21,8 +21,41 @@ RenderPass::~RenderPass() {
 }
 
 void RenderPass::render() {
+  Graphics &graphics = Graphics::getInstance();
   
+  if (_models.size()) {
+    auto model = _models.begin();
+    GraphicTask templateTask;
+    
+    // Apply Camera and Lights to the Template Task
+    if (_camera)
+      templateTask = _camera->templateTask();
+    for (auto light = _lights.begin(); light != _lights.end(); ++light)
+      (*light)->applyToTask(templateTask);
+    
+    // Apply Camera clear operations on the first task
+    if (_camera) {
+      GraphicTask task = templateTask;
+      (*model)->applyToTask(task);
+      _camera->applyToTask(task);
+      graphics.addTask(task);
+      ++model;
+    }
+    
+    // Create tasks for the rest of the models
+    while (model != _models.end()) {
+      GraphicTask task = templateTask;
+      (*model)->applyToTask(task);
+      graphics.addTask(task);
+      ++model;
+    }
+  }
+}
+
+void RenderPass::clear() {
   _camera.reset();
+  _lights.clear();
+  _models.clear();
 }
 
 RenderPassPtr RenderPass::getMainRenderPass() {

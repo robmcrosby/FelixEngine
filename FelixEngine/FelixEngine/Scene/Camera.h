@@ -47,7 +47,8 @@ namespace fx {
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     
-    virtual bool preDraw();
+    virtual GraphicTask templateTask();
+    virtual void applyToTask(GraphicTask &task);
     
     CameraProperties& properties() {return _properties;}
     

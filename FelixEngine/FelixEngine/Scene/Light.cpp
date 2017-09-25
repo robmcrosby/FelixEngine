@@ -27,3 +27,7 @@ bool Light::loadXML(const XMLTree::Node &node) {
 void Light::update(float dt) {
   
 }
+
+void Light::applyToTask(GraphicTask &task) {
+  
+}

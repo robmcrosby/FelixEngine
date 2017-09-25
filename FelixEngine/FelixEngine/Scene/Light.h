@@ -10,7 +10,7 @@
 #define Light_h
 
 #include "Scene.h"
-
+#include "GraphicTask.h"
 
 namespace fx {
   class Light;
@@ -36,6 +36,8 @@ namespace fx {
     virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
+    
+    virtual void applyToTask(GraphicTask &task);
     
     void setPosition(vec3 pos) {
       _peramaters.position = vec4(pos, _peramaters.position.w);

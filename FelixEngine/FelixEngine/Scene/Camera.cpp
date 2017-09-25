@@ -8,6 +8,7 @@
 
 
 #include "Camera.h"
+#include "GraphicTask.h"
 #include "GraphicResources.h"
 
 
@@ -34,8 +35,13 @@ void Camera::update(float dt) {
   
 }
 
-bool Camera::preDraw() {
-  return false;
+GraphicTask Camera::templateTask() {
+  GraphicTask task;
+  return task;
+}
+
+void Camera::applyToTask(GraphicTask &task) {
+  
 }
 
 void Camera::addDepthBuffer() {

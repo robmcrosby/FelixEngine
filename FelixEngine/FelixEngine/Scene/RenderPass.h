@@ -23,18 +23,19 @@ namespace fx {
   class RenderPass {
   private:
     CameraPtr _camera;
-    std::vector<ModelPtr> _models;
     std::vector<LightPtr> _lights;
+    std::vector<ModelPtr> _models;
     
   public:
     RenderPass();
     ~RenderPass();
     
     void setCamera(CameraPtr &camera) {_camera = camera;}
-    void addModel(ModelPtr &model) {_models.push_back(model);}
     void addLight(LightPtr &light) {_lights.push_back(light);}
+    void addModel(ModelPtr &model) {_models.push_back(model);}
     
     void render();
+    void clear();
     
   public:
     static RenderPassPtr getMainRenderPass();
