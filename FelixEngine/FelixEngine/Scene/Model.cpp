@@ -7,6 +7,7 @@
 //
 
 #include "Model.h"
+#include "RenderPass.h"
 
 
 using namespace fx;

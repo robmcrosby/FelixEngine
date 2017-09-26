@@ -9,6 +9,7 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
+#include "RenderItem.h"
 #include "GraphicTask.h"
 #include "UniformMap.h"
 #include "Camera.h"
@@ -17,8 +18,7 @@
 
 
 namespace fx {
-  class RenderPass;
-  typedef std::shared_ptr<RenderPass> RenderPassPtr;
+  typedef std::map<std::string, RenderPassPtr> RenderPassMap;
   
   class RenderPass {
   private:
@@ -38,7 +38,8 @@ namespace fx {
     void clear();
     
   public:
-    static RenderPassPtr getMainRenderPass();
+    static RenderPassMap& getRenderPassMap();
+    static RenderPassPtr getRenderPass(const std::string &name);
   };
 }
 

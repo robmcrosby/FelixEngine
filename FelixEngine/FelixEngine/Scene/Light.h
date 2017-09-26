@@ -9,6 +9,7 @@
 #ifndef Light_h
 #define Light_h
 
+#include "RenderItem.h"
 #include "Scene.h"
 #include "GraphicTask.h"
 
@@ -23,7 +24,7 @@ namespace fx {
     vec4 factors;
   };
   
-  class Light: public iObject {
+  class Light: public RenderItem, public iObject {
   private:
     Scene *_scene;
     
@@ -38,6 +39,8 @@ namespace fx {
     virtual void update(float dt);
     
     virtual void applyToTask(GraphicTask &task);
+    
+    LightPeramaters peramaters() const {return _peramaters;}
     
     void setPosition(vec3 pos) {
       _peramaters.position = vec4(pos, _peramaters.position.w);

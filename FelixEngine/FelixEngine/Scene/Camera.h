@@ -9,6 +9,7 @@
 #ifndef Camera_h
 #define Camera_h
 
+#include "RenderItem.h"
 #include "Scene.h"
 #include "Graphics.h"
 
@@ -24,7 +25,7 @@ namespace fx {
   };
 
   
-  class Camera: public iObject {
+  class Camera: public RenderItem, public iObject {
   private:
     Scene *_scene;
     

@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "GraphicTask.h"
 #include "GraphicResources.h"
+#include "RenderPass.h"
 
 
 using namespace fx;

@@ -58,9 +58,19 @@ void RenderPass::clear() {
   _models.clear();
 }
 
-RenderPassPtr RenderPass::getMainRenderPass() {
-  static RenderPassPtr mainInstance = std::make_shared<RenderPass>();
-  return mainInstance;
+RenderPassMap& RenderPass::getRenderPassMap() {
+  static RenderPassMap mapInstance = RenderPassMap();
+  return mapInstance;
+}
+
+RenderPassPtr RenderPass::getRenderPass(const std::string &name) {
+  RenderPassMap &map = getRenderPassMap();
+  RenderPassPtr renderPass = map[name];
+  if (!renderPass) {
+    renderPass = std::make_shared<RenderPass>();
+    map[name] = renderPass;
+  }
+  return renderPass;
 }
 
 

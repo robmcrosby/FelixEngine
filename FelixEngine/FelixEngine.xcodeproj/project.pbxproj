@@ -44,6 +44,8 @@
 		C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1412E5D1F37D892001E8D83 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C142C0B01F77601D00B45750 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0AE1F77601D00B45750 /* Light.cpp */; };
 		C142C0B11F77601D00B45750 /* Light.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0AF1F77601D00B45750 /* Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C142C0B31F7B152100B45750 /* RenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0B21F7B152100B45750 /* RenderItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0B41F7B163B00B45750 /* RenderItem.cpp */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -121,6 +123,8 @@
 		C1412E5D1F37D892001E8D83 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C142C0AE1F77601D00B45750 /* Light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
 		C142C0AF1F77601D00B45750 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		C142C0B21F7B152100B45750 /* RenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderItem.h; sourceTree = "<group>"; };
+		C142C0B41F7B163B00B45750 /* RenderItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RenderItem.cpp; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 				C10D82631F0E6B8B0005629F /* Scene.h */,
 				C10D82621F0E6B8B0005629F /* Scene.cpp */,
 				C1E6251F1F7546580019BDD2 /* Object.h */,
+				C142C0B21F7B152100B45750 /* RenderItem.h */,
+				C142C0B41F7B163B00B45750 /* RenderItem.cpp */,
 				C1CC9D181F110CCB00A938D0 /* RenderPass.h */,
 				C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */,
 				C1CC9D1B1F11144C00A938D0 /* Components */,
@@ -410,6 +416,7 @@
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
+				C142C0B31F7B152100B45750 /* RenderItem.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
@@ -528,6 +535,7 @@
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
+				C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,

@@ -9,6 +9,7 @@
 #ifndef Model_h
 #define Model_h
 
+#include "RenderItem.h"
 #include "Scene.h"
 #include "Material.h"
 #include "Graphics.h"
@@ -18,7 +19,7 @@ namespace fx {
   class Model;
   typedef std::shared_ptr<Model> ModelPtr;
   
-  class Model: public iObject {
+  class Model: public RenderItem, public iObject {
   private:
     Scene *_scene;
     

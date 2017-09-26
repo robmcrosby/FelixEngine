@@ -7,6 +7,7 @@
 //
 
 #include "Light.h"
+#include "RenderPass.h"
 
 
 using namespace fx;
