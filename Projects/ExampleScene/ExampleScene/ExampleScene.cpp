@@ -48,20 +48,20 @@ void ExampleScene::initalize() {
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
   camera->setClearDepth();
-  camera->addToRenderPass("main");
+  camera->addToRenderPass("MainPass");
   
   // Setup the Lights
   fx::LightPtr lightA = _scene.get<fx::Light>("LightA");
   lightA->setAsDirectionalLight(fx::vec3(-1.0f, -1.0f, 0.0f), fx::vec3(0.8f, 0.9f, 1.0f), 0.8f);
-  lightA->addToRenderPass("main");
+  lightA->addToRenderPass("MainPass");
   
   fx::LightPtr lightB = _scene.get<fx::Light>("LightB");
   lightB->setAsPointLight(fx::vec3(1.0f, -1.0f, 2.0f), fx::vec3(0.4f, 0.4f, 1.0f), 0.4f);
-  lightB->addToRenderPass("main");
+  lightB->addToRenderPass("MainPass");
   
   fx::LightPtr lightC = _scene.get<fx::Light>("LightC");
   lightC->setAsPointLight(fx::vec3(-4.0f, 1.0f, -6.0f), fx::vec3(1.0f, 1.0f, 1.0f), 1.0f);
-  lightC->addToRenderPass("main");
+  lightC->addToRenderPass("MainPass");
   
   // Load the Shader
   fx::ShaderPtr shader = _graphics->createShaderProgram();
@@ -87,7 +87,10 @@ void ExampleScene::initalize() {
   _model->setMaterial(material);
   _model->setScale(0.2f);
   _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
-  _model->addToRenderPass("main");
+  _model->addToRenderPass("MainPass");
+  
+  // Setup the Render Scheme
+  _renderScheme.push_back("MainPass");
 
   
 //  fx::ShaderPtr shader = _graphics->createShaderProgram();
@@ -133,6 +136,9 @@ void ExampleScene::initalize() {
 void ExampleScene::update(float td) {
   _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
   _scene.update(td);
+  
+  fx::RenderPass::renderPasses(_renderScheme);
+  fx::RenderPass::resetPasses();
 }
 
 void ExampleScene::render() {

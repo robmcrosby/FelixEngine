@@ -19,6 +19,7 @@
 
 namespace fx {
   typedef std::map<std::string, RenderPassPtr> RenderPassMap;
+  typedef std::list<std::string> RenderScheme;
   
   class RenderPass {
   private:
@@ -35,11 +36,13 @@ namespace fx {
     void addModel(ModelPtr &model) {_models.push_back(model);}
     
     void render();
-    void clear();
+    void reset();
     
   public:
     static RenderPassMap& getRenderPassMap();
     static RenderPassPtr getRenderPass(const std::string &name);
+    static void renderPasses(const RenderScheme &scheme);
+    static void resetPasses();
   };
 }
 

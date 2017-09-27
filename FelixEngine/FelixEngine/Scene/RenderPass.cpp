@@ -52,7 +52,7 @@ void RenderPass::render() {
   }
 }
 
-void RenderPass::clear() {
+void RenderPass::reset() {
   _camera.reset();
   _lights.clear();
   _models.clear();
@@ -73,6 +73,23 @@ RenderPassPtr RenderPass::getRenderPass(const std::string &name) {
   return renderPass;
 }
 
+void RenderPass::renderPasses(const RenderScheme &scheme) {
+  RenderScheme::const_iterator name = scheme.begin();
+  while (name != scheme.end()) {
+    RenderPassPtr pass = getRenderPass(*name);
+    pass->render();
+    ++name;
+  }
+}
+
+void RenderPass::resetPasses() {
+  RenderPassMap &passes = getRenderPassMap();
+  RenderPassMap::iterator pass = passes.begin();
+  while (pass != passes.end()) {
+    pass->second->reset();
+    ++pass;
+  }
+}
 
 
 //#include "RenderPass.h"
