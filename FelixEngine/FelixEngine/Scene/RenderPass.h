@@ -21,19 +21,37 @@ namespace fx {
   typedef std::map<std::string, RenderPassPtr> RenderPassMap;
   typedef std::list<std::string> RenderScheme;
   
+  struct ModelCompare {
+    bool operator()(const ModelPtr &lhs, const ModelPtr &rhs) {
+      if (lhs->layer() != rhs->layer())
+        return lhs->layer() < rhs->layer();
+      return lhs.get() < rhs.get();
+    }
+  };
+  typedef std::set<ModelPtr, ModelCompare> ModelSet;
+  
+  struct LightCompare {
+    bool operator()(const LightPtr &lhs, const LightPtr &rhs) {
+      if (lhs->layer() != rhs->layer())
+        return lhs->layer() < rhs->layer();
+      return lhs.get() < rhs.get();
+    }
+  };
+  typedef std::set<LightPtr, LightCompare> LightSet;
+  
   class RenderPass {
   private:
     CameraPtr _camera;
-    std::vector<LightPtr> _lights;
-    std::vector<ModelPtr> _models;
+    LightSet _lights;
+    ModelSet _models;
     
   public:
     RenderPass();
     ~RenderPass();
     
     void setCamera(CameraPtr &camera) {_camera = camera;}
-    void addLight(LightPtr &light) {_lights.push_back(light);}
-    void addModel(ModelPtr &model) {_models.push_back(model);}
+    void addLight(LightPtr &light) {_lights.insert(light);}
+    void addModel(ModelPtr &model) {_models.insert(model);}
     
     void render();
     void reset();

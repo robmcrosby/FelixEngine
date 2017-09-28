@@ -43,6 +43,9 @@ namespace fx {
     
     virtual void applyToTask(GraphicTask &task);
     
+    void setLayer(int layer) {_layer = layer;}
+    int layer() const {return _layer;}
+    
     void setMaterial(const std::string &name);
     void setMaterial(MaterialPtr &material) {_material = material;}
     MaterialPtr material() const {return _material;}

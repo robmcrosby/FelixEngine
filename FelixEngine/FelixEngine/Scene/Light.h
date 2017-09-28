@@ -29,6 +29,7 @@ namespace fx {
     Scene *_scene;
     
     LightPeramaters _peramaters;
+    int _layer;
     
   public:
     Light();
@@ -39,6 +40,9 @@ namespace fx {
     virtual void update(float dt);
     
     virtual void applyToTask(GraphicTask &task);
+    
+    void setLayer(int layer) {_layer = layer;}
+    int layer() const {return _layer;}
     
     LightPeramaters peramaters() const {return _peramaters;}
     

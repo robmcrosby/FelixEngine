@@ -13,7 +13,7 @@
 using namespace fx;
 using namespace std;
 
-Light::Light() {
+Light::Light(): _layer(0) {
   
 }
 
