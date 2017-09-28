@@ -26,7 +26,8 @@ bool Light::loadXML(const XMLTree::Node &node) {
 }
 
 void Light::update(float dt) {
-  
+  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
+    (*pass)->addLight(this);
 }
 
 void Light::applyToTask(GraphicTask &task) {

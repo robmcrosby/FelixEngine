@@ -22,39 +22,45 @@ namespace fx {
   typedef std::list<std::string> RenderScheme;
   
   struct ModelCompare {
-    bool operator()(const ModelPtr &lhs, const ModelPtr &rhs) {
+    bool operator()(Model *lhs, Model *rhs) {
       if (lhs->layer() != rhs->layer())
         return lhs->layer() < rhs->layer();
-      return lhs.get() < rhs.get();
+      return lhs < rhs;
     }
   };
-  typedef std::set<ModelPtr, ModelCompare> ModelSet;
+  typedef std::set<Model*, ModelCompare> ModelSet;
   
   struct LightCompare {
-    bool operator()(const LightPtr &lhs, const LightPtr &rhs) {
+    bool operator()(Light *lhs, Light *rhs) {
       if (lhs->layer() != rhs->layer())
         return lhs->layer() < rhs->layer();
-      return lhs.get() < rhs.get();
+      return lhs < rhs;
     }
   };
-  typedef std::set<LightPtr, LightCompare> LightSet;
+  typedef std::set<Light*, LightCompare> LightSet;
   
   class RenderPass {
   private:
-    CameraPtr _camera;
+    Camera *_camera;
     LightSet _lights;
     ModelSet _models;
+    
+    UniformsPtr _lightUniforms;
     
   public:
     RenderPass();
     ~RenderPass();
     
-    void setCamera(CameraPtr &camera) {_camera = camera;}
-    void addLight(LightPtr &light) {_lights.insert(light);}
-    void addModel(ModelPtr &model) {_models.insert(model);}
+    void setCamera(Camera *camera) {_camera = camera;}
+    void addLight(Light *light) {_lights.insert(light);}
+    void addModel(Model *model) {_models.insert(model);}
     
     void render();
     void reset();
+    
+  private:
+    GraphicTask getTemplateTask();
+    void updateLightUniforms();
     
   public:
     static RenderPassMap& getRenderPassMap();

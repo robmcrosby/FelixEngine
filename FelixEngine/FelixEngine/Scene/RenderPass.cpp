@@ -13,7 +13,8 @@ using namespace fx;
 using namespace std;
 
 RenderPass::RenderPass() {
-  
+  _camera = nullptr;
+  _lightUniforms = std::make_shared<UniformMap>();
 }
 
 RenderPass::~RenderPass() {
@@ -22,38 +23,49 @@ RenderPass::~RenderPass() {
 
 void RenderPass::render() {
   Graphics &graphics = Graphics::getInstance();
-  
+
   if (_models.size()) {
     auto model = _models.begin();
-    GraphicTask templateTask;
+    GraphicTask templateTask = getTemplateTask();
     
-    // Apply Camera and Lights to the Template Task
-    if (_camera)
-      templateTask = _camera->templateTask();
-    for (auto light = _lights.begin(); light != _lights.end(); ++light)
-      (*light)->applyToTask(templateTask);
+    // Update and assign light uniforms
+    updateLightUniforms();
     
+    // Get the template graphics task
+    templateTask.uniforms.push_back(_lightUniforms);
+
     // Apply Camera clear operations on the first task
     if (_camera) {
       GraphicTask task = templateTask;
       (*model)->applyToTask(task);
       _camera->applyToTask(task);
-      graphics.addTask(task);
+      //graphics.addTask(task);
       ++model;
     }
-    
+
     // Create tasks for the rest of the models
     while (model != _models.end()) {
       GraphicTask task = templateTask;
       (*model)->applyToTask(task);
-      graphics.addTask(task);
+      //graphics.addTask(task);
       ++model;
     }
   }
 }
 
+GraphicTask RenderPass::getTemplateTask() {
+  return _camera ? _camera->templateTask() : GraphicTask();
+}
+
+void RenderPass::updateLightUniforms() {
+  vector<LightPeramaters> lightPeramaters;
+  for (auto &light : _lights)
+    lightPeramaters.push_back(light->peramaters());
+  (*_lightUniforms)["lights"] = lightPeramaters;
+}
+
 void RenderPass::reset() {
-  _camera.reset();
+  _camera = nullptr;
   _lights.clear();
   _models.clear();
 }

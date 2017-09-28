@@ -33,7 +33,8 @@ bool Camera::loadXML(const XMLTree::Node &node) {
 }
 
 void Camera::update(float dt) {
-  
+  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
+    (*pass)->setCamera(this);
 }
 
 GraphicTask Camera::templateTask() {

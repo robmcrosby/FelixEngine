@@ -27,7 +27,8 @@ bool Model::loadXML(const XMLTree::Node &node) {
 }
 
 void Model::update(float dt) {
-  
+  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
+    (*pass)->addModel(this);
 }
 
 void Model::applyToTask(fx::GraphicTask &task) {
