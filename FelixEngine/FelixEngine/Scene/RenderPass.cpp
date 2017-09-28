@@ -39,7 +39,7 @@ void RenderPass::render() {
       GraphicTask task = templateTask;
       (*model)->applyToTask(task);
       _camera->applyToTask(task);
-      //graphics.addTask(task);
+      graphics.addTask(task);
       ++model;
     }
 
@@ -47,7 +47,7 @@ void RenderPass::render() {
     while (model != _models.end()) {
       GraphicTask task = templateTask;
       (*model)->applyToTask(task);
-      //graphics.addTask(task);
+      graphics.addTask(task);
       ++model;
     }
   }

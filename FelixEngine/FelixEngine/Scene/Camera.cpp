@@ -19,6 +19,8 @@ using namespace std;
 Camera::Camera() {
   _scene = nullptr;
   _frame = Graphics::getInstance().getMainWindowBuffer();
+  _uniforms = make_shared<UniformMap>();
+  (*_uniforms)["camera"] = _properties;
   
   _isClearingColor = false;
   _isClearingDepth = false;
@@ -33,17 +35,30 @@ bool Camera::loadXML(const XMLTree::Node &node) {
 }
 
 void Camera::update(float dt) {
+  (*_uniforms)["camera"] = _properties;
   for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
     (*pass)->setCamera(this);
 }
 
 GraphicTask Camera::templateTask() {
   GraphicTask task;
+  task.frame = _frame;
+  task.uniforms.push_back(_uniforms);
   return task;
 }
 
 void Camera::applyToTask(GraphicTask &task) {
+  // Set Clear Color
+  if (isClearingColor())
+    task.setClearColor(clearColor());
+  else
+    task.setDefaultColorActions();
   
+  // Set Clear Depth
+  if (isClearingDepth())
+    task.setClearDepthStencil(clearDepth());
+  else
+    task.setDefaultDepthStencilActions();
 }
 
 void Camera::addDepthBuffer() {

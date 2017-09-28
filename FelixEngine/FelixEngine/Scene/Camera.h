@@ -12,6 +12,7 @@
 #include "RenderItem.h"
 #include "Scene.h"
 #include "Graphics.h"
+#include "UniformMap.h"
 
 
 namespace fx {
@@ -26,10 +27,11 @@ namespace fx {
 
   
   class Camera: public RenderItem, public iObject {
-  private:
+  protected:
     Scene *_scene;
     
     CameraProperties _properties;
+    UniformsPtr _uniforms;
     
     FramePtr  _frame;
     ShaderPtr _shader;

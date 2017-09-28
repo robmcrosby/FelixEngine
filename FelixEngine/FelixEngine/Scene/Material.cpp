@@ -7,13 +7,15 @@
 //
 
 #include "Material.h"
+#include "GraphicTask.h"
 
 
 using namespace fx;
 using namespace std;
 
 Material::Material(): _scene(0) {
-  
+  _uniforms = make_shared<UniformMap>();
+  (*_uniforms)["material"] = _properties;
 }
 
 Material::~Material() {
@@ -25,7 +27,15 @@ bool Material::loadXML(const XMLTree::Node &node) {
 }
 
 void Material::update(float dt) {
-  
+  (*_uniforms)["material"] = _properties;
+}
+
+void Material::setToTask(GraphicTask &task) {
+  task.uniforms.push_back(_uniforms);
+  task.textures = _textures;
+  task.shader = _shader;
+  task.depthState = _depthState;
+  task.blendState = _blendState;
 }
 
 void Material::setShader(const string &name) {

@@ -142,7 +142,7 @@ void ExampleScene::update(float td) {
 }
 
 void ExampleScene::render() {
-  _graphics->addTask(_task);
+  //_graphics->addTask(_task);
   
  // _scene.render();
 }

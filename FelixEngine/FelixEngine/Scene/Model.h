@@ -14,10 +14,16 @@
 #include "Material.h"
 #include "Graphics.h"
 #include "Quaternion.h"
+#include "UniformMap.h"
 
 namespace fx {
   class Model;
   typedef std::shared_ptr<Model> ModelPtr;
+  
+  struct Transform {
+    mat4 model;
+    quat rotation;
+  };
   
   class Model: public RenderItem, public iObject {
   private:
@@ -25,10 +31,13 @@ namespace fx {
     
     MaterialPtr _material;
     VertexPtr   _mesh;
+    UniformsPtr _uniforms;
     
     vec3 _scale;
     quat _orientation;
     vec3 _position;
+    
+    Transform _transform;
     
     bool _hidden;
     int _layer;
@@ -98,7 +107,7 @@ namespace fx {
 //    quat rotation;
 //  };
 //  typedef std::vector<ModelData> InstanceModels;
-//  
+//
 //  class Model {
 //  protected:
 //    Scene *_scene;

@@ -13,6 +13,7 @@
 #include "Graphics.h"
 #include "GraphicStates.h"
 #include "TextureMap.h"
+#include "UniformMap.h"
 
 
 namespace fx {
@@ -35,6 +36,7 @@ namespace fx {
     
     TexturesPtr  _textures;
     ShaderPtr    _shader;
+    UniformsPtr  _uniforms;
     
     DepthState _depthState;
     BlendState _blendState;
@@ -46,6 +48,8 @@ namespace fx {
     virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
+    
+    virtual void setToTask(GraphicTask &task);
     
     void setShader(const std::string &name);
     void setShader(ShaderPtr &shader) {_shader = shader;}

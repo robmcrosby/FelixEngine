@@ -16,6 +16,8 @@ using namespace std;
 Model::Model(): _layer(0) {
   _scene = nullptr;
   _scale = vec3(1.0f, 1.0f, 1.0f);
+  _uniforms = make_shared<UniformMap>();
+  (*_uniforms)["model"] = _transform;
 }
 
 Model::~Model() {
@@ -27,12 +29,19 @@ bool Model::loadXML(const XMLTree::Node &node) {
 }
 
 void Model::update(float dt) {
+  _transform.model = mat4::Trans3d(_position) * _orientation.toMat4() * mat4::Scale(_scale);
+  _transform.rotation = _orientation;
+  (*_uniforms)["model"] = _transform;
   for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
     (*pass)->addModel(this);
 }
 
 void Model::applyToTask(fx::GraphicTask &task) {
+  task.uniforms.push_back(_uniforms);
+  task.mesh = _mesh;
   
+  if (_material)
+    _material->setToTask(task);
 }
 
 void Model::setMaterial(const std::string &name) {
