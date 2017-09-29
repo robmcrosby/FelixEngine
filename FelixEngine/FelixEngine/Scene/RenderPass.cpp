@@ -26,12 +26,14 @@ void RenderPass::render() {
 
   if (_models.size()) {
     auto model = _models.begin();
-    GraphicTask templateTask = getTemplateTask();
+    GraphicTask templateTask;
+    
+    // Setup the template
+    if (_camera)
+      _camera->setupTemplateTask(templateTask);
     
     // Update and assign light uniforms
     updateLightUniforms();
-    
-    // Get the template graphics task
     templateTask.uniforms.push_back(_lightUniforms);
 
     // Apply Camera clear operations on the first task
@@ -51,10 +53,6 @@ void RenderPass::render() {
       ++model;
     }
   }
-}
-
-GraphicTask RenderPass::getTemplateTask() {
-  return _camera ? _camera->templateTask() : GraphicTask();
 }
 
 void RenderPass::updateLightUniforms() {

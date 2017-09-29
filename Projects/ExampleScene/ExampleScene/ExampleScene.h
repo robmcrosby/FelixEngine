@@ -17,7 +17,6 @@
 
 class ExampleScene: public fx::Application {
   private:
-  fx::GraphicTask _task;
   fx::RenderScheme _renderScheme;
   
   fx::Scene _scene;
