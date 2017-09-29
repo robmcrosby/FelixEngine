@@ -23,26 +23,24 @@ Material::~Material() {
 }
 
 bool Material::loadXML(const XMLTree::Node &node) {
-  return true;
+  bool success = true;
   
-  //  bool success = true;
-  //
-  //  if (node.hasAttribute("shader"))
-  //    setShader(node.attribute("shader"));
-  //
-  //  for (auto subNode : node) {
-  //    if (subNode->element() == "Ambiant")
-  //      success &= setAmbiant(*subNode);
-  //    else if (subNode->element() == "Diffuse")
-  //      success &= setDiffuse(*subNode);
-  //    else if (subNode->element() == "Specular")
-  //      success &= setSpecular(*subNode);
-  //    else if (subNode->element() == "DepthState")
-  //      success &= _depthState.loadXml(*subNode);
-  //    else if (subNode->element() == "BlendState")
-  //      success &= _blendState.loadXml(*subNode);
-  //  }
-  //  return success;
+  if (node.hasAttribute("shader"))
+    setShader(node.attribute("shader"));
+  
+  for (auto subNode : node) {
+    if (subNode->element() == "Ambiant")
+      success &= setAmbiant(*subNode);
+    else if (subNode->element() == "Diffuse")
+      success &= setDiffuse(*subNode);
+    else if (subNode->element() == "Specular")
+      success &= setSpecular(*subNode);
+    else if (subNode->element() == "DepthState")
+      success &= _depthState.loadXml(*subNode);
+    else if (subNode->element() == "BlendState")
+      success &= _blendState.loadXml(*subNode);
+  }
+  return success;
 }
 
 void Material::update(float dt) {

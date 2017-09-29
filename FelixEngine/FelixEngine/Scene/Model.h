@@ -51,6 +51,10 @@ namespace fx {
     virtual void update(float dt);
     
     virtual void applyToTask(GraphicTask &task);
+    bool setTransform(const XMLTree::Node &node);
+    
+    void setHidden(bool hidden = true) {_hidden = hidden;}
+    bool hidden() const {return _hidden;}
     
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}

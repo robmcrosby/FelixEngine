@@ -25,25 +25,33 @@ Model::~Model() {
 }
 
 bool Model::loadXML(const XMLTree::Node &node) {
-  return true;
+  bool success = true;
   
-  //  bool success = true;
-  //
-  //  if (node.hasAttribute("mesh"))
-  //    setMesh(node.attribute("mesh"));
-  //  if (node.hasAttribute("material"))
-  //    setMaterial(node.attribute("material"));
-  //  if (node.hasAttribute("pass"))
-  //    _scene->renderPasses()[node.attribute("pass")].addModel(this);
-  //  if (node.hasAttribute("hidden"))
-  //    setHidden(node.attributeAsBoolean("hidden"));
-  //
-  //  for (auto subNode : node) {
-  //    if (*subNode == "Transform")
-  //      success &= setTransform(*subNode);
-  //    //TODO: add sub models, Meshes, Shaders, etc.
-  //  }
-  //  return success;
+  if (node.hasAttribute("mesh"))
+    setMesh(node.attribute("mesh"));
+  if (node.hasAttribute("material"))
+    setMaterial(node.attribute("material"));
+  if (node.hasAttribute("pass"))
+    addToRenderPass(node.attribute("pass"));
+  if (node.hasAttribute("hidden"))
+    setHidden(node.attributeAsBoolean("hidden"));
+  
+  for (auto subNode : node) {
+    if (*subNode == "Transform")
+      success &= setTransform(*subNode);
+    //TODO: add sub models, Meshes, Shaders, etc.
+  }
+  return success;
+}
+
+bool Model::setTransform(const XMLTree::Node &node) {
+  if (node.hasAttribute("position"))
+    setPosition(node.attribute("position"));
+  if (node.hasAttribute("orientation"))
+    setOrientation(node.attribute("orientation"));
+  if (node.hasAttribute("scale"))
+    setScale(node.attributeAsFloat("scale"));
+  return true;
 }
 
 void Model::update(float dt) {

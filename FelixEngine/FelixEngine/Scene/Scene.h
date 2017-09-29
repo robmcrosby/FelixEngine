@@ -42,6 +42,9 @@ namespace fx {
     Scene();
     ~Scene();
     
+    bool loadXMLFile(const std::string &file);
+    bool loadXML(const XMLTree::Node &node);
+    
     template <typename T, typename... Args>
     std::shared_ptr<T> make(const std::string &name, Args... args) {
       std::shared_ptr<T> item = std::make_shared<T>(args...);
