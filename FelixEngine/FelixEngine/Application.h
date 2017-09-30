@@ -29,7 +29,6 @@ namespace fx {
     
     virtual void initalize();
     virtual void update(float td);
-    virtual void render();
     
     virtual void willEnterBackground();
     virtual void willEnterForeground();

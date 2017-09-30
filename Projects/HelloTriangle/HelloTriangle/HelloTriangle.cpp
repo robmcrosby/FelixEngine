@@ -34,6 +34,6 @@ void HelloTriangle::initalize() {
   _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
 
-void HelloTriangle::render() {
+void HelloTriangle::update(float td) {
   _graphics->addTask(_task);
 }

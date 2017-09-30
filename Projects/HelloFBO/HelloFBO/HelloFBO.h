@@ -22,12 +22,12 @@ struct MVPUniform {
 class HelloFBO: public fx::Application {
 private:
   fx::GraphicTask _firstTask;
-  fx::UniformMap _firstUniformMap;
+  fx::UniformsPtr _firstUniformMap;
   MVPUniform _firstUniform;
   
   fx::GraphicTask _secondTask;
-  fx::UniformMap _secondUniformMap;
-  fx::TextureMap _secondTextureMap;
+  fx::UniformsPtr _secondUniformMap;
+  fx::TexturesPtr _secondTextureMap;
   MVPUniform _secondUniform;
   
 public:
@@ -35,8 +35,7 @@ public:
   virtual ~HelloFBO();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
   
 private:
   void setupFirstTask();

@@ -22,7 +22,7 @@ public:
   virtual ~HelloTriangle();
   
   virtual void initalize();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* HelloTriangle_h */

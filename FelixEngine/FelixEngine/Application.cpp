@@ -43,10 +43,6 @@ void Application::update(float td) {
   
 }
 
-void Application::render() {
-  
-}
-
 void Application::willEnterBackground() {
   
 }
@@ -63,7 +59,6 @@ void Application::processFrame(float td) {
   if (_graphics != nullptr) {
     _graphics->nextFrame();
     update(td);
-    render();
     _graphics->presentFrame();
   }
 }

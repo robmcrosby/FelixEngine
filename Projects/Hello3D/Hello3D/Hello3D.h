@@ -23,7 +23,7 @@ struct MVPUniform {
 class Hello3D: public fx::Application {
 private:
   fx::GraphicTask _task;
-  fx::UniformMap _uniformMap;
+  fx::UniformsPtr _uniformMap;
   MVPUniform _mvpUniform;
   
 public:
@@ -31,8 +31,7 @@ public:
   virtual ~Hello3D();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* Hello3D_h */

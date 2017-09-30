@@ -10,7 +10,9 @@
 
 
 HelloFBO::HelloFBO() {
-  printf("Create HelloFBO\n");
+  _firstUniformMap = std::make_shared<fx::UniformMap>();
+  _secondUniformMap = std::make_shared<fx::UniformMap>();
+  _secondTextureMap = std::make_shared<fx::TextureMap>();
 }
 
 HelloFBO::~HelloFBO() {
@@ -22,17 +24,15 @@ void HelloFBO::initalize() {
   setupSecondTask();
 }
 
-void HelloFBO::update() {
+void HelloFBO::update(float td) {
   // Rotate the Model
-  _firstUniform.rotation *= fx::quat::RotZ(0.02f);
+  _firstUniform.rotation *= fx::quat::RotZ(td);
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
   
   // Update the Model Uniforms
-  _firstUniformMap["MVP"] = _firstUniform;
-  _firstUniformMap.update();
-}
-
-void HelloFBO::render() {
+  (*_firstUniformMap)["MVP"] = _firstUniform;
+  _firstUniformMap->update();
+  
   _graphics->addTask(_firstTask);
   _graphics->addTask(_secondTask);
 }
@@ -59,8 +59,8 @@ void HelloFBO::setupFirstTask() {
   _firstUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _firstUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
-  _firstUniformMap["MVP"] = _firstUniform;
-  _firstTask.uniforms = &_firstUniformMap;
+  (*_firstUniformMap)["MVP"] = _firstUniform;
+  _firstTask.uniforms.push_back(_firstUniformMap);
   
   _firstTask.cullMode = fx::CULL_BACK;
   
@@ -95,8 +95,8 @@ void HelloFBO::setupSecondTask() {
   _secondTask.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
   _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
-  _secondTextureMap.addTexture(_firstTask.frame->getColorTexture(0));
-  _secondTask.textures = &_secondTextureMap;
+  _secondTextureMap->addTexture(_firstTask.frame->getColorTexture(0));
+  _secondTask.textures = _secondTextureMap;
   
   fx::vec2 size = fx::vec2(_secondTask.frame->size());
   float width = 2.0f;
@@ -104,8 +104,8 @@ void HelloFBO::setupSecondTask() {
   _secondUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _secondUniform.view = fx::mat4();
   _secondUniform.model = fx::mat4::Scale(fx::vec3(0.8f, 0.8f, 0.8f));
-  _secondUniformMap["MVP"] = _secondUniform;
-  _secondTask.uniforms = &_secondUniformMap;
+  (*_secondUniformMap)["MVP"] = _secondUniform;
+  _secondTask.uniforms.push_back(_secondUniformMap);
   
   _secondTask.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
 }
