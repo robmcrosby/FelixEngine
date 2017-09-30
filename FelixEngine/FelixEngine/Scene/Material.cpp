@@ -26,23 +26,28 @@ Material::~Material() {
 
 bool Material::loadXML(const XMLTree::Node &node) {
   bool success = true;
-  
   if (node.hasAttribute("shader"))
     setShader(node.attribute("shader"));
   
-  for (auto subNode : node) {
-    if (subNode->element() == "Ambiant")
-      success &= setAmbiant(*subNode);
-    else if (subNode->element() == "Diffuse")
-      success &= setDiffuse(*subNode);
-    else if (subNode->element() == "Specular")
-      success &= setSpecular(*subNode);
-    else if (subNode->element() == "DepthState")
-      success &= _depthState.loadXml(*subNode);
-    else if (subNode->element() == "BlendState")
-      success &= _blendState.loadXml(*subNode);
-  }
+  for (auto subNode : node)
+    success &= loadXMLItem(*subNode);
   return success;
+}
+
+bool Material::loadXMLItem(const XMLTree::Node &node) {
+  if (node == "Ambiant")
+    return setAmbiant(node);
+  if (node == "Diffuse")
+    return setDiffuse(node);
+  if (node == "Specular")
+    return setSpecular(node);
+  if (node == "DepthState")
+    return _depthState.loadXml(node);
+  if (node == "BlendState")
+    return _blendState.loadXml(node);
+  if (node == "Shader")
+    return setShader(node);
+  return false;
 }
 
 void Material::update(float dt) {
@@ -55,6 +60,11 @@ void Material::setToTask(GraphicTask &task) {
   task.shader = _shader;
   task.depthState = _depthState;
   task.blendState = _blendState;
+}
+
+bool Material::setShader(const XMLTree::Node &node) {
+  _shader = Graphics::getInstance().getShaderProgram(node.attribute("name"));
+  return _shader->loadXML(node);
 }
 
 void Material::setShader(const string &name) {

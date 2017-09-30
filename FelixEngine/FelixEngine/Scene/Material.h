@@ -53,6 +53,7 @@ namespace fx {
     
     virtual void setToTask(GraphicTask &task);
     
+    bool setShader(const XMLTree::Node &node);
     void setShader(const std::string &name);
     void setShader(ShaderPtr &shader) {_shader = shader;}
     ShaderPtr shader() {return _shader;}
@@ -85,7 +86,9 @@ namespace fx {
     vec3 specularColor() const {return _properties.specular.xyz();}
     float specularFactor() const {return _properties.specular.a;}
     float hardness() const {return _properties.factors.x;}
-
+    
+  private:
+    bool loadXMLItem(const XMLTree::Node &node);
   };
 }
 
