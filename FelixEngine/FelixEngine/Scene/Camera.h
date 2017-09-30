@@ -83,10 +83,12 @@ namespace fx {
       _properties.projection = mat4::Frustum(left, right, bottom, top, near, far);
     }
     
+    bool setFrame(const XMLTree::Node &node);
     void setFrame(const std::string &name);
     void setFrame(FramePtr &frame) {_frame = frame;}
     FramePtr frame() {return _frame;}
     
+    bool setShader(const XMLTree::Node &node);
     void setShader(const std::string &name);
     void setShader(ShaderPtr &shader) {_shader = shader;}
     ShaderPtr shader() {return _shader;}
@@ -100,7 +102,10 @@ namespace fx {
     void setClearDepth(float depth = 1.0f);
     float clearDepth() const {return _clearDepth;}
     bool isClearingDepth() const {return _isClearingDepth;}
-
+    
+  private:
+    bool loadXMLItem(const XMLTree::Node &node);
+    
   };
 }
 

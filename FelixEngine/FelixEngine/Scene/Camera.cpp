@@ -33,7 +33,31 @@ Camera::~Camera() {
 }
 
 bool Camera::loadXML(const XMLTree::Node &node) {
-  return true;
+  bool success = true;
+  if (node.hasAttribute("pass"))
+    addToRenderPass(node.attribute("pass"));
+  if (node.hasAttribute("frame"))
+    setFrame(node.attribute("frame"));
+  if (node.hasAttribute("shader"))
+    setShader(node.attribute("shader"));
+  
+  for (auto subnode : node)
+    success &= loadXMLItem(*subnode);
+  return success;
+}
+
+bool Camera::loadXMLItem(const XMLTree::Node &node) {
+  if (node == "Projection")
+    return setProjection(node);
+  if (node == "View")
+    return setView(node);
+  if (node == "Clear")
+    return setClearState(node);
+  if (node == "Frame")
+    return setFrame(node);
+  if (node == "Shader")
+    return setShader(node);
+  return false;
 }
 
 void Camera::update(float dt) {
@@ -98,8 +122,18 @@ bool Camera::setClearState(const XMLTree::Node &node) {
   return true;
 }
 
+bool Camera::setFrame(const XMLTree::Node &node) {
+  _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
+  return _frame->loadXML(node);
+}
+
 void Camera::setFrame(const string &name) {
   _frame = Graphics::getInstance().getFrameBuffer(name);
+}
+
+bool Camera::setShader(const XMLTree::Node &node) {
+  _shader = Graphics::getInstance().getShaderProgram(node.attribute("name"));
+  return _shader->loadXML(node);
 }
 
 void Camera::setShader(const string &name) {
