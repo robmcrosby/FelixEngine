@@ -61,10 +61,12 @@ namespace fx {
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
     
+    bool setMaterial(const XMLTree::Node &node);
     void setMaterial(const std::string &name);
     void setMaterial(MaterialPtr &material) {_material = material;}
     MaterialPtr material() const {return _material;}
     
+    bool setMesh(const XMLTree::Node &node);
     void setMesh(const std::string &name);
     void setMesh(VertexPtr &mesh) {_mesh = mesh;}
     VertexPtr mesh() const {return _mesh;}
@@ -78,6 +80,9 @@ namespace fx {
     
     void setPosition(const vec3 &position) {_position = position;}
     vec3 position() const {return _position;}
+    
+  private:
+    virtual bool loadXMLItem(const XMLTree::Node &node);
   };
 }
 
