@@ -123,7 +123,10 @@ bool Camera::setClearState(const XMLTree::Node &node) {
 }
 
 bool Camera::setFrame(const XMLTree::Node &node) {
-  _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
+  if (node.hasAttribute("window"))
+    _frame = Graphics::getInstance().getMainWindowBuffer();
+  else
+    _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
   return _frame->loadXML(node);
 }
 

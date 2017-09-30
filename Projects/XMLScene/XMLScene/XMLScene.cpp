@@ -22,13 +22,15 @@ XMLScene::~XMLScene() {
 void XMLScene::initalize() {
   _scene.loadXMLFile("Scene.xml");
   _model = _scene.get<fx::Model>("Model");
+  _renderScheme.push_back("MainPass");
 }
 
-void XMLScene::update() {
-  _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
-  //_model->update();
+void XMLScene::update(float td) {
+  _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
+  _scene.update(td);
   
-  //_scene.update();
+  fx::RenderPass::renderPasses(_renderScheme);
+  fx::RenderPass::resetPasses();
 }
 
 void XMLScene::render() {

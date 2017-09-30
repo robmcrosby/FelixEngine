@@ -14,9 +14,12 @@
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 
 class XMLScene: public fx::Application {
 private:
+  fx::RenderScheme _renderScheme;
+  
   fx::Scene _scene;
   fx::ModelPtr _model;
   
@@ -25,7 +28,7 @@ public:
   virtual ~XMLScene();
   
   virtual void initalize();
-  virtual void update();
+  virtual void update(float td);
   virtual void render();
 };
 

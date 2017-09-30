@@ -24,6 +24,9 @@ Light::~Light() {
 }
 
 bool Light::loadXML(const XMLTree::Node &node) {
+  if (node.hasAttribute("pass"))
+    addToRenderPass(node.attribute("pass"));
+  
   if (node.hasAttributes("color", "energy")) {
     vec3 color = node.attribute("color");
     float energy = node.attributeAsFloat("energy");
