@@ -24,7 +24,22 @@ Light::~Light() {
 }
 
 bool Light::loadXML(const XMLTree::Node &node) {
-  return true;
+  if (node.hasAttributes("color", "energy")) {
+    vec3 color = node.attribute("color");
+    float energy = node.attributeAsFloat("energy");
+    
+    if (node.hasAttribute("direction")) {
+      vec3 direction = node.attribute("direction");
+      setAsDirectionalLight(direction, color, energy);
+      return true;
+    }
+    if (node.hasAttribute("position")) {
+      vec3 position = node.attribute("position");
+      setAsPointLight(position, color, energy);
+      return true;
+    }
+  }
+  return false;
 }
 
 void Light::update(float dt) {
