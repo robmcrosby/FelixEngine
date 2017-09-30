@@ -34,6 +34,9 @@ bool Scene::loadXMLFile(const std::string &file) {
 
 bool Scene::loadXML(const XMLTree::Node &node) {
   bool success = true;
+  for (auto &subNode : node)
+    success &= loadObject(*subNode);
+  return success;
   
 //  for (auto subNode : node) {
 //    if (*subNode == "FrameBuffer") {
@@ -53,10 +56,26 @@ bool Scene::loadXML(const XMLTree::Node &node) {
 //    else
 //      success &= addModel(*subNode) || addCamera(*subNode);
 //  }
-  
-  return success;
 }
 
+bool Scene::loadObject(const XMLTree::Node &node) {
+  SharedObject obj = build(node);
+  return obj ? true : false;
+}
+
+SharedObject Scene::build(const std::string &type, const std::string &name) {
+  BuilderMap &builders = getBuilderMap();
+  if (builders.count(type))
+    return builders[type]->build(this, name);
+  return SharedObject();
+}
+
+SharedObject Scene::build(const XMLTree::Node &node) {
+  SharedObject obj = build(node.element(), node.attribute("name"));
+  if (obj)
+    obj->loadXML(node);
+  return obj;
+}
 
 void Scene::addObject(SharedObject &obj, const string &name) {
   obj->setScene(this);
@@ -84,4 +103,9 @@ void Scene::update(float td) {
     (*itr)->update(td);
     ++itr;
   }
+}
+
+BuilderMap& Scene::getBuilderMap() {
+  static BuilderMap instance;
+  return instance;
 }

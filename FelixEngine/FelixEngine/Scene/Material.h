@@ -17,8 +17,7 @@
 
 
 namespace fx {
-  class Material;
-  typedef std::shared_ptr<Material> MaterialPtr;
+  DEFINE_OBJ_BUILDER(Material)
   
   struct MaterialProperties {
     vec4 ambiant;
@@ -29,6 +28,9 @@ namespace fx {
 
   
   class Material: public iObject {
+  private:
+    static MaterialBuilder materialBuilder;
+    
   private:
     Scene *_scene;
     

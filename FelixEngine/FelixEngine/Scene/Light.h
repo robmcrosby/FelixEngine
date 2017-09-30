@@ -14,8 +14,7 @@
 #include "GraphicTask.h"
 
 namespace fx {
-  class Light;
-  typedef std::shared_ptr<Light> LightPtr;
+  DEFINE_OBJ_BUILDER(Light)
   
   struct LightPeramaters {
     vec4 position;
@@ -25,6 +24,9 @@ namespace fx {
   };
   
   class Light: public RenderItem, public iObject {
+  private:
+    static LightBuilder lightBuilder;
+    
   private:
     Scene *_scene;
     

@@ -13,6 +13,8 @@
 using namespace fx;
 using namespace std;
 
+LightBuilder Light::lightBuilder = LightBuilder();
+
 Light::Light(): _layer(0) {
   
 }

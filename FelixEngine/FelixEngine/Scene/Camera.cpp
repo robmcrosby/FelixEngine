@@ -16,6 +16,8 @@
 using namespace fx;
 using namespace std;
 
+CameraBuilder Camera::cameraBuilder = CameraBuilder();
+
 Camera::Camera() {
   _scene = nullptr;
   _frame = Graphics::getInstance().getMainWindowBuffer();

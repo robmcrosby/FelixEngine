@@ -21,16 +21,16 @@ XMLScene::~XMLScene() {
 
 void XMLScene::initalize() {
   _scene.loadXMLFile("Scene.xml");
-  _model = _scene.getModel("Model");
+  _model = _scene.get<fx::Model>("Model");
 }
 
 void XMLScene::update() {
   _model->setOrientation(_model->orientation() * fx::quat::RotZ(0.02f));
-  _model->update();
+  //_model->update();
   
-  _scene.update();
+  //_scene.update();
 }
 
 void XMLScene::render() {
-  _scene.render();
+  //_scene.render();
 }

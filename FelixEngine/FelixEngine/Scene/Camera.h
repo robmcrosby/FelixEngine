@@ -16,8 +16,7 @@
 
 
 namespace fx {
-  class Camera;
-  typedef std::shared_ptr<Camera> CameraPtr;
+  DEFINE_OBJ_BUILDER(Camera)
   
   struct CameraProperties {
     mat4 projection;
@@ -27,6 +26,9 @@ namespace fx {
 
   
   class Camera: public RenderItem, public iObject {
+  private:
+    static CameraBuilder cameraBuilder;
+    
   protected:
     Scene *_scene;
     

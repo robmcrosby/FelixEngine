@@ -17,8 +17,7 @@
 #include "UniformMap.h"
 
 namespace fx {
-  class Model;
-  typedef std::shared_ptr<Model> ModelPtr;
+  DEFINE_OBJ_BUILDER(Model)
   
   struct Transform {
     mat4 model;
@@ -26,6 +25,9 @@ namespace fx {
   };
   
   class Model: public RenderItem, public iObject {
+  private:
+    static ModelBuilder modelBuilder;
+    
   private:
     Scene *_scene;
     

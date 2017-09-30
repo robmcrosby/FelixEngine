@@ -13,6 +13,9 @@
 using namespace fx;
 using namespace std;
 
+
+ModelBuilder Model::modelBuilder = ModelBuilder();
+
 Model::Model(): _layer(0) {
   _scene = nullptr;
   _scale = vec3(1.0f, 1.0f, 1.0f);
