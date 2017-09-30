@@ -11,11 +11,11 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Scene.h>
-#import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 
 class ARTracker: public fx::Application {
 private:
+  fx::RenderScheme _renderScheme;
   fx::Scene _scene;
   
 public:
@@ -23,8 +23,7 @@ public:
   virtual ~ARTracker();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* ARTracker_h */

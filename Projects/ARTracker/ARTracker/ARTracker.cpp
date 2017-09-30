@@ -13,7 +13,7 @@
 
 
 ARTracker::ARTracker() {
-  printf("Create ARTracker\n");
+  
 }
 
 ARTracker::~ARTracker() {
@@ -22,12 +22,12 @@ ARTracker::~ARTracker() {
 
 void ARTracker::initalize() {
   _scene.loadXMLFile("Scene.xml");
+  _renderScheme.push_back("MainPass");
 }
 
-void ARTracker::update() {
-  _scene.update();
-}
-
-void ARTracker::render() {
-  _scene.render();
+void ARTracker::update(float td) {
+  _scene.update(td);
+  
+  fx::RenderPass::renderPasses(_renderScheme);
+  fx::RenderPass::resetPasses();
 }
