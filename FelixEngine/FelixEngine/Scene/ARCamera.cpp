@@ -36,11 +36,18 @@ void ARCamera::setupPreDraw() {
     1.0f,  1.0f, 0.0f, 1.0f
   };
   
+//  float uvBuffer[] = {
+//    0.0f, 1.0f,
+//    0.0f, 0.0f,
+//    1.0f, 1.0f,
+//    1.0f, 0.0f
+//  };
+  
   float uvBuffer[] = {
-    0.0f, 1.0f,
-    0.0f, 0.0f,
     1.0f, 1.0f,
-    1.0f, 0.0f
+    0.0f, 1.0f,
+    1.0f, 0.0f,
+    0.0f, 0.0f
   };
   
   Graphics &graphics = Graphics::getInstance();
