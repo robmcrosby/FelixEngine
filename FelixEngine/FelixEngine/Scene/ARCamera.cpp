@@ -36,18 +36,11 @@ void ARCamera::setupPreDraw() {
     1.0f,  1.0f, 0.0f, 1.0f
   };
   
-//  float uvBuffer[] = {
-//    0.0f, 1.0f,
-//    0.0f, 0.0f,
-//    1.0f, 1.0f,
-//    1.0f, 0.0f
-//  };
-  
   float uvBuffer[] = {
-    1.0f, 1.0f,
     0.0f, 1.0f,
-    1.0f, 0.0f,
-    0.0f, 0.0f
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
   };
   
   Graphics &graphics = Graphics::getInstance();
@@ -66,10 +59,8 @@ void ARCamera::setupPreDraw() {
   _task.textures->addTexture(_imageCbCr);
   _task.setClearDepthStencil();
   
-  fx::UniformsPtr uniforms = make_shared<UniformMap>();
-  (*uniforms)["Transform"] = _imageTransform;
-  uniforms->update();
-  _task.uniforms.push_back(uniforms);
+  (*_uniformMap)["Transform"] = _imageTransform;
+  _task.uniforms.push_back(_uniformMap);
   
   _task.colorActions[0].loadAction = LOAD_NONE;
 }
