@@ -127,7 +127,6 @@ mat4 ARKitTracker::getCameraProjection() {
 }
 
 mat4 ARKitTracker::getImageTransform() {
-  //return _imageTransform;
   mat4 transform;
   ARFrame *frame = _arSession.currentFrame;
   if (frame != nil) {
@@ -154,18 +153,18 @@ TexturePtr ARKitTracker::getCameraImageCbCr() {
 
 bool ARKitTracker::drawLiveCamera() {
   bool draw = _cameraImageY && _cameraImageY->loaded() && _cameraImageCbCr && _cameraImageCbCr->loaded();
-  if (draw)
+  if (draw) {
+    vector<vec4> vertices;
+    calculateVertices(vertices);
+    _task.mesh->setVertexBuffer("Vertices", vertices);
     _graphics->addTask(_task);
+  }
   return draw;
 }
 
 void ARKitTracker::setupLiveCamera() {
-  float vertices[] = {
-    -1.0f, -1.0f, 0.0f, 1.0f,
-    -1.0f,  1.0f, 0.0f, 0.0f,
-     1.0f, -1.0f, 1.0f, 1.0f,
-     1.0f,  1.0f, 1.0f, 0.0f
-  };
+  vector<vec4> vertices;
+  calculateVertices(vertices);
   
   _task.frame = _graphics->getMainWindowBuffer();
   
@@ -173,7 +172,7 @@ void ARKitTracker::setupLiveCamera() {
   _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->addVertexBuffer("Vertices", 4, 4, vertices);
+  _task.mesh->setVertexBuffer("Vertices", vertices);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
   _task.textures = make_shared<TextureMap>();
@@ -276,11 +275,35 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
 }
 
 void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
-  for (auto tracked : _trackedPlanes) {
+  for (auto &tracked : _trackedPlanes) {
     if (tracked.uuid == plane.uuid) {
       tracked = plane;
       return;
     }
   }
   _trackedPlanes.push_back(plane);
+}
+
+void ARKitTracker::calculateVertices(vector<vec4> &vertices) {
+  // Add the Vertices
+  vertices.clear();
+  vertices.push_back(vec4(-1.0f, -1.0f, 0.0f, 1.0f));
+  vertices.push_back(vec4(-1.0f,  1.0f, 0.0f, 0.0f));
+  vertices.push_back(vec4(1.0f, -1.0f, 1.0f, 1.0f));
+  vertices.push_back(vec4(1.0f,  1.0f, 1.0f, 0.0f));
+  
+  ARFrame *frame = _arSession.currentFrame;
+  if (frame != nil) {
+    // Get the Image Correction Transform
+    CGSize viewport = CGSizeMake(_task.frame->size().x, _task.frame->size().y);
+    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
+    affine = CGAffineTransformInvert(affine);
+    
+    // Transform the UVs of the Vertices
+    for (auto &vertex : vertices) {
+      CGPoint coord = CGPointApplyAffineTransform(CGPointMake(vertex.z, vertex.w), affine);
+      vertex.z = coord.x;
+      vertex.w = coord.y;
+    }
+  }
 }

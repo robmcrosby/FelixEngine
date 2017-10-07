@@ -70,6 +70,7 @@ namespace fx {
     
   private:
     void updateTrackedPlane(const TrackedPlane &plane);
+    void calculateVertices(std::vector<vec4> &vertices);
   };
   
 }

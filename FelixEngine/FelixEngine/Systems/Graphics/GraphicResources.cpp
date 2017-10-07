@@ -35,6 +35,18 @@ bool VertexMesh::loadXML(const XMLTree::Node &node) {
   return false;
 }
 
+bool VertexMesh::setVertexBuffer(const string &name, const vector<float> &buffer) {
+  return setVertexBuffer(name, 1, buffer.size(), &buffer.at(0));
+}
+
+bool VertexMesh::setVertexBuffer(const string &name, const vector<vec2> &buffer) {
+  return setVertexBuffer(name, 2, buffer.size(), &buffer.at(0).x);
+}
+
+bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer) {
+  return setVertexBuffer(name, 4, buffer.size(), &buffer.at(0).x);
+}
+
 bool FrameBuffer::loadXML(const XMLTree::Node &node) {
   bool success = true;
   //if (node.hasAttribute("window"))

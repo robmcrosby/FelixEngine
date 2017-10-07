@@ -38,8 +38,8 @@ void HelloTexture::initalize() {
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->addVertexBuffer("Position", 4, 4, vertexBuffer);
-  _task.mesh->addVertexBuffer("UV", 2, 4, uvBuffer);
+  _task.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);
+  _task.mesh->setVertexBuffer("UV", 2, 4, uvBuffer);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
   fx::ImageBufferData image;
