@@ -67,8 +67,11 @@ void Model::update(float dt) {
   _transform.model = mat4::Trans3d(_position) * _orientation.toMat4() * mat4::Scale(_scale);
   _transform.rotation = _orientation;
   (*_uniforms)["model"] = _transform;
-  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
-    (*pass)->addModel(this);
+  
+  if (!_hidden) {
+    for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
+      (*pass)->addModel(this);
+  }
 }
 
 void Model::applyToTask(fx::GraphicTask &task) {

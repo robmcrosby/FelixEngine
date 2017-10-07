@@ -11,23 +11,23 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Scene.h>
-#import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/Model.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/TrackerSystem.h>
 
 class ARPlaneDetect: public fx::Application, public fx::TrackerDelegate {
 private:
+  fx::RenderScheme _renderScheme;
   fx::Scene _scene;
-  fx::Model *_model;
-  fx::Model *_plane;
+  fx::ModelPtr _model;
+  fx::ModelPtr _plane;
   
 public:
   ARPlaneDetect();
   virtual ~ARPlaneDetect();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
   
   virtual void trackedPlaneAdded(fx::TrackedPlane plane);
   virtual void trackedPlaneUpdated(fx::TrackedPlane plane);
