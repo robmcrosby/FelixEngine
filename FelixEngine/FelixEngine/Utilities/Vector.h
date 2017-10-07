@@ -402,6 +402,8 @@ namespace fx
   
   typedef Vector4<unsigned char> RGBA;
   typedef Vector4<float> RGBAf;
+  
+  typedef Vector2<unsigned int> Range;
 }
 
 #endif /* Vector_h */

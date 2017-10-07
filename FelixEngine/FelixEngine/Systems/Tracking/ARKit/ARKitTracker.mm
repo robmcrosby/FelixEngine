@@ -82,6 +82,8 @@ ARKitTracker::ARKitTracker() {
   
   _arSession = [ARSession new];
   [_arSession setDelegate:_arDelegate];
+  
+  _uniformMap = make_shared<UniformMap>();
 }
 
 ARKitTracker::~ARKitTracker() {
@@ -102,6 +104,8 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
   configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
   [_arSession runWithConfiguration: configuration];
+  
+  setupLiveCamera();
   
   return true;
 }
@@ -146,6 +150,40 @@ TexturePtr ARKitTracker::getCameraImageY() {
 
 TexturePtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
+}
+
+bool ARKitTracker::drawLiveCamera() {
+  bool draw = _cameraImageY && _cameraImageY->loaded() && _cameraImageCbCr && _cameraImageCbCr->loaded();
+  if (draw)
+    _graphics->addTask(_task);
+  return draw;
+}
+
+void ARKitTracker::setupLiveCamera() {
+  float vertices[] = {
+    -1.0f, -1.0f, 0.0f, 1.0f,
+    -1.0f,  1.0f, 0.0f, 0.0f,
+     1.0f, -1.0f, 1.0f, 1.0f,
+     1.0f,  1.0f, 1.0f, 0.0f
+  };
+  
+  _task.frame = _graphics->getMainWindowBuffer();
+  
+  _task.shader = _graphics->createShaderProgram();
+  _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");
+  
+  _task.mesh = _graphics->createVertexMesh();
+  _task.mesh->addVertexBuffer("Vertices", 4, 4, vertices);
+  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  
+  _task.textures = make_shared<TextureMap>();
+  _task.textures->addTexture(_cameraImageY);
+  _task.textures->addTexture(_cameraImageCbCr);
+  _task.setClearDepthStencil();
+  
+  _task.uniforms.push_back(_uniformMap);
+  
+  _task.colorActions[0].loadAction = LOAD_NONE;
 }
 
 const TrackedPlanes& ARKitTracker::trackedPlanes() const {

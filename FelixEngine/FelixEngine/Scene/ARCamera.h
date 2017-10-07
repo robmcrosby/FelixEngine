@@ -16,20 +16,8 @@ namespace fx {
   DEFINE_OBJ_BUILDER(ARCamera)
   
   class ARCamera: public Camera {
-  private:
+  protected:
     static ARCameraBuilder arCameraBuilder;
-    
-  private:
-    GraphicTask _task;
-    TexturePtr _imageY;
-    TexturePtr _imageCbCr;
-    
-    mat4 _imageTransform;
-    UniformsPtr _uniformMap;
-    
-  private:
-    void setupPreDraw();
-    bool cameraImagesReady();
     
   public:
     ARCamera();
