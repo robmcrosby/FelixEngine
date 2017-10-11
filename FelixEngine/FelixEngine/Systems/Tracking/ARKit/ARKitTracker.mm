@@ -143,11 +143,11 @@ mat4 ARKitTracker::getImageTransform() {
   return transform;
 }
 
-TexturePtr ARKitTracker::getCameraImageY() {
+TextureBufferPtr ARKitTracker::getCameraImageY() {
   return _cameraImageY;
 }
 
-TexturePtr ARKitTracker::getCameraImageCbCr() {
+TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
 

@@ -31,9 +31,9 @@ namespace fx {
   private:
     Scene *_scene;
     
-    MaterialPtr _material;
-    VertexPtr   _mesh;
-    UniformsPtr _uniforms;
+    MaterialPtr   _material;
+    VertexMeshPtr _mesh;
+    UniformsPtr   _uniforms;
     
     vec3 _scale;
     quat _orientation;
@@ -68,8 +68,8 @@ namespace fx {
     
     bool setMesh(const XMLTree::Node &node);
     void setMesh(const std::string &name);
-    void setMesh(VertexPtr &mesh) {_mesh = mesh;}
-    VertexPtr mesh() const {return _mesh;}
+    void setMesh(VertexMeshPtr &mesh) {_mesh = mesh;}
+    VertexMeshPtr mesh() const {return _mesh;}
     
     void setScale(float scale) {_scale = vec3(scale, scale, scale);}
     void setScale(const vec3 &scale) {_scale = scale;}

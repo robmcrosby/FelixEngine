@@ -32,12 +32,12 @@ namespace fx {
     bool initalize(UIView *view);
     //bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
-    virtual FramePtr   getMainWindowBuffer();
-    virtual FramePtr   createFrameBuffer();
-    virtual ShaderPtr  createShaderProgram();
-    virtual VertexPtr  createVertexMesh();
-    virtual UniformPtr createUniformBuffer();
-    virtual TexturePtr createTextureBuffer();
+    virtual FrameBufferPtr   getMainWindowBuffer();
+    virtual FrameBufferPtr   createFrameBuffer();
+    virtual ShaderProgramPtr createShaderProgram();
+    virtual VertexMeshPtr    createVertexMesh();
+    virtual UniformBufferPtr createUniformBuffer();
+    virtual TextureBufferPtr createTextureBuffer();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);

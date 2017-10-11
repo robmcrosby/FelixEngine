@@ -23,11 +23,11 @@ namespace fx {
   class UniformBuffer;
   class TextureBuffer;
   
-  typedef std::shared_ptr<FrameBuffer>   FramePtr;
-  typedef std::shared_ptr<ShaderProgram> ShaderPtr;
-  typedef std::shared_ptr<VertexMesh>    VertexPtr;
-  typedef std::shared_ptr<UniformBuffer> UniformPtr;
-  typedef std::shared_ptr<TextureBuffer> TexturePtr;
+  typedef std::shared_ptr<FrameBuffer>   FrameBufferPtr;
+  typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
+  typedef std::shared_ptr<VertexMesh>    VertexMeshPtr;
+  typedef std::shared_ptr<UniformBuffer> UniformBufferPtr;
+  typedef std::shared_ptr<TextureBuffer> TextureBufferPtr;
   
   /** File System */
   class Graphics {
@@ -47,19 +47,19 @@ namespace fx {
   public:
     virtual ~Graphics() {}
     
-    virtual FramePtr   getMainWindowBuffer() = 0;
-    virtual FramePtr   createFrameBuffer()   = 0;
-    virtual ShaderPtr  createShaderProgram() = 0;
-    virtual VertexPtr  createVertexMesh()    = 0;
-    virtual UniformPtr createUniformBuffer() = 0;
-    virtual TexturePtr createTextureBuffer() = 0;
+    virtual FrameBufferPtr   getMainWindowBuffer() = 0;
+    virtual FrameBufferPtr   createFrameBuffer()   = 0;
+    virtual ShaderProgramPtr createShaderProgram() = 0;
+    virtual VertexMeshPtr    createVertexMesh()    = 0;
+    virtual UniformBufferPtr createUniformBuffer() = 0;
+    virtual TextureBufferPtr createTextureBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;
     virtual void presentFrame() = 0;
     
-    FramePtr getFrameBuffer(const std::string &name) {
-      FramePtr frame = frameMap[name].lock();
+    FrameBufferPtr getFrameBuffer(const std::string &name) {
+      FrameBufferPtr frame = frameMap[name].lock();
       if (!frame) {
         frame = createFrameBuffer();
         frameMap[name] = frame;
@@ -67,8 +67,8 @@ namespace fx {
       return frame;
     }
     
-    ShaderPtr  getShaderProgram(const std::string &name) {
-      ShaderPtr shader = shaderMap[name].lock();
+    ShaderProgramPtr  getShaderProgram(const std::string &name) {
+      ShaderProgramPtr shader = shaderMap[name].lock();
       if (!shader) {
         shader = createShaderProgram();
         shaderMap[name] = shader;
@@ -76,8 +76,8 @@ namespace fx {
       return shader;
     }
     
-    VertexPtr  getVertexMesh(const std::string &name) {
-      VertexPtr mesh = vertexMap[name].lock();
+    VertexMeshPtr  getVertexMesh(const std::string &name) {
+      VertexMeshPtr mesh = vertexMap[name].lock();
       if (!mesh) {
         mesh = createVertexMesh();
         vertexMap[name] = mesh;
@@ -85,8 +85,8 @@ namespace fx {
       return mesh;
     }
     
-    UniformPtr getUniformBuffer(const std::string &name) {
-      UniformPtr uniform = uniformMap[name].lock();
+    UniformBufferPtr getUniformBuffer(const std::string &name) {
+      UniformBufferPtr uniform = uniformMap[name].lock();
       if (!uniform) {
         uniform = createUniformBuffer();
         uniformMap[name] = uniform;
@@ -94,8 +94,8 @@ namespace fx {
       return uniform;
     }
     
-    TexturePtr getTextureBuffer(const std::string &name) {
-      TexturePtr texture = textureMap[name].lock();
+    TextureBufferPtr getTextureBuffer(const std::string &name) {
+      TextureBufferPtr texture = textureMap[name].lock();
       if (!texture) {
         texture = createTextureBuffer();
         textureMap[name] = texture;

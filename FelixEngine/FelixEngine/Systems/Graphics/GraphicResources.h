@@ -97,7 +97,7 @@ namespace fx {
     virtual bool addDepthBuffer() = 0;
     virtual bool addColorTexture() = 0;
     
-    virtual TexturePtr getColorTexture(int index) = 0;
+    virtual TextureBufferPtr getColorTexture(int index) = 0;
   };
 }
 

@@ -71,7 +71,7 @@ void Material::setShader(const string &name) {
   _shader = Graphics::getInstance().getShaderProgram(name);
 }
 
-void Material::addTexture(TexturePtr &texture, SamplerState sampler) {
+void Material::addTexture(TextureBufferPtr &texture, SamplerState sampler) {
   _textures->addTexture(texture, sampler);
 }
 

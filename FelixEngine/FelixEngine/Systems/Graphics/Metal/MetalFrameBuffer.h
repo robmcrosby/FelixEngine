@@ -51,7 +51,7 @@ namespace fx {
     virtual bool addDepthBuffer();
     virtual bool addColorTexture();
     
-    virtual TexturePtr getColorTexture(int index);
+    virtual TextureBufferPtr getColorTexture(int index);
     
     void setMetalLayer(CAMetalLayer *layer);
     void present(id <MTLCommandBuffer> buffer);

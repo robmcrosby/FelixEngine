@@ -65,8 +65,8 @@ namespace fx {
     virtual mat4 getCameraProjection() = 0;
     virtual mat4 getImageTransform() = 0;
     
-    virtual TexturePtr getCameraImageY() = 0;
-    virtual TexturePtr getCameraImageCbCr() = 0;
+    virtual TextureBufferPtr getCameraImageY() = 0;
+    virtual TextureBufferPtr getCameraImageCbCr() = 0;
     
     virtual bool drawLiveCamera() = 0;
     

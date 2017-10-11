@@ -47,13 +47,13 @@ void ExampleScene::initalize() {
   lightC->addToRenderPass("MainPass");
   
   // Load the Shader
-  fx::ShaderPtr shader = _graphics->createShaderProgram();
+  fx::ShaderProgramPtr shader = _graphics->createShaderProgram();
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   // Load the Bunny Mesh
   fx::VertexMeshData meshData;
   fx::FileSystem::loadMesh(meshData, "bunny.mesh");
-  fx::VertexPtr mesh = _graphics->createVertexMesh();
+  fx::VertexMeshPtr mesh = _graphics->createVertexMesh();
   mesh->load(meshData);
   
   // Setup the Material

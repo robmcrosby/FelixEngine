@@ -35,8 +35,8 @@ namespace fx {
     CameraProperties _properties;
     UniformsPtr _uniforms;
     
-    FramePtr  _frame;
-    ShaderPtr _shader;
+    FrameBufferPtr  _frame;
+    ShaderProgramPtr _shader;
     
     bool _isClearingColor;
     vec4 _clearColor;
@@ -85,13 +85,13 @@ namespace fx {
     
     bool setFrame(const XMLTree::Node &node);
     void setFrame(const std::string &name);
-    void setFrame(FramePtr &frame) {_frame = frame;}
-    FramePtr frame() {return _frame;}
+    void setFrame(FrameBufferPtr &frame) {_frame = frame;}
+    FrameBufferPtr frame() {return _frame;}
     
     bool setShader(const XMLTree::Node &node);
     void setShader(const std::string &name);
-    void setShader(ShaderPtr &shader) {_shader = shader;}
-    ShaderPtr shader() {return _shader;}
+    void setShader(ShaderProgramPtr &shader) {_shader = shader;}
+    ShaderProgramPtr shader() {return _shader;}
     
     bool setClearState(const XMLTree::Node &node);
     

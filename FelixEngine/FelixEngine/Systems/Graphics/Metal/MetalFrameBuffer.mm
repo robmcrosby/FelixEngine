@@ -123,7 +123,7 @@ bool MetalFrameBuffer::addColorTexture() {
   return _colorAttachments.back() != nil;
 }
 
-TexturePtr MetalFrameBuffer::getColorTexture(int index) {
+TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
   return make_shared<MetalTextureBuffer>(_device, _colorAttachments.at(index)); //new MetalTextureBuffer(_device, _colorAttachments.at(index));
 }
 

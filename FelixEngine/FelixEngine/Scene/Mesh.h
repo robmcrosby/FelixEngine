@@ -20,7 +20,7 @@ namespace fx {
     static MeshBuilder meshBuilder;
     
   protected:
-    VertexPtr _mesh;
+    VertexMeshPtr _mesh;
     
   public:
     Mesh();

@@ -108,7 +108,7 @@ bool MetalGraphics::initalize(UIView *view) {
 //  return true;
 //}
 
-FramePtr MetalGraphics::getMainWindowBuffer() {
+FrameBufferPtr MetalGraphics::getMainWindowBuffer() {
   if (!_windowBuffer) {
     _windowBuffer = make_shared<MetalFrameBuffer>(_data->device);
     _windowBuffer->setMetalLayer(_data->metalLayer);
@@ -116,27 +116,27 @@ FramePtr MetalGraphics::getMainWindowBuffer() {
   return _windowBuffer;
 }
 
-FramePtr MetalGraphics::createFrameBuffer() {
+FrameBufferPtr MetalGraphics::createFrameBuffer() {
   shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device);
   return frame;
 }
 
-ShaderPtr MetalGraphics::createShaderProgram() {
+ShaderProgramPtr MetalGraphics::createShaderProgram() {
   shared_ptr<MetalShaderProgram> shader = make_shared<MetalShaderProgram>(_data->device);
   return shader;
 }
 
-VertexPtr MetalGraphics::createVertexMesh() {
+VertexMeshPtr MetalGraphics::createVertexMesh() {
   shared_ptr<MetalVertexMesh> mesh = make_shared<MetalVertexMesh>(_data->device);
   return mesh;
 }
 
-UniformPtr MetalGraphics::createUniformBuffer() {
+UniformBufferPtr MetalGraphics::createUniformBuffer() {
   shared_ptr<MetalUniformBuffer> buffer = make_shared<MetalUniformBuffer>(_data->device);
   return buffer;
 }
 
-TexturePtr MetalGraphics::createTextureBuffer() {
+TextureBufferPtr MetalGraphics::createTextureBuffer() {
   shared_ptr<MetalTextureBuffer> texture = make_shared<MetalTextureBuffer>(_data->device);
   return texture;
 }
