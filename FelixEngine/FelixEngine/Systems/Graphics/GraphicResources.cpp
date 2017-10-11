@@ -25,7 +25,7 @@ bool VertexMesh::loadXML(const XMLTree::Node &node) {
   VertexMeshData meshData;
   
   if (node.hasAttribute("file")) {
-    if (fx::FileSystem::loadMesh(meshData, node.attribute("file")))
+    if (FileSystem::loadMesh(meshData, node.attribute("file")))
       return load(meshData);
   }
   else {
@@ -46,6 +46,18 @@ bool VertexMesh::setVertexBuffer(const string &name, const vector<vec2> &buffer)
 bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer) {
   return setVertexBuffer(name, 4, buffer.size(), &buffer.at(0).x);
 }
+
+
+bool TextureBuffer::loadXML(const XMLTree::Node &node) {
+  ImageBufferData image;
+  
+  if (node.hasAttribute("file")) {
+    if (FileSystem::loadImage(image, node.attribute("file")))
+      return load(image);
+  }
+  return false;
+}
+
 
 bool FrameBuffer::loadXML(const XMLTree::Node &node) {
   bool success = true;

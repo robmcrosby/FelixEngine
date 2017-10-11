@@ -80,6 +80,7 @@ namespace fx {
   struct TextureBuffer {
     virtual ~TextureBuffer() {}
     
+    virtual bool loadXML(const XMLTree::Node &node);
     virtual bool load(const ImageBufferData &data) = 0;
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;
