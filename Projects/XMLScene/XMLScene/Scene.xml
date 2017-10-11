@@ -11,8 +11,8 @@
   <Light name="LightA" direction="-1.0, -1.0, 0.0" color="0.8, 0.9, 1.0" energy="0.8" pass="MainPass"/>
   <Light name="LightB" position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4" pass="MainPass"/>
   <Light name="LightC" position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0" pass="MainPass"/>
-  <Model name="Model" material="Material" pass="MainPass">
-    <Mesh name="Mesh" file="bunny.mesh"/>
+  <Mesh name="Mesh" file="bunny.mesh"/>
+  <Model name="Model" material="Material" pass="MainPass" mesh="Mesh">
     <Transform scale="0.2" orientation="0.5, -0.5, 0.5, 0.5"/>
     <Material name="Material">
       <Shader name="Shader" vertexFunction="basic_vertex" fragmentFunction="basic_fragment"/>

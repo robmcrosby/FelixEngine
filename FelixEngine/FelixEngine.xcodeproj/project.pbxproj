@@ -46,6 +46,8 @@
 		C142C0B11F77601D00B45750 /* Light.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0AF1F77601D00B45750 /* Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C142C0B31F7B152100B45750 /* RenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0B21F7B152100B45750 /* RenderItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0B41F7B163B00B45750 /* RenderItem.cpp */; };
+		C142C0E11F8DA07200B45750 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0DF1F8DA07000B45750 /* Mesh.cpp */; };
+		C142C0E21F8DA07200B45750 /* Mesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0E01F8DA07000B45750 /* Mesh.h */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -123,6 +125,8 @@
 		C142C0AF1F77601D00B45750 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
 		C142C0B21F7B152100B45750 /* RenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderItem.h; sourceTree = "<group>"; };
 		C142C0B41F7B163B00B45750 /* RenderItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RenderItem.cpp; sourceTree = "<group>"; };
+		C142C0DF1F8DA07000B45750 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		C142C0E01F8DA07000B45750 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -281,6 +285,15 @@
 			name = MetalGraphics;
 			sourceTree = "<group>";
 		};
+		C142C0DE1F8D9FEB00B45750 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C142C0E01F8DA07000B45750 /* Mesh.h */,
+				C142C0DF1F8DA07000B45750 /* Mesh.cpp */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		C1443AE91EF344830059BA9D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,6 +384,7 @@
 		C1CC9D1B1F11144C00A938D0 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				C142C0DE1F8D9FEB00B45750 /* Resources */,
 				C1A5E3851F3659740071D515 /* Cameras */,
 				C1A5E3841F36596D0071D515 /* Models */,
 				C1E60EAA1F0F08370021F704 /* Material.h */,
@@ -401,6 +415,7 @@
 				C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */,
 				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
+				C142C0E21F8DA07200B45750 /* Mesh.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
@@ -519,6 +534,7 @@
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
+				C142C0E11F8DA07200B45750 /* Mesh.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
