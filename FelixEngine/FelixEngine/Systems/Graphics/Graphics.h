@@ -29,9 +29,8 @@ namespace fx {
   typedef std::shared_ptr<UniformBuffer> UniformBufferPtr;
   typedef std::shared_ptr<TextureBuffer> TextureBufferPtr;
   
-  /** File System */
   class Graphics {
-  private:
+  protected:
     std::map<std::string, std::weak_ptr<FrameBuffer> >   frameMap;
     std::map<std::string, std::weak_ptr<ShaderProgram> > shaderMap;
     std::map<std::string, std::weak_ptr<VertexMesh> >    vertexMap;
@@ -47,7 +46,6 @@ namespace fx {
   public:
     virtual ~Graphics() {}
     
-    virtual FrameBufferPtr   getMainWindowBuffer() = 0;
     virtual FrameBufferPtr   createFrameBuffer()   = 0;
     virtual ShaderProgramPtr createShaderProgram() = 0;
     virtual VertexMeshPtr    createVertexMesh()    = 0;

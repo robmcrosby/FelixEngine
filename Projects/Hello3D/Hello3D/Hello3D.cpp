@@ -18,7 +18,8 @@ Hello3D::~Hello3D() {
 }
 
 void Hello3D::initalize() {
-  _task.frame = _graphics->getMainWindowBuffer();
+  _task.frame = _graphics->getFrameBuffer("MainWindow");
+  _task.frame->setToWindow(0);
   _task.frame->addDepthBuffer();
   
   _task.shader = _graphics->createShaderProgram();

@@ -90,7 +90,7 @@ namespace fx {
     virtual ~FrameBuffer() {}
     
     virtual bool loadXML(const XMLTree::Node &node);
-    //virtual bool setToWindow(int index) = 0;
+    virtual bool setToWindow(int index) = 0;
     
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;

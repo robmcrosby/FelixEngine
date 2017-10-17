@@ -32,7 +32,8 @@ void HelloTexture::initalize() {
     1.0f, 0.0f
   };
   
-  _task.frame = _graphics->getMainWindowBuffer();
+  _task.frame = _graphics->getFrameBuffer("MainWindow");
+  _task.frame->setToWindow(0);
   
   _task.shader = _graphics->createShaderProgram();
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");

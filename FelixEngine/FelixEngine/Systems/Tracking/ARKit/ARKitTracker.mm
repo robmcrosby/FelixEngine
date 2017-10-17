@@ -166,7 +166,8 @@ void ARKitTracker::setupLiveCamera() {
   vector<vec4> vertices;
   calculateVertices(vertices);
   
-  _task.frame = _graphics->getMainWindowBuffer();
+  _task.frame = _graphics->getFrameBuffer("MainWindow");
+  _task.frame->setToWindow(0);
   
   _task.shader = _graphics->createShaderProgram();
   _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");

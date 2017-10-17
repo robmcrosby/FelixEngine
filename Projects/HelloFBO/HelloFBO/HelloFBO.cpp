@@ -85,7 +85,8 @@ void HelloFBO::setupSecondTask() {
     1.0f, 0.0f
   };
   
-  _secondTask.frame = _graphics->getMainWindowBuffer();
+  _secondTask.frame = _graphics->getFrameBuffer("MainWindow");
+  _secondTask.frame->setToWindow(0);
   
   _secondTask.shader = _graphics->createShaderProgram();
   _secondTask.shader->loadShaderFunctions("basic_uv", "basic_texture");

@@ -23,16 +23,15 @@ namespace fx {
   class MetalGraphics: public Graphics {
   private:
     MTLGraphicsData  *_data;
-    std::shared_ptr<MetalFrameBuffer> _windowBuffer;
+    MetalFrameBuffer *_windowBuffer;
     
   public:
     MetalGraphics();
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
-    //bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
+    bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
-    virtual FrameBufferPtr   getMainWindowBuffer();
     virtual FrameBufferPtr   createFrameBuffer();
     virtual ShaderProgramPtr createShaderProgram();
     virtual VertexMeshPtr    createVertexMesh();

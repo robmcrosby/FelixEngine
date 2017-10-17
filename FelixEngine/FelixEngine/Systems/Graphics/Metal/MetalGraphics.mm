@@ -86,10 +86,6 @@ bool MetalGraphics::initalize(UIView *view) {
   _data->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
   [view.layer addSublayer: _data->metalLayer];
   
-  // Set the Metal Layer to a Frame Buffer
-  //_frame = new MetalFrameBuffer(_data->device);
-  //_frame->setMetalLayer(layer);
-  
   // Create an instance of MetalDepthStencil
   _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
   
@@ -102,18 +98,10 @@ bool MetalGraphics::initalize(UIView *view) {
   return true;
 }
 
-//bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
-//  _windowBuffer = buffer;
-//  _windowBuffer->setMetalLayer(_data->metalLayer);
-//  return true;
-//}
-
-FrameBufferPtr MetalGraphics::getMainWindowBuffer() {
-  if (!_windowBuffer) {
-    _windowBuffer = make_shared<MetalFrameBuffer>(_data->device);
-    _windowBuffer->setMetalLayer(_data->metalLayer);
-  }
-  return _windowBuffer;
+bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
+  _windowBuffer = buffer;
+  _windowBuffer->setMetalLayer(_data->metalLayer);
+  return false;
 }
 
 FrameBufferPtr MetalGraphics::createFrameBuffer() {

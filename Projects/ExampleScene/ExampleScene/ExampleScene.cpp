@@ -16,7 +16,7 @@
 #include <map>
 
 ExampleScene::ExampleScene() {
-  printf("Create HelloTriangle\n");
+  
 }
 
 ExampleScene::~ExampleScene() {
@@ -24,9 +24,13 @@ ExampleScene::~ExampleScene() {
 }
 
 void ExampleScene::initalize() {
+  fx::FrameBufferPtr frame = _graphics->getFrameBuffer("MainWindow");
+  frame->setToWindow(0);
+  frame->addDepthBuffer();
+  
   // Setup the Camera
   fx::CameraPtr camera = _scene.get<fx::Camera>("Camera");
-  camera->addDepthBuffer();
+  camera->setFrame(frame);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));

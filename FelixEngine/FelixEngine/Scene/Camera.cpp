@@ -20,7 +20,6 @@ CameraBuilder Camera::cameraBuilder = CameraBuilder();
 
 Camera::Camera() {
   _scene = nullptr;
-  _frame = Graphics::getInstance().getMainWindowBuffer();
   _uniforms = make_shared<UniformMap>();
   (*_uniforms)["camera"] = _properties;
   
@@ -86,7 +85,8 @@ void Camera::applyToTask(GraphicTask &task) {
 }
 
 void Camera::addDepthBuffer() {
-  _frame->addDepthBuffer();
+  if (_frame)
+    _frame->addDepthBuffer();
 }
 
 bool Camera::setView(const XMLTree::Node &node) {
@@ -123,10 +123,7 @@ bool Camera::setClearState(const XMLTree::Node &node) {
 }
 
 bool Camera::setFrame(const XMLTree::Node &node) {
-  if (node.hasAttribute("window"))
-    _frame = Graphics::getInstance().getMainWindowBuffer();
-  else
-    _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
+  _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
   return _frame->loadXML(node);
 }
 
@@ -144,14 +141,14 @@ void Camera::setShader(const string &name) {
 }
 
 void Camera::setOrthographic(float scale, float near, float far) {
-  fx::vec2 size = _frame != nullptr ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
+  fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
   float width = scale/2.0f;
   float height = (scale * size.h/size.w)/2.0f;
   setOrthographic(-width, width, -height, height, near, far);
 }
 
 void Camera::setFrustum(float scale, float near, float far) {
-  fx::vec2 size = _frame != nullptr ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
+  fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
   float width = scale/2.0f;
   float height = (scale * size.h/size.w)/2.0f;
   setFrustum(-width, width, -height, height, near, far);

@@ -32,10 +32,7 @@ bool Shader::loadXML(const XMLTree::Node &node) {
 FrameBuilder Frame::frameBuilder = FrameBuilder();
 
 bool Frame::loadXML(const XMLTree::Node &node) {
-  if (node.hasAttribute("window"))
-    _frame = Graphics::getInstance().getMainWindowBuffer();
-  else
-    _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
+  _frame = Graphics::getInstance().getFrameBuffer(node.attribute("name"));
   return _frame->loadXML(node);
 }
 

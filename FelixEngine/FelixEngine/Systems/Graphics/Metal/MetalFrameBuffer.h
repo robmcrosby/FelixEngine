@@ -43,7 +43,7 @@ namespace fx {
     MetalFrameBuffer(id <MTLDevice> device);
     virtual ~MetalFrameBuffer();
     
-    //virtual bool setToWindow(int index);
+    virtual bool setToWindow(int index);
     
     virtual bool resize(int width, int height);
     virtual ivec2 size() const;
