@@ -19,10 +19,10 @@ HelloTexture::~HelloTexture() {
 
 void HelloTexture::initalize() {
   float vertexBuffer[] = {
-    -1.0f, -1.0f, 0.0f, 1.0f,
-    -1.0f,  1.0f, 0.0f, 1.0f,
-     1.0f, -1.0f, 0.0f, 1.0f,
-     1.0f,  1.0f, 0.0f, 1.0f
+    -1.0f, -1.0f, 0.0f,
+    -1.0f,  1.0f, 0.0f,
+     1.0f, -1.0f, 0.0f,
+     1.0f,  1.0f, 0.0f
   };
   
   float uvBuffer[] = {
@@ -39,8 +39,8 @@ void HelloTexture::initalize() {
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);
-  _task.mesh->setVertexBuffer("UV", 2, 4, uvBuffer);
+  _task.mesh->setVertexBuffer("position", 3, 4, vertexBuffer);
+  _task.mesh->setVertexBuffer("uvMap", 2, 4, uvBuffer);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   
   fx::ImageBufferData image;

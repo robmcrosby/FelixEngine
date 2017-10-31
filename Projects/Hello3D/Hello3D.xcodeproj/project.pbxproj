@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C130FF1E1FA212FF001C6FFF /* bunnyMesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C130FF1D1FA212FF001C6FFF /* bunnyMesh.mesh */; };
 		C1401CCC1EFBF56B00BE9958 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401CCB1EFBF56B00BE9958 /* main.m */; };
 		C1401CCF1EFBF56B00BE9958 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1401CCE1EFBF56B00BE9958 /* AppDelegate.m */; };
 		C1401CD21EFBF56B00BE9958 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401CD11EFBF56B00BE9958 /* ViewController.mm */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C130FF1D1FA212FF001C6FFF /* bunnyMesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunnyMesh.mesh; sourceTree = "<group>"; };
 		C1401CC71EFBF56B00BE9958 /* Hello3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hello3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1401CCB1EFBF56B00BE9958 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C1401CCD1EFBF56B00BE9958 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		C1401CC91EFBF56B00BE9958 /* Hello3D */ = {
 			isa = PBXGroup;
 			children = (
+				C130FF1D1FA212FF001C6FFF /* bunnyMesh.mesh */,
 				C1401CCD1EFBF56B00BE9958 /* AppDelegate.h */,
 				C1401CCE1EFBF56B00BE9958 /* AppDelegate.m */,
 				C1401CD01EFBF56B00BE9958 /* ViewController.h */,
@@ -235,6 +238,7 @@
 			files = (
 				C1401CDA1EFBF56B00BE9958 /* LaunchScreen.storyboard in Resources */,
 				C1401D011F000BA500BE9958 /* cube.mesh in Resources */,
+				C130FF1E1FA212FF001C6FFF /* bunnyMesh.mesh in Resources */,
 				C1401D001F000BA500BE9958 /* bunny.mesh in Resources */,
 				C1401CD71EFBF56B00BE9958 /* Assets.xcassets in Resources */,
 				C1401CD51EFBF56B00BE9958 /* Main.storyboard in Resources */,

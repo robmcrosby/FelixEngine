@@ -24,13 +24,13 @@ struct FragmentInput {
   float2 uv [[user(uv)]];
 };
 
-vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
-                                 const device packed_float2 *UV       [[ buffer(1) ]],
+vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
+                                 const device packed_float2 *uvMap    [[ buffer(1) ]],
                                  constant     MVPUniform    *MVP      [[ buffer(2) ]],
                                               unsigned int   vid      [[ vertex_id ]]) {
   VertexOutput output;
-  output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
-  output.uv = float2(UV[vid]);
+  output.position = MVP->projection * MVP->view * MVP->model * float4(position[vid], 1.0);
+  output.uv = float2(uvMap[vid]);
   return output;
 }
 

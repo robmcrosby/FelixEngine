@@ -26,7 +26,7 @@ void Hello3D::initalize() {
   _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   fx::VertexMeshData meshData;
-  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
+  fx::FileSystem::loadMesh(meshData, "bunnyMesh.mesh");
   
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->load(meshData);
@@ -37,7 +37,7 @@ void Hello3D::initalize() {
   _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _mvpUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
-  _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
   
   (*_uniformMap)["MVP"] = _mvpUniform;
   _task.uniforms.push_back(_uniformMap);
@@ -53,7 +53,7 @@ void Hello3D::initalize() {
 void Hello3D::update(float td) {
   // Rotate the Model
   _mvpUniform.rotation *= fx::quat::RotZ(0.02f);
-  _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
+  _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
   
   // Update the Model Uniforms
   (*_uniformMap)["MVP"] = _mvpUniform;
