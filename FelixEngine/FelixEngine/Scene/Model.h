@@ -13,14 +13,14 @@
 #include "Scene.h"
 #include "Material.h"
 #include "Graphics.h"
-#include "Quaternion.h"
+#include "Transform.h"
 #include "UniformMap.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Model)
   
-  struct Transform {
-    mat4 model;
+  struct ModelTransform {
+    mat4 transform;
     quat rotation;
   };
   
@@ -35,11 +35,7 @@ namespace fx {
     VertexMeshPtr _mesh;
     UniformsPtr   _uniforms;
     
-    vec3 _scale;
-    quat _orientation;
-    vec3 _position;
-    
-    Transform _transform;
+    TransformPtr _transform;
     
     bool _hidden;
     int _layer;
@@ -53,7 +49,6 @@ namespace fx {
     virtual void update(float dt);
     
     virtual void applyToTask(GraphicTask &task);
-    bool setTransform(const XMLTree::Node &node);
     
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}
@@ -71,15 +66,17 @@ namespace fx {
     void setMesh(VertexMeshPtr &mesh) {_mesh = mesh;}
     VertexMeshPtr mesh() const {return _mesh;}
     
-    void setScale(float scale) {_scale = vec3(scale, scale, scale);}
-    void setScale(const vec3 &scale) {_scale = scale;}
-    vec3 scale() const {return _scale;}
+    void setScale(float scale) {_transform->setScale(scale);}
+    void setScale(const vec3 &scale) {_transform->setScale(scale);}
+    vec3 localScale() const {return _transform->localScale();}
     
-    void setOrientation(const quat &orientation) {_orientation = orientation;}
-    quat orientation() const {return _orientation;}
+    void setRotation(const quat &orientation) {_transform->setRotation(orientation);}
+    quat localRotation() const {return _transform->localRotation();}
     
-    void setPosition(const vec3 &position) {_position = position;}
-    vec3 position() const {return _position;}
+    void setLocation(const vec3 &location) {_transform->setLocation(location);}
+    vec3 localLocation() const {return _transform->localLocation();}
+    
+    TransformPtr transform() {return _transform;}
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);

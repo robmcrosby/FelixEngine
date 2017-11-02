@@ -21,6 +21,7 @@
 		C1136C541EF2246700BA1322 /* Graphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C531EF2246700BA1322 /* Graphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C561EF224F700BA1322 /* MetalGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C571EF224F700BA1322 /* MetalGraphics.mm */; };
+		C130FF201FA8AD45001C6FFF /* Transform.h in Headers */ = {isa = PBXBuildFile; fileRef = C130FF1F1FA8AD45001C6FFF /* Transform.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401C971EF8054200BE9958 /* GraphicStates.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401CF71EFD430400BE9958 /* Variant.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401CF61EFD42FE00BE9958 /* Variant.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,6 +101,7 @@
 		C1136C531EF2246700BA1322 /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Graphics.h; path = Systems/Graphics/Graphics.h; sourceTree = "<group>"; };
 		C1136C561EF224F700BA1322 /* MetalGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalGraphics.h; path = Systems/Graphics/Metal/MetalGraphics.h; sourceTree = "<group>"; };
 		C1136C571EF224F700BA1322 /* MetalGraphics.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalGraphics.mm; path = Systems/Graphics/Metal/MetalGraphics.mm; sourceTree = "<group>"; };
+		C130FF1F1FA8AD45001C6FFF /* Transform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Transform.h; path = Utilities/Transform.h; sourceTree = "<group>"; };
 		C13EBCAD1F5C65D100C3BB9D /* EventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventHandler.h; path = Systems/Events/EventHandler.h; sourceTree = "<group>"; };
 		C1401C971EF8054200BE9958 /* GraphicStates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicStates.h; path = Systems/Graphics/GraphicStates.h; sourceTree = "<group>"; };
 		C1401CF61EFD42FE00BE9958 /* Variant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Variant.h; path = Utilities/Variant.h; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				C1401CF81EFEDAB700BE9958 /* IndexedMap.h */,
 				C1BB4F291F1C255E008FDF01 /* XMLTree.h */,
 				C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */,
+				C130FF1F1FA8AD45001C6FFF /* Transform.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,

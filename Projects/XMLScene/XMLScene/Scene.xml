@@ -14,7 +14,11 @@
   <Light name="LightB" position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4" pass="MainPass"/>
   <Light name="LightC" position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0" pass="MainPass"/>
   <Model name="Model" material="Material" pass="MainPass" mesh="Mesh">
-    <Transform scale="0.2" orientation="0.5, -0.5, 0.5, 0.5"/>
+    <Transform>
+      <Scale>0.2, 0.2, 0.2</Scale>
+      <Rotation>0.5, -0.5, 0.5, 0.5</Rotation>
+      <Location>0.0, 0.0, 0.0</Location>
+    </Transform>
     <Material name="Material" shader="Shader">
       <Ambiant color="0.7, 0.7, 0.7" factor="0.2"/>
       <Diffuse color="0.7, 0.7, 0.7" factor="0.8"/>

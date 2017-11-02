@@ -12,7 +12,7 @@
 
 
 XMLScene::XMLScene() {
-  printf("Create XMLScene\n");
+  _transform = fx::Transform::make();
 }
 
 XMLScene::~XMLScene() {
@@ -21,18 +21,15 @@ XMLScene::~XMLScene() {
 
 void XMLScene::initalize() {
   _scene.loadXMLFile("Scene.xml");
-  _model = _scene.get<fx::Model>("Model");
+  fx::ModelPtr model = _scene.get<fx::Model>("Model");
+  model->transform()->setParrent(_transform);
   _renderScheme.push_back("MainPass");
 }
 
 void XMLScene::update(float td) {
-  _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
+  _transform->setRotation(_transform->localRotation() * fx::quat::RotZ(td));
   _scene.update(td);
   
   fx::RenderPass::renderPasses(_renderScheme);
   fx::RenderPass::resetPasses();
-}
-
-void XMLScene::render() {
-  //_scene.render();
 }

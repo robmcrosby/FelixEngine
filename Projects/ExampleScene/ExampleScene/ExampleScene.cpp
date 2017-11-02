@@ -73,7 +73,7 @@ void ExampleScene::initalize() {
   _model->setMesh(mesh);
   _model->setMaterial(material);
   _model->setScale(0.2f);
-  _model->setOrientation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
+  _model->setRotation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
   _model->addToRenderPass("MainPass");
   
   // Setup the Render Scheme
@@ -81,13 +81,9 @@ void ExampleScene::initalize() {
 }
 
 void ExampleScene::update(float td) {
-  _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
+  _model->setRotation(_model->localRotation() * fx::quat::RotZ(td));
   _scene.update(td);
   
   fx::RenderPass::renderPasses(_renderScheme);
   fx::RenderPass::resetPasses();
-}
-
-void ExampleScene::render() {
-  
 }

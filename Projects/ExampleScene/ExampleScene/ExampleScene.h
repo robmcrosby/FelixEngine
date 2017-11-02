@@ -28,7 +28,6 @@ class ExampleScene: public fx::Application {
   
   virtual void initalize();
   virtual void update(float td);
-  virtual void render();
 };
 
 #endif /* ExampleScene_h */

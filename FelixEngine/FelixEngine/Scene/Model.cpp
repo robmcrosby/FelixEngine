@@ -18,9 +18,8 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 
 Model::Model(): _layer(0) {
   _scene = nullptr;
-  _scale = vec3(1.0f, 1.0f, 1.0f);
+  _transform = Transform::make();
   _uniforms = make_shared<UniformMap>();
-  (*_uniforms)["model"] = _transform;
 }
 
 Model::~Model() {
@@ -45,7 +44,7 @@ bool Model::loadXML(const XMLTree::Node &node) {
 
 bool Model::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Transform")
-    return setTransform(node);
+    return _transform->loadXML(node);
   if (node == "Mesh")
     return setMesh(node);
   if (node == "Material")
@@ -53,20 +52,11 @@ bool Model::loadXMLItem(const XMLTree::Node &node) {
   return false;
 }
 
-bool Model::setTransform(const XMLTree::Node &node) {
-  if (node.hasAttribute("position"))
-    setPosition(node.attribute("position"));
-  if (node.hasAttribute("orientation"))
-    setOrientation(node.attribute("orientation"));
-  if (node.hasAttribute("scale"))
-    setScale(node.attributeAsFloat("scale"));
-  return true;
-}
-
 void Model::update(float dt) {
-  _transform.model = mat4::Trans3d(_position) * _orientation.toMat4() * mat4::Scale(_scale);
-  _transform.rotation = _orientation;
-  (*_uniforms)["model"] = _transform;
+  ModelTransform transform;
+  transform.transform = _transform->globalTransform();
+  transform.rotation = _transform->globalRotation();
+  (*_uniforms)["model"] = transform;
   
   if (!_hidden) {
     for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
