@@ -63,7 +63,7 @@ namespace fx
     
     void setLocation(const vec3 &location) {_location = location;}
     vec3 localLocation() const {return _location;}
-    vec3 gobalLocation() const {
+    vec3 globalLocation() const {
       TransformPtr parrent = _parrent.lock();
       if (parrent)
         return parrent->globalTransform() * _location;

@@ -12,12 +12,13 @@
 #include "RenderItem.h"
 #include "Scene.h"
 #include "GraphicTask.h"
+#include "Transform.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Light)
   
   struct LightPeramaters {
-    vec4 position;
+    vec4 location;
     vec4 direction;
     vec4 color;
     vec4 factors;
@@ -30,8 +31,24 @@ namespace fx {
   private:
     Scene *_scene;
     
-    LightPeramaters _peramaters;
+    TransformPtr _transform;
+    
+    vec3 _color;
+    float _energy;
+    float _distance;
+    
+    float _linearAttenuation;
+    float _squareAttenuation;
+    
+    float _coneAngle;
+    float _softAngle;
+    
+    bool _directional;
+    
     int _layer;
+    
+  private:
+    bool loadXMLItem(const XMLTree::Node &node);
     
   public:
     Light();
@@ -46,57 +63,71 @@ namespace fx {
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
     
-    LightPeramaters peramaters() const {return _peramaters;}
-    
-    void setPosition(vec3 pos) {
-      _peramaters.position = vec4(pos, _peramaters.position.w);
+    LightPeramaters peramaters() const {
+      LightPeramaters peramaters;
+      peramaters.location = vec4(globalLocation(), _directional ? 0.0f : 1.0f);
+      peramaters.direction = vec4(globalDirection(), distance());
+      peramaters.color = vec4(color(), energy());
+      peramaters.factors = vec4(linearAttenuation(), squareAttenuation(), coneAngle(), softAngle());
+      return peramaters;
     }
-    vec3 position() const {return _peramaters.position.xyz();}
+    
+    void setLocation(vec3 location) {_transform->setLocation(location);}
+    vec3 localLocation() const {return _transform->localLocation();}
+    vec3 globalLocation() const {return _transform->globalLocation();}
+    
+    void setRotation(quat rotation) {_transform->setRotation(rotation);}
+    quat localRotation() const {return _transform->localRotation();}
+    quat globalRotation() const {return _transform->globalRotation();}
     
     void setDirection(vec3 dir) {
-      _peramaters.direction = vec4(dir.normalized(), _peramaters.direction.w);
+      _transform->setRotation(quat(vec3(0.0f, 0.0f, -1.0f), dir));
     }
-    vec3 direction() const {return _peramaters.direction.xyz();}
+    vec3 localDirection() const {return _transform->localRotation() * vec3(0.0f, 0.0f, -1.0f);}
+    vec3 globalDirection() const {return _transform->globalRotation() * vec3(0.0f, 0.0f, -1.0f);}
     
-    void setColor(vec3 color) {_peramaters.color = vec4(color, energy());}
-    vec3 color() const {return _peramaters.color.xyz();}
+    void setColor(vec3 color) {_color = color;}
+    vec3 color() const {return _color;}
     
-    void setEnergy(float energy) {_peramaters.color.w = energy;}
-    float energy() const {return _peramaters.color.w;}
+    void setEnergy(float energy) {_energy = energy;}
+    float energy() const {return _energy;}
     
-    void setLinearAttenuation(float attenuation) {_peramaters.factors.x = attenuation;}
-    float linearAttenuation() const {return _peramaters.factors.x;}
+    void setLinearAttenuation(float attenuation) {_linearAttenuation = attenuation;}
+    float linearAttenuation() const {return _linearAttenuation;}
     
-    void setSquareAttenuation(float attenuation) {_peramaters.factors.y = attenuation;}
-    float squareAttenuation() const {return _peramaters.factors.y;}
+    void setSquareAttenuation(float attenuation) {_squareAttenuation = attenuation;}
+    float squareAttenuation() const {return _squareAttenuation;}
     
-    void setDistance(float dist) {_peramaters.direction.w = dist;}
-    float distance() const {return _peramaters.direction.w;}
+    void setDistance(float distance) {_distance = distance;}
+    float distance() const {return _distance;}
     
-    void setConeAngle(float angle) {_peramaters.factors.z = angle;}
-    float coneAngle() const {return _peramaters.factors.z;}
+    void setConeAngle(float angle) {_coneAngle = angle;}
+    float coneAngle() const {return _coneAngle;}
     
-    void setSoftAngle(float angle) {_peramaters.factors.w = angle;}
-    float softAngle() const {return _peramaters.factors.w;}
+    void setSoftAngle(float angle) {_softAngle = angle;}
+    float softAngle() const {return _softAngle;}
     
-    void setAsDirectionalLight() {_peramaters.position.w = 0.0f;}
+    void setAsDirectionalLight() {_directional = true;}
+    bool isDirectionalLight() const {return _directional;}
+    
+    void setAsPointLight() {_directional = false;}
+    bool isPointLight() const {return !_directional;}
+    
     void setAsDirectionalLight(vec3 direction, vec3 color, float energy) {
       setAsDirectionalLight();
       setDirection(direction);
       setColor(color);
       setEnergy(energy);
     }
-    bool isDirectionalLight() const {return _peramaters.position.w == 0.0f;}
     
-    void setAsPointLight() {_peramaters.position.w = 1.0f;}
-    void setAsPointLight(vec3 position, vec3 color, float energy) {
+    void setAsPointLight(vec3 location, vec3 color, float energy) {
       setAsPointLight();
-      setPosition(position);
+      setLocation(location);
       setColor(color);
       setEnergy(energy);
     }
-    bool isPointLight() const {return _peramaters.position.w == 1.0f;}
-
+    
+    TransformPtr transform() {return _transform;}
   };
 }
 

@@ -182,6 +182,11 @@ namespace fx
       return vec;
     }
     Vector3 clamp(const Vector3 &v1, const Vector3 &v2) const {return min(v1.max(v2)).max(v1.min(v2));}
+    Vector3 orthogonal() const {
+      if (abs(x) < abs(y))
+        return cross(abs(x) < abs(z) ? Vector3(1, 0, 0) : Vector3(0, 0, 1));
+      return cross(abs(y) < abs(z) ? Vector3(0, 1, 0) : Vector3(0, 0, 1));
+    }
     
     static Vector3 Max(const Vector3 &v1, const Vector3 &v2) {return v1.max(v2);}
     static Vector3 Min(const Vector3 &v1, const Vector3 &v2) {return v1.min(v2);}

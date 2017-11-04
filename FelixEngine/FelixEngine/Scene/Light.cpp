@@ -15,8 +15,20 @@ using namespace std;
 
 LightBuilder Light::lightBuilder = LightBuilder();
 
-Light::Light(): _layer(0) {
+Light::Light() {
+  _transform = Transform::make();
+  _energy = 0.0f;
+  _distance = 0.0f;
   
+  _linearAttenuation = 0.0f;
+  _squareAttenuation = 0.0f;
+  
+  _coneAngle = 0.0f;
+  _softAngle = 0.0f;
+  
+  _directional = false;
+  
+  _layer = 0;
 }
 
 Light::~Light() {
@@ -24,24 +36,32 @@ Light::~Light() {
 }
 
 bool Light::loadXML(const XMLTree::Node &node) {
+  bool success = true;
+  
   if (node.hasAttribute("pass"))
     addToRenderPass(node.attribute("pass"));
-  
-  if (node.hasAttributes("color", "energy")) {
-    vec3 color = node.attribute("color");
-    float energy = node.attributeAsFloat("energy");
-    
-    if (node.hasAttribute("direction")) {
-      vec3 direction = node.attribute("direction");
-      setAsDirectionalLight(direction, color, energy);
-      return true;
-    }
-    if (node.hasAttribute("position")) {
-      vec3 position = node.attribute("position");
-      setAsPointLight(position, color, energy);
-      return true;
-    }
+  if (node.hasAttribute("energy"))
+    setEnergy(node.attributeAsFloat("energy"));
+  if (node.hasAttribute("type")) {
+    if (node.attribute("type") == "directional")
+      setAsDirectionalLight();
+    else
+      setAsPointLight();
   }
+  
+  for (auto &subNode : node)
+    success &= loadXMLItem(*subNode);
+  return success;
+}
+
+bool Light::loadXMLItem(const XMLTree::Node &node) {
+  if (node == "Transform")
+    return _transform->loadXML(node);
+  if (node == "Color") {
+    setColor(node.contents());
+    return true;
+  }
+  cerr << "Unknown XML: " << node.element() << " in Light" << endl;
   return false;
 }
 

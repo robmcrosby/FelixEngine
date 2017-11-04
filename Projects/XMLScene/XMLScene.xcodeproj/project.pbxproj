@@ -112,6 +112,7 @@
 		C1BB4EFA1F1C2068008FDF01 /* XMLScene */ = {
 			isa = PBXGroup;
 			children = (
+				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
 				C1BB4EFE1F1C2068008FDF01 /* AppDelegate.h */,
 				C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */,
 				C1BB4F011F1C2068008FDF01 /* ViewController.h */,
@@ -125,7 +126,6 @@
 				C1BB4F0C1F1C2068008FDF01 /* Info.plist */,
 				C1BB4EFB1F1C2068008FDF01 /* Supporting Files */,
 				C1BB4F271F1C225E008FDF01 /* Shaders.metal */,
-				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
 			);
 			path = XMLScene;
 			sourceTree = "<group>";

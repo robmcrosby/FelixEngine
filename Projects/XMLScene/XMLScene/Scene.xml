@@ -10,9 +10,30 @@
     <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
-  <Light name="LightA" direction="-1.0, -1.0, 0.0" color="0.8, 0.9, 1.0" energy="0.8" pass="MainPass"/>
-  <Light name="LightB" position="1.0, -1.0, 2.0" color="0.4, 0.4, 1.0" energy="0.4" pass="MainPass"/>
-  <Light name="LightC" position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0" pass="MainPass"/>
+  <Light energy="0.8" name="LightA" type="directional" pass="MainPass">
+    <Color>0.8, 0.9, 1.0</Color>
+    <Transform>
+      <Scale>1.0, 1.0, 1.0</Scale>
+      <Rotation>-0.377409, 0.262945, -0.158328, 0.873702</Rotation>
+      <Location>1.0, 1.0, 1.0</Location>
+    </Transform>
+  </Light>
+  <Light energy="0.4" name="LightB" type="point" pass="MainPass">
+    <Color>0.4, 0.4, 1.0</Color>
+    <Transform>
+      <Scale>1.0, 1.0, 1.0</Scale>
+      <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
+      <Location>1.0, -1.0, 2.0</Location>
+    </Transform>
+  </Light>
+  <Light energy="1.0" name="LightC" type="point" pass="MainPass">
+    <Color>1.0, 1.0, 1.0</Color>
+    <Transform>
+      <Scale>1.0, 1.0, 1.0</Scale>
+      <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
+      <Location>-4.0, 1.0, -6.0</Location>
+    </Transform>
+  </Light>
   <Model name="Model" material="Material" pass="MainPass" mesh="Mesh">
     <Transform>
       <Scale>0.2, 0.2, 0.2</Scale>

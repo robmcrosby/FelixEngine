@@ -35,18 +35,25 @@ namespace fx
       y *= axis.y;
       z *= axis.z;
     }
-    Quaternion(const Vector3<T> &v0, const Vector3<T> &v1): x(1), y(0), z(0), w(0)
+    Quaternion(const Vector3<T> &v0, const Vector3<T> &v1): x(0), y(0), z(0), w(1)
     {
-      if (!(v0 == -v1)) {
-        T s;
-        Vector3<T> c = v0.Cross(v1);
-        s = v0.Dot(v1);
-        s = std::sqrt((1 + s) * 2);
-        
-        x = c.x / s;
-        y = c.y / s;
-        z = c.z / s;
-        w = s / 2.0f;
+      Vector3<T> u = v0.normalized();
+      Vector3<T> v = v1.normalized();
+      if (u == -v) {
+        // 180 degree rotation around any orthogonal vector
+        Vector3<T> orth = u.orthogonal().normalized();
+        x = orth.x;
+        y = orth.y;
+        z = orth.z;
+        w = 0;
+      }
+      else if (u != v) {
+        Vector3<T> half = (u + v).normalized();
+        Vector3<T> cross = u.cross(half);
+        x = cross.x;
+        y = cross.y;
+        z = cross.z;
+        w = u.dot(half);
       }
     }
     
