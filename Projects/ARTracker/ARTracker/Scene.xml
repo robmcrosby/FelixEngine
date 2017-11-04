@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Scene name="scene">
   <ARCamera name="Camera" pass="MainPass">
-    <Frame name="Frame" window="0">
+    <Frame name="MainWindow" window="0">
       <Buffer type="depth"/>
     </Frame>
     <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
@@ -13,7 +13,11 @@
   <Light name="LightC" position="-4.0, 1.0, -6.0" color="1.0, 1.0, 1.0" energy="1.0" pass="MainPass"/>
   <Model name="Model" pass="MainPass">
     <Mesh name="Mesh" file="bunny.mesh"/>
-    <Transform scale="0.01" orientation="0.5, -0.5, 0.5, 0.5"/>
+    <Transform>
+      <Scale>0.01, 0.01, 0.01</Scale>
+      <Rotation>0.5, -0.5, 0.5, 0.5</Rotation>
+      <Location>0.0, 0.0, 0.0</Location>
+    </Transform>
     <Material name="Material">
       <Shader name="Shader" vertexFunction="basic_vertex" fragmentFunction="basic_fragment"/>
       <Ambiant color="0.7, 0.7, 0.7" factor="0.2"/>
