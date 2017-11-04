@@ -16,7 +16,7 @@ using namespace std;
 MaterialBuilder Material::materialBuilder = MaterialBuilder();
 
 Material::Material(): _scene(0) {
-  _uniforms = make_shared<UniformMap>();
+  _uniforms = UniformMap::make();
   (*_uniforms)["material"] = _properties;
 }
 

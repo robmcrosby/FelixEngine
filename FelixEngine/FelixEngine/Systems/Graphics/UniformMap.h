@@ -45,11 +45,17 @@ namespace fx {
   };
   
   
+  class UniformMap;
+  typedef std::shared_ptr<UniformMap> UniformsPtr;
+  typedef std::list<UniformsPtr> UniformsList;
+  
   class UniformMap {
   private:
     std::map<std::string, Uniform> _map;
     
   public:
+    static UniformsPtr make() {return std::make_shared<UniformMap>();}
+    
     UniformMap() {}
     ~UniformMap() {}
     
@@ -71,9 +77,6 @@ namespace fx {
 //      return *_map.at(name);
     }
   };
-  
-  typedef std::shared_ptr<UniformMap> UniformsPtr;
-  typedef std::list<UniformsPtr> UniformsList;
 }
 
 #endif /* UniformMap_h */

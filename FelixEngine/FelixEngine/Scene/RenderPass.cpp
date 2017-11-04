@@ -14,7 +14,7 @@ using namespace std;
 
 RenderPass::RenderPass() {
   _camera = nullptr;
-  _lightUniforms = std::make_shared<UniformMap>();
+  _lightUniforms = UniformMap::make();
 }
 
 RenderPass::~RenderPass() {

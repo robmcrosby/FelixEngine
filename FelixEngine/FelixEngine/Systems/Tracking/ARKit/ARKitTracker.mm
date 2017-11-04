@@ -83,7 +83,7 @@ ARKitTracker::ARKitTracker() {
   _arSession = [ARSession new];
   [_arSession setDelegate:_arDelegate];
   
-  _uniformMap = make_shared<UniformMap>();
+  _uniformMap = UniformMap::make();
 }
 
 ARKitTracker::~ARKitTracker() {

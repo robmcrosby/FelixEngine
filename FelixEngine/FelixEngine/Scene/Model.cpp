@@ -19,7 +19,7 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 Model::Model(): _layer(0) {
   _scene = nullptr;
   _transform = Transform::make();
-  _uniforms = make_shared<UniformMap>();
+  _uniforms = UniformMap::make();
 }
 
 Model::~Model() {

@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include "Graphics.h"
 #include "UniformMap.h"
+#include "Transform.h"
 
 
 namespace fx {
@@ -21,7 +22,7 @@ namespace fx {
   struct CameraProperties {
     mat4 projection;
     mat4 view;
-    vec4 position;
+    vec4 location;
   };
 
   
@@ -32,11 +33,13 @@ namespace fx {
   protected:
     Scene *_scene;
     
-    CameraProperties _properties;
-    UniformsPtr _uniforms;
+    TransformPtr _transform;
+    UniformsPtr  _uniforms;
     
     FrameBufferPtr  _frame;
     ShaderProgramPtr _shader;
+    
+    mat4 _projection;
     
     bool _isClearingColor;
     vec4 _clearColor;
@@ -55,33 +58,36 @@ namespace fx {
     virtual void setupTemplateTask(GraphicTask &task);
     virtual void applyToTask(GraphicTask &task);
     
-    CameraProperties& properties() {return _properties;}
+    virtual CameraProperties properties();
     
     bool setView(const XMLTree::Node &node);
-    void setView(const mat4 &view) {
-      _properties.view = view;
-      _properties.position = view * vec4(0.0f, 0.0f, 0.0f, 1.0f);
-      _properties.position /= _properties.position.w;
-    }
+    void setView(const mat4 &view);
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
-      _properties.view = mat4::LookAt(eye, center, up);
-      _properties.position = vec4(eye, 1.0);
+      setView(mat4::LookAt(eye, center, up));
     }
-    vec3 position() const {return _properties.position.xyz();}
+    mat4 view() const;
+    
+    void setRotation(const quat &rotation) {_transform->setRotation(rotation);}
+    quat localRotation() const {return _transform->localRotation();}
+    quat globalRotation() const {return _transform->globalRotation();}
+    
+    void setLocation(const vec3 &location) {_transform->setLocation(location);}
+    vec3 localLocation() const {return _transform->localLocation();}
+    vec3 globalLocation() const {return _transform->globalLocation();}
     
     void addDepthBuffer();
     
     bool setProjection(const XMLTree::Node &node);
-    void setProjection(const mat4 &projection) {_properties.projection = projection;}
+    void setProjection(const mat4 &projection) {_projection = projection;}
     void setOrthographic(float scale, float near, float far);
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
-      _properties.projection = mat4::Ortho(left, right, bottom, top, near, far);
+      setProjection(mat4::Ortho(left, right, bottom, top, near, far));
     }
-    
     void setFrustum(float scale, float near, float far);
     void setFrustum(float left, float right, float bottom, float top, float near, float far) {
-      _properties.projection = mat4::Frustum(left, right, bottom, top, near, far);
+      setProjection(mat4::Frustum(left, right, bottom, top, near, far));
     }
+    mat4 projection() const {return _projection;}
     
     bool setFrame(const XMLTree::Node &node);
     void setFrame(const std::string &name);

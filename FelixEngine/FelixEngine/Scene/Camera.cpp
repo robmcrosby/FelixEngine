@@ -20,8 +20,9 @@ CameraBuilder Camera::cameraBuilder = CameraBuilder();
 
 Camera::Camera() {
   _scene = nullptr;
-  _uniforms = make_shared<UniformMap>();
-  (*_uniforms)["camera"] = _properties;
+  _transform = Transform::make();
+  _uniforms = UniformMap::make();;
+  (*_uniforms)["camera"] = properties();
   
   _isClearingColor = false;
   _isClearingDepth = false;
@@ -59,8 +60,16 @@ bool Camera::loadXMLItem(const XMLTree::Node &node) {
   return false;
 }
 
+CameraProperties Camera::properties() {
+  CameraProperties properties;
+  properties.projection = projection();
+  properties.view = view();
+  properties.location = vec4(globalLocation(), 1.0f);
+  return properties;
+}
+
 void Camera::update(float dt) {
-  (*_uniforms)["camera"] = _properties;
+  (*_uniforms)["camera"] = properties();
   for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
     (*pass)->setCamera(this);
 }
@@ -98,6 +107,15 @@ bool Camera::setView(const XMLTree::Node &node) {
     return true;
   }
   return false;
+}
+
+void Camera::setView(const mat4 &view) {
+  setRotation(view);
+  setLocation(view.inverse() * vec3());
+}
+
+mat4 Camera::view() const {
+  return (mat4::Trans3d(globalLocation()) * globalRotation().toMat4()).inverse();
 }
 
 bool Camera::setProjection(const XMLTree::Node &node) {
