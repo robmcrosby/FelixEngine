@@ -83,7 +83,7 @@ namespace fx {
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
       setProjection(mat4::Ortho(left, right, bottom, top, near, far));
     }
-    void setFrustum(float scale, float near, float far);
+    void setFrustum(float angle, float near, float far);
     void setFrustum(float left, float right, float bottom, float top, float near, float far) {
       setProjection(mat4::Frustum(left, right, bottom, top, near, far));
     }

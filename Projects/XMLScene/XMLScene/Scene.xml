@@ -6,8 +6,8 @@
     <Frame name="Frame" window="0">
       <Buffer type="depth"/>
     </Frame>
-    <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
-    <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
+    <Projection angle="0.927295" far="100.0" near="0.1" type="frustum"/>
+    <View eye="1.2, 1.2, 1.2" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
   <Light energy="0.8" name="LightA" type="directional" pass="MainPass">
