@@ -7,18 +7,22 @@
       <Buffer type="depth"/>
     </Frame>
     <Projection angle="0.927295" far="100.0" near="0.1" type="frustum"/>
-    <View eye="1.2, 1.2, 1.2" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.240452, 0.395910, 0.141601, 0.874864</Rotation>
+      <Location>6.186304, 5.972611, 6.016000</Location>
+    </Transform>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
   <Light energy="0.8" name="LightA" type="directional" pass="MainPass">
     <Color>0.8, 0.9, 1.0</Color>
     <Transform>
-      <Scale>1.0, 1.0, 1.0</Scale>
-      <Rotation>-0.377409, 0.262945, -0.158328, 0.873702</Rotation>
-      <Location>1.0, 1.0, 1.0</Location>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
+      <Location>4.076245, 5.903862, -1.005454</Location>
     </Transform>
   </Light>
-  <Light energy="0.4" name="LightB" type="point" pass="MainPass">
+  <Light energy="0.0" name="LightB" type="point" pass="MainPass">
     <Color>0.4, 0.4, 1.0</Color>
     <Transform>
       <Scale>1.0, 1.0, 1.0</Scale>
@@ -26,7 +30,7 @@
       <Location>1.0, -1.0, 2.0</Location>
     </Transform>
   </Light>
-  <Light energy="1.0" name="LightC" type="point" pass="MainPass">
+  <Light energy="0.0" name="LightC" type="point" pass="MainPass">
     <Color>1.0, 1.0, 1.0</Color>
     <Transform>
       <Scale>1.0, 1.0, 1.0</Scale>
@@ -36,9 +40,9 @@
   </Light>
   <Model name="Model" material="Material" pass="MainPass" mesh="Mesh">
     <Transform>
-      <Scale>0.2, 0.2, 0.2</Scale>
-      <Rotation>0.5, -0.5, 0.5, 0.5</Rotation>
-      <Location>0.0, 0.0, 0.0</Location>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>
     <Material name="Material" shader="Shader">
       <Ambiant color="0.7, 0.7, 0.7" factor="0.2"/>

@@ -172,7 +172,7 @@ void Camera::setOrthographic(float scale, float near, float far) {
 
 void Camera::setFrustum(float angle, float near, float far) {
   fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
-  float scale = near * tanf(angle/2.0f);
+  float scale = near * tanf(angle/4.0f);
   float width = scale;
   float height = (scale * size.h/size.w);
   setFrustum(-width, width, -height, height, near, far);

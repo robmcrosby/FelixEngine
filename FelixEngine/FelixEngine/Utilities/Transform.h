@@ -57,7 +57,7 @@ namespace fx
     quat globalRotation() const {
       TransformPtr parrent = _parrent.lock();
       if (parrent)
-        return _rotation * parrent->globalRotation();
+        return parrent->globalRotation() * _rotation;
       return _rotation;
     }
     
@@ -74,7 +74,7 @@ namespace fx
     mat4 globalTransform() const {
       TransformPtr parrent = _parrent.lock();
       if (parrent)
-        return localTransform() * parrent->globalTransform();
+        return parrent->globalTransform() * localTransform();
       return localTransform();
     }
     

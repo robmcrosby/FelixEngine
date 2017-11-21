@@ -27,7 +27,7 @@ void XMLScene::initalize() {
 }
 
 void XMLScene::update(float td) {
-  _transform->setRotation(_transform->localRotation() * fx::quat::RotZ(td));
+  _transform->setRotation(_transform->localRotation() * fx::quat::RotY(td));
   _scene.update(td);
   
   fx::RenderPass::renderPasses(_renderScheme);
