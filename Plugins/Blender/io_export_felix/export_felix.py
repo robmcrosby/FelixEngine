@@ -1,260 +1,429 @@
-
-
-import os
-import time
-
 import bpy
-import mathutils
-import bpy_extras.io_utils
+import json
 
-from struct import *
+import math
+import mathutils
+from mathutils import *
 
 try:
     import xml.etree.cElementTree as Etree
 except ImportError:
     import xml.etree.ElementTree as Etree
 
-
-
-
-################################################################################
-##                            File Functions                                  ##
-################################################################################
-
-def getDirOfPath(path):
-    """ Strips the file from the given Path """
-    dirs = path.split('/')
-    dirs.pop()
-    ret = ''
-    for dir in dirs:
-        ret += dir + '/'
-    return ret
-
-def readXml(filePath, rootName):
-    """ Reads an xml file and returns the root node. """
-    try:
-        tree = Etree.parse(filePath)
-        node = tree.getroot()
-        if node.tag == root:
-            return node;
-        return Etree.Element(rootName)
-    except FileNotFoundError:
-        return Etree.Element(rootName)
-
-
-def writeXml(rootNode, filePath):
-    """ Writes the rootNode to the filePath. """
-    tree = Etree.ElementTree(rootNode)
-    tmpFile = getDirOfPath(filePath) + 'tmp.xml'
-    tree.write(tmpFile)
-    # TODO: Dangerous Operations! Need a better solution.
-    os.system('xmllint --format ' + tmpFile + ' > ' + filePath)
-    os.system('rm -f ' + tmpFile)
-
-
-def createDir(rootPath, dirName):
-    dirPath = rootPath + dirName + '/'
-    if not os.path.exists(dirPath):
-        os.makedirs(dirPath)
-
-def clearDir(dirPath):
-    """ Clears the directory. """
-    # TODO: Dangerous Operation! Need a better solution.
-    os.system('rm -f -r ' + dirPath + '*')
-
-
+import xml.dom.minidom as MiniDom
+from struct import pack
 
 
 ################################################################################
-##                         XML Node Functions                                 ##
+##                          JSON File Functions                               ##
 ################################################################################
 
-def getSubNode(node, name):
-    """ Gets or Creates a subNode in a node by the given name. """ 
-    subNode = node.find(name)
-    if subNode == None:
-        subNode = Etree.SubElement(node, name)
-    return subNode
-
-
-
+def writeJSON(data, filePath):
+    with open(filePath, 'w') as outfile:
+        json.dump(data, outfile, indent=2)
+        outfile.close()
 
 
 ################################################################################
-##                        Mesh Buffer Functions                               ##
+##                          XML File Functions                                ##
 ################################################################################
 
-def roundVector(vector, places):
-    ret = vector.copy()
-    for i in range(len(ret)):
-        ret[i] = round(ret[i], places)
-    return ret
+def writeXML(node, filePath, pretty = True):
+    str = Etree.tostring(node, 'utf-8')
+    if pretty:
+        reParsed = MiniDom.parseString(str)
+        str = reParsed.toprettyxml(indent='  ')
+    else:
+        str = str.decode("utf-8")
+    with open(filePath, 'w') as outfile:
+        outfile.write(str)
+        outfile.close()
 
-def addVector(vectors, vectorMap, vector):
-    key = roundVector(vector, 2).freeze()
-    if key not in vectorMap:
-        vectorMap[key] = len(vectors)
-        vectors.append(vector)
-    return vectorMap[key]
+################################################################################
+##                      Right to left handed Functions                        ##
+################################################################################
 
-def extractMeshBuffers(mesh, bufferMap, indexMap,
-                       extractNormals = True,
-                       extractUVs = True, 
-                       extractColors = False):
+def correctVector(v):
+    return Vector((v.x, v.z, -v.y))
+
+def correctRotation(q):
+    m = Matrix(((1.0, 0.0, 0.0),(0.0, 0.0, 1.0), (0.0, -1.0, 0.0)))
+    m = m * q.to_matrix()
+    return m.to_quaternion()
+
+################################################################################
+##                          Mesh File Functions                               ##
+################################################################################
+
+def colorToData(color):
+    return [color.r, color.g, color.b]
+
+def vec2ToData(vec):
+    return [vec.x, vec.y]
+
+def vec3ToData(vec):
+    return [vec.x, vec.y, vec.z]
+
+def quatToData(quat):
+    return [quat.x, quat.y, quat.z, quat.w]
+
+
+################################################################################
+##                           Material Functions                               ##
+################################################################################
+
+def buildAmbiant(material):
+    data = {'type':'Ambiant', 'properties':{}}
+    data['properties']['color'] = colorToData(material.diffuse_color)
+    data['properties']['factor'] = material.emit
+    return data
+
+def buildDiffuse(material):
+    data = {'type':'Diffuse', 'properties':{}}
+    data['properties']['color'] = colorToData(material.diffuse_color)
+    data['properties']['factor'] = material.diffuse_intensity
+    return data
+
+def buildSpecular(material):
+    data = {'type':'Specular', 'properties':{}}
+    data['properties']['color'] = colorToData(material.specular_color)
+    data['properties']['factor'] = material.specular_intensity
+    data['properties']['hardness'] = material.specular_hardness
+    return data
+
+def buildDepthState(material):
+    data = {'type':'DepthState', 'properties':{}}
+    data['properties']['write'] = 'true'
+    data['properties']['function'] = 'less'
+    return data
+
+def buildMaterial(material):
+    data = {'type':'Material', 'properties':{}, 'data':[]}
+    data['properties']['name'] = material.name
+    data['properties']['shader'] = 'Shader'
+    data['data'].append(buildAmbiant(material))
+    data['data'].append(buildDiffuse(material))
+    data['data'].append(buildSpecular(material))
+    data['data'].append(buildDepthState(material))
+    return data
+
+
+################################################################################
+##                             Mesh Functions                                 ##
+################################################################################
+
+def getFaceGroups(mesh):
+    faceGroups = [[] for i in range(len(mesh.materials))]
+    for face in mesh.tessfaces:
+        faceGroups[face.material_index].append(face)
+    return faceGroups
+
+def buildSubMeshes(mesh):
+    data = []
+    faceGroups = getFaceGroups(mesh)
+    start = 0
+    for group in faceGroups:
+        end = start
+        for face in group:
+            end += 3
+            if len(face.vertices) > 3:
+                end += 3
+        data.append({'type':'Range', 'properties':{'start':start, 'end':end}})
+        start = end
+    return {'type':'SubMeshes', 'data':data}
+
+def buildPositionBuffer(mesh):
+    faces = sum(getFaceGroups(mesh), [])
+    positions = [vec3ToData(v.co.copy()) for v in mesh.vertices]
+    data = []
+    for face in faces:
+        data.append(positions[face.vertices[0]])
+        data.append(positions[face.vertices[1]])
+        data.append(positions[face.vertices[2]])
+        if len(face.vertices) > 3:
+            data.append(positions[face.vertices[0]])
+            data.append(positions[face.vertices[2]])
+            data.append(positions[face.vertices[3]])
+    return {'type':'Buffer', 'properties':{'size':3, 'name':'position'}, 'data':data}
+
+def buildNormalBuffer(mesh):
+    faces = sum(getFaceGroups(mesh), [])
+    normals = [vec3ToData(v.normal.copy()) for v in mesh.vertices]
+    data = []
+    for face in faces:
+        if face.use_smooth:
+            data.append(normals[face.vertices[0]])
+            data.append(normals[face.vertices[1]])
+            data.append(normals[face.vertices[2]])
+            if len(face.vertices) > 3:
+                data.append(normals[face.vertices[0]])
+                data.append(normals[face.vertices[2]])
+                data.append(normals[face.vertices[3]])
+        else:
+            normal = vec3ToData(correctVector(face.normal))
+            data.extend([normal]*3)
+            if len(face.vertices) > 3:
+                data.extend([normal]*3)
+    return {'type':'Buffer', 'properties':{'size':3, 'name':'normal'}, 'data':data}
+
+def buildUVBuffers(mesh):
+    buffers = []
+    for i, texture in enumerate(mesh.tessface_uv_textures):
+        data = []
+        for uv in texture.data:
+            data.append(vec2ToData(uv.uv1))
+            data.append(vec2ToData(uv.uv2))
+            data.append(vec2ToData(uv.uv3))
+            if len(uv.uv) > 3:
+                data.append(vec2ToData(uv.uv1))
+                data.append(vec2ToData(uv.uv3))
+                data.append(vec2ToData(uv.uv4))
+        buffers.append({'type':'Buffer', 'properties':{'size':2, 'name':texture.name}, 'data':data})
+    return buffers
+
+def buildColorBuffers(mesh):
+    faces = sum(getFaceGroups(mesh), [])
+    buffers = []
+    for i, colors in enumerate(mesh.tessface_vertex_colors):
+        data = []
+        for index, color in enumerate(colors.data):
+            data.append(colorToData(color.color1))
+            data.append(colorToData(color.color2))
+            data.append(colorToData(color.color3))
+            if len(faces[index].vertices) > 3:
+                data.append(colorToData(color.color1))
+                data.append(colorToData(color.color3))
+                data.append(colorToData(color.color4))
+        buffers.append({'type':'Buffer', 'properties':{'size':3, 'name':colors.name}, 'data':data})
+    return buffers
+
+def buildMeshData(mesh):
     mesh.calc_tessface()
     mesh.calc_normals()
-    
-    # Get the vertex positions and normals
-    positions = list()
-    normals   = list()
-    normalMap = dict()
-    for vertex in mesh.vertices:
-        positions.append(vertex.co)
-        normals.append(vertex.normal)
-    
-    # Setup the UV lists
-    uvNames  = list()
-    uvCoords = list()
-    uvMaps   = list()
-    if extractUVs:
-        for uv in mesh.tessface_uv_textures:
-            uvNames.append(uv.name)
-            uvCoords.append(list())
-            uvMaps.append(dict())
-    
-    # Setup the Color lists
-    colorNames = list()
-    colors     = list()
-    colorMaps  = list()
-    if extractColors:
-        for color in mesh.tessface_vertex_colors:
-            colorNames.append(color.name)
-            colors.append(list())
-            colorMaps.append(dict())
-    
-    # Get the mesh faces in seperate materals
-    facelists = list()
-    for i in range(max(1, len(mesh.materials))):
-        facelists.append(list())
-    for face in mesh.tessfaces:
-        facelists[face.material_index].append(face)
-    
-    # Get Vertex Tuples, UVs, Colors, and Face Normals from the Faces
-    vertices = list()
-    for i, facelist in enumerate(facelists):
-        vertices.append(list())
-        for faceIndex, face in enumerate(facelist):
-            if len(face.vertices) >= 3:
-                v1 = (face.vertices[0],)
-                v2 = (face.vertices[1],)
-                v3 = (face.vertices[2],)
-                if extractNormals:
-                    if face.use_smooth:
-                        v1 += v1
-                        v2 += v2
-                        v3 += v3
-                    else:
-                        nIndex = addVector(normals, normalMap, face.normal)
-                        v1 += (nIndex,)
-                        v2 += (nIndex,)
-                        v3 += (nIndex,)
-                for uvIndex, uvCoordsList in enumerate(uvCoords):
-                    v1 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv1),)
-                    v2 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv2),)
-                    v3 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv3),)
-                for colorIndex, colorsList in enumerate(colors):
-                    v1 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color1),)
-                    v2 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color2),)
-                    v3 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color3),)
-                vertices[i].append(v1)
-                vertices[i].append(v2)
-                vertices[i].append(v3)
-            if len(face.vertices) >= 4:
-                v1 = (face.vertices[0],)
-                v2 = (face.vertices[2],)
-                v3 = (face.vertices[3],)
-                if extractNormals:
-                    if face.use_smooth:
-                        v1 += v1
-                        v2 += v2
-                        v3 += v3
-                    else:
-                        nIndex = addVector(normals, normalMap, face.normal)
-                        v1 += (nIndex,)
-                        v2 += (nIndex,)
-                        v3 += (nIndex,)
-                for uvIndex, uvCoordsList in enumerate(uvCoords):
-                    v1 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv1),)
-                    v2 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv3),)
-                    v3 += (addVector(uvCoordsList, uvMaps[uvIndex], mesh.tessface_uv_textures[uvIndex].data[faceIndex].uv4),)
-                for colorIndex, colorsList in enumerate(colors):
-                    v1 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color1),)
-                    v2 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color3),)
-                    v3 += (addVector(colorsList, colorMaps[colorIndex], mesh.tessface_vertex_colors[colorIndex].data[faceIndex].color4),)
-                vertices[i].append(v1)
-                vertices[i].append(v2)
-                vertices[i].append(v3)
-    
-    # Initalize the buffers
-    bufferMap["Position"] = list()
-    if extractNormals:
-        bufferMap["Normal"] = list()
-    for name in uvNames:
-        bufferMap[name] = list()
-    for name in colorNames:
-        bufferMap[name] = list()
-    
-    # Compile everything into the buffers
-    uvOffset = 2 if extractNormals else 1
-    colOffset = uvOffset + len(uvNames)
-    vertexMap = dict()
-    for verticesList in vertices:
-        indices = list()
-        for v in verticesList:
-            if v not in vertexMap:
-                vertexMap[v] = len(vertexMap)
-                bufferMap["Position"].append(positions[v[0]])
-                if extractNormals:
-                    bufferMap["Normal"].append(normals[v[1]])
-                for i, uvs in enumerate(uvCoords):
-                    bufferMap[uvNames[i]].append(uvs[v[uvOffset+i]])
-                for i, colorsList in enumerate(colors):
-                    bufferMap[colorNames[i]].append(colorsList[v[colOffset+i]])
-            indices.append(vertexMap[v])
-        indexMap.append(indices)
-    
 
-def deIndexBufferMap(bufferMap, indexMap):
-    map = dict()
-    for name in bufferMap.keys():
-        map[name] = list()
-    for indices in indexMap:
-        for i in indices:
-            for name in bufferMap.keys():
-                map[name].append(bufferMap[name][i])
-    return map
+    data = [buildSubMeshes(mesh)]
+    data.append(buildPositionBuffer(mesh))
+    data.append(buildNormalBuffer(mesh))
+    data.extend(buildUVBuffers(mesh))
+    data.extend(buildColorBuffers(mesh))
 
-def transformBufferMap(bufferMap, transform):
-    if 'Position' in bufferMap:
-        for i, pos in enumerate(bufferMap['Position']):
-            bufferMap['Position'][i] = transform * pos
-    if 'Normal' in bufferMap:
-        for i, norm in enumerate(bufferMap['Normal']):
-            norm = transform * norm
-            bufferMap['Normal'][i]= norm.normalized()
+    return data
 
-def printVector(vector, align):
-    ret = ''
-    for v in vector:
-        ret += '{:9.4f}, '.format(v)
-    if align and len(vector) == 3:
-        ret += '   1.0000,'
-    return ret
-
+def buildMesh(mesh):
+    data = {'type':'Mesh', 'properties':{}}
+    data['properties']['name'] = mesh.name
+    data['data'] = buildMeshData(mesh)
+    data['properties']['vertices'] = data['data'][0]['data'][-1]['properties']['end']
+    return data
 
 
 ################################################################################
-##                       Binary Mesh File Functions                           ##
+##                            Model Functions                                 ##
+################################################################################
+
+def buildTransform(obj):
+    rotMode = obj.rotation_mode
+    obj.rotation_mode = 'QUATERNION'
+
+    rotation = correctRotation(obj.rotation_quaternion)
+    location = correctVector(obj.location)
+
+    data = {'type':'Transform', 'properties':{}, 'data':[]}
+    data['data'].append({'type':'Scale', 'data':vec3ToData(obj.scale)})
+    data['data'].append({'type':'Rotation', 'data':quatToData(rotation)})
+    data['data'].append({'type':'Location', 'data':vec3ToData(location)})
+
+    obj.rotation_mode = rotMode
+    return data
+
+def buildModelMaterials(materials):
+    data = {'type':'Materials', 'data':[]}
+    for index, material in enumerate(materials):
+        mat = {'type':'Material', 'properties':{}}
+        mat['properties']['name'] = material.name
+        mat['properties']['index'] = index
+        data['data'].append(mat)
+    return data
+
+def buildModel(model):
+    data = {'type':'Model', 'properties':{}, 'data':[]}
+    data['properties']['name'] = model.name
+    data['properties']['pass'] = 'MainPass'
+    data['properties']['mesh'] = model.data.name
+    data['data'].append(buildTransform(model))
+    if len(model.material_slots) == 1:
+        data['properties']['material'] = model.material_slots[0].name
+    elif len(model.material_slots) > 0:
+        data['data'].append(buildModelMaterials(model.material_slots))
+    return data
+
+
+################################################################################
+##                            Light Functions                                 ##
+################################################################################
+
+def buildSpotLight(light):
+    data = {'type':'Spot', 'properties':{}}
+    data['properties']['size'] = light.data.spot_size
+    data['properties']['blend'] = light.data.spot_blend
+    return data
+
+def buildLightFalloff(light):
+    data = {'type':'Falloff', 'properties':{}}
+    return data
+
+def buildLight(light):
+    data = {'type':'Light', 'properties':{}, 'data':[]}
+    data['properties']['name'] = light.name
+    data['properties']['pass'] = 'MainPass'
+    data['properties']['energy'] = light.data.energy
+    data['data'].append({'type':'Color', 'data':colorToData(light.data.color)})
+    if light.data.type == 'POINT':
+        data['properties']['type'] = 'point'
+        data['data'].append(buildLightFalloff(light))
+    elif light.data.type == 'SUN':
+        data['properties']['type'] = 'directional'
+    elif light.data.type == 'SPOT':
+        data['properties']['type'] = 'spot'
+        data['data'].append(buildLightFalloff(light))
+        data['data'].append(buildSpotLight(light))
+    data['data'].append(buildTransform(light))
+    return data
+
+
+################################################################################
+##                            Camera Functions                                ##
+################################################################################
+
+def buildClear():
+    data = {'type':'Clear', 'properties':{}}
+    data['properties']['color'] = '0.2, 0.2, 0.2, 1.0'
+    data['properties']['depth'] = '1.0'
+    return data
+
+def buildCameraProjection(camera):
+    data = {'type':'Projection', 'properties':{}}
+    data['properties']['near'] = camera.data.clip_start
+    data['properties']['far'] = camera.data.clip_end
+    if camera.data.type == 'ORTHO':
+        data['properties']['type'] = 'ortho'
+        data['properties']['scale'] = camera.data.ortho_scale
+    else:
+        data['properties']['type'] = 'frustum'
+        data['properties']['angle'] = camera.data.angle
+    return data
+
+def buildCamera(camera):
+    data = {'type':'Camera', 'properties':{}, 'data':[]}
+    data['properties']['name'] = camera.name
+    data['properties']['pass'] = 'MainPass'
+    data['properties']['frame'] = 'MainFrame'
+    data['data'].append(buildCameraProjection(camera))
+    data['data'].append(buildTransform(camera))
+    #TODO figure out how to control clear operations
+    data['data'].append(buildClear())
+    return data
+
+
+################################################################################
+##                            Scene Functions                                 ##
+################################################################################
+
+def buildMainFrame():
+    data = {'type':'Frame', 'properties':{}, 'data':[]}
+    data['properties']['name'] = 'MainFrame'
+    data['properties']['window'] = '0'
+    data['data'].append({'type':'Buffer', 'properties':{'type':'depth'}})
+    return data
+
+def buildMainShader():
+    data = {'type':'Shader', 'properties':{}}
+    data['properties']['name'] = 'Shader'
+    data['properties']['vertex'] = 'basic_vertex'
+    data['properties']['fragment'] = 'basic_fragment'
+    return data
+
+def getObjectMaterials(obj):
+    materials = []
+    for slot in obj.material_slots:
+        if slot.material is not None:
+            materials.append(slot.material)
+    return materials
+
+def buildScene(objects, name):
+    meshes = {}
+    materials = []
+    for obj in objects:
+        if obj.type == 'MESH':
+            meshes[obj.data.name] = obj.data
+            materials.extend(getObjectMaterials(obj))
+
+    data = {'type':'Scene', 'properties':{'name':name}, 'data':[]}
+
+    # TODO: Figure out how to define multiple frames
+    data['data'].append(buildMainFrame())
+
+    # TODO: Implement diffrent shaders based on materials
+    data['data'].append(buildMainShader())
+
+    for mesh in meshes.values():
+        data['data'].append(buildMesh(mesh))
+
+    for material in materials:
+        data['data'].append(buildMaterial(material))
+
+    for obj in objects:
+        if obj.type == 'MESH':
+            data['data'].append(buildModel(obj))
+        elif obj.type == 'CAMERA':
+            data['data'].append(buildCamera(obj))
+        elif obj.type == 'LAMP':
+            data['data'].append(buildLight(obj))
+    return data
+
+
+################################################################################
+##                        XML Conversion Functions                            ##
+################################################################################
+
+def toStr(data, seperator = ', '):
+    if type(data) is float:
+        return '{:f}'.format(data)
+    if type(data) is int:
+        return '{:d}'.format(data)
+    if type(data) is list:
+        return seperator.join(toStr(i) for i in data)
+    return data
+
+def isSubData(data):
+    if type(data) is list and len(data) > 0:
+        return type(data[0]) is dict
+    return False
+
+def isIndentedList(data):
+    return type(data) is list and len(data) > 0 and type(data[0]) is list
+
+def buildXML(data, level = 0):
+    node = Etree.Element(data['type'])
+    if 'properties' in data.keys():
+        for key in data['properties']:
+            node.set(key, toStr(data['properties'][key]))
+    if 'data' in data.keys():
+        if isSubData(data['data']):
+            for item in data['data']:
+                node.append(buildXML(item, level+1))
+        elif isIndentedList(data['data']):
+            indent = '\t'*level
+            node.text = '\n'+indent+'\t'
+            node.text += toStr(data['data'], ',\n'+indent+'\t')
+            node.text += '\n'+indent
+        else:
+            node.text = toStr(data['data'])
+    return node
+
+
+################################################################################
+##                      Binary Mesh Conversion Functions                      ##
 ################################################################################
 
 # Structure of a Binary Mesh file.
@@ -263,8 +432,10 @@ def printVector(vector, align):
 #{int} primitive type:
 #	triangles                 = 0
 #	triangle strip            = 1
+#	triangle fan              = 2
 #	indexed triangles         = 8
 #	indexed triangle strip    = 9
+#	indexed triangle fan      = 10
 #
 #{int} number of sub-meshes
 #
@@ -283,187 +454,85 @@ def printVector(vector, align):
 #{int}    number of indices
 #{int...} index data
 
+def packData(data):
+    if type(data) is list:
+        buffer = b''
+        for item in data:
+            buffer += packData(item)
+        return buffer
+    if type(data) is float:
+        return pack('!f', data)
+    if type(data) is int:
+        return pack('!i', data)
+    return b''
 
-def writeBinaryMeshFile(mesh, filePath,
-                   transform     = mathutils.Matrix(),
-                   stripMode     = 'OFF',
-                   alignBuffers  = True,
-                   exportIndices = True,
-                   exportNormals = True,
-                   exportUVs     = True,
-                   exportColors  = False):
-    bufferMap = dict()
-    indexMap = list()
-    extractMeshBuffers(mesh, bufferMap, indexMap,
-                       exportNormals,
-                       exportUVs,
-                       exportColors)
-    transformBufferMap(bufferMap, transform)
-    # TODO: Add Triangle Stripping Function here
-    if not exportIndices:
-        bufferMap = deIndexBufferMap(bufferMap, indexMap)
-    
-    meshFile = open(filePath, 'wb')
-    
-    # Write the primative type
-    # TODO: Implement more options with Triangle Strips
-    triType = 8 if exportIndices else 0
-    meshFile.write(pack('!i', triType))
-    
-    # Write the Sub-Meshes and build the Index Buffer
-    indexCount = 0
-    indexBuffer = b''
-    meshFile.write(pack('!i', len(indexMap)))
-    for indices in indexMap:
-        meshFile.write(pack('!i', indexCount))
-        for index in indices:
-            indexBuffer += pack('!i', index)
-        indexCount += len(indices)
-        meshFile.write(pack('!i', indexCount))
-    
-    meshFile.write(pack('!i', len(bufferMap['Position'])))
-    meshFile.write(pack('!i', len(bufferMap)))
-    
-    for attribute, buffer in bufferMap.items():
-        compSize = len(buffer[0])
-        if alignBuffers and compSize == 3:
-            compSize = 4
-        meshFile.write(pack('!i', compSize))
-        meshFile.write(pack('32s', attribute.encode('utf-8')))
-        for vector in buffer:
-            for v in vector:
-                meshFile.write(pack('!f', v))
-            for i in range(compSize-len(vector)):
-                meshFile.write(pack('!f', 1.0))
-    
-    # Write the Index Buffer if exporting indices 
-    if exportIndices:
-        meshFile.write(pack('!i', indexCount))
-        meshFile.write(indexBuffer)
-    
-    meshFile.close()
-
+def writeBinaryMesh(mesh, filePath):
+    with open(filePath, 'wb') as outfile:
+        subMeshes = mesh['data'][0]['data']
+        outfile.write(pack('!i', 0))
+        outfile.write(pack('!i', len(subMeshes)))
+        for subMesh in subMeshes:
+            outfile.write(pack('!i', subMesh['properties']['start']))
+            outfile.write(pack('!i', subMesh['properties']['end']))
+        outfile.write(pack('!i', mesh['properties']['vertices']))
+        outfile.write(pack('!i', len(mesh['data'])-1))
+        for buffer in mesh['data'][1:]:
+            outfile.write(pack('!i', buffer['properties']['size']))
+            outfile.write(pack('32s', buffer['properties']['name'].encode()))
+            outfile.write(packData(buffer['data']))
+        outfile.close()
 
 
 ################################################################################
-##                          Mesh Node Functions                               ##
+##                           Mesh Export Functions                            ##
 ################################################################################
 
-def getMeshes(objects):
-    meshes = set()
-    for object in objects:
-        if object.type == 'MESH':
-            meshes.add(object.data)
+def exportMesh(mesh, filePath, fileName, fileType):
+    fullPath = filePath+'/'+fileName+'.'+fileType
+
+    if fileType == 'xml':
+        node = buildXML(mesh)
+        writeXML(node, fullPath, True)
+    elif fileType == 'json':
+        writeJSON(mesh, fullPath)
+    elif fileType == 'mesh':
+        writeBinaryMesh(mesh, fullPath)
+
+def exportMeshes(meshes, filePath, fileType):
+    for mesh in meshes:
+        fileName = mesh['properties']['name']
+        exportMesh(mesh, filePath, fileName, fileType)
+        mesh['properties']['file'] = fileName+'.'+fileType
+        mesh['properties'].pop('vertices', None)
+        mesh.pop('data', None)
+
+
+################################################################################
+##                           Scene Export Functions                           ##
+################################################################################
+
+def getMeshesFromScene(scene):
+    meshes = []
+    for item in scene['data']:
+        if item['type'] == 'Mesh':
+            meshes.append(item)
     return meshes
 
+def exportScene(objects, filePath, fileType, sceneName, meshType):
+    scene = buildScene(objects, sceneName)
 
-def addSubMeshes(meshNode, mesh):
-    if len(mesh.materials) > 0:
-        subMeshesNode = Etree.SubElement(meshNode, 'SubMeshes')
-        for index, material in enumerate(mesh.materials):
-            subMeshNode = Etree.SubElement(subMeshesNode, 'SubMesh')
-            subMeshNode.set('index', '{}'.format(index))
-            subMeshNode.set('material', material.name)
+    if meshType == 'xml' or meshType == 'json' or meshType == 'mesh':
+        meshes = getMeshesFromScene(scene)
+        exportMeshes(meshes, filePath, meshType)
 
-
-def addMesh(resourcesNode, mesh):
-    meshNode = Etree.SubElement(resourcesNode, 'Mesh')
-    meshNode.set('name', mesh.name)
-    meshNode.set('file', mesh.name + '.xml')
-    addSubMeshes(meshNode, mesh)
+    fullPath = filePath+'/'+sceneName+'.'+fileType
+    if fileType == 'xml':
+        node = buildXML(scene)
+        writeXML(node, fullPath, True)
+    elif fileType == 'json':
+        writeJSON(scene, fullPath)
 
 
-def addMeshes(resourcesNode, objects, path):
-    createDir(path, 'Meshes')
-    meshPath = path + 'Meshes/'
-    
-    for mesh in getMeshes(objects):
-        addMesh(resourcesNode, mesh)
-        writeMeshFile(mesh, meshPath)
-
-
-
-################################################################################
-##                       Xml Mesh File Functions                           ##
-################################################################################
-
-def writeMeshToXml(mesh, meshNode,
-                   transform     = mathutils.Matrix(),
-                   stripMode     = 'OFF',
-                   alignBuffers  = True,
-                   exportIndices = True,
-                   exportNormals = True,
-                   exportUVs     = True,
-                   exportColors  = False):
-    bufferMap = dict()
-    indexMap = list()
-    extractMeshBuffers(mesh, bufferMap, indexMap,
-                       exportNormals,
-                       exportUVs,
-                       exportColors)
-    transformBufferMap(bufferMap, transform)
-    # TODO: Add Triangle Stripping Function here
-    if not exportIndices:
-        bufferMap = deIndexBufferMap(bufferMap, indexMap)
-    
-    # TODO: Implement Triangle Stripping
-    meshNode.set('primative', 'triangles')
-    
-    buffersNode = Etree.SubElement(meshNode, 'Buffers')
-    buffersNode.set('vertices', '{}'.format(len(bufferMap['Position'])))
-    for attribute, buffer in bufferMap.items():
-        compSize = len(buffer[0])
-        if alignBuffers and compSize == 3:
-            compSize = 4
-        buffNode = Etree.SubElement(buffersNode, 'Buffer')
-        buffNode.set('attribute', attribute)
-        buffNode.set('components', '{}'.format(compSize))
-        buffNode.text = ''
-        for vector in buffer:
-            buffNode.text += '\n      ' + printVector(vector, alignBuffers)
-        buffNode.text +=  '\n    '
-    
-    if exportIndices:
-        indicesNode = Etree.SubElement(meshNode, 'Indices')
-        indicesNode.text = ''
-        i = 0
-        for indices in indexMap:
-            for index in indices:
-                if i%9 == 0:
-                    indicesNode.text += '\n    '
-                elif i%3 == 0:
-                    indicesNode.text += '  '
-                i += 1
-                indicesNode.text += '{:4}, '.format(index)
-        indicesNode.text += '\n  '
-    
-    subMeshesNode = Etree.SubElement(meshNode, 'SubMeshes')
-    pos = 0
-    for indices in indexMap:
-        subMeshNode = Etree.SubElement(subMeshesNode, 'SubMesh')
-        subMeshNode.set('start', '{}'.format(pos))
-        pos += len(indices)
-        subMeshNode.set('end', '{}'.format(pos))
-
-
-def writeXmlMeshFile(mesh, filePath,
-                     transform     = mathutils.Matrix(),
-                     stripMode     = 'OFF',
-                     alignBuffers  = True,
-                     exportIndices = True,
-                     exportNormals = True,
-                     exportUVs     = True,
-                     exportColors  = False):
-    meshNode = Etree.Element('Mesh')
-    writeMeshToXml(mesh, meshNode,
-                   transform,
-                   stripMode,
-                   alignBuffers,
-                   exportIndices,
-                   exportNormals,
-                   exportUVs,
-                   exportColors)
-    writeXml(meshNode, filePath)
 
 
 
