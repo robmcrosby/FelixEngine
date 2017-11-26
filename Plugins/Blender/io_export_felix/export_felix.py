@@ -1,5 +1,6 @@
 import bpy
 import json
+import os
 
 import math
 import mathutils
@@ -533,49 +534,17 @@ def exportScene(objects, filePath, fileType, sceneName, meshType):
         writeJSON(scene, fullPath)
 
 
+################################################################################
+##                         Export Interface Functions                         ##
+################################################################################
 
-
-
-def save_binary_mesh(context, filepath="",
-                     stripMode     = 'OFF',
-                     alignBuffers  = True,
-                     exportIndices = True,
-                     exportNormals = True,
-                     exportUVs     = True,
-                     exportColors  = False,
-                     meshScale     = 1.0):
-    mesh = context.active_object.data
-    transform = mathutils.Matrix()
-    transform[0][0] = transform[1][1] = meshScale
-    transform[2][2] = -meshScale
-    writeBinaryMeshFile(mesh, filepath,
-                        transform,
-                        stripMode,
-                        alignBuffers,
-                        exportIndices,
-                        exportNormals,
-                        exportUVs,
-                        exportColors)
+def export_meshes(context, filepath = ''):
+    print('export_meshes to ' + filepath)
     return {'FINISHED'}
 
-def save_xml_mesh(context, filepath="",
-                  stripMode     = 'OFF',
-                  alignBuffers  = True,
-                  exportIndices = True,
-                  exportNormals = True,
-                  exportUVs     = True,
-                  exportColors  = False,
-                  meshScale     = 1.0):
-    mesh = context.active_object.data
-    transform = mathutils.Matrix()
-    transform[0][0] = transform[1][1] = meshScale
-    transform[2][2] = -meshScale
-    writeXmlMeshFile(mesh, filepath,
-                     transform,
-                     stripMode,
-                     alignBuffers,
-                     exportIndices,
-                     exportNormals,
-                     exportUVs,
-                     exportColors)
+def export_scene(context, filepath='', meshType='mesh'):
+    filePath, filename = os.path.split(filepath)
+    sceneName, fileType = filename.split('.')
+    objects = context.selected_objects
+    exportScene(objects, filePath, fileType, sceneName, meshType)
     return {'FINISHED'}
