@@ -1,42 +1,13 @@
 //
-//  Shaders.metal
-//  XMLScene
+//  MetalShaders.metal
+//  FelixEngine
 //
-//  Created by Robert Crosby on 7/16/17.
+//  Created by Robert Crosby on 11/29/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include <metal_stdlib>
-
-#define NUM_LIGHTS 3
-
-using namespace metal;
-
-
-struct Model {
-  float4x4 model;
-  float4   rotation;
-};
-
-struct Camera {
-  float4x4 projection;
-  float4x4 view;
-  float4   position;
-};
-
-struct Material {
-  float4 ambiant;
-  float4 diffuse;
-  float4 specular;
-  float4 factors;
-};
-
-struct Light {
-  float4 position;
-  float4 direction;
-  float4 color;
-  float4 factors;
-};
+#define NUM_LIGHTS 2
+#include "GraphicStructures.h"
 
 
 device float3 rotate_quat(float4 rot, float3 v);

@@ -405,6 +405,10 @@ namespace fx
   typedef Vector3<float> vec3;
   typedef Vector4<float> vec4;
   
+  typedef Vector2<float> float2;
+  typedef Vector3<float> float3;
+  typedef Vector4<float> float4;
+  
   typedef Vector4<unsigned char> RGBA;
   typedef Vector4<float> RGBAf;
   

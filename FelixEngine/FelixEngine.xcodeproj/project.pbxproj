@@ -63,6 +63,8 @@
 		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C154C0DD1FCE389100D3DCFF /* GraphicStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */; };
 		C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */ = {isa = PBXBuildFile; fileRef = C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */ = {isa = PBXBuildFile; fileRef = C15C16C21F695E8B007E2C1E /* EventSubject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = C15CAEB01EEDEF33004FA3C7 /* FelixEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -143,6 +145,8 @@
 		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
 		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
 		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
+		C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicStructures.h; path = Systems/Graphics/GraphicStructures.h; sourceTree = "<group>"; };
+		C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = MetalShaders.metal; path = Systems/Graphics/Metal/MetalShaders.metal; sourceTree = "<group>"; };
 		C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventListenerSet.h; path = Systems/Events/EventListenerSet.h; sourceTree = "<group>"; };
 		C15C16C21F695E8B007E2C1E /* EventSubject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventSubject.h; path = Systems/Events/EventSubject.h; sourceTree = "<group>"; };
 		C15CAEAD1EEDEF33004FA3C7 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -259,6 +263,7 @@
 				C1401D5F1F0BEB1600BE9958 /* TextureMap.h */,
 				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
 				C1401D551F0BE28900BE9958 /* ImageBufferData.h */,
+				C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -283,6 +288,7 @@
 				C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */,
 				C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */,
 				C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */,
+				C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */,
 			);
 			name = MetalGraphics;
 			sourceTree = "<group>";
@@ -456,6 +462,7 @@
 				C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
 				C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */,
+				C154C0DD1FCE389100D3DCFF /* GraphicStructures.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
 				C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */,
 				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
@@ -537,6 +544,7 @@
 				C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */,
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
+				C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
 				C142C0E11F8DA07200B45750 /* Resources.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
@@ -685,6 +693,7 @@
 				INFOPLIST_FILE = FelixEngine/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_HEADER_SEARCH_PATHS = FelixEngine/Systems/Graphics/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -704,6 +713,7 @@
 				INFOPLIST_FILE = FelixEngine/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_HEADER_SEARCH_PATHS = FelixEngine/Systems/Graphics/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

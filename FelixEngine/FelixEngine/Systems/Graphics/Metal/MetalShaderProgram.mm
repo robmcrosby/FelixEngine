@@ -9,6 +9,7 @@
 #include "MetalShaderProgram.h"
 #include "MetalFrameBuffer.h"
 #include "MetalUniformBuffer.h"
+#include "MetalTextureSampler.h"
 #include "GraphicTask.h"
 #include "UniformMap.h"
 #include <Metal/Metal.h>
@@ -26,12 +27,30 @@ MetalShaderProgram::~MetalShaderProgram() {
 }
 
 bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string &fragment) {
-  id <MTLLibrary> library = [_device newDefaultLibrary];
-  _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
-  _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  _vertex = nil;
+  _fragment = nil;
   
-  extractIndexMaps();
-  return _vertex != nil  && _fragment != nil;
+  id <MTLLibrary> library = [_device newDefaultLibrary];
+  if (library != nil) {
+    _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
+    _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  }
+  
+  if (_vertex == nil || _fragment == nil) {
+    NSBundle *bundle = [NSBundle bundleForClass:[MetalTextureSampler class]];
+    NSString *path = [bundle pathForResource:@"default" ofType:@"metallib"];
+    library = [_device newLibraryWithFile:path error:nil];
+    if (_vertex == nil)
+      _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
+    if (_fragment == nil)
+      _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  }
+  
+  if (_vertex != nil  && _fragment != nil) {
+    extractIndexMaps();
+    return true;
+  }
+  return false;
 }
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
