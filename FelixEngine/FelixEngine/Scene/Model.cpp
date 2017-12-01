@@ -53,9 +53,9 @@ bool Model::loadXMLItem(const XMLTree::Node &node) {
 }
 
 void Model::update(float dt) {
-  ModelTransform transform;
-  transform.transform = _transform->globalTransform();
-  transform.rotation = _transform->globalRotation();
+  STR_Model transform;
+  transform.model = _transform->globalTransform();
+  transform.rotation = _transform->globalRotation().toVec4();
   (*_uniforms)["model"] = transform;
   
   if (!_hidden) {

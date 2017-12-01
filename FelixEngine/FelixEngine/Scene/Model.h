@@ -19,11 +19,6 @@
 namespace fx {
   DEFINE_OBJ_BUILDER(Model)
   
-  struct ModelTransform {
-    mat4 transform;
-    quat rotation;
-  };
-  
   class Model: public RenderItem, public iObject {
   private:
     static ModelBuilder modelBuilder;

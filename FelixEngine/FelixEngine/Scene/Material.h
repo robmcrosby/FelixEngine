@@ -14,18 +14,11 @@
 #include "GraphicStates.h"
 #include "TextureMap.h"
 #include "UniformMap.h"
+#include "GraphicStructures.h"
 
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Material)
-  
-  struct MaterialProperties {
-    vec4 ambiant;
-    vec4 diffuse;
-    vec4 specular;
-    vec4 factors;
-  };
-
   
   class Material: public iObject {
   private:
@@ -34,7 +27,7 @@ namespace fx {
   private:
     Scene *_scene;
     
-    MaterialProperties _properties;
+    STR_Material _properties;
     
     TexturesPtr      _textures;
     ShaderProgramPtr _shader;
@@ -61,7 +54,7 @@ namespace fx {
     void addTexture(TextureBufferPtr &texture, SamplerState sampler = SamplerState());
     TexturesPtr textures() {return _textures;}
     
-    MaterialProperties& properties() {return _properties;}
+    STR_Material& properties() {return _properties;}
     
     DepthState& depthState() {return _depthState;}
     void enableDepthTesting() {_depthState.enableDefaultTesting();}

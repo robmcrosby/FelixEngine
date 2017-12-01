@@ -14,17 +14,11 @@
 #include "Graphics.h"
 #include "UniformMap.h"
 #include "Transform.h"
+#include "GraphicStructures.h"
 
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Camera)
-  
-  struct CameraProperties {
-    mat4 projection;
-    mat4 view;
-    vec4 location;
-  };
-
   
   class Camera: public RenderItem, public iObject {
   private:
@@ -58,7 +52,7 @@ namespace fx {
     virtual void setupTemplateTask(GraphicTask &task);
     virtual void applyToTask(GraphicTask &task);
     
-    virtual CameraProperties properties();
+    virtual STR_Camera properties();
     
     bool setView(const XMLTree::Node &node);
     void setView(const mat4 &view);

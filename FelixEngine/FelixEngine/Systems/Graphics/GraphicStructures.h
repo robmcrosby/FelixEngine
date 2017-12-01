@@ -18,25 +18,25 @@ using namespace fx;
 #endif
 
 
-struct Model {
+struct STR_Model {
   float4x4 model;
-  float4   rotation;
+  float4 rotation;
 };
 
-struct Camera {
+struct STR_Camera {
   float4x4 projection;
   float4x4 view;
-  float4   position;
+  float4 position;
 };
 
-struct Material {
+struct STR_Material {
   float4 ambiant;
   float4 diffuse;
   float4 specular;
   float4 factors;
 };
 
-struct Light {
+struct STR_Light {
   float4 position;
   float4 direction;
   float4 color;

@@ -62,11 +62,11 @@ bool Camera::loadXMLItem(const XMLTree::Node &node) {
   return false;
 }
 
-CameraProperties Camera::properties() {
-  CameraProperties properties;
+STR_Camera Camera::properties() {
+  STR_Camera properties;
   properties.projection = projection();
   properties.view = view();
-  properties.location = vec4(globalLocation(), 1.0f);
+  properties.position = vec4(globalLocation(), 1.0f);
   return properties;
 }
 

@@ -13,16 +13,10 @@
 #include "Scene.h"
 #include "GraphicTask.h"
 #include "Transform.h"
+#include "GraphicStructures.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Light)
-  
-  struct LightPeramaters {
-    vec4 location;
-    vec4 direction;
-    vec4 color;
-    vec4 factors;
-  };
   
   class Light: public RenderItem, public iObject {
   private:
@@ -63,9 +57,9 @@ namespace fx {
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
     
-    LightPeramaters peramaters() const {
-      LightPeramaters peramaters;
-      peramaters.location = vec4(globalLocation(), _directional ? 0.0f : 1.0f);
+    STR_Light peramaters() const {
+      STR_Light peramaters;
+      peramaters.position = vec4(globalLocation(), _directional ? 0.0f : 1.0f);
       peramaters.direction = vec4(globalDirection(), distance());
       peramaters.color = vec4(color(), energy());
       peramaters.factors = vec4(linearAttenuation(), squareAttenuation(), coneAngle(), softAngle());

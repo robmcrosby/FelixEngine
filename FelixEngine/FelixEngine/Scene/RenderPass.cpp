@@ -7,6 +7,7 @@
 //
 
 #include "RenderPass.h"
+#include "GraphicStructures.h"
 
 
 using namespace fx;
@@ -56,7 +57,7 @@ void RenderPass::render() {
 }
 
 void RenderPass::updateLightUniforms() {
-  vector<LightPeramaters> lightPeramaters;
+  vector<STR_Light> lightPeramaters;
   for (auto &light : _lights)
     lightPeramaters.push_back(light->peramaters());
   (*_lightUniforms)["lights"] = lightPeramaters;

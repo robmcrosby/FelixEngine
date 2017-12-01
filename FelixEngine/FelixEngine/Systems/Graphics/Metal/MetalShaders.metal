@@ -48,9 +48,9 @@ device float shade_specular(float3 normal, float3 view, float3 light, float hard
 
 vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
                                  const device packed_float3 *normal   [[ buffer(1) ]],
-                                 constant     Camera        *camera   [[ buffer(2) ]],
-                                 constant     Model         *model    [[ buffer(3) ]],
-                                 unsigned int   vid      [[ vertex_id ]]) {
+                                 constant     STR_Camera    *camera   [[ buffer(2) ]],
+                                 constant     STR_Model     *model    [[ buffer(3) ]],
+                                 unsigned     int            vid      [[ vertex_id ]]) {
   VertexOutput output;
   float4 location = model->model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
@@ -60,16 +60,16 @@ vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(
   return output;
 }
 
-fragment half4 basic_fragment(FragmentInput      input    [[ stage_in  ]],
-                              constant Light    *lights   [[ buffer(0) ]],
-                              constant Material *material [[ buffer(1) ]]) {
+fragment half4 basic_fragment(FragmentInput          input    [[ stage_in  ]],
+                              constant STR_Light    *lights   [[ buffer(0) ]],
+                              constant STR_Material *material [[ buffer(1) ]]) {
   // Set the base ambiant color
   float3 color = material->ambiant.xyz * material->ambiant.w;
   float3 normal = normalize(input.normal);
   float3 view = normalize(input.view);
   
   for (int i = 0; i < NUM_LIGHTS; ++i) {
-    Light light = lights[i];
+    STR_Light light = lights[i];
     float3 lightDirection = light.position.w ? light.position.xyz - input.location : -light.direction.xyz;
     float lightDistance = length(lightDirection);
     float attenuation = light_attenuation(lightDistance, light.factors.xy);
