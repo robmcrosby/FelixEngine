@@ -1,19 +1,19 @@
 //
 //  ViewController.m
-//  XMLScene
+//  Shaders
 //
-//  Created by Robert Crosby on 7/16/17.
+//  Created by Robert Crosby on 12/2/17.
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
 #import "ViewController.h"
-#import "XMLScene.h"
+#import "Shaders.h"
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
 
 @interface ViewController ()
-@property XMLScene *xmlSceneApp;
+@property Shaders *shadersApp;
 
 @end
 
@@ -23,27 +23,29 @@
   [super viewDidLoad];
   
   // Create the Cpp Application
-  self.xmlSceneApp = new XMLScene();
+  self.shadersApp = new Shaders();
   
   // Add iOS File System
   fx::iOSFileSystem *fileSystem = new fx::iOSFileSystem();
-  self.xmlSceneApp->setFileSystem(fileSystem);
+  self.shadersApp->setFileSystem(fileSystem);
   
   // Add and initalize Metal Graphics
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
   graphics->initalize(self.view);
-  self.xmlSceneApp->setGraphics(graphics);
+  self.shadersApp->setGraphics(graphics);
   
   // Set the Application
-  [self setApplication: self.xmlSceneApp];
-  self.xmlSceneApp->initalize();
+  [self setApplication: self.shadersApp];
+  self.shadersApp->initalize();
   
   // Start Display Link
   [self setupDisplayLink];
 }
 
+
 - (void)didReceiveMemoryWarning {
   [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
 }
 
 
