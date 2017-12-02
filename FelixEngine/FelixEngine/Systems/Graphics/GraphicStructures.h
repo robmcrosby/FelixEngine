@@ -20,6 +20,7 @@ using namespace fx;
 
 struct STR_Model {
   float4x4 model;
+  float4x4 texture;
   float4 rotation;
 };
 
