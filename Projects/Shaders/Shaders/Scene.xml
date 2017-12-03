@@ -37,11 +37,67 @@
     </Transform>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
-  <Model material="Material" mesh="Mesh" name="Model" pass="MainPass">
+  <Model material="Material" mesh="Mesh" name="ModelA" pass="MainPass">
     <Transform>
-      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
-      <Location>0.000000, 0.000000, -0.000000</Location>
+      <Location>-1.949047, 1.414114, 0.812684</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelB" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.852974, 1.504666, -0.471125</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelC" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>0.335199, 1.576492, -1.838231</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelD" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-1.190254, -0.018209, 1.319337</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelE" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.094181, 0.072343, 0.035527</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelF" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>1.093993, 0.144169, -1.331578</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelG" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.497530, -1.402597, 1.853538</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelH" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>0.598543, -1.312045, 0.569728</Location>
+    </Transform>
+  </Model>
+  <Model material="Material" mesh="Mesh" name="ModelI" pass="MainPass">
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>1.786716, -1.240219, -0.797377</Location>
     </Transform>
   </Model>
 </Scene>

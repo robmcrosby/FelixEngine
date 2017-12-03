@@ -9,18 +9,21 @@
 #ifndef Shaders_h
 #define Shaders_h
 
-#import <FelixEngine/Application.h>
-#import <FelixEngine/Scene.h>
-#import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
-#import <FelixEngine/RenderPass.h>
-#import <FelixEngine/Transform.h>
+#include <FelixEngine/Application.h>
+#include <FelixEngine/Scene.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/GraphicTask.h>
+#include <FelixEngine/RenderPass.h>
+#include <FelixEngine/Transform.h>
+#include <FelixEngine/Model.h>
 
 class Shaders: public fx::Application {
 private:
   fx::RenderScheme _renderScheme;
   
   fx::Scene _scene;
+  std::vector<fx::ModelPtr> _models;
+  fx::quat _rotation;
   fx::TransformPtr _transform;
   
 public:
