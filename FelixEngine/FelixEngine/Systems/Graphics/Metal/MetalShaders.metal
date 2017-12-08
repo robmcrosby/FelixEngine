@@ -45,7 +45,7 @@ struct OutputShadeless {
   float4 position [[ position ]];
 };
 
-vertex OutputShadeless shadeless_v(const device packed_float3* position [[ buffer(0) ]],
+vertex OutputShadeless v_shadeless(const device packed_float3 *position [[ buffer(0) ]],
                                    constant     STR_Camera*    camera   [[ buffer(1) ]],
                                    constant     STR_Model*     model    [[ buffer(2) ]],
                                    unsigned     int            vid      [[ vertex_id ]]) {
@@ -55,12 +55,39 @@ vertex OutputShadeless shadeless_v(const device packed_float3* position [[ buffe
   return output;
 }
 
-fragment half4 shadeless_f(constant STR_Material *material [[ buffer(0) ]]) {
+fragment half4 f_shadeless(constant STR_Material *material [[ buffer(0) ]]) {
   float3 color = material->ambiant.xyz * material->ambiant.a;
   return half4(color.x, color.y, color.z, 1.0);
 }
 
 
+
+struct OutputColor {
+  float4 position [[ position    ]];
+  float3 color    [[ user(color) ]];
+};
+
+struct InputColor {
+  float3 color [[ user(color) ]];
+};
+
+vertex OutputColor v_color(const device packed_float3* position [[ buffer(0) ]],
+                           const device packed_float3* color0   [[ buffer(1) ]],
+                           constant     STR_Camera*    camera   [[ buffer(2) ]],
+                           constant     STR_Model*     model    [[ buffer(3) ]],
+                           unsigned     int            vid      [[ vertex_id ]]) {
+  OutputColor output;
+  float4 location = model->model * float4(position[vid], 1.0);
+  output.position = camera->projection * camera->view * location;
+  output.color = float3(color0[vid]);
+  return output;
+}
+
+fragment half4 f_color_shadeless(InputColor             input     [[ stage_in ]],
+                                 constant STR_Material* material  [[ buffer(0) ]]) {
+  float3 color = input.color * material->ambiant.xyz * material->ambiant.a;
+  return half4(color.x, color.y, color.z, 1.0);
+}
 
 
 
@@ -75,14 +102,14 @@ struct InputTexture {
 };
 
 vertex OutputTexture v_texture(const device packed_float3* position   [[ buffer(0) ]],
-                               const device packed_float2* coordinate [[ buffer(1) ]],
+                               const device packed_float2* uv0        [[ buffer(1) ]],
                                constant     STR_Camera*    camera     [[ buffer(2) ]],
                                constant     STR_Model*     model      [[ buffer(3) ]],
                                unsigned     int            vid        [[ vertex_id ]]) {
   OutputTexture output;
   float4 location = model->model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
-  output.coordinate = transform_coordinate(model->texture, float2(coordinate[vid]));
+  output.coordinate = transform_coordinate(model->texture, float2(uv0[vid]));
   return output;
 }
 
@@ -94,39 +121,6 @@ fragment half4 f_texture_shadeless(InputTexture           input     [[ stage_in 
   float3 color = texture.xyz * material->ambiant.xyz * material->ambiant.a;
   return half4(color.x, color.y, color.z, 1.0);
 }
-
-
-
-
-
-struct OutputColor {
-  float4 position [[ position    ]];
-  float3 color    [[ user(color) ]];
-};
-
-struct InputColor {
-  float3 color [[ user(color) ]];
-};
-
-vertex OutputColor v_color(const device packed_float3* position [[ buffer(0) ]],
-                           const device packed_float3* color    [[ buffer(1) ]],
-                           constant     STR_Camera*    camera   [[ buffer(2) ]],
-                           constant     STR_Model*     model    [[ buffer(3) ]],
-                           unsigned     int            vid      [[ vertex_id ]]) {
-  OutputColor output;
-  float4 location = model->model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
-  output.color = float3(color[vid]);
-  return output;
-}
-
-fragment half4 f_color_shadeless(InputColor             input     [[ stage_in ]],
-                                 constant STR_Material* material  [[ buffer(0) ]]) {
-  float3 color = input.color * material->ambiant.xyz * material->ambiant.a;
-  return half4(color.x, color.y, color.z, 1.0);
-}
-
-
 
 
 

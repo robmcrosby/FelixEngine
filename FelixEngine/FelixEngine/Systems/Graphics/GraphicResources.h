@@ -10,6 +10,7 @@
 #define GraphicResources_h
 
 #include "Graphics.h"
+#include "GraphicStates.h"
 #include "XMLTree.h"
 #include "Vector.h"
 #include "Matrix.h"
@@ -84,6 +85,9 @@ namespace fx {
     virtual bool load(const ImageBufferData &data) = 0;
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;
+    
+    virtual void setDefaultSampler(SamplerState state) = 0;
+    virtual SamplerState defaultSampler() const = 0;
   };
   
   struct FrameBuffer {

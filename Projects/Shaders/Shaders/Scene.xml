@@ -37,7 +37,12 @@
     </Transform>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
-  <Model material="Material" mesh="Mesh" name="ModelA" pass="MainPass">
+  <Model mesh="Mesh" name="ModelA" pass="MainPass">
+    <Material name="MaterialA">
+      <Shader name="Shadeless" vertex="v_shadeless" fragment="f_shadeless"/>
+      <Ambiant color="0.600000, 0.600000, 0.600000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
@@ -45,6 +50,11 @@
     </Transform>
   </Model>
   <Model material="Material" mesh="Mesh" name="ModelB" pass="MainPass">
+    <Material name="MaterialB">
+      <Shader name="ColorShadeless" vertex="v_color" fragment="f_color_shadeless"/>
+      <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
@@ -52,6 +62,12 @@
     </Transform>
   </Model>
   <Model material="Material" mesh="Mesh" name="ModelC" pass="MainPass">
+    <Material name="MaterialC">
+      <Shader name="TextureShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
+      <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
+      <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

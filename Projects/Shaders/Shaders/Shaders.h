@@ -24,7 +24,6 @@ private:
   fx::Scene _scene;
   std::vector<fx::ModelPtr> _models;
   fx::quat _rotation;
-  fx::TransformPtr _transform;
   
 public:
   Shaders();

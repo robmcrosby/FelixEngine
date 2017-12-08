@@ -51,6 +51,8 @@ namespace fx {
     void setShader(ShaderProgramPtr &shader) {_shader = shader;}
     ShaderProgramPtr shader() {return _shader;}
     
+    bool addTexture(const XMLTree::Node &node);
+    bool addTextures(const XMLTree::Node &node);
     void addTexture(TextureBufferPtr &texture, SamplerState sampler = SamplerState());
     TexturesPtr textures() {return _textures;}
     

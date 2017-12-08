@@ -47,6 +47,10 @@ bool Material::loadXMLItem(const XMLTree::Node &node) {
     return _blendState.loadXml(node);
   if (node == "Shader")
     return setShader(node);
+  if (node == "Texture")
+    return addTexture(node);
+  if (node == "Textures")
+    return addTexture(node);
   return false;
 }
 
@@ -71,7 +75,21 @@ void Material::setShader(const string &name) {
   _shader = Graphics::getInstance().getShaderProgram(name);
 }
 
+bool Material::addTexture(const XMLTree::Node &node) {
+  if (!_textures)
+    _textures = TextureMap::make();
+  return _textures->addTexture(node);
+}
+
+bool Material::addTextures(const XMLTree::Node &node) {
+  if (!_textures)
+    _textures = TextureMap::make();
+  return _textures->loadXML(node);
+}
+
 void Material::addTexture(TextureBufferPtr &texture, SamplerState sampler) {
+  if (!_textures)
+    _textures = TextureMap::make();
   _textures->addTexture(texture, sampler);
 }
 

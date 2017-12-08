@@ -49,9 +49,9 @@ bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer)
 
 
 bool TextureBuffer::loadXML(const XMLTree::Node &node) {
-  ImageBufferData image;
-  
+  setDefaultSampler(node);
   if (node.hasAttribute("file")) {
+    ImageBufferData image;
     if (FileSystem::loadImage(image, node.attribute("file")))
       return load(image);
   }

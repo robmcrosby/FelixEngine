@@ -65,6 +65,7 @@ namespace fx {
     int flags;
     
     DepthState(int flags = 0): flags(flags) {}
+    DepthState(const XMLTree::Node &node): flags(0) {loadXml(node);}
     void setWriting(bool writing = true) {
       if (writing)
         flags |= DEPTH_ENABLE_WRITING;
@@ -186,6 +187,7 @@ namespace fx {
     RGBAf color;
     
     BlendState(int f = 0): flags(f) {}
+    BlendState(const XMLTree::Node &node): flags(0) {loadXml(node);}
     
     void enableDefaultBlending()
     {
@@ -335,7 +337,7 @@ namespace fx {
     SAMPLER_COORD_T_MASK   = 0x0C00,
     SAMPLER_COORD_R_MASK   = 0x3000,
     
-    SAMPLER_FILTER_MIN_OFFSET = 14,
+    SAMPLER_FILTER_MIN_OFFSET = 14,  //0100 0000 0000 0000
     SAMPLER_FILTER_MAG_OFFSET = 15,
     SAMPLER_FILTER_MIP_OFFSET = 16,
     
@@ -351,13 +353,45 @@ namespace fx {
     int flags;
     
     SamplerState(int flags = 0): flags(flags) {}
+    SamplerState(const XMLTree::Node &node): flags(0) {loadXml(node);}
+    
+    static COORD_TYPE parseCoord(const std::string &coord) {
+      if (coord == "repeat")
+        return COORD_REPEAT;
+      if (coord == "mirror")
+        return COORD_MIRROR;
+      if (coord == "zero")
+        return COORD_CLAMP_ZERO;
+      return COORD_CLAMP_EDGE;
+    }
+    
+    static FILTER_TYPE parseFilter(const std::string &filter) {
+      if (filter == "linear")
+        return FILTER_LINEAR;
+      return FILTER_NEAREST;
+    }
+    
+    bool loadXml(const XMLTree::Node &node) {
+      flags = 0;
+      setSamples(node.attributeAsInt("samples"));
+      
+      setSCoord(parseCoord(node.attribute("sCoord")));
+      setTCoord(parseCoord(node.attribute("tCoord")));
+      setRCoord(parseCoord(node.attribute("rCoord")));
+      
+      setMinFilter(parseFilter(node.attribute("min")));
+      setMagFilter(parseFilter(node.attribute("mag")));
+      setMipFilter(parseFilter(node.attribute("mip")));
+      
+      return true;
+    }
     
     void setSamples(int samples)
     {
       samples = samples < 1 ? 1 : samples > SAMPLER_MAX_SAMPLES ? SAMPLER_MAX_SAMPLES : samples;
       flags = (flags & ~SAMPLER_SAMPLES_MASK) | ((samples - 1) & SAMPLER_SAMPLES_MASK);
     }
-    int samples() const {return (flags & ~SAMPLER_SAMPLES_MASK) + 1;}
+    int samples() const {return (flags & SAMPLER_SAMPLES_MASK) + 1;}
     
     void setSCoord(COORD_TYPE coord) {flags = (flags & ~SAMPLER_COORD_S_MASK) | (coord << SAMPLER_COORD_S_OFFSET);}
     COORD_TYPE sCoord() const {return (COORD_TYPE)((flags & SAMPLER_COORD_S_MASK) >> SAMPLER_COORD_S_OFFSET);}

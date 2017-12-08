@@ -21,6 +21,7 @@
 		C154C1191FD326DB00D3DCFF /* Mesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C154C1171FD326DB00D3DCFF /* Mesh.mesh */; };
 		C154C11C1FD3277700D3DCFF /* Shaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C154C11A1FD3277700D3DCFF /* Shaders.cpp */; };
 		C154C11E1FD327B200D3DCFF /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C154C10D1FD3263B00D3DCFF /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1739D011FD589FA00123B5D /* grid.png in Resources */ = {isa = PBXBuildFile; fileRef = C1739D001FD589F900123B5D /* grid.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		C154C1171FD326DB00D3DCFF /* Mesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Mesh.mesh; sourceTree = "<group>"; };
 		C154C11A1FD3277700D3DCFF /* Shaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shaders.cpp; sourceTree = "<group>"; };
 		C154C11B1FD3277700D3DCFF /* Shaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shaders.h; sourceTree = "<group>"; };
+		C1739D001FD589F900123B5D /* grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 		C154C0EB1FD3247C00D3DCFF /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				C1739D001FD589F900123B5D /* grid.png */,
 				C154C1161FD326DA00D3DCFF /* Scene.xml */,
 				C154C1171FD326DB00D3DCFF /* Mesh.mesh */,
 				C154C0EC1FD3247C00D3DCFF /* AppDelegate.h */,
@@ -226,6 +229,7 @@
 				C154C1191FD326DB00D3DCFF /* Mesh.mesh in Resources */,
 				C154C1181FD326DB00D3DCFF /* Scene.xml in Resources */,
 				C154C0F41FD3247C00D3DCFF /* Main.storyboard in Resources */,
+				C1739D011FD589FA00123B5D /* grid.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
