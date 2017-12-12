@@ -88,7 +88,14 @@
       <Location>-1.190254, -0.018209, 1.319337</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelE" pass="MainPass">
+  <Model mesh="Mesh" name="ModelE" pass="MainPass">
+    <Material name="MaterialE">
+      <Shader name="LambertPhongColor" vertex="v_color_normal" fragment="f_color_lambert_phong_4"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="1.000000, 1.000000, 1.000000" factor="0.800000"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
