@@ -240,7 +240,7 @@ fragment half4 f_lambert_phong_4(InputNormal            input    [[ stage_in  ]]
 
 
 
-struct OutputNormalColor {
+struct OutputColorNormal {
   float4 position [[ position    ]];
   float3 location [[ user(loc)   ]];
   float3 normal   [[ user(norm)  ]];
@@ -248,20 +248,20 @@ struct OutputNormalColor {
   float3 color    [[ user(color) ]];
 };
 
-struct InputNormalColor {
+struct InputColorNormal {
   float3 location [[ user(loc)   ]];
   float3 normal   [[ user(norm)  ]];
   float3 view     [[ user(view)  ]];
   float3 color    [[ user(color) ]];
 };
 
-vertex OutputNormalColor v_color_normal(const device packed_float3 *position [[ buffer(0) ]],
+vertex OutputColorNormal v_color_normal(const device packed_float3 *position [[ buffer(0) ]],
                                         const device packed_float3 *normal   [[ buffer(1) ]],
                                         const device packed_float3 *color0   [[ buffer(2) ]],
                                         constant     STR_Camera    *camera   [[ buffer(3) ]],
                                         constant     STR_Model     *model    [[ buffer(4) ]],
                                         unsigned     int            vid      [[ vertex_id ]]) {
-  OutputNormalColor output;
+  OutputColorNormal output;
   float4 location = model->model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
@@ -271,7 +271,7 @@ vertex OutputNormalColor v_color_normal(const device packed_float3 *position [[ 
   return output;
 }
 
-fragment half4 f_color_lambert_phong_4(InputNormalColor       input    [[ stage_in  ]],
+fragment half4 f_color_lambert_phong_4(InputColorNormal       input    [[ stage_in  ]],
                                        constant STR_Light    *lights   [[ buffer(0) ]],
                                        constant STR_Material *material [[ buffer(1) ]]) {
   LightingParams lightParams;
@@ -291,6 +291,63 @@ fragment half4 f_color_lambert_phong_4(InputNormalColor       input    [[ stage_
 }
 
 
+
+
+
+
+
+struct OutputTextureNormal {
+  float4 position   [[ position   ]];
+  float3 location   [[ user(loc)  ]];
+  float3 normal     [[ user(norm) ]];
+  float3 view       [[ user(view) ]];
+  float2 coordinate [[ user(uv)   ]];
+};
+
+struct InputTextureNormal {
+  float3 location   [[ user(loc)  ]];
+  float3 normal     [[ user(norm) ]];
+  float3 view       [[ user(view) ]];
+  float2 coordinate [[ user(uv)   ]];
+};
+
+vertex OutputTextureNormal v_texture_normal(const device packed_float3 *position [[ buffer(0) ]],
+                                            const device packed_float3 *normal   [[ buffer(1) ]],
+                                            const device packed_float2 *uv0      [[ buffer(2) ]],
+                                            constant     STR_Camera    *camera   [[ buffer(3) ]],
+                                            constant     STR_Model     *model    [[ buffer(4) ]],
+                                            unsigned     int            vid      [[ vertex_id ]]) {
+  OutputTextureNormal output;
+  float4 location = model->model * float4(position[vid], 1.0);
+  output.position = camera->projection * camera->view * location;
+  output.location = location.xyz;
+  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
+  output.view = camera->position.xyz - output.position.xyz;
+  output.coordinate = float2(uv0[vid]);
+  return output;
+}
+
+fragment half4 f_texture_lambert_phong_4(InputTextureNormal     input     [[ stage_in   ]],
+                                         constant STR_Light    *lights    [[ buffer(0)  ]],
+                                         constant STR_Material *material  [[ buffer(1)  ]],
+                                         texture2d<float>       texture2D [[ texture(0) ]],
+                                         sampler                sampler2D [[ sampler(0) ]]) {
+  LightingParams lightParams;
+  MaterialParams materialParams;
+  float4 texture = texture2D.sample(sampler2D, input.coordinate);
+  
+  setupLightingParams(&lightParams, input.normal, input.view);
+  setupMaterialParams(&materialParams, *material, texture.xyz);
+  
+  float3 color = materialParams.ambiantColor;
+  for (int i = 0; i < NUM_LIGHTS; ++i) {
+    setLightToParams(&lightParams, input.location, lights[i]);
+    color += shadeLambert(lightParams, materialParams);
+    color += shadePhong(lightParams, materialParams);
+  }
+  
+  return half4(color.x, color.y, color.z, texture.w);
+}
 
 
 
