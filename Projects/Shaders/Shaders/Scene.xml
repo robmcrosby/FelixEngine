@@ -11,6 +11,14 @@
     <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
     <DepthState function="less" write="true"/>
   </Material>
+  <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
+    <Color>1.000000, 1.000000, 1.000000</Color>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
+      <Location>4.076245, 5.903862, -1.005454</Location>
+    </Transform>
+  </Light>
   <Light energy="0.500000" name="LightB" pass="MainPass" type="point">
     <Color>0.098603, 0.068963, 1.000000</Color>
     <Falloff/>
@@ -18,14 +26,6 @@
       <Scale>1.000000, 1.000000, 1.000000</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
       <Location>-2.271056, -0.135679, 4.769545</Location>
-    </Transform>
-  </Light>
-  <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
-    <Color>1.000000, 1.000000, 1.000000</Color>
-    <Transform>
-      <Scale>1.000000, 1.000000, 1.000000</Scale>
-      <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
-      <Location>4.076245, 5.903862, -1.005454</Location>
     </Transform>
   </Light>
   <Camera frame="MainFrame" name="Camera" pass="MainPass">
@@ -49,7 +49,7 @@
       <Location>-1.949047, 1.414114, 0.812684</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelB" pass="MainPass">
+  <Model mesh="Mesh" name="ModelB" pass="MainPass">
     <Material name="MaterialB">
       <Shader name="ColorShadeless" vertex="v_color" fragment="f_color_shadeless"/>
       <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
@@ -61,7 +61,7 @@
       <Location>-0.852974, 1.504666, -0.471125</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelC" pass="MainPass">
+  <Model mesh="Mesh" name="ModelC" pass="MainPass">
     <Material name="MaterialC">
       <Shader name="TextureShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
       <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
@@ -74,7 +74,14 @@
       <Location>0.335199, 1.576492, -1.838231</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelD" pass="MainPass">
+  <Model mesh="Mesh" name="ModelD" pass="MainPass">
+    <Material name="MaterialD">
+      <Shader name="LambertPhong" vertex="v_normal" fragment="f_lambert_phong_4"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

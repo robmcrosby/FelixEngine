@@ -7,6 +7,8 @@
 //
 
 #define NUM_LIGHTS 2
+#define FOUR_LIGHTS 4
+
 #include "GraphicStructures.h"
 
 
@@ -121,6 +123,119 @@ fragment half4 f_texture_shadeless(InputTexture           input     [[ stage_in 
   float3 color = texture.xyz * material->ambiant.xyz * material->ambiant.a;
   return half4(color.x, color.y, color.z, 1.0);
 }
+
+
+
+
+
+
+
+struct OutputNormal {
+  float4 position [[ position   ]];
+  float3 location [[ user(loc)  ]];
+  float3 normal   [[ user(norm) ]];
+  float3 view     [[ user(view) ]];
+};
+
+struct InputNormal {
+  float3 location [[ user(loc)  ]];
+  float3 normal   [[ user(norm) ]];
+  float3 view     [[ user(view) ]];
+};
+
+struct LightingParams {
+  float3 normal;
+  float3 view;
+  float3 direction;
+  float3 color;
+  float distance;
+  float attenuation;
+  float energy;
+};
+
+struct MaterialParams {
+  float3 ambiantColor;
+  float3 diffuseColor;
+  float3 specularColor;
+  float specularHardness;
+};
+
+device void setupLightingParams(thread LightingParams *params, float3 normal, float3 view) {
+  params->normal = normalize(normal);
+  params->view = normalize(view);
+}
+
+device void setLightToParams(thread LightingParams *params, float3 location, STR_Light light) {
+  params->direction = light.position.w*(light.position.xyz - location) + (1.0 - light.position.w)*-light.direction.xyz;
+  params->distance = length(params->direction);
+  params->direction /= params->distance;
+  params->attenuation = light_attenuation(params->distance, light.factors.xy);
+  params->color = light.color.xyz;
+  params->energy = light.color.w;
+}
+
+device void setupMaterialParams(thread MaterialParams *params, STR_Material material) {
+  params->ambiantColor = material.ambiant.xyz * material.ambiant.w;
+  params->diffuseColor = material.diffuse.xyz * material.diffuse.w;
+  params->specularColor = material.specular.xyz * material.specular.w;
+  params->specularHardness = material.factors.x;
+}
+
+device float lambert(LightingParams params) {
+  return saturate(dot(params.normal, params.direction)) * params.energy * params.attenuation;
+}
+device float3 shadeLambert(LightingParams light, MaterialParams material) {
+  return material.diffuseColor * light.color * lambert(light);
+}
+
+device float phong(LightingParams params, float hardness) {
+  float3 halfAngle = normalize(params.view + params.direction);
+  return pow(saturate(dot(params.normal, halfAngle)), hardness) * params.energy * params.attenuation;
+}
+device float3 shadePhong(LightingParams light, MaterialParams material) {
+  return material.specularColor * light.color * phong(light, material.specularHardness);
+}
+
+
+
+vertex OutputNormal v_normal(const device packed_float3 *position [[ buffer(0) ]],
+                             const device packed_float3 *normal   [[ buffer(1) ]],
+                             constant     STR_Camera    *camera   [[ buffer(2) ]],
+                             constant     STR_Model     *model    [[ buffer(3) ]],
+                             unsigned     int            vid      [[ vertex_id ]]) {
+  OutputNormal output;
+  float4 location = model->model * float4(position[vid], 1.0);
+  output.position = camera->projection * camera->view * location;
+  output.location = location.xyz;
+  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
+  output.view = camera->position.xyz - output.position.xyz;
+  return output;
+}
+
+fragment half4 f_lambert_phong_4(InputNormal            input    [[ stage_in  ]],
+                                 constant STR_Light    *lights   [[ buffer(0) ]],
+                                 constant STR_Material *material [[ buffer(1) ]]) {
+  LightingParams lightParams;
+  MaterialParams materialParams;
+  
+  setupLightingParams(&lightParams, input.normal, input.view);
+  setupMaterialParams(&materialParams, *material);
+  
+  float3 color = materialParams.ambiantColor;
+  for (int i = 0; i < NUM_LIGHTS; ++i) {
+    setLightToParams(&lightParams, input.location, lights[i]);
+    color += shadeLambert(lightParams, materialParams);
+    color += shadePhong(lightParams, materialParams);
+  }
+  
+  return half4(color.x, color.y, color.z, 1.0);
+}
+
+
+
+
+
+
 
 
 
