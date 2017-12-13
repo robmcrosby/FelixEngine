@@ -229,11 +229,11 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
   setupLightingParams(&lightParams, input.normal, input.view); \
   setupMaterialParams(&materialParams, *material); \
   float3 color = materialParams.ambiantColor; \
-  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, LIGHTS) \
   return half4(color.x, color.y, color.z, 1.0); \
 }
 
-LIGHT_FUNC(lambert, phong, 4)
+LIGHT_FUNC(lambert, phong, 2)
 
 
 
@@ -276,12 +276,12 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
   LightingParams lightParams; MaterialParams materialParams; \
   setupLightingParams(&lightParams, input.normal, input.view); \
   setupMaterialParams(&materialParams, *material, input.color); \
-  float3 color = materialParams.ambiantColor; \
-  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  float3 color = materialParams.ambiantColor * input.color; \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, LIGHTS) \
   return half4(color.x, color.y, color.z, 1.0); \
 }
 
-LIGHT_COLOR_FUNC(lambert, phong, 4)
+LIGHT_COLOR_FUNC(lambert, phong, 2)
 
 
 
@@ -328,12 +328,12 @@ texture2d<float> texture2D [[texture(0)]], sampler sampler2D [[sampler(0)]]) { \
   float4 texture = texture2D.sample(sampler2D, input.coordinate); \
   setupLightingParams(&lightParams, input.normal, input.view); \
   setupMaterialParams(&materialParams, *material, texture.xyz); \
-  float3 color = materialParams.ambiantColor; \
-  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  float3 color = materialParams.ambiantColor * texture.xyz; \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, LIGHTS) \
   return half4(color.x, color.y, color.z, texture.w); \
 }
 
-LIGHT_TEXTURE_FUNC(lambert, phong, 4)
+LIGHT_TEXTURE_FUNC(lambert, phong, 2)
 
 
 
