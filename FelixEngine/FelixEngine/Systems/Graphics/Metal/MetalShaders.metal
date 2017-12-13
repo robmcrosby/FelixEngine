@@ -189,7 +189,7 @@ device void setupMaterialParams(thread MaterialParams *params, STR_Material mate
 device float lambert(LightingParams params) {
   return saturate(dot(params.normal, params.direction)) * params.energy * params.attenuation;
 }
-device float3 shadeLambert(LightingParams light, MaterialParams material) {
+device float3 shade_lambert(LightingParams light, MaterialParams material) {
   return material.diffuseColor * light.color * lambert(light);
 }
 
@@ -197,11 +197,16 @@ device float phong(LightingParams params, float hardness) {
   float3 halfAngle = normalize(params.view + params.direction);
   return pow(saturate(dot(params.normal, halfAngle)), hardness) * params.energy * params.attenuation;
 }
-device float3 shadePhong(LightingParams light, MaterialParams material) {
+device float3 shade_phong(LightingParams light, MaterialParams material) {
   return material.specularColor * light.color * phong(light, material.specularHardness);
 }
 
-
+#define LIGHT_LOOP(DIFFUSE, SPECULAR, START, END) \
+  for (int i = START; i < END; ++i) { \
+    setLightToParams(&lightParams, input.location, lights[i]); \
+    color += shade_##DIFFUSE(lightParams, materialParams); \
+    color += shade_##SPECULAR(lightParams, materialParams); \
+  }
 
 vertex OutputNormal v_normal(const device packed_float3 *position [[ buffer(0) ]],
                              const device packed_float3 *normal   [[ buffer(1) ]],
@@ -217,24 +222,18 @@ vertex OutputNormal v_normal(const device packed_float3 *position [[ buffer(0) ]
   return output;
 }
 
-fragment half4 f_lambert_phong_4(InputNormal            input    [[ stage_in  ]],
-                                 constant STR_Light    *lights   [[ buffer(0) ]],
-                                 constant STR_Material *material [[ buffer(1) ]]) {
-  LightingParams lightParams;
-  MaterialParams materialParams;
-  
-  setupLightingParams(&lightParams, input.normal, input.view);
-  setupMaterialParams(&materialParams, *material);
-  
-  float3 color = materialParams.ambiantColor;
-  for (int i = 0; i < NUM_LIGHTS; ++i) {
-    setLightToParams(&lightParams, input.location, lights[i]);
-    color += shadeLambert(lightParams, materialParams);
-    color += shadePhong(lightParams, materialParams);
-  }
-  
-  return half4(color.x, color.y, color.z, 1.0);
+#define LIGHT_FUNC(DIFFUSE, SPECULAR, LIGHTS) \
+fragment half4 f_##DIFFUSE##_##SPECULAR##_##LIGHTS(InputNormal input [[stage_in]], \
+constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buffer(1)]]) { \
+  LightingParams lightParams; MaterialParams materialParams; \
+  setupLightingParams(&lightParams, input.normal, input.view); \
+  setupMaterialParams(&materialParams, *material); \
+  float3 color = materialParams.ambiantColor; \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  return half4(color.x, color.y, color.z, 1.0); \
 }
+
+LIGHT_FUNC(lambert, phong, 4)
 
 
 
@@ -271,24 +270,18 @@ vertex OutputColorNormal v_color_normal(const device packed_float3 *position [[ 
   return output;
 }
 
-fragment half4 f_color_lambert_phong_4(InputColorNormal       input    [[ stage_in  ]],
-                                       constant STR_Light    *lights   [[ buffer(0) ]],
-                                       constant STR_Material *material [[ buffer(1) ]]) {
-  LightingParams lightParams;
-  MaterialParams materialParams;
-  
-  setupLightingParams(&lightParams, input.normal, input.view);
-  setupMaterialParams(&materialParams, *material, input.color);
-  
-  float3 color = materialParams.ambiantColor;
-  for (int i = 0; i < NUM_LIGHTS; ++i) {
-    setLightToParams(&lightParams, input.location, lights[i]);
-    color += shadeLambert(lightParams, materialParams);
-    color += shadePhong(lightParams, materialParams);
-  }
-  
-  return half4(color.x, color.y, color.z, 1.0);
+#define LIGHT_COLOR_FUNC(DIFFUSE, SPECULAR, LIGHTS) \
+fragment half4 f_color_##DIFFUSE##_##SPECULAR##_##LIGHTS(InputColorNormal input [[stage_in]], \
+constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buffer(1)]]) { \
+  LightingParams lightParams; MaterialParams materialParams; \
+  setupLightingParams(&lightParams, input.normal, input.view); \
+  setupMaterialParams(&materialParams, *material, input.color); \
+  float3 color = materialParams.ambiantColor; \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  return half4(color.x, color.y, color.z, 1.0); \
 }
+
+LIGHT_COLOR_FUNC(lambert, phong, 4)
 
 
 
@@ -327,27 +320,20 @@ vertex OutputTextureNormal v_texture_normal(const device packed_float3 *position
   return output;
 }
 
-fragment half4 f_texture_lambert_phong_4(InputTextureNormal     input     [[ stage_in   ]],
-                                         constant STR_Light    *lights    [[ buffer(0)  ]],
-                                         constant STR_Material *material  [[ buffer(1)  ]],
-                                         texture2d<float>       texture2D [[ texture(0) ]],
-                                         sampler                sampler2D [[ sampler(0) ]]) {
-  LightingParams lightParams;
-  MaterialParams materialParams;
-  float4 texture = texture2D.sample(sampler2D, input.coordinate);
-  
-  setupLightingParams(&lightParams, input.normal, input.view);
-  setupMaterialParams(&materialParams, *material, texture.xyz);
-  
-  float3 color = materialParams.ambiantColor;
-  for (int i = 0; i < NUM_LIGHTS; ++i) {
-    setLightToParams(&lightParams, input.location, lights[i]);
-    color += shadeLambert(lightParams, materialParams);
-    color += shadePhong(lightParams, materialParams);
-  }
-  
-  return half4(color.x, color.y, color.z, texture.w);
+#define LIGHT_TEXTURE_FUNC(DIFFUSE, SPECULAR, LIGHTS) \
+fragment half4 f_texture_##DIFFUSE##_##SPECULAR##_##LIGHTS(InputTextureNormal input [[stage_in]], \
+constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buffer(1)]], \
+texture2d<float> texture2D [[texture(0)]], sampler sampler2D [[sampler(0)]]) { \
+  LightingParams lightParams; MaterialParams materialParams; \
+  float4 texture = texture2D.sample(sampler2D, input.coordinate); \
+  setupLightingParams(&lightParams, input.normal, input.view); \
+  setupMaterialParams(&materialParams, *material, texture.xyz); \
+  float3 color = materialParams.ambiantColor; \
+  LIGHT_LOOP(DIFFUSE, SPECULAR, 0, NUM_LIGHTS) \
+  return half4(color.x, color.y, color.z, texture.w); \
 }
+
+LIGHT_TEXTURE_FUNC(lambert, phong, 4)
 
 
 
