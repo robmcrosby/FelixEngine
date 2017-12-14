@@ -157,7 +157,7 @@ struct MaterialParams {
   float3 ambiantColor;
   float3 diffuseColor;
   float3 specularColor;
-  float specularHardness;
+  float4 factors;
 };
 
 device void setupLightingParams(thread LightingParams *params, float3 normal, float3 view) {
@@ -178,7 +178,7 @@ device void setupMaterialParams(thread MaterialParams *params, STR_Material mate
   params->ambiantColor = material.ambiant.xyz * material.ambiant.w;
   params->diffuseColor = material.diffuse.xyz * material.diffuse.w;
   params->specularColor = material.specular.xyz * material.specular.w;
-  params->specularHardness = material.factors.x;
+  params->factors = material.factors;
 }
 
 device void setupMaterialParams(thread MaterialParams *params, STR_Material material, float3 diffuse) {
@@ -186,6 +186,7 @@ device void setupMaterialParams(thread MaterialParams *params, STR_Material mate
   params->diffuseColor *= diffuse;
 }
 
+// Diffuse Shaders
 device float lambert(LightingParams params) {
   return saturate(dot(params.normal, params.direction)) * params.energy * params.attenuation;
 }
@@ -193,12 +194,49 @@ device float3 shade_lambert(LightingParams light, MaterialParams material) {
   return material.diffuseColor * light.color * lambert(light);
 }
 
+device float toon_d(LightingParams params, float size, float smooth) {
+  float angle = acos(dot(params.normal, params.direction));
+  if (angle < size)
+    return 1.0;
+  if (angle > (size + smooth) || smooth == 0.0)
+    return 0.0;
+  return 1.0 - ((angle - size)/smooth);
+}
+device float3 shade_toon_d(LightingParams light, MaterialParams material) {
+  return material.diffuseColor * light.color * toon_d(light, material.factors.z, material.factors.w);
+}
+
+
+// Specular Shaders
 device float phong(LightingParams params, float hardness) {
   float3 halfAngle = normalize(params.view + params.direction);
   return pow(saturate(dot(params.normal, halfAngle)), hardness) * params.energy * params.attenuation;
 }
 device float3 shade_phong(LightingParams light, MaterialParams material) {
-  return material.specularColor * light.color * phong(light, material.specularHardness);
+  return material.specularColor * light.color * phong(light, material.factors.x);
+}
+
+device float cooktorr(LightingParams params, float hardness) {
+  float3 halfAngle = normalize(params.view + params.direction);
+  float nh = max(dot(params.normal, halfAngle), 0.0);
+  float nv = max(dot(params.normal, params.view ), 0.0);
+  return pow(nh, hardness)/(0.1+nv);
+}
+device float3 shade_cooktorr(LightingParams light, MaterialParams material) {
+  return material.specularColor * light.color * cooktorr(light, material.factors.x);
+}
+
+device float toon_s(LightingParams params, float size, float smooth) {
+  float3 halfAngle = normalize(params.view + params.direction);
+  float angle = acos(dot(halfAngle, params.normal));
+  if (angle < size)
+    return 1.0;
+  if (angle >= (size + smooth) || smooth == 0.0)
+    return 0.0;
+  return 1.0 - ((angle - size)/smooth);
+}
+device float3 shade_toon_s(LightingParams light, MaterialParams material) {
+  return material.specularColor * light.color * toon_s(light, material.factors.z, material.factors.w);
 }
 
 #define LIGHT_LOOP(DIFFUSE, SPECULAR, START, END) \
@@ -234,6 +272,7 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
 }
 
 LIGHT_FUNC(lambert, phong, 2)
+LIGHT_FUNC(toon_d, toon_s, 2)
 
 
 
@@ -282,7 +321,7 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
 }
 
 LIGHT_COLOR_FUNC(lambert, phong, 2)
-
+LIGHT_COLOR_FUNC(toon_d, toon_s, 2)
 
 
 
@@ -334,7 +373,7 @@ texture2d<float> texture2D [[texture(0)]], sampler sampler2D [[sampler(0)]]) { \
 }
 
 LIGHT_TEXTURE_FUNC(lambert, phong, 2)
-
+LIGHT_TEXTURE_FUNC(toon_d, toon_s, 2)
 
 
 

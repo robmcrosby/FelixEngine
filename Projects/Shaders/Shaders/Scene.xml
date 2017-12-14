@@ -118,7 +118,14 @@
       <Location>1.093993, 0.144169, -1.331578</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelG" pass="MainPass">
+  <Model mesh="Mesh" name="ModelG" pass="MainPass">
+    <Material name="MaterialG">
+      <Shader name="Toon" vertex="v_normal" fragment="f_toon_d_toon_s_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.200000, 1.000000, 0.200000" factor="0.600000" size="1.0" smooth="0.1"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.600000" size="0.1" smooth="0.1"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

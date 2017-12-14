@@ -102,6 +102,10 @@ bool Material::setAmbiant(const XMLTree::Node &node) {
 }
 
 bool Material::setDiffuse(const XMLTree::Node &node) {
+  if (node.hasAttribute("size"))
+    setDiffuseSize(node.attributeAsFloat("size"));
+  if (node.hasAttribute("smooth"))
+    setDiffuseSmooth(node.attributeAsFloat("smooth"));
   if (node.hasAttributes("color", "factor")) {
     setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
@@ -109,14 +113,19 @@ bool Material::setDiffuse(const XMLTree::Node &node) {
   return false;
 }
 
-void Material::setSpecular(const vec3 &color, float factor, float hardness) {
+void Material::setSpecular(const vec3 &color, float factor) {
   _properties.specular = vec4(color, factor);
-  _properties.factors.x = hardness;
 }
 
 bool Material::setSpecular(const XMLTree::Node &node) {
-  if (node.hasAttributes("color", "factor", "hardness")) {
-    setSpecular(node.attribute("color"), node.attributeAsFloat("factor"), node.attributeAsFloat("hardness"));
+  if (node.hasAttribute("size"))
+    setSpecularSize(node.attributeAsFloat("size"));
+  if (node.hasAttribute("smooth"))
+    setSpecularSmooth(node.attributeAsFloat("smooth"));
+  if (node.hasAttribute("hardness"))
+    setSpecularHardness(node.attributeAsFloat("hardness"));
+  if (node.hasAttributes("color", "factor")) {
+    setSpecular(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
   }
   return false;
