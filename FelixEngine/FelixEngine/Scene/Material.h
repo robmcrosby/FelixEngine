@@ -75,10 +75,14 @@ namespace fx {
     void setDiffuse(const vec3 &color, float factor) {_properties.diffuse = vec4(color, factor);}
     void setDiffuseSize(float size) {_properties.factors.z = size;}
     void setDiffuseSmooth(float smooth) {_properties.factors.w = smooth;}
+    void setDiffuseRoughness(float roughness) {_properties.factors.z = roughness;}
+    void setDiffuseAlbedo(float albedo) {_properties.factors.w = albedo;}
     vec3 diffuseColor() const {return _properties.diffuse.xyz();}
     float diffuseFactor() const {return _properties.diffuse.a;}
     float diffuseSize() const {return _properties.factors.z;}
     float diffuseSmooth() const {return _properties.factors.w;}
+    float diffuseRoughness() const {return _properties.factors.z;}
+    float diffuseAlbedo() const {return _properties.factors.w;}
     
     
     bool setSpecular(const XMLTree::Node &node);

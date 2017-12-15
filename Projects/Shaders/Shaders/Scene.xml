@@ -122,7 +122,7 @@
     <Material name="MaterialG">
       <Shader name="Toon" vertex="v_normal" fragment="f_toon_d_toon_s_2"/>
       <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
-      <Diffuse color="0.200000, 1.000000, 0.200000" factor="0.600000" size="1.0" smooth="0.1"/>
+      <Diffuse color="0.800000, 0.200000, 0.200000" factor="0.600000" size="1.0" smooth="0.1"/>
       <Specular color="1.000000, 1.000000, 1.000000" factor="0.600000" size="0.1" smooth="0.1"/>
       <DepthState function="less" write="true"/>
     </Material>
@@ -132,7 +132,14 @@
       <Location>-0.497530, -1.402597, 1.853538</Location>
     </Transform>
   </Model>
-  <Model material="Material" mesh="Mesh" name="ModelH" pass="MainPass">
+  <Model mesh="Mesh" name="ModelH" pass="MainPass">
+    <Material name="MaterialH">
+      <Shader name="OrenNayerPhong" vertex="v_normal" fragment="f_oren_nayer_cooktorr_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.800000, 0.800000" factor="1.000000" roughness="0.2" albedo="1.2"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.400000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
     <Transform>
       <Scale>0.4, 0.4, 0.4</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

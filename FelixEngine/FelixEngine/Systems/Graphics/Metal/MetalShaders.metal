@@ -11,6 +11,7 @@
 
 #include "GraphicStructures.h"
 
+#define PI 3.14159265
 
 device float3 rotate_quat(float4 rot, float3 v);
 device float2 transform_coordinate(float4x4 transform, float2 coordinate);
@@ -194,13 +195,31 @@ device float3 shade_lambert(LightingParams light, MaterialParams material) {
   return material.diffuseColor * light.color * lambert(light);
 }
 
+device float oren_nayer(LightingParams params, float roughness, float albedo) {
+  float LdotV = dot(params.direction, params.view);
+  float NdotL = dot(params.direction, params.normal);
+  float NdotV = dot(params.normal, params.view);
+  
+  float s = LdotV - NdotL * NdotV;
+  float t = mix(1.0, max(NdotL, NdotV), step(0.0, s));
+  
+  roughness *= roughness;
+  float A = 1.0 + roughness*(albedo/(roughness + 0.13) + 0.5/(roughness + 0.33));
+  float B = 0.45*roughness/(roughness + 0.09);
+  
+  return albedo * max(0.0, NdotL)*(A + B*s/t)/PI * params.energy * params.attenuation;
+}
+device float3 shade_oren_nayer(LightingParams light, MaterialParams material) {
+  return material.diffuseColor * light.color * oren_nayer(light, material.factors.z, material.factors.w);
+}
+
 device float toon_d(LightingParams params, float size, float smooth) {
   float angle = acos(dot(params.normal, params.direction));
   if (angle < size)
-    return 1.0;
+    return params.energy * params.attenuation;
   if (angle > (size + smooth) || smooth == 0.0)
     return 0.0;
-  return 1.0 - ((angle - size)/smooth);
+  return (1.0 - ((angle - size)/smooth)) * params.energy * params.attenuation;
 }
 device float3 shade_toon_d(LightingParams light, MaterialParams material) {
   return material.diffuseColor * light.color * toon_d(light, material.factors.z, material.factors.w);
@@ -220,7 +239,7 @@ device float cooktorr(LightingParams params, float hardness) {
   float3 halfAngle = normalize(params.view + params.direction);
   float nh = max(dot(params.normal, halfAngle), 0.0);
   float nv = max(dot(params.normal, params.view ), 0.0);
-  return pow(nh, hardness)/(0.1+nv);
+  return pow(nh, hardness)/(0.1+nv) * params.energy * params.attenuation;
 }
 device float3 shade_cooktorr(LightingParams light, MaterialParams material) {
   return material.specularColor * light.color * cooktorr(light, material.factors.x);
@@ -230,10 +249,10 @@ device float toon_s(LightingParams params, float size, float smooth) {
   float3 halfAngle = normalize(params.view + params.direction);
   float angle = acos(dot(halfAngle, params.normal));
   if (angle < size)
-    return 1.0;
+    return params.energy * params.attenuation;
   if (angle >= (size + smooth) || smooth == 0.0)
     return 0.0;
-  return 1.0 - ((angle - size)/smooth);
+  return (1.0 - ((angle - size)/smooth)) * params.energy * params.attenuation;
 }
 device float3 shade_toon_s(LightingParams light, MaterialParams material) {
   return material.specularColor * light.color * toon_s(light, material.factors.z, material.factors.w);
@@ -272,6 +291,15 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
 }
 
 LIGHT_FUNC(lambert, phong, 2)
+LIGHT_FUNC(lambert, cooktorr, 2)
+LIGHT_FUNC(lambert, toon_s, 2)
+
+LIGHT_FUNC(oren_nayer, phong, 2)
+LIGHT_FUNC(oren_nayer, cooktorr, 2)
+LIGHT_FUNC(oren_nayer, toon_s, 2)
+
+LIGHT_FUNC(toon_d, phong, 2)
+LIGHT_FUNC(toon_d, cooktorr, 2)
 LIGHT_FUNC(toon_d, toon_s, 2)
 
 
@@ -321,9 +349,16 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
 }
 
 LIGHT_COLOR_FUNC(lambert, phong, 2)
+LIGHT_COLOR_FUNC(lambert, cooktorr, 2)
+LIGHT_COLOR_FUNC(lambert, toon_s, 2)
+
+LIGHT_COLOR_FUNC(oren_nayer, phong, 2)
+LIGHT_COLOR_FUNC(oren_nayer, cooktorr, 2)
+LIGHT_COLOR_FUNC(oren_nayer, toon_s, 2)
+
+LIGHT_COLOR_FUNC(toon_d, phong, 2)
+LIGHT_COLOR_FUNC(toon_d, cooktorr, 2)
 LIGHT_COLOR_FUNC(toon_d, toon_s, 2)
-
-
 
 
 
@@ -373,10 +408,16 @@ texture2d<float> texture2D [[texture(0)]], sampler sampler2D [[sampler(0)]]) { \
 }
 
 LIGHT_TEXTURE_FUNC(lambert, phong, 2)
+LIGHT_TEXTURE_FUNC(lambert, cooktorr, 2)
+LIGHT_TEXTURE_FUNC(lambert, toon_s, 2)
+
+LIGHT_TEXTURE_FUNC(oren_nayer, phong, 2)
+LIGHT_TEXTURE_FUNC(oren_nayer, cooktorr, 2)
+LIGHT_TEXTURE_FUNC(oren_nayer, toon_s, 2)
+
+LIGHT_TEXTURE_FUNC(toon_d, phong, 2)
+LIGHT_TEXTURE_FUNC(toon_d, cooktorr, 2)
 LIGHT_TEXTURE_FUNC(toon_d, toon_s, 2)
-
-
-
 
 
 

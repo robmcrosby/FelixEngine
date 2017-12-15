@@ -106,6 +106,10 @@ bool Material::setDiffuse(const XMLTree::Node &node) {
     setDiffuseSize(node.attributeAsFloat("size"));
   if (node.hasAttribute("smooth"))
     setDiffuseSmooth(node.attributeAsFloat("smooth"));
+  if (node.hasAttribute("roughness"))
+    setDiffuseRoughness(node.attributeAsFloat("roughness"));
+  if (node.hasAttribute("albedo"))
+    setDiffuseAlbedo(node.attributeAsFloat("albedo"));
   if (node.hasAttributes("color", "factor")) {
     setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
