@@ -66,7 +66,8 @@ void ExampleScene::initalize() {
   material->enableDepthTesting();
   material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
   material->setDiffuse(fx::vec3(0.7, 0.7, 0.7), 0.8);
-  material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6, 20.0);
+  material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6);
+  material->setSpecularHardness(20.0);
   
   // Setup the Bunny Model
   _model = _scene.get<fx::Model>("Bunny");

@@ -3,15 +3,8 @@
   <Frame name="MainFrame" window="0">
     <Buffer type="depth"/>
   </Frame>
-  <Shader fragment="basic_fragment" name="Shader" vertex="basic_vertex"/>
   <Mesh file="Mesh.mesh" name="Mesh"/>
   <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
-  <Material name="Material" shader="Shader">
-    <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
-    <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
-    <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
-    <DepthState function="less" write="true"/>
-  </Material>
   <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
     <Color>1.000000, 1.000000, 1.000000</Color>
     <Transform>

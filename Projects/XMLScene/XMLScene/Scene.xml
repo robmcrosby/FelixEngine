@@ -3,7 +3,7 @@
   <Frame name="MainFrame" window="0">
     <Buffer type="depth"/>
   </Frame>
-  <Shader fragment="basic_fragment" name="Shader" vertex="basic_vertex"/>
+  <Shader name="Shader" vertex="v_normal" fragment="f_lambert_phong_2"/>
   <Mesh file="Mesh.mesh" name="Mesh"/>
   <Material name="Material" shader="Shader">
     <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>

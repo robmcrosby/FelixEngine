@@ -16,8 +16,6 @@
 device float3 rotate_quat(float4 rot, float3 v);
 device float2 transform_coordinate(float4x4 transform, float2 coordinate);
 device float light_attenuation(float distance, float2 factors);
-device float shade_diffuse(float3 normal, float3 light);
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness);
 
 
 device float3 rotate_quat(float4 rot, float3 v) {
@@ -30,15 +28,6 @@ device float2 transform_coordinate(float4x4 transform, float2 coordinate) {
 
 device float light_attenuation(float distance, float2 factors) {
   return 1.0 / (1.0 + distance*factors.x + distance*distance*factors.y);
-}
-
-device float shade_diffuse(float3 normal, float3 light) {
-  return saturate(dot(normal, light));
-}
-
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
-  float3 halfAngle = normalize(view + light);
-  return pow(saturate(dot(normal, halfAngle)), hardness);
 }
 
 
@@ -304,21 +293,27 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
   return half4(color.x, color.y, color.z, 1.0); \
 }
 
-LIGHT_FUNC(lambert, phong, 2)
-LIGHT_FUNC(lambert, cooktorr, 2)
-LIGHT_FUNC(lambert, toon_s, 2)
+#define LIGHT_FUNCS(DIFFUSE, SPECULAR) \
+LIGHT_FUNC(DIFFUSE, SPECULAR, 1) \
+LIGHT_FUNC(DIFFUSE, SPECULAR, 2) \
+LIGHT_FUNC(DIFFUSE, SPECULAR, 4) \
+LIGHT_FUNC(DIFFUSE, SPECULAR, 8)
 
-LIGHT_FUNC(oren_nayer, phong, 2)
-LIGHT_FUNC(oren_nayer, cooktorr, 2)
-LIGHT_FUNC(oren_nayer, toon_s, 2)
+LIGHT_FUNCS(lambert, phong)
+LIGHT_FUNCS(lambert, cooktorr)
+LIGHT_FUNCS(lambert, toon_s)
 
-LIGHT_FUNC(toon_d, phong, 2)
-LIGHT_FUNC(toon_d, cooktorr, 2)
-LIGHT_FUNC(toon_d, toon_s, 2)
+LIGHT_FUNCS(oren_nayer, phong)
+LIGHT_FUNCS(oren_nayer, cooktorr)
+LIGHT_FUNCS(oren_nayer, toon_s)
 
-LIGHT_FUNC(minnaert, phong, 2)
-LIGHT_FUNC(minnaert, cooktorr, 2)
-LIGHT_FUNC(minnaert, toon_s, 2)
+LIGHT_FUNCS(toon_d, phong)
+LIGHT_FUNCS(toon_d, cooktorr)
+LIGHT_FUNCS(toon_d, toon_s)
+
+LIGHT_FUNCS(minnaert, phong)
+LIGHT_FUNCS(minnaert, cooktorr)
+LIGHT_FUNCS(minnaert, toon_s)
 
 
 
@@ -365,21 +360,27 @@ constant STR_Light *lights [[buffer(0)]], constant STR_Material *material [[buff
   return half4(color.x, color.y, color.z, 1.0); \
 }
 
-LIGHT_COLOR_FUNC(lambert, phong, 2)
-LIGHT_COLOR_FUNC(lambert, cooktorr, 2)
-LIGHT_COLOR_FUNC(lambert, toon_s, 2)
+#define LIGHT_COLOR_FUNCS(DIFFUSE, SPECULAR) \
+LIGHT_COLOR_FUNC(DIFFUSE, SPECULAR, 1) \
+LIGHT_COLOR_FUNC(DIFFUSE, SPECULAR, 2) \
+LIGHT_COLOR_FUNC(DIFFUSE, SPECULAR, 4) \
+LIGHT_COLOR_FUNC(DIFFUSE, SPECULAR, 8)
 
-LIGHT_COLOR_FUNC(oren_nayer, phong, 2)
-LIGHT_COLOR_FUNC(oren_nayer, cooktorr, 2)
-LIGHT_COLOR_FUNC(oren_nayer, toon_s, 2)
+LIGHT_COLOR_FUNCS(lambert, phong)
+LIGHT_COLOR_FUNCS(lambert, cooktorr)
+LIGHT_COLOR_FUNCS(lambert, toon_s)
 
-LIGHT_COLOR_FUNC(toon_d, phong, 2)
-LIGHT_COLOR_FUNC(toon_d, cooktorr, 2)
-LIGHT_COLOR_FUNC(toon_d, toon_s, 2)
+LIGHT_COLOR_FUNCS(oren_nayer, phong)
+LIGHT_COLOR_FUNCS(oren_nayer, cooktorr)
+LIGHT_COLOR_FUNCS(oren_nayer, toon_s)
 
-LIGHT_COLOR_FUNC(minnaert, phong, 2)
-LIGHT_COLOR_FUNC(minnaert, cooktorr, 2)
-LIGHT_COLOR_FUNC(minnaert, toon_s, 2)
+LIGHT_COLOR_FUNCS(toon_d, phong)
+LIGHT_COLOR_FUNCS(toon_d, cooktorr)
+LIGHT_COLOR_FUNCS(toon_d, toon_s)
+
+LIGHT_COLOR_FUNCS(minnaert, phong)
+LIGHT_COLOR_FUNCS(minnaert, cooktorr)
+LIGHT_COLOR_FUNCS(minnaert, toon_s)
 
 
 
@@ -427,76 +428,24 @@ texture2d<float> texture2D [[texture(0)]], sampler sampler2D [[sampler(0)]]) { \
   return half4(color.x, color.y, color.z, texture.w); \
 }
 
-LIGHT_TEXTURE_FUNC(lambert, phong, 2)
-LIGHT_TEXTURE_FUNC(lambert, cooktorr, 2)
-LIGHT_TEXTURE_FUNC(lambert, toon_s, 2)
+#define LIGHT_TEXTURE_FUNCS(DIFFUSE, SPECULAR) \
+LIGHT_TEXTURE_FUNC(DIFFUSE, SPECULAR, 1) \
+LIGHT_TEXTURE_FUNC(DIFFUSE, SPECULAR, 2) \
+LIGHT_TEXTURE_FUNC(DIFFUSE, SPECULAR, 4) \
+LIGHT_TEXTURE_FUNC(DIFFUSE, SPECULAR, 8)
 
-LIGHT_TEXTURE_FUNC(oren_nayer, phong, 2)
-LIGHT_TEXTURE_FUNC(oren_nayer, cooktorr, 2)
-LIGHT_TEXTURE_FUNC(oren_nayer, toon_s, 2)
+LIGHT_TEXTURE_FUNCS(lambert, phong)
+LIGHT_TEXTURE_FUNCS(lambert, cooktorr)
+LIGHT_TEXTURE_FUNCS(lambert, toon_s)
 
-LIGHT_TEXTURE_FUNC(toon_d, phong, 2)
-LIGHT_TEXTURE_FUNC(toon_d, cooktorr, 2)
-LIGHT_TEXTURE_FUNC(toon_d, toon_s, 2)
+LIGHT_TEXTURE_FUNCS(oren_nayer, phong)
+LIGHT_TEXTURE_FUNCS(oren_nayer, cooktorr)
+LIGHT_TEXTURE_FUNCS(oren_nayer, toon_s)
 
-LIGHT_TEXTURE_FUNC(minnaert, phong, 2)
-LIGHT_TEXTURE_FUNC(minnaert, cooktorr, 2)
-LIGHT_TEXTURE_FUNC(minnaert, toon_s, 2)
+LIGHT_TEXTURE_FUNCS(toon_d, phong)
+LIGHT_TEXTURE_FUNCS(toon_d, cooktorr)
+LIGHT_TEXTURE_FUNCS(toon_d, toon_s)
 
-
-
-
-struct VertexOutput {
-  float4 position [[ position       ]];
-  float3 location [[ user(location) ]];
-  float3 normal   [[ user(normal)   ]];
-  float3 view     [[ user(view)     ]];
-};
-
-struct FragmentInput {
-  float3 location [[ user(location) ]];
-  float3 normal   [[ user(normal)   ]];
-  float3 view     [[ user(view)     ]];
-};
-
-vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
-                                 const device packed_float3 *normal   [[ buffer(1) ]],
-                                 constant     STR_Camera    *camera   [[ buffer(2) ]],
-                                 constant     STR_Model     *model    [[ buffer(3) ]],
-                                 unsigned     int            vid      [[ vertex_id ]]) {
-  VertexOutput output;
-  float4 location = model->model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
-  output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
-  output.view   = camera->position.xyz - output.position.xyz;
-  return output;
-}
-
-fragment half4 basic_fragment(FragmentInput          input    [[ stage_in  ]],
-                              constant STR_Light    *lights   [[ buffer(0) ]],
-                              constant STR_Material *material [[ buffer(1) ]]) {
-  // Set the base ambiant color
-  float3 color = material->ambiant.xyz * material->ambiant.w;
-  float3 normal = normalize(input.normal);
-  float3 view = normalize(input.view);
-  
-  for (int i = 0; i < NUM_LIGHTS; ++i) {
-    STR_Light light = lights[i];
-    float3 lightDirection = light.position.w*(light.position.xyz - input.location) + (1.0 - light.position.w)*-light.direction.xyz;
-    float lightDistance = length(lightDirection);
-    float attenuation = light_attenuation(lightDistance, light.factors.xy);
-    
-    lightDirection /= lightDistance;
-    
-    // Add Light Diffuse
-    float diffuse = shade_diffuse(normal, lightDirection) * light.color.w * material->diffuse.w;
-    color += material->diffuse.xyz * light.color.xyz * diffuse * attenuation;
-    
-    // Add Light Specular
-    float specular = shade_specular(normal, view, lightDirection, material->factors.x) * light.color.w * material->specular.w;
-    color += material->specular.xyz * light.color.xyz * specular * attenuation;
-  }
-  
-  return half4(color.x, color.y, color.z, 1.0);
-}
+LIGHT_TEXTURE_FUNCS(minnaert, phong)
+LIGHT_TEXTURE_FUNCS(minnaert, cooktorr)
+LIGHT_TEXTURE_FUNCS(minnaert, toon_s)
