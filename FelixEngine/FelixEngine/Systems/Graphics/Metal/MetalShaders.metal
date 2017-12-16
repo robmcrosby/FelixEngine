@@ -225,6 +225,20 @@ device float3 shade_toon_d(LightingParams light, MaterialParams material) {
   return material.diffuseColor * light.color * toon_d(light, material.factors.z, material.factors.w);
 }
 
+device float minnaert(LightingParams params, float darkness) {
+  float nl = max(dot(params.normal, params.direction), 0.0);
+  float nv = max(dot(params.normal, params.view), 0.0);
+  
+  if(darkness <= 1.0)
+    return nl*pow(max(nv*nl, 0.1), darkness - 1.0) * params.energy * params.attenuation;
+  else
+    return nl*pow(1.0001 - nv, darkness - 1.0) * params.energy * params.attenuation;
+}
+device float3 shade_minnaert(LightingParams light, MaterialParams material) {
+  return material.diffuseColor * light.color * minnaert(light, material.factors.z);
+}
+
+
 
 // Specular Shaders
 device float phong(LightingParams params, float hardness) {
@@ -302,6 +316,9 @@ LIGHT_FUNC(toon_d, phong, 2)
 LIGHT_FUNC(toon_d, cooktorr, 2)
 LIGHT_FUNC(toon_d, toon_s, 2)
 
+LIGHT_FUNC(minnaert, phong, 2)
+LIGHT_FUNC(minnaert, cooktorr, 2)
+LIGHT_FUNC(minnaert, toon_s, 2)
 
 
 
@@ -360,6 +377,9 @@ LIGHT_COLOR_FUNC(toon_d, phong, 2)
 LIGHT_COLOR_FUNC(toon_d, cooktorr, 2)
 LIGHT_COLOR_FUNC(toon_d, toon_s, 2)
 
+LIGHT_COLOR_FUNC(minnaert, phong, 2)
+LIGHT_COLOR_FUNC(minnaert, cooktorr, 2)
+LIGHT_COLOR_FUNC(minnaert, toon_s, 2)
 
 
 
@@ -418,6 +438,10 @@ LIGHT_TEXTURE_FUNC(oren_nayer, toon_s, 2)
 LIGHT_TEXTURE_FUNC(toon_d, phong, 2)
 LIGHT_TEXTURE_FUNC(toon_d, cooktorr, 2)
 LIGHT_TEXTURE_FUNC(toon_d, toon_s, 2)
+
+LIGHT_TEXTURE_FUNC(minnaert, phong, 2)
+LIGHT_TEXTURE_FUNC(minnaert, cooktorr, 2)
+LIGHT_TEXTURE_FUNC(minnaert, toon_s, 2)
 
 
 
