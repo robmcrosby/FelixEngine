@@ -85,6 +85,7 @@
 		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EB11F0F09860021F704 /* Camera.cpp */; };
 		C1E60EB41F0F09860021F704 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EB21F0F09860021F704 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D61F353A680005367E /* ARKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -169,6 +170,7 @@
 		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		C1E60EB11F0F09860021F704 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		C1E60EB21F0F09860021F704 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalFunctions.h; path = Systems/Graphics/Metal/MetalFunctions.h; sourceTree = "<group>"; };
 		C1F7D9D61F353A680005367E /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -288,6 +290,7 @@
 				C1401D501F08A07500BE9958 /* MetalTextureBuffer.mm */,
 				C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */,
 				C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */,
+				C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */,
 				C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */,
 			);
 			name = MetalGraphics;
@@ -454,6 +457,7 @@
 				C1A5E3831F3659620071D515 /* ARCamera.h in Headers */,
 				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
+				C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */,
 				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C10D82651F0E6B8B0005629F /* Scene.h in Headers */,

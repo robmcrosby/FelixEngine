@@ -115,8 +115,8 @@
     <Material name="MaterialG">
       <Shader name="Toon" vertex="v_normal" fragment="f_toon_d_toon_s_2"/>
       <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
-      <Diffuse color="0.800000, 0.200000, 0.200000" factor="0.600000" size="1.0" smooth="0.1"/>
-      <Specular color="1.000000, 1.000000, 1.000000" factor="0.600000" size="0.1" smooth="0.1"/>
+      <Diffuse color="0.800000, 0.200000, 0.200000" factor="0.800000" size="1.0" smooth="0.1"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.600000" size="0.4" smooth="0.1"/>
       <DepthState function="less" write="true"/>
     </Material>
     <Transform>
