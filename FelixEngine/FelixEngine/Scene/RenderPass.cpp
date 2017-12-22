@@ -7,152 +7,97 @@
 //
 
 #include "RenderPass.h"
-#include "Graphics.h"
-
-#include "Camera.h"
-#include "Model.h"
-#include "Material.h"
-#include "LightRig.h"
+#include "GraphicStructures.h"
 
 
 using namespace fx;
 using namespace std;
 
-RenderItem::RenderItem(Camera *camera, Model *model): model(model) {
-  task.uniforms = &uniforms;
-  setCamera(camera);
-  setModel(model);
+RenderPass::RenderPass() {
+  _camera = nullptr;
+  _lightUniforms = UniformMap::make();
 }
 
-RenderItem& RenderItem::operator=(const RenderItem &other) {
-  model = other.model;
-  uniforms = other.uniforms;
-  task = other.task;
-  task.uniforms = &uniforms;
-  return *this;
-}
-
-bool RenderItem::active() const {
-  return !model->hidden() && task.mesh != nullptr && task.shader != nullptr && task.frame != nullptr;
-}
-
-void RenderItem::setClearOperations(Camera *camera) {
-  if (camera != nullptr) {
-    // Set Clear Color
-    if (camera->isClearingColor())
-      task.setClearColor(camera->clearColor());
-    else
-      task.setDefaultColorActions();
-    
-    // Set Clear Depth
-    if (camera->isClearingDepth())
-      task.setClearDepthStencil(camera->clearDepth());
-    else
-      task.setDefaultDepthStencilActions();
-  }
-}
-
-void RenderItem::setDefaultOperations() {
-  task.setDefaultColorActions();
-  task.setDefaultDepthStencilActions();
-}
-
-void RenderItem::setCamera(Camera *camera) {
-  if (camera != nullptr) {
-    uniforms["camera"] = camera->data();
-    task.frame = camera->frame();
-    
-    LightRig *lightRig = camera->lightRig();
-    if (lightRig != nullptr && lightRig->size() > 0)
-      uniforms["lights"].load(&lightRig->data(), lightRig->size());
-  }
-}
-
-void RenderItem::setModel(Model *newModel) {
-  if (model != nullptr) {
-    model = newModel;
-    uniforms["model"] = model->data();
-    task.mesh = model->mesh();
-    
-    Material *material = model->material();
-    if (material != nullptr) {
-      uniforms["material"] = material->data();
-      task.textures = &material->textures();
-      task.shader = material->shader();
-      task.depthState = material->depthState();
-    }
-  }
-}
-
-
-RenderPass::RenderPass(const std::string name): _name(name), _camera(nullptr) {
+RenderPass::~RenderPass() {
   
-}
-
-void RenderPass::setCamera(Camera *camera) {
-  _camera = camera;
-  for (auto item : _items)
-    item.setCamera(_camera);
-}
-
-void RenderPass::addModel(Model *model) {
-  _items.push_back(RenderItem(_camera, model));
-}
-
-void RenderPass::removeModel(Model *model) {
-  // TODO
-}
-
-void RenderPass::update() {
-  for (auto item : _items)
-    item.uniforms.update();
 }
 
 void RenderPass::render() {
   Graphics &graphics = Graphics::getInstance();
-  bool firstItem = !_camera->preDraw();
-  
-  for (auto item : _items) {
-    if (item.active()) {
-      if (firstItem) {
-        item.setClearOperations(_camera);
-        firstItem = false;
-      }
-      else
-        item.setDefaultOperations();
-      graphics.addTask(item.task);
+
+  if (_models.size()) {
+    auto model = _models.begin();
+    GraphicTask templateTask;
+    
+    // Setup the template
+    if (_camera)
+      _camera->setupTemplateTask(templateTask);
+    
+    // Update and assign light uniforms
+    updateLightUniforms();
+    templateTask.uniforms.push_back(_lightUniforms);
+
+    // Apply Camera clear operations on the first task
+    if (_camera) {
+      GraphicTask task = templateTask;
+      (*model)->applyToTask(task);
+      _camera->applyToTask(task);
+      graphics.addTask(task);
+      ++model;
+    }
+
+    // Create tasks for the rest of the models
+    while (model != _models.end()) {
+      GraphicTask task = templateTask;
+      (*model)->applyToTask(task);
+      graphics.addTask(task);
+      ++model;
     }
   }
 }
 
-
-
-RenderPasses::RenderPasses() {
-  
+void RenderPass::updateLightUniforms() {
+  vector<STR_Light> lightPeramaters;
+  for (auto &light : _lights)
+    lightPeramaters.push_back(light->peramaters());
+  (*_lightUniforms)["lights"] = lightPeramaters;
 }
 
-RenderPasses::~RenderPasses() {
-  
+void RenderPass::reset() {
+  _camera = nullptr;
+  _lights.clear();
+  _models.clear();
 }
 
-void RenderPasses::update() {
-  for (auto pass : _renderPasses)
-    pass.update();
+RenderPassMap& RenderPass::getRenderPassMap() {
+  static RenderPassMap mapInstance = RenderPassMap();
+  return mapInstance;
 }
 
-void RenderPasses::render() {
-  for (auto pass : _renderPasses)
-    pass.render();
-}
-
-RenderPass& RenderPasses::operator[](const std::string &name) {
-  // Attempt to find the RenderPass
-  for (int i = 0; i < _renderPasses.size(); ++i) {
-    if (name == _renderPasses.at(i).name())
-      return _renderPasses.at(i);
+RenderPassPtr RenderPass::getRenderPass(const std::string &name) {
+  RenderPassMap &map = getRenderPassMap();
+  RenderPassPtr renderPass = map[name];
+  if (!renderPass) {
+    renderPass = std::make_shared<RenderPass>();
+    map[name] = renderPass;
   }
-  
-  // Create a new RenderPass
-  _renderPasses.push_back(name);
-  return _renderPasses.back();
+  return renderPass;
+}
+
+void RenderPass::renderPasses(const RenderScheme &scheme) {
+  RenderScheme::const_iterator name = scheme.begin();
+  while (name != scheme.end()) {
+    RenderPassPtr pass = getRenderPass(*name);
+    pass->render();
+    ++name;
+  }
+}
+
+void RenderPass::resetPasses() {
+  RenderPassMap &passes = getRenderPassMap();
+  RenderPassMap::iterator pass = passes.begin();
+  while (pass != passes.end()) {
+    pass->second->reset();
+    ++pass;
+  }
 }

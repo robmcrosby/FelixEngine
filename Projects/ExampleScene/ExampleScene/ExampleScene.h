@@ -10,20 +10,24 @@
 #define ExampleScene_h
 
 #import <FelixEngine/Application.h>
+#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Scene.h>
+#import <FelixEngine/Model.h>
 
 class ExampleScene: public fx::Application {
   private:
+  fx::RenderScheme _renderScheme;
+  
   fx::Scene _scene;
-  fx::Model *_model;
+  fx::ModelPtr _model;
   
   public:
   ExampleScene();
   virtual ~ExampleScene();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* ExampleScene_h */

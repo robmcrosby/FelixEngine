@@ -28,11 +28,18 @@ void Application::initalize() {
   
 }
 
-void Application::update() {
-  
+void Application::handle(const Event &event) {
+  if (event.catagory == EVENT_INPUT) {
+    if (event.type == INPUT_TOUCH_DOWN) {
+      for (int i = 0; i < event.message.size(); ++i) {
+        const Touch &touch = (const Touch&)event.message[i];
+        std::cout << touch.location << std::endl;
+      }
+    }
+  }
 }
 
-void Application::render() {
+void Application::update(float td) {
   
 }
 
@@ -48,11 +55,10 @@ void Application::willTerminate() {
   
 }
 
-void Application::processFrame() {
+void Application::processFrame(float td) {
   if (_graphics != nullptr) {
     _graphics->nextFrame();
-    update();
-    render();
+    update(td);
     _graphics->presentFrame();
   }
 }

@@ -9,44 +9,31 @@
 #ifndef Camera_h
 #define Camera_h
 
-#include "Matrix.h"
-#include "XMLTree.h"
+#include "RenderItem.h"
+#include "Scene.h"
+#include "Graphics.h"
+#include "UniformMap.h"
+#include "Transform.h"
+#include "GraphicStructures.h"
 
-#define DEFINE_CAMERA_BUILDER(name) \
-  struct name##Builder: fx::iCameraBuilder { \
-    static name##Builder intance; \
-    name##Builder() {fx::Camera::builders()[#name] = this;} \
-    virtual fx::Camera* build(fx::Scene *scene) {return new fx::name(scene);} \
-  }; \
-  name##Builder name##Builder::intance;
 
 namespace fx {
-  class Scene;
-  class Camera;
-  class LightRig;
-  class FrameBuffer;
-  class ShaderProgram;
+  DEFINE_OBJ_BUILDER(Camera)
   
-  struct iCameraBuilder {
-    virtual ~iCameraBuilder() {}
-    virtual Camera* build(Scene *scene) = 0;
-  };
-  typedef std::map<std::string, iCameraBuilder*> CameraBuilderMap;
-  
-  struct CameraData {
-    mat4 projection;
-    mat4 view;
-    vec4 position;
-  };
-  
-  class Camera {
+  class Camera: public RenderItem, public iObject {
+  private:
+    static CameraBuilder cameraBuilder;
+    
   protected:
     Scene *_scene;
     
-    CameraData _data;
-    LightRig *_lightRig;
-    FrameBuffer *_frame;
-    ShaderProgram *_shader;
+    TransformPtr _transform;
+    UniformsPtr  _uniforms;
+    
+    FrameBufferPtr  _frame;
+    ShaderProgramPtr _shader;
+    
+    mat4 _projection;
     
     bool _isClearingColor;
     vec4 _clearColor;
@@ -55,53 +42,56 @@ namespace fx {
     float _clearDepth;
     
   public:
-    Camera(Scene *scene);
+    Camera();
     virtual ~Camera();
     
-    virtual void update();
+    virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
+    virtual void update(float dt);
     
-    virtual bool preDraw();
+    virtual void setupTemplateTask(GraphicTask &task);
+    virtual void applyToTask(GraphicTask &task);
     
-    CameraData& data() {return _data;}
-    
-    void setLightRig(const std::string &name);
-    void setLightRig(LightRig *rig) {_lightRig = rig;}
-    LightRig* lightRig() {return _lightRig;}
+    virtual STR_Camera properties();
     
     bool setView(const XMLTree::Node &node);
-    void setView(const mat4 &view) {
-      _data.view = view;
-      _data.position = view * vec4(0.0f, 0.0f, 0.0f, 1.0f);
-      _data.position /= _data.position.w;
-    }
+    void setView(const mat4 &view);
     void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
-      _data.view = mat4::LookAt(eye, center, up);
-      _data.position = vec4(eye, 1.0);
+      setView(mat4::LookAt(eye, center, up));
     }
-    vec3 position() const {return _data.position.xyz();}
+    mat4 view() const;
+    
+    void setRotation(const quat &rotation) {_transform->setRotation(rotation);}
+    quat localRotation() const {return _transform->localRotation();}
+    quat globalRotation() const {return _transform->globalRotation();}
+    
+    void setLocation(const vec3 &location) {_transform->setLocation(location);}
+    vec3 localLocation() const {return _transform->localLocation();}
+    vec3 globalLocation() const {return _transform->globalLocation();}
     
     void addDepthBuffer();
     
     bool setProjection(const XMLTree::Node &node);
-    void setProjection(const mat4 &projection) {_data.projection = projection;}
+    void setProjection(const mat4 &projection) {_projection = projection;}
     void setOrthographic(float scale, float near, float far);
     void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
-      _data.projection = mat4::Ortho(left, right, bottom, top, near, far);
+      setProjection(mat4::Ortho(left, right, bottom, top, near, far));
     }
-    
-    void setFrustum(float scale, float near, float far);
+    void setFrustum(float angle, float near, float far);
     void setFrustum(float left, float right, float bottom, float top, float near, float far) {
-      _data.projection = mat4::Frustum(left, right, bottom, top, near, far);
+      setProjection(mat4::Frustum(left, right, bottom, top, near, far));
     }
+    mat4 projection() const {return _projection;}
     
+    bool setFrame(const XMLTree::Node &node);
     void setFrame(const std::string &name);
-    void setFrame(FrameBuffer *frame) {_frame = frame;}
-    FrameBuffer* frame() {return _frame;}
+    void setFrame(FrameBufferPtr &frame) {_frame = frame;}
+    FrameBufferPtr frame() {return _frame;}
     
+    bool setShader(const XMLTree::Node &node);
     void setShader(const std::string &name);
-    void setShader(ShaderProgram *shader) {_shader = shader;}
-    ShaderProgram* shader() {return _shader;}
+    void setShader(ShaderProgramPtr &shader) {_shader = shader;}
+    ShaderProgramPtr shader() {return _shader;}
     
     bool setClearState(const XMLTree::Node &node);
     
@@ -113,11 +103,10 @@ namespace fx {
     float clearDepth() const {return _clearDepth;}
     bool isClearingDepth() const {return _isClearingDepth;}
     
-  public:
-    static Camera* build(const std::string &type, Scene *scene);
-    static CameraBuilderMap& builders();
+  private:
+    bool loadXMLItem(const XMLTree::Node &node);
+    
   };
-  
 }
 
 #endif /* Camera_h */

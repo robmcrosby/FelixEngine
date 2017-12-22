@@ -1,0 +1,440 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C154C0EE1FD3247C00D3DCFF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C154C0ED1FD3247C00D3DCFF /* AppDelegate.m */; };
+		C154C0F11FD3247C00D3DCFF /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C154C0F01FD3247C00D3DCFF /* ViewController.mm */; };
+		C154C0F41FD3247C00D3DCFF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C154C0F21FD3247C00D3DCFF /* Main.storyboard */; };
+		C154C0F61FD3247C00D3DCFF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C154C0F51FD3247C00D3DCFF /* Assets.xcassets */; };
+		C154C0F91FD3247C00D3DCFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C154C0F71FD3247C00D3DCFF /* LaunchScreen.storyboard */; };
+		C154C0FC1FD3247C00D3DCFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C154C0FB1FD3247C00D3DCFF /* main.m */; };
+		C154C10F1FD3265600D3DCFF /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C154C10D1FD3263B00D3DCFF /* FelixEngine.framework */; };
+		C154C1111FD3267600D3DCFF /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C154C1101FD3266800D3DCFF /* Metal.framework */; };
+		C154C1131FD3269100D3DCFF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C154C1121FD3268A00D3DCFF /* QuartzCore.framework */; };
+		C154C1151FD326B100D3DCFF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C154C1141FD326AC00D3DCFF /* CoreGraphics.framework */; };
+		C154C1181FD326DB00D3DCFF /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C154C1161FD326DA00D3DCFF /* Scene.xml */; };
+		C154C1191FD326DB00D3DCFF /* Mesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C154C1171FD326DB00D3DCFF /* Mesh.mesh */; };
+		C154C11C1FD3277700D3DCFF /* Shaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C154C11A1FD3277700D3DCFF /* Shaders.cpp */; };
+		C154C11E1FD327B200D3DCFF /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C154C10D1FD3263B00D3DCFF /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1739D011FD589FA00123B5D /* grid.png in Resources */ = {isa = PBXBuildFile; fileRef = C1739D001FD589F900123B5D /* grid.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C154C10C1FD3263B00D3DCFF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C154C1081FD3263B00D3DCFF /* FelixEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C15CAEAD1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+		C154C11F1FD32B3D00D3DCFF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C154C1081FD3263B00D3DCFF /* FelixEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C15CAEAC1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C154C11D1FD327A900D3DCFF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C154C11E1FD327B200D3DCFF /* FelixEngine.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C154C0E91FD3247C00D3DCFF /* Shaders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shaders.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C154C0EC1FD3247C00D3DCFF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C154C0ED1FD3247C00D3DCFF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C154C0EF1FD3247C00D3DCFF /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C154C0F01FD3247C00D3DCFF /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		C154C0F31FD3247C00D3DCFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C154C0F51FD3247C00D3DCFF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C154C0F81FD3247C00D3DCFF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C154C0FA1FD3247C00D3DCFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C154C0FB1FD3247C00D3DCFF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C154C1081FD3263B00D3DCFF /* FelixEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FelixEngine.xcodeproj; path = ../../FelixEngine/FelixEngine.xcodeproj; sourceTree = "<group>"; };
+		C154C1101FD3266800D3DCFF /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C154C1121FD3268A00D3DCFF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C154C1141FD326AC00D3DCFF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C154C1161FD326DA00D3DCFF /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
+		C154C1171FD326DB00D3DCFF /* Mesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Mesh.mesh; sourceTree = "<group>"; };
+		C154C11A1FD3277700D3DCFF /* Shaders.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Shaders.cpp; sourceTree = "<group>"; };
+		C154C11B1FD3277700D3DCFF /* Shaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shaders.h; sourceTree = "<group>"; };
+		C1739D001FD589F900123B5D /* grid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grid.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C154C0E61FD3247C00D3DCFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C154C1151FD326B100D3DCFF /* CoreGraphics.framework in Frameworks */,
+				C154C1131FD3269100D3DCFF /* QuartzCore.framework in Frameworks */,
+				C154C1111FD3267600D3DCFF /* Metal.framework in Frameworks */,
+				C154C10F1FD3265600D3DCFF /* FelixEngine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C154C0E01FD3247C00D3DCFF = {
+			isa = PBXGroup;
+			children = (
+				C154C1081FD3263B00D3DCFF /* FelixEngine.xcodeproj */,
+				C154C0EB1FD3247C00D3DCFF /* Shaders */,
+				C154C0EA1FD3247C00D3DCFF /* Products */,
+				C154C10E1FD3265600D3DCFF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C154C0EA1FD3247C00D3DCFF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C154C0E91FD3247C00D3DCFF /* Shaders.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C154C0EB1FD3247C00D3DCFF /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				C1739D001FD589F900123B5D /* grid.png */,
+				C154C1161FD326DA00D3DCFF /* Scene.xml */,
+				C154C1171FD326DB00D3DCFF /* Mesh.mesh */,
+				C154C0EC1FD3247C00D3DCFF /* AppDelegate.h */,
+				C154C0ED1FD3247C00D3DCFF /* AppDelegate.m */,
+				C154C0EF1FD3247C00D3DCFF /* ViewController.h */,
+				C154C0F01FD3247C00D3DCFF /* ViewController.mm */,
+				C154C11B1FD3277700D3DCFF /* Shaders.h */,
+				C154C11A1FD3277700D3DCFF /* Shaders.cpp */,
+				C154C0F21FD3247C00D3DCFF /* Main.storyboard */,
+				C154C0F51FD3247C00D3DCFF /* Assets.xcassets */,
+				C154C0F71FD3247C00D3DCFF /* LaunchScreen.storyboard */,
+				C154C0FA1FD3247C00D3DCFF /* Info.plist */,
+				C154C0FB1FD3247C00D3DCFF /* main.m */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		C154C1091FD3263B00D3DCFF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C154C10D1FD3263B00D3DCFF /* FelixEngine.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C154C10E1FD3265600D3DCFF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C154C1141FD326AC00D3DCFF /* CoreGraphics.framework */,
+				C154C1121FD3268A00D3DCFF /* QuartzCore.framework */,
+				C154C1101FD3266800D3DCFF /* Metal.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C154C0E81FD3247C00D3DCFF /* Shaders */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C154C0FF1FD3247C00D3DCFF /* Build configuration list for PBXNativeTarget "Shaders" */;
+			buildPhases = (
+				C154C0E51FD3247C00D3DCFF /* Sources */,
+				C154C0E61FD3247C00D3DCFF /* Frameworks */,
+				C154C0E71FD3247C00D3DCFF /* Resources */,
+				C154C11D1FD327A900D3DCFF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C154C1201FD32B3D00D3DCFF /* PBXTargetDependency */,
+			);
+			name = Shaders;
+			productName = Shaders;
+			productReference = C154C0E91FD3247C00D3DCFF /* Shaders.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C154C0E11FD3247C00D3DCFF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0910;
+				ORGANIZATIONNAME = "Robert Crosby";
+				TargetAttributes = {
+					C154C0E81FD3247C00D3DCFF = {
+						CreatedOnToolsVersion = 9.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C154C0E41FD3247C00D3DCFF /* Build configuration list for PBXProject "Shaders" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C154C0E01FD3247C00D3DCFF;
+			productRefGroup = C154C0EA1FD3247C00D3DCFF /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C154C1091FD3263B00D3DCFF /* Products */;
+					ProjectRef = C154C1081FD3263B00D3DCFF /* FelixEngine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C154C0E81FD3247C00D3DCFF /* Shaders */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C154C10D1FD3263B00D3DCFF /* FelixEngine.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FelixEngine.framework;
+			remoteRef = C154C10C1FD3263B00D3DCFF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C154C0E71FD3247C00D3DCFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C154C0F91FD3247C00D3DCFF /* LaunchScreen.storyboard in Resources */,
+				C154C0F61FD3247C00D3DCFF /* Assets.xcassets in Resources */,
+				C154C1191FD326DB00D3DCFF /* Mesh.mesh in Resources */,
+				C154C1181FD326DB00D3DCFF /* Scene.xml in Resources */,
+				C154C0F41FD3247C00D3DCFF /* Main.storyboard in Resources */,
+				C1739D011FD589FA00123B5D /* grid.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C154C0E51FD3247C00D3DCFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C154C0F11FD3247C00D3DCFF /* ViewController.mm in Sources */,
+				C154C0FC1FD3247C00D3DCFF /* main.m in Sources */,
+				C154C11C1FD3277700D3DCFF /* Shaders.cpp in Sources */,
+				C154C0EE1FD3247C00D3DCFF /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C154C1201FD32B3D00D3DCFF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FelixEngine;
+			targetProxy = C154C11F1FD32B3D00D3DCFF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C154C0F21FD3247C00D3DCFF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C154C0F31FD3247C00D3DCFF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C154C0F71FD3247C00D3DCFF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C154C0F81FD3247C00D3DCFF /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C154C0FD1FD3247C00D3DCFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C154C0FE1FD3247C00D3DCFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C154C1001FD3247C00D3DCFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Shaders/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.Shaders;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C154C1011FD3247C00D3DCFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = Shaders/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.Shaders;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C154C0E41FD3247C00D3DCFF /* Build configuration list for PBXProject "Shaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C154C0FD1FD3247C00D3DCFF /* Debug */,
+				C154C0FE1FD3247C00D3DCFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C154C0FF1FD3247C00D3DCFF /* Build configuration list for PBXNativeTarget "Shaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C154C1001FD3247C00D3DCFF /* Debug */,
+				C154C1011FD3247C00D3DCFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C154C0E11FD3247C00D3DCFF /* Project object */;
+}

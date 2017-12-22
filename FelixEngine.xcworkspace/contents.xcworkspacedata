@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Projects/Shaders/Shaders.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Projects/ARPlaneDetect/ARPlaneDetect.xcodeproj">
    </FileRef>
    <FileRef

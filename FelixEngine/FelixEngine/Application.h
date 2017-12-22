@@ -9,12 +9,13 @@
 #ifndef Application_h
 #define Application_h
 
+#include "EventSubject.h"
 #include "FileSystem.h"
 #include "Graphics.h"
 #include "TrackerSystem.h"
 
 namespace fx {
-  class Application {
+  class Application: public EventSubject {
   protected:
     FileSystem *_fileSystem;
     Graphics *_graphics;
@@ -24,15 +25,16 @@ namespace fx {
     Application();
     virtual ~Application();
     
+    virtual void handle(const Event &event);
+    
     virtual void initalize();
-    virtual void update();
-    virtual void render();
+    virtual void update(float td);
     
     virtual void willEnterBackground();
     virtual void willEnterForeground();
     virtual void willTerminate();
     
-    void processFrame();
+    void processFrame(float td);
     
     FileSystem& fileSystem() const {return *_fileSystem;}
     void setFileSystem(FileSystem *fileSystem) {_fileSystem = fileSystem;}

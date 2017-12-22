@@ -10,6 +10,7 @@
 #define TrackerSystem_h
 
 #include "Matrix.h"
+#include "Graphics.h"
 #include <vector>
 
 
@@ -64,8 +65,10 @@ namespace fx {
     virtual mat4 getCameraProjection() = 0;
     virtual mat4 getImageTransform() = 0;
     
-    virtual TextureBuffer* getCameraImageY() = 0;
-    virtual TextureBuffer* getCameraImageCbCr() = 0;
+    virtual TextureBufferPtr getCameraImageY() = 0;
+    virtual TextureBufferPtr getCameraImageCbCr() = 0;
+    
+    virtual bool drawLiveCamera() = 0;
     
     void setDelegate(TrackerDelegate *delegate) {_delegate = delegate;}
     

@@ -13,19 +13,22 @@
 #import <FelixEngine/Scene.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
+#import <FelixEngine/Transform.h>
 
 class XMLScene: public fx::Application {
 private:
+  fx::RenderScheme _renderScheme;
+  
   fx::Scene _scene;
-  fx::Model *_model;
+  fx::TransformPtr _transform;
   
 public:
   XMLScene();
   virtual ~XMLScene();
   
   virtual void initalize();
-  virtual void update();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* XMLScene_h */

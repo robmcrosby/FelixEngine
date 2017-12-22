@@ -42,9 +42,9 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
     MTLRegion region = MTLRegionMake2D(0, 0, _width, _height);
     NSUInteger bytesPerRow = _width * 4;
     [_texture replaceRegion:region mipmapLevel:0 withBytes:data.ptr() bytesPerRow:bytesPerRow];
+    return true;
   }
-  else
-    cerr << "Error Creating Metal Texture" << endl;
+  cerr << "Error Creating Metal Texture" << endl;
   return false;
 }
 

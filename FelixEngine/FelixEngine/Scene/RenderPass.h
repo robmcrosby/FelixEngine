@@ -9,66 +9,63 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
+#include "RenderItem.h"
 #include "GraphicTask.h"
 #include "UniformMap.h"
-#include <vector>
-#include <string>
-#include <list>
+#include "Camera.h"
+#include "Model.h"
+#include "Light.h"
+
 
 namespace fx {
-  class Camera;
-  class Model;
+  typedef std::map<std::string, RenderPassPtr> RenderPassMap;
+  typedef std::list<std::string> RenderScheme;
   
-  struct RenderItem {
-    Model *model;
-    UniformMap uniforms;
-    GraphicTask task;
-    
-    RenderItem(Model *model = nullptr): model(model) {task.uniforms = &uniforms;}
-    RenderItem(const RenderItem &other) {*this = other;}
-    RenderItem(Camera *camera, Model *model);
-    RenderItem& operator=(const RenderItem &other);
-    
-    bool active() const;
-    
-    void setClearOperations(Camera *camera);
-    void setDefaultOperations();
-    
-    void setCamera(Camera *camera);
-    void setModel(Model *model);
+  struct ModelCompare {
+    bool operator()(Model *lhs, Model *rhs) {
+      if (lhs->layer() != rhs->layer())
+        return lhs->layer() < rhs->layer();
+      return lhs < rhs;
+    }
   };
-  typedef std::list<RenderItem> RenderItems;
+  typedef std::set<Model*, ModelCompare> ModelSet;
+  
+  struct LightCompare {
+    bool operator()(Light *lhs, Light *rhs) {
+      if (lhs->layer() != rhs->layer())
+        return lhs->layer() < rhs->layer();
+      return lhs < rhs;
+    }
+  };
+  typedef std::set<Light*, LightCompare> LightSet;
   
   class RenderPass {
-    std::string _name;
-    Camera *_camera;
-    RenderItems _items;
-    
-  public:
-    RenderPass(const std::string name);
-    std::string name() {return _name;}
-    
-    void setCamera(Camera *camera);
-    Camera *camera() const {return _camera;}
-    
-    void addModel(Model *model);
-    void removeModel(Model *model);
-    
-    void update();
-    void render();
-  };
-  
-  class RenderPasses {
   private:
-    std::vector<RenderPass> _renderPasses;
+    Camera *_camera;
+    LightSet _lights;
+    ModelSet _models;
+    
+    UniformsPtr _lightUniforms;
     
   public:
-    RenderPasses();
-    ~RenderPasses();
+    RenderPass();
+    ~RenderPass();
     
-    void update();
+    void setCamera(Camera *camera) {_camera = camera;}
+    void addLight(Light *light) {_lights.insert(light);}
+    void addModel(Model *model) {_models.insert(model);}
+    
     void render();
-    RenderPass& operator[](const std::string &name);
+    void reset();
+    
+  private:
+    void updateLightUniforms();
+    
+  public:
+    static RenderPassMap& getRenderPassMap();
+    static RenderPassPtr getRenderPass(const std::string &name);
+    static void renderPasses(const RenderScheme &scheme);
+    static void resetPasses();
   };
 }
 

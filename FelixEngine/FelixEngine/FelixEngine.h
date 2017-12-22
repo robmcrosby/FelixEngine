@@ -25,6 +25,7 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/GraphicResources.h>
 #import <FelixEngine/GraphicStates.h>
 #import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/GraphicStructures.h>
 #import <FelixEngine/TrackerSystem.h>
 #import <FelixEngine/Vector.h>
 #import <FelixEngine/Matrix.h>
@@ -37,8 +38,13 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/ImageBufferData.h>
 #import <FelixEngine/UniformMap.h>
 #import <FelixEngine/TextureMap.h>
+#import <FelixEngine/Event.h>
+#import <FelixEngine/EventListenerSet.h>
+#import <FelixEngine/EventHandler.h>
+#import <FelixEngine/EventSubject.h>
 
 #import <FelixEngine/Scene.h>
+#import <FelixEngine/Object.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Camera.h>

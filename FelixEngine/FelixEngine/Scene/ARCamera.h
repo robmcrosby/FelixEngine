@@ -13,26 +13,18 @@
 #include "GraphicTask.h"
 
 namespace fx {
+  DEFINE_OBJ_BUILDER(ARCamera)
+  
   class ARCamera: public Camera {
-  private:
-    GraphicTask _task;
-    TextureMap _textureMap;
-    TextureBuffer *_imageY;
-    TextureBuffer *_imageCbCr;
-    
-    mat4 _imageTransform;
-    UniformMap _uniformMap;
-    
-  private:
-    void setupPreDraw();
-    bool cameraImagesReady();
+  protected:
+    static ARCameraBuilder arCameraBuilder;
     
   public:
-    ARCamera(Scene *scene);
+    ARCamera();
     virtual ~ARCamera();
     
-    virtual void update();
-    virtual bool preDraw();
+    virtual void update(float td);
+    virtual void applyToTask(GraphicTask &task);
   };
 }
 

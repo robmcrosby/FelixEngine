@@ -18,12 +18,12 @@
 
 namespace fx {
   struct GraphicTask {
-    FrameBuffer   *frame;
-    ShaderProgram *shader;
-    VertexMesh    *mesh;
+    FrameBufferPtr   frame;
+    ShaderProgramPtr shader;
+    VertexMeshPtr    mesh;
     
-    UniformMap *uniforms;
-    TextureMap *textures;
+    UniformsList uniforms;
+    TexturesPtr textures;
     
     int instances;
     
@@ -32,19 +32,9 @@ namespace fx {
     
     CULL_MODE cullMode;
     DepthState depthState;
+    BlendState blendState;
     
-    GraphicTask() {
-      frame  = nullptr;
-      shader = nullptr;
-      mesh   = nullptr;
-      
-      uniforms = nullptr;
-      textures = nullptr;
-      
-      instances = 1;
-      
-      cullMode = CULL_NONE;
-    }
+    GraphicTask(): instances(1), cullMode(CULL_NONE) {}
     
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
@@ -73,6 +63,7 @@ namespace fx {
     }
     
     void enableDepthTesting() {depthState.enableDefaultTesting();}
+    void enableBlending() {blendState.enableDefaultBlending();}
   };
 }
 

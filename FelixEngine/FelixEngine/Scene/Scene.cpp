@@ -6,13 +6,9 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "Scene.h"
-#include "Model.h"
-#include "Camera.h"
-#include "Material.h"
-#include "LightRig.h"
-#include "FileSystem.h"
 
+#include "Scene.h"
+#include "FileSystem.h"
 
 using namespace fx;
 using namespace std;
@@ -23,18 +19,6 @@ Scene::Scene() {
 
 Scene::~Scene() {
   
-}
-
-void Scene::update() {
-  for (auto model : _models)
-    model->update();
-  for (auto camera : _cameras)
-    camera->update();
-  _renderPasses.update();
-}
-
-void Scene::render() {
-  _renderPasses.render();
 }
 
 bool Scene::loadXMLFile(const std::string &file) {
@@ -50,127 +34,78 @@ bool Scene::loadXMLFile(const std::string &file) {
 
 bool Scene::loadXML(const XMLTree::Node &node) {
   bool success = true;
-  
-  for (auto subNode : node) {
-    if (*subNode == "FrameBuffer")
-      success &= addFrame(*subNode);
-    else if (*subNode == "ShaderProgram")
-      success &= addShader(*subNode);
-    else if (*subNode == "VertexMesh")
-      success &= addMesh(*subNode);
-    else if (*subNode == "LightRig")
-      success &= addLightRig(*subNode);
-    else if (*subNode == "Material")
-      success &= addMaterial(*subNode);
-    else
-      success &= addModel(*subNode) || addCamera(*subNode);
-  }
-  
+  for (auto &subNode : node)
+    success &= loadObject(*subNode);
   return success;
+  
+//  for (auto subNode : node) {
+//    if (*subNode == "FrameBuffer") {
+//      if (subNode->hasAttribute("window"))
+//        success &= addWindow(*subNode);
+//      else
+//        success &= addFrame(*subNode);
+//    }
+//    else if (*subNode == "ShaderProgram")
+//      success &= addShader(*subNode);
+//    else if (*subNode == "VertexMesh")
+//      success &= addMesh(*subNode);
+//    else if (*subNode == "LightRig")
+//      success &= addLightRig(*subNode);
+//    else if (*subNode == "Material")
+//      success &= addMaterial(*subNode);
+//    else
+//      success &= addModel(*subNode) || addCamera(*subNode);
+//  }
 }
 
-bool Scene::addFrame(const XMLTree::Node &node) {
-  return getFrame(node.attribute("name"))->loadXML(node);
+bool Scene::loadObject(const XMLTree::Node &node) {
+  SharedObject obj = build(node);
+  return obj ? true : false;
 }
 
-bool Scene::addShader(const XMLTree::Node &node) {
-  return getShader(node.attribute("name"))->loadXML(node);
+SharedObject Scene::build(const std::string &type, const std::string &name) {
+  BuilderMap &builders = getBuilderMap();
+  if (builders.count(type))
+    return builders[type]->build(this, name);
+  return SharedObject();
 }
 
-bool Scene::addMesh(const XMLTree::Node &node) {
-  return getMesh(node.attribute("name"))->loadXML(node);
+SharedObject Scene::build(const XMLTree::Node &node) {
+  SharedObject obj = build(node.element(), node.attribute("name"));
+  if (obj)
+    obj->loadXML(node);
+  return obj;
 }
 
-bool Scene::addLightRig(const XMLTree::Node &node) {
-  return getLightRig(node.attribute("name"))->loadXML(node);
+void Scene::addObject(SharedObject &obj, const string &name) {
+  obj->setScene(this);
+  _objects.insert(obj);
+  if (name != "")
+    _objectMap[name] = obj;
 }
 
-bool Scene::addMaterial(const XMLTree::Node &node) {
-  return getMaterial(node.attribute("name"))->loadXML(node);
+void Scene::removeObject(SharedObject &obj) {
+  _objects.erase(obj);
 }
 
-bool Scene::addCamera(const XMLTree::Node &node) {
-  Camera *camera = Camera::build(node.element(), this);
-  if (camera != nullptr) {
-    _cameras.push(node.attribute("name"), camera);
-    return camera->loadXML(node);
+void Scene::removeObject(const string &name) {
+  if (name != "") {
+    SharedObject obj = _objectMap[name].lock();
+    if (obj)
+      _objects.erase(obj);
+    _objectMap.erase(name);
   }
-  return false;
 }
 
-bool Scene::addModel(const XMLTree::Node &node) {
-  Model *model = Model::build(node.element(), this);
-  if (model != nullptr) {
-    _models.push(node.attribute("name"), model);
-    return model->loadXML(node);
+void Scene::update(float td) {
+  Objects::iterator itr = _objects.begin();
+  while (itr != _objects.end()) {
+    (*itr)->update(td);
+    ++itr;
   }
-  return false;
 }
 
-Model* Scene::createModel(const string &name) {
-  if (name == "Model")
-    return new Model(this);
-  return nullptr;
-}
-
-Camera* Scene::createCamera(const string &name) {
-  if (name == "Camera")
-    return new Camera(this);
-  return nullptr;
-}
-
-FrameBuffer* Scene::getFrame(const string &name) {
-  if (_frames.contains(name))
-    return _frames[name];
-  FrameBuffer *buffer = Graphics::getInstance().createFrameBuffer();
-  _frames.push(name, buffer);
-  return buffer;
-}
-
-ShaderProgram* Scene::getShader(const string &name) {
-  if (_shaders.contains(name))
-    return _shaders[name];
-  ShaderProgram *shader = Graphics::getInstance().createShaderProgram();
-  _shaders.push(name, shader);
-  return shader;
-}
-
-VertexMesh* Scene::getMesh(const std::string &name) {
-  if (_meshes.contains(name))
-    return _meshes[name];
-  VertexMesh *mesh = Graphics::getInstance().createVertexMesh();
-  _meshes.push(name, mesh);
-  return mesh;
-}
-
-Model* Scene::getModel(const std::string &name) {
-  if (_models.contains(name))
-    return _models[name];
-  Model *model = new Model(this);
-  _models.push(name, model);
-  return model;
-}
-
-Camera* Scene::getCamera(const std::string &name) {
-  if (_cameras.contains(name))
-    return _cameras[name];
-  Camera *camera = new Camera(this);
-  _cameras.push(name, camera);
-  return camera;
-}
-
-Material* Scene::getMaterial(const std::string &name) {
-  if (_materials.contains(name))
-    return _materials[name];
-  Material *material = new Material(this);
-  _materials.push(name, material);
-  return material;
-}
-
-LightRig* Scene::getLightRig(const std::string &name) {
-  if (_lights.contains(name))
-    return _lights[name];
-  LightRig *lightRig = new LightRig();
-  _lights.push(name, lightRig);
-  return lightRig;
+BuilderMap& Scene::getBuilderMap() {
+  static BuilderMap instance;
+  return instance;
 }

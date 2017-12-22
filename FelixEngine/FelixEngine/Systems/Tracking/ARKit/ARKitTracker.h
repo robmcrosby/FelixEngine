@@ -7,6 +7,8 @@
 //
 
 #include "TrackerSystem.h"
+#include "Graphics.h"
+#include "GraphicTask.h"
 #include "Macros.h"
 
 #ifndef ARKitTracker_h
@@ -29,9 +31,11 @@ namespace fx {
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     
-    MetalTextureBuffer *_cameraImageY;
-    MetalTextureBuffer *_cameraImageCbCr;
-    mat4 _imageTransform;
+    std::shared_ptr<MetalTextureBuffer> _cameraImageY;
+    std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
+    
+    UniformsPtr _uniformMap;
+    GraphicTask _task;
     
     TrackedPlanes _trackedPlanes;
     
@@ -45,8 +49,11 @@ namespace fx {
     virtual mat4 getCameraProjection();
     virtual mat4 getImageTransform();
     
-    virtual TextureBuffer* getCameraImageY();
-    virtual TextureBuffer* getCameraImageCbCr();
+    virtual TextureBufferPtr getCameraImageY();
+    virtual TextureBufferPtr getCameraImageCbCr();
+    
+    virtual bool drawLiveCamera();
+    void setupLiveCamera();
     
     virtual const TrackedPlanes& trackedPlanes() const;
     
@@ -63,6 +70,7 @@ namespace fx {
     
   private:
     void updateTrackedPlane(const TrackedPlane &plane);
+    void calculateVertices(std::vector<vec4> &vertices);
   };
   
 }

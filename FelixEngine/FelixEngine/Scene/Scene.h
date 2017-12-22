@@ -9,67 +9,106 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include "RenderPass.h"
+#include "EventSubject.h"
 #include "XMLTree.h"
-#include "IndexedMap.h"
+#include <memory>
+#include <string>
 #include <set>
 #include <map>
-#include <string>
+
 
 namespace fx {
-  class Model;
-  class Camera;
-  class Material;
-  class LightRig;
+  class Scene;
   
-  class Scene {
-  protected:
-    RenderPasses _renderPasses;
-    
-    IndexedMap<std::string, FrameBuffer*>   _frames;
-    IndexedMap<std::string, ShaderProgram*> _shaders;
-    IndexedMap<std::string, VertexMesh*>    _meshes;
-    
-    IndexedMap<std::string, Model*>    _models;
-    IndexedMap<std::string, Camera*>   _cameras;
-    IndexedMap<std::string, Material*> _materials;
-    IndexedMap<std::string, LightRig*> _lights;
-    
-  public:
-    bool loadXMLFile(const std::string &file);
-    bool loadXML(const XMLTree::Node &node);
-    
+  struct iObject {
+    virtual ~iObject() {}
+    virtual void setScene(Scene *scene) = 0;
+    virtual bool loadXML(const XMLTree::Node &node) = 0;
+    virtual void update(float dt) = 0;
+  };
+  typedef std::shared_ptr<iObject> SharedObject;
+  typedef std::weak_ptr<iObject> WeakObject;
+  
+  typedef std::set<SharedObject> Objects;
+  typedef std::map<std::string, WeakObject> ObjectMap;
+  
+  struct iObjectBuilder {
+    virtual SharedObject build(Scene *scene, const std::string &name) = 0;
+  };
+  typedef std::map<std::string, iObjectBuilder*> BuilderMap;
+  
+  #define DEFINE_OBJ_BUILDER(T) \
+    class T; \
+    typedef std::shared_ptr<T> T##Ptr; \
+    struct T##Builder: public iObjectBuilder { \
+      T##Builder() {Scene::getBuilderMap()[#T] = this;} \
+      virtual ~T##Builder() {} \
+      virtual SharedObject build(Scene *scene, const std::string &name) { \
+        T##Ptr obj = scene->get<T>(name); \
+        return std::static_pointer_cast<iObject>(obj); \
+      } \
+    };
+  
+//  class Model;
+//  typedef std::shared_ptr<Model> ModelPtr;
+//
+//  struct ModelBuilder: public iObjectBuilder {
+//    ModelBuilder() {Scene::getBuilderMap()["Model"] = this;}
+//    virtual ~ModelBuilder() {}
+//    virtual SharedObject build(Scene *scene, const std::string &name) {
+//      ModelPtr obj = scene->get<Model>(name);
+//      return std::static_pointer_cast<iObject>(obj);
+//    }
+//  };
+  
+  
+  
+  class Scene: public EventSubject {
   private:
-    bool addFrame(const XMLTree::Node &node);
-    bool addShader(const XMLTree::Node &node);
-    bool addMesh(const XMLTree::Node &node);
-    bool addLightRig(const XMLTree::Node &node);
-    bool addMaterial(const XMLTree::Node &node);
-    bool addCamera(const XMLTree::Node &node);
-    bool addModel(const XMLTree::Node &node);
-    
-    Model* createModel(const std::string &name);
-    Camera* createCamera(const std::string &name);
+    Objects   _objects;
+    ObjectMap _objectMap;
     
   public:
     Scene();
-    virtual ~Scene();
+    ~Scene();
     
-    virtual void update();
-    virtual void render();
+    bool loadXMLFile(const std::string &file);
+    bool loadXML(const XMLTree::Node &node);
+    bool loadObject(const XMLTree::Node &node);
     
-    RenderPasses& renderPasses() {return _renderPasses;}
+    template <typename T, typename... Args>
+    std::shared_ptr<T> make(const std::string &name, Args... args) {
+      std::shared_ptr<T> item = std::make_shared<T>(args...);
+      SharedObject obj = std::static_pointer_cast<iObject>(item);
+      addObject(obj, name);
+      return item;
+    }
     
-    FrameBuffer*   getFrame(const std::string &name);
-    ShaderProgram* getShader(const std::string &name);
-    VertexMesh*    getMesh(const std::string &name);
+    template <typename T>
+    std::shared_ptr<T> get(const std::string &name) {
+      if (name != "") {
+        SharedObject obj = _objectMap[name].lock();
+        if (obj) {
+          std::shared_ptr<T> item = std::dynamic_pointer_cast<T>(obj);
+          if (item)
+            return item;
+        }
+      }
+      return make<T>(name);
+    }
     
-    Model*    getModel(const std::string &name = "");
-    Camera*   getCamera(const std::string &name = "");
-    Material* getMaterial(const std::string &name = "");
-    LightRig* getLightRig(const std::string &name = "");
+    SharedObject build(const std::string &type, const std::string &name);
+    SharedObject build(const XMLTree::Node &node);
+    
+    void addObject(SharedObject &obj, const std::string &name = "");
+    void removeObject(SharedObject &obj);
+    void removeObject(const std::string &name);
+    
+    void update(float td);
+    
+  public:
+    static BuilderMap& getBuilderMap();
   };
-  
 }
 
 #endif /* Scene_h */

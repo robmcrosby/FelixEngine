@@ -13,7 +13,6 @@
 #import <FelixEngine/MetalGraphics.h>
 
 @interface ViewController ()
-
 @property XMLScene *xmlSceneApp;
 
 @end

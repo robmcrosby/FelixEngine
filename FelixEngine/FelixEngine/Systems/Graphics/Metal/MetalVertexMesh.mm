@@ -37,7 +37,7 @@ bool MetalVertexMesh::load(const VertexMeshData &data) {
   if (success) {
     for (auto buffer : data.buffers) {
       size_t size = buffer.second.size()/data.totalVertices;
-      success &= addVertexBuffer(buffer.first, size, data.totalVertices, &buffer.second[0]);
+      success &= setVertexBuffer(buffer.first, size, data.totalVertices, &buffer.second[0]);
     }
   }
   
@@ -59,12 +59,19 @@ bool MetalVertexMesh::setIndexBuffer(size_t count, const int *buffer) {
   return _indices != nil;
 }
 
-bool MetalVertexMesh::addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) {
+bool MetalVertexMesh::setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) {
+  NSUInteger length = size * count * sizeof(float);
   _vertexCount = count;
   
-  NSUInteger length = size * count * sizeof(float);
-  id <MTLBuffer> mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
-  _buffers[name] = mtlBuffer;
+  id <MTLBuffer> mtlBuffer = nil;
+  if (_buffers.count(name)) {
+    mtlBuffer = _buffers[name];
+    memcpy(mtlBuffer.contents, buffer, length);
+  }
+  else {
+    id <MTLBuffer> mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
+    _buffers[name] = mtlBuffer;
+  }
   
   return mtlBuffer != nil;
 }
@@ -96,7 +103,7 @@ void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderPr
 }
 
 void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader);
+  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
   
   // Set the Triangle Culling Mode
   if (task.cullMode == CULL_FRONT)

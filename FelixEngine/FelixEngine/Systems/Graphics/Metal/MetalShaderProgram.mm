@@ -9,7 +9,9 @@
 #include "MetalShaderProgram.h"
 #include "MetalFrameBuffer.h"
 #include "MetalUniformBuffer.h"
+#include "MetalTextureSampler.h"
 #include "GraphicTask.h"
+#include "UniformMap.h"
 #include <Metal/Metal.h>
 
 using namespace fx;
@@ -25,70 +27,67 @@ MetalShaderProgram::~MetalShaderProgram() {
 }
 
 bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string &fragment) {
-  id <MTLLibrary> library = [_device newDefaultLibrary];
-  _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
-  _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  _vertex = nil;
+  _fragment = nil;
   
-  extractIndexMaps();
-  return _vertex != nil  && _fragment != nil;
-}
-
-void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame) {
-  if (!_pipelines.count(frame)) {
-    MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
-    descriptor.vertexFunction = _vertex;
-    descriptor.fragmentFunction = _fragment;
-    
-    int index = 0;
-    for (id <MTLTexture> attachment : frame->_colorAttachments) {
-      descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
-    }
-    
-    if (frame->_depthAttachment != nil) {
-      descriptor.depthAttachmentPixelFormat = frame->_depthAttachment.pixelFormat;
-    }
-    if (frame->_stencilAttachment != nil) {
-      descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
-    }
-    
-    _pipelines[frame] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
+  id <MTLLibrary> library = [_device newDefaultLibrary];
+  if (library != nil) {
+    _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
+    _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
   }
   
-  [encoder setRenderPipelineState:_pipelines.at(frame)];
+  if (_vertex == nil || _fragment == nil) {
+    NSBundle *bundle = [NSBundle bundleForClass:[MetalTextureSampler class]];
+    NSString *path = [bundle pathForResource:@"default" ofType:@"metallib"];
+    library = [_device newLibraryWithFile:path error:nil];
+    if (_vertex == nil)
+      _vertex = [library newFunctionWithName:[NSString stringWithUTF8String:vertex.c_str()]];
+    if (_fragment == nil)
+      _fragment = [library newFunctionWithName:[NSString stringWithUTF8String:fragment.c_str()]];
+  }
+  
+  if (_vertex != nil  && _fragment != nil) {
+    extractIndexMaps();
+    return true;
+  }
+  return false;
 }
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame);
-  if (!_pipelines.count(frame))
-    addPipelineForFrame(frame);
-  [encoder setRenderPipelineState:_pipelines.at(frame)];
+  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame.get());
+  int pipelineId = frame->pipelineId(task.blendState);
+  if (!_pipelines.count(pipelineId))
+    addPipeline(frame, task.blendState);
+  [encoder setRenderPipelineState:_pipelines.at(pipelineId)];
   
-  if (task.uniforms != nullptr) {
-    for (auto uniform : *task.uniforms) {
-      MetalUniformBuffer *mtlUniform = (MetalUniformBuffer*)uniform.second;
-      mtlUniform->encode(encoder, uniform.first, this);
-    }
+  UniformsList::const_iterator itr = task.uniforms.begin();
+  while (itr != task.uniforms.end()) {
+    for (auto uniform : **itr)
+      setUniform(encoder, uniform.first, uniform.second);
+    ++itr;
   }
 }
 
-void MetalShaderProgram::addPipelineForFrame(MetalFrameBuffer *frame) {
-  MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
+void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {
+  if (uniform.usingBuffer()) {
+    MetalUniformBuffer *buffer = static_cast<MetalUniformBuffer*>(uniform.buffer());
+    buffer->encodeCurrent(encoder, name, this);
+  }
+  else {
+    if (_vertexIndexMap.count(name) > 0)
+      [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
+    if (_fragmentIndexMap.count(name) > 0)
+      [encoder setFragmentBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_fragmentIndexMap.at(name)];
+  }
+}
+
+void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &blending) {
+  MTLRenderPipelineDescriptor *descriptor = frame->createPipelineDescriptor(blending);
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
   
-  int index = 0;
-  for (id <MTLTexture> attachment : frame->_colorAttachments) {
-    descriptor.colorAttachments[index].pixelFormat = attachment.pixelFormat;
-  }
-  
-  if (frame->_depthAttachment != nil) {
-    descriptor.depthAttachmentPixelFormat = frame->_depthAttachment.pixelFormat;
-  }
-  if (frame->_stencilAttachment != nil) {
-    descriptor.stencilAttachmentPixelFormat = frame->_stencilAttachment.pixelFormat;
-  }
-  
-  _pipelines[frame] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
+  int pipelineId = frame->pipelineId(blending);
+  _pipelines[pipelineId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
 }
 
 void MetalShaderProgram::extractIndexMaps() {

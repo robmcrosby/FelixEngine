@@ -20,8 +20,8 @@ struct MVPUniform {
 class HelloTexture: public fx::Application {
 private:
   fx::GraphicTask _task;
-  fx::UniformMap _uniformMap;
-  fx::TextureMap _textureMap;
+  fx::UniformsPtr _uniformMap;
+  fx::TexturesPtr _textureMap;
   MVPUniform _mvpUniform;
   
 public:
@@ -29,7 +29,7 @@ public:
   virtual ~HelloTexture();
   
   virtual void initalize();
-  virtual void render();
+  virtual void update(float td);
 };
 
 #endif /* HelloTexture_h */

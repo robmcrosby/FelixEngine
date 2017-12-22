@@ -20,6 +20,7 @@ namespace fx {
     id <MTLDevice> _device;
     id <MTLTexture> _texture;
     int _width, _height;
+    SamplerState _samplerState;
  
   public:
     MetalTextureBuffer(id <MTLDevice> device);
@@ -29,6 +30,9 @@ namespace fx {
     virtual bool load(const ImageBufferData &data);
     virtual bool loaded() const;
     virtual ivec2 size() const;
+    
+    virtual void setDefaultSampler(SamplerState state) {_samplerState = state;}
+    virtual SamplerState defaultSampler() const {return _samplerState;}
     
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
     void setMetalTexture(id <MTLTexture> texture);

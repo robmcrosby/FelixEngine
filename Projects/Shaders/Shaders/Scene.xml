@@ -1,0 +1,156 @@
+<?xml version="1.0" ?>
+<Scene name="test">
+  <Frame name="MainFrame" window="0">
+    <Buffer type="depth"/>
+  </Frame>
+  <Mesh file="Mesh.mesh" name="Mesh"/>
+  <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
+  <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
+    <Color>1.000000, 1.000000, 1.000000</Color>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
+      <Location>4.076245, 5.903862, -1.005454</Location>
+    </Transform>
+  </Light>
+  <Light energy="0.500000" name="LightB" pass="MainPass" type="point">
+    <Color>0.098603, 0.068963, 1.000000</Color>
+    <Falloff/>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-2.271056, -0.135679, 4.769545</Location>
+    </Transform>
+  </Light>
+  <Camera frame="MainFrame" name="Camera" pass="MainPass">
+    <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.240452, 0.395910, 0.141601, 0.874864</Rotation>
+      <Location>6.186304, 5.972611, 6.016000</Location>
+    </Transform>
+    <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
+  </Camera>
+  <Model mesh="Mesh" name="ModelA" pass="MainPass">
+    <Material name="MaterialA">
+      <Shader name="Shadeless" vertex="v_shadeless" fragment="f_shadeless"/>
+      <Ambiant color="0.600000, 0.600000, 0.600000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-1.949047, 1.414114, 0.812684</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelB" pass="MainPass">
+    <Material name="MaterialB">
+      <Shader name="ColorShadeless" vertex="v_color" fragment="f_color_shadeless"/>
+      <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.852974, 1.504666, -0.471125</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelC" pass="MainPass">
+    <Material name="MaterialC">
+      <Shader name="TextureShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
+      <Texture name="Texture"/>
+      <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>0.335199, 1.576492, -1.838231</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelD" pass="MainPass">
+    <Material name="MaterialD">
+      <Shader name="LambertPhong" vertex="v_normal" fragment="f_lambert_phong_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-1.190254, -0.018209, 1.319337</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelE" pass="MainPass">
+    <Material name="MaterialE">
+      <Shader name="LambertPhongColor" vertex="v_color_normal" fragment="f_color_lambert_phong_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="1.000000, 1.000000, 1.000000" factor="0.800000"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.094181, 0.072343, 0.035527</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelF" pass="MainPass">
+    <Material name="MaterialF">
+      <Shader name="LambertPhongTexture" vertex="v_texture_normal" fragment="f_texture_lambert_phong_2"/>
+      <Texture name="Texture"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>1.093993, 0.144169, -1.331578</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelG" pass="MainPass">
+    <Material name="MaterialG">
+      <Shader name="Toon" vertex="v_normal" fragment="f_toon_d_toon_s_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.200000, 0.200000" factor="0.800000" size="1.0" smooth="0.1"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.600000" size="0.4" smooth="0.1"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>-0.497530, -1.402597, 1.853538</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelH" pass="MainPass">
+    <Material name="MaterialH">
+      <Shader name="OrenNayerCookTorr" vertex="v_normal" fragment="f_oren_nayer_cooktorr_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.800000, 0.800000" factor="1.000000" roughness="0.2" albedo="1.2"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.400000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>0.598543, -1.312045, 0.569728</Location>
+    </Transform>
+  </Model>
+  <Model mesh="Mesh" name="ModelI" pass="MainPass">
+    <Material name="MaterialI">
+      <Shader name="OrenMinnaertCookTorr" vertex="v_normal" fragment="f_minnaert_cooktorr_2"/>
+      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
+      <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.400000" darkness="1.0"/>
+      <Specular color="1.000000, 1.000000, 1.000000" factor="0.000000" hardness="50"/>
+      <DepthState function="less" write="true"/>
+    </Material>
+    <Transform>
+      <Scale>0.4, 0.4, 0.4</Scale>
+      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+      <Location>1.786716, -1.240219, -0.797377</Location>
+    </Transform>
+  </Model>
+</Scene>

@@ -31,14 +31,13 @@ device float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 
-vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
-                                 const device packed_float4 *Normal   [[ buffer(1) ]],
+vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
+                                 const device packed_float3 *normal   [[ buffer(1) ]],
                                  constant     MVPUniform    *MVP      [[ buffer(2) ]],
                                               unsigned int   vid      [[ vertex_id ]]) {
   VertexOutput output;
-  float4 normal = Normal[vid];
-  output.normal = rotate_quat(MVP->rotation, normal.xyz);
-  output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
+  output.normal = rotate_quat(MVP->rotation, float3(normal[vid]));
+  output.position = MVP->projection * MVP->view * MVP->model * float4(position[vid], 1.0);
   return output;
 }
 

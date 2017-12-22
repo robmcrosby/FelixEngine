@@ -270,6 +270,13 @@ namespace fx
     template <typename T>
     Variant& operator=(const T &value) {setValues(&value); return *this;}
     
+    template <typename T>
+    Variant& operator=(const std::vector<T> &values) {
+      
+      setValues(&values.at(0), values.size());
+      return *this;
+    }
+    
     bool operator==(const Variant &other) const
     {
       if (_type != other._type || _data.size() != other._data.size())

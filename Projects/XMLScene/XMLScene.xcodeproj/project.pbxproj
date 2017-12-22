@@ -19,9 +19,8 @@
 		C1BB4F211F1C211E008FDF01 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1BB4F201F1C211E008FDF01 /* CoreGraphics.framework */; };
 		C1BB4F231F1C2130008FDF01 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1BB4F171F1C20EB008FDF01 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C1BB4F261F1C2148008FDF01 /* XMLScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F241F1C2148008FDF01 /* XMLScene.cpp */; };
-		C1BB4F281F1C225E008FDF01 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F271F1C225E008FDF01 /* Shaders.metal */; };
 		C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1BB4F2B1F1C3049008FDF01 /* Scene.xml */; };
-		C1BB4F321F1E30D6008FDF01 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1BB4F311F1E30D6008FDF01 /* bunny.mesh */; };
+		C1C1FF471FCB33330091E342 /* Mesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1C1FF461FCB33330091E342 /* Mesh.mesh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,9 +70,8 @@
 		C1BB4F201F1C211E008FDF01 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C1BB4F241F1C2148008FDF01 /* XMLScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XMLScene.cpp; sourceTree = "<group>"; };
 		C1BB4F251F1C2148008FDF01 /* XMLScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMLScene.h; sourceTree = "<group>"; };
-		C1BB4F271F1C225E008FDF01 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C1BB4F2B1F1C3049008FDF01 /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
-		C1BB4F311F1E30D6008FDF01 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+		C1C1FF461FCB33330091E342 /* Mesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Mesh.mesh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +110,8 @@
 		C1BB4EFA1F1C2068008FDF01 /* XMLScene */ = {
 			isa = PBXGroup;
 			children = (
+				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
+				C1C1FF461FCB33330091E342 /* Mesh.mesh */,
 				C1BB4EFE1F1C2068008FDF01 /* AppDelegate.h */,
 				C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */,
 				C1BB4F011F1C2068008FDF01 /* ViewController.h */,
@@ -121,11 +121,8 @@
 				C1BB4F041F1C2068008FDF01 /* Main.storyboard */,
 				C1BB4F071F1C2068008FDF01 /* Assets.xcassets */,
 				C1BB4F091F1C2068008FDF01 /* LaunchScreen.storyboard */,
-				C1BB4F311F1E30D6008FDF01 /* bunny.mesh */,
 				C1BB4F0C1F1C2068008FDF01 /* Info.plist */,
 				C1BB4EFB1F1C2068008FDF01 /* Supporting Files */,
-				C1BB4F271F1C225E008FDF01 /* Shaders.metal */,
-				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
 			);
 			path = XMLScene;
 			sourceTree = "<group>";
@@ -234,7 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1BB4F0B1F1C2068008FDF01 /* LaunchScreen.storyboard in Resources */,
-				C1BB4F321F1E30D6008FDF01 /* bunny.mesh in Resources */,
+				C1C1FF471FCB33330091E342 /* Mesh.mesh in Resources */,
 				C1BB4F081F1C2068008FDF01 /* Assets.xcassets in Resources */,
 				C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */,
 				C1BB4F061F1C2068008FDF01 /* Main.storyboard in Resources */,
@@ -252,7 +249,6 @@
 				C1BB4F031F1C2068008FDF01 /* ViewController.mm in Sources */,
 				C1BB4F001F1C2068008FDF01 /* AppDelegate.m in Sources */,
 				C1BB4EFD1F1C2068008FDF01 /* main.m in Sources */,
-				C1BB4F281F1C225E008FDF01 /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +394,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = XMLScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_HEADER_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.XMLScene;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -411,6 +408,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = XMLScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_HEADER_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.XMLScene;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

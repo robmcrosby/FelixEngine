@@ -9,77 +9,41 @@
 #ifndef Model_h
 #define Model_h
 
-#include "Quaternion.h"
-#include "XMLTree.h"
-#include <vector>
-
-#define DEFINE_MODEL_BUILDER(name) \
-  struct name##Builder: fx::iModelBuilder { \
-    static name##Builder intance; \
-    name##Builder() {fx::Model::builders()[#name] = this;} \
-    virtual fx::Model* build(fx::Scene *scene) {return new fx::name(scene);} \
-  }; \
-  name##Builder name##Builder::intance;
-
+#include "RenderItem.h"
+#include "Scene.h"
+#include "Material.h"
+#include "Graphics.h"
+#include "Transform.h"
+#include "UniformMap.h"
 
 namespace fx {
-  class Scene;
-  class Model;
-  class Material;
-  class VertexMesh;
-  class ShaderProgram;
+  DEFINE_OBJ_BUILDER(Model)
   
-  struct iModelBuilder {
-    virtual ~iModelBuilder() {}
-    virtual Model* build(Scene *scene) = 0;
-  };
-  typedef std::map<std::string, iModelBuilder*> ModelBuilderMap;
-  
-  struct ModelData {
-    mat4 model;
-    quat rotation;
-  };
-  typedef std::vector<ModelData> InstanceModels;
-  
-  class Model {
-  protected:
+  class Model: public RenderItem, public iObject {
+  private:
+    static ModelBuilder modelBuilder;
+    
+  private:
     Scene *_scene;
     
-    InstanceModels _data;
-    Material *_material;
-    VertexMesh *_mesh;
+    MaterialPtr   _material;
+    VertexMeshPtr _mesh;
+    UniformsPtr   _uniforms;
     
-    vec3 _scale;
-    quat _orientation;
-    vec3 _position;
+    TransformPtr _transform;
     
     bool _hidden;
     int _layer;
     
   public:
-    Model(Scene *scene);
+    Model();
     virtual ~Model();
     
-    virtual void update();
+    virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
+    virtual void update(float dt);
     
-    void setInstances(int instances) {_data.resize(instances);}
-    int instances() const {return (int)_data.size();}
-    
-    ModelData& data() {return _data.at(0);}
-    
-    void setMesh(VertexMesh *mesh) {_mesh = mesh;}
-    void setMesh(const std::string &name);
-    VertexMesh* mesh() const {return _mesh;}
-    
-    void setMaterial(Material *material) {_material = material;}
-    void setMaterial(const std::string &name);
-    Material* material() const {return _material;}
-    
-    bool setTransform(const XMLTree::Node &node);
-    
-    void setShader(ShaderProgram *shader);
-    void enableDepthTesting();
+    virtual void applyToTask(GraphicTask &task);
     
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}
@@ -87,21 +51,31 @@ namespace fx {
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
     
-    void setScale(const vec3 &scale) {_scale = scale;}
-    void setScale(float scale) {_scale = vec3(scale, scale, scale);}
-    vec3 scale() const {return _scale;}
+    bool setMaterial(const XMLTree::Node &node);
+    void setMaterial(const std::string &name);
+    void setMaterial(MaterialPtr &material) {_material = material;}
+    MaterialPtr material() const {return _material;}
     
-    void setOrientation(const quat &orientation) {_orientation = orientation;}
-    quat orientation() const {return _orientation;}
+    bool setMesh(const XMLTree::Node &node);
+    void setMesh(const std::string &name);
+    void setMesh(VertexMeshPtr &mesh) {_mesh = mesh;}
+    VertexMeshPtr mesh() const {return _mesh;}
     
-    void setPosition(const vec3 &position) {_position = position;}
-    vec3 position() const {return _position;}
+    void setScale(float scale) {_transform->setScale(scale);}
+    void setScale(const vec3 &scale) {_transform->setScale(scale);}
+    vec3 localScale() const {return _transform->localScale();}
     
-  public:
-    static Model* build(const std::string &type, Scene *scene);
-    static ModelBuilderMap& builders();
+    void setRotation(const quat &orientation) {_transform->setRotation(orientation);}
+    quat localRotation() const {return _transform->localRotation();}
+    
+    void setLocation(const vec3 &location) {_transform->setLocation(location);}
+    vec3 localLocation() const {return _transform->localLocation();}
+    
+    TransformPtr transform() {return _transform;}
+    
+  private:
+    virtual bool loadXMLItem(const XMLTree::Node &node);
   };
-  
 }
 
 #endif /* Model_h */

@@ -35,7 +35,7 @@ namespace fx {
     virtual bool load(const VertexMeshData &data);
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
     virtual bool setIndexBuffer(size_t count, const int *buffer);
-    virtual bool addVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
+    virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
     
     void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
     void encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task);

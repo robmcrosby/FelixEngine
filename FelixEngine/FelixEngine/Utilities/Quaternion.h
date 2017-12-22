@@ -18,13 +18,14 @@ namespace fx
   struct Quaternion
   {
     Quaternion(): x(0), y(0), z(0), w(1) {}
-    Quaternion(T x, T y, T z, T w): x(x), y(y), z(z), w(w) {}
+    Quaternion(T x, T y, T z, T w): x(x), y(y), z(z), w(w) {normalize();}
     Quaternion(const std::string &str): x(0), y(0), z(0), w(1) {parse(str);}
-    Quaternion(const Vector4<T> &v): x(v.x), y(v.y), z(v.z), w(v.w) {}
+    Quaternion(const Vector4<T> &v): x(v.x), y(v.y), z(v.z), w(v.w) {normalize();}
     Quaternion(const Vector3<T> &v): x(v.x), y(v.y), z(v.z)
     {
       w = 1.0 - (x*x) - (y*y) - (z*z);
       w = w < 0 ? 0 : -std::sqrt(w);
+      normalize();
     }
     Quaternion(Vector3<T> axis, T r)
     {
@@ -34,20 +35,41 @@ namespace fx
       x *= axis.x;
       y *= axis.y;
       z *= axis.z;
+      normalize();
     }
-    Quaternion(const Vector3<T> &v0, const Vector3<T> &v1): x(1), y(0), z(0), w(0)
+    Quaternion(const Vector3<T> &v0, const Vector3<T> &v1): x(0), y(0), z(0), w(1)
     {
-      if (!(v0 == -v1)) {
-        T s;
-        Vector3<T> c = v0.Cross(v1);
-        s = v0.Dot(v1);
-        s = std::sqrt((1 + s) * 2);
-        
-        x = c.x / s;
-        y = c.y / s;
-        z = c.z / s;
-        w = s / 2.0f;
+      Vector3<T> u = v0.normalized();
+      Vector3<T> v = v1.normalized();
+      if (u == -v) {
+        // 180 degree rotation around any orthogonal vector
+        Vector3<T> orth = u.orthogonal().normalized();
+        x = orth.x;
+        y = orth.y;
+        z = orth.z;
+        w = 0;
+        normalize();
       }
+      else if (u != v) {
+        Vector3<T> half = (u + v).normalized();
+        Vector3<T> cross = u.cross(half);
+        x = cross.x;
+        y = cross.y;
+        z = cross.z;
+        w = u.dot(half);
+        normalize();
+      }
+    }
+    Quaternion(const mat4 &m) {setTo(m);}
+    Quaternion(const mat3 &m) {setTo(m);}
+    
+    void setTo(const mat4 &m) {setTo(m.toMat3());}
+    void setTo(const mat3 &m) {
+      w = sqrt(1.0 + m.x.x + m.y.y + m.z.z)/2.0;
+      x = (m.z.y - m.y.z)/(4.0*w);
+      y = (m.x.z - m.z.x)/(4.0*w);
+      z = (m.y.x - m.x.y)/(4.0*w);
+      normalize();
     }
     
     Vector3<T> toVec3() const {return Vector3<T>(x, y, z);}
@@ -77,7 +99,7 @@ namespace fx
     void operator+=(const Quaternion &q) {*this = *this + q;}
     void operator-=(const Quaternion &q) {*this = *this - q;}
     void operator*=(const Quaternion &q) {*this = *this * q;}
-    void operator*=(T s) {this = *this * s;}
+    void operator*=(T s) {x *= s; y *= s; z *= s; w *= s;}
     
     void rotate(const Vector3<T> &v)
     {
@@ -102,7 +124,7 @@ namespace fx
     Quaternion scale(T s) const {return Quaternion(x*s, y*s, z*s, w*s);}
     Quaternion inverse() const {return conjugate().scale(1.0/norm());}
     
-    void normalize() {*this = normalized();}
+    void normalize() {*this *= (1.0/length());}
     
     bool operator==(const Quaternion &q) const {return x == q.x && y == q.y && z == q.z && w == q.w;}
     bool operator<(const Quaternion &q) const
@@ -140,11 +162,11 @@ namespace fx
     {
       float fx = 0.0f, fy = 0.0f, fz = 0.0f, fw = 1.0f;
       int res = sscanf(str.c_str(), " %f , %f , %f , %f", &fx, &fy, &fz, &fw);
-      
       x = (T)fx;
       y = (T)fy;
       z = (T)fz;
       w = (T)fw;
+      normalize();
       return res = 4;
     }
     Matrix3<T> toMat3() const

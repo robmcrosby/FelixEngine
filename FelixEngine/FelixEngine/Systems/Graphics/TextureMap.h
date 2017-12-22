@@ -16,17 +16,22 @@
 
 namespace fx {
   struct Texture {
-    TextureBuffer *buffer;
+    TextureBufferPtr buffer;
     SamplerState sampler;
     
-    Texture(TextureBuffer *b, SamplerState s): buffer(b), sampler(s) {}
+    Texture(TextureBufferPtr b, SamplerState s): buffer(b), sampler(s) {}
   };
+  
+  class TextureMap;
+  typedef std::shared_ptr<TextureMap> TexturesPtr;
   
   class TextureMap {
   private:
     std::vector<Texture> _textures;
     
   public:
+    static TexturesPtr make() {return std::make_shared<TextureMap>();}
+    
     TextureMap() {}
     ~TextureMap() {}
     
@@ -36,6 +41,29 @@ namespace fx {
     std::vector<Texture>::const_iterator begin() const {return _textures.begin();}
     std::vector<Texture>::const_iterator end() const {return _textures.end();}
     
+    bool loadXML(const XMLTree::Node &node) {
+      bool success = true;
+      for (auto &subNode : node)
+        success &= addTexture(*subNode);
+      return success;
+    }
+    
+    bool addTexture(const XMLTree::Node &node) {
+      bool success = true;
+      TextureBufferPtr texture;
+      if (node.hasAttribute("name")) {
+        texture = Graphics::getInstance().getTextureBuffer(node.attribute("name"));
+        if (node.hasAttribute("file"))
+          success = texture->loadXML(node);
+      }
+      else {
+        texture = Graphics::getInstance().createTextureBuffer();
+        success = texture->loadXML(node);
+      }
+      addTexture(texture, node);
+      return success;
+    }
+    
     bool addTexture(const ImageBufferData &image, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
       bool loaded = texture.buffer->load(image);
@@ -43,7 +71,7 @@ namespace fx {
       return loaded;
     }
     
-    void addTexture(TextureBuffer *buffer, SamplerState sampler = SamplerState()) {
+    void addTexture(TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(buffer, sampler);
       _textures.push_back(texture);
     }

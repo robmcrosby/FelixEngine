@@ -39,6 +39,17 @@ struct Light {
 };
 
 
+
+vertex float4 tri_vertex(const device packed_float4* vertex_array [[ buffer(0) ]],
+                           unsigned int   vid          [[ vertex_id ]]) {
+  return float4(vertex_array[vid]);
+}
+
+fragment half4 tri_fragment() {
+  return half4(1.0);
+}
+
+
 device float3 rotate_quat(float4 rot, float3 v);
 device float light_attenuation(float distance, float2 factors);
 device float shade_diffuse(float3 normal, float3 light);
