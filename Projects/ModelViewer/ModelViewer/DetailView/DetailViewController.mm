@@ -7,8 +7,13 @@
 //
 
 #import "DetailViewController.h"
+#import <FelixEngine/iOSFileSystem.h>
+#import <FelixEngine/MetalGraphics.h>
+#import "ModelViewer.h"
+
 
 @interface DetailViewController ()
+@property ModelViewer *modelViewerApp;
 
 @end
 
@@ -16,22 +21,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+  
+  // Create the Cpp Application
+  self.modelViewerApp = new ModelViewer();
+  
+  // Add iOS File System
+  fx::iOSFileSystem *fileSystem = new fx::iOSFileSystem();
+  self.modelViewerApp->setFileSystem(fileSystem);
+  
+  // Add and initalize Metal Graphics
+  fx::MetalGraphics *graphics = new fx::MetalGraphics();
+  graphics->initalize(self.view);
+  self.modelViewerApp->setGraphics(graphics);
+  
+  // Set the Application
+  [self setApplication: self.modelViewerApp];
+  self.modelViewerApp->initalize();
+  
+  // Start Display Link
+  [self setupDisplayLink];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -6,8 +6,8 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <FelixEngine/iOSViewController.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : iOSViewController
 
 @end
