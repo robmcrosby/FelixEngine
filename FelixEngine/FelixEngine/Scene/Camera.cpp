@@ -24,6 +24,12 @@ Camera::Camera() {
   _uniforms = UniformMap::make();;
   (*_uniforms)["camera"] = properties();
   
+  _projectionType = PROJ_ORTHO;
+  _near = 1.0;
+  _far = 100.0;
+  _scale = 1.0;
+  _angle = Pi/4.0;
+  
   _isClearingColor = false;
   _isClearingDepth = false;
 }
@@ -163,19 +169,49 @@ void Camera::setShader(const string &name) {
   _shader = Graphics::getInstance().getShaderProgram(name);
 }
 
+void Camera::setProjection(const mat4 &projection) {
+  _projectionType = PROJ_MATRIX;
+  _projection = projection;
+}
+
 void Camera::setOrthographic(float scale, float near, float far) {
-  fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
-  float width = scale/2.0f;
-  float height = (scale * size.h/size.w)/2.0f;
-  setOrthographic(-width, width, -height, height, near, far);
+  _projectionType = PROJ_ORTHO;
+  _scale = scale;
+  _near = near;
+  _far = far;
 }
 
 void Camera::setFrustum(float angle, float near, float far) {
+  _projectionType = PROJ_FRUSTUM;
+  _angle = angle;
+  _near = near;
+  _far = far;
+}
+
+mat4 Camera::projection() const {
+  switch (_projectionType) {
+    case PROJ_ORTHO:
+      return orthoProjection();
+    case PROJ_FRUSTUM:
+      return frustumProjection();
+    case PROJ_MATRIX:
+      return _projection;
+  }
+}
+
+mat4 Camera::orthoProjection() const {
   fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
-  float scale = near * tanf(angle/4.0f);
-  float width = scale;
-  float height = (scale * size.h/size.w);
-  setFrustum(-width, width, -height, height, near, far);
+  float w = _scale/2.0f;
+  float h = (_scale * size.h/size.w)/2.0f;
+  return mat4::Ortho(-w, w, -h, h, _near, _far);
+}
+
+mat4 Camera::frustumProjection() const {
+  fx::vec2 size = _frame ? fx::vec2(_frame->size()) : fx::vec2(1.0f, 1.0f);
+  float scale = _near * tanf(_angle/4.0f);
+  float w = scale;
+  float h = (scale * size.h/size.w);
+  return mat4::Frustum(-w, w, -h, h, _near, _far);
 }
 
 void Camera::setClearColor(const vec4 &color) {

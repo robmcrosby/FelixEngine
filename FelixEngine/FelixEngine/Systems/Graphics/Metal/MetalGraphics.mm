@@ -32,6 +32,7 @@ namespace fx {
     id <MTLCommandQueue>  queue;
     id <MTLCommandBuffer> buffer;
     
+    UIView *view;
     CAMetalLayer *metalLayer;
     MetalDepthStencil *depthStencilStates;
     MetalTextureSampler *samplerStates;
@@ -71,6 +72,11 @@ bool MetalGraphics::initalize(UIView *view) {
     return false;
   }
   
+  _data->view = view;
+  
+  CGFloat width = view.bounds.size.width;
+  CGFloat height = view.bounds.size.height;
+  
   // Setup the Metal Layer
   _data->metalLayer = [[CAMetalLayer alloc] init];
   if (_data->metalLayer == nil) {
@@ -82,7 +88,7 @@ bool MetalGraphics::initalize(UIView *view) {
   _data->metalLayer.device = _data->device;
   _data->metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
   _data->metalLayer.framebufferOnly = YES;
-  _data->metalLayer.frame = view.bounds;
+  _data->metalLayer.frame = CGRectMake(0, 0, width, height);
   _data->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
   [view.layer addSublayer: _data->metalLayer];
   
@@ -131,6 +137,13 @@ TextureBufferPtr MetalGraphics::createTextureBuffer() {
 
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+  
+  CGFloat width = _data->view.bounds.size.width;
+  CGFloat height = _data->view.bounds.size.height;
+  if (_data->metalLayer.frame.size.width != width || _data->metalLayer.frame.size.height != height) {
+    _data->metalLayer.frame = CGRectMake(0, 0, width, height);
+  }
+  
   _data->buffer = [_data->queue commandBuffer];
 }
 

@@ -20,6 +20,12 @@
 namespace fx {
   DEFINE_OBJ_BUILDER(Camera)
   
+  enum PROJ_TYPE {
+    PROJ_ORTHO,
+    PROJ_FRUSTUM,
+    PROJ_MATRIX,
+  };
+  
   class Camera: public RenderItem, public iObject {
   private:
     static CameraBuilder cameraBuilder;
@@ -33,6 +39,11 @@ namespace fx {
     FrameBufferPtr  _frame;
     ShaderProgramPtr _shader;
     
+    PROJ_TYPE _projectionType;
+    float _near;
+    float _far;
+    float _scale;
+    float _angle;
     mat4 _projection;
     
     bool _isClearingColor;
@@ -72,16 +83,13 @@ namespace fx {
     void addDepthBuffer();
     
     bool setProjection(const XMLTree::Node &node);
-    void setProjection(const mat4 &projection) {_projection = projection;}
+    void setProjection(const mat4 &projection);
     void setOrthographic(float scale, float near, float far);
-    void setOrthographic(float left, float right, float bottom, float top, float near, float far) {
-      setProjection(mat4::Ortho(left, right, bottom, top, near, far));
-    }
     void setFrustum(float angle, float near, float far);
-    void setFrustum(float left, float right, float bottom, float top, float near, float far) {
-      setProjection(mat4::Frustum(left, right, bottom, top, near, far));
-    }
-    mat4 projection() const {return _projection;}
+
+    mat4 projection() const;
+    mat4 orthoProjection() const;
+    mat4 frustumProjection() const;
     
     bool setFrame(const XMLTree::Node &node);
     void setFrame(const std::string &name);

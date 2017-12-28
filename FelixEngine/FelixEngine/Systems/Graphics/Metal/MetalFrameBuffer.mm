@@ -219,6 +219,9 @@ MTLRenderPipelineDescriptor* MetalFrameBuffer::createPipelineDescriptor(const Bl
 }
 
 void MetalFrameBuffer::getNextDrawable() {
+  _size.w = _metalLayer.bounds.size.width;
+  _size.h = _metalLayer.bounds.size.height;
+  
   _drawable = [_metalLayer nextDrawable];
   _colorAttachments.at(0) = _drawable.texture;
 }
