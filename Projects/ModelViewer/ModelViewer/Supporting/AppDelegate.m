@@ -16,7 +16,17 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  // Override point for customization after application launch.
+  
+  NSFileManager* fileManager = [NSFileManager defaultManager];
+  id currentiCloudToken = fileManager.ubiquityIdentityToken;
+  
+  if (currentiCloudToken) {
+    NSData *newTokenData = [NSKeyedArchiver archivedDataWithRootObject: currentiCloudToken];
+    [[NSUserDefaults standardUserDefaults] setObject: newTokenData forKey: @"com.FelixEngine.ModelViewer.UbiquityIdentityToken"];
+  } else {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"com.FelixEngine.ModelViewer.UbiquityIdentityToken"];
+  }
+  
   return YES;
 }
 
