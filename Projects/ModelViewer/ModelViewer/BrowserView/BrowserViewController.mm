@@ -1,0 +1,263 @@
+//
+//  BrowserViewController.m
+//  ModelViewer
+//
+//  Created by Robert Crosby on 1/7/18.
+//  Copyright © 2018 Robert Crosby. All rights reserved.
+//
+
+#import "BrowserViewController.h"
+
+@interface BrowserViewController ()
+
+@property (nonatomic) NSURL *iCloudRoot;
+@property (nonatomic) BOOL iCloudAvailable;
+
+@property (nonatomic) NSMetadataQuery *query;
+@property (nonatomic) BOOL iCloudURLsReady;
+@property (nonatomic) NSMutableArray *iCloudURLs;
+
+@end
+
+
+@implementation BrowserViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+  
+  _query = nil;
+  _iCloudURLsReady = NO;
+  _iCloudURLs = [NSMutableArray new];
+  [self refresh];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+  [_query enableUpdates];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+  [_query disableUpdates];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [_iCloudURLs count];
+}
+
+
+- (void)refresh {
+  _iCloudURLsReady = NO;
+  [_iCloudURLs removeAllObjects];
+  
+  [self initializeiCloudAccessWithCompletion:^(BOOL available) {
+    _iCloudAvailable = available;
+    
+    if (_iCloudAvailable) {
+//      NSFileManager *manager = [NSFileManager defaultManager];
+//      NSURL *iCloudDocuments = [_iCloudRoot URLByAppendingPathComponent:@"Documents" isDirectory:YES];
+//      if (![manager fileExistsAtPath:iCloudDocuments.path]) {
+//        NSError *error;
+//        [manager createDirectoryAtURL:iCloudDocuments withIntermediateDirectories:NO attributes:nil error:&error];
+//      }
+      
+//      NSURL *readmeUrl = [iCloudDocuments URLByAppendingPathComponent:@"readme.text"];
+//      NSURL *localReadme = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:@"readme.text"];
+//      //if (![manager fileExistsAtPath:readmeUrl.path]) {
+//        NSString *contents = @"It Works!";
+//        [contents writeToURL:localReadme atomically:NO encoding:NSStringEncodingConversionAllowLossy error:nil];
+//      //}
+      
+      //NSURL *localReadme = [[NSBundle mainBundle] URLForResource:@"readme" withExtension:@"txt"];
+//      if (localReadme != nil) {
+//        NSError *error;
+//        [manager setUbiquitous:YES itemAtURL:localReadme destinationURL:readmeUrl error:&error];
+//        if (error != nil) {
+//          NSLog(@"Problem");
+//        }
+//      }
+      
+      [self startQuery];
+    }
+  }];
+}
+
+
+#pragma mark - iCloud Methods
+
+- (void)initializeiCloudAccessWithCompletion:(void (^)(BOOL available)) completion {
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    _iCloudRoot = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+    if (_iCloudRoot != nil) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"iCloud available at: %@", _iCloudRoot);
+        completion(TRUE);
+      });
+    }
+    else {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"iCloud not available");
+        completion(FALSE);
+      });
+    }
+  });
+}
+
+- (NSMetadataQuery *)createQuery {
+  NSMetadataQuery *query = [NSMetadataQuery new];
+  if (query) {
+    
+    // Search documents subdir only
+    [query setSearchScopes:[NSArray arrayWithObject:NSMetadataQueryUbiquitousDocumentsScope]];
+    
+    // Add a predicate for finding the documents
+    NSString * filePattern = @"*"; //[NSString stringWithFormat:@"*.%@", PTK_EXTENSION];
+    [query setPredicate:[NSPredicate predicateWithFormat:@"%K LIKE %@",
+                         NSMetadataItemFSNameKey, filePattern]];
+  }
+  return query;
+}
+
+
+- (void)stopQuery {
+  if (_query) {
+    NSLog(@"No longer watching iCloud dir...");
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSMetadataQueryDidFinishGatheringNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSMetadataQueryDidUpdateNotification object:nil];
+    [_query stopQuery];
+    _query = nil;
+  }
+  
+}
+
+- (void)startQuery {
+  [self stopQuery];
+  NSLog(@"Starting to watch iCloud dir...");
+  
+  _query = [self createQuery];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(processiCloudFiles:)
+                                               name:NSMetadataQueryDidFinishGatheringNotification
+                                             object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(processiCloudFiles:)
+                                               name:NSMetadataQueryDidUpdateNotification
+                                             object:nil];
+  
+  [_query startQuery];
+}
+
+- (void)processiCloudFiles:(NSNotification *)notification {
+  // Always disable updates while processing results
+  [_query disableUpdates];
+  [_iCloudURLs removeAllObjects];
+  
+  // The query reports all files found, every time.
+  NSArray * queryResults = [_query results];
+  for (NSMetadataItem * result in queryResults) {
+    NSURL * fileURL = [result valueForAttribute:NSMetadataItemURLKey];
+    NSNumber * aBool = nil;
+    
+    // Don't include hidden files
+    [fileURL getResourceValue:&aBool forKey:NSURLIsHiddenKey error:nil];
+    if (aBool && ![aBool boolValue]) {
+      [_iCloudURLs addObject:fileURL];
+    }
+  }
+  [self.tableView reloadData];
+  
+  NSLog(@"Found %lu iCloud files.", (unsigned long)_iCloudURLs.count);
+  _iCloudURLsReady = YES;
+//  if ([self iCloudOn]) {
+//    // Remove deleted files
+//    // Iterate backwards because we need to remove items form the array
+//    for (int i = _objects.count -1; i >= 0; --i) {
+//      PTKEntry * entry = [_objects objectAtIndex:i];
+//      if (![_iCloudURLs containsObject:entry.fileURL]) {
+//        [self removeEntryWithURL:entry.fileURL];
+//      }
+//    }
+//
+//    // Add new files
+//    for (NSURL * fileURL in _iCloudURLs) {
+//      [self loadDocAtURL:fileURL];
+//    }
+//  }
+  
+  [_query enableUpdates];
+}
+
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FileCell" forIndexPath:indexPath];
+  
+  NSURL *fileUrl = [_iCloudURLs objectAtIndex:indexPath.row];
+  cell.textLabel.text = [fileUrl lastPathComponent];
+  
+  return cell;
+}
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end
