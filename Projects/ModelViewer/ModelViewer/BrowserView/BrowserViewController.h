@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BrowserViewController : UITableViewController
+@interface BrowserViewController : UITableViewController <UIDocumentPickerDelegate>
 
 @end

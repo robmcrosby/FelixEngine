@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRr-7l-W1I">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14087.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRr-7l-W1I">
     <device id="ipad10_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14075.4"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="1114" y="-633"/>
         </scene>
-        <!--Files-->
+        <!--Title-->
         <scene sceneID="dvR-Wc-n9y">
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="87s-Ep-FqX" customClass="BrowserViewController" sceneMemberID="viewController">
@@ -42,17 +42,52 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BrowseCell" id="9fL-kE-RW3">
+                                <rect key="frame" x="0.0" y="72" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9fL-kE-RW3" id="b8T-3n-ELb">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Za-wu-mVW">
+                                            <rect key="frame" x="16" y="6" width="139" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Add Files"/>
+                                            <connections>
+                                                <action selector="browseButtonPress:" destination="87s-Ep-FqX" eventType="touchUpInside" id="Pu9-xe-usa"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DVn-ES-985">
+                                            <rect key="frame" x="165" y="6" width="139" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                            <state key="normal" title="Create Directory"/>
+                                            <connections>
+                                                <action selector="createDirectoryButtonPress:" destination="87s-Ep-FqX" eventType="touchUpInside" id="uGz-Cg-fZi"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="87s-Ep-FqX" id="ddj-fJ-LoZ"/>
                             <outlet property="delegate" destination="87s-Ep-FqX" id="CsO-zH-VHn"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Files" id="nBu-I9-07S"/>
+                    <navigationItem key="navigationItem" title="Title" id="1BG-lm-C15">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="uVT-sk-5DW">
+                            <connections>
+                                <action selector="backButtonPress:" destination="87s-Ep-FqX" id="W35-fD-g8R"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="backButton" destination="uVT-sk-5DW" id="th7-7R-aZM"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CMj-Pj-OWB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2067" y="-1299"/>
+            <point key="canvasLocation" x="2066.906474820144" y="-1299.2805755395684"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ozF-sj-tsn">
