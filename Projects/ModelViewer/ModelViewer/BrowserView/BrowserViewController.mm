@@ -7,6 +7,7 @@
 //
 
 #import "BrowserViewController.h"
+#import "DetailViewController.h"
 
 @interface BrowserViewController ()
 
@@ -227,6 +228,9 @@
     }
 }
 
+
+#pragma mark - Table view methods
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   if (indexPath.section == 1) {
     NSURL *url = [_fileURLs objectAtIndex:indexPath.row];
@@ -235,6 +239,9 @@
     if ([manager fileExistsAtPath:url.path isDirectory:&isDirectory] && isDirectory) {
       _workingDir = url;
       [self refresh];
+    }
+    else {
+      [self.detailViewController showPictureAtUrl:url];
     }
   }
 }

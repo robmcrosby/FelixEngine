@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C1BC07FF201AEA4B00E48D7C /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = C1BC07FE201AEA4B00E48D7C /* readme.txt */; };
-		C1EF03481FEC8EDE00C3D346 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1EF03471FEC8EDE00C3D346 /* AppDelegate.m */; };
+		C1EF03481FEC8EDE00C3D346 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1EF03471FEC8EDE00C3D346 /* AppDelegate.mm */; };
 		C1EF034E1FEC8EDF00C3D346 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1EF034C1FEC8EDF00C3D346 /* Main.storyboard */; };
 		C1EF03501FEC8EDF00C3D346 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1EF034F1FEC8EDF00C3D346 /* Assets.xcassets */; };
 		C1EF03531FEC8EDF00C3D346 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1EF03511FEC8EDF00C3D346 /* LaunchScreen.storyboard */; };
@@ -60,7 +60,7 @@
 		C1BC07FE201AEA4B00E48D7C /* readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		C1EF03431FEC8EDE00C3D346 /* ModelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ModelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1EF03461FEC8EDE00C3D346 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		C1EF03471FEC8EDE00C3D346 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C1EF03471FEC8EDE00C3D346 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		C1EF034D1FEC8EDF00C3D346 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C1EF034F1FEC8EDF00C3D346 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1EF03521FEC8EDF00C3D346 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 			children = (
 				C1EF03771FEC983B00C3D346 /* Resources */,
 				C1EF03461FEC8EDE00C3D346 /* AppDelegate.h */,
-				C1EF03471FEC8EDE00C3D346 /* AppDelegate.m */,
+				C1EF03471FEC8EDE00C3D346 /* AppDelegate.mm */,
 				C1EF034C1FEC8EDF00C3D346 /* Main.storyboard */,
 				C1EF034F1FEC8EDF00C3D346 /* Assets.xcassets */,
 				C1EF03511FEC8EDF00C3D346 /* LaunchScreen.storyboard */,
@@ -293,7 +293,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1EF03561FEC8EDF00C3D346 /* main.m in Sources */,
-				C1EF03481FEC8EDE00C3D346 /* AppDelegate.m in Sources */,
+				C1EF03481FEC8EDE00C3D346 /* AppDelegate.mm in Sources */,
 				C1EF038820029A2400C3D346 /* BrowserViewController.mm in Sources */,
 				C1EF035E1FEC901A00C3D346 /* DetailViewController.mm in Sources */,
 				C1EF03761FEC97B200C3D346 /* ModelViewer.cpp in Sources */,

@@ -46,5 +46,9 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)showPictureAtUrl:(NSURL*)url {
+  NSLog(@"Show Picture: %@", [url lastPathComponent]);
+}
+
 
 @end

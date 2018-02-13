@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "DetailViewController.h"
+#import "BrowserViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   
+  [self setupSplitView];
+  [self setupUbiquity];
+  
+  return YES;
+}
+
+- (void)setupSplitView {
+  UISplitViewController *splitViewController = (UISplitViewController*)self.window.rootViewController;
+  UINavigationController *navigationController = (UINavigationController*)[splitViewController.viewControllers firstObject];
+  
+  BrowserViewController *browserViewController = (BrowserViewController*)navigationController.topViewController;
+  browserViewController.detailViewController = (DetailViewController*)[splitViewController.viewControllers lastObject];
+}
+
+- (void)setupUbiquity {
   NSFileManager* fileManager = [NSFileManager defaultManager];
   id currentiCloudToken = fileManager.ubiquityIdentityToken;
   
@@ -26,8 +43,6 @@
   } else {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey: @"com.FelixEngine.ModelViewer.UbiquityIdentityToken"];
   }
-  
-  return YES;
 }
 
 

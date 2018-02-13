@@ -10,4 +10,6 @@
 
 @interface DetailViewController : iOSViewController
 
+- (void)showPictureAtUrl:(NSURL*)url;
+
 @end

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class DetailViewController;
+
 @interface BrowserViewController : UITableViewController <UIDocumentPickerDelegate>
+
+@property (nonatomic) DetailViewController *detailViewController;
 
 @end
