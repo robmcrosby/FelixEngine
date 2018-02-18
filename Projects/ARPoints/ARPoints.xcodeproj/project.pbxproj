@@ -1,0 +1,459 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C16A4386203A3BB100456B48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C16A4385203A3BB100456B48 /* AppDelegate.m */; };
+		C16A4389203A3BB100456B48 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C16A4388203A3BB100456B48 /* ViewController.mm */; };
+		C16A438C203A3BB100456B48 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C16A438A203A3BB100456B48 /* Main.storyboard */; };
+		C16A438E203A3BB200456B48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C16A438D203A3BB200456B48 /* Assets.xcassets */; };
+		C16A4391203A3BB200456B48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C16A438F203A3BB200456B48 /* LaunchScreen.storyboard */; };
+		C16A4394203A3BB200456B48 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C16A4393203A3BB200456B48 /* main.m */; };
+		C17135E6203A3C4800CF3EFD /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135E2203A3C2E00CF3EFD /* FelixEngine.framework */; };
+		C17135E8203A3C6E00CF3EFD /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135E7203A3C6E00CF3EFD /* Metal.framework */; };
+		C17135EA203A3C7400CF3EFD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135E9203A3C7400CF3EFD /* QuartzCore.framework */; };
+		C17135EC203A3C8600CF3EFD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135EB203A3C8600CF3EFD /* CoreGraphics.framework */; };
+		C17135EE203A3C9600CF3EFD /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135ED203A3C9600CF3EFD /* ARKit.framework */; };
+		C17135F0203A3CA600CF3EFD /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17135EF203A3CA600CF3EFD /* CoreVideo.framework */; };
+		C17135F2203A3CB400CF3EFD /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C17135E2203A3C2E00CF3EFD /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C17135F5203A3CFC00CF3EFD /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C17135F3203A3CFC00CF3EFD /* Scene.xml */; };
+		C17135F6203A3CFC00CF3EFD /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C17135F4203A3CFC00CF3EFD /* Shaders.metal */; };
+		C17135F9203A3E1000CF3EFD /* ARPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C17135F7203A3E1000CF3EFD /* ARPoints.cpp */; };
+		C17135FB203A3EAD00CF3EFD /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C17135FA203A3EAC00CF3EFD /* bunny.mesh */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C17135E1203A3C2E00CF3EFD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C17135DD203A3C2E00CF3EFD /* FelixEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C15CAEAD1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+		C17135E3203A3C3F00CF3EFD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C17135DD203A3C2E00CF3EFD /* FelixEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C15CAEAC1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C17135F1203A3CAB00CF3EFD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C17135F2203A3CB400CF3EFD /* FelixEngine.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C16A4381203A3BB100456B48 /* ARPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C16A4384203A3BB100456B48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C16A4385203A3BB100456B48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C16A4387203A3BB100456B48 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C16A4388203A3BB100456B48 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		C16A438B203A3BB100456B48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C16A438D203A3BB200456B48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C16A4390203A3BB200456B48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C16A4392203A3BB200456B48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C16A4393203A3BB200456B48 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C17135DD203A3C2E00CF3EFD /* FelixEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FelixEngine.xcodeproj; path = ../../FelixEngine/FelixEngine.xcodeproj; sourceTree = "<group>"; };
+		C17135E7203A3C6E00CF3EFD /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C17135E9203A3C7400CF3EFD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C17135EB203A3C8600CF3EFD /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C17135ED203A3C9600CF3EFD /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
+		C17135EF203A3CA600CF3EFD /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		C17135F3203A3CFC00CF3EFD /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
+		C17135F4203A3CFC00CF3EFD /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		C17135F7203A3E1000CF3EFD /* ARPoints.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARPoints.cpp; sourceTree = "<group>"; };
+		C17135F8203A3E1000CF3EFD /* ARPoints.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARPoints.h; sourceTree = "<group>"; };
+		C17135FA203A3EAC00CF3EFD /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C16A437E203A3BB100456B48 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C17135F0203A3CA600CF3EFD /* CoreVideo.framework in Frameworks */,
+				C17135EE203A3C9600CF3EFD /* ARKit.framework in Frameworks */,
+				C17135EC203A3C8600CF3EFD /* CoreGraphics.framework in Frameworks */,
+				C17135EA203A3C7400CF3EFD /* QuartzCore.framework in Frameworks */,
+				C17135E8203A3C6E00CF3EFD /* Metal.framework in Frameworks */,
+				C17135E6203A3C4800CF3EFD /* FelixEngine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C16A4378203A3BB100456B48 = {
+			isa = PBXGroup;
+			children = (
+				C17135DD203A3C2E00CF3EFD /* FelixEngine.xcodeproj */,
+				C16A4383203A3BB100456B48 /* ARPoints */,
+				C16A4382203A3BB100456B48 /* Products */,
+				C17135E5203A3C4800CF3EFD /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C16A4382203A3BB100456B48 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C16A4381203A3BB100456B48 /* ARPoints.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C16A4383203A3BB100456B48 /* ARPoints */ = {
+			isa = PBXGroup;
+			children = (
+				C17135F3203A3CFC00CF3EFD /* Scene.xml */,
+				C17135FA203A3EAC00CF3EFD /* bunny.mesh */,
+				C16A4384203A3BB100456B48 /* AppDelegate.h */,
+				C16A4385203A3BB100456B48 /* AppDelegate.m */,
+				C16A4387203A3BB100456B48 /* ViewController.h */,
+				C16A4388203A3BB100456B48 /* ViewController.mm */,
+				C17135F8203A3E1000CF3EFD /* ARPoints.h */,
+				C17135F7203A3E1000CF3EFD /* ARPoints.cpp */,
+				C17135F4203A3CFC00CF3EFD /* Shaders.metal */,
+				C16A438A203A3BB100456B48 /* Main.storyboard */,
+				C16A438D203A3BB200456B48 /* Assets.xcassets */,
+				C16A438F203A3BB200456B48 /* LaunchScreen.storyboard */,
+				C16A4392203A3BB200456B48 /* Info.plist */,
+				C16A4393203A3BB200456B48 /* main.m */,
+			);
+			path = ARPoints;
+			sourceTree = "<group>";
+		};
+		C17135DE203A3C2E00CF3EFD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C17135E2203A3C2E00CF3EFD /* FelixEngine.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C17135E5203A3C4800CF3EFD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C17135EF203A3CA600CF3EFD /* CoreVideo.framework */,
+				C17135ED203A3C9600CF3EFD /* ARKit.framework */,
+				C17135EB203A3C8600CF3EFD /* CoreGraphics.framework */,
+				C17135E9203A3C7400CF3EFD /* QuartzCore.framework */,
+				C17135E7203A3C6E00CF3EFD /* Metal.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C16A4380203A3BB100456B48 /* ARPoints */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C16A4397203A3BB200456B48 /* Build configuration list for PBXNativeTarget "ARPoints" */;
+			buildPhases = (
+				C16A437D203A3BB100456B48 /* Sources */,
+				C16A437E203A3BB100456B48 /* Frameworks */,
+				C16A437F203A3BB100456B48 /* Resources */,
+				C17135F1203A3CAB00CF3EFD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C17135E4203A3C3F00CF3EFD /* PBXTargetDependency */,
+			);
+			name = ARPoints;
+			productName = ARPoints;
+			productReference = C16A4381203A3BB100456B48 /* ARPoints.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C16A4379203A3BB100456B48 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0930;
+				ORGANIZATIONNAME = "Robert Crosby";
+				TargetAttributes = {
+					C16A4380203A3BB100456B48 = {
+						CreatedOnToolsVersion = 9.3;
+					};
+				};
+			};
+			buildConfigurationList = C16A437C203A3BB100456B48 /* Build configuration list for PBXProject "ARPoints" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C16A4378203A3BB100456B48;
+			productRefGroup = C16A4382203A3BB100456B48 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C17135DE203A3C2E00CF3EFD /* Products */;
+					ProjectRef = C17135DD203A3C2E00CF3EFD /* FelixEngine.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				C16A4380203A3BB100456B48 /* ARPoints */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C17135E2203A3C2E00CF3EFD /* FelixEngine.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FelixEngine.framework;
+			remoteRef = C17135E1203A3C2E00CF3EFD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C16A437F203A3BB100456B48 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C16A4391203A3BB200456B48 /* LaunchScreen.storyboard in Resources */,
+				C17135FB203A3EAD00CF3EFD /* bunny.mesh in Resources */,
+				C16A438E203A3BB200456B48 /* Assets.xcassets in Resources */,
+				C17135F5203A3CFC00CF3EFD /* Scene.xml in Resources */,
+				C16A438C203A3BB100456B48 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C16A437D203A3BB100456B48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C17135F6203A3CFC00CF3EFD /* Shaders.metal in Sources */,
+				C16A4389203A3BB100456B48 /* ViewController.mm in Sources */,
+				C16A4394203A3BB200456B48 /* main.m in Sources */,
+				C16A4386203A3BB100456B48 /* AppDelegate.m in Sources */,
+				C17135F9203A3E1000CF3EFD /* ARPoints.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C17135E4203A3C3F00CF3EFD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FelixEngine;
+			targetProxy = C17135E3203A3C3F00CF3EFD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C16A438A203A3BB100456B48 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C16A438B203A3BB100456B48 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		C16A438F203A3BB200456B48 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C16A4390203A3BB200456B48 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C16A4395203A3BB200456B48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C16A4396203A3BB200456B48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C16A4398203A3BB200456B48 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = ARPoints/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.ARPoints;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C16A4399203A3BB200456B48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
+				INFOPLIST_FILE = ARPoints/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.ARPoints;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C16A437C203A3BB100456B48 /* Build configuration list for PBXProject "ARPoints" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C16A4395203A3BB200456B48 /* Debug */,
+				C16A4396203A3BB200456B48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C16A4397203A3BB200456B48 /* Build configuration list for PBXNativeTarget "ARPoints" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C16A4398203A3BB200456B48 /* Debug */,
+				C16A4399203A3BB200456B48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C16A4379203A3BB100456B48 /* Project object */;
+}
