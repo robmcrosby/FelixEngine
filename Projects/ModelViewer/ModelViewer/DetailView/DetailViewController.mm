@@ -47,6 +47,7 @@
 }
 
 - (void)showPictureAtUrl:(NSURL*)url {
+  [self.splitViewController showDetailViewController:self sender:nil];
   NSLog(@"Show Picture: %@", [url lastPathComponent]);
 }
 
