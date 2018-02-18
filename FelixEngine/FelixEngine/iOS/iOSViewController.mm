@@ -61,7 +61,7 @@
 
 - (void)setupDisplayLink {
   self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(frameUpdate:)];
-  [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+  [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
   self.nextDeltaTimeZero = YES;
 }
 

@@ -8,6 +8,9 @@
 
 #include "FileSystem.h"
 
+#ifndef iOSFileSystem_h
+#define iOSFileSystem_h
+
 namespace fx {
   
   /** iOS File System */
@@ -29,3 +32,5 @@ namespace fx {
   };
   
 }
+
+#endif /* iOSFileSystem_h */
