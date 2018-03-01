@@ -38,6 +38,7 @@
   
   // Add and initalize ARKit
   fx::ARKitTracker *tracker = new fx::ARKitTracker();
+  tracker->enablePointCloud(true);
   tracker->initalize(graphics);
   self.arPointsApp->setTrackerSystem(tracker);
   

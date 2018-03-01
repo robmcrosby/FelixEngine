@@ -31,6 +31,9 @@ namespace fx {
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     
+    bool _pointCloudEnabled;
+    ARPointVector _pointCloud;
+    
     std::shared_ptr<MetalTextureBuffer> _cameraImageY;
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
     
@@ -48,6 +51,9 @@ namespace fx {
     virtual mat4 getCameraView();
     virtual mat4 getCameraProjection();
     virtual mat4 getImageTransform();
+    
+    virtual void enablePointCloud(bool enable);
+    virtual const ARPointVector& getPointCloud() const;
     
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
