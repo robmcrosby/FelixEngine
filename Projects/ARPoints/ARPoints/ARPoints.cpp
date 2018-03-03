@@ -23,6 +23,19 @@ ARPoints::~ARPoints() {
 void ARPoints::initalize() {
   _scene.loadXMLFile("Scene.xml");
   _renderScheme.push_back("MainPass");
+  
+  // Load the Point Mesh
+  fx::VertexMeshData meshData;
+  fx::FileSystem::loadMesh(meshData, "cube.mesh");
+  fx::VertexMeshPtr mesh = _graphics->createVertexMesh();
+  mesh->load(meshData);
+  
+  // Setup the Point Model
+  _model = _scene.get<fx::Model>("PointModel");
+  _model->setMesh(mesh);
+  _model->setMaterial("Material");
+  _model->setScale(0.01f);
+  _model->addToRenderPass("MainPass");
 }
 
 void ARPoints::update(float td) {

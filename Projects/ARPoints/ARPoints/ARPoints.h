@@ -17,6 +17,7 @@ class ARPoints: public fx::Application {
   private:
   fx::RenderScheme _renderScheme;
   fx::Scene _scene;
+  fx::ModelPtr _model;
   
   public:
   ARPoints();

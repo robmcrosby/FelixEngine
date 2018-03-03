@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C14F34672048D1720047214C /* cube.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C14F34662048D1720047214C /* cube.mesh */; };
 		C16A4386203A3BB100456B48 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C16A4385203A3BB100456B48 /* AppDelegate.m */; };
 		C16A4389203A3BB100456B48 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C16A4388203A3BB100456B48 /* ViewController.mm */; };
 		C16A438C203A3BB100456B48 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C16A438A203A3BB100456B48 /* Main.storyboard */; };
@@ -57,6 +58,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C14F34662048D1720047214C /* cube.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = cube.mesh; sourceTree = "<group>"; };
 		C16A4381203A3BB100456B48 /* ARPoints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARPoints.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C16A4384203A3BB100456B48 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C16A4385203A3BB100456B48 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		C16A4383203A3BB100456B48 /* ARPoints */ = {
 			isa = PBXGroup;
 			children = (
+				C14F34662048D1720047214C /* cube.mesh */,
 				C17135F3203A3CFC00CF3EFD /* Scene.xml */,
 				C17135FA203A3EAC00CF3EFD /* bunny.mesh */,
 				C16A4384203A3BB100456B48 /* AppDelegate.h */,
@@ -234,6 +237,7 @@
 				C16A4391203A3BB200456B48 /* LaunchScreen.storyboard in Resources */,
 				C17135FB203A3EAD00CF3EFD /* bunny.mesh in Resources */,
 				C16A438E203A3BB200456B48 /* Assets.xcassets in Resources */,
+				C14F34672048D1720047214C /* cube.mesh in Resources */,
 				C17135F5203A3CFC00CF3EFD /* Scene.xml in Resources */,
 				C16A438C203A3BB100456B48 /* Main.storyboard in Resources */,
 			);
