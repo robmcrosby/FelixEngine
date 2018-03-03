@@ -18,7 +18,8 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 
 Model::Model(): _layer(0) {
   _scene = nullptr;
-  _transform = Transform::make();
+  _instances = 1;
+  _transforms.push_back(Transform::make());
   _uniforms = UniformMap::make();
 }
 
@@ -43,8 +44,8 @@ bool Model::loadXML(const XMLTree::Node &node) {
 }
 
 bool Model::loadXMLItem(const XMLTree::Node &node) {
-  if (node == "Transform")
-    return _transform->loadXML(node);
+  if (node == "Transform" && _transforms.size() > 0)
+    return _transforms.front()->loadXML(node);
   if (node == "Mesh")
     return setMesh(node);
   if (node == "Material")
@@ -53,12 +54,14 @@ bool Model::loadXMLItem(const XMLTree::Node &node) {
 }
 
 void Model::update(float dt) {
-  STR_Model transform;
-  transform.model = _transform->globalTransform();
-  transform.rotation = _transform->globalRotation().toVec4();
-  (*_uniforms)["model"] = transform;
+  vector<STR_Model> transforms(_transforms.size());
+  for (int i = 0; i < _transforms.size(); ++i) {
+    transforms[i].model = _transforms[i]->globalTransform();
+    transforms[i].rotation = _transforms[i]->globalRotation().toVec4();
+  }
+  (*_uniforms)["model"] = transforms;
   
-  if (!_hidden) {
+  if (!_hidden && _instances > 0) {
     for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
       (*pass)->addModel(this);
   }
@@ -67,9 +70,16 @@ void Model::update(float dt) {
 void Model::applyToTask(fx::GraphicTask &task) {
   task.uniforms.push_back(_uniforms);
   task.mesh = _mesh;
+  task.instances = _instances;
   
   if (_material)
     _material->setToTask(task);
+}
+
+void Model::setInstances(unsigned int instances) {
+  while (instances > _transforms.size())
+    _transforms.push_back(Transform::make());
+  _instances = instances;
 }
 
 bool Model::setMaterial(const XMLTree::Node &node) {
@@ -89,4 +99,48 @@ bool Model::setMesh(const XMLTree::Node &node) {
 
 void Model::setMesh(const std::string &name) {
   _mesh = Graphics::getInstance().getVertexMesh(name);
+}
+
+void Model::setScale(float scale, int index) {
+  if (index < _transforms.size())
+    _transforms[index]->setScale(scale);
+}
+
+void Model::setScale(const vec3 &scale, int index) {
+  if (index < _transforms.size())
+    _transforms[index]->setScale(scale);
+}
+
+vec3 Model::localScale(int index) const {
+  if (index < _transforms.size())
+    return _transforms[index]->localScale();
+  return vec3(1.0f, 1.0f, 1.0f);
+}
+
+void Model::setRotation(const quat &orientation, int index) {
+  if (index < _transforms.size())
+    _transforms[index]->setRotation(orientation);
+}
+
+quat Model::localRotation(int index) const {
+  if (index < _transforms.size())
+    return _transforms[index]->localRotation();
+  return quat();
+}
+
+void Model::setLocation(const vec3 &location, int index) {
+  if (index < _transforms.size())
+    _transforms[index]->setLocation(location);
+  
+}
+vec3 Model::localLocation(int index) const {
+  if (index < _transforms.size())
+    return _transforms[index]->localLocation();
+  return vec3();
+}
+
+TransformPtr Model::transform(int index) {
+  if (index < _transforms.size())
+    return _transforms[index];
+  return Transform::make();
 }

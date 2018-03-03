@@ -30,7 +30,8 @@ namespace fx {
     VertexMeshPtr _mesh;
     UniformsPtr   _uniforms;
     
-    TransformPtr _transform;
+    unsigned int _instances;
+    Transforms _transforms;
     
     bool _hidden;
     int _layer;
@@ -48,6 +49,9 @@ namespace fx {
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}
     
+    void setInstances(unsigned int instances);
+    unsigned int instances() const {return _instances;}
+    
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
     
@@ -61,17 +65,17 @@ namespace fx {
     void setMesh(VertexMeshPtr &mesh) {_mesh = mesh;}
     VertexMeshPtr mesh() const {return _mesh;}
     
-    void setScale(float scale) {_transform->setScale(scale);}
-    void setScale(const vec3 &scale) {_transform->setScale(scale);}
-    vec3 localScale() const {return _transform->localScale();}
+    void setScale(float scale, int index = 0);
+    void setScale(const vec3 &scale, int index = 0);
+    vec3 localScale(int index = 0) const;
     
-    void setRotation(const quat &orientation) {_transform->setRotation(orientation);}
-    quat localRotation() const {return _transform->localRotation();}
+    void setRotation(const quat &orientation, int index = 0);
+    quat localRotation(int index = 0) const;
     
-    void setLocation(const vec3 &location) {_transform->setLocation(location);}
-    vec3 localLocation() const {return _transform->localLocation();}
+    void setLocation(const vec3 &location, int index = 0);
+    vec3 localLocation(int index = 0) const;
     
-    TransformPtr transform() {return _transform;}
+    TransformPtr transform(int index = 0);
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);
