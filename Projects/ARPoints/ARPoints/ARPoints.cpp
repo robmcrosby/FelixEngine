@@ -13,7 +13,7 @@
 
 
 ARPoints::ARPoints() {
-  
+  _tracker = nullptr;
 }
 
 ARPoints::~ARPoints() {
@@ -40,6 +40,22 @@ void ARPoints::initalize() {
 
 void ARPoints::update(float td) {
   _scene.update(td);
+  
+  if (_tracker != nullptr) {
+    const fx::ARPointVector &points = _tracker->getPointCloud();
+    int instances = points.size() > 0 ? points.size() > 4 ? 4 : (int)points.size() : 1;
+    _model->setInstances(instances);
+    for (int i = 0; i < instances && i < points.size(); ++i) {
+      _model->setLocation(points[i].position, i);
+      _model->setScale(0.01f, i);
+    }
+    
+//    _model->setInstances(points.size() > 0 ? (int)points.size() : 1);
+//    for (int i = 0; i < points.size(); ++i) {
+//      _model->setLocation(points[i].position, i);
+//      _model->setScale(0.01f, i);
+//    }
+  }
   
   fx::RenderPass::renderPasses(_renderScheme);
   fx::RenderPass::resetPasses();

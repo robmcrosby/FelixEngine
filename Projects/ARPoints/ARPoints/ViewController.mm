@@ -41,6 +41,7 @@
   tracker->enablePointCloud(true);
   tracker->initalize(graphics);
   self.arPointsApp->setTrackerSystem(tracker);
+  self.arPointsApp->setTracker(tracker);
   
   // Set the Application
   [self setApplication: self.arPointsApp];

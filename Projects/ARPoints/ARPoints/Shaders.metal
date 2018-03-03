@@ -79,12 +79,13 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
                                  const device packed_float4 *Normal   [[ buffer(1) ]],
                                  constant     Camera        *camera   [[ buffer(2) ]],
                                  constant     Model         *model    [[ buffer(3) ]],
-                                 unsigned int   vid      [[ vertex_id ]]) {
+                                 unsigned int   vid      [[ vertex_id ]],
+                                 unsigned int   iid      [[ instance_id ]]) {
   VertexOutput output;
-  float4 location = model->model * float4(Position[vid]);
+  float4 location = model[iid].model * float4(Position[vid]);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float4(Normal[vid]).xyz);
+  output.normal = rotate_quat(model[iid].rotation, float4(Normal[vid]).xyz);
   output.view   = camera->position.xyz - output.position.xyz;
   return output;
 }
