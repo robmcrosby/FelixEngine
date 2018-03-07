@@ -40,10 +40,14 @@ bool MetalUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
 }
 
 void MetalUniformBuffer::update(void *data, size_t size) {
-  size_t dataSize = min(_bufferSize, size);
   _lastBuffer = _currentBuffer;
   _currentBuffer = (_currentBuffer + 1) % _bufferCount;
-  memcpy(_buffers[_currentBuffer].contents, data, dataSize);
+  _bufferSize = size;
+  
+  if ([_buffers[_currentBuffer] allocatedSize] < size)
+    _buffers[_currentBuffer] = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
+  else
+    memcpy(_buffers[_currentBuffer].contents, data, size);
 }
 
 void MetalUniformBuffer::encodeCurrent(id <MTLRenderCommandEncoder> encoder, const string &name, MetalShaderProgram *shader) {

@@ -60,6 +60,7 @@ void Model::update(float dt) {
     transforms[i].rotation = _transforms[i]->globalRotation().toVec4();
   }
   (*_uniforms)["model"] = transforms;
+  _uniforms->update();
   
   if (!_hidden && _instances > 0) {
     for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
@@ -80,6 +81,10 @@ void Model::setInstances(unsigned int instances) {
   while (instances > _transforms.size())
     _transforms.push_back(Transform::make());
   _instances = instances;
+  
+  if (!(*_uniforms)["model"].usingBuffer() && instances > 4) {
+    (*_uniforms)["model"].useBuffer();
+  }
 }
 
 bool Model::setMaterial(const XMLTree::Node &node) {
