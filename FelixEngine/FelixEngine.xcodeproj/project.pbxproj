@@ -63,6 +63,8 @@
 		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C14549502059E32C003156A0 /* MeshBuilder.cpp */; };
+		C14549532059E32C003156A0 /* MeshBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = C14549512059E32C003156A0 /* MeshBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C154C0DD1FCE389100D3DCFF /* GraphicStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */; };
 		C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */ = {isa = PBXBuildFile; fileRef = C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -146,6 +148,8 @@
 		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
 		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
 		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
+		C14549502059E32C003156A0 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBuilder.cpp; path = Systems/Graphics/MeshBuilder.cpp; sourceTree = "<group>"; };
+		C14549512059E32C003156A0 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshBuilder.h; path = Systems/Graphics/MeshBuilder.h; sourceTree = "<group>"; };
 		C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicStructures.h; path = Systems/Graphics/GraphicStructures.h; sourceTree = "<group>"; };
 		C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; name = MetalShaders.metal; path = Systems/Graphics/Metal/MetalShaders.metal; sourceTree = "<group>"; };
 		C15C16C01F68B4E5007E2C1E /* EventListenerSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = EventListenerSet.h; path = Systems/Events/EventListenerSet.h; sourceTree = "<group>"; };
@@ -266,6 +270,8 @@
 				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
 				C1401D551F0BE28900BE9958 /* ImageBufferData.h */,
 				C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */,
+				C14549512059E32C003156A0 /* MeshBuilder.h */,
+				C14549502059E32C003156A0 /* MeshBuilder.cpp */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 			);
 			name = Graphics;
@@ -441,6 +447,7 @@
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
+				C14549532059E32C003156A0 /* MeshBuilder.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
@@ -559,6 +566,7 @@
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
+				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
 				C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
