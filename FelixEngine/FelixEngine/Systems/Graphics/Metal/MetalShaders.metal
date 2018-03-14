@@ -21,9 +21,10 @@ struct OutputShadeless {
 vertex OutputShadeless v_shadeless(const device packed_float3 *position [[ buffer(0) ]],
                                    constant     STR_Camera    *camera   [[ buffer(1) ]],
                                    constant     STR_Model     *model    [[ buffer(2) ]],
-                                   unsigned     int            vid      [[ vertex_id ]]) {
+                                   unsigned     int            vid      [[ vertex_id ]],
+                                   unsigned     int            iid      [[ instance_id ]]) {
   OutputShadeless output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   return output;
 }
@@ -49,9 +50,10 @@ vertex OutputColor v_color(const device packed_float3 *position [[ buffer(0) ]],
                            const device packed_float3 *color0   [[ buffer(1) ]],
                            constant     STR_Camera    *camera   [[ buffer(2) ]],
                            constant     STR_Model     *model    [[ buffer(3) ]],
-                           unsigned     int            vid      [[ vertex_id ]]) {
+                           unsigned     int            vid      [[ vertex_id ]],
+                           unsigned     int            iid      [[ instance_id ]]) {
   OutputColor output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.color = float3(color0[vid]);
   return output;
@@ -79,9 +81,10 @@ vertex OutputTexture v_texture(const device packed_float3 *position   [[ buffer(
                                const device packed_float2 *uv0        [[ buffer(1) ]],
                                constant     STR_Camera    *camera     [[ buffer(2) ]],
                                constant     STR_Model     *model      [[ buffer(3) ]],
-                               unsigned     int            vid        [[ vertex_id ]]) {
+                               unsigned     int            vid        [[ vertex_id ]],
+                               unsigned     int            iid        [[ instance_id ]]) {
   OutputTexture output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.coordinate = transform_coordinate(model->texture, float2(uv0[vid]));
   return output;
@@ -116,12 +119,13 @@ vertex OutputNormal v_normal(const device packed_float3 *position [[ buffer(0) ]
                              const device packed_float3 *normal   [[ buffer(1) ]],
                              constant     STR_Camera    *camera   [[ buffer(2) ]],
                              constant     STR_Model     *model    [[ buffer(3) ]],
-                             unsigned     int            vid      [[ vertex_id ]]) {
+                             unsigned     int            vid      [[ vertex_id ]],
+                             unsigned     int            iid      [[ instance_id ]]) {
   OutputNormal output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
+  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
   output.view = camera->position.xyz - output.position.xyz;
   return output;
 }
@@ -182,12 +186,13 @@ vertex OutputColorNormal v_color_normal(const device packed_float3 *position [[ 
                                         const device packed_float3 *color0   [[ buffer(2) ]],
                                         constant     STR_Camera    *camera   [[ buffer(3) ]],
                                         constant     STR_Model     *model    [[ buffer(4) ]],
-                                        unsigned     int            vid      [[ vertex_id ]]) {
+                                        unsigned     int            vid      [[ vertex_id ]],
+                                        unsigned     int            iid      [[ instance_id ]]) {
   OutputColorNormal output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
+  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
   output.view = camera->position.xyz - output.position.xyz;
   output.color = float3(color0[vid]);
   return output;
@@ -248,12 +253,13 @@ vertex OutputTextureNormal v_texture_normal(const device packed_float3 *position
                                             const device packed_float2 *uv0      [[ buffer(2) ]],
                                             constant     STR_Camera    *camera   [[ buffer(3) ]],
                                             constant     STR_Model     *model    [[ buffer(4) ]],
-                                            unsigned     int            vid      [[ vertex_id ]]) {
+                                            unsigned     int            vid      [[ vertex_id ]],
+                                            unsigned     int            iid      [[ instance_id ]]) {
   OutputTextureNormal output;
-  float4 location = model->model * float4(position[vid], 1.0);
+  float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float3(normal[vid]));
+  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
   output.view = camera->position.xyz - output.position.xyz;
   output.coordinate = float2(uv0[vid]);
   return output;

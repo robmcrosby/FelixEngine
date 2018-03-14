@@ -70,7 +70,7 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
 
 void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {
   if (uniform.usingBuffer()) {
-    MetalUniformBuffer *buffer = static_cast<MetalUniformBuffer*>(uniform.buffer());
+    MetalUniformBuffer *buffer = static_cast<MetalUniformBuffer*>(uniform.buffer().get());
     buffer->encodeCurrent(encoder, name, this);
   }
   else {

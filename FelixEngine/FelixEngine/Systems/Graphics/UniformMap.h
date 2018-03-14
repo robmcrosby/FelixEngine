@@ -20,14 +20,20 @@ namespace fx {
   
   class Uniform: public Variant {
   private:
-    UniformBuffer *_buffer;
+    UniformBufferPtr _buffer;
 
   public:
     Uniform(): Variant(), _buffer(0) {}
     virtual ~Uniform() {}
 
     bool usingBuffer() const {return _buffer != nullptr;}
-    UniformBuffer* buffer() const {return _buffer;}
+    UniformBufferPtr buffer() const {return _buffer;}
+    void useBuffer(BUFFER_COUNT bufferCount = BUFFER_TRIPLE) {
+      if (!usingBuffer()) {
+        _buffer = Graphics::getInstance().createUniformBuffer();
+        _buffer->load(ptr(), sizeInBytes(), bufferCount);
+      }
+    }
     
     void update() {
       if (usingBuffer())
@@ -66,15 +72,12 @@ namespace fx {
     std::map<std::string, Uniform>::const_iterator end() const {return _map.end();}
     
     void update() {
-      //for (auto uniform : _map)
-      //  uniform.second.update();
+      for (auto uniform : _map)
+        uniform.second.update();
     }
     
     Uniform& operator[](const std::string name) {
       return _map[name];
-//      if (_map.count(name) == 0)
-//        _map[name] = Graphics::getInstance().createUniformBuffer();
-//      return *_map.at(name);
     }
   };
 }

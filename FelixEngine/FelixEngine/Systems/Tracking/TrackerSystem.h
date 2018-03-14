@@ -39,6 +39,14 @@ namespace fx {
     virtual void trackedPlaneRemoved(TrackedPlane plane) = 0;
   };
   
+  struct ARPoint {
+    ARPoint(): identifier(0) {}
+    
+    long identifier;
+    fx::vec3 position;
+  };
+  typedef std::vector<ARPoint> ARPointVector;
+  
   class TrackerSystem {
   protected:
     static TrackerSystem *instance;
@@ -64,6 +72,9 @@ namespace fx {
     virtual mat4 getCameraView() = 0;
     virtual mat4 getCameraProjection() = 0;
     virtual mat4 getImageTransform() = 0;
+    
+    virtual void enablePointCloud(bool enable) = 0;
+    virtual const ARPointVector& getPointCloud() const = 0;
     
     virtual TextureBufferPtr getCameraImageY() = 0;
     virtual TextureBufferPtr getCameraImageCbCr() = 0;

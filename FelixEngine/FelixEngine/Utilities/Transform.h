@@ -17,6 +17,7 @@ namespace fx
 {
   class Transform;
   typedef std::shared_ptr<Transform> TransformPtr;
+  typedef std::vector<TransformPtr> Transforms;
   
   class Transform {
   private:

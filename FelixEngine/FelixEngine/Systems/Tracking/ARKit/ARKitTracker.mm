@@ -80,6 +80,8 @@ ARKitTracker::ARKitTracker() {
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
   
+  _pointCloudEnabled = false;
+  
   _arSession = [ARSession new];
   [_arSession setDelegate:_arDelegate];
   
@@ -141,6 +143,14 @@ mat4 ARKitTracker::getImageTransform() {
     transform.w.y = affine.ty;
   }
   return transform;
+}
+
+void ARKitTracker::enablePointCloud(bool enable) {
+  _pointCloudEnabled = enable;
+}
+
+const ARPointVector& ARKitTracker::getPointCloud() const {
+  return _pointCloud;
 }
 
 TextureBufferPtr ARKitTracker::getCameraImageY() {
@@ -222,6 +232,17 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
     if(status == kCVReturnSuccess) {
       _cameraImageCbCr->setMetalTexture(CVMetalTextureGetTexture(texture));
       CFRelease(texture);
+    }
+  }
+  
+  if (_pointCloudEnabled) {
+    ARPointCloud *pointCloud = [frame rawFeaturePoints];
+    long size = [pointCloud count];
+    _pointCloud.resize(size);
+    for (long i = 0; i < [pointCloud count]; ++i) {
+      const vector_float3 &pt = pointCloud.points[i];
+      _pointCloud[i].position = vec3(pt[0], pt[1], pt[2]);
+      _pointCloud[i].identifier = pointCloud.identifiers[i];
     }
   }
 }
