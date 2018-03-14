@@ -9,6 +9,7 @@
 #ifndef ARPoints_h
 #define ARPoints_h
 
+#include <unordered_map>
 #include <FelixEngine/Application.h>
 #include <FelixEngine/Scene.h>
 #include <FelixEngine/RenderPass.h>
@@ -20,6 +21,8 @@ class ARPoints: public fx::Application {
   fx::Scene _scene;
   fx::ModelPtr _model;
   fx::TrackerSystem *_tracker;
+  
+  std::unordered_map<long, fx::vec3> _pointCloud;
   
   public:
   ARPoints();

@@ -16,7 +16,7 @@ using namespace std;
 
 ModelBuilder Model::modelBuilder = ModelBuilder();
 
-Model::Model(): _layer(0) {
+Model::Model(): _layer(0), _hidden(0) {
   _scene = nullptr;
   _instances = 1;
   _transforms.push_back(Transform::make());

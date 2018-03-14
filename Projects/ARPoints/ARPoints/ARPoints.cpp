@@ -36,6 +36,7 @@ void ARPoints::initalize() {
   _model->setMaterial("Material");
   _model->setScale(0.01f);
   _model->addToRenderPass("MainPass");
+  _model->setInstances(0);
 }
 
 void ARPoints::update(float td) {
@@ -43,10 +44,20 @@ void ARPoints::update(float td) {
   
   if (_tracker != nullptr) {
     const fx::ARPointVector &points = _tracker->getPointCloud();
-    _model->setInstances(points.size() > 0 ? (int)points.size() : 1);
+//    _model->setInstances(points.size() > 0 ? (int)points.size() : 1);
     for (int i = 0; i < points.size(); ++i) {
-      _model->setLocation(points[i].position, i);
+      _pointCloud[points[i].identifier] = points[i].position;
+//      _model->setLocation(points[i].position, i);
+//      _model->setScale(0.01f, i);
+    }
+    
+    int i = 0;
+    _model->setInstances((int)_pointCloud.size());
+    //_model->setInstances(points.size() > 0 ? (int)_pointCloud.size() : 1);
+    for (const auto &point : _pointCloud) {
+      _model->setLocation(point.second, i);
       _model->setScale(0.01f, i);
+      ++i;
     }
   }
   
