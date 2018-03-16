@@ -7,3 +7,11 @@
 //
 
 #include "MeshBuilder.h"
+
+
+using namespace fx;
+using namespace std;
+
+VertexMeshPtr MeshBuilder::loadFromFile(const std::string &file) {
+  return Graphics::getInstance().createVertexMesh();
+}

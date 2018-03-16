@@ -44,10 +44,11 @@ void MetalUniformBuffer::update(void *data, size_t size) {
   _currentBuffer = (_currentBuffer + 1) % _bufferCount;
   _bufferSize = size;
   
-  if ([_buffers[_currentBuffer] allocatedSize] < size)
-    _buffers[_currentBuffer] = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
-  else
-    memcpy(_buffers[_currentBuffer].contents, data, size);
+  if ([_buffers[_currentBuffer] length] < size) {
+    NSUInteger length = 2 * [_buffers[_currentBuffer] length];
+    _buffers[_currentBuffer] = [_device newBufferWithLength:length options:MTLResourceCPUCacheModeDefaultCache];
+  }
+  memcpy(_buffers[_currentBuffer].contents, data, size);
 }
 
 void MetalUniformBuffer::encodeCurrent(id <MTLRenderCommandEncoder> encoder, const string &name, MetalShaderProgram *shader) {
