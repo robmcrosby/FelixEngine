@@ -31,6 +31,7 @@ namespace fx {
     
   private:
     void clearBuffers();
+    size_t nextPowOfTwo(size_t x) const;
     
   public:
     MetalUniformBuffer(id <MTLDevice> device);

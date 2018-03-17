@@ -11,6 +11,7 @@
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/Light.h>
+#import <FelixEngine/MeshBuilder.h>
 
 #include <set>
 #include <map>
@@ -55,10 +56,7 @@ void ExampleScene::initalize() {
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   // Load the Bunny Mesh
-  fx::VertexMeshData meshData;
-  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
-  fx::VertexMeshPtr mesh = _graphics->createVertexMesh();
-  mesh->load(meshData);
+  fx::VertexMeshPtr mesh = MeshBuilder::createFromFile("bunny.mesh");
   
   // Setup the Material
   fx::MaterialPtr material = _scene.get<fx::Material>("Material");

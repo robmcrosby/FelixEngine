@@ -13,7 +13,7 @@
 
 namespace fx {
   struct MeshBuilder {
-    static VertexMeshPtr loadFromFile(const std::string &file);
+    static VertexMeshPtr createFromFile(const std::string &file);
   };
 }
 

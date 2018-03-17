@@ -7,11 +7,18 @@
 //
 
 #include "MeshBuilder.h"
+#include "FileSystem.h"
 
 
 using namespace fx;
 using namespace std;
 
-VertexMeshPtr MeshBuilder::loadFromFile(const std::string &file) {
-  return Graphics::getInstance().createVertexMesh();
+VertexMeshPtr MeshBuilder::createFromFile(const std::string &file) {
+  VertexMeshData meshData;
+  FileSystem::loadMesh(meshData, file);
+  
+  VertexMeshPtr mesh = Graphics::getInstance().createVertexMesh();
+  mesh->load(meshData);
+  
+  return mesh;
 }

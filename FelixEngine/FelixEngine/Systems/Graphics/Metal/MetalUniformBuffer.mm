@@ -27,14 +27,17 @@ MetalUniformBuffer::~MetalUniformBuffer() {
 
 bool MetalUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
   bool success = true;
-  _bufferSize = size;
+  _bufferSize = nextPowOfTwo(size);
   _bufferCount = count;
   _currentBuffer = 0;
   _lastBuffer = 0;
   
   for (int i = 0; i < _bufferCount; ++i) {
-    _buffers[i] = [_device newBufferWithBytes:data length:size options:MTLResourceCPUCacheModeDefaultCache];
-    success &= _buffers[i] != nil;
+    _buffers[i] = [_device newBufferWithLength:_bufferSize options:MTLResourceCPUCacheModeDefaultCache];
+    if (_buffers[i] != nil)
+      memcpy(_buffers[i].contents, data, size);
+    else
+      success = false;
   }
   return success;
 }
@@ -42,12 +45,12 @@ bool MetalUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
 void MetalUniformBuffer::update(void *data, size_t size) {
   _lastBuffer = _currentBuffer;
   _currentBuffer = (_currentBuffer + 1) % _bufferCount;
-  _bufferSize = size;
   
-  if ([_buffers[_currentBuffer] length] < size) {
-    NSUInteger length = 2 * [_buffers[_currentBuffer] length];
-    _buffers[_currentBuffer] = [_device newBufferWithLength:length options:MTLResourceCPUCacheModeDefaultCache];
-  }
+  if (size < _bufferSize)
+    _bufferSize = nextPowOfTwo(size);
+  
+  if ([_buffers[_currentBuffer] length] < _bufferSize)
+    _buffers[_currentBuffer] = [_device newBufferWithLength:_bufferSize options:MTLResourceCPUCacheModeDefaultCache];
   memcpy(_buffers[_currentBuffer].contents, data, size);
 }
 
@@ -74,4 +77,11 @@ void MetalUniformBuffer::encode(id <MTLRenderCommandEncoder> encoder, const stri
 void MetalUniformBuffer::clearBuffers() {
   for (int i = 0; i < MAX_BUFFERS; ++i)
     _buffers[i] = nil;
+}
+
+size_t MetalUniformBuffer::nextPowOfTwo(size_t x) const {
+  size_t power = 4;
+  while (power < x)
+    power <<= 1;
+  return power;
 }
