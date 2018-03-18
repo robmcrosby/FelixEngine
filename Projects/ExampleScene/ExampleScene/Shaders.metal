@@ -86,16 +86,16 @@ device float shade_specular(float3 normal, float3 view, float3 light, float hard
   return pow(saturate(dot(normal, halfAngle)), hardness);
 }
 
-vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
-                                 const device packed_float4 *Normal   [[ buffer(1) ]],
+vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
+                                 const device packed_float3 *normal   [[ buffer(1) ]],
                                  constant     Camera        *camera   [[ buffer(2) ]],
                                  constant     Model         *model    [[ buffer(3) ]],
                                               unsigned int   vid      [[ vertex_id ]]) {
   VertexOutput output;
-  float4 location = model->model * float4(Position[vid]);
+  float4 location = model->model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float4(Normal[vid]).xyz);
+  output.normal = rotate_quat(model->rotation, normal[vid]);
   output.view   = camera->position.xyz - output.position.xyz;
   return output;
 }
