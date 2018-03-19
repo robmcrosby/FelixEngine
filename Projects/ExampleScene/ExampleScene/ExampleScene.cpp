@@ -76,6 +76,7 @@ void ExampleScene::initalize() {
   _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
   _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
   _model->addToRenderPass("MainPass");
+  //_model->setFaceCulling(fx::CULL_BACK);
   
   // Setup the Render Scheme
   _renderScheme.push_back("MainPass");

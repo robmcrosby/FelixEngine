@@ -25,28 +25,42 @@ VertexMeshPtr MeshBuilder::createFromFile(const std::string &file) {
 VertexMeshPtr MeshBuilder::createCube(float size) {
   VertexMeshData meshData;
   
-  size /= 2.0f;
-  float positions[] = {
-    -size, -size, 0.0f,
-     size,  size, 0.0f,
-    -size,  size, 0.0f,
-    -size, -size, 0.0f,
-     size, -size, 0.0f,
-     size,  size, 0.0f,
-  };
-  float normals[] = {
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f
+  vec2 seq[] = {
+    {-1.0f, -1.0f}, { 1.0f,  1.0f}, {-1.0f,  1.0f},
+    {-1.0f, -1.0f}, { 1.0f, -1.0f}, { 1.0f,  1.0f},
+    {-1.0f, -1.0f}, {-1.0f,  1.0f}, { 1.0f,  1.0f},
+    {-1.0f, -1.0f}, { 1.0f,  1.0f}, { 1.0f, -1.0f}
   };
   
-  meshData.buffers["position"].assign(positions, positions+18);
-  meshData.buffers["normal"].assign(normals, normals+18);
-  meshData.totalVertices = 6;
-  meshData.subMeshes.push_back(ivec2(0, 6));
+  size /= 2.0f;
+  vector<vec3> positions(36);
+  
+  for (int i = 0; i < 6; ++i)
+    positions[i] = vec3(seq[i].x, seq[i].y, -1.0f) * size;
+  for (int i = 6; i < 12; ++i)
+    positions[i] = vec3(seq[i].x, seq[i].y, 1.0f) * size;
+  
+  for (int i = 0; i < 6; ++i)
+    positions[i+12] = vec3(seq[i].x, 1.0f, seq[i].y) * size;
+  for (int i = 6; i < 12; ++i)
+    positions[i+12] = vec3(seq[i].x, -1.0f, seq[i].y) * size;
+  
+  for (int i = 0; i < 6; ++i)
+    positions[i+24] = vec3(-1.0f, seq[i].x, seq[i].y) * size;
+  for (int i = 6; i < 12; ++i)
+    positions[i+24] = vec3(1.0f, seq[i].x, seq[i].y) * size;
+  
+  vector<vec3> normals(6, vec3(0.0f, 0.0f, -1.0f));
+  normals.resize(12, vec3(0.0f, 0.0f, 1.0f));
+  normals.resize(18, vec3(0.0f, 1.0f, 0.0f));
+  normals.resize(24, vec3(0.0f, -1.0f, 0.0f));
+  normals.resize(30, vec3(-1.0f, 0.0f, 0.0f));
+  normals.resize(36, vec3(1.0f, 0.0f, 0.0f));
+  
+  meshData["position"].assign(&positions[0].x, &positions[0].x+positions.size()*3);
+  meshData["normal"].assign(&normals[0].x, &normals[0].x+normals.size()*3);
+  meshData.totalVertices = (int)positions.size();
+  meshData.addSubMesh(0, (int)positions.size());
   
 //  VertexBuffer &pos = meshData.buffers["position"];
 //  VertexBuffer &nor = meshData.buffers["normal"];

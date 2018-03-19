@@ -15,6 +15,7 @@ using namespace metal;
 
 struct Model {
   float4x4 model;
+  float4x4 texture;
   float4   rotation;
 };
 

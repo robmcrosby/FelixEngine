@@ -19,6 +19,7 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 Model::Model(): _layer(0), _hidden(0) {
   _scene = nullptr;
   _instances = 1;
+  _cullMode = CULL_NONE;
   _transforms.push_back(Transform::make());
   _uniforms = UniformMap::make();
 }
@@ -72,6 +73,7 @@ void Model::applyToTask(fx::GraphicTask &task) {
   task.uniforms.push_back(_uniforms);
   task.mesh = _mesh;
   task.instances = _instances;
+  task.cullMode = _cullMode;
   
   if (_material)
     _material->setToTask(task);
