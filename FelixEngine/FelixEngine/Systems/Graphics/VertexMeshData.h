@@ -47,6 +47,12 @@ namespace fx {
         StringUtils::parseFloats(buffers[node.attribute("name")], node.contents());
       return true;
     }
+    VertexBuffer& operator[](const std::string name) {
+      return buffers[name];
+    }
+    void addSubMesh(int start, int end) {
+      subMeshes.push_back(ivec2(start, end));
+    }
   };
 }
 

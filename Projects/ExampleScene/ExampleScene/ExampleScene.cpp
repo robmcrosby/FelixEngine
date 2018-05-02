@@ -11,6 +11,7 @@
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/Light.h>
+#import <FelixEngine/MeshBuilder.h>
 
 #include <set>
 #include <map>
@@ -55,10 +56,8 @@ void ExampleScene::initalize() {
   shader->loadShaderFunctions("basic_vertex", "basic_fragment");
   
   // Load the Bunny Mesh
-  fx::VertexMeshData meshData;
-  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
-  fx::VertexMeshPtr mesh = _graphics->createVertexMesh();
-  mesh->load(meshData);
+  fx::VertexMeshPtr mesh = MeshBuilder::createFromFile("Mesh.mesh");
+  //fx::VertexMeshPtr mesh = MeshBuilder::createCube();
   
   // Setup the Material
   fx::MaterialPtr material = _scene.get<fx::Material>("Material");
@@ -73,9 +72,11 @@ void ExampleScene::initalize() {
   _model = _scene.get<fx::Model>("Bunny");
   _model->setMesh(mesh);
   _model->setMaterial(material);
-  _model->setScale(0.2f);
-  _model->setRotation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f));
+  _model->setScale(0.4f);
+  _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
+  _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
   _model->addToRenderPass("MainPass");
+  //_model->setFaceCulling(fx::CULL_BACK);
   
   // Setup the Render Scheme
   _renderScheme.push_back("MainPass");

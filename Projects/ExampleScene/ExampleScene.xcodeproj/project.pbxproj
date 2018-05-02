@@ -20,7 +20,7 @@
 		C10D0BE51F0E6A000029696E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D0BE41F0E6A000029696E /* CoreGraphics.framework */; };
 		C10D0BE91F0E6A320029696E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C10D0BE81F0E6A320029696E /* QuartzCore.framework */; };
 		C10D0BEB1F0E6A450029696E /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C10D0BDD1F0E69E20029696E /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C1CC9D1F1F1453E800A938D0 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1CC9D1E1F1453E800A938D0 /* bunny.mesh */; };
+		C1454959205EA681003156A0 /* Mesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1454958205EA681003156A0 /* Mesh.mesh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,7 +71,7 @@
 		C10D0BE21F0E69F90029696E /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C10D0BE41F0E6A000029696E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C10D0BE81F0E6A320029696E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		C1CC9D1E1F1453E800A938D0 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+		C1454958205EA681003156A0 /* Mesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Mesh.mesh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,10 +116,10 @@
 				C10D0BC31F0E67FD0029696E /* ViewController.mm */,
 				C10D0BD61F0E687F0029696E /* ExampleScene.h */,
 				C10D0BD51F0E687F0029696E /* ExampleScene.cpp */,
+				C1454958205EA681003156A0 /* Mesh.mesh */,
 				C10D0BC51F0E67FD0029696E /* Main.storyboard */,
 				C10D0BC81F0E67FD0029696E /* Assets.xcassets */,
 				C10D0BCA1F0E67FD0029696E /* LaunchScreen.storyboard */,
-				C1CC9D1E1F1453E800A938D0 /* bunny.mesh */,
 				C10D0BCD1F0E67FD0029696E /* Info.plist */,
 				C10D0BBC1F0E67FD0029696E /* Supporting Files */,
 				C10D0BD31F0E68500029696E /* Shaders.metal */,
@@ -231,7 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C10D0BCC1F0E67FD0029696E /* LaunchScreen.storyboard in Resources */,
-				C1CC9D1F1F1453E800A938D0 /* bunny.mesh in Resources */,
+				C1454959205EA681003156A0 /* Mesh.mesh in Resources */,
 				C10D0BC91F0E67FD0029696E /* Assets.xcassets in Resources */,
 				C10D0BC71F0E67FD0029696E /* Main.storyboard in Resources */,
 			);

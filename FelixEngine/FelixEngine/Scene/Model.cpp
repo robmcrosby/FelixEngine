@@ -19,8 +19,10 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 Model::Model(): _layer(0), _hidden(0) {
   _scene = nullptr;
   _instances = 1;
+  _cullMode = CULL_NONE;
   _transforms.push_back(Transform::make());
   _uniforms = UniformMap::make();
+  (*_uniforms)["model"] = STR_Model();
 }
 
 Model::~Model() {
@@ -54,12 +56,13 @@ bool Model::loadXMLItem(const XMLTree::Node &node) {
 }
 
 void Model::update(float dt) {
-  vector<STR_Model> transforms(_transforms.size());
+  Uniform &models = (*_uniforms)["model"];
+  models.resize(_transforms.size());
   for (int i = 0; i < _transforms.size(); ++i) {
-    transforms[i].model = _transforms[i]->globalTransform();
-    transforms[i].rotation = _transforms[i]->globalRotation().toVec4();
+    STR_Model &model = (STR_Model&)models[i];
+    model.model = _transforms[i]->globalTransform();
+    model.rotation = _transforms[i]->globalRotation().toVec4();
   }
-  (*_uniforms)["model"] = transforms;
   _uniforms->update();
   
   if (!_hidden && _instances > 0) {
@@ -69,9 +72,12 @@ void Model::update(float dt) {
 }
 
 void Model::applyToTask(fx::GraphicTask &task) {
+  int instances = (int)(*_uniforms)["model"].width();
+  
   task.uniforms.push_back(_uniforms);
   task.mesh = _mesh;
-  task.instances = _instances;
+  task.instances = _instances < instances ? _instances : instances;
+  task.cullMode = _cullMode;
   
   if (_material)
     _material->setToTask(task);

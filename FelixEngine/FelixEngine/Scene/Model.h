@@ -36,6 +36,8 @@ namespace fx {
     bool _hidden;
     int _layer;
     
+    CULL_MODE _cullMode;
+    
   public:
     Model();
     virtual ~Model();
@@ -54,6 +56,9 @@ namespace fx {
     
     void setLayer(int layer) {_layer = layer;}
     int layer() const {return _layer;}
+    
+    void setFaceCulling(CULL_MODE mode) {_cullMode = mode;}
+    CULL_MODE faceCulling() const {return _cullMode;}
     
     bool setMaterial(const XMLTree::Node &node);
     void setMaterial(const std::string &name);
