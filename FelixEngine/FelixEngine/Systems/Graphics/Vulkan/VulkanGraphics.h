@@ -9,6 +9,9 @@
 #include "Graphics.h"
 #include "Macros.h"
 
+#include <vulkan/vulkan.h>
+
+
 #ifndef VulkanGraphics_h
 #define VulkanGraphics_h
 
