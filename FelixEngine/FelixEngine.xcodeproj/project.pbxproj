@@ -82,6 +82,7 @@
 		C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F331F1ECF23008FDF01 /* Material.cpp */; };
 		C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */; };
 		C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1D1D7D4209A9DF4000EB92C /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D7D3209A9DF4000EB92C /* MoltenVK.framework */; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
 		C1E60EA81F0F080B0021F704 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EA61F0F080B0021F704 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -90,6 +91,16 @@
 		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D61F353A680005367E /* ARKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C1D1D7D5209A9DFF000EB92C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1D1D7CC209A9DD9000EB92C /* MoltenVKPackaging.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A9FEADBC1F3517480010240E;
+			remoteInfo = MoltenVK;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C10D82621F0E6B8B0005629F /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
@@ -169,6 +180,8 @@
 		C1BB4F331F1ECF23008FDF01 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
 		C1CC9D181F110CCB00A938D0 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
+		C1D1D7CC209A9DD9000EB92C /* MoltenVKPackaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MoltenVKPackaging.xcodeproj; path = ../ThirdParty/MoltenVK/MoltenVKPackaging.xcodeproj; sourceTree = "<group>"; };
+		C1D1D7D3209A9DF4000EB92C /* MoltenVK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MoltenVK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		C1E60EA61F0F080B0021F704 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
@@ -183,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1D1D7D4209A9DF4000EB92C /* MoltenVK.framework in Frameworks */,
 				C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */,
 				C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */,
 				C1401D5A1F0BE8CB00BE9958 /* CoreGraphics.framework in Frameworks */,
@@ -222,6 +236,7 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C1D1D7D3209A9DF4000EB92C /* MoltenVK.framework */,
 				C1412E5D1F37D892001E8D83 /* CoreVideo.framework */,
 				C1F7D9D61F353A680005367E /* ARKit.framework */,
 				C1401D591F0BE8CB00BE9958 /* CoreGraphics.framework */,
@@ -330,6 +345,7 @@
 		C15CAEA31EEDEF33004FA3C7 = {
 			isa = PBXGroup;
 			children = (
+				C1D1D7CC209A9DD9000EB92C /* MoltenVKPackaging.xcodeproj */,
 				C15CAEAF1EEDEF33004FA3C7 /* FelixEngine */,
 				C15CAEAE1EEDEF33004FA3C7 /* Products */,
 				C1136C3F1EF0E01900BA1322 /* Frameworks */,
@@ -411,6 +427,13 @@
 				C142C0AE1F77601D00B45750 /* Light.cpp */,
 			);
 			name = Components;
+			sourceTree = "<group>";
+		};
+		C1D1D7CD209A9DD9000EB92C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		C1F7D9D81F353C580005367E /* TrackerSystem */ = {
@@ -496,6 +519,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C1D1D7D6209A9DFF000EB92C /* PBXTargetDependency */,
 			);
 			name = FelixEngine;
 			productName = FelixEngine;
@@ -528,6 +552,12 @@
 			mainGroup = C15CAEA31EEDEF33004FA3C7;
 			productRefGroup = C15CAEAE1EEDEF33004FA3C7 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C1D1D7CD209A9DD9000EB92C /* Products */;
+					ProjectRef = C1D1D7CC209A9DD9000EB92C /* MoltenVKPackaging.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C15CAEAC1EEDEF33004FA3C7 /* FelixEngine */,
@@ -580,6 +610,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1D1D7D6209A9DFF000EB92C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoltenVK;
+			targetProxy = C1D1D7D5209A9DFF000EB92C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C15CAEB31EEDEF33004FA3C7 /* Debug */ = {
