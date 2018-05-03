@@ -83,7 +83,20 @@
 		C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */; };
 		C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D1D7DE209AA705000EB92C /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D7DD209AA705000EB92C /* MoltenVK.framework */; };
-		C1D1D7E0209AA727000EB92C /* MoltenVK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1D1D7DD209AA705000EB92C /* MoltenVK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7E2209B32E9000EB92C /* VulkanGraphics.h */; };
+		C1D1D7E5209B32E9000EB92C /* VulkanGraphics.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7E3209B32E9000EB92C /* VulkanGraphics.mm */; };
+		C1D1D7E8209B33AF000EB92C /* MetalView.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7E6209B33AF000EB92C /* MetalView.h */; };
+		C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7E7209B33AF000EB92C /* MetalView.m */; };
+		C1D1D7EC209BB637000EB92C /* VulkanFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7EA209BB637000EB92C /* VulkanFrameBuffer.cpp */; };
+		C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7EB209BB637000EB92C /* VulkanFrameBuffer.h */; };
+		C1D1D7F0209BB666000EB92C /* VulkanShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7EE209BB666000EB92C /* VulkanShaderProgram.cpp */; };
+		C1D1D7F1209BB666000EB92C /* VulkanShaderProgram.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7EF209BB666000EB92C /* VulkanShaderProgram.h */; };
+		C1D1D7F4209BB68D000EB92C /* VulkanVertexMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7F2209BB68D000EB92C /* VulkanVertexMesh.cpp */; };
+		C1D1D7F5209BB68D000EB92C /* VulkanVertexMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7F3209BB68D000EB92C /* VulkanVertexMesh.h */; };
+		C1D1D7F8209BB6B7000EB92C /* VulkanUniformBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7F6209BB6B7000EB92C /* VulkanUniformBuffer.cpp */; };
+		C1D1D7F9209BB6B7000EB92C /* VulkanUniformBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7F7209BB6B7000EB92C /* VulkanUniformBuffer.h */; };
+		C1D1D7FC209BB712000EB92C /* VulkanTextureBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D7FA209BB712000EB92C /* VulkanTextureBuffer.cpp */; };
+		C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7FB209BB712000EB92C /* VulkanTextureBuffer.h */; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
 		C1E60EA81F0F080B0021F704 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EA61F0F080B0021F704 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,7 +113,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C1D1D7E0209AA727000EB92C /* MoltenVK.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +197,20 @@
 		C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
 		C1CC9D181F110CCB00A938D0 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
 		C1D1D7DD209AA705000EB92C /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../ThirdParty/MoltenVK/iOS/MoltenVK.framework; sourceTree = "<group>"; };
+		C1D1D7E2209B32E9000EB92C /* VulkanGraphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanGraphics.h; path = Systems/Graphics/Vulkan/VulkanGraphics.h; sourceTree = "<group>"; };
+		C1D1D7E3209B32E9000EB92C /* VulkanGraphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = VulkanGraphics.mm; path = Systems/Graphics/Vulkan/VulkanGraphics.mm; sourceTree = "<group>"; };
+		C1D1D7E6209B33AF000EB92C /* MetalView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalView.h; path = Systems/Graphics/Metal/MetalView.h; sourceTree = "<group>"; };
+		C1D1D7E7209B33AF000EB92C /* MetalView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MetalView.m; path = Systems/Graphics/Metal/MetalView.m; sourceTree = "<group>"; };
+		C1D1D7EA209BB637000EB92C /* VulkanFrameBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanFrameBuffer.cpp; path = Systems/Graphics/Vulkan/VulkanFrameBuffer.cpp; sourceTree = "<group>"; };
+		C1D1D7EB209BB637000EB92C /* VulkanFrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanFrameBuffer.h; path = Systems/Graphics/Vulkan/VulkanFrameBuffer.h; sourceTree = "<group>"; };
+		C1D1D7EE209BB666000EB92C /* VulkanShaderProgram.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanShaderProgram.cpp; path = Systems/Graphics/Vulkan/VulkanShaderProgram.cpp; sourceTree = "<group>"; };
+		C1D1D7EF209BB666000EB92C /* VulkanShaderProgram.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanShaderProgram.h; path = Systems/Graphics/Vulkan/VulkanShaderProgram.h; sourceTree = "<group>"; };
+		C1D1D7F2209BB68D000EB92C /* VulkanVertexMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanVertexMesh.cpp; path = Systems/Graphics/Vulkan/VulkanVertexMesh.cpp; sourceTree = "<group>"; };
+		C1D1D7F3209BB68D000EB92C /* VulkanVertexMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanVertexMesh.h; path = Systems/Graphics/Vulkan/VulkanVertexMesh.h; sourceTree = "<group>"; };
+		C1D1D7F6209BB6B7000EB92C /* VulkanUniformBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanUniformBuffer.cpp; path = Systems/Graphics/Vulkan/VulkanUniformBuffer.cpp; sourceTree = "<group>"; };
+		C1D1D7F7209BB6B7000EB92C /* VulkanUniformBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanUniformBuffer.h; path = Systems/Graphics/Vulkan/VulkanUniformBuffer.h; sourceTree = "<group>"; };
+		C1D1D7FA209BB712000EB92C /* VulkanTextureBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanTextureBuffer.cpp; path = Systems/Graphics/Vulkan/VulkanTextureBuffer.cpp; sourceTree = "<group>"; };
+		C1D1D7FB209BB712000EB92C /* VulkanTextureBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanTextureBuffer.h; path = Systems/Graphics/Vulkan/VulkanTextureBuffer.h; sourceTree = "<group>"; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		C1E60EA61F0F080B0021F704 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
@@ -291,6 +317,7 @@
 				C14549512059E32C003156A0 /* MeshBuilder.h */,
 				C14549502059E32C003156A0 /* MeshBuilder.cpp */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
+				C1D1D7E1209B31D9000EB92C /* VulkanGraphics */,
 			);
 			name = Graphics;
 			sourceTree = "<group>";
@@ -316,6 +343,8 @@
 				C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */,
 				C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */,
 				C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */,
+				C1D1D7E6209B33AF000EB92C /* MetalView.h */,
+				C1D1D7E7209B33AF000EB92C /* MetalView.m */,
 			);
 			name = MetalGraphics;
 			sourceTree = "<group>";
@@ -431,6 +460,25 @@
 			name = Components;
 			sourceTree = "<group>";
 		};
+		C1D1D7E1209B31D9000EB92C /* VulkanGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				C1D1D7E2209B32E9000EB92C /* VulkanGraphics.h */,
+				C1D1D7E3209B32E9000EB92C /* VulkanGraphics.mm */,
+				C1D1D7EB209BB637000EB92C /* VulkanFrameBuffer.h */,
+				C1D1D7EA209BB637000EB92C /* VulkanFrameBuffer.cpp */,
+				C1D1D7EF209BB666000EB92C /* VulkanShaderProgram.h */,
+				C1D1D7EE209BB666000EB92C /* VulkanShaderProgram.cpp */,
+				C1D1D7F3209BB68D000EB92C /* VulkanVertexMesh.h */,
+				C1D1D7F2209BB68D000EB92C /* VulkanVertexMesh.cpp */,
+				C1D1D7F7209BB6B7000EB92C /* VulkanUniformBuffer.h */,
+				C1D1D7F6209BB6B7000EB92C /* VulkanUniformBuffer.cpp */,
+				C1D1D7FB209BB712000EB92C /* VulkanTextureBuffer.h */,
+				C1D1D7FA209BB712000EB92C /* VulkanTextureBuffer.cpp */,
+			);
+			name = VulkanGraphics;
+			sourceTree = "<group>";
+		};
 		C1F7D9D81F353C580005367E /* TrackerSystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -460,14 +508,18 @@
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
+				C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */,
 				C142C0B31F7B152100B45750 /* RenderItem.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
+				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
 				C14549532059E32C003156A0 /* MeshBuilder.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
+				C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
+				C1D1D7F1209BB666000EB92C /* VulkanShaderProgram.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
@@ -481,8 +533,11 @@
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
 				C1A5E3831F3659620071D515 /* ARCamera.h in Headers */,
 				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
+				C1D1D7F9209BB6B7000EB92C /* VulkanUniformBuffer.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
+				C1D1D7F5209BB68D000EB92C /* VulkanVertexMesh.h in Headers */,
 				C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */,
+				C1D1D7E8209B33AF000EB92C /* MetalView.h in Headers */,
 				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
 				C10D82651F0E6B8B0005629F /* Scene.h in Headers */,
@@ -575,25 +630,32 @@
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */,
+				C1D1D7E5209B32E9000EB92C /* VulkanGraphics.mm in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
 				C142C0E11F8DA07200B45750 /* Resources.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
+				C1D1D7EC209BB637000EB92C /* VulkanFrameBuffer.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
+				C1D1D7F8209BB6B7000EB92C /* VulkanUniformBuffer.cpp in Sources */,
 				C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
+				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,
 				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */,
+				C1D1D7F4209BB68D000EB92C /* VulkanVertexMesh.cpp in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,
+				C1D1D7F0209BB666000EB92C /* VulkanShaderProgram.cpp in Sources */,
+				C1D1D7FC209BB712000EB92C /* VulkanTextureBuffer.cpp in Sources */,
 				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
