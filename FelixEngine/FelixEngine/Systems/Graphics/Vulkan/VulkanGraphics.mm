@@ -8,6 +8,11 @@
 
 #include "VulkanGraphics.h"
 
+#import "MetalView.h"
+
+#include "Vulkan.h"
+#include <vulkan/vulkan_ios.h>
+
 #include "VulkanFrameBuffer.h"
 #include "VulkanShaderProgram.h"
 #include "VulkanVertexMesh.h"
@@ -19,7 +24,8 @@ using namespace std;
 using namespace fx;
 
 VulkanGraphics::VulkanGraphics() {
-  
+  _layers.push_back("MoltenVK");
+  _extensions.push_back("VK_MVK_moltenvk");
 }
 
 VulkanGraphics::~VulkanGraphics() {
@@ -28,6 +34,14 @@ VulkanGraphics::~VulkanGraphics() {
 
 bool VulkanGraphics::initalize(UIView *view) {
   bool success = true;
+  
+  CGFloat viewWidth = view.frame.size.width;
+  CGFloat viewHeight = view.frame.size.height;
+  CGRect frame = CGRectMake(0, 0, viewWidth, viewHeight);
+  MetalView *mtlView = [[MetalView alloc] initWithFrame:frame];
+  [view addSubview:mtlView];
+  
+  assert(createInstance());
   
   return success;
 }
@@ -67,4 +81,17 @@ void VulkanGraphics::addTask(const GraphicTask &task) {
 
 void VulkanGraphics::presentFrame() {
   
+}
+
+bool VulkanGraphics::createInstance() {
+  // Provide Application Information
+  VkApplicationInfo appInfo;
+  appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+  appInfo.pApplicationName = "Felix Application";
+  appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+  appInfo.pEngineName = "Felix Engine";
+  appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+  appInfo.apiVersion = VK_API_VERSION_1_0;
+  
+  return Vulkan::createInstance(appInfo, _layers, _extensions);
 }

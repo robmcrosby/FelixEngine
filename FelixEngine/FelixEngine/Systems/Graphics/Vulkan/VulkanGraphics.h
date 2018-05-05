@@ -6,14 +6,13 @@
 //  Copyright © 2018 Robert Crosby. All rights reserved.
 //
 
-#include "Graphics.h"
-#include "Macros.h"
-
-#include <vulkan/vulkan.h>
-
-
 #ifndef VulkanGraphics_h
 #define VulkanGraphics_h
+
+#include "Graphics.h"
+#include "Macros.h"
+#include <vector>
+
 
 OBJC_CLASS(UIView)
 
@@ -24,6 +23,8 @@ namespace fx {
    */
   class VulkanGraphics: public Graphics {
   private:
+    std::vector<std::string> _layers;
+    std::vector<std::string> _extensions;
     
   public:
     VulkanGraphics();
@@ -40,6 +41,10 @@ namespace fx {
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);
     virtual void presentFrame();
+    
+  private:
+    bool createInstance();
+    
   };
 }
 
