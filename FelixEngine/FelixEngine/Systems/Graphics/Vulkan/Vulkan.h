@@ -46,6 +46,9 @@ namespace fx {
     static VkPipelineLayout pipelineLayout;
     static VkPipeline graphicsPipeline;
     
+    static VkCommandPool commandPool;
+    static std::vector<VkCommandBuffer> commandBuffers;
+    
     static VkSemaphore imageAvailableSemaphore;
     static VkSemaphore renderFinishedSemaphore;
     
@@ -57,9 +60,14 @@ namespace fx {
     static bool createLogicalDevice();
     
     static bool initDeviceQueue(float &width, float &height);
+    static bool createSemaphores();
+    
+    static void cleaup();
     
     static bool checkLayerNames(const std::vector<const char *> &layerNames);
     static bool checkExtensionNames(const std::vector<const char *> &extensionNames);
+    
+    static VkShaderModule createShaderModule(const std::string &fileName);
     
     static std::vector<VkLayerProperties> getAvalibleLayers();
     static std::vector<VkExtensionProperties> getAvalibleExtensions();

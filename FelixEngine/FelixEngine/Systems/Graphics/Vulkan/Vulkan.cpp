@@ -7,6 +7,7 @@
 //
 
 #include "Vulkan.h"
+#include "FileSystem.h"
 
 
 using namespace std;
@@ -32,6 +33,9 @@ uint32_t Vulkan::currentBuffer;
 VkRenderPass Vulkan::renderPass;
 VkPipelineLayout Vulkan::pipelineLayout;
 VkPipeline Vulkan::graphicsPipeline;
+
+VkCommandPool Vulkan::commandPool;
+std::vector<VkCommandBuffer> Vulkan::commandBuffers;
 
 VkSemaphore Vulkan::imageAvailableSemaphore;
 VkSemaphore Vulkan::renderFinishedSemaphore;
@@ -256,6 +260,18 @@ bool Vulkan::initDeviceQueue(float &width, float &height) {
   return true;
 }
 
+bool Vulkan::createSemaphores() {
+  VkSemaphoreCreateInfo semaphoreInfo = {};
+  semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+  
+  if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+      vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS) {
+    cerr << "Error Creating Vulkan Semaphores" << endl;
+    return false;
+  }
+  return true;
+}
+
 bool Vulkan::checkLayerNames(const vector<const char *> &layerNames) {
   bool success = true;
   vector<VkLayerProperties> avalibleLayers = getAvalibleLayers();
@@ -277,6 +293,25 @@ bool Vulkan::checkLayerNames(const vector<const char *> &layerNames) {
   return success;
 }
 
+void Vulkan::cleaup() {
+  if (device != VK_NULL_HANDLE) {
+    vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
+    vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
+    
+    //vkDestroyCommandPool(device, commandPool, nullptr);
+    
+    for (auto framebuffer : swapChainFrameBuffers)
+      vkDestroyFramebuffer(device, framebuffer, nullptr);
+    
+    vkDestroyPipeline(device, graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
+    vkDestroyRenderPass(device, renderPass, nullptr);
+    
+    vkDestroyDevice(device, nullptr);
+    device = VK_NULL_HANDLE;
+  }
+}
+
 bool Vulkan::checkExtensionNames(const std::vector<const char *> &extensionNames) {
   bool success = true;
   vector<VkExtensionProperties> avalibleExtensions = getAvalibleExtensions();
@@ -296,6 +331,23 @@ bool Vulkan::checkExtensionNames(const std::vector<const char *> &extensionNames
     success &= extensionAvalible;
   }
   return success;
+}
+
+VkShaderModule Vulkan::createShaderModule(const std::string &fileName) {
+  FileData code;
+  assert(FileSystem::loadData(code, fileName));
+  
+  VkShaderModuleCreateInfo createInfo = {};
+  createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+  createInfo.codeSize = code.size();
+  createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
+  
+  VkShaderModule shaderModule;
+  if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+    cerr << "Error Creating Shader Module" << endl;
+    assert(false);
+  }
+  return shaderModule;
 }
 
 vector<VkLayerProperties> Vulkan::getAvalibleLayers() {

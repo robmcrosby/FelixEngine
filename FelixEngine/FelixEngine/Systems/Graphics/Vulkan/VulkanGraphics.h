@@ -51,7 +51,8 @@ namespace fx {
     bool createFrameBuffers();
     bool createCommandPool();
     bool createCommandBuffers();
-    bool createSemaphores();
+    
+    void drawFrame();
   };
 }
 
