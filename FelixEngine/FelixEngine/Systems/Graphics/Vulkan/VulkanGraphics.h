@@ -44,7 +44,14 @@ namespace fx {
     
   private:
     bool createInstance();
+    bool createSwapChain(UIView *view);
     
+    bool createRenderPass();
+    bool createPipeline();
+    bool createFrameBuffers();
+    bool createCommandPool();
+    bool createCommandBuffers();
+    bool createSemaphores();
   };
 }
 

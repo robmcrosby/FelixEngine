@@ -16,10 +16,47 @@
 
 
 namespace fx {
+  
+  struct SwapChainBuffer {
+    VkImage image;
+    VkImageView view;
+  };
+  
   struct Vulkan {
     static VkInstance instance;
+    static VkPhysicalDevice physicalDevice;
+    static uint32_t queueFamilyIndex;
+    
+    static VkSurfaceKHR surface;
+    static VkFormat surfaceFormat;
+    
+    static VkDevice device;
+    
+    // attempt to move the following to other classes
+    static VkQueue graphicsQueue;
+    static VkQueue presentQueue;
+    
+    static VkSwapchainKHR swapChain;
+    static VkExtent2D swapChainExtent;
+    static std::vector<SwapChainBuffer> swapChainBuffers;
+    static std::vector<VkFramebuffer> swapChainFrameBuffers;
+    static uint32_t currentBuffer;
+    
+    static VkRenderPass renderPass;
+    static VkPipelineLayout pipelineLayout;
+    static VkPipeline graphicsPipeline;
+    
+    static VkSemaphore imageAvailableSemaphore;
+    static VkSemaphore renderFinishedSemaphore;
+    
     
     static bool createInstance(const VkApplicationInfo &appInfo, const std::vector<std::string> &layers, const std::vector<std::string> &extensions);
+    static bool setDefaultPhysicalDevice();
+    static bool setDefaultQueueFamily();
+    static bool createSwapChain();
+    static bool createLogicalDevice();
+    
+    static bool initDeviceQueue(float &width, float &height);
     
     static bool checkLayerNames(const std::vector<const char *> &layerNames);
     static bool checkExtensionNames(const std::vector<const char *> &extensionNames);
@@ -28,6 +65,8 @@ namespace fx {
     static std::vector<VkExtensionProperties> getAvalibleExtensions();
     static std::vector<VkPhysicalDevice> getPhysicalDevices();
     static std::vector<VkQueueFamilyProperties> getQueueFamilyProperties(VkPhysicalDevice device);
+    
+    static std::vector<VkSurfaceFormatKHR> getPhysicalDeviceSurfaceFormats(VkPhysicalDevice device, VkSurfaceKHR surface);
   };
 }
 
