@@ -28,7 +28,7 @@ VkSwapchainKHR Vulkan::swapChain;
 VkExtent2D Vulkan::swapChainExtent;
 vector<SwapChainBuffer> Vulkan::swapChainBuffers;
 vector<VkFramebuffer> Vulkan::swapChainFrameBuffers;
-uint32_t Vulkan::currentBuffer;
+uint32_t Vulkan::currentSwapBuffer = 0;
 
 VkRenderPass Vulkan::renderPass;
 VkPipelineLayout Vulkan::pipelineLayout;
@@ -291,6 +291,11 @@ bool Vulkan::checkLayerNames(const vector<const char *> &layerNames) {
     success &= layerAvalible;
   }
   return success;
+}
+
+void Vulkan::waitIdle() {
+  if (device != VK_NULL_HANDLE)
+    vkDeviceWaitIdle(device);
 }
 
 void Vulkan::cleaup() {

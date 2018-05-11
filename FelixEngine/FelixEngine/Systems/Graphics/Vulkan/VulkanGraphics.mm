@@ -21,6 +21,7 @@
 #include "VulkanVertexMesh.h"
 #include "VulkanUniformBuffer.h"
 #include "VulkanTextureBuffer.h"
+#include "VulkanCommandPool.h"
 
 
 using namespace std;
@@ -32,7 +33,9 @@ VulkanGraphics::VulkanGraphics() {
 }
 
 VulkanGraphics::~VulkanGraphics() {
-  
+  Vulkan::waitIdle();
+  clearCommandPools();
+  Vulkan::cleaup();
 }
 
 bool VulkanGraphics::initalize(UIView *view) {
@@ -56,12 +59,11 @@ bool VulkanGraphics::initalize(UIView *view) {
   assert(Vulkan::initDeviceQueue(width, height));
   
   assert(createRenderPass());
-  //assert(createPipeline());
   assert(createFrameBuffers());
   assert(createCommandPool());
-  //assert(createCommandBuffers());
   assert(Vulkan::createSemaphores());
   
+  createCommandPools();
   return success;
 }
 
@@ -91,7 +93,7 @@ TextureBufferPtr VulkanGraphics::createTextureBuffer() {
 }
 
 void VulkanGraphics::nextFrame() {
-  vkAcquireNextImageKHR(Vulkan::device, Vulkan::swapChain, std::numeric_limits<uint64_t>::max(), Vulkan::imageAvailableSemaphore, VK_NULL_HANDLE, &_imageIndex);
+  vkAcquireNextImageKHR(Vulkan::device, Vulkan::swapChain, std::numeric_limits<uint64_t>::max(), Vulkan::imageAvailableSemaphore, VK_NULL_HANDLE, &Vulkan::currentSwapBuffer);
   _renderPasses.clear();
 }
 
@@ -104,10 +106,7 @@ void VulkanGraphics::addTask(const GraphicTask &task) {
 }
 
 void VulkanGraphics::presentFrame() {
-  for (RenderPass &renderPass : _renderPasses)
-    submitRenderPass(renderPass);
-  
-  
+  _commandPools[Vulkan::currentSwapBuffer]->submitRenderPasses(_renderPasses);
   
   VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
   VkPresentInfoKHR presentInfo = {};
@@ -120,106 +119,9 @@ void VulkanGraphics::presentFrame() {
   presentInfo.swapchainCount = 1;
   presentInfo.pSwapchains = swapChains;
   
-  presentInfo.pImageIndices = &_imageIndex;
+  presentInfo.pImageIndices = &Vulkan::currentSwapBuffer;
   
   vkQueuePresentKHR(Vulkan::presentQueue, &presentInfo);
-  
-  //drawFrame();
-}
-
-void VulkanGraphics::submitRenderPass(RenderPass &renderPass) {
-  GraphicTask &firstTask = renderPass.front();
-  VulkanFrameBuffer   *frame  = static_cast<VulkanFrameBuffer*>(firstTask.frame.get());
-//  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
-//  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh.get());
-  
-  
-  
-  VkPipeline pipeline = frame->getVkPipelineForTask(firstTask);
-  
-  
-  // Define the Command Buffer Info
-  VkCommandBufferAllocateInfo commandBufferInfo = {};
-  commandBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  commandBufferInfo.commandPool = Vulkan::commandPool;
-  commandBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  commandBufferInfo.commandBufferCount = 1;
-  
-  // Create the Command Buffer
-  VkCommandBuffer commandBuffer;
-  if (vkAllocateCommandBuffers(Vulkan::device, &commandBufferInfo, &commandBuffer) != VK_SUCCESS) {
-    cerr << "Error Creating Command Buffers" << endl;
-    assert(false);
-  }
-  
-  // Record each of the Command Buffers
-  //for (size_t i = 0; i < Vulkan::commandBuffers.size(); i++) {
-    // Define the Begin Info
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    beginInfo.pInheritanceInfo = nullptr; // Optional
-    
-    // Begin Recording the Command Buffer
-    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
-      cerr << "Failed to begin recording command buffer" << endl;
-      assert(false);
-    }
-    
-    // Define the Render Pass Info
-    VkRenderPassBeginInfo renderPassInfo = {};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = Vulkan::renderPass;
-    renderPassInfo.framebuffer = Vulkan::swapChainFrameBuffers[_imageIndex];
-    // Define the Render Extents
-    renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
-    // Define the Clear Color
-    VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor;
-    
-    // Begin the Render Pass
-    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    
-    // Bind the Graphics Pipeline
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
-    
-    // Draw the triangle
-    vkCmdDraw(commandBuffer, 3, 1, 0, 0);
-    
-    // Finish the Render Pass
-    vkCmdEndRenderPass(commandBuffer);
-    
-    // End Recording the Command Buffer
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-      cerr << "Error Recording the Command Buffer" << endl;
-      assert(false);
-    }
-  //}
-  
-  
-  
-  VkSubmitInfo submitInfo = {};
-  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-  
-  VkSemaphore waitSemaphores[] = {Vulkan::imageAvailableSemaphore};
-  VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-  submitInfo.waitSemaphoreCount = 1;
-  submitInfo.pWaitSemaphores = waitSemaphores;
-  submitInfo.pWaitDstStageMask = waitStages;
-  
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers = &commandBuffer;
-  
-  VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
-  submitInfo.signalSemaphoreCount = 1;
-  submitInfo.pSignalSemaphores = signalSemaphores;
-  
-  if (vkQueueSubmit(Vulkan::graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
-    cerr << "failed to submit draw command buffer!" << endl;
-    assert(false);
-  }
 }
 
 bool VulkanGraphics::createInstance() {
@@ -339,4 +241,16 @@ bool VulkanGraphics::createCommandPool() {
     return false;
   }
   return true;
+}
+
+void VulkanGraphics::createCommandPools() {
+  clearCommandPools();
+  for (int i = 0; i < Vulkan::swapChainBuffers.size(); ++i)
+    _commandPools.push_back(new VulkanCommandPool());
+}
+
+void VulkanGraphics::clearCommandPools() {
+  for (auto &pool : _commandPools)
+    delete pool;
+  _commandPools.clear();
 }

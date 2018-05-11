@@ -101,6 +101,10 @@
 		C1D1D801209D209E000EB92C /* Vulkan.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7FF209D209E000EB92C /* Vulkan.h */; };
 		C1D1D805209D2C15000EB92C /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D804209D2C15000EB92C /* GLKit.framework */; };
 		C1D1D807209D2D30000EB92C /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D806209D2D30000EB92C /* IOSurface.framework */; };
+		C1D1D81920A64F4C000EB92C /* VulkanCommandBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D81720A64F4C000EB92C /* VulkanCommandBuffer.cpp */; };
+		C1D1D81A20A64F4C000EB92C /* VulkanCommandBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81820A64F4C000EB92C /* VulkanCommandBuffer.h */; };
+		C1D1D81D20A650D8000EB92C /* VulkanCommandPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1D1D81B20A650D8000EB92C /* VulkanCommandPool.cpp */; };
+		C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */; };
 		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
 		C1E60EA81F0F080B0021F704 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EA61F0F080B0021F704 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -219,6 +223,10 @@
 		C1D1D7FF209D209E000EB92C /* Vulkan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Vulkan.h; path = Systems/Graphics/Vulkan/Vulkan.h; sourceTree = "<group>"; };
 		C1D1D804209D2C15000EB92C /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		C1D1D806209D2D30000EB92C /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		C1D1D81720A64F4C000EB92C /* VulkanCommandBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanCommandBuffer.cpp; path = Systems/Graphics/Vulkan/VulkanCommandBuffer.cpp; sourceTree = "<group>"; };
+		C1D1D81820A64F4C000EB92C /* VulkanCommandBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanCommandBuffer.h; path = Systems/Graphics/Vulkan/VulkanCommandBuffer.h; sourceTree = "<group>"; };
+		C1D1D81B20A650D8000EB92C /* VulkanCommandPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanCommandPool.cpp; path = Systems/Graphics/Vulkan/VulkanCommandPool.cpp; sourceTree = "<group>"; };
+		C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanCommandPool.h; path = Systems/Graphics/Vulkan/VulkanCommandPool.h; sourceTree = "<group>"; };
 		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		C1E60EA61F0F080B0021F704 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
@@ -489,6 +497,10 @@
 				C1D1D7F6209BB6B7000EB92C /* VulkanUniformBuffer.cpp */,
 				C1D1D7FB209BB712000EB92C /* VulkanTextureBuffer.h */,
 				C1D1D7FA209BB712000EB92C /* VulkanTextureBuffer.cpp */,
+				C1D1D81820A64F4C000EB92C /* VulkanCommandBuffer.h */,
+				C1D1D81720A64F4C000EB92C /* VulkanCommandBuffer.cpp */,
+				C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */,
+				C1D1D81B20A650D8000EB92C /* VulkanCommandPool.cpp */,
 			);
 			name = VulkanGraphics;
 			sourceTree = "<group>";
@@ -522,6 +534,7 @@
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
+				C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */,
 				C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */,
 				C142C0B31F7B152100B45750 /* RenderItem.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
@@ -538,6 +551,7 @@
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */,
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
+				C1D1D81A20A64F4C000EB92C /* VulkanCommandBuffer.h in Headers */,
 				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
 				C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */,
 				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
@@ -647,6 +661,7 @@
 				C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */,
 				C1D1D7E5209B32E9000EB92C /* VulkanGraphics.mm in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
+				C1D1D81920A64F4C000EB92C /* VulkanCommandBuffer.cpp in Sources */,
 				C142C0E11F8DA07200B45750 /* Resources.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
@@ -662,6 +677,7 @@
 				C1D1D7F8209BB6B7000EB92C /* VulkanUniformBuffer.cpp in Sources */,
 				C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
+				C1D1D81D20A650D8000EB92C /* VulkanCommandPool.cpp in Sources */,
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,
 				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,

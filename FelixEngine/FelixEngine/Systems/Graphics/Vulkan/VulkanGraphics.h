@@ -17,7 +17,10 @@
 OBJC_CLASS(UIView)
 
 namespace fx {
+  class VulkanCommandPool;
+  
   typedef std::vector<GraphicTask> RenderPass;
+  typedef std::vector<VulkanCommandPool*> CommandPools;
   
   /**
    *
@@ -28,7 +31,7 @@ namespace fx {
     std::vector<std::string> _extensions;
     
     std::vector<RenderPass> _renderPasses;
-    uint32_t _imageIndex;
+    CommandPools _commandPools;
     
   public:
     VulkanGraphics();
@@ -47,18 +50,15 @@ namespace fx {
     virtual void presentFrame();
     
   private:
-    void submitRenderPass(RenderPass &renderPass);
-    
     bool createInstance();
     bool createSwapChain(UIView *view);
     
     bool createRenderPass();
-    //bool createPipeline();
     bool createFrameBuffers();
     bool createCommandPool();
-    //bool createCommandBuffers();
     
-    //void drawFrame();
+    void createCommandPools();
+    void clearCommandPools();
   };
 }
 

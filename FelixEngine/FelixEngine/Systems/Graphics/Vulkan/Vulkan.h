@@ -40,7 +40,7 @@ namespace fx {
     static VkExtent2D swapChainExtent;
     static std::vector<SwapChainBuffer> swapChainBuffers;
     static std::vector<VkFramebuffer> swapChainFrameBuffers;
-    static uint32_t currentBuffer;
+    static uint32_t currentSwapBuffer;
     
     static VkRenderPass renderPass;
     static VkPipelineLayout pipelineLayout;
@@ -62,6 +62,7 @@ namespace fx {
     static bool initDeviceQueue(float &width, float &height);
     static bool createSemaphores();
     
+    static void waitIdle();
     static void cleaup();
     
     static bool checkLayerNames(const std::vector<const char *> &layerNames);
