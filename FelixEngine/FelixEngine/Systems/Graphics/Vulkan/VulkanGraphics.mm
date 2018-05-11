@@ -13,6 +13,9 @@
 #include "Vulkan.h"
 #include <vulkan/vulkan_ios.h>
 
+#include "GraphicResources.h"
+#include "GraphicTask.h"
+
 #include "VulkanFrameBuffer.h"
 #include "VulkanShaderProgram.h"
 #include "VulkanVertexMesh.h"
@@ -53,10 +56,10 @@ bool VulkanGraphics::initalize(UIView *view) {
   assert(Vulkan::initDeviceQueue(width, height));
   
   assert(createRenderPass());
-  assert(createPipeline());
+  //assert(createPipeline());
   assert(createFrameBuffers());
   assert(createCommandPool());
-  assert(createCommandBuffers());
+  //assert(createCommandBuffers());
   assert(Vulkan::createSemaphores());
   
   return success;
@@ -88,15 +91,135 @@ TextureBufferPtr VulkanGraphics::createTextureBuffer() {
 }
 
 void VulkanGraphics::nextFrame() {
-  
+  vkAcquireNextImageKHR(Vulkan::device, Vulkan::swapChain, std::numeric_limits<uint64_t>::max(), Vulkan::imageAvailableSemaphore, VK_NULL_HANDLE, &_imageIndex);
+  _renderPasses.clear();
 }
 
 void VulkanGraphics::addTask(const GraphicTask &task) {
-  
+  // TODO: Fix for multiple Tasks in Same Render Pass
+  if (_renderPasses.empty())
+    _renderPasses.push_back({task});
+  else
+    _renderPasses.back().push_back(task);
 }
 
 void VulkanGraphics::presentFrame() {
-  drawFrame();
+  for (RenderPass &renderPass : _renderPasses)
+    submitRenderPass(renderPass);
+  
+  
+  
+  VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
+  VkPresentInfoKHR presentInfo = {};
+  presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+  
+  presentInfo.waitSemaphoreCount = 1;
+  presentInfo.pWaitSemaphores = signalSemaphores;
+  
+  VkSwapchainKHR swapChains[] = {Vulkan::swapChain};
+  presentInfo.swapchainCount = 1;
+  presentInfo.pSwapchains = swapChains;
+  
+  presentInfo.pImageIndices = &_imageIndex;
+  
+  vkQueuePresentKHR(Vulkan::presentQueue, &presentInfo);
+  
+  //drawFrame();
+}
+
+void VulkanGraphics::submitRenderPass(RenderPass &renderPass) {
+  GraphicTask &firstTask = renderPass.front();
+  VulkanFrameBuffer   *frame  = static_cast<VulkanFrameBuffer*>(firstTask.frame.get());
+//  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
+//  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh.get());
+  
+  
+  
+  VkPipeline pipeline = frame->getVkPipelineForTask(firstTask);
+  
+  
+  // Define the Command Buffer Info
+  VkCommandBufferAllocateInfo commandBufferInfo = {};
+  commandBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+  commandBufferInfo.commandPool = Vulkan::commandPool;
+  commandBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  commandBufferInfo.commandBufferCount = 1;
+  
+  // Create the Command Buffer
+  VkCommandBuffer commandBuffer;
+  if (vkAllocateCommandBuffers(Vulkan::device, &commandBufferInfo, &commandBuffer) != VK_SUCCESS) {
+    cerr << "Error Creating Command Buffers" << endl;
+    assert(false);
+  }
+  
+  // Record each of the Command Buffers
+  //for (size_t i = 0; i < Vulkan::commandBuffers.size(); i++) {
+    // Define the Begin Info
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo = nullptr; // Optional
+    
+    // Begin Recording the Command Buffer
+    if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
+      cerr << "Failed to begin recording command buffer" << endl;
+      assert(false);
+    }
+    
+    // Define the Render Pass Info
+    VkRenderPassBeginInfo renderPassInfo = {};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = Vulkan::renderPass;
+    renderPassInfo.framebuffer = Vulkan::swapChainFrameBuffers[_imageIndex];
+    // Define the Render Extents
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
+    // Define the Clear Color
+    VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+    renderPassInfo.clearValueCount = 1;
+    renderPassInfo.pClearValues = &clearColor;
+    
+    // Begin the Render Pass
+    vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    
+    // Bind the Graphics Pipeline
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+    
+    // Draw the triangle
+    vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    
+    // Finish the Render Pass
+    vkCmdEndRenderPass(commandBuffer);
+    
+    // End Recording the Command Buffer
+    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+      cerr << "Error Recording the Command Buffer" << endl;
+      assert(false);
+    }
+  //}
+  
+  
+  
+  VkSubmitInfo submitInfo = {};
+  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+  
+  VkSemaphore waitSemaphores[] = {Vulkan::imageAvailableSemaphore};
+  VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+  submitInfo.waitSemaphoreCount = 1;
+  submitInfo.pWaitSemaphores = waitSemaphores;
+  submitInfo.pWaitDstStageMask = waitStages;
+  
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers = &commandBuffer;
+  
+  VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
+  submitInfo.signalSemaphoreCount = 1;
+  submitInfo.pSignalSemaphores = signalSemaphores;
+  
+  if (vkQueueSubmit(Vulkan::graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
+    cerr << "failed to submit draw command buffer!" << endl;
+    assert(false);
+  }
 }
 
 bool VulkanGraphics::createInstance() {
@@ -180,165 +303,6 @@ bool VulkanGraphics::createRenderPass() {
   return true;
 }
 
-bool VulkanGraphics::createPipeline() {
-  // Load the Shader Modules
-  VkShaderModule vertShaderModule = Vulkan::createShaderModule("vert.spv");
-  VkShaderModule fragShaderModule = Vulkan::createShaderModule("frag.spv");
-  
-  // Create Vertex Shader Stage Info
-  VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
-  vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-  vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-  vertShaderStageInfo.module = vertShaderModule;
-  vertShaderStageInfo.pName = "main";
-
-  // Create fragment Shader Stage Info
-  VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
-  fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-  fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-  fragShaderStageInfo.module = fragShaderModule;
-  fragShaderStageInfo.pName = "main";
-
-  // Create Array of Shader Stage Infos
-  VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
-
-
-  // Define the Vertex Input Info
-  VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
-  vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-  vertexInputInfo.vertexBindingDescriptionCount = 0;
-  vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
-  vertexInputInfo.vertexAttributeDescriptionCount = 0;
-  vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
-
-
-  // Define to Draw Triangle Prmitives
-  VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
-  inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-  inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-  inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-
-  // Define the viewport
-  VkViewport viewport = {};
-  viewport.x = 0.0f;
-  viewport.y = 0.0f;
-  viewport.width = (float)Vulkan::swapChainExtent.width;
-  viewport.height = (float)Vulkan::swapChainExtent.height;
-  viewport.minDepth = 0.0f;
-  viewport.maxDepth = 1.0f;
-
-  // Define the scissor region
-  VkRect2D scissor = {};
-  scissor.offset = {0, 0};
-  scissor.extent = Vulkan::swapChainExtent;
-
-  // Define the Viewport State Info
-  VkPipelineViewportStateCreateInfo viewportState = {};
-  viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-  viewportState.viewportCount = 1;
-  viewportState.pViewports = &viewport;
-  viewportState.scissorCount = 1;
-  viewportState.pScissors = &scissor;
-
-
-  // Define the Rasterization State Info
-  VkPipelineRasterizationStateCreateInfo rasterizer = {};
-  rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-  rasterizer.depthClampEnable = VK_FALSE;
-  rasterizer.rasterizerDiscardEnable = VK_FALSE;
-  rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
-  rasterizer.lineWidth = 1.0f;
-  rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
-  rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
-  rasterizer.depthBiasEnable = VK_FALSE;
-  rasterizer.depthBiasConstantFactor = 0.0f; // Optional
-  rasterizer.depthBiasClamp = 0.0f; // Optional
-  rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
-
-
-  // Define Multisampling State Info
-  VkPipelineMultisampleStateCreateInfo multisampling = {};
-  multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-  multisampling.sampleShadingEnable = VK_FALSE;
-  multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-  multisampling.minSampleShading = 1.0f; // Optional
-  multisampling.pSampleMask = nullptr; // Optional
-  multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
-  multisampling.alphaToOneEnable = VK_FALSE; // Optional
-
-
-  // Define Color Blending State Info
-  VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
-  colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-  colorBlendAttachment.blendEnable = VK_FALSE;
-  colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-  colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-  colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD; // Optional
-  colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-  colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-  colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
-
-
-  // Define the Blend Color Info
-  VkPipelineColorBlendStateCreateInfo colorBlending = {};
-  colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-  colorBlending.logicOpEnable = VK_FALSE;
-  colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-  colorBlending.attachmentCount = 1;
-  colorBlending.pAttachments = &colorBlendAttachment;
-  colorBlending.blendConstants[0] = 0.0f; // Optional
-  colorBlending.blendConstants[1] = 0.0f; // Optional
-  colorBlending.blendConstants[2] = 0.0f; // Optional
-  colorBlending.blendConstants[3] = 0.0f; // Optional
-
-
-  // Define Pipeline Layout for Constant Values
-  VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
-  pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-  pipelineLayoutInfo.setLayoutCount = 0; // Optional
-  pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
-  pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
-  pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
-
-  // Create the Pipeline Layout
-  if (vkCreatePipelineLayout(Vulkan::device, &pipelineLayoutInfo, nullptr, &Vulkan::pipelineLayout) != VK_SUCCESS) {
-    cerr << "Error creating Pipeline Layout" << endl;
-    assert(false);
-  }
-
-
-  // Define the Pipeline info
-  VkGraphicsPipelineCreateInfo pipelineInfo = {};
-  pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-  pipelineInfo.stageCount = 2;
-  pipelineInfo.pStages = shaderStages;
-  pipelineInfo.pVertexInputState = &vertexInputInfo;
-  pipelineInfo.pInputAssemblyState = &inputAssembly;
-  pipelineInfo.pViewportState = &viewportState;
-  pipelineInfo.pRasterizationState = &rasterizer;
-  pipelineInfo.pMultisampleState = &multisampling;
-  pipelineInfo.pDepthStencilState = nullptr; // Optional
-  pipelineInfo.pColorBlendState = &colorBlending;
-  pipelineInfo.pDynamicState = nullptr; // Optional
-  pipelineInfo.layout = Vulkan::pipelineLayout;
-  pipelineInfo.renderPass = Vulkan::renderPass;
-  pipelineInfo.subpass = 0;
-  pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
-  pipelineInfo.basePipelineIndex = -1; // Optional
-
-  // Create the Graphics Pipeline
-  if (vkCreateGraphicsPipelines(Vulkan::device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &Vulkan::graphicsPipeline) != VK_SUCCESS) {
-    cerr << "Error creating Graphics Pipeline" << endl;
-    return false;
-  }
-
-  // Cleanup the Shader Modules
-  vkDestroyShaderModule(Vulkan::device, fragShaderModule, nullptr);
-  vkDestroyShaderModule(Vulkan::device, vertShaderModule, nullptr);
-  return true;
-}
-
 bool VulkanGraphics::createFrameBuffers() {
   Vulkan::swapChainFrameBuffers.resize(Vulkan::swapChainBuffers.size());
   
@@ -375,108 +339,4 @@ bool VulkanGraphics::createCommandPool() {
     return false;
   }
   return true;
-}
-
-bool VulkanGraphics::createCommandBuffers() {
-  // Resize the number of command buffers to the number of Swap Chain Buffers.
-  Vulkan::commandBuffers.resize(Vulkan::swapChainBuffers.size());
-  
-  // Define the Command Buffer Info
-  VkCommandBufferAllocateInfo commandBufferInfo = {};
-  commandBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  commandBufferInfo.commandPool = Vulkan::commandPool;
-  commandBufferInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  commandBufferInfo.commandBufferCount = (uint32_t)Vulkan::commandBuffers.size();
-  
-  // Create the Command Buffers
-  if (vkAllocateCommandBuffers(Vulkan::device, &commandBufferInfo, Vulkan::commandBuffers.data()) != VK_SUCCESS) {
-    cerr << "Error Creating Command Buffers" << endl;
-    return false;
-  }
-  
-  // Record each of the Command Buffers
-  for (size_t i = 0; i < Vulkan::commandBuffers.size(); i++) {
-    // Define the Begin Info
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-    beginInfo.pInheritanceInfo = nullptr; // Optional
-    
-    // Begin Recording the Command Buffer
-    if (vkBeginCommandBuffer(Vulkan::commandBuffers[i], &beginInfo) != VK_SUCCESS) {
-      cerr << "Failed to begin recording command buffer: " << i << endl;
-      return false;
-    }
-    
-    // Define the Render Pass Info
-    VkRenderPassBeginInfo renderPassInfo = {};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = Vulkan::renderPass;
-    renderPassInfo.framebuffer = Vulkan::swapChainFrameBuffers[i];
-    // Define the Render Extents
-    renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
-    // Define the Clear Color
-    VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor;
-    
-    // Begin the Render Pass
-    vkCmdBeginRenderPass(Vulkan::commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-    
-    // Bind the Graphics Pipeline
-    vkCmdBindPipeline(Vulkan::commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::graphicsPipeline);
-    
-    // Draw the triangle
-    vkCmdDraw(Vulkan::commandBuffers[i], 3, 1, 0, 0);
-    
-    // Finish the Render Pass
-    vkCmdEndRenderPass(Vulkan::commandBuffers[i]);
-    
-    // End Recording the Command Buffer
-    if (vkEndCommandBuffer(Vulkan::commandBuffers[i]) != VK_SUCCESS) {
-      cerr << "Error Recording the Command Buffer: " << i << endl;
-      return false;
-    }
-  }
-  return true;
-}
-
-void VulkanGraphics::drawFrame() {
-  uint32_t imageIndex;
-  vkAcquireNextImageKHR(Vulkan::device, Vulkan::swapChain, std::numeric_limits<uint64_t>::max(), Vulkan::imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
-  
-  VkSubmitInfo submitInfo = {};
-  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-  
-  VkSemaphore waitSemaphores[] = {Vulkan::imageAvailableSemaphore};
-  VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-  submitInfo.waitSemaphoreCount = 1;
-  submitInfo.pWaitSemaphores = waitSemaphores;
-  submitInfo.pWaitDstStageMask = waitStages;
-  
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers = &Vulkan::commandBuffers[imageIndex];
-  
-  VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
-  submitInfo.signalSemaphoreCount = 1;
-  submitInfo.pSignalSemaphores = signalSemaphores;
-  
-  if (vkQueueSubmit(Vulkan::graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {
-    throw std::runtime_error("failed to submit draw command buffer!");
-  }
-  
-  VkPresentInfoKHR presentInfo = {};
-  presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-  
-  presentInfo.waitSemaphoreCount = 1;
-  presentInfo.pWaitSemaphores = signalSemaphores;
-  
-  VkSwapchainKHR swapChains[] = {Vulkan::swapChain};
-  presentInfo.swapchainCount = 1;
-  presentInfo.pSwapchains = swapChains;
-  
-  presentInfo.pImageIndices = &imageIndex;
-  
-  vkQueuePresentKHR(Vulkan::presentQueue, &presentInfo);
 }

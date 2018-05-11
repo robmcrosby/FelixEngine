@@ -295,10 +295,12 @@ bool Vulkan::checkLayerNames(const vector<const char *> &layerNames) {
 
 void Vulkan::cleaup() {
   if (device != VK_NULL_HANDLE) {
+    vkDeviceWaitIdle(device);
+    
     vkDestroySemaphore(device, renderFinishedSemaphore, nullptr);
     vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
     
-    //vkDestroyCommandPool(device, commandPool, nullptr);
+    vkDestroyCommandPool(device, commandPool, nullptr);
     
     for (auto framebuffer : swapChainFrameBuffers)
       vkDestroyFramebuffer(device, framebuffer, nullptr);

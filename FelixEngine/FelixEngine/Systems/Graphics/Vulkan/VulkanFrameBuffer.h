@@ -10,11 +10,14 @@
 #define VulkanFrameBuffer_h
 
 #include "GraphicResources.h"
+#include <vulkan/vulkan.h>
+#include <map>
 
 
 namespace fx {
   class VulkanFrameBuffer: public FrameBuffer {
   private:
+    std::map<int, VkPipeline> _pipelines;
     
   public:
     VulkanFrameBuffer();
@@ -30,6 +33,8 @@ namespace fx {
     virtual bool addColorTexture();
     
     virtual TextureBufferPtr getColorTexture(int index);
+    
+    VkPipeline getVkPipelineForTask(const GraphicTask &task);
   };
 }
 
