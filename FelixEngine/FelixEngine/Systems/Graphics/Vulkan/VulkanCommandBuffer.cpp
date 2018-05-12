@@ -64,9 +64,8 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
     // Define the Clear Color
-    VkClearValue clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
     renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = &clearColor;
+    renderPassInfo.pClearValues = (VkClearValue*)task.colorActions[0].clearColor.ptr();
     
     // Begin the Render Pass
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
