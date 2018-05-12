@@ -340,23 +340,6 @@ bool Vulkan::checkExtensionNames(const std::vector<const char *> &extensionNames
   return success;
 }
 
-VkShaderModule Vulkan::createShaderModule(const std::string &fileName) {
-  FileData code;
-  assert(FileSystem::loadData(code, fileName));
-  
-  VkShaderModuleCreateInfo createInfo = {};
-  createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-  createInfo.codeSize = code.size();
-  createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
-  
-  VkShaderModule shaderModule;
-  if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-    cerr << "Error Creating Shader Module" << endl;
-    assert(false);
-  }
-  return shaderModule;
-}
-
 vector<VkLayerProperties> Vulkan::getAvalibleLayers() {
   // Get the avalible layer count
   uint32_t layerCount = 0;

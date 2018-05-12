@@ -105,7 +105,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
   submitInfo.pCommandBuffers = _commandBuffers.data();
   
   VkSemaphore signalSemaphores[] = {Vulkan::renderFinishedSemaphore};
-  submitInfo.signalSemaphoreCount = count;
+  submitInfo.signalSemaphoreCount = 1;
   submitInfo.pSignalSemaphores = signalSemaphores;
   
   if (vkQueueSubmit(Vulkan::graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE) != VK_SUCCESS) {

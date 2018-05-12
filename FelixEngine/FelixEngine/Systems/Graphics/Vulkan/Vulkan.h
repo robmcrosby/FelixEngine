@@ -68,8 +68,6 @@ namespace fx {
     static bool checkLayerNames(const std::vector<const char *> &layerNames);
     static bool checkExtensionNames(const std::vector<const char *> &extensionNames);
     
-    static VkShaderModule createShaderModule(const std::string &fileName);
-    
     static std::vector<VkLayerProperties> getAvalibleLayers();
     static std::vector<VkExtensionProperties> getAvalibleExtensions();
     static std::vector<VkPhysicalDevice> getPhysicalDevices();

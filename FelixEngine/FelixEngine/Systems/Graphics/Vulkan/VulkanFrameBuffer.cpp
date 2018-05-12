@@ -8,6 +8,8 @@
 
 #include "VulkanFrameBuffer.h"
 #include "VulkanTextureBuffer.h"
+#include "VulkanShaderProgram.h"
+#include "GraphicTask.h"
 #include "Vulkan.h"
 
 
@@ -56,27 +58,7 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
   int key = 0;
   
   if (!_pipelines.count(key)) {
-    // Load the Shader Modules
-    VkShaderModule vertShaderModule = Vulkan::createShaderModule("vert.spv");
-    VkShaderModule fragShaderModule = Vulkan::createShaderModule("frag.spv");
-    
-    // Create Vertex Shader Stage Info
-    VkPipelineShaderStageCreateInfo vertShaderStageInfo = {};
-    vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-    vertShaderStageInfo.module = vertShaderModule;
-    vertShaderStageInfo.pName = "main";
-    
-    // Create fragment Shader Stage Info
-    VkPipelineShaderStageCreateInfo fragShaderStageInfo = {};
-    fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fragShaderStageInfo.module = fragShaderModule;
-    fragShaderStageInfo.pName = "main";
-    
-    // Create Array of Shader Stage Infos
-    VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
-    
+    VulkanShaderProgram *shader = static_cast<VulkanShaderProgram*>(task.shader.get());
     
     // Define the Vertex Input Info
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
@@ -185,8 +167,8 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     // Define the Pipeline info
     VkGraphicsPipelineCreateInfo pipelineInfo = {};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-    pipelineInfo.stageCount = 2;
-    pipelineInfo.pStages = shaderStages;
+    pipelineInfo.stageCount = shader->getStageCount();
+    pipelineInfo.pStages = shader->getStages();
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &inputAssembly;
     pipelineInfo.pViewportState = &viewportState;
@@ -208,10 +190,6 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
       assert(false);
     }
     _pipelines[key] = pipeline;
-    
-    // Cleanup the Shader Modules
-    vkDestroyShaderModule(Vulkan::device, fragShaderModule, nullptr);
-    vkDestroyShaderModule(Vulkan::device, vertShaderModule, nullptr);
   }
   return _pipelines[key];
 }
