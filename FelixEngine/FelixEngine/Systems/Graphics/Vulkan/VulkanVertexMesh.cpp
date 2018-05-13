@@ -43,7 +43,7 @@ bool VulkanVertexMesh::load(const VertexMeshData &data) {
     attributeDescription.binding = 0;
     attributeDescription.location = location++; // TODO: Implement Shader Reflection to find locations for names
     attributeDescription.format = getFloatFormatForSize(componentSize);
-    attributeDescription.offset = vertexSize;
+    attributeDescription.offset = vertexSize * sizeof(float);
     _attributeDescriptions.push_back(attributeDescription);
     
     // Add to the vertex size
