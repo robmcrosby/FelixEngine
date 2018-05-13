@@ -41,6 +41,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
   
   int bufferIndex = 0;
   for (GraphicTask &task : pass) {
+    VulkanVertexMesh *mesh = static_cast<VulkanVertexMesh*>(task.mesh.get());
     VkCommandBuffer &commandBuffer = _commandBuffers[bufferIndex];
     
     // Define the Begin Info
@@ -72,6 +73,11 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     
     // Bind the Graphics Pipeline
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+    
+    uint32_t vertexBufferCount = mesh->getVertexBufferCount();
+    VkBuffer *vertexBuffers = mesh->getVertexBuffers();
+    VkDeviceSize *offsets = mesh->getVertexOffsets();
+    vkCmdBindVertexBuffers(commandBuffer, 0, vertexBufferCount, vertexBuffers, offsets);
     
     // Draw the triangle
     vkCmdDraw(commandBuffer, 3, 1, 0, 0);

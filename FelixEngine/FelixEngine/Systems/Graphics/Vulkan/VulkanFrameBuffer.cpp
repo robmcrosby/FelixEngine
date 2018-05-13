@@ -9,6 +9,7 @@
 #include "VulkanFrameBuffer.h"
 #include "VulkanTextureBuffer.h"
 #include "VulkanShaderProgram.h"
+#include "VulkanVertexMesh.h"
 #include "GraphicTask.h"
 #include "Vulkan.h"
 
@@ -59,15 +60,15 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
   
   if (!_pipelines.count(key)) {
     VulkanShaderProgram *shader = static_cast<VulkanShaderProgram*>(task.shader.get());
+    VulkanVertexMesh *mesh = static_cast<VulkanVertexMesh*>(task.mesh.get());
     
     // Define the Vertex Input Info
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
-    
+    vertexInputInfo.vertexBindingDescriptionCount = mesh->getBindingDescriptionsCount();;
+    vertexInputInfo.pVertexBindingDescriptions = mesh->getBindingDescriptions();
+    vertexInputInfo.vertexAttributeDescriptionCount = mesh->getAttributeDescriptionsCount();
+    vertexInputInfo.pVertexAttributeDescriptions = mesh->getAttributeDescriptions();
     
     // Define to Draw Triangle Prmitives
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};
