@@ -28,6 +28,8 @@ using namespace std;
 using namespace fx;
 
 VulkanGraphics::VulkanGraphics() {
+  Graphics::instance = this;
+  
   _layers.push_back("MoltenVK");
   _extensions.push_back("VK_MVK_moltenvk");
 }

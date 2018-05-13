@@ -40,6 +40,7 @@ void Hello3D::initalize() {
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
   
   (*_uniformMap)["MVP"] = _mvpUniform;
+  (*_uniformMap)["MVP"].useBuffer();
   _task.uniforms.push_back(_uniformMap);
   
   _task.cullMode = fx::CULL_BACK;

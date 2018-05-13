@@ -10,6 +10,7 @@
 #include "VulkanTextureBuffer.h"
 #include "VulkanShaderProgram.h"
 #include "VulkanVertexMesh.h"
+#include "VulkanUniformBuffer.h"
 #include "GraphicTask.h"
 #include "Vulkan.h"
 
@@ -150,12 +151,20 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     colorBlending.blendConstants[2] = 0.0f; // Optional
     colorBlending.blendConstants[3] = 0.0f; // Optional
     
+    // Get Set Layouts for uniforms
+    vector<VkDescriptorSetLayout> setLayouts;
+    for (const auto &uniformMap : task.uniforms) {
+      for (const auto &uniform : *uniformMap) {
+        VulkanUniformBuffer *uniformBuffer = static_cast<VulkanUniformBuffer*>(uniform.second.buffer().get());
+        setLayouts.push_back(uniformBuffer->getSetLayout());
+      }
+    }
     
     // Define Pipeline Layout for Constant Values
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipelineLayoutInfo.setLayoutCount = 0; // Optional
-    pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+    pipelineLayoutInfo.setLayoutCount = (uint32_t)setLayouts.size();
+    pipelineLayoutInfo.pSetLayouts = setLayouts.size() == 0 ? nullptr : setLayouts.data(); // Optional
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
     

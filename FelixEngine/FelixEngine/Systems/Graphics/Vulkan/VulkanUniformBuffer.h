@@ -10,6 +10,7 @@
 #define VulkanUniformBuffer_h
 
 #include "GraphicResources.h"
+#include <vulkan/vulkan.h>
 
 
 namespace fx {
@@ -19,6 +20,13 @@ namespace fx {
    */
   class VulkanUniformBuffer: public UniformBuffer {
   private:
+    VkDescriptorSetLayout _descriptorSetLayout;
+    
+    VkBuffer _uniformBuffer;
+    VkDeviceMemory _uniformBufferMemory;
+    
+    VkDescriptorPool _descriptorPool;
+    VkDescriptorSet _descriptorSet;
     
   public:
     VulkanUniformBuffer();
@@ -26,6 +34,13 @@ namespace fx {
     
     virtual bool load(void *data, size_t size, BUFFER_COUNT count);
     virtual void update(void *data, size_t size);
+    
+    VkDescriptorSetLayout getSetLayout() {return _descriptorSetLayout;}
+    VkDescriptorSet getDescriptorSet() {return _descriptorSet;}
+    
+  private:
+    bool createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
+    uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties) const;
   };
 }
 

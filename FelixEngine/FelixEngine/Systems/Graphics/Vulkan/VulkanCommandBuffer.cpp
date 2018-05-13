@@ -79,6 +79,14 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     VkDeviceSize *offsets = mesh->getVertexOffsets();
     vkCmdBindVertexBuffers(commandBuffer, 0, vertexBufferCount, vertexBuffers, offsets);
     
+    for (const auto &uniformMap : task.uniforms) {
+      for (const auto &uniform : *uniformMap) {
+        VulkanUniformBuffer *uniformBuffer = static_cast<VulkanUniformBuffer*>(uniform.second.buffer().get());
+        VkDescriptorSet descriptorSet = uniformBuffer->getDescriptorSet();
+        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
+      }
+    }
+    
     // Draw the triangle
     vkCmdDraw(commandBuffer, 3, 1, 0, 0);
     
