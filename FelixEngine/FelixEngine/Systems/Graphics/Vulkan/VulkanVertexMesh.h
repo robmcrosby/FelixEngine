@@ -10,6 +10,7 @@
 #define VulkanVertexMesh_h
 
 #include "GraphicResources.h"
+#include "VertexMeshData.h"
 #include <vulkan/vulkan.h>
 
 
@@ -27,6 +28,9 @@ namespace fx {
     std::vector<VkDeviceSize> _vertexOffsets;
     std::vector<VkDeviceMemory> _vertexMemory;
     
+    VERTEX_PRIMITIVE _primitiveType;
+    VertexMeshData *_meshData;
+    
   public:
     VulkanVertexMesh();
     virtual ~VulkanVertexMesh();
@@ -35,6 +39,7 @@ namespace fx {
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
     virtual bool setIndexBuffer(size_t count, const int *buffer);
     virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
+    virtual bool loadBuffers();
     
     uint32_t getBindingDescriptionsCount() const {return 1;}
     VkVertexInputBindingDescription* getBindingDescriptions() {return &_bindingDescription;}
@@ -46,11 +51,13 @@ namespace fx {
     VkBuffer* getVertexBuffers() {return _vertexBuffers.data();}
     VkDeviceSize* getVertexOffsets() {return _vertexOffsets.data();}
     
+    void clearMeshData();
     void clearBuffers();
     
   private:
     VkFormat getFloatFormatForSize(size_t size) const;
     uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties) const;
+    bool createVertexBuffer(const fx::VertexBuffer &vertices);
   };
 }
 

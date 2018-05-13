@@ -167,6 +167,7 @@ bool ARKitTracker::drawLiveCamera() {
     vector<vec4> vertices;
     calculateVertices(vertices);
     _task.mesh->setVertexBuffer("Vertices", vertices);
+    _task.mesh->loadBuffers();
     _graphics->addTask(_task);
   }
   return draw;
@@ -185,6 +186,7 @@ void ARKitTracker::setupLiveCamera() {
   _task.mesh = _graphics->createVertexMesh();
   _task.mesh->setVertexBuffer("Vertices", vertices);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  _task.mesh->loadBuffers();
   
   _task.textures = make_shared<TextureMap>();
   _task.textures->addTexture(_cameraImageY);

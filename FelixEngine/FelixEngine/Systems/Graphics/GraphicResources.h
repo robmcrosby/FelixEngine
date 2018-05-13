@@ -47,6 +47,7 @@ namespace fx {
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
     virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
+    virtual bool loadBuffers() = 0;
     
     bool setVertexBuffer(const std::string &name, const std::vector<float> &buffer);
     bool setVertexBuffer(const std::string &name, const std::vector<vec2> &buffer);

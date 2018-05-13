@@ -95,6 +95,7 @@ void HelloFBO::setupSecondTask() {
   _secondTask.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);
   _secondTask.mesh->setVertexBuffer("UV", 2, 4, uvBuffer);
   _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  _secondTask.mesh->loadBuffers();
   
   _secondTextureMap->addTexture(_firstTask.frame->getColorTexture(0));
   _secondTask.textures = _secondTextureMap;

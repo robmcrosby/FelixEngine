@@ -76,6 +76,10 @@ bool MetalVertexMesh::setVertexBuffer(const std::string &name, size_t size, size
   return mtlBuffer != nil;
 }
 
+bool MetalVertexMesh::loadBuffers() {
+  return true;
+}
+
 void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances) {
   for (auto buffer : _buffers) {
     if (shader->_vertexIndexMap.count(buffer.first)) {

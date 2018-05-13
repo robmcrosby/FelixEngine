@@ -42,6 +42,7 @@ void HelloTexture::initalize() {
   _task.mesh->setVertexBuffer("position", 3, 4, vertexBuffer);
   _task.mesh->setVertexBuffer("uvMap", 2, 4, uvBuffer);
   _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  _task.mesh->loadBuffers();
   
   fx::ImageBufferData image;
   fx::FileSystem::loadImage(image, "test.png");
