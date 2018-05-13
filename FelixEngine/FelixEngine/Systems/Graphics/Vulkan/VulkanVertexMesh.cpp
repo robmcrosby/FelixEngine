@@ -20,6 +20,8 @@ VulkanVertexMesh::VulkanVertexMesh() {
   
   _primitiveType = VERTEX_TRIANGLES;
   _meshData = nullptr;
+  
+  _totalVertices = 0;
 }
 
 VulkanVertexMesh::~VulkanVertexMesh() {
@@ -67,6 +69,8 @@ bool VulkanVertexMesh::load(const VertexMeshData &data) {
     offset += componentSize;
   }
   
+  _totalVertices = vertexCount;
+  
   return createVertexBuffer(vertices);
 }
 
@@ -107,6 +111,12 @@ bool VulkanVertexMesh::loadBuffers() {
       clearMeshData();
   }
   return success;
+}
+
+void VulkanVertexMesh::drawToCommandBuffer(VkCommandBuffer commandBuffer) {
+  
+  
+  vkCmdDraw(commandBuffer, _totalVertices, 1, 0, 0);
 }
 
 void VulkanVertexMesh::clearMeshData() {

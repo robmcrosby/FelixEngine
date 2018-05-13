@@ -28,6 +28,8 @@ namespace fx {
     std::vector<VkDeviceSize> _vertexOffsets;
     std::vector<VkDeviceMemory> _vertexMemory;
     
+    uint32_t _totalVertices;
+    
     VERTEX_PRIMITIVE _primitiveType;
     VertexMeshData *_meshData;
     
@@ -50,6 +52,8 @@ namespace fx {
     uint32_t getVertexBufferCount() {return (uint32_t)_vertexBuffers.size();}
     VkBuffer* getVertexBuffers() {return _vertexBuffers.data();}
     VkDeviceSize* getVertexOffsets() {return _vertexOffsets.data();}
+    
+    void drawToCommandBuffer(VkCommandBuffer commandBuffer);
     
     void clearMeshData();
     void clearBuffers();

@@ -88,7 +88,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     }
     
     // Draw the triangle
-    vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    mesh->drawToCommandBuffer(commandBuffer);
     
     // Finish the Render Pass
     vkCmdEndRenderPass(commandBuffer);
