@@ -44,7 +44,7 @@ bool VulkanVertexMesh::load(const VertexMeshData &data) {
     VkVertexInputAttributeDescription attributeDescription = {};
     attributeDescription.binding = 0;
     attributeDescription.location = location++; // TODO: Implement Shader Reflection to find locations for names
-    attributeDescription.format = getFloatFormatForSize(componentSize);
+    attributeDescription.format = Vulkan::getFloatFormatForSize(componentSize);
     attributeDescription.offset = vertexSize * sizeof(float);
     _attributeDescriptions.push_back(attributeDescription);
     
@@ -134,22 +134,6 @@ void VulkanVertexMesh::clearBuffers() {
   for (auto vertexMemory : _vertexMemory)
     vkFreeMemory(Vulkan::device, vertexMemory, nullptr);
   _vertexMemory.clear();
-}
-
-VkFormat VulkanVertexMesh::getFloatFormatForSize(size_t size) const {
-  switch (size) {
-    case 1:
-      return VK_FORMAT_R32_SFLOAT;
-    case 2:
-      return VK_FORMAT_R32G32_SFLOAT;
-    case 3:
-      return VK_FORMAT_R32G32B32_SFLOAT;
-    case 4:
-      return VK_FORMAT_R32G32B32A32_SFLOAT;
-    default:
-      cerr << "No Float Formats of size: " << size << endl;
-      return VK_FORMAT_UNDEFINED;
-  }
 }
 
 uint32_t VulkanVertexMesh::findMemoryType(uint32_t typeFilter, uint32_t properties) const {

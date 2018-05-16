@@ -8,8 +8,9 @@
 
 #include "VulkanShaderProgram.h"
 #include "Vulkan.h"
-#include "FileSystem.h"
 #include <sstream>
+
+#include "spirv_cross.hpp"
 
 
 using namespace std;
@@ -32,6 +33,10 @@ VulkanShaderProgram::~VulkanShaderProgram() {
 }
 
 void VulkanShaderProgram::clearShaderModules() {
+  _vertexInputs.clear();
+  _vertexUniforms.clear();
+  _fragmentUniforms.clear();
+  
   if (_shaderStages[0].module != VK_NULL_HANDLE) {
     vkDestroyShaderModule(Vulkan::device, _shaderStages[0].module, nullptr);
     _shaderStages[0].module = VK_NULL_HANDLE;
@@ -45,8 +50,8 @@ void VulkanShaderProgram::clearShaderModules() {
 bool VulkanShaderProgram::loadShaderFunctions(const std::string &vertex, const std::string &fragment) {
   clearShaderModules();
   
-  _shaderStages[0].module = loadShaderModule(getShaderFileName(vertex));
-  _shaderStages[1].module = loadShaderModule(getShaderFileName(fragment));
+  loadShaderModule(getShaderFileName(vertex), SHADER_VERTEX);
+  loadShaderModule(getShaderFileName(fragment), SHADER_FRAGMENT);
   
   return _shaderStages[0].module != VK_NULL_HANDLE && _shaderStages[1].module != VK_NULL_HANDLE;
 }
@@ -57,10 +62,12 @@ string VulkanShaderProgram::getShaderFileName(const string &name) const {
   return ss.str();
 }
 
-VkShaderModule VulkanShaderProgram::loadShaderModule(const string &fileName) const {
+bool VulkanShaderProgram::loadShaderModule(const string &fileName, SHADER_PART part) {
   FileData code;
   if (!FileSystem::loadData(code, fileName))
-    return VK_NULL_HANDLE;
+    return false;
+  
+  reflectShaderCode(code, part);
   
   VkShaderModuleCreateInfo createInfo = {};
   createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
@@ -70,7 +77,47 @@ VkShaderModule VulkanShaderProgram::loadShaderModule(const string &fileName) con
   VkShaderModule shaderModule;
   if (vkCreateShaderModule(Vulkan::device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
     cerr << "Error Creating Shader Module" << endl;
-    return VK_NULL_HANDLE;
+    return false;
   }
-  return shaderModule;
+  _shaderStages[part].module = shaderModule;
+  return true;
+}
+
+void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
+  size_t words = (size_t)ceil(code.size()/4.0);
+  spirv_cross::Compiler compiler((uint32_t*)code.data(), words);
+  spirv_cross::ShaderResources resources = compiler.get_shader_resources();
+  
+  if (part == SHADER_VERTEX) {
+    // Get the Vertex input info
+    for (auto &resource : resources.stage_inputs) {
+      VertexInput input;
+      spirv_cross::SPIRType type = compiler.get_type(resource.type_id);
+      input.name = resource.name;
+      input.index = compiler.get_decoration(resource.id, spv::DecorationLocation);
+      input.format = Vulkan::getFloatFormatForSize(type.vecsize);
+      _vertexInputs.push_back(input);
+    }
+    
+    // Get the Vertex Uniform info
+    for (auto &resource: resources.uniform_buffers) {
+      UniformInput input;
+      input.name = resource.name;
+      input.index = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      _vertexUniforms.push_back(input);
+    }
+    
+    // TODO: get the Vertex Texture info
+  }
+  else {
+    // Get the Fragment uniform info
+    for (auto &resource: resources.uniform_buffers) {
+      UniformInput input;
+      input.name = resource.name;
+      input.index = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      _fragmentUniforms.push_back(input);
+    }
+    
+    // TODO: Get the Fragment textures info
+  }
 }

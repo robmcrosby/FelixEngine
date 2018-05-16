@@ -393,3 +393,19 @@ vector<VkSurfaceFormatKHR> Vulkan::getPhysicalDeviceSurfaceFormats(VkPhysicalDev
   
   return formats;
 }
+
+VkFormat Vulkan::getFloatFormatForSize(size_t size) {
+  switch (size) {
+    case 1:
+      return VK_FORMAT_R32_SFLOAT;
+    case 2:
+      return VK_FORMAT_R32G32_SFLOAT;
+    case 3:
+      return VK_FORMAT_R32G32B32_SFLOAT;
+    case 4:
+      return VK_FORMAT_R32G32B32A32_SFLOAT;
+    default:
+      cerr << "No Float Formats of size: " << size << endl;
+      return VK_FORMAT_UNDEFINED;
+  }
+}

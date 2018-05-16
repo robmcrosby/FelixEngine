@@ -8,8 +8,8 @@ layout(binding = 0) uniform MVPUniform {
   vec4 rotation;
 } MVP;
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec3 normal;
+layout(location = 1) in vec3 position;
+layout(location = 0) in vec3 normal;
 
 out gl_PerVertex {
   vec4 gl_Position;

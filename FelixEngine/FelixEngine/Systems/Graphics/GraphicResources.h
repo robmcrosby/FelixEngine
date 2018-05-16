@@ -22,9 +22,9 @@ namespace fx {
   class ImageBufferData;
   
   enum SHADER_PART {
-    SHADER_VERTEX,
+    SHADER_VERTEX = 0,
     SHADER_FRAGMENT,
-    SHADER_COUNT,
+    SHADER_PART_COUNT,
   };
   
   enum VERTEX_PRIMITIVE {

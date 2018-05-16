@@ -59,7 +59,6 @@ namespace fx {
     void clearBuffers();
     
   private:
-    VkFormat getFloatFormatForSize(size_t size) const;
     uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties) const;
     bool createVertexBuffer(const fx::VertexBuffer &vertices);
   };

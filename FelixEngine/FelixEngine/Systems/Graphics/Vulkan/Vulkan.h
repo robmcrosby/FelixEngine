@@ -74,6 +74,8 @@ namespace fx {
     static std::vector<VkQueueFamilyProperties> getQueueFamilyProperties(VkPhysicalDevice device);
     
     static std::vector<VkSurfaceFormatKHR> getPhysicalDeviceSurfaceFormats(VkPhysicalDevice device, VkSurfaceKHR surface);
+    
+    static VkFormat getFloatFormatForSize(size_t size);
   };
 }
 
