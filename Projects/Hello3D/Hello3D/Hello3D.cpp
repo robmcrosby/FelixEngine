@@ -33,7 +33,7 @@ void Hello3D::initalize() {
   
   fx::vec2 size = fx::vec2(_task.frame->size());
   float width = 2.0f;
-  float height = 2.0f; //2.0f * size.h/size.w;
+  float height = 2.0f * size.h/size.w;
   _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _mvpUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);

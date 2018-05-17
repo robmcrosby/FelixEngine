@@ -39,7 +39,9 @@ bool VulkanFrameBuffer::resize(int width, int height) {
 }
 
 ivec2 VulkanFrameBuffer::size() const {
-  return ivec2();
+  int width = (int)Vulkan::swapChainExtent.width;
+  int height = (int)Vulkan::swapChainExtent.height;
+  return ivec2(width, height);
 }
 
 bool VulkanFrameBuffer::addDepthBuffer() {
@@ -77,7 +79,6 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
-    
     
     // Define the viewport
     VkViewport viewport = {};
