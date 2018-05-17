@@ -37,6 +37,10 @@ void VulkanShaderProgram::clearShaderModules() {
   _vertexUniforms.clear();
   _fragmentUniforms.clear();
   
+  for (auto &layout : _descriptorSetLayouts)
+    vkDestroyDescriptorSetLayout(Vulkan::device, layout, nullptr);
+  _descriptorSetLayouts.clear();
+  
   if (_shaderStages[0].module != VK_NULL_HANDLE) {
     vkDestroyShaderModule(Vulkan::device, _shaderStages[0].module, nullptr);
     _shaderStages[0].module = VK_NULL_HANDLE;
@@ -53,7 +57,11 @@ bool VulkanShaderProgram::loadShaderFunctions(const std::string &vertex, const s
   loadShaderModule(getShaderFileName(vertex), SHADER_VERTEX);
   loadShaderModule(getShaderFileName(fragment), SHADER_FRAGMENT);
   
-  return _shaderStages[0].module != VK_NULL_HANDLE && _shaderStages[1].module != VK_NULL_HANDLE;
+  return _shaderStages[0].module != VK_NULL_HANDLE && _shaderStages[1].module != VK_NULL_HANDLE && createDescriptorSetLayouts();
+}
+
+VkDescriptorSetLayout* VulkanShaderProgram::getDescriptorSetLayouts() {
+  return _descriptorSetLayouts.size() == 0 ? nullptr : _descriptorSetLayouts.data();
 }
 
 string VulkanShaderProgram::getShaderFileName(const string &name) const {
@@ -103,7 +111,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
     for (auto &resource: resources.uniform_buffers) {
       UniformInput input;
       input.name = resource.name;
-      input.index = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       _vertexUniforms.push_back(input);
     }
     
@@ -114,10 +122,45 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
     for (auto &resource: resources.uniform_buffers) {
       UniformInput input;
       input.name = resource.name;
-      input.index = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       _fragmentUniforms.push_back(input);
     }
     
     // TODO: Get the Fragment textures info
   }
+}
+
+bool VulkanShaderProgram::createDescriptorSetLayouts() {
+  vector<VkDescriptorSetLayoutBinding> bindings;
+  for (auto &uniform : _vertexUniforms) {
+    VkDescriptorSetLayoutBinding binding = {};
+    binding.binding = uniform.binding;
+    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.descriptorCount = 1;
+    binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    binding.pImmutableSamplers = nullptr; // Optional
+    bindings.push_back(binding);
+  }
+  for (auto &uniform : _fragmentUniforms) {
+    VkDescriptorSetLayoutBinding binding = {};
+    binding.binding = uniform.binding;
+    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.descriptorCount = 1;
+    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    binding.pImmutableSamplers = nullptr; // Optional
+    bindings.push_back(binding);
+  }
+  
+  VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+  layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+  layoutInfo.bindingCount = (uint32_t)bindings.size();
+  layoutInfo.pBindings = bindings.size() == 0 ? nullptr : bindings.data();
+  
+  VkDescriptorSetLayout layout;
+  if (vkCreateDescriptorSetLayout(Vulkan::device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
+    cerr << "Failed to create descriptor set layout" << endl;
+    return false;
+  }
+  _descriptorSetLayouts.push_back(layout);
+  return true;
 }

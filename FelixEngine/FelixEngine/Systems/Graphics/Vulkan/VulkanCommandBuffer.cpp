@@ -36,6 +36,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
   
   // Get the Pipeline from the first task.
   GraphicTask &firstTask = pass.front();
+  VulkanShaderProgram *shader = static_cast<VulkanShaderProgram*>(firstTask.shader.get());
   VulkanFrameBuffer *frame = static_cast<VulkanFrameBuffer*>(firstTask.frame.get());
   VkPipeline pipeline = frame->getVkPipelineForTask(firstTask);
   
