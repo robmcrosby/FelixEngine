@@ -64,12 +64,13 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     VulkanVertexMesh *mesh = static_cast<VulkanVertexMesh*>(task.mesh.get());
     
     // Define the Vertex Input Info
+    vector<VkVertexInputAttributeDescription> vertexAttributes = mesh->getAttributeDescriptions(shader);
     VkPipelineVertexInputStateCreateInfo vertexInputInfo = {};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
     vertexInputInfo.vertexBindingDescriptionCount = mesh->getBindingDescriptionsCount();;
     vertexInputInfo.pVertexBindingDescriptions = mesh->getBindingDescriptions();
-    vertexInputInfo.vertexAttributeDescriptionCount = mesh->getAttributeDescriptionsCount();
-    vertexInputInfo.pVertexAttributeDescriptions = mesh->getAttributeDescriptions();
+    vertexInputInfo.vertexAttributeDescriptionCount = (uint32_t)vertexAttributes.size();
+    vertexInputInfo.pVertexAttributeDescriptions = vertexAttributes.data();
     
     // Define to Draw Triangle Prmitives
     VkPipelineInputAssemblyStateCreateInfo inputAssembly = {};

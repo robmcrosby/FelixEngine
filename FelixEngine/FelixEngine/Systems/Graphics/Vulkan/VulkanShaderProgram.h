@@ -16,12 +16,6 @@
 
 namespace fx {
   
-  struct VertexInput {
-    std::string name;
-    uint32_t index;
-    VkFormat format;
-  };
-  
   struct UniformInput {
     std::string name;
     uint32_t binding;
@@ -33,9 +27,9 @@ namespace fx {
   class VulkanShaderProgram: public ShaderProgram {
   private:
     VkPipelineShaderStageCreateInfo _shaderStages[SHADER_PART_COUNT];
-    std::vector<VertexInput>  _vertexInputs;
-    std::vector<UniformInput> _vertexUniforms;
-    std::vector<UniformInput> _fragmentUniforms;
+    std::map<std::string, int> _vertexLocations;
+    std::vector<UniformInput>  _vertexUniforms;
+    std::vector<UniformInput>  _fragmentUniforms;
     
     std::vector<VkDescriptorSetLayout> _descriptorSetLayouts;
     
@@ -48,7 +42,7 @@ namespace fx {
     void clearShaderModules();
     
     uint32_t getStageCount() const {return 2;}
-    //uint32_t getVertexLocation(const std::string &name) const {return _vertexInputs.at(name);}
+    int getVertexLocation(const std::string &name) const;
     VkPipelineShaderStageCreateInfo* getStages() {return _shaderStages;}
     
     uint32_t getDescriptorSetLayoutCount() const {return (uint32_t)_descriptorSetLayouts.size();}

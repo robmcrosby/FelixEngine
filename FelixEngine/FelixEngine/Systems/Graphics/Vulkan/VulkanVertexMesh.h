@@ -15,6 +15,13 @@
 
 
 namespace fx {
+  class VulkanShaderProgram;
+  
+  struct VertexAttribute {
+    std::string name;
+    uint32_t offset;
+    VkFormat format;
+  };
   
   /**
    *
@@ -22,7 +29,7 @@ namespace fx {
   class VulkanVertexMesh: public VertexMesh {
   private:
     VkVertexInputBindingDescription _bindingDescription;
-    std::vector<VkVertexInputAttributeDescription> _attributeDescriptions;
+    std::vector<VertexAttribute> _vertexAttributes;
     
     std::vector<VkBuffer> _vertexBuffers;
     std::vector<VkDeviceSize> _vertexOffsets;
@@ -46,8 +53,7 @@ namespace fx {
     uint32_t getBindingDescriptionsCount() const {return 1;}
     VkVertexInputBindingDescription* getBindingDescriptions() {return &_bindingDescription;}
     
-    uint32_t getAttributeDescriptionsCount() const {return (uint32_t)_attributeDescriptions.size();}
-    VkVertexInputAttributeDescription* getAttributeDescriptions() {return _attributeDescriptions.data();}
+    std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions(VulkanShaderProgram *shader);
     
     uint32_t getVertexBufferCount() {return (uint32_t)_vertexBuffers.size();}
     VkBuffer* getVertexBuffers() {return _vertexBuffers.data();}

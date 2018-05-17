@@ -33,7 +33,6 @@ VulkanShaderProgram::~VulkanShaderProgram() {
 }
 
 void VulkanShaderProgram::clearShaderModules() {
-  _vertexInputs.clear();
   _vertexUniforms.clear();
   _fragmentUniforms.clear();
   
@@ -58,6 +57,12 @@ bool VulkanShaderProgram::loadShaderFunctions(const std::string &vertex, const s
   loadShaderModule(getShaderFileName(fragment), SHADER_FRAGMENT);
   
   return _shaderStages[0].module != VK_NULL_HANDLE && _shaderStages[1].module != VK_NULL_HANDLE && createDescriptorSetLayouts();
+}
+
+int VulkanShaderProgram::getVertexLocation(const std::string &name) const {
+  if (_vertexLocations.count(name) > 0)
+    return _vertexLocations.at(name);
+  return -1;
 }
 
 VkDescriptorSetLayout* VulkanShaderProgram::getDescriptorSetLayouts() {
@@ -97,17 +102,13 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
   spirv_cross::ShaderResources resources = compiler.get_shader_resources();
   
   if (part == SHADER_VERTEX) {
-    // Get the Vertex input info
+    // Get the Vertex Locations
     for (auto &resource : resources.stage_inputs) {
-      VertexInput input;
-      spirv_cross::SPIRType type = compiler.get_type(resource.type_id);
-      input.name = resource.name;
-      input.index = compiler.get_decoration(resource.id, spv::DecorationLocation);
-      input.format = Vulkan::getFloatFormatForSize(type.vecsize);
-      _vertexInputs.push_back(input);
+      int location = (int)compiler.get_decoration(resource.id, spv::DecorationLocation);
+      _vertexLocations[resource.name] = location;
     }
     
-    // Get the Vertex Uniform info
+    // Get the Vertex Uniform Bindings
     for (auto &resource: resources.uniform_buffers) {
       UniformInput input;
       input.name = resource.name;
@@ -115,10 +116,10 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       _vertexUniforms.push_back(input);
     }
     
-    // TODO: get the Vertex Texture info
+    // TODO: Get the Vertex Texture Bindings
   }
   else {
-    // Get the Fragment uniform info
+    // Get the Fragment Uniform Bindings
     for (auto &resource: resources.uniform_buffers) {
       UniformInput input;
       input.name = resource.name;
@@ -126,7 +127,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       _fragmentUniforms.push_back(input);
     }
     
-    // TODO: Get the Fragment textures info
+    // TODO: Get the Fragment Textures Bindings
   }
 }
 

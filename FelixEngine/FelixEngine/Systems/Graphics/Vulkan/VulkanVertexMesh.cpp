@@ -7,6 +7,7 @@
 //
 
 #include "VulkanVertexMesh.h"
+#include "VulkanShaderProgram.h"
 #include "Vulkan.h"
 
 
@@ -34,19 +35,16 @@ bool VulkanVertexMesh::load(const VertexMeshData &data) {
   uint32_t vertexSize = 0;
   
   // Create the vertex attributes
-  _attributeDescriptions.clear();
-  uint32_t location = 0;
+  _vertexAttributes.clear();
   for (const auto &buffer : data.buffers) {
     size_t bufferSize = buffer.second.size();
     size_t componentSize = bufferSize/vertexCount;
     
-    // Add an attribute for the buffer
-    VkVertexInputAttributeDescription attributeDescription = {};
-    attributeDescription.binding = 0;
-    attributeDescription.location = location++; // TODO: Implement Shader Reflection to find locations for names
-    attributeDescription.format = Vulkan::getFloatFormatForSize(componentSize);
-    attributeDescription.offset = vertexSize * sizeof(float);
-    _attributeDescriptions.push_back(attributeDescription);
+    VertexAttribute attribute;
+    attribute.name = buffer.first;
+    attribute.offset = vertexSize * sizeof(float);
+    attribute.format = Vulkan::getFloatFormatForSize(componentSize);
+    _vertexAttributes.push_back(attribute);
     
     // Add to the vertex size
     vertexSize += componentSize;
@@ -72,6 +70,22 @@ bool VulkanVertexMesh::load(const VertexMeshData &data) {
   _totalVertices = vertexCount;
   
   return createVertexBuffer(vertices);
+}
+
+vector<VkVertexInputAttributeDescription> VulkanVertexMesh::getAttributeDescriptions(VulkanShaderProgram *shader) {
+  vector<VkVertexInputAttributeDescription> attributes;
+  for (auto &attribute : _vertexAttributes) {
+    int location = shader->getVertexLocation(attribute.name);
+    if (location >= 0) {
+      VkVertexInputAttributeDescription attributeDescription = {};
+      attributeDescription.binding  = 0;
+      attributeDescription.location = (uint32_t)location;
+      attributeDescription.format   = attribute.format;
+      attributeDescription.offset   = attribute.offset;
+      attributes.push_back(attributeDescription);
+    }
+  }
+  return attributes;
 }
 
 void VulkanVertexMesh::setPrimativeType(VERTEX_PRIMITIVE type) {
