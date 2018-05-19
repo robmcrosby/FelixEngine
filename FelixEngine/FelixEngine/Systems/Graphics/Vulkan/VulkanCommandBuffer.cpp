@@ -43,6 +43,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
   int bufferIndex = 0;
   for (GraphicTask &task : pass) {
     VulkanVertexMesh *mesh = static_cast<VulkanVertexMesh*>(task.mesh.get());
+    VulkanShaderProgram *shader = static_cast<VulkanShaderProgram*>(task.shader.get());
     VkCommandBuffer &commandBuffer = _commandBuffers[bufferIndex];
     
     // Define the Begin Info
@@ -83,7 +84,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     for (const auto &uniformMap : task.uniforms) {
       for (const auto &uniform : *uniformMap) {
         VulkanUniformBuffer *uniformBuffer = static_cast<VulkanUniformBuffer*>(uniform.second.buffer().get());
-        VkDescriptorSet descriptorSet = uniformBuffer->getDescriptorSet();
+        VkDescriptorSet descriptorSet = uniformBuffer->getDescriptorSet(shader);
         vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
       }
     }

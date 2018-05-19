@@ -14,19 +14,21 @@
 
 
 namespace fx {
+  class VulkanShaderProgram;
+  typedef std::map<VulkanShaderProgram*, VkDescriptorSet> DescriptorSetMap;
   
   /**
    *
    */
   class VulkanUniformBuffer: public UniformBuffer {
   private:
-    VkDescriptorSetLayout _descriptorSetLayout;
+    size_t _size;
     
     VkBuffer _uniformBuffer;
     VkDeviceMemory _uniformBufferMemory;
     
     VkDescriptorPool _descriptorPool;
-    VkDescriptorSet _descriptorSet;
+    DescriptorSetMap _descriptorSetMap;
     
   public:
     VulkanUniformBuffer();
@@ -35,8 +37,7 @@ namespace fx {
     virtual bool load(void *data, size_t size, BUFFER_COUNT count);
     virtual void update(void *data, size_t size);
     
-    VkDescriptorSetLayout getSetLayout() {return _descriptorSetLayout;}
-    VkDescriptorSet getDescriptorSet() {return _descriptorSet;}
+    VkDescriptorSet getDescriptorSet(VulkanShaderProgram *shader);
     
   private:
     bool createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
