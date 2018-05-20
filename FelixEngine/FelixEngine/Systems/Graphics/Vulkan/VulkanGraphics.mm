@@ -22,6 +22,7 @@
 #include "VulkanUniformBuffer.h"
 #include "VulkanTextureBuffer.h"
 #include "VulkanCommandPool.h"
+#include "VulkanBufferPool.h"
 
 
 using namespace std;
@@ -92,6 +93,11 @@ UniformBufferPtr VulkanGraphics::createUniformBuffer() {
 TextureBufferPtr VulkanGraphics::createTextureBuffer() {
   shared_ptr<VulkanTextureBuffer> texture = make_shared<VulkanTextureBuffer>();
   return texture;
+}
+
+BufferPoolPtr VulkanGraphics::createBufferPool() {
+  shared_ptr<VulkanBufferPool> pool = make_shared<VulkanBufferPool>();
+  return pool;
 }
 
 void VulkanGraphics::nextFrame() {

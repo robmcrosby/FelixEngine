@@ -28,6 +28,8 @@ namespace fx {
   private:
     VkPipelineShaderStageCreateInfo _shaderStages[SHADER_PART_COUNT];
     std::map<std::string, int> _vertexLocations;
+    std::map<std::string, int> _uniformBindings;
+    
     std::vector<UniformInput>  _vertexUniforms;
     std::vector<UniformInput>  _fragmentUniforms;
     
@@ -43,6 +45,7 @@ namespace fx {
     
     uint32_t getStageCount() const {return 2;}
     int getVertexLocation(const std::string &name) const;
+    int getUniformBinding(const std::string &name) const;
     VkPipelineShaderStageCreateInfo* getStages() {return _shaderStages;}
     
     uint32_t getDescriptorSetLayoutCount() const {return (uint32_t)_descriptorSetLayouts.size();}

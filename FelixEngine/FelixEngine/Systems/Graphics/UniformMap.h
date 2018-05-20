@@ -58,11 +58,12 @@ namespace fx {
   class UniformMap {
   private:
     std::map<std::string, Uniform> _map;
+    BufferPoolPtr _bufferPool;
     
   public:
     static UniformsPtr make() {return std::make_shared<UniformMap>();}
     
-    UniformMap() {}
+    UniformMap() {_bufferPool = Graphics::getInstance().createBufferPool();}
     ~UniformMap() {}
     
     std::map<std::string, Uniform>::iterator begin() {return _map.begin();}
@@ -79,6 +80,8 @@ namespace fx {
     Uniform& operator[](const std::string name) {
       return _map[name];
     }
+    
+    BufferPoolPtr bufferPool() {return _bufferPool;}
   };
 }
 

@@ -15,6 +15,7 @@
 #include "VulkanVertexMesh.h"
 #include "VulkanUniformBuffer.h"
 #include "VulkanTextureBuffer.h"
+#include "VulkanBufferPool.h"
 #include "VulkanCommandPool.h"
 
 
@@ -81,13 +82,13 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     VkDeviceSize *offsets = mesh->getVertexOffsets();
     vkCmdBindVertexBuffers(commandBuffer, 0, vertexBufferCount, vertexBuffers, offsets);
     
-    for (const auto &uniformMap : task.uniforms) {
-      for (const auto &uniform : *uniformMap) {
-        VulkanUniformBuffer *uniformBuffer = static_cast<VulkanUniformBuffer*>(uniform.second.buffer().get());
-        VkDescriptorSet descriptorSet = uniformBuffer->getDescriptorSet(shader);
-        vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, 1, &descriptorSet, 0, nullptr);
-      }
+    vector<VkDescriptorSet> descriptorSets;
+    for (auto &uniformMap : task.uniforms) {
+      VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(uniformMap->bufferPool().get());
+      bufferPool->addDescriptorSet(descriptorSets, shader, *uniformMap);
     }
+    uint32_t count = (uint32_t)descriptorSets.size();
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, count, descriptorSets.data(), 0, nullptr);
     
     // Draw the triangle
     mesh->drawToCommandBuffer(commandBuffer);

@@ -10,7 +10,7 @@
 
 
 Hello3D::Hello3D() {
-  _uniformMap = std::make_shared<fx::UniformMap>();
+  
 }
 
 Hello3D::~Hello3D() {
@@ -18,6 +18,9 @@ Hello3D::~Hello3D() {
 }
 
 void Hello3D::initalize() {
+  _uniformMap = std::make_shared<fx::UniformMap>();
+  _secondMap = std::make_shared<fx::UniformMap>();
+  
   _task.frame = _graphics->getFrameBuffer("MainWindow");
   _task.frame->setToWindow(0);
   _task.frame->addDepthBuffer();
@@ -39,9 +42,17 @@ void Hello3D::initalize() {
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
   
+  _matrix.y.y = -1.0f;
+  
   (*_uniformMap)["MVP"] = _mvpUniform;
   (*_uniformMap)["MVP"].useBuffer();
+  (*_uniformMap)["Test"] = _matrix;
+  (*_uniformMap)["Test"].useBuffer();
   _task.uniforms.push_back(_uniformMap);
+  
+//  (*_secondMap)["Test"] = _matrix;
+//  (*_secondMap)["Test"].useBuffer();
+//  _task.uniforms.push_back(_secondMap);
   
   _task.cullMode = fx::CULL_BACK;
   
@@ -59,6 +70,9 @@ void Hello3D::update(float td) {
   // Update the Model Uniforms
   (*_uniformMap)["MVP"] = _mvpUniform;
   _uniformMap->update();
+  
+  (*_secondMap)["Test"] = _matrix;
+  _secondMap->update();
   
   _graphics->addTask(_task);
 }

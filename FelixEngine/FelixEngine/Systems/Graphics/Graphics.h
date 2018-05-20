@@ -22,12 +22,14 @@ namespace fx {
   class VertexMesh;
   class UniformBuffer;
   class TextureBuffer;
+  class BufferPool;
   
   typedef std::shared_ptr<FrameBuffer>   FrameBufferPtr;
   typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
   typedef std::shared_ptr<VertexMesh>    VertexMeshPtr;
   typedef std::shared_ptr<UniformBuffer> UniformBufferPtr;
   typedef std::shared_ptr<TextureBuffer> TextureBufferPtr;
+  typedef std::shared_ptr<BufferPool>    BufferPoolPtr;
   
   class Graphics {
   protected:
@@ -51,6 +53,7 @@ namespace fx {
     virtual VertexMeshPtr    createVertexMesh()    = 0;
     virtual UniformBufferPtr createUniformBuffer() = 0;
     virtual TextureBufferPtr createTextureBuffer() = 0;
+    virtual BufferPoolPtr    createBufferPool()    = 0;
     
     virtual void nextFrame() = 0;
     virtual void addTask(const GraphicTask &task) = 0;

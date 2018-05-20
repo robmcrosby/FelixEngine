@@ -65,6 +65,12 @@ int VulkanShaderProgram::getVertexLocation(const std::string &name) const {
   return -1;
 }
 
+int VulkanShaderProgram::getUniformBinding(const std::string &name) const {
+  if (_uniformBindings.count(name) > 0)
+    return _uniformBindings.at(name);
+  return -1;
+}
+
 VkDescriptorSetLayout* VulkanShaderProgram::getDescriptorSetLayouts() {
   return _descriptorSetLayouts.size() == 0 ? nullptr : _descriptorSetLayouts.data();
 }
@@ -114,6 +120,8 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.name = resource.name;
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       _vertexUniforms.push_back(input);
+      
+      _uniformBindings[resource.name] = compiler.get_decoration(resource.id, spv::DecorationBinding);
     }
     
     // TODO: Get the Vertex Texture Bindings
@@ -125,6 +133,8 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.name = resource.name;
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       _fragmentUniforms.push_back(input);
+      
+      _uniformBindings[resource.name] = compiler.get_decoration(resource.id, spv::DecorationBinding);
     }
     
     // TODO: Get the Fragment Textures Bindings

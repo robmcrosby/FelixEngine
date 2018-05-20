@@ -105,6 +105,10 @@ namespace fx {
     
     virtual TextureBufferPtr getColorTexture(int index) = 0;
   };
+  
+  struct BufferPool {
+    virtual ~BufferPool() {}
+  };
 }
 
 

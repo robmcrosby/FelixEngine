@@ -19,8 +19,6 @@ VulkanUniformBuffer::VulkanUniformBuffer() {
   
   _uniformBuffer = VK_NULL_HANDLE;
   _uniformBufferMemory = VK_NULL_HANDLE;
-  
-  _descriptorPool = VK_NULL_HANDLE;
 }
 
 VulkanUniformBuffer::~VulkanUniformBuffer() {
@@ -28,9 +26,6 @@ VulkanUniformBuffer::~VulkanUniformBuffer() {
     vkDestroyBuffer(Vulkan::device, _uniformBuffer, nullptr);
   if (_uniformBufferMemory != VK_NULL_HANDLE)
     vkFreeMemory(Vulkan::device, _uniformBufferMemory, nullptr);
-  
-  if (_descriptorPool != VK_NULL_HANDLE)
-    vkDestroyDescriptorPool(Vulkan::device, _descriptorPool, nullptr);
 }
 
 bool VulkanUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
@@ -43,22 +38,6 @@ bool VulkanUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
   vkUnmapMemory(Vulkan::device, _uniformBufferMemory);
   
   _size = size;
-  
-  VkDescriptorPoolSize poolSize = {};
-  poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-  poolSize.descriptorCount = 1;
-  
-  VkDescriptorPoolCreateInfo poolInfo = {};
-  poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-  poolInfo.poolSizeCount = 1;
-  poolInfo.pPoolSizes = &poolSize;
-  poolInfo.maxSets = 1;
-  poolInfo.flags = 0;
-  
-  if (vkCreateDescriptorPool(Vulkan::device, &poolInfo, nullptr, &_descriptorPool) != VK_SUCCESS) {
-    cerr << "Failed to create descriptor pool" << endl;
-    return false;
-  }
   
   return true;
 }
@@ -74,41 +53,41 @@ void VulkanUniformBuffer::update(void *data, size_t size) {
   }
 }
 
-VkDescriptorSet VulkanUniformBuffer::getDescriptorSet(VulkanShaderProgram *shader) {
-  if (_descriptorSetMap.count(shader) == 0) {
-    VkDescriptorSetAllocateInfo allocInfo = {};
-    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool = _descriptorPool;
-    allocInfo.descriptorSetCount = shader->getDescriptorSetLayoutCount();
-    allocInfo.pSetLayouts = shader->getDescriptorSetLayouts();
-    
-    VkDescriptorSet descriptorSet;
-    if (vkAllocateDescriptorSets(Vulkan::device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
-      cerr << "Failed to allocate descriptor set" << endl;
-      assert(false);
-    }
-    _descriptorSetMap[shader] = descriptorSet;
-    
-    VkDescriptorBufferInfo bufferInfo = {};
-    bufferInfo.buffer = _uniformBuffer;
-    bufferInfo.offset = 0;
-    bufferInfo.range = _size;
-    
-    VkWriteDescriptorSet descriptorWrite = {};
-    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    descriptorWrite.dstSet = descriptorSet;
-    descriptorWrite.dstBinding = 0;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    descriptorWrite.descriptorCount = 1;
-    descriptorWrite.pBufferInfo = &bufferInfo;
-    descriptorWrite.pImageInfo = nullptr; // Optional
-    descriptorWrite.pTexelBufferView = nullptr; // Optional
-    
-    vkUpdateDescriptorSets(Vulkan::device, 1, &descriptorWrite, 0, nullptr);
-  }
-  return _descriptorSetMap.at(shader);
-}
+//VkDescriptorSet VulkanUniformBuffer::getDescriptorSet(VulkanShaderProgram *shader, uint32_t binding) {
+//  if (_descriptorSetMap.count(shader) == 0) {
+//    VkDescriptorSetAllocateInfo allocInfo = {};
+//    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+//    allocInfo.descriptorPool = _descriptorPool;
+//    allocInfo.descriptorSetCount = shader->getDescriptorSetLayoutCount();
+//    allocInfo.pSetLayouts = shader->getDescriptorSetLayouts();
+//
+//    VkDescriptorSet descriptorSet;
+//    if (vkAllocateDescriptorSets(Vulkan::device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
+//      cerr << "Failed to allocate descriptor set" << endl;
+//      assert(false);
+//    }
+//    _descriptorSetMap[shader] = descriptorSet;
+//
+//    VkDescriptorBufferInfo bufferInfo = {};
+//    bufferInfo.buffer = _uniformBuffer;
+//    bufferInfo.offset = 0;
+//    bufferInfo.range = _size;
+//
+//    VkWriteDescriptorSet descriptorWrite = {};
+//    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+//    descriptorWrite.dstSet = descriptorSet;
+//    descriptorWrite.dstBinding = 0;
+//    descriptorWrite.dstArrayElement = 0;
+//    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+//    descriptorWrite.descriptorCount = 1;
+//    descriptorWrite.pBufferInfo = &bufferInfo;
+//    descriptorWrite.pImageInfo = nullptr; // Optional
+//    descriptorWrite.pTexelBufferView = nullptr; // Optional
+//
+//    vkUpdateDescriptorSets(Vulkan::device, 1, &descriptorWrite, 0, nullptr);
+//  }
+//  return _descriptorSetMap.at(shader);
+//}
 
 bool VulkanUniformBuffer::createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
   VkBufferCreateInfo bufferInfo = {};
