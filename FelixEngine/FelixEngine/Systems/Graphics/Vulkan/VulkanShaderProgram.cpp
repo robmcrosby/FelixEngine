@@ -17,7 +17,8 @@ using namespace std;
 using namespace fx;
 
 VulkanShaderProgram::VulkanShaderProgram() {
-  _totalSets = 0;
+  _totalVertexSets = 0;
+  _totalFragmentSets = 0;
   
   _shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   _shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -35,16 +36,19 @@ VulkanShaderProgram::~VulkanShaderProgram() {
 }
 
 void VulkanShaderProgram::clearShaderModules() {
-//  _uniformBindings.clear();
-//  _uniformSets.clear();
-  _totalSets = 0;
+  _totalVertexSets = 0;
+  _totalFragmentSets = 0;
   
   _vertexUniforms.clear();
   _fragmentUniforms.clear();
   
-  for (auto &layout : _descriptorSetLayouts)
+  for (auto &layout : _vertexSetLayouts)
     vkDestroyDescriptorSetLayout(Vulkan::device, layout, nullptr);
-  _descriptorSetLayouts.clear();
+  _vertexSetLayouts.clear();
+  
+  for (auto &layout : _fragmentSetLayouts)
+    vkDestroyDescriptorSetLayout(Vulkan::device, layout, nullptr);
+  _fragmentSetLayouts.clear();
   
   if (_shaderStages[0].module != VK_NULL_HANDLE) {
     vkDestroyShaderModule(Vulkan::device, _shaderStages[0].module, nullptr);
@@ -71,13 +75,6 @@ int VulkanShaderProgram::getVertexLocation(const std::string &name) const {
   return -1;
 }
 
-int VulkanShaderProgram::getUniformBinding(const std::string &name) const {
-  int binding = getVertexUniformBinding(name);
-  if (binding == -1)
-    binding = getFragmentUniformBinding(name);
-  return binding;
-}
-
 int VulkanShaderProgram::getVertexUniformBinding(const std::string &name) const {
   for (const auto &uniform : _vertexUniforms) {
     if (name == uniform.name)
@@ -94,8 +91,18 @@ int VulkanShaderProgram::getFragmentUniformBinding(const std::string &name) cons
   return -1;
 }
 
-VkDescriptorSetLayout* VulkanShaderProgram::getDescriptorSetLayouts() {
-  return _descriptorSetLayouts.size() == 0 ? nullptr : _descriptorSetLayouts.data();
+VkDescriptorSetLayout* VulkanShaderProgram::getVertexSetLayouts() {
+  return _vertexSetLayouts.size() == 0 ? nullptr : _vertexSetLayouts.data();
+}
+
+VkDescriptorSetLayout* VulkanShaderProgram::getFragmentSetLayouts() {
+  return _fragmentSetLayouts.size() == 0 ? nullptr : _fragmentSetLayouts.data();
+}
+
+vector<VkDescriptorSetLayout> VulkanShaderProgram::getDescriptorSetLayouts() const {
+  vector<VkDescriptorSetLayout> combined = _vertexSetLayouts;
+  combined.insert(combined.end(), _fragmentSetLayouts.begin(), _fragmentSetLayouts.end());
+  return combined;
 }
 
 string VulkanShaderProgram::getShaderFileName(const string &name) const {
@@ -144,7 +151,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _vertexUniforms.push_back(input);
-      _totalSets = _totalSets > input.set+1 ? _totalSets : input.set+1;
+      _totalVertexSets = _totalVertexSets > input.set+1 ? _totalVertexSets : input.set+1;
     }
     
     // TODO: Get the Vertex Texture Bindings
@@ -157,7 +164,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _fragmentUniforms.push_back(input);
-      _totalSets = _totalSets > input.set+1 ? _totalSets : input.set+1;
+      _totalFragmentSets = _totalFragmentSets > input.set+1 ? _totalFragmentSets : input.set+1;
     }
     
     // TODO: Get the Fragment Textures Bindings
@@ -165,7 +172,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
 }
 
 bool VulkanShaderProgram::createDescriptorSetLayouts() {
-  vector<vector<VkDescriptorSetLayoutBinding> > bindingSets(_totalSets);
+  vector<vector<VkDescriptorSetLayoutBinding> > vertexBindingSets(_totalVertexSets);
   for (auto &uniform : _vertexUniforms) {
     VkDescriptorSetLayoutBinding binding = {};
     binding.binding = uniform.binding;
@@ -173,19 +180,9 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
     binding.descriptorCount = 1;
     binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
     binding.pImmutableSamplers = nullptr; // Optional
-    bindingSets[uniform.set].push_back(binding);
+    vertexBindingSets[uniform.set].push_back(binding);
   }
-  for (auto &uniform : _fragmentUniforms) {
-    VkDescriptorSetLayoutBinding binding = {};
-    binding.binding = uniform.binding;
-    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    binding.descriptorCount = 1;
-    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-    binding.pImmutableSamplers = nullptr; // Optional
-    bindingSets[uniform.set].push_back(binding);
-  }
-  
-  for (auto &bindingSet : bindingSets) {
+  for (auto &bindingSet : vertexBindingSets) {
     VkDescriptorSetLayoutCreateInfo layoutInfo = {};
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     layoutInfo.bindingCount = (uint32_t)bindingSet.size();
@@ -196,7 +193,32 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
       cerr << "Failed to create descriptor set layout" << endl;
       return false;
     }
-    _descriptorSetLayouts.push_back(layout);
+    _vertexSetLayouts.push_back(layout);
   }
+  
+  vector<vector<VkDescriptorSetLayoutBinding> > fragmentBindingSets(_totalFragmentSets);
+  for (auto &uniform : _fragmentUniforms) {
+    VkDescriptorSetLayoutBinding binding = {};
+    binding.binding = uniform.binding;
+    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.descriptorCount = 1;
+    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    binding.pImmutableSamplers = nullptr; // Optional
+    fragmentBindingSets[uniform.set].push_back(binding);
+  }
+  for (auto &bindingSet : fragmentBindingSets) {
+    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layoutInfo.bindingCount = (uint32_t)bindingSet.size();
+    layoutInfo.pBindings = bindingSet.size() == 0 ? nullptr : bindingSet.data();
+    
+    VkDescriptorSetLayout layout;
+    if (vkCreateDescriptorSetLayout(Vulkan::device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
+      cerr << "Failed to create descriptor set layout" << endl;
+      return false;
+    }
+    _fragmentSetLayouts.push_back(layout);
+  }
+  
   return true;
 }

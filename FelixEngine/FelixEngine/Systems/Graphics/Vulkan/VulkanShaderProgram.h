@@ -32,9 +32,11 @@ namespace fx {
     
     std::vector<UniformInput>  _vertexUniforms;
     std::vector<UniformInput>  _fragmentUniforms;
-    int _totalSets;
+    int _totalVertexSets;
+    int _totalFragmentSets;
     
-    std::vector<VkDescriptorSetLayout> _descriptorSetLayouts;
+    std::vector<VkDescriptorSetLayout> _vertexSetLayouts;
+    std::vector<VkDescriptorSetLayout> _fragmentSetLayouts;
     
   public:
     VulkanShaderProgram();
@@ -45,17 +47,22 @@ namespace fx {
     void clearShaderModules();
     
     uint32_t getStageCount() const {return 2;}
-    uint32_t getDescriptorSetCount() const {return _totalSets;}
-    int getVertexLocation(const std::string &name) const;
+    uint32_t getVertexSetCount() const {return _totalVertexSets;}
+    uint32_t getFragmentSetCount() const {return _totalFragmentSets;}
     
-    int getUniformBinding(const std::string &name) const;
+    int getVertexLocation(const std::string &name) const;
     int getVertexUniformBinding(const std::string &name) const;
     int getFragmentUniformBinding(const std::string &name) const;
     
     VkPipelineShaderStageCreateInfo* getStages() {return _shaderStages;}
     
-    uint32_t getDescriptorSetLayoutCount() const {return (uint32_t)_descriptorSetLayouts.size();}
-    VkDescriptorSetLayout* getDescriptorSetLayouts();
+    uint32_t getVertexSetLayoutCount() const {return (uint32_t)_vertexSetLayouts.size();}
+    VkDescriptorSetLayout* getVertexSetLayouts();
+    
+    uint32_t getFragmentSetLayoutCount() const {return (uint32_t)_fragmentSetLayouts.size();}
+    VkDescriptorSetLayout* getFragmentSetLayouts();
+    
+    std::vector<VkDescriptorSetLayout> getDescriptorSetLayouts() const;
     
   private:
     std::string getShaderFileName(const std::string &name) const;

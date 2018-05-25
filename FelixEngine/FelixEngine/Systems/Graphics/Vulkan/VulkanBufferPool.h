@@ -35,6 +35,7 @@ namespace fx {
     
   private:
     void clearDescriptorSets();
+    bool isVertexUniform(VulkanShaderProgram *shader, UniformMap &map);
   };
 }
 

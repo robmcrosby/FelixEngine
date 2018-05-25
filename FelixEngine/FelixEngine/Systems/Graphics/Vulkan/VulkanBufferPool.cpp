@@ -25,16 +25,17 @@ VulkanBufferPool::~VulkanBufferPool() {
 
 void VulkanBufferPool::addDescriptorSet(vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, UniformMap &map) {
   if (_descriptorSetMap.count(shader) == 0) {
+    bool isVertex = isVertexUniform(shader, map);
     
     VkDescriptorPoolSize poolSize = {};
     poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    poolSize.descriptorCount = shader->getDescriptorSetLayoutCount();
+    poolSize.descriptorCount = isVertex ? shader->getVertexSetLayoutCount() : shader->getFragmentSetLayoutCount();
     
     VkDescriptorPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
-    poolInfo.maxSets = shader->getDescriptorSetCount();
+    poolInfo.maxSets = isVertex ? shader->getVertexSetCount() : shader->getFragmentSetCount();
     poolInfo.flags = 0;
     
     VkDescriptorPool descriptorPool;
@@ -48,8 +49,8 @@ void VulkanBufferPool::addDescriptorSet(vector<VkDescriptorSet> &descriptorSets,
     VkDescriptorSetAllocateInfo allocInfo = {};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     allocInfo.descriptorPool = descriptorPool;
-    allocInfo.descriptorSetCount = shader->getDescriptorSetLayoutCount();
-    allocInfo.pSetLayouts = shader->getDescriptorSetLayouts();
+    allocInfo.descriptorSetCount = isVertex ? shader->getVertexSetLayoutCount() : shader->getFragmentSetLayoutCount();
+    allocInfo.pSetLayouts = isVertex ? shader->getVertexSetLayouts() : shader->getFragmentSetLayouts();
     
     VkDescriptorSet descriptorSet;
     if (vkAllocateDescriptorSets(Vulkan::device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
@@ -93,4 +94,12 @@ void VulkanBufferPool::clearDescriptorSets() {
     vkDestroyDescriptorPool(Vulkan::device, pool.second, nullptr);
   _descriptorPoolMap.clear();
   _descriptorSetMap.clear();
+}
+
+bool VulkanBufferPool::isVertexUniform(VulkanShaderProgram *shader, UniformMap &map) {
+  for (auto &uniform : map) {
+    if (shader->getVertexUniformBinding(uniform.first) >= 0)
+      return true;
+  }
+  return false;
 }

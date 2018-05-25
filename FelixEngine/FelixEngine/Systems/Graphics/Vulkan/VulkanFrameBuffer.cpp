@@ -155,9 +155,10 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     
     // Define Pipeline Layout for Constant Values
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
+    vector<VkDescriptorSetLayout> descriptorSetLayouts = shader->getDescriptorSetLayouts();
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    pipelineLayoutInfo.setLayoutCount = shader->getDescriptorSetLayoutCount();
-    pipelineLayoutInfo.pSetLayouts = shader->getDescriptorSetLayouts();
+    pipelineLayoutInfo.setLayoutCount = (uint32_t)descriptorSetLayouts.size();
+    pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.size() == 0 ? nullptr : descriptorSetLayouts.data();
     pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
     pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
     

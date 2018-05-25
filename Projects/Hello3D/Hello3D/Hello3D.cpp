@@ -54,10 +54,10 @@ void Hello3D::initalize() {
 //  (*_secondMap)["Test"].useBuffer();
 //  _task.uniforms.push_back(_secondMap);
   
-//  _color = fx::vec4(1.0, 0.0, 0.0, 1.0);
-//  (*_secondMap)["Color"] = _color;
-//  (*_secondMap)["Color"].useBuffer();
-//  _task.uniforms.push_back(_secondMap);
+  _color = fx::vec4(1.0, 0.0, 0.0, 1.0);
+  (*_secondMap)["Color"] = _color;
+  (*_secondMap)["Color"].useBuffer();
+  _task.uniforms.push_back(_secondMap);
   
   _task.cullMode = fx::CULL_BACK;
   
@@ -77,8 +77,8 @@ void Hello3D::update(float td) {
   _uniformMap->update();
   
   //(*_secondMap)["Test"] = _matrix;
-//  (*_secondMap)["Color"] = _color;
-//  _secondMap->update();
+  (*_secondMap)["Color"] = _color;
+  _secondMap->update();
   
   _graphics->addTask(_task);
 }
