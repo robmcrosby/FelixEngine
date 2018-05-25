@@ -36,7 +36,7 @@ namespace fx {
     
     //VkDescriptorSet getDescriptorSet(VulkanShaderProgram *shader, uint32_t binding);
     VkBuffer getVulkanBuffer() {return _uniformBuffer;}
-    uint32_t getVulkanBufferSize() {return _size;}
+    uint32_t getVulkanBufferSize() {return (uint32_t)_size;}
     
   private:
     bool createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);

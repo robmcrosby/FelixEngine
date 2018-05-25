@@ -34,7 +34,7 @@ void VulkanBufferPool::addDescriptorSet(vector<VkDescriptorSet> &descriptorSets,
     poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
     poolInfo.poolSizeCount = 1;
     poolInfo.pPoolSizes = &poolSize;
-    poolInfo.maxSets = 1;
+    poolInfo.maxSets = shader->getDescriptorSetCount();
     poolInfo.flags = 0;
     
     VkDescriptorPool descriptorPool;

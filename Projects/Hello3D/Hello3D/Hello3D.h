@@ -28,6 +28,7 @@ private:
   MVPUniform _mvpUniform;
   
   fx::mat4 _matrix;
+  fx::vec4 _color;
   
 public:
   Hello3D();
