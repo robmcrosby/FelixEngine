@@ -77,9 +77,22 @@ namespace fx {
     
     static VkFormat getFloatFormatForSize(size_t size);
     
-    static VkBuffer createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkSharingMode sharing = VK_SHARING_MODE_EXCLUSIVE);
-    static VkDeviceMemory allocateMemory(VkBuffer buffer, uint32_t properties);
-    static uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties);
+    static VkBuffer createBuffer(size_t size, VkBufferUsageFlags usage, VkSharingMode sharing = VK_SHARING_MODE_EXCLUSIVE);
+    static VkDeviceMemory allocateMemory(VkBuffer buffer, VkMemoryPropertyFlags properties);
+    
+    static VkImage createImage(size_t width, size_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage);
+    static VkDeviceMemory allocateImage(VkImage image, VkMemoryPropertyFlags properties);
+    
+    static uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+    
+    static bool upload(VkDeviceMemory memory, const void *data, size_t size);
+    
+    static VkCommandBuffer beginSingleTimeCommands();
+    static void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+    
+    static void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
+    static void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+    static void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
   };
 }
 

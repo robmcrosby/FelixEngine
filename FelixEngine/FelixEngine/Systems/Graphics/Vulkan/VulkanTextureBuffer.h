@@ -10,6 +10,7 @@
 #define VulkanTextureBuffer_h
 
 #include "GraphicResources.h"
+#include <vulkan/vulkan.h>
 
 
 namespace fx {
@@ -19,6 +20,8 @@ namespace fx {
    */
   class VulkanTextureBuffer: public TextureBuffer {
   private:
+    VkImage _textureImage;
+    VkDeviceMemory _textureImageMemory;
     
   public:
     VulkanTextureBuffer();
@@ -30,6 +33,9 @@ namespace fx {
     
     virtual void setDefaultSampler(SamplerState state);
     virtual SamplerState defaultSampler() const;
+    
+  private:
+    void clearTexture();
   };
 }
 

@@ -32,11 +32,7 @@ bool VulkanUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
   if (!createUniformBuffer(size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT))
     return false;
   
-  void* deviceMemPtr;
-  vkMapMemory(Vulkan::device, _uniformBufferMemory, 0, size, 0, &deviceMemPtr);
-  memcpy(deviceMemPtr, data, size);
-  vkUnmapMemory(Vulkan::device, _uniformBufferMemory);
-  
+  Vulkan::upload(_uniformBufferMemory, data, size);
   _size = size;
   
   return true;
@@ -44,11 +40,7 @@ bool VulkanUniformBuffer::load(void *data, size_t size, BUFFER_COUNT count) {
 
 void VulkanUniformBuffer::update(void *data, size_t size) {
   if (_uniformBufferMemory != VK_NULL_HANDLE) {
-    void* deviceMemPtr;
-    vkMapMemory(Vulkan::device, _uniformBufferMemory, 0, size, 0, &deviceMemPtr);
-    memcpy(deviceMemPtr, data, size);
-    vkUnmapMemory(Vulkan::device, _uniformBufferMemory);
-    
+    Vulkan::upload(_uniformBufferMemory, data, size);
     _size = size;
   }
 }

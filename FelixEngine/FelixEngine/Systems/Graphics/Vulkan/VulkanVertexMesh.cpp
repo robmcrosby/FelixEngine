@@ -163,10 +163,7 @@ bool VulkanVertexMesh::createVertexBuffer(const fx::VertexBuffer &vertices) {
   VkDeviceMemory bufferMemory = Vulkan::allocateMemory(vertexBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
   
   // Copy the Vertex Data to the Vertex Buffer
-  void* deviceMemPtr;
-  vkMapMemory(Vulkan::device, bufferMemory, 0, size, 0, &deviceMemPtr);
-  memcpy(deviceMemPtr, vertices.data(), (size_t)size);
-  vkUnmapMemory(Vulkan::device, bufferMemory);
+  Vulkan::upload(bufferMemory, vertices.data(), size);
   
   // Save the buffer and memory handles
   _vertexBuffers.push_back(vertexBuffer);
