@@ -62,6 +62,11 @@ void VulkanBufferPool::addDescriptorSet(vector<VkDescriptorSet> &descriptorSets,
     
     vector<VkDescriptorBufferInfo> bufferInfos;
     for (auto &uniform : map) {
+      // Create any missing uniform buffers
+      if (!uniform.second.usingBuffer())
+        uniform.second.useBuffer();
+      
+      // Downcast to a VulkanUniformBuffer
       VulkanUniformBuffer *uniformBuffer = static_cast<VulkanUniformBuffer*>(uniform.second.buffer().get());
       
       VkDescriptorBufferInfo bufferInfo = {};

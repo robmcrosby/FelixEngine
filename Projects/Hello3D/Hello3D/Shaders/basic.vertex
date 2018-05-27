@@ -8,10 +8,6 @@ layout(set = 0, binding = 0) uniform MVP {
   vec4 rotation;
 };
 
-layout(set = 0, binding = 1) uniform Test {
-  mat4 test;
-};
-
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 normal;
 
@@ -21,8 +17,13 @@ out gl_PerVertex {
 
 layout(location = 0) out vec3 normal_out;
 
+
+vec3 rotate_quat(vec4 rot, vec3 v) {
+  return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
+}
+
 void main() {
-  gl_Position = test * projection * view * model * vec4(position, 1.0);
+  gl_Position = projection * view * model * vec4(position, 1.0);
   gl_Position.y = -gl_Position.y;
-  normal_out = normal;
+  normal_out = rotate_quat(rotation, normal);
 }

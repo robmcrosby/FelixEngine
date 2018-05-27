@@ -24,11 +24,7 @@ class Hello3D: public fx::Application {
 private:
   fx::GraphicTask _task;
   fx::UniformsPtr _uniformMap;
-  fx::UniformsPtr _secondMap;
   MVPUniform _mvpUniform;
-  
-  fx::mat4 _matrix;
-  fx::vec4 _color;
   
 public:
   Hello3D();
