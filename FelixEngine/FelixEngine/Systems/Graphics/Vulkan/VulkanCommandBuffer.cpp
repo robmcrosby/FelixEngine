@@ -90,7 +90,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     uint32_t count = (uint32_t)descriptorSets.size();
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, count, descriptorSets.data(), 0, nullptr);
     
-    // Draw the triangle
+    // Draw the mesh
     mesh->drawToCommandBuffer(commandBuffer);
     
     // Finish the Render Pass

@@ -59,6 +59,8 @@ namespace fx {
     VkBuffer* getVertexBuffers() {return _vertexBuffers.data();}
     VkDeviceSize* getVertexOffsets() {return _vertexOffsets.data();}
     
+    VkPrimitiveTopology getPrimitiveTopology() const;
+    
     void drawToCommandBuffer(VkCommandBuffer commandBuffer);
     
     void clearMeshData();

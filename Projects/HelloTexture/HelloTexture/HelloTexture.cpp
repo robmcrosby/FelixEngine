@@ -9,8 +9,7 @@
 #include "HelloTexture.h"
 
 HelloTexture::HelloTexture() {
-  _uniformMap = std::make_shared<fx::UniformMap>();
-  _textureMap = std::make_shared<fx::TextureMap>();
+  
 }
 
 HelloTexture::~HelloTexture() {
@@ -31,6 +30,9 @@ void HelloTexture::initalize() {
     1.0f, 1.0f,
     1.0f, 0.0f
   };
+  
+  _uniformMap = std::make_shared<fx::UniformMap>();
+  _textureMap = std::make_shared<fx::TextureMap>();
   
   _task.frame = _graphics->getFrameBuffer("MainWindow");
   _task.frame->setToWindow(0);

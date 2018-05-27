@@ -88,6 +88,10 @@ vector<VkVertexInputAttributeDescription> VulkanVertexMesh::getAttributeDescript
   return attributes;
 }
 
+VkPrimitiveTopology VulkanVertexMesh::getPrimitiveTopology() const {
+  return _primitiveType == VERTEX_TRIANGLES ? VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST : VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+}
+
 void VulkanVertexMesh::setPrimativeType(VERTEX_PRIMITIVE type) {
   _primitiveType = type;
 }
