@@ -76,6 +76,10 @@ namespace fx {
     static std::vector<VkSurfaceFormatKHR> getPhysicalDeviceSurfaceFormats(VkPhysicalDevice device, VkSurfaceKHR surface);
     
     static VkFormat getFloatFormatForSize(size_t size);
+    
+    static VkBuffer createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkSharingMode sharing = VK_SHARING_MODE_EXCLUSIVE);
+    static VkDeviceMemory allocateMemory(VkBuffer buffer, uint32_t properties);
+    static uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties);
   };
 }
 

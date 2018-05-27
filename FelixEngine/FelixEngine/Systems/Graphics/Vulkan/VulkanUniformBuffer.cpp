@@ -53,82 +53,8 @@ void VulkanUniformBuffer::update(void *data, size_t size) {
   }
 }
 
-//VkDescriptorSet VulkanUniformBuffer::getDescriptorSet(VulkanShaderProgram *shader, uint32_t binding) {
-//  if (_descriptorSetMap.count(shader) == 0) {
-//    VkDescriptorSetAllocateInfo allocInfo = {};
-//    allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-//    allocInfo.descriptorPool = _descriptorPool;
-//    allocInfo.descriptorSetCount = shader->getDescriptorSetLayoutCount();
-//    allocInfo.pSetLayouts = shader->getDescriptorSetLayouts();
-//
-//    VkDescriptorSet descriptorSet;
-//    if (vkAllocateDescriptorSets(Vulkan::device, &allocInfo, &descriptorSet) != VK_SUCCESS) {
-//      cerr << "Failed to allocate descriptor set" << endl;
-//      assert(false);
-//    }
-//    _descriptorSetMap[shader] = descriptorSet;
-//
-//    VkDescriptorBufferInfo bufferInfo = {};
-//    bufferInfo.buffer = _uniformBuffer;
-//    bufferInfo.offset = 0;
-//    bufferInfo.range = _size;
-//
-//    VkWriteDescriptorSet descriptorWrite = {};
-//    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-//    descriptorWrite.dstSet = descriptorSet;
-//    descriptorWrite.dstBinding = 0;
-//    descriptorWrite.dstArrayElement = 0;
-//    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-//    descriptorWrite.descriptorCount = 1;
-//    descriptorWrite.pBufferInfo = &bufferInfo;
-//    descriptorWrite.pImageInfo = nullptr; // Optional
-//    descriptorWrite.pTexelBufferView = nullptr; // Optional
-//
-//    vkUpdateDescriptorSets(Vulkan::device, 1, &descriptorWrite, 0, nullptr);
-//  }
-//  return _descriptorSetMap.at(shader);
-//}
-
 bool VulkanUniformBuffer::createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties) {
-  VkBufferCreateInfo bufferInfo = {};
-  bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-  bufferInfo.size = size;
-  bufferInfo.usage = usage;
-  bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-  
-  if (vkCreateBuffer(Vulkan::device, &bufferInfo, nullptr, &_uniformBuffer) != VK_SUCCESS) {
-    cerr << "Failed to create uniform buffer" << endl;
-    return false;
-  }
-  
-  VkMemoryRequirements memRequirements;
-  vkGetBufferMemoryRequirements(Vulkan::device, _uniformBuffer, &memRequirements);
-  
-  VkMemoryAllocateInfo allocInfo = {};
-  allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-  allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
-  
-  if (vkAllocateMemory(Vulkan::device, &allocInfo, nullptr, &_uniformBufferMemory) != VK_SUCCESS) {
-    cerr << "failed to allocate buffer memory!" << endl;
-  }
-  
-  vkBindBufferMemory(Vulkan::device, _uniformBuffer, _uniformBufferMemory, 0);
-  return true;
-}
-
-uint32_t VulkanUniformBuffer::findMemoryType(uint32_t typeFilter, uint32_t properties) const {
-  VkPhysicalDeviceMemoryProperties memProperties;
-  vkGetPhysicalDeviceMemoryProperties(Vulkan::physicalDevice, &memProperties);
-  
-  for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
-    uint32_t flags = (uint32_t)memProperties.memoryTypes[i].propertyFlags;
-    if ((typeFilter & (1 << i)) && (flags & properties) == properties) {
-      return i;
-    }
-  }
-  
-  cerr << "Failed to find suitable memory type" << endl;
-  assert(false);
-  return 0;
+  _uniformBuffer = Vulkan::createBuffer(size, usage);
+  _uniformBufferMemory = Vulkan::allocateMemory(_uniformBuffer, properties);
+  return _uniformBuffer != VK_NULL_HANDLE && _uniformBufferMemory != VK_NULL_HANDLE;
 }

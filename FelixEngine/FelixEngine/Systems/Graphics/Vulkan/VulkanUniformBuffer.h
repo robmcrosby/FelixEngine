@@ -24,9 +24,6 @@ namespace fx {
     VkBuffer _uniformBuffer;
     VkDeviceMemory _uniformBufferMemory;
     
-    //VkDescriptorPool _descriptorPool;
-    //DescriptorSetMap _descriptorSetMap;
-    
   public:
     VulkanUniformBuffer();
     virtual ~VulkanUniformBuffer();
@@ -34,13 +31,11 @@ namespace fx {
     virtual bool load(void *data, size_t size, BUFFER_COUNT count);
     virtual void update(void *data, size_t size);
     
-    //VkDescriptorSet getDescriptorSet(VulkanShaderProgram *shader, uint32_t binding);
     VkBuffer getVulkanBuffer() {return _uniformBuffer;}
     uint32_t getVulkanBufferSize() {return (uint32_t)_size;}
     
   private:
     bool createUniformBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties);
-    uint32_t findMemoryType(uint32_t typeFilter, uint32_t properties) const;
   };
 }
 

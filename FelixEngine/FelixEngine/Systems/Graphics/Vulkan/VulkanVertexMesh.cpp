@@ -154,69 +154,24 @@ void VulkanVertexMesh::clearBuffers() {
   _vertexMemory.clear();
 }
 
-uint32_t VulkanVertexMesh::findMemoryType(uint32_t typeFilter, uint32_t properties) const {
-  VkPhysicalDeviceMemoryProperties memProperties;
-  vkGetPhysicalDeviceMemoryProperties(Vulkan::physicalDevice, &memProperties);
-  
-  for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
-    uint32_t flags = (uint32_t)memProperties.memoryTypes[i].propertyFlags;
-    if ((typeFilter & (1 << i)) && (flags & properties) == properties) {
-      return i;
-    }
-  }
-  
-  cerr << "Failed to find suitable memory type" << endl;
-  assert(false);
-  return 0;
-}
-
 bool VulkanVertexMesh::createVertexBuffer(const fx::VertexBuffer &vertices) {
   // Create the Vertex Buffer
-  VkBufferCreateInfo bufferInfo = {};
-  bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-  bufferInfo.pNext = nullptr;
-  bufferInfo.size = vertices.size() * sizeof(float);
-  bufferInfo.usage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
-  bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-  bufferInfo.queueFamilyIndexCount = 0;
-  bufferInfo.pQueueFamilyIndices = nullptr;
-  bufferInfo.flags = 0;
+  VkDeviceSize size = vertices.size() * sizeof(float);
+  VkBuffer vertexBuffer = Vulkan::createBuffer(size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
   
-  VkBuffer vertexBuffer;
-  if (vkCreateBuffer(Vulkan::device, &bufferInfo, nullptr, &vertexBuffer) != VK_SUCCESS) {
-    cerr << "failed to create vertex buffer" << endl;
-    return false;
-  }
-  
-  // Get Memory Requirements
-  VkMemoryRequirements memRequirements;
-  vkGetBufferMemoryRequirements(Vulkan::device, vertexBuffer, &memRequirements);
-  
-  VkMemoryAllocateInfo allocInfo = {};
-  allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-  allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-  
-  // Allocate Buffer Memory
-  VkDeviceMemory vertexBufferMemory;
-  if (vkAllocateMemory(Vulkan::device, &allocInfo, nullptr, &vertexBufferMemory) != VK_SUCCESS) {
-    cerr << "failed to allocate vertex buffer memory!";
-    return false;
-  }
-  
-  // Bind the Vertex Buffer with the Buffer Memory
-  vkBindBufferMemory(Vulkan::device, vertexBuffer, vertexBufferMemory, 0);
+  // Allocate the Vertex Buffer Memory
+  VkDeviceMemory bufferMemory = Vulkan::allocateMemory(vertexBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
   
   // Copy the Vertex Data to the Vertex Buffer
   void* deviceMemPtr;
-  vkMapMemory(Vulkan::device, vertexBufferMemory, 0, bufferInfo.size, 0, &deviceMemPtr);
-  memcpy(deviceMemPtr, vertices.data(), (size_t)bufferInfo.size);
-  vkUnmapMemory(Vulkan::device, vertexBufferMemory);
+  vkMapMemory(Vulkan::device, bufferMemory, 0, size, 0, &deviceMemPtr);
+  memcpy(deviceMemPtr, vertices.data(), (size_t)size);
+  vkUnmapMemory(Vulkan::device, bufferMemory);
   
   // Save the buffer and memory handles
   _vertexBuffers.push_back(vertexBuffer);
   _vertexOffsets.push_back(0);
-  _vertexMemory.push_back(vertexBufferMemory);
+  _vertexMemory.push_back(bufferMemory);
   
   return true;
 }

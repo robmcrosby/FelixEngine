@@ -28,11 +28,12 @@ namespace fx {
   class TextureMap {
   private:
     std::vector<Texture> _textures;
+    BufferPoolPtr _bufferPool;
     
   public:
     static TexturesPtr make() {return std::make_shared<TextureMap>();}
     
-    TextureMap() {}
+    TextureMap() {_bufferPool = Graphics::getInstance().createBufferPool();}
     ~TextureMap() {}
     
     std::vector<Texture>::iterator begin() {return _textures.begin();}

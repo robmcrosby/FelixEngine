@@ -409,3 +409,60 @@ VkFormat Vulkan::getFloatFormatForSize(size_t size) {
       return VK_FORMAT_UNDEFINED;
   }
 }
+
+VkBuffer Vulkan::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkSharingMode sharing) {
+  VkBufferCreateInfo bufferInfo = {};
+  bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+  bufferInfo.pNext = nullptr;
+  bufferInfo.size = size;
+  bufferInfo.usage = usage;
+  bufferInfo.sharingMode = sharing;
+  bufferInfo.queueFamilyIndexCount = 0;
+  bufferInfo.pQueueFamilyIndices = nullptr;
+  bufferInfo.flags = 0;
+  
+  VkBuffer buffer = VK_NULL_HANDLE;
+  if (vkCreateBuffer(Vulkan::device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+    cerr << "Failed to create Vulkan Buffer" << endl;
+    assert(false);
+  }
+  return buffer;
+}
+
+VkDeviceMemory Vulkan::allocateMemory(VkBuffer buffer, uint32_t properties) {
+  // Get Memory Requirements
+  VkMemoryRequirements memRequirements;
+  vkGetBufferMemoryRequirements(Vulkan::device, buffer, &memRequirements);
+  
+  VkMemoryAllocateInfo allocInfo = {};
+  allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+  allocInfo.allocationSize = memRequirements.size;
+  allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+  
+  // Allocate Buffer Memory
+  VkDeviceMemory memory = VK_NULL_HANDLE;
+  if (vkAllocateMemory(Vulkan::device, &allocInfo, nullptr, &memory) != VK_SUCCESS) {
+    cerr << "Failed to Allocate Vulkan Buffer Memory";
+    assert(false);
+  }
+  
+  // Bind the Vertex Buffer with the Buffer Memory
+  vkBindBufferMemory(device, buffer, memory, 0);
+  return memory;
+}
+
+uint32_t Vulkan::findMemoryType(uint32_t typeFilter, uint32_t properties) {
+  VkPhysicalDeviceMemoryProperties memProperties;
+  vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
+  
+  for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+    uint32_t flags = (uint32_t)memProperties.memoryTypes[i].propertyFlags;
+    if ((typeFilter & (1 << i)) && (flags & properties) == properties) {
+      return i;
+    }
+  }
+  
+  cerr << "Failed to find suitable memory type" << endl;
+  assert(false);
+  return 0;
+}
