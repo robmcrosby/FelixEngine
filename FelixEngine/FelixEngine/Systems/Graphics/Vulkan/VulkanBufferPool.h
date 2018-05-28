@@ -11,6 +11,7 @@
 
 #include "GraphicResources.h"
 #include "UniformMap.h"
+#include "TextureMap.h"
 #include <vulkan/vulkan.h>
 
 
@@ -32,6 +33,7 @@ namespace fx {
     virtual ~VulkanBufferPool();
     
     void addDescriptorSet(std::vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, UniformMap &map);
+    void addDescriptorSet(std::vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, TextureMap &map);
     
   private:
     void clearDescriptorSets();

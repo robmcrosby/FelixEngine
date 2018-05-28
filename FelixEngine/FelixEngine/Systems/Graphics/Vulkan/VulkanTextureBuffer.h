@@ -24,6 +24,8 @@ namespace fx {
     VkDeviceMemory _textureImageMemory;
     VkImageView    _textureImageView;
     
+    static std::map<int, VkSampler> samplerMap;
+    
   public:
     VulkanTextureBuffer();
     virtual ~VulkanTextureBuffer();
@@ -34,6 +36,11 @@ namespace fx {
     
     virtual void setDefaultSampler(SamplerState state);
     virtual SamplerState defaultSampler() const;
+    
+    VkImageView getImageView() const {return _textureImageView;}
+    
+    static VkSampler getSamplerForState(const SamplerState &state);
+    static VkSamplerAddressMode getAddressMode(COORD_TYPE type);
     
   private:
     void clearTexture();

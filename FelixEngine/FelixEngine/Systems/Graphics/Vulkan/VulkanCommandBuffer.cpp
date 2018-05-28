@@ -87,6 +87,10 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
       VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(uniformMap->bufferPool().get());
       bufferPool->addDescriptorSet(descriptorSets, shader, *uniformMap);
     }
+    if (task.textures) {
+      VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(task.textures->bufferPool().get());
+      bufferPool->addDescriptorSet(descriptorSets, shader, *task.textures);
+    }
     uint32_t count = (uint32_t)descriptorSets.size();
     vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, count, descriptorSets.data(), 0, nullptr);
     

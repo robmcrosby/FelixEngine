@@ -22,6 +22,12 @@ namespace fx {
     uint32_t set;
   };
   
+  struct TextureInput {
+    std::string name;
+    uint32_t binding;
+    uint32_t set;
+  };
+  
   /**
    *
    */
@@ -30,10 +36,13 @@ namespace fx {
     VkPipelineShaderStageCreateInfo _shaderStages[SHADER_PART_COUNT];
     std::map<std::string, int> _vertexLocations;
     
-    std::vector<UniformInput>  _vertexUniforms;
-    std::vector<UniformInput>  _fragmentUniforms;
-    int _totalVertexSets;
-    int _totalFragmentSets;
+    std::vector<UniformInput> _vertexUniforms;
+    std::vector<UniformInput> _fragmentUniforms;
+    std::vector<TextureInput> _fragmentTextures;
+    
+    int _totalVertexUniformSets;
+    int _totalFragmentUniformSets;
+    int _totalFragmentTextureSets;
     
     std::vector<VkDescriptorSetLayout> _vertexSetLayouts;
     std::vector<VkDescriptorSetLayout> _fragmentSetLayouts;
@@ -47,8 +56,9 @@ namespace fx {
     void clearShaderModules();
     
     uint32_t getStageCount() const {return 2;}
-    uint32_t getVertexSetCount() const {return _totalVertexSets;}
-    uint32_t getFragmentSetCount() const {return _totalFragmentSets;}
+    uint32_t getVertexUniformSetCount() const {return _totalVertexUniformSets;}
+    uint32_t getFragmentUniformSetCount() const {return _totalFragmentUniformSets;}
+    uint32_t getFragmentTextureSetCount() const {return _totalFragmentTextureSets;}
     
     int getVertexLocation(const std::string &name) const;
     int getVertexUniformBinding(const std::string &name) const;

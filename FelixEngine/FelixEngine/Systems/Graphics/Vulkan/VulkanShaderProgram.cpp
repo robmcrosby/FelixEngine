@@ -17,8 +17,9 @@ using namespace std;
 using namespace fx;
 
 VulkanShaderProgram::VulkanShaderProgram() {
-  _totalVertexSets = 0;
-  _totalFragmentSets = 0;
+  _totalVertexUniformSets = 0;
+  _totalFragmentUniformSets = 0;
+  _totalFragmentTextureSets = 0;
   
   _shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   _shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -36,11 +37,13 @@ VulkanShaderProgram::~VulkanShaderProgram() {
 }
 
 void VulkanShaderProgram::clearShaderModules() {
-  _totalVertexSets = 0;
-  _totalFragmentSets = 0;
+  _totalVertexUniformSets = 0;
+  _totalFragmentUniformSets = 0;
+  _totalFragmentTextureSets = 0;
   
   _vertexUniforms.clear();
   _fragmentUniforms.clear();
+  _fragmentTextures.clear();
   
   for (auto &layout : _vertexSetLayouts)
     vkDestroyDescriptorSetLayout(Vulkan::device, layout, nullptr);
@@ -145,34 +148,42 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
     }
     
     // Get the Vertex Uniform Bindings
-    for (auto &resource: resources.uniform_buffers) {
+    for (auto &resource : resources.uniform_buffers) {
       UniformInput input;
       input.name    = resource.name;
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _vertexUniforms.push_back(input);
-      _totalVertexSets = _totalVertexSets > input.set+1 ? _totalVertexSets : input.set+1;
+      _totalVertexUniformSets = _totalVertexUniformSets > input.set+1 ? _totalVertexUniformSets : input.set+1;
     }
     
     // TODO: Get the Vertex Texture Bindings
   }
   else {
     // Get the Fragment Uniform Bindings
-    for (auto &resource: resources.uniform_buffers) {
+    for (auto &resource : resources.uniform_buffers) {
       UniformInput input;
       input.name    = resource.name;
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _fragmentUniforms.push_back(input);
-      _totalFragmentSets = _totalFragmentSets > input.set+1 ? _totalFragmentSets : input.set+1;
+      _totalFragmentUniformSets = _totalFragmentUniformSets > input.set+1 ? _totalFragmentUniformSets : input.set+1;
     }
     
-    // TODO: Get the Fragment Textures Bindings
+    // Get the Fragment Textures Bindings
+    for (auto &resource : resources.sampled_images) {
+      TextureInput input;
+      input.name    = resource.name;
+      input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
+      _fragmentTextures.push_back(input);
+      _totalFragmentTextureSets = _totalFragmentTextureSets > input.set+1 ? _totalFragmentTextureSets : input.set+1;
+    }
   }
 }
 
 bool VulkanShaderProgram::createDescriptorSetLayouts() {
-  vector<vector<VkDescriptorSetLayoutBinding> > vertexBindingSets(_totalVertexSets);
+  vector<vector<VkDescriptorSetLayoutBinding> > vertexBindingSets(_totalVertexUniformSets);
   for (auto &uniform : _vertexUniforms) {
     VkDescriptorSetLayoutBinding binding = {};
     binding.binding = uniform.binding;
@@ -196,7 +207,8 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
     _vertexSetLayouts.push_back(layout);
   }
   
-  vector<vector<VkDescriptorSetLayoutBinding> > fragmentBindingSets(_totalFragmentSets);
+  int totalFramgnetSets = _totalFragmentUniformSets+_totalFragmentTextureSets;
+  vector<vector<VkDescriptorSetLayoutBinding> > fragmentBindingSets(totalFramgnetSets);
   for (auto &uniform : _fragmentUniforms) {
     VkDescriptorSetLayoutBinding binding = {};
     binding.binding = uniform.binding;
@@ -205,6 +217,15 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
     binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     binding.pImmutableSamplers = nullptr; // Optional
     fragmentBindingSets[uniform.set].push_back(binding);
+  }
+  for (auto &texture : _fragmentTextures) {
+    VkDescriptorSetLayoutBinding binding = {};
+    binding.binding = texture.binding;
+    binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    binding.descriptorCount = 1;
+    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    binding.pImmutableSamplers = nullptr; // Optional
+    fragmentBindingSets[texture.set].push_back(binding);
   }
   for (auto &bindingSet : fragmentBindingSets) {
     VkDescriptorSetLayoutCreateInfo layoutInfo = {};

@@ -76,6 +76,8 @@ namespace fx {
       Texture texture = Texture(buffer, sampler);
       _textures.push_back(texture);
     }
+    
+    BufferPoolPtr bufferPool() {return _bufferPool;}
   };
 }
 
