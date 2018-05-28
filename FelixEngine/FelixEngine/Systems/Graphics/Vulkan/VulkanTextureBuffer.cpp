@@ -15,8 +15,9 @@ using namespace std;
 using namespace fx;
 
 VulkanTextureBuffer::VulkanTextureBuffer() {
-  _textureImage = VK_NULL_HANDLE;
+  _textureImage       = VK_NULL_HANDLE;
   _textureImageMemory = VK_NULL_HANDLE;
+  _textureImageView   = VK_NULL_HANDLE;
 }
 
 VulkanTextureBuffer::~VulkanTextureBuffer() {
@@ -44,6 +45,9 @@ bool VulkanTextureBuffer::load(const ImageBufferData &data) {
   Vulkan::copyBufferToImage(stagingBuffer, _textureImage, static_cast<uint32_t>(width), static_cast<uint32_t>(height));
   Vulkan::transitionImageLayout(_textureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
   
+  // Create the Texture Image View
+  _textureImageView = Vulkan::createImageView(_textureImage, VK_FORMAT_R8G8B8A8_UNORM);
+  
   // Free the Staging Buffer
   vkDestroyBuffer(Vulkan::device, stagingBuffer, nullptr);
   vkFreeMemory(Vulkan::device, stagingBufferMemory, nullptr);
@@ -68,6 +72,10 @@ SamplerState VulkanTextureBuffer::defaultSampler() const {
 }
 
 void VulkanTextureBuffer::clearTexture() {
+  if (_textureImageView != VK_NULL_HANDLE) {
+    vkDestroyImageView(Vulkan::device, _textureImageView, nullptr);
+    _textureImageView = VK_NULL_HANDLE;
+  }
   if (_textureImage != VK_NULL_HANDLE) {
     vkDestroyImage(Vulkan::device, _textureImage, nullptr);
     _textureImage = VK_NULL_HANDLE;

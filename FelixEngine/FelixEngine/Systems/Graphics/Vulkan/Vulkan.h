@@ -82,6 +82,7 @@ namespace fx {
     
     static VkImage createImage(size_t width, size_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage);
     static VkDeviceMemory allocateImage(VkImage image, VkMemoryPropertyFlags properties);
+    static VkImageView createImageView(VkImage image, VkFormat format);
     
     static uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     

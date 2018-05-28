@@ -20,8 +20,9 @@ namespace fx {
    */
   class VulkanTextureBuffer: public TextureBuffer {
   private:
-    VkImage _textureImage;
+    VkImage        _textureImage;
     VkDeviceMemory _textureImageMemory;
+    VkImageView    _textureImageView;
     
   public:
     VulkanTextureBuffer();
