@@ -17,9 +17,8 @@ using namespace std;
 using namespace fx;
 
 VulkanShaderProgram::VulkanShaderProgram() {
-  _totalVertexUniformSets = 0;
-  _totalFragmentUniformSets = 0;
-  _totalFragmentTextureSets = 0;
+  _totalVertexSets = 0;
+  _totalFragmentSets = 0;
   
   _shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
   _shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -37,9 +36,8 @@ VulkanShaderProgram::~VulkanShaderProgram() {
 }
 
 void VulkanShaderProgram::clearShaderModules() {
-  _totalVertexUniformSets = 0;
-  _totalFragmentUniformSets = 0;
-  _totalFragmentTextureSets = 0;
+  _totalVertexSets = 0;
+  _totalFragmentSets = 0;
   
   _vertexUniforms.clear();
   _fragmentUniforms.clear();
@@ -51,7 +49,7 @@ void VulkanShaderProgram::clearShaderModules() {
   
   for (auto &layout : _fragmentSetLayouts)
     vkDestroyDescriptorSetLayout(Vulkan::device, layout, nullptr);
-  _fragmentSetLayouts.clear();
+  _vertexSetLayouts.clear();
   
   if (_shaderStages[0].module != VK_NULL_HANDLE) {
     vkDestroyShaderModule(Vulkan::device, _shaderStages[0].module, nullptr);
@@ -94,6 +92,22 @@ int VulkanShaderProgram::getFragmentUniformBinding(const std::string &name) cons
   return -1;
 }
 
+//int VulkanShaderProgram::getVertexUniformSet(const std::string &name) const {
+//  for (const auto &uniform : _vertexUniforms) {
+//    if (name == uniform.name)
+//    return uniform.set;
+//  }
+//  return -1;
+//}
+//
+//int VulkanShaderProgram::getFragmentUniformSet(const std::string &name) const {
+//  for (const auto &uniform : _fragmentUniforms) {
+//    if (name == uniform.name)
+//    return uniform.set;
+//  }
+//  return -1;
+//}
+
 VkDescriptorSetLayout* VulkanShaderProgram::getVertexSetLayouts() {
   return _vertexSetLayouts.size() == 0 ? nullptr : _vertexSetLayouts.data();
 }
@@ -101,6 +115,18 @@ VkDescriptorSetLayout* VulkanShaderProgram::getVertexSetLayouts() {
 VkDescriptorSetLayout* VulkanShaderProgram::getFragmentSetLayouts() {
   return _fragmentSetLayouts.size() == 0 ? nullptr : _fragmentSetLayouts.data();
 }
+
+//uint32_t VulkanShaderProgram::getVertexUniformDescriptorCount(int set) const {
+//  return 0;
+//}
+//
+//uint32_t VulkanShaderProgram::getFragmentUniformDescriptorCount(int set) const {
+//  return 0;
+//}
+//
+//uint32_t VulkanShaderProgram::getFragmentTextureDescriptorCount(int set) const {
+//  return 0;
+//}
 
 vector<VkDescriptorSetLayout> VulkanShaderProgram::getDescriptorSetLayouts() const {
   vector<VkDescriptorSetLayout> combined = _vertexSetLayouts;
@@ -154,7 +180,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _vertexUniforms.push_back(input);
-      _totalVertexUniformSets = _totalVertexUniformSets > input.set+1 ? _totalVertexUniformSets : input.set+1;
+      _totalVertexSets = _totalVertexSets > input.set+1 ? _totalVertexSets : input.set+1;
     }
     
     // TODO: Get the Vertex Texture Bindings
@@ -167,7 +193,7 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _fragmentUniforms.push_back(input);
-      _totalFragmentUniformSets = _totalFragmentUniformSets > input.set+1 ? _totalFragmentUniformSets : input.set+1;
+      _totalFragmentSets = _totalFragmentSets > input.set+1 ? _totalFragmentSets : input.set+1;
     }
     
     // Get the Fragment Textures Bindings
@@ -177,13 +203,13 @@ void VulkanShaderProgram::reflectShaderCode(FileData &code, SHADER_PART part) {
       input.binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
       input.set     = compiler.get_decoration(resource.id, spv::DecorationDescriptorSet);
       _fragmentTextures.push_back(input);
-      _totalFragmentTextureSets = _totalFragmentTextureSets > input.set+1 ? _totalFragmentTextureSets : input.set+1;
+      _totalFragmentSets = _totalFragmentSets > input.set+1 ? _totalFragmentSets : input.set+1;
     }
   }
 }
 
 bool VulkanShaderProgram::createDescriptorSetLayouts() {
-  vector<vector<VkDescriptorSetLayoutBinding> > vertexBindingSets(_totalVertexUniformSets);
+  vector<vector<VkDescriptorSetLayoutBinding> > vertexBindingSets(_totalVertexSets);
   for (auto &uniform : _vertexUniforms) {
     VkDescriptorSetLayoutBinding binding = {};
     binding.binding = uniform.binding;
@@ -194,30 +220,11 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
     vertexBindingSets[uniform.set].push_back(binding);
   }
   for (auto &bindingSet : vertexBindingSets) {
-    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
-    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layoutInfo.bindingCount = (uint32_t)bindingSet.size();
-    layoutInfo.pBindings = bindingSet.size() == 0 ? nullptr : bindingSet.data();
-    
-    VkDescriptorSetLayout layout;
-    if (vkCreateDescriptorSetLayout(Vulkan::device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
-      cerr << "Failed to create descriptor set layout" << endl;
-      return false;
-    }
+    VkDescriptorSetLayout layout = createDescriptorSetLayout(bindingSet);
     _vertexSetLayouts.push_back(layout);
   }
   
-  int totalFramgnetSets = _totalFragmentUniformSets+_totalFragmentTextureSets;
-  vector<vector<VkDescriptorSetLayoutBinding> > fragmentBindingSets(totalFramgnetSets);
-  for (auto &uniform : _fragmentUniforms) {
-    VkDescriptorSetLayoutBinding binding = {};
-    binding.binding = uniform.binding;
-    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    binding.descriptorCount = 1;
-    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-    binding.pImmutableSamplers = nullptr; // Optional
-    fragmentBindingSets[uniform.set].push_back(binding);
-  }
+  vector<vector<VkDescriptorSetLayoutBinding> > fragmentBindingSets(_totalFragmentSets);
   for (auto &texture : _fragmentTextures) {
     VkDescriptorSetLayoutBinding binding = {};
     binding.binding = texture.binding;
@@ -227,19 +234,33 @@ bool VulkanShaderProgram::createDescriptorSetLayouts() {
     binding.pImmutableSamplers = nullptr; // Optional
     fragmentBindingSets[texture.set].push_back(binding);
   }
+  for (auto &uniform : _fragmentUniforms) {
+    VkDescriptorSetLayoutBinding binding = {};
+    binding.binding = uniform.binding;
+    binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    binding.descriptorCount = 1;
+    binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    binding.pImmutableSamplers = nullptr; // Optional
+    fragmentBindingSets[uniform.set].push_back(binding);
+  }
   for (auto &bindingSet : fragmentBindingSets) {
-    VkDescriptorSetLayoutCreateInfo layoutInfo = {};
-    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layoutInfo.bindingCount = (uint32_t)bindingSet.size();
-    layoutInfo.pBindings = bindingSet.size() == 0 ? nullptr : bindingSet.data();
-    
-    VkDescriptorSetLayout layout;
-    if (vkCreateDescriptorSetLayout(Vulkan::device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
-      cerr << "Failed to create descriptor set layout" << endl;
-      return false;
-    }
+    VkDescriptorSetLayout layout = createDescriptorSetLayout(bindingSet);
     _fragmentSetLayouts.push_back(layout);
   }
   
   return true;
+}
+
+VkDescriptorSetLayout VulkanShaderProgram::createDescriptorSetLayout(vector<VkDescriptorSetLayoutBinding> &bindingSet) {
+  VkDescriptorSetLayoutCreateInfo layoutInfo = {};
+  layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+  layoutInfo.bindingCount = (uint32_t)bindingSet.size();
+  layoutInfo.pBindings = bindingSet.size() == 0 ? nullptr : bindingSet.data();
+  
+  VkDescriptorSetLayout layout;
+  if (vkCreateDescriptorSetLayout(Vulkan::device, &layoutInfo, nullptr, &layout) != VK_SUCCESS) {
+    cerr << "Failed to create descriptor set layout" << endl;
+    assert(false);
+  }
+  return layout;
 }

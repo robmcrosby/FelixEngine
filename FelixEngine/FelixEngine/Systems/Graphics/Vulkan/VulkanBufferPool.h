@@ -34,10 +34,12 @@ namespace fx {
     
     void addDescriptorSet(std::vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, UniformMap &map);
     void addDescriptorSet(std::vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, TextureMap &map);
+    void addDescriptorSet(std::vector<VkDescriptorSet> &descriptorSets, VulkanShaderProgram *shader, TextureMap &textures, UniformMap &uniforms);
+    
+    static bool isVertexUniform(VulkanShaderProgram *shader, UniformMap &map);
     
   private:
     void clearDescriptorSets();
-    bool isVertexUniform(VulkanShaderProgram *shader, UniformMap &map);
   };
 }
 

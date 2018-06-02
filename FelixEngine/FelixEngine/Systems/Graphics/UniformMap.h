@@ -72,6 +72,8 @@ namespace fx {
     std::map<std::string, Uniform>::const_iterator begin() const {return _map.begin();}
     std::map<std::string, Uniform>::const_iterator end() const {return _map.end();}
     
+    size_t size() const {return _map.size();}
+    
     void update() {
       for (auto uniform : _map)
         uniform.second.update();

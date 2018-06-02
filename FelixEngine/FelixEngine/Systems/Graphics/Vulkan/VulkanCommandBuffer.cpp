@@ -82,12 +82,20 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     VkDeviceSize *offsets = mesh->getVertexOffsets();
     vkCmdBindVertexBuffers(commandBuffer, 0, vertexBufferCount, vertexBuffers, offsets);
     
+    bool texturesAdded = false;
     vector<VkDescriptorSet> descriptorSets;
     for (auto &uniformMap : task.uniforms) {
-      VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(uniformMap->bufferPool().get());
-      bufferPool->addDescriptorSet(descriptorSets, shader, *uniformMap);
+      if (!texturesAdded && task.textures && !VulkanBufferPool::isVertexUniform(shader, *uniformMap)) {
+        VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(task.textures->bufferPool().get());
+        bufferPool->addDescriptorSet(descriptorSets, shader, *task.textures, *uniformMap);
+        texturesAdded = true;
+      }
+      else {
+        VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(uniformMap->bufferPool().get());
+        bufferPool->addDescriptorSet(descriptorSets, shader, *uniformMap);
+      }
     }
-    if (task.textures) {
+    if (task.textures && !texturesAdded) {
       VulkanBufferPool *bufferPool = static_cast<VulkanBufferPool*>(task.textures->bufferPool().get());
       bufferPool->addDescriptorSet(descriptorSets, shader, *task.textures);
     }

@@ -42,6 +42,8 @@ namespace fx {
     std::vector<Texture>::const_iterator begin() const {return _textures.begin();}
     std::vector<Texture>::const_iterator end() const {return _textures.end();}
     
+    size_t size() const {return _textures.size();}
+    
     bool loadXML(const XMLTree::Node &node) {
       bool success = true;
       for (auto &subNode : node)
