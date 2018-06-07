@@ -17,7 +17,17 @@
 namespace fx {
   class VulkanFrameBuffer: public FrameBuffer {
   private:
+    ivec2 _frameSize;
     std::map<int, VkPipeline> _pipelines;
+    
+    VkRenderPass _renderPass;
+    std::vector<VkFramebuffer> _swapChainFramebuffers;
+    VkPipelineLayout _pipelineLayout;
+    
+    VkFormat _depthFormat;
+    VkImage _depthImage;
+    VkDeviceMemory _depthImageMemory;
+    VkImageView _depthImageView;
     
   public:
     VulkanFrameBuffer();
@@ -35,6 +45,16 @@ namespace fx {
     virtual TextureBufferPtr getColorTexture(int index);
     
     VkPipeline getVkPipelineForTask(const GraphicTask &task);
+    
+    VkRenderPass getRenderPass() {return _renderPass;}
+    VkFramebuffer getFrameBuffer(int index) {return _swapChainFramebuffers[index];}
+    VkPipelineLayout getPipelineLayout() {return _pipelineLayout;}
+    
+  private:
+    void clearBuffers();
+    VkFormat findDepthFormat();
+    bool createRenderPass();
+    bool createFrameBuffers();
   };
 }
 

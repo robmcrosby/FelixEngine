@@ -59,17 +59,24 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
       assert(false);
     }
     
+    
     // Define the Render Pass Info
     VkRenderPassBeginInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = Vulkan::renderPass;
-    renderPassInfo.framebuffer = Vulkan::swapChainFrameBuffers[Vulkan::currentSwapBuffer];
+    renderPassInfo.renderPass = frame->getRenderPass(); //Vulkan::renderPass;
+    renderPassInfo.framebuffer = frame->getFrameBuffer(Vulkan::currentSwapBuffer); //Vulkan::swapChainFrameBuffers[Vulkan::currentSwapBuffer];
     // Define the Render Extents
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
-    // Define the Clear Color
-    renderPassInfo.clearValueCount = 1;
-    renderPassInfo.pClearValues = (VkClearValue*)task.colorActions[0].clearColor.ptr();
+    
+    // TODO: Define the Clear Values
+    vector<VkClearValue> clearValues(2);
+    clearValues[0].color = {0.0f, 0.0f, 0.0f, 1.0f};
+    clearValues[1].depthStencil = {1.0f, 0};
+    
+    renderPassInfo.clearValueCount = 2;
+    renderPassInfo.pClearValues = clearValues.data();
+    //renderPassInfo.pClearValues = (VkClearValue*)task.colorActions[0].clearColor.ptr();
     
     // Begin the Render Pass
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -100,7 +107,7 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
       bufferPool->addDescriptorSet(descriptorSets, shader, *task.textures);
     }
     uint32_t count = (uint32_t)descriptorSets.size();
-    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, Vulkan::pipelineLayout, 0, count, descriptorSets.data(), 0, nullptr);
+    vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, frame->getPipelineLayout(), 0, count, descriptorSets.data(), 0, nullptr);
     
     // Draw the mesh
     mesh->drawToCommandBuffer(commandBuffer);

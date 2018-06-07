@@ -49,7 +49,7 @@ bool VulkanTextureBuffer::load(const ImageBufferData &data) {
   Vulkan::transitionImageLayout(_textureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
   
   // Create the Texture Image View
-  _textureImageView = Vulkan::createImageView(_textureImage, VK_FORMAT_R8G8B8A8_UNORM);
+  _textureImageView = Vulkan::createImageView(_textureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT);
   
   // Free the Staging Buffer
   vkDestroyBuffer(Vulkan::device, stagingBuffer, nullptr);
