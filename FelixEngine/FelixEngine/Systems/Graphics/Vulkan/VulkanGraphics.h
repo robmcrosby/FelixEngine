@@ -55,7 +55,6 @@ namespace fx {
     bool createSwapChain(UIView *view);
     
     bool createRenderPass();
-    bool createFrameBuffers();
     bool createCommandPool();
     
     void createCommandPools();

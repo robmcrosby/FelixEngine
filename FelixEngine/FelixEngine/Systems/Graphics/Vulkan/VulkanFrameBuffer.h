@@ -9,12 +9,13 @@
 #ifndef VulkanFrameBuffer_h
 #define VulkanFrameBuffer_h
 
-#include "GraphicResources.h"
-#include <vulkan/vulkan.h>
+#include "VulkanTextureBuffer.h"
 #include <map>
 
 
 namespace fx {
+  
+  
   class VulkanFrameBuffer: public FrameBuffer {
   private:
     ivec2 _frameSize;

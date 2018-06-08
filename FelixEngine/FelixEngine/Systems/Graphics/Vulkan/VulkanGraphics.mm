@@ -62,7 +62,6 @@ bool VulkanGraphics::initalize(UIView *view) {
   assert(Vulkan::initDeviceQueue(width, height));
   
   assert(createRenderPass());
-  assert(createFrameBuffers());
   assert(createCommandPool());
   assert(Vulkan::createSemaphores());
   
@@ -209,29 +208,6 @@ bool VulkanGraphics::createRenderPass() {
   if (vkCreateRenderPass(Vulkan::device, &renderPassInfo, nullptr, &Vulkan::renderPass) != VK_SUCCESS) {
     cerr << "Error Creating Render Pass" << endl;
     return false;
-  }
-  return true;
-}
-
-bool VulkanGraphics::createFrameBuffers() {
-  Vulkan::swapChainFrameBuffers.resize(Vulkan::swapChainBuffers.size());
-  
-  for (size_t i = 0; i < Vulkan::swapChainBuffers.size(); i++) {
-    VkImageView attachments[] = {Vulkan::swapChainBuffers[i].view};
-    
-    VkFramebufferCreateInfo framebufferInfo = {};
-    framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.renderPass = Vulkan::renderPass;
-    framebufferInfo.attachmentCount = 1;
-    framebufferInfo.pAttachments = attachments;
-    framebufferInfo.width = Vulkan::swapChainExtent.width;
-    framebufferInfo.height = Vulkan::swapChainExtent.height;
-    framebufferInfo.layers = 1;
-    
-    if (vkCreateFramebuffer(Vulkan::device, &framebufferInfo, nullptr, &Vulkan::swapChainFrameBuffers[i]) != VK_SUCCESS) {
-      cerr << "Error Creating FrameBuffer" << endl;
-      return false;
-    }
   }
   return true;
 }

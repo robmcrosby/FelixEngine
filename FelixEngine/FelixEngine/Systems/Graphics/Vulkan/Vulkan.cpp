@@ -8,6 +8,7 @@
 
 #include "Vulkan.h"
 #include "FileSystem.h"
+#include "VulkanTextureBuffer.h"
 
 
 using namespace std;
@@ -26,8 +27,7 @@ VkQueue Vulkan::presentQueue;
 
 VkSwapchainKHR Vulkan::swapChain;
 VkExtent2D Vulkan::swapChainExtent;
-vector<SwapChainBuffer> Vulkan::swapChainBuffers;
-vector<VkFramebuffer> Vulkan::swapChainFrameBuffers;
+VulkanTextureBuffers Vulkan::swapChainBuffers;
 uint32_t Vulkan::currentSwapBuffer = 0;
 
 VkRenderPass Vulkan::renderPass;
@@ -232,29 +232,10 @@ bool Vulkan::initDeviceQueue(float &width, float &height) {
   vector<VkImage> swapChainImages(swapChainImageCount);
   assert(vkGetSwapchainImagesKHR(device, swapChain, &swapChainImageCount, swapChainImages.data()) == VK_SUCCESS);
   
+  // Create the Swap Chain Textures
   for (uint32_t i = 0; i < swapChainImageCount; i++) {
-    SwapChainBuffer buffer;
-    
-    VkImageViewCreateInfo colorImageView = {};
-    colorImageView.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    colorImageView.pNext = NULL;
-    colorImageView.format = surfaceFormat;
-    colorImageView.components.r = VK_COMPONENT_SWIZZLE_R;
-    colorImageView.components.g = VK_COMPONENT_SWIZZLE_G;
-    colorImageView.components.b = VK_COMPONENT_SWIZZLE_B;
-    colorImageView.components.a = VK_COMPONENT_SWIZZLE_A;
-    colorImageView.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-    colorImageView.subresourceRange.baseMipLevel = 0;
-    colorImageView.subresourceRange.levelCount = 1;
-    colorImageView.subresourceRange.baseArrayLayer = 0;
-    colorImageView.subresourceRange.layerCount = 1;
-    colorImageView.viewType = VK_IMAGE_VIEW_TYPE_2D;
-    colorImageView.flags = 0;
-    
-    buffer.image = swapChainImages[i];
-    colorImageView.image = buffer.image;
-    
-    assert(vkCreateImageView(device, &colorImageView, NULL, &buffer.view) == VK_SUCCESS);
+    shared_ptr<VulkanTextureBuffer> buffer = make_shared<VulkanTextureBuffer>();
+    buffer->loadSwapBuffer(surfaceFormat, swapChainImages[i], swapChainExtent.width, swapChainExtent.height);
     swapChainBuffers.push_back(buffer);
   }
   return true;
@@ -306,9 +287,6 @@ void Vulkan::cleaup() {
     vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
     
     vkDestroyCommandPool(device, commandPool, nullptr);
-    
-    for (auto framebuffer : swapChainFrameBuffers)
-      vkDestroyFramebuffer(device, framebuffer, nullptr);
     
     vkDestroyPipeline(device, graphicsPipeline, nullptr);
     vkDestroyPipelineLayout(device, pipelineLayout, nullptr);

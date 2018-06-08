@@ -20,9 +20,12 @@ namespace fx {
    */
   class VulkanTextureBuffer: public TextureBuffer {
   private:
+    VkFormat       _textureFormat;
     VkImage        _textureImage;
     VkDeviceMemory _textureImageMemory;
     VkImageView    _textureImageView;
+    
+    int _width, _height;
     
     static std::map<int, VkSampler> samplerMap;
     
@@ -31,6 +34,7 @@ namespace fx {
     virtual ~VulkanTextureBuffer();
     
     bool load(const ImageBufferData &data);
+    bool loadSwapBuffer(VkFormat format, VkImage image, int width, int height);
     bool loaded() const;
     ivec2 size() const;
     

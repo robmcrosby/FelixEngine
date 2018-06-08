@@ -16,6 +16,8 @@
 
 
 namespace fx {
+  class VulkanTextureBuffer;
+  typedef std::vector<std::shared_ptr<VulkanTextureBuffer> > VulkanTextureBuffers;
   
   struct SwapChainBuffer {
     VkImage image;
@@ -38,8 +40,7 @@ namespace fx {
     
     static VkSwapchainKHR swapChain;
     static VkExtent2D swapChainExtent;
-    static std::vector<SwapChainBuffer> swapChainBuffers;
-    static std::vector<VkFramebuffer> swapChainFrameBuffers;
+    static VulkanTextureBuffers swapChainBuffers;
     static uint32_t currentSwapBuffer;
     
     static VkRenderPass renderPass;

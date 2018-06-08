@@ -139,7 +139,7 @@ bool VulkanFrameBuffer::createFrameBuffers() {
   _swapChainFramebuffers.resize(Vulkan::swapChainBuffers.size());
   
   for (size_t i = 0; i < _swapChainFramebuffers.size(); i++) {
-    VkImageView attachments[] = {Vulkan::swapChainBuffers[i].view, _depthImageView};
+    VkImageView attachments[] = {Vulkan::swapChainBuffers[i]->getImageView(), _depthImageView};
     
     VkFramebufferCreateInfo framebufferInfo = {};
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
