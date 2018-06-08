@@ -81,7 +81,7 @@ namespace fx {
     static VkBuffer createBuffer(size_t size, VkBufferUsageFlags usage, VkSharingMode sharing = VK_SHARING_MODE_EXCLUSIVE);
     static VkDeviceMemory allocateMemory(VkBuffer buffer, VkMemoryPropertyFlags properties);
     
-    static VkImage createImage(size_t width, size_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage);
+    static VkImage createImage(int width, int height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage);
     static VkDeviceMemory allocateImage(VkImage image, VkMemoryPropertyFlags properties);
     static VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
     

@@ -25,10 +25,7 @@ namespace fx {
     std::vector<VkFramebuffer> _swapChainFramebuffers;
     VkPipelineLayout _pipelineLayout;
     
-    VkFormat _depthFormat;
-    VkImage _depthImage;
-    VkDeviceMemory _depthImageMemory;
-    VkImageView _depthImageView;
+    std::shared_ptr<VulkanTextureBuffer> _depthBuffer;
     
   public:
     VulkanFrameBuffer();

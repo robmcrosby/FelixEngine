@@ -35,12 +35,14 @@ namespace fx {
     
     bool load(const ImageBufferData &data);
     bool loadSwapBuffer(VkFormat format, VkImage image, int width, int height);
+    bool loadDepthBuffer(VkFormat format, int width, int height);
     bool loaded() const;
     ivec2 size() const;
     
     virtual void setDefaultSampler(SamplerState state);
     virtual SamplerState defaultSampler() const;
     
+    VkFormat getFormat() const {return _textureFormat;}
     VkImageView getImageView() const {return _textureImageView;}
     
     static VkSampler getSamplerForState(const SamplerState &state);

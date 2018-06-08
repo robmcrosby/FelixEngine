@@ -63,10 +63,11 @@ bool VulkanTextureBuffer::load(const ImageBufferData &data) {
 }
 
 bool VulkanTextureBuffer::loadSwapBuffer(VkFormat format, VkImage image, int width, int height) {
-  _textureFormat = format;
-  _textureImage = image;
   _width = width;
   _height = height;
+  
+  _textureFormat = format;
+  _textureImage = image;
   
   VkImageViewCreateInfo imageViewInfo = {};
   imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -91,6 +92,20 @@ bool VulkanTextureBuffer::loadSwapBuffer(VkFormat format, VkImage image, int wid
     assert(false);
   }
   return success;
+}
+
+bool VulkanTextureBuffer::loadDepthBuffer(VkFormat format, int width, int height) {
+  _width = width;
+  _height = height;
+  
+  _textureFormat = format;
+  _textureImage = Vulkan::createImage(_width, _height, _textureFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+  _textureImageMemory = Vulkan::allocateImage(_textureImage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+  _textureImageView = Vulkan::createImageView(_textureImage, _textureFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+  
+  Vulkan::transitionImageLayout(_textureImage, _textureFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+  
+  return _textureImageView != VK_NULL_HANDLE;
 }
 
 bool VulkanTextureBuffer::loaded() const {

@@ -19,10 +19,7 @@ using namespace std;
 using namespace fx;
 
 VulkanFrameBuffer::VulkanFrameBuffer() {
-  _depthFormat = VK_FORMAT_UNDEFINED;
-  _depthImageView = VK_NULL_HANDLE;
-  _depthImage = VK_NULL_HANDLE;
-  _depthImageMemory = VK_NULL_HANDLE;
+  
 }
 
 VulkanFrameBuffer::~VulkanFrameBuffer() {
@@ -51,17 +48,8 @@ ivec2 VulkanFrameBuffer::size() const {
 }
 
 bool VulkanFrameBuffer::addDepthBuffer() {
-  bool success = true;
-  size_t width = _frameSize.w;
-  size_t height = _frameSize.h;
-  
-  _depthFormat = findDepthFormat();
-  _depthImage = Vulkan::createImage(width, height, _depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-  _depthImageMemory = Vulkan::allocateImage(_depthImage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-  _depthImageView = Vulkan::createImageView(_depthImage, _depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
-  
-  Vulkan::transitionImageLayout(_depthImage, _depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-  
+  _depthBuffer = make_shared<VulkanTextureBuffer>();
+  bool success = _depthBuffer->loadDepthBuffer(findDepthFormat(), _frameSize.w, _frameSize.h);
   success &= createRenderPass();
   success &= createFrameBuffers();
   return success;
@@ -86,7 +74,7 @@ bool VulkanFrameBuffer::createRenderPass() {
   
   // Define the depth attachment
   VkAttachmentDescription depthAttachment = {};
-  depthAttachment.format = _depthFormat;
+  depthAttachment.format = _depthBuffer->getFormat();
   depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
   depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
   depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -139,7 +127,7 @@ bool VulkanFrameBuffer::createFrameBuffers() {
   _swapChainFramebuffers.resize(Vulkan::swapChainBuffers.size());
   
   for (size_t i = 0; i < _swapChainFramebuffers.size(); i++) {
-    VkImageView attachments[] = {Vulkan::swapChainBuffers[i]->getImageView(), _depthImageView};
+    VkImageView attachments[] = {Vulkan::swapChainBuffers[i]->getImageView(), _depthBuffer->getImageView()};
     
     VkFramebufferCreateInfo framebufferInfo = {};
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -159,19 +147,7 @@ bool VulkanFrameBuffer::createFrameBuffers() {
 }
 
 void VulkanFrameBuffer::clearBuffers() {
-  
-  if (_depthImageView != VK_NULL_HANDLE) {
-    vkDestroyImageView(Vulkan::device, _depthImageView, nullptr);
-    _depthImageView = VK_NULL_HANDLE;
-  }
-  if (_depthImage != VK_NULL_HANDLE) {
-    vkDestroyImage(Vulkan::device, _depthImage, nullptr);
-    _depthImage = VK_NULL_HANDLE;
-  }
-  if (_depthImageMemory != VK_NULL_HANDLE) {
-    vkFreeMemory(Vulkan::device, _depthImageMemory, nullptr);
-    _depthImageMemory = VK_NULL_HANDLE;
-  }
+  _depthBuffer = nullptr;
 }
 
 VkFormat VulkanFrameBuffer::findDepthFormat() {

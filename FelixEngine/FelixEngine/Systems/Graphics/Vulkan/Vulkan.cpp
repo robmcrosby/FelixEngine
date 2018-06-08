@@ -429,12 +429,12 @@ VkDeviceMemory Vulkan::allocateMemory(VkBuffer buffer, VkMemoryPropertyFlags pro
   return memory;
 }
 
-VkImage Vulkan::createImage(size_t width, size_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage) {
+VkImage Vulkan::createImage(int width, int height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage) {
   VkImageCreateInfo imageInfo = {};
   imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
   imageInfo.imageType = VK_IMAGE_TYPE_2D;
-  imageInfo.extent.width = static_cast<uint32_t>(width);
-  imageInfo.extent.height = static_cast<uint32_t>(height);
+  imageInfo.extent.width = width;
+  imageInfo.extent.height = height;
   imageInfo.extent.depth = 1;
   imageInfo.mipLevels = 1;
   imageInfo.arrayLayers = 1;
