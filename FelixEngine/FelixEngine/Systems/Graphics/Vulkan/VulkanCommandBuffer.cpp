@@ -69,14 +69,20 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;
     
-    // TODO: Define the Clear Values
-    vector<VkClearValue> clearValues(2);
-    clearValues[0].color = {0.0f, 0.0f, 0.0f, 1.0f};
-    clearValues[1].depthStencil = {1.0f, 0};
+    // Define the Clear Values
+    int totalColorAttachments = frame->totalColorAttachements();
+    vector<VkClearValue> clearValues(totalColorAttachments);
+    for (int i = 0; i < totalColorAttachments; ++i)
+      memcpy(&clearValues[i], task.colorActions[i].clearColor.ptr(), sizeof(vec4));
+    if (frame->hasDepthBuffer()) {
+      VkClearValue value;
+      value.depthStencil.depth = task.depthStencilAction.clearColor.r;
+      value.depthStencil.stencil = (int)task.depthStencilAction.clearColor.g;
+      clearValues.push_back(value);
+    }
     
-    renderPassInfo.clearValueCount = 2;
+    renderPassInfo.clearValueCount = (uint32_t)clearValues.size();
     renderPassInfo.pClearValues = clearValues.data();
-    //renderPassInfo.pClearValues = (VkClearValue*)task.colorActions[0].clearColor.ptr();
     
     // Begin the Render Pass
     vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);

@@ -54,6 +54,7 @@ namespace fx {
     VkPipelineLayout getPipelineLayout();
     
     bool hasDepthBuffer() const {return _depthAttachment.get() != nullptr;}
+    int totalColorAttachements() const {return (int)_colorAttachments.size();}
     
   private:
     void clearBuffers();
