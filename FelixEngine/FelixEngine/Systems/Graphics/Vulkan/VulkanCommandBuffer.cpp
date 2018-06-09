@@ -63,8 +63,8 @@ void VulkanCommandBuffer::submitRenderPass(RenderPass &pass) {
     // Define the Render Pass Info
     VkRenderPassBeginInfo renderPassInfo = {};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    renderPassInfo.renderPass = frame->getRenderPass(); //Vulkan::renderPass;
-    renderPassInfo.framebuffer = frame->getFrameBuffer(Vulkan::currentSwapBuffer); //Vulkan::swapChainFrameBuffers[Vulkan::currentSwapBuffer];
+    renderPassInfo.renderPass = frame->getRenderPass();
+    renderPassInfo.framebuffer = frame->getFrameBuffer();
     // Define the Render Extents
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = Vulkan::swapChainExtent;

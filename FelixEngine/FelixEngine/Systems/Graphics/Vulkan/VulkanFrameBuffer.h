@@ -9,13 +9,17 @@
 #ifndef VulkanFrameBuffer_h
 #define VulkanFrameBuffer_h
 
-#include "VulkanTextureBuffer.h"
+#include "VulkanFrameAttachment.h"
 #include <map>
 
 
 namespace fx {
+  typedef std::shared_ptr<VulkanFrameAttachment> AttachmentPtr;
+  typedef std::vector<AttachmentPtr> Attachments;
   
-  
+  /**
+   *
+   */
   class VulkanFrameBuffer: public FrameBuffer {
   private:
     ivec2 _frameSize;
@@ -25,7 +29,8 @@ namespace fx {
     std::vector<VkFramebuffer> _swapChainFramebuffers;
     VkPipelineLayout _pipelineLayout;
     
-    std::shared_ptr<VulkanTextureBuffer> _depthBuffer;
+    Attachments _colorAttachments;
+    AttachmentPtr _depthAttachment;
     
   public:
     VulkanFrameBuffer();
@@ -44,9 +49,11 @@ namespace fx {
     
     VkPipeline getVkPipelineForTask(const GraphicTask &task);
     
-    VkRenderPass getRenderPass() {return _renderPass;}
-    VkFramebuffer getFrameBuffer(int index) {return _swapChainFramebuffers[index];}
-    VkPipelineLayout getPipelineLayout() {return _pipelineLayout;}
+    VkRenderPass getRenderPass();
+    VkFramebuffer getFrameBuffer();
+    VkPipelineLayout getPipelineLayout();
+    
+    bool hasDepthBuffer() const {return _depthAttachment.get() != nullptr;}
     
   private:
     void clearBuffers();

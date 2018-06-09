@@ -19,7 +19,8 @@ using namespace std;
 using namespace fx;
 
 VulkanFrameBuffer::VulkanFrameBuffer() {
-  
+  _renderPass = VK_NULL_HANDLE;
+  _pipelineLayout = VK_NULL_HANDLE;
 }
 
 VulkanFrameBuffer::~VulkanFrameBuffer() {
@@ -31,10 +32,14 @@ bool VulkanFrameBuffer::loadXML(const XMLTree::Node &node) {
 }
 
 bool VulkanFrameBuffer::setToWindow(int index) {
-  _frameSize.w = (int)Vulkan::swapChainExtent.width;
-  _frameSize.h = (int)Vulkan::swapChainExtent.height;
-  
-  return true;
+  _colorAttachments.clear();
+  AttachmentPtr attachment = make_shared<VulkanFrameAttachment>();
+  if (attachment->loadSwapBuffers(index)) {
+    _frameSize = attachment->getBufferSize();
+    _colorAttachments.push_back(attachment);
+    return true;
+  }
+  return false;
 }
 
 bool VulkanFrameBuffer::resize(int width, int height) {
@@ -48,52 +53,53 @@ ivec2 VulkanFrameBuffer::size() const {
 }
 
 bool VulkanFrameBuffer::addDepthBuffer() {
-  _depthBuffer = make_shared<VulkanTextureBuffer>();
-  bool success = _depthBuffer->loadDepthBuffer(findDepthFormat(), _frameSize.w, _frameSize.h);
-  success &= createRenderPass();
-  success &= createFrameBuffers();
-  return success;
+  _depthAttachment = make_shared<VulkanFrameAttachment>();
+  return _depthAttachment->loadDepthBuffer(findDepthFormat(), _frameSize.w, _frameSize.h);
 }
 
 bool VulkanFrameBuffer::createRenderPass() {
-  // Define a single color attachment
-  VkAttachmentDescription colorAttachment = {};
-  colorAttachment.format = Vulkan::surfaceFormat;
-  colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-  colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-  colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-  colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-  colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+  int totalColorAttachments = (int)_colorAttachments.size();
+  vector<VkAttachmentReference> colorAttachmentRefrences(totalColorAttachments);
+  vector<VkAttachmentDescription> attachmentInfos(totalColorAttachments);
+  for (int i = 0; i < totalColorAttachments; ++i) {
+    colorAttachmentRefrences[i].attachment = i;
+    colorAttachmentRefrences[i].layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    
+    attachmentInfos[i].format = _colorAttachments[i]->getFormat();
+    attachmentInfos[i].samples = VK_SAMPLE_COUNT_1_BIT;
+    attachmentInfos[i].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    attachmentInfos[i].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachmentInfos[i].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    attachmentInfos[i].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    attachmentInfos[i].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    attachmentInfos[i].finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+  }
   
-  // Define a Color Attachment Refrence at index 0
-  VkAttachmentReference colorAttachmentRef = {};
-  colorAttachmentRef.attachment = 0;
-  colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-  
-  // Define the depth attachment
-  VkAttachmentDescription depthAttachment = {};
-  depthAttachment.format = _depthBuffer->getFormat();
-  depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-  depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-  depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-  depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-  
-  // Define a Depth Attachment Refrence at index 1
-  VkAttachmentReference depthAttachmentRef = {};
-  depthAttachmentRef.attachment = 1;
-  depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+  vector<VkAttachmentReference> depthAttachmentRefrences;
+  if (_depthAttachment) {
+    VkAttachmentReference depthAttachmentRef = {};
+    depthAttachmentRef.attachment = (uint32_t)attachmentInfos.size();
+    depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    depthAttachmentRefrences.push_back(depthAttachmentRef);
+    
+    VkAttachmentDescription depthAttachmentInfo = {};
+    depthAttachmentInfo.format = _depthAttachment->getFormat();
+    depthAttachmentInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+    depthAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    depthAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthAttachmentInfo.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    depthAttachmentInfo.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthAttachmentInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    depthAttachmentInfo.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+    attachmentInfos.push_back(depthAttachmentInfo);
+  }
   
   // Define subpass using the Color and Depth Attachment Refrences
   VkSubpassDescription subpass = {};
   subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-  subpass.colorAttachmentCount = 1;
-  subpass.pColorAttachments = &colorAttachmentRef;
-  subpass.pDepthStencilAttachment = &depthAttachmentRef;
+  subpass.colorAttachmentCount = (uint32_t)colorAttachmentRefrences.size();
+  subpass.pColorAttachments = colorAttachmentRefrences.size() > 0 ? colorAttachmentRefrences.data() : nullptr;
+  subpass.pDepthStencilAttachment = depthAttachmentRefrences.size() > 0 ? depthAttachmentRefrences.data() : nullptr;
   
   //
   VkSubpassDependency dependency = {};
@@ -105,11 +111,10 @@ bool VulkanFrameBuffer::createRenderPass() {
   dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
   
   // Create the Render Pass from the Color Attachment and Subpass
-  VkAttachmentDescription attachments[] = {colorAttachment, depthAttachment};
   VkRenderPassCreateInfo renderPassInfo = {};
   renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-  renderPassInfo.attachmentCount = 2;
-  renderPassInfo.pAttachments = attachments;
+  renderPassInfo.attachmentCount = (uint32_t)attachmentInfos.size();
+  renderPassInfo.pAttachments = attachmentInfos.data();
   renderPassInfo.subpassCount = 1;
   renderPassInfo.pSubpasses = &subpass;
   renderPassInfo.dependencyCount = 1;
@@ -124,20 +129,28 @@ bool VulkanFrameBuffer::createRenderPass() {
 }
 
 bool VulkanFrameBuffer::createFrameBuffers() {
-  _swapChainFramebuffers.resize(Vulkan::swapChainBuffers.size());
+  int totalBuffers = _colorAttachments.front()->getBufferCount();
+  _swapChainFramebuffers.resize(totalBuffers);
   
-  for (size_t i = 0; i < _swapChainFramebuffers.size(); i++) {
-    VkImageView attachments[] = {Vulkan::swapChainBuffers[i]->getImageView(), _depthBuffer->getImageView()};
+  for (int i = 0; i < totalBuffers; i++) {
+    // Get the Attachements
+    vector<VkImageView> attachments;
+    for (auto &colorAttachemnt : _colorAttachments)
+      attachments.push_back(colorAttachemnt->getImageView(i));
+    if (_depthAttachment)
+      attachments.push_back(_depthAttachment->getImageView());
     
+    // Define the Frame Buffer
     VkFramebufferCreateInfo framebufferInfo = {};
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.renderPass = _renderPass;
-    framebufferInfo.attachmentCount = 2;
-    framebufferInfo.pAttachments = attachments;
-    framebufferInfo.width = Vulkan::swapChainExtent.width;
-    framebufferInfo.height = Vulkan::swapChainExtent.height;
+    framebufferInfo.renderPass = getRenderPass();
+    framebufferInfo.attachmentCount = (uint32_t)attachments.size();
+    framebufferInfo.pAttachments = attachments.data();
+    framebufferInfo.width = _frameSize.width;
+    framebufferInfo.height = _frameSize.height;
     framebufferInfo.layers = 1;
     
+    // Create the Frame Buffer
     if (vkCreateFramebuffer(Vulkan::device, &framebufferInfo, nullptr, &_swapChainFramebuffers[i]) != VK_SUCCESS) {
       cerr << "Error Creating Frame Buffer" << endl;
       return false;
@@ -147,7 +160,7 @@ bool VulkanFrameBuffer::createFrameBuffers() {
 }
 
 void VulkanFrameBuffer::clearBuffers() {
-  _depthBuffer = nullptr;
+  _depthAttachment = nullptr;
 }
 
 VkFormat VulkanFrameBuffer::findDepthFormat() {
@@ -194,8 +207,8 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     VkViewport viewport = {};
     viewport.x = 0.0f;
     viewport.y = 0.0f;
-    viewport.width = (float)Vulkan::swapChainExtent.width;
-    viewport.height = (float)Vulkan::swapChainExtent.height;
+    viewport.width = (float)_frameSize.width;
+    viewport.height = (float)_frameSize.height;
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
     
@@ -302,7 +315,7 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = nullptr; // Optional
     pipelineInfo.layout = _pipelineLayout;
-    pipelineInfo.renderPass = _renderPass; //Vulkan::renderPass;
+    pipelineInfo.renderPass = getRenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     pipelineInfo.basePipelineIndex = -1; // Optional
@@ -316,4 +329,20 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     _pipelines[key] = pipeline;
   }
   return _pipelines[key];
+}
+
+VkRenderPass VulkanFrameBuffer::getRenderPass() {
+  if (_renderPass == VK_NULL_HANDLE)
+    assert(createRenderPass());
+  return _renderPass;
+}
+
+VkFramebuffer VulkanFrameBuffer::getFrameBuffer() {
+  if (_swapChainFramebuffers.size() == 0)
+    createFrameBuffers();
+  return _swapChainFramebuffers[_colorAttachments.front()->getCurrentIndex()];
+}
+
+VkPipelineLayout VulkanFrameBuffer::getPipelineLayout() {
+  return _pipelineLayout;
 }

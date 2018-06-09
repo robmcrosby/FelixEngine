@@ -73,6 +73,8 @@
 		C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08B1F353CD600212AAA /* TrackerSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08E1F353ECD00212AAA /* ARKitTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = C160E08F1F353ECD00212AAA /* ARKitTracker.mm */; };
+		C17C1D5120CB676600E102B9 /* VulkanFrameAttachment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C17C1D4F20CB676600E102B9 /* VulkanFrameAttachment.cpp */; };
+		C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */; };
 		C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A5E3801F3659620071D515 /* ARCamera.cpp */; };
 		C1A5E3831F3659620071D515 /* ARCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A5E3811F3659620071D515 /* ARCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3FDC21F54E8BB001F7DB5 /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -197,6 +199,8 @@
 		C160E08B1F353CD600212AAA /* TrackerSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrackerSystem.h; path = Systems/Tracking/TrackerSystem.h; sourceTree = "<group>"; };
 		C160E08E1F353ECD00212AAA /* ARKitTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKitTracker.h; path = Systems/Tracking/ARKit/ARKitTracker.h; sourceTree = "<group>"; };
 		C160E08F1F353ECD00212AAA /* ARKitTracker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARKitTracker.mm; path = Systems/Tracking/ARKit/ARKitTracker.mm; sourceTree = "<group>"; };
+		C17C1D4F20CB676600E102B9 /* VulkanFrameAttachment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanFrameAttachment.cpp; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.cpp; sourceTree = "<group>"; };
+		C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanFrameAttachment.h; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.h; sourceTree = "<group>"; };
 		C1A5E3801F3659620071D515 /* ARCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARCamera.cpp; sourceTree = "<group>"; };
 		C1A5E3811F3659620071D515 /* ARCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARCamera.h; sourceTree = "<group>"; };
 		C1B3FDC21F54E8BB001F7DB5 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Systems/Events/Event.h; sourceTree = "<group>"; };
@@ -493,6 +497,8 @@
 				C1D1D7FE209D209E000EB92C /* Vulkan.cpp */,
 				C1D1D7EB209BB637000EB92C /* VulkanFrameBuffer.h */,
 				C1D1D7EA209BB637000EB92C /* VulkanFrameBuffer.cpp */,
+				C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */,
+				C17C1D4F20CB676600E102B9 /* VulkanFrameAttachment.cpp */,
 				C1D1D7EF209BB666000EB92C /* VulkanShaderProgram.h */,
 				C1D1D7EE209BB666000EB92C /* VulkanShaderProgram.cpp */,
 				C1D1D7F3209BB68D000EB92C /* VulkanVertexMesh.h */,
@@ -585,6 +591,7 @@
 				C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
 				C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */,
+				C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */,
 				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
 				C1E60EB41F0F09860021F704 /* Camera.h in Headers */,
 			);
@@ -673,6 +680,7 @@
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
+				C17C1D5120CB676600E102B9 /* VulkanFrameAttachment.cpp in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
 				C1D1D800209D209E000EB92C /* Vulkan.cpp in Sources */,
 				C1D1D7EC209BB637000EB92C /* VulkanFrameBuffer.cpp in Sources */,
