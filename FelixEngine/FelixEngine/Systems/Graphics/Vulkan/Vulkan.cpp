@@ -30,10 +30,6 @@ VkExtent2D Vulkan::swapChainExtent;
 VulkanTextureBuffers Vulkan::swapChainBuffers;
 uint32_t Vulkan::currentSwapBuffer = 0;
 
-VkRenderPass Vulkan::renderPass;
-VkPipelineLayout Vulkan::pipelineLayout;
-VkPipeline Vulkan::graphicsPipeline;
-
 VkCommandPool Vulkan::commandPool;
 std::vector<VkCommandBuffer> Vulkan::commandBuffers;
 
@@ -287,10 +283,6 @@ void Vulkan::cleaup() {
     vkDestroySemaphore(device, imageAvailableSemaphore, nullptr);
     
     vkDestroyCommandPool(device, commandPool, nullptr);
-    
-    vkDestroyPipeline(device, graphicsPipeline, nullptr);
-    vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-    vkDestroyRenderPass(device, renderPass, nullptr);
     
     vkDestroyDevice(device, nullptr);
     device = VK_NULL_HANDLE;

@@ -61,7 +61,6 @@ bool VulkanGraphics::initalize(UIView *view) {
   assert(Vulkan::createLogicalDevice());
   assert(Vulkan::initDeviceQueue(width, height));
   
-  assert(createRenderPass());
   assert(createCommandPool());
   assert(Vulkan::createSemaphores());
   
@@ -170,45 +169,6 @@ bool VulkanGraphics::createSwapChain(UIView *view) {
   else
     Vulkan::surfaceFormat = formats[0].format;
   
-  return true;
-}
-
-bool VulkanGraphics::createRenderPass() {
-  // Define a single color attachment
-  VkAttachmentDescription colorAttachment = {};
-  colorAttachment.format = Vulkan::surfaceFormat;
-  colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-  colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-  colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-  colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-  colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-  colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-  colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-  
-  // Define a Color Attachment Refrence at index 0
-  VkAttachmentReference colorAttachmentRef = {};
-  colorAttachmentRef.attachment = 0;
-  colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-  
-  // Define subpass using the Color Attachment Refrence
-  VkSubpassDescription subpass = {};
-  subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-  subpass.colorAttachmentCount = 1;
-  subpass.pColorAttachments = &colorAttachmentRef;
-  
-  // Create the Render Pass from the Color Attachment and Subpass
-  VkRenderPassCreateInfo renderPassInfo = {};
-  renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-  renderPassInfo.attachmentCount = 1;
-  renderPassInfo.pAttachments = &colorAttachment;
-  renderPassInfo.subpassCount = 1;
-  renderPassInfo.pSubpasses = &subpass;
-  
-  // Create the Render Pass
-  if (vkCreateRenderPass(Vulkan::device, &renderPassInfo, nullptr, &Vulkan::renderPass) != VK_SUCCESS) {
-    cerr << "Error Creating Render Pass" << endl;
-    return false;
-  }
   return true;
 }
 

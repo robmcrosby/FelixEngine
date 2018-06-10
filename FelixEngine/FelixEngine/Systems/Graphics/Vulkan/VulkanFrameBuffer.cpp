@@ -161,7 +161,16 @@ bool VulkanFrameBuffer::createFrameBuffers(const GraphicTask &task) {
 }
 
 void VulkanFrameBuffer::clearBuffers() {
+  // Clear the Color Buffers
+  _colorAttachments.clear();
+  
+  // Clear the DepthStencil Buffer
   _depthAttachment = nullptr;
+  
+  // Clear the Render Passes
+  for (auto &renderPass : _renderPasses)
+    vkDestroyRenderPass(Vulkan::device, renderPass.second, nullptr);
+  _renderPasses.clear();
 }
 
 VkFormat VulkanFrameBuffer::findDepthFormat() {

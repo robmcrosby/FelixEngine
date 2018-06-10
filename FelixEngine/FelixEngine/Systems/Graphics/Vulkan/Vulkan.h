@@ -43,10 +43,6 @@ namespace fx {
     static VulkanTextureBuffers swapChainBuffers;
     static uint32_t currentSwapBuffer;
     
-    static VkRenderPass renderPass;
-    static VkPipelineLayout pipelineLayout;
-    static VkPipeline graphicsPipeline;
-    
     static VkCommandPool commandPool;
     static std::vector<VkCommandBuffer> commandBuffers;
     

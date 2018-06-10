@@ -53,8 +53,6 @@ namespace fx {
   private:
     bool createInstance();
     bool createSwapChain(UIView *view);
-    
-    bool createRenderPass();
     bool createCommandPool();
     
     void createCommandPools();
