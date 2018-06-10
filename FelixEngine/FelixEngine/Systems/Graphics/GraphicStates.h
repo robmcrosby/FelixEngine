@@ -18,14 +18,14 @@
 namespace fx {
   
   enum LOAD_ACTION {
-    LOAD_LAST,
-    LOAD_NONE,
-    LOAD_CLEAR,
+    LOAD_NONE  = 0x00,
+    LOAD_LAST  = 0x01,
+    LOAD_CLEAR = 0x02,
   };
   
   enum STORE_ACTION {
-    STORE_SAVE,
-    STORE_DISCARD,
+    STORE_DISCARD = 0x00,
+    STORE_SAVE    = 0x04,
   };
   
   struct ActionState {
@@ -36,6 +36,7 @@ namespace fx {
     ActionState(): loadAction(LOAD_LAST), storeAction(STORE_SAVE) {
       clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
+    uint32_t key() const {return loadAction | storeAction;}
   };
   
   enum CULL_MODE {

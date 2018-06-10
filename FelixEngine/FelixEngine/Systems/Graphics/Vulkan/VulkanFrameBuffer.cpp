@@ -19,7 +19,6 @@ using namespace std;
 using namespace fx;
 
 VulkanFrameBuffer::VulkanFrameBuffer() {
-  _renderPass = VK_NULL_HANDLE;
   _pipelineLayout = VK_NULL_HANDLE;
 }
 
@@ -57,7 +56,7 @@ bool VulkanFrameBuffer::addDepthBuffer() {
   return _depthAttachment->loadDepthBuffer(findDepthFormat(), _frameSize.w, _frameSize.h);
 }
 
-bool VulkanFrameBuffer::createRenderPass() {
+bool VulkanFrameBuffer::createRenderPass(const GraphicTask &task) {
   int totalColorAttachments = (int)_colorAttachments.size();
   vector<VkAttachmentReference> colorAttachmentRefrences(totalColorAttachments);
   vector<VkAttachmentDescription> attachmentInfos(totalColorAttachments);
@@ -67,8 +66,8 @@ bool VulkanFrameBuffer::createRenderPass() {
     
     attachmentInfos[i].format = _colorAttachments[i]->getFormat();
     attachmentInfos[i].samples = VK_SAMPLE_COUNT_1_BIT;
-    attachmentInfos[i].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    attachmentInfos[i].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachmentInfos[i].loadOp = getAttachmentLoadOp(task.colorActions[i].loadAction);
+    attachmentInfos[i].storeOp = getAttachmentStoreOp(task.colorActions[i].storeAction);
     attachmentInfos[i].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     attachmentInfos[i].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     attachmentInfos[i].initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -85,8 +84,8 @@ bool VulkanFrameBuffer::createRenderPass() {
     VkAttachmentDescription depthAttachmentInfo = {};
     depthAttachmentInfo.format = _depthAttachment->getFormat();
     depthAttachmentInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-    depthAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    depthAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    depthAttachmentInfo.loadOp = getAttachmentLoadOp(task.depthStencilAction.loadAction);
+    depthAttachmentInfo.storeOp = getAttachmentStoreOp(task.depthStencilAction.storeAction);
     depthAttachmentInfo.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
     depthAttachmentInfo.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     depthAttachmentInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -121,14 +120,16 @@ bool VulkanFrameBuffer::createRenderPass() {
   renderPassInfo.pDependencies = &dependency;
   
   // Create the Render Pass
-  if (vkCreateRenderPass(Vulkan::device, &renderPassInfo, nullptr, &_renderPass) != VK_SUCCESS) {
+  VkRenderPass renderPass;
+  if (vkCreateRenderPass(Vulkan::device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
     cerr << "Error Creating Render Pass" << endl;
     return false;
   }
+  _renderPasses[task.getActionStateKey()] = renderPass;
   return true;
 }
 
-bool VulkanFrameBuffer::createFrameBuffers() {
+bool VulkanFrameBuffer::createFrameBuffers(const GraphicTask &task) {
   int totalBuffers = _colorAttachments.front()->getBufferCount();
   _swapChainFramebuffers.resize(totalBuffers);
   
@@ -143,7 +144,7 @@ bool VulkanFrameBuffer::createFrameBuffers() {
     // Define the Frame Buffer
     VkFramebufferCreateInfo framebufferInfo = {};
     framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.renderPass = getRenderPass();
+    framebufferInfo.renderPass = getRenderPass(task);
     framebufferInfo.attachmentCount = (uint32_t)attachments.size();
     framebufferInfo.pAttachments = attachments.data();
     framebufferInfo.width = _frameSize.width;
@@ -315,7 +316,7 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = nullptr; // Optional
     pipelineInfo.layout = _pipelineLayout;
-    pipelineInfo.renderPass = getRenderPass();
+    pipelineInfo.renderPass = getRenderPass(task);
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
     pipelineInfo.basePipelineIndex = -1; // Optional
@@ -331,18 +332,41 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
   return _pipelines[key];
 }
 
-VkRenderPass VulkanFrameBuffer::getRenderPass() {
-  if (_renderPass == VK_NULL_HANDLE)
-    assert(createRenderPass());
-  return _renderPass;
+VkRenderPass VulkanFrameBuffer::getRenderPass(const GraphicTask &task) {
+  uint32_t key = task.getActionStateKey();
+  if (_renderPasses.count(key) == 0)
+    assert(createRenderPass(task));
+  return _renderPasses.at(key);
 }
 
-VkFramebuffer VulkanFrameBuffer::getFrameBuffer() {
+VkFramebuffer VulkanFrameBuffer::getFrameBuffer(const GraphicTask &task) {
   if (_swapChainFramebuffers.size() == 0)
-    createFrameBuffers();
+    createFrameBuffers(task);
   return _swapChainFramebuffers[_colorAttachments.front()->getCurrentIndex()];
 }
 
 VkPipelineLayout VulkanFrameBuffer::getPipelineLayout() {
   return _pipelineLayout;
+}
+
+VkAttachmentLoadOp VulkanFrameBuffer::getAttachmentLoadOp(LOAD_ACTION action) {
+  switch (action) {
+    case LOAD_NONE:
+      return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    case LOAD_LAST:
+      return VK_ATTACHMENT_LOAD_OP_LOAD;
+    case LOAD_CLEAR:
+      return VK_ATTACHMENT_LOAD_OP_CLEAR;
+  }
+  return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+}
+
+VkAttachmentStoreOp VulkanFrameBuffer::getAttachmentStoreOp(STORE_ACTION action) {
+  switch (action) {
+    case STORE_DISCARD:
+      return VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    case STORE_SAVE:
+      return VK_ATTACHMENT_STORE_OP_STORE;
+  }
+  return VK_ATTACHMENT_STORE_OP_DONT_CARE;
 }

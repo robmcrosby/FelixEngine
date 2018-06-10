@@ -25,7 +25,7 @@ namespace fx {
     ivec2 _frameSize;
     std::map<int, VkPipeline> _pipelines;
     
-    VkRenderPass _renderPass;
+    std::map<uint32_t, VkRenderPass> _renderPasses;
     std::vector<VkFramebuffer> _swapChainFramebuffers;
     VkPipelineLayout _pipelineLayout;
     
@@ -49,8 +49,8 @@ namespace fx {
     
     VkPipeline getVkPipelineForTask(const GraphicTask &task);
     
-    VkRenderPass getRenderPass();
-    VkFramebuffer getFrameBuffer();
+    VkRenderPass getRenderPass(const GraphicTask &task);
+    VkFramebuffer getFrameBuffer(const GraphicTask &task);
     VkPipelineLayout getPipelineLayout();
     
     bool hasDepthBuffer() const {return _depthAttachment.get() != nullptr;}
@@ -59,8 +59,11 @@ namespace fx {
   private:
     void clearBuffers();
     VkFormat findDepthFormat();
-    bool createRenderPass();
-    bool createFrameBuffers();
+    bool createRenderPass(const GraphicTask &task);
+    bool createFrameBuffers(const GraphicTask &task);
+    
+    static VkAttachmentLoadOp getAttachmentLoadOp(LOAD_ACTION action);
+    static VkAttachmentStoreOp getAttachmentStoreOp(STORE_ACTION action);
   };
 }
 
