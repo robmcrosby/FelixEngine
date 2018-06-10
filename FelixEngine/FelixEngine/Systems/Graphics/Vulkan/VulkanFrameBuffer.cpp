@@ -130,8 +130,10 @@ bool VulkanFrameBuffer::createRenderPass(const GraphicTask &task) {
 }
 
 bool VulkanFrameBuffer::createFrameBuffers(const GraphicTask &task) {
+  int key = task.getActionStateKey();
   int totalBuffers = _colorAttachments.front()->getBufferCount();
-  _swapChainFramebuffers.resize(totalBuffers);
+  
+  _framebuffers[key].resize(totalBuffers);
   
   for (int i = 0; i < totalBuffers; i++) {
     // Get the Attachements
@@ -152,7 +154,7 @@ bool VulkanFrameBuffer::createFrameBuffers(const GraphicTask &task) {
     framebufferInfo.layers = 1;
     
     // Create the Frame Buffer
-    if (vkCreateFramebuffer(Vulkan::device, &framebufferInfo, nullptr, &_swapChainFramebuffers[i]) != VK_SUCCESS) {
+    if (vkCreateFramebuffer(Vulkan::device, &framebufferInfo, nullptr, &_framebuffers[key][i]) != VK_SUCCESS) {
       cerr << "Error Creating Frame Buffer" << endl;
       return false;
     }
@@ -349,9 +351,10 @@ VkRenderPass VulkanFrameBuffer::getRenderPass(const GraphicTask &task) {
 }
 
 VkFramebuffer VulkanFrameBuffer::getFrameBuffer(const GraphicTask &task) {
-  if (_swapChainFramebuffers.size() == 0)
+  int key = task.getActionStateKey();
+  if (_framebuffers.count(key) == 0)
     createFrameBuffers(task);
-  return _swapChainFramebuffers[_colorAttachments.front()->getCurrentIndex()];
+  return _framebuffers[key][_colorAttachments.front()->getCurrentIndex()];
 }
 
 VkPipelineLayout VulkanFrameBuffer::getPipelineLayout() {

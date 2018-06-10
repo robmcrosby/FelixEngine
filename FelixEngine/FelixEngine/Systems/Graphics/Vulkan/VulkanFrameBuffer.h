@@ -26,7 +26,7 @@ namespace fx {
     std::map<int, VkPipeline> _pipelines;
     
     std::map<uint32_t, VkRenderPass> _renderPasses;
-    std::vector<VkFramebuffer> _swapChainFramebuffers;
+    std::map<uint32_t, std::vector<VkFramebuffer> > _framebuffers;
     VkPipelineLayout _pipelineLayout;
     
     Attachments _colorAttachments;
