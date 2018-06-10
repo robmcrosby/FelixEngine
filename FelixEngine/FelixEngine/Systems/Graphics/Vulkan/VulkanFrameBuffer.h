@@ -62,6 +62,7 @@ namespace fx {
     bool createRenderPass(const GraphicTask &task);
     bool createFrameBuffers(const GraphicTask &task);
     
+    static VkCullModeFlags getCullMode(CULL_MODE mode);
     static VkAttachmentLoadOp getAttachmentLoadOp(LOAD_ACTION action);
     static VkAttachmentStoreOp getAttachmentStoreOp(STORE_ACTION action);
   };

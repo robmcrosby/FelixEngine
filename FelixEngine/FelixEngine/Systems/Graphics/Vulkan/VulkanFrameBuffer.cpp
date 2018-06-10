@@ -245,7 +245,7 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     rasterizer.rasterizerDiscardEnable = VK_FALSE;
     rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
     rasterizer.lineWidth = 1.0f;
-    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+    rasterizer.cullMode = getCullMode(task.cullMode);  //VK_CULL_MODE_BACK_BIT;
     rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE; // VK_FRONT_FACE_COUNTER_CLOCKWISE
     rasterizer.depthBiasEnable = VK_FALSE;
     rasterizer.depthBiasConstantFactor = 0.0f; // Optional
@@ -359,6 +359,18 @@ VkFramebuffer VulkanFrameBuffer::getFrameBuffer(const GraphicTask &task) {
 
 VkPipelineLayout VulkanFrameBuffer::getPipelineLayout() {
   return _pipelineLayout;
+}
+
+VkCullModeFlags VulkanFrameBuffer::getCullMode(CULL_MODE mode) {
+  switch (mode) {
+    case CULL_NONE:
+      return VK_CULL_MODE_NONE;
+    case CULL_BACK:
+      return VK_CULL_MODE_BACK_BIT;
+    case CULL_FRONT:
+      return VK_CULL_MODE_FRONT_BIT;
+  }
+  return VK_CULL_MODE_NONE;
 }
 
 VkAttachmentLoadOp VulkanFrameBuffer::getAttachmentLoadOp(LOAD_ACTION action) {
