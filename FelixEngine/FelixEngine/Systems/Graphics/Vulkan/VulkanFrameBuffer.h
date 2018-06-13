@@ -65,6 +65,9 @@ namespace fx {
     static VkCullModeFlags getCullMode(CULL_MODE mode);
     static VkAttachmentLoadOp getAttachmentLoadOp(LOAD_ACTION action);
     static VkAttachmentStoreOp getAttachmentStoreOp(STORE_ACTION action);
+    static VkCompareOp getDepthCompareOp(int operation);
+    static VkBlendFactor getBlendFactor(int factor);
+    static VkBlendOp getBlendOp(int equation);
   };
 }
 

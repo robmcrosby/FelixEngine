@@ -245,8 +245,8 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     rasterizer.rasterizerDiscardEnable = VK_FALSE;
     rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
     rasterizer.lineWidth = 1.0f;
-    rasterizer.cullMode = getCullMode(task.cullMode);  //VK_CULL_MODE_BACK_BIT;
-    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE; // VK_FRONT_FACE_COUNTER_CLOCKWISE
+    rasterizer.cullMode = getCullMode(task.cullMode);
+    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
     rasterizer.depthBiasEnable = VK_FALSE;
     rasterizer.depthBiasConstantFactor = 0.0f; // Optional
     rasterizer.depthBiasClamp = 0.0f; // Optional
@@ -267,9 +267,9 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     // Define Depth Stencil State Info
     VkPipelineDepthStencilStateCreateInfo depthStencil = {};
     depthStencil.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-    depthStencil.depthTestEnable = VK_TRUE;
-    depthStencil.depthWriteEnable = VK_TRUE;
-    depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
+    depthStencil.depthTestEnable = task.depthState.enabled() ? VK_TRUE : VK_FALSE;
+    depthStencil.depthWriteEnable = task.depthState.writingEnabled() ? VK_TRUE : VK_FALSE;
+    depthStencil.depthCompareOp = getDepthCompareOp(task.depthState.function());
     depthStencil.depthBoundsTestEnable = VK_FALSE;
     depthStencil.stencilTestEnable = VK_FALSE;
     
@@ -277,12 +277,12 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     // Define Color Blending State Info
     VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
     colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    colorBlendAttachment.blendEnable = VK_FALSE;
-    colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-    colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-    colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD; // Optional
-    colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE; // Optional
-    colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
+    colorBlendAttachment.blendEnable = task.blendState.enabled() ? VK_TRUE : VK_FALSE;
+    colorBlendAttachment.srcColorBlendFactor = getBlendFactor(task.blendState.src());
+    colorBlendAttachment.dstColorBlendFactor = getBlendFactor(task.blendState.dst());
+    colorBlendAttachment.colorBlendOp = getBlendOp(task.blendState.equation());
+    colorBlendAttachment.srcAlphaBlendFactor = getBlendFactor(task.blendState.srcAlpha());
+    colorBlendAttachment.dstAlphaBlendFactor = getBlendFactor(task.blendState.dstAlpha());
     colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
     
     
@@ -293,10 +293,10 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
     colorBlending.attachmentCount = 1;
     colorBlending.pAttachments = &colorBlendAttachment;
-    colorBlending.blendConstants[0] = 0.0f; // Optional
-    colorBlending.blendConstants[1] = 0.0f; // Optional
-    colorBlending.blendConstants[2] = 0.0f; // Optional
-    colorBlending.blendConstants[3] = 0.0f; // Optional
+    colorBlending.blendConstants[0] = task.blendState.color.r;
+    colorBlending.blendConstants[1] = task.blendState.color.g;
+    colorBlending.blendConstants[2] = task.blendState.color.b;
+    colorBlending.blendConstants[3] = task.blendState.color.a;
     
     // Define Pipeline Layout for Constant Values
     VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
@@ -393,4 +393,72 @@ VkAttachmentStoreOp VulkanFrameBuffer::getAttachmentStoreOp(STORE_ACTION action)
       return VK_ATTACHMENT_STORE_OP_STORE;
   }
   return VK_ATTACHMENT_STORE_OP_DONT_CARE;
+}
+
+VkCompareOp VulkanFrameBuffer::getDepthCompareOp(int operation) {
+  switch (operation) {
+    case DEPTH_TEST_NEVER:
+      return VK_COMPARE_OP_NEVER;
+    case DEPTH_TEST_EQUAL:
+      return VK_COMPARE_OP_EQUAL;
+    case DEPTH_TEST_LESS:
+      return VK_COMPARE_OP_LESS;
+    case DEPTH_TEST_GREATER:
+      return VK_COMPARE_OP_GREATER;
+    case DEPTH_TEST_LESS_EQ:
+      return VK_COMPARE_OP_LESS_OR_EQUAL;
+    case DEPTH_TEST_GREATER_EQ:
+      return VK_COMPARE_OP_GREATER_OR_EQUAL;
+  }
+  return VK_COMPARE_OP_ALWAYS;
+}
+
+VkBlendFactor VulkanFrameBuffer::getBlendFactor(int factor) {
+  switch (factor) {
+    case BLEND_INPUT_ZERO:
+      return VK_BLEND_FACTOR_ZERO;
+    case BLEND_INPUT_ONE:
+      return VK_BLEND_FACTOR_ONE;
+    case BLEND_INPUT_SRC_COLOR:
+      return VK_BLEND_FACTOR_SRC_COLOR;
+    case BLEND_INPUT_SRC_ALPHA:
+      return VK_BLEND_FACTOR_SRC_ALPHA;
+    case BLEND_INPUT_DST_COLOR:
+      return VK_BLEND_FACTOR_DST_COLOR;
+    case BLEND_INPUT_DST_ALPHA:
+      return VK_BLEND_FACTOR_DST_ALPHA;
+    case BLEND_INPUT_CONST_COLOR:
+      return VK_BLEND_FACTOR_CONSTANT_COLOR;
+    case BLEND_INPUT_CONST_ALPHA:
+      return VK_BLEND_FACTOR_CONSTANT_ALPHA;
+    case BLEND_INPUT_SRC_COLOR | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+    case BLEND_INPUT_SRC_ALPHA | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    case BLEND_INPUT_DST_COLOR | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
+    case BLEND_INPUT_DST_ALPHA | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
+    case BLEND_INPUT_CONST_COLOR | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_COLOR;
+    case BLEND_INPUT_CONST_ALPHA | BLEND_INPUT_ONE_MINUS:
+      return VK_BLEND_FACTOR_ONE_MINUS_CONSTANT_ALPHA;
+  }
+  return VK_BLEND_FACTOR_SRC_ALPHA_SATURATE;
+}
+
+VkBlendOp VulkanFrameBuffer::getBlendOp(int equation) {
+  switch (equation) {
+    case BLEND_EQ_ADD:
+      return VK_BLEND_OP_ADD;
+    case BLEND_EQ_SUBTRACT:
+      return VK_BLEND_OP_SUBTRACT;
+    case BLEND_EQ_REV_SUBTRACT:
+      return VK_BLEND_OP_REVERSE_SUBTRACT;
+    case BLEND_EQ_MIN:
+      return VK_BLEND_OP_MIN;
+    case BLEND_EQ_MAX:
+      return VK_BLEND_OP_MAX;
+  }
+  return VK_BLEND_OP_ZERO_EXT;
 }
