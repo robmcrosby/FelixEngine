@@ -14,6 +14,8 @@
 using namespace std;
 using namespace fx;
 
+unsigned int VulkanVertexMesh::meshCount = 0;
+
 VulkanVertexMesh::VulkanVertexMesh() {
   _bindingDescription.binding = 0;
   _bindingDescription.stride = 0;
@@ -23,6 +25,8 @@ VulkanVertexMesh::VulkanVertexMesh() {
   _meshData = nullptr;
   
   _totalVertices = 0;
+  
+  _meshId = meshCount++;
 }
 
 VulkanVertexMesh::~VulkanVertexMesh() {
@@ -129,6 +133,10 @@ bool VulkanVertexMesh::loadBuffers() {
       clearMeshData();
   }
   return success;
+}
+
+unsigned int VulkanVertexMesh::getMeshId() const {
+  return _meshId;
 }
 
 void VulkanVertexMesh::drawToCommandBuffer(VkCommandBuffer commandBuffer) {

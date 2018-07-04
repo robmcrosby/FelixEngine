@@ -46,11 +46,16 @@ namespace fx {
     std::vector<VkDescriptorSetLayout> _vertexSetLayouts;
     std::vector<VkDescriptorSetLayout> _fragmentSetLayouts;
     
+    static unsigned int shaderCount;
+    unsigned int _shaderId;
+    
   public:
     VulkanShaderProgram();
     virtual ~VulkanShaderProgram();
     
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
+    
+    virtual unsigned int getShaderId() const;
     
     void clearShaderModules();
     

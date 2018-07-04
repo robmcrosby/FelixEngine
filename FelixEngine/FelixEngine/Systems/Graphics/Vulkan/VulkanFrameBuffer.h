@@ -23,7 +23,7 @@ namespace fx {
   class VulkanFrameBuffer: public FrameBuffer {
   private:
     ivec2 _frameSize;
-    std::map<int, VkPipeline> _pipelines;
+    std::map<std::string, VkPipeline> _pipelines;
     
     std::map<uint32_t, VkRenderPass> _renderPasses;
     std::map<uint32_t, std::vector<VkFramebuffer> > _framebuffers;
@@ -61,6 +61,8 @@ namespace fx {
     VkFormat findDepthFormat();
     bool createRenderPass(const GraphicTask &task);
     bool createFrameBuffers(const GraphicTask &task);
+    
+    static std::string generateKey(const GraphicTask &task);
     
     static VkCullModeFlags getCullMode(CULL_MODE mode);
     static VkAttachmentLoadOp getAttachmentLoadOp(LOAD_ACTION action);

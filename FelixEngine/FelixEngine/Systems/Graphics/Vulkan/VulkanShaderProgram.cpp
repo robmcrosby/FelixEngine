@@ -16,6 +16,8 @@
 using namespace std;
 using namespace fx;
 
+unsigned int VulkanShaderProgram::shaderCount = 0;
+
 VulkanShaderProgram::VulkanShaderProgram() {
   _totalVertexSets = 0;
   _totalFragmentSets = 0;
@@ -29,6 +31,8 @@ VulkanShaderProgram::VulkanShaderProgram() {
   _shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
   _shaderStages[1].module = VK_NULL_HANDLE;
   _shaderStages[1].pName = "main";
+  
+  _shaderId = shaderCount++;
 }
 
 VulkanShaderProgram::~VulkanShaderProgram() {
@@ -68,6 +72,10 @@ bool VulkanShaderProgram::loadShaderFunctions(const std::string &vertex, const s
   loadShaderModule(getShaderFileName(fragment), SHADER_FRAGMENT);
   
   return _shaderStages[0].module != VK_NULL_HANDLE && _shaderStages[1].module != VK_NULL_HANDLE && createDescriptorSetLayouts();
+}
+
+unsigned int VulkanShaderProgram::getShaderId() const {
+  return _shaderId;
 }
 
 int VulkanShaderProgram::getVertexLocation(const std::string &name) const {

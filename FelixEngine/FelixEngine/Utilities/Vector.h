@@ -11,6 +11,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <string>
 
 #define CHAR_BUFF_SIZE 128
@@ -373,6 +375,16 @@ namespace fx
       z = (T)fz;
       w = (T)fw;
       return res = 4;
+    }
+    
+    std::string hexColor() const
+    {
+      std::stringstream ss;
+      ss << std::setfill('0') << std::setw(2) << std::hex << (int)(x*255);
+      ss << std::setfill('0') << std::setw(2) << std::hex << (int)(y*255);
+      ss << std::setfill('0') << std::setw(2) << std::hex << (int)(z*255);
+      ss << std::setfill('0') << std::setw(2) << std::hex << (int)(a*255);
+      return ss.str();
     }
     
     friend std::ostream &operator<<(std::ostream &os, const Vector4 &v)

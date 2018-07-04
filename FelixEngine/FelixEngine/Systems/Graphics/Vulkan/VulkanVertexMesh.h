@@ -40,6 +40,9 @@ namespace fx {
     VERTEX_PRIMITIVE _primitiveType;
     VertexMeshData *_meshData;
     
+    static unsigned int meshCount;
+    unsigned int _meshId;
+    
   public:
     VulkanVertexMesh();
     virtual ~VulkanVertexMesh();
@@ -49,6 +52,8 @@ namespace fx {
     virtual bool setIndexBuffer(size_t count, const int *buffer);
     virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
     virtual bool loadBuffers();
+    
+    virtual unsigned int getMeshId() const;
     
     uint32_t getBindingDescriptionsCount() const {return 1;}
     VkVertexInputBindingDescription* getBindingDescriptions() {return &_bindingDescription;}

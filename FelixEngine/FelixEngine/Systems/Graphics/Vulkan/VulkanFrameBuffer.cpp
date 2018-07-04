@@ -193,8 +193,7 @@ TextureBufferPtr VulkanFrameBuffer::getColorTexture(int index) {
 }
 
 VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
-  // TODO: Implement Key
-  int key = 0;
+  string key = generateKey(task);
   
   if (!_pipelines.count(key)) {
     VulkanShaderProgram *shader = static_cast<VulkanShaderProgram*>(task.shader.get());
@@ -227,7 +226,8 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     // Define the scissor region
     VkRect2D scissor = {};
     scissor.offset = {0, 0};
-    scissor.extent = Vulkan::swapChainExtent;
+    scissor.extent.width = (uint32_t)_frameSize.width;
+    scissor.extent.height = (uint32_t)_frameSize.height;
     
     // Define the Viewport State Info
     VkPipelineViewportStateCreateInfo viewportState = {};
@@ -236,7 +236,6 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     viewportState.pViewports = &viewport;
     viewportState.scissorCount = 1;
     viewportState.pScissors = &scissor;
-    
     
     // Define the Rasterization State Info
     VkPipelineRasterizationStateCreateInfo rasterizer = {};
@@ -275,24 +274,25 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     
     
     // Define Color Blending State Info
-    VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
-    colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    colorBlendAttachment.blendEnable = task.blendState.enabled() ? VK_TRUE : VK_FALSE;
-    colorBlendAttachment.srcColorBlendFactor = getBlendFactor(task.blendState.src());
-    colorBlendAttachment.dstColorBlendFactor = getBlendFactor(task.blendState.dst());
-    colorBlendAttachment.colorBlendOp = getBlendOp(task.blendState.equation());
-    colorBlendAttachment.srcAlphaBlendFactor = getBlendFactor(task.blendState.srcAlpha());
-    colorBlendAttachment.dstAlphaBlendFactor = getBlendFactor(task.blendState.dstAlpha());
-    colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD; // Optional
-    
+    vector<VkPipelineColorBlendAttachmentState> colorBlendAttachments(_colorAttachments.size());
+    for (int i = 0; i < colorBlendAttachments.size(); ++i) {
+      colorBlendAttachments[i].colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+      colorBlendAttachments[i].blendEnable = task.blendState.enabled() ? VK_TRUE : VK_FALSE;
+      colorBlendAttachments[i].srcColorBlendFactor = getBlendFactor(task.blendState.src());
+      colorBlendAttachments[i].dstColorBlendFactor = getBlendFactor(task.blendState.dst());
+      colorBlendAttachments[i].colorBlendOp = getBlendOp(task.blendState.equation());
+      colorBlendAttachments[i].srcAlphaBlendFactor = getBlendFactor(task.blendState.srcAlpha());
+      colorBlendAttachments[i].dstAlphaBlendFactor = getBlendFactor(task.blendState.dstAlpha());
+      colorBlendAttachments[i].alphaBlendOp = VK_BLEND_OP_ADD; // Optional
+    }
     
     // Define the Blend Color Info
     VkPipelineColorBlendStateCreateInfo colorBlending = {};
     colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     colorBlending.logicOpEnable = VK_FALSE;
     colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
-    colorBlending.attachmentCount = 1;
-    colorBlending.pAttachments = &colorBlendAttachment;
+    colorBlending.attachmentCount = (uint32_t)colorBlendAttachments.size();
+    colorBlending.pAttachments = colorBlendAttachments.data();
     colorBlending.blendConstants[0] = task.blendState.color.r;
     colorBlending.blendConstants[1] = task.blendState.color.g;
     colorBlending.blendConstants[2] = task.blendState.color.b;
@@ -340,7 +340,7 @@ VkPipeline VulkanFrameBuffer::getVkPipelineForTask(const GraphicTask &task) {
     }
     _pipelines[key] = pipeline;
   }
-  return _pipelines[key];
+  return _pipelines.at(key);
 }
 
 VkRenderPass VulkanFrameBuffer::getRenderPass(const GraphicTask &task) {
@@ -359,6 +359,17 @@ VkFramebuffer VulkanFrameBuffer::getFrameBuffer(const GraphicTask &task) {
 
 VkPipelineLayout VulkanFrameBuffer::getPipelineLayout() {
   return _pipelineLayout;
+}
+
+string VulkanFrameBuffer::generateKey(const GraphicTask &task) {
+  stringstream ss;
+  ss << "C" << task.cullMode;
+  ss << "D" << task.depthState.flags;
+  ss << "B" << task.blendState.flags;
+  ss << task.blendState.color.hexColor();
+  ss << "M" << task.mesh->getMeshId();
+  ss << "S" << task.shader->getShaderId();
+  return ss.str();
 }
 
 VkCullModeFlags VulkanFrameBuffer::getCullMode(CULL_MODE mode) {

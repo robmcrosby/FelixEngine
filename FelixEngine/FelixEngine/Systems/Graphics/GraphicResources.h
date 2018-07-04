@@ -37,6 +37,8 @@ namespace fx {
     
     virtual bool loadXML(const XMLTree::Node &node);
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) = 0;
+    
+    virtual unsigned int getShaderId() const = 0;
   };
   
   struct VertexMesh {
@@ -52,6 +54,8 @@ namespace fx {
     bool setVertexBuffer(const std::string &name, const std::vector<float> &buffer);
     bool setVertexBuffer(const std::string &name, const std::vector<vec2> &buffer);
     bool setVertexBuffer(const std::string &name, const std::vector<vec4> &buffer);
+    
+    virtual unsigned int getMeshId() const = 0;
   };
   
   enum BUFFER_COUNT {
