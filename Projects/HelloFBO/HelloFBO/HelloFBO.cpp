@@ -10,9 +10,7 @@
 
 
 HelloFBO::HelloFBO() {
-  _firstUniformMap = std::make_shared<fx::UniformMap>();
-  _secondUniformMap = std::make_shared<fx::UniformMap>();
-  _secondTextureMap = std::make_shared<fx::TextureMap>();
+  
 }
 
 HelloFBO::~HelloFBO() {
@@ -20,6 +18,10 @@ HelloFBO::~HelloFBO() {
 }
 
 void HelloFBO::initalize() {
+  _firstUniformMap = std::make_shared<fx::UniformMap>();
+  _secondUniformMap = std::make_shared<fx::UniformMap>();
+  _secondTextureMap = std::make_shared<fx::TextureMap>();
+  
   setupFirstTask();
   setupSecondTask();
 }
