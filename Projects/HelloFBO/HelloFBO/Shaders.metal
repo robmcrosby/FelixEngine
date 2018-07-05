@@ -62,19 +62,19 @@ struct UVInput {
   float2 uv [[user(uv)]];
 };
 
-vertex UVOutput basic_uv(const device packed_float4 *Position [[ buffer(0) ]],
-                         const device packed_float2 *UV       [[ buffer(1) ]],
-                         constant     MVPUniform    *MVP      [[ buffer(2) ]],
-                         unsigned int   vid      [[ vertex_id ]]) {
+vertex UVOutput texture_vertex(const device packed_float4 *Position [[ buffer(0) ]],
+                               const device packed_float2 *UV       [[ buffer(1) ]],
+                               constant     MVPUniform    *MVP      [[ buffer(2) ]],
+                                            unsigned int   vid      [[ vertex_id ]]) {
   UVOutput output;
   output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
   output.uv = float2(UV[vid]);
   return output;
 }
 
-fragment half4 basic_texture(UVInput           input     [[ stage_in ]],
-                             texture2d<float>  texture2D [[ texture(0) ]],
-                             sampler           sampler2D [[ sampler(0) ]]) {
+fragment half4 texture_fragment(UVInput           input     [[ stage_in ]],
+                                texture2d<float>  texture2D [[ texture(0) ]],
+                                sampler           sampler2D [[ sampler(0) ]]) {
   float4 color = texture2D.sample(sampler2D, input.uv);
   return half4(color.r, color.g, color.b, color.a);
 }

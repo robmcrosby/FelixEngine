@@ -91,7 +91,7 @@ void HelloFBO::setupSecondTask() {
   _secondTask.frame->setToWindow(0);
   
   _secondTask.shader = _graphics->createShaderProgram();
-  _secondTask.shader->loadShaderFunctions("basic_uv", "basic_texture");
+  _secondTask.shader->loadShaderFunctions("texture_vertex", "texture_fragment");
   
   _secondTask.mesh = _graphics->createVertexMesh();
   _secondTask.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);

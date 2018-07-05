@@ -11,6 +11,7 @@
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
+#import <FelixEngine/VulkanGraphics.h>
 
 @interface ViewController ()
 
@@ -32,6 +33,7 @@
   
   // Add and initalize Metal Graphics
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
+  //fx::VulkanGraphics *graphics = new fx::VulkanGraphics();
   graphics->initalize(self.view);
   self.helloFBOApp->setGraphics(graphics);
   
