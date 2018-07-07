@@ -38,9 +38,12 @@ namespace fx {
     virtual UniformBufferPtr createUniformBuffer();
     virtual TextureBufferPtr createTextureBuffer();
     virtual BufferPoolPtr    createBufferPool();
+    virtual RenderPassPtr    createRenderPass();
+    virtual RenderItemPtr    createRenderItem();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);
+    virtual void renderPass(RenderPassPtr pass);
     virtual void presentFrame();
   };
   

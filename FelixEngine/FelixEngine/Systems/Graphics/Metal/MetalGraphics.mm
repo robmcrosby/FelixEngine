@@ -140,6 +140,16 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
   return pool;
 }
 
+RenderPassPtr MetalGraphics::createRenderPass() {
+  // TODO: Implement
+  return nullptr;
+}
+
+RenderItemPtr MetalGraphics::createRenderItem() {
+  // TODO: Implement
+  return nullptr;
+}
+
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   
@@ -195,6 +205,10 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   // Encode the Vertex Buffers and End Encoding
   mesh->encode(encoder, shader, task.instances);
   [encoder endEncoding];
+}
+
+void MetalGraphics::renderPass(RenderPassPtr pass) {
+  // TODO: Implement
 }
 
 void MetalGraphics::presentFrame() {
