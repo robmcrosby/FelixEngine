@@ -135,6 +135,11 @@ TextureBufferPtr MetalGraphics::createTextureBuffer() {
   return texture;
 }
 
+BufferPoolPtr MetalGraphics::createBufferPool() {
+  BufferPoolPtr pool = make_shared<BufferPool>();
+  return pool;
+}
+
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   

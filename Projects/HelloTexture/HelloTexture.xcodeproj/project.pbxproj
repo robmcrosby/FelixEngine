@@ -22,6 +22,7 @@
 		C1401D4E1F0840A100BE9958 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D4D1F0840A100BE9958 /* Metal.framework */; };
 		C1401D541F0BE23A00BE9958 /* bunnies.png in Resources */ = {isa = PBXBuildFile; fileRef = C1401D531F0BE23A00BE9958 /* bunnies.png */; };
 		C1401D581F0BE8BB00BE9958 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1401D571F0BE8BB00BE9958 /* CoreGraphics.framework */; };
+		C19C42C220BB0EBE00C85CFA /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = C19C42C120BB0EBD00C85CFA /* Shaders */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C1401D4D1F0840A100BE9958 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C1401D531F0BE23A00BE9958 /* bunnies.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bunnies.png; sourceTree = "<group>"; };
 		C1401D571F0BE8BB00BE9958 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C19C42C120BB0EBD00C85CFA /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				C1401D2F1F083C9700BE9958 /* Assets.xcassets */,
 				C1401D311F083C9700BE9958 /* LaunchScreen.storyboard */,
 				C1401D341F083C9700BE9958 /* Info.plist */,
+				C19C42C120BB0EBD00C85CFA /* Shaders */,
 				C1401D231F083C9700BE9958 /* Supporting Files */,
 				C1401D481F083DA600BE9958 /* Shaders.metal */,
 			);
@@ -165,6 +168,7 @@
 			buildPhases = (
 				C1401D1C1F083C9600BE9958 /* Sources */,
 				C1401D1D1F083C9600BE9958 /* Frameworks */,
+				C19C42C320BB0EFF00C85CFA /* Run Script */,
 				C1401D1E1F083C9600BE9958 /* Resources */,
 				C1401D461F083D8200BE9958 /* CopyFiles */,
 			);
@@ -236,12 +240,30 @@
 				C1401D331F083C9700BE9958 /* LaunchScreen.storyboard in Resources */,
 				C11B29181F0C07150042D306 /* test.png in Resources */,
 				C1401D301F083C9700BE9958 /* Assets.xcassets in Resources */,
+				C19C42C220BB0EBE00C85CFA /* Shaders in Resources */,
 				C1401D541F0BE23A00BE9958 /* bunnies.png in Resources */,
 				C1401D2E1F083C9700BE9958 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C19C42C320BB0EFF00C85CFA /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/../../ThirdParty/MoltenVK/macOS/MoltenVKShaderConverter -gi -d $SRCROOT/HelloTexture/Shaders -so\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C1401D1C1F083C9600BE9958 /* Sources */ = {

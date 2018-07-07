@@ -37,6 +37,7 @@ namespace fx {
     virtual VertexMeshPtr    createVertexMesh();
     virtual UniformBufferPtr createUniformBuffer();
     virtual TextureBufferPtr createTextureBuffer();
+    virtual BufferPoolPtr    createBufferPool();
     
     virtual void nextFrame();
     virtual void addTask(const GraphicTask &task);

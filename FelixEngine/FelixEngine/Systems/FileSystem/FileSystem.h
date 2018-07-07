@@ -18,6 +18,9 @@
 namespace fx {
   class XMLTree;
   
+  /** define for FileData */
+  typedef std::vector<char> FileData;
+  
   /** File System */
   class FileSystem {
   protected:
@@ -26,6 +29,7 @@ namespace fx {
     virtual std::string resourcesPath() const = 0;
     virtual std::string documentsPath() const = 0;
     
+    virtual bool loadFileData(FileData &data, const std::string &file) const = 0;
     virtual bool loadMeshFile(VertexMeshData &mesh, const std::string &file) const = 0;
     virtual bool loadImageData(ImageBufferData &image, const std::string &file) const = 0;
     virtual bool loadXMLTreeFile(XMLTree &tree, const std::string &file) const = 0;
@@ -41,6 +45,10 @@ namespace fx {
     }
     static std::string getDocumentsPath() {
       return instance ? instance->documentsPath() : "";
+    }
+    
+    static bool loadData(FileData &data, const std::string &file) {
+      return instance != nullptr && instance->loadFileData(data, file);
     }
     
     static bool loadMesh(VertexMeshData &mesh, const std::string &file) {

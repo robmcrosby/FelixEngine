@@ -36,6 +36,29 @@ string iOSFileSystem::documentsPath() const {
   return [[url absoluteString] UTF8String];
 }
 
+bool iOSFileSystem::loadFileData(fx::FileData &data, const std::string &fileName) const {
+  string filePath = findPathForFile(fileName);
+  
+  // Attempt to open the file
+  ifstream file(filePath, ios::ate | ios::binary);
+  if (!file.is_open()) {
+    cerr << "Error Opening file: " << fileName << endl;
+    return false;
+  }
+  
+  // Get the file size and create the buffer
+  size_t fileSize = (size_t)file.tellg();
+  data.resize(fileSize);
+  
+  // Read to the buffer
+  file.seekg(0);
+  file.read(data.data(), fileSize);
+  
+  // Close the file
+  file.close();
+  return true;
+}
+
 bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const std::string &file) const {
   string fileType = getFilePostfix(file);
   string filePath = findPathForFile(file);

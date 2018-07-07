@@ -28,6 +28,10 @@ namespace fx {
     unsigned long  _indexCount;
     unsigned long  _vertexCount;
     
+  private:
+    static unsigned int meshCount;
+    unsigned int _meshId;
+    
   public:
     MetalVertexMesh(id <MTLDevice> device);
     virtual ~MetalVertexMesh();
@@ -36,6 +40,9 @@ namespace fx {
     virtual void setPrimativeType(VERTEX_PRIMITIVE type);
     virtual bool setIndexBuffer(size_t count, const int *buffer);
     virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer);
+    virtual bool loadBuffers();
+    
+    virtual unsigned int getMeshId() const;
     
     void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
     void encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task);

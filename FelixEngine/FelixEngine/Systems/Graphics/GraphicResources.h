@@ -22,9 +22,9 @@ namespace fx {
   class ImageBufferData;
   
   enum SHADER_PART {
-    SHADER_VERTEX,
+    SHADER_VERTEX = 0,
     SHADER_FRAGMENT,
-    SHADER_COUNT,
+    SHADER_PART_COUNT,
   };
   
   enum VERTEX_PRIMITIVE {
@@ -37,6 +37,8 @@ namespace fx {
     
     virtual bool loadXML(const XMLTree::Node &node);
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) = 0;
+    
+    virtual unsigned int getShaderId() const = 0;
   };
   
   struct VertexMesh {
@@ -47,10 +49,13 @@ namespace fx {
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
     virtual bool setVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) = 0;
+    virtual bool loadBuffers() = 0;
     
     bool setVertexBuffer(const std::string &name, const std::vector<float> &buffer);
     bool setVertexBuffer(const std::string &name, const std::vector<vec2> &buffer);
     bool setVertexBuffer(const std::string &name, const std::vector<vec4> &buffer);
+    
+    virtual unsigned int getMeshId() const = 0;
   };
   
   enum BUFFER_COUNT {
@@ -103,6 +108,10 @@ namespace fx {
     virtual bool addColorTexture() = 0;
     
     virtual TextureBufferPtr getColorTexture(int index) = 0;
+  };
+  
+  struct BufferPool {
+    virtual ~BufferPool() {}
   };
 }
 

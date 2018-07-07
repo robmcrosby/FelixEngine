@@ -28,11 +28,12 @@ namespace fx {
   class TextureMap {
   private:
     std::vector<Texture> _textures;
+    BufferPoolPtr _bufferPool;
     
   public:
     static TexturesPtr make() {return std::make_shared<TextureMap>();}
     
-    TextureMap() {}
+    TextureMap() {_bufferPool = Graphics::getInstance().createBufferPool();}
     ~TextureMap() {}
     
     std::vector<Texture>::iterator begin() {return _textures.begin();}
@@ -40,6 +41,8 @@ namespace fx {
     
     std::vector<Texture>::const_iterator begin() const {return _textures.begin();}
     std::vector<Texture>::const_iterator end() const {return _textures.end();}
+    
+    size_t size() const {return _textures.size();}
     
     bool loadXML(const XMLTree::Node &node) {
       bool success = true;
@@ -75,6 +78,8 @@ namespace fx {
       Texture texture = Texture(buffer, sampler);
       _textures.push_back(texture);
     }
+    
+    BufferPoolPtr bufferPool() {return _bufferPool;}
   };
 }
 

@@ -20,6 +20,9 @@
 		C15CAE9C1EEDEE24004FA3C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C15CAE9A1EEDEE24004FA3C7 /* LaunchScreen.storyboard */; };
 		C17DCCE11EEDFF91007D1D3D /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17DCCDE1EEDFF81007D1D3D /* FelixEngine.framework */; };
 		C17DCCE31EEDFFA1007D1D3D /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C17DCCDE1EEDFF81007D1D3D /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1D1D80A209E5CC3000EB92C /* frag.spv in Resources */ = {isa = PBXBuildFile; fileRef = C1D1D808209E5CC2000EB92C /* frag.spv */; };
+		C1D1D80B209E5CC3000EB92C /* vert.spv in Resources */ = {isa = PBXBuildFile; fileRef = C1D1D809209E5CC2000EB92C /* vert.spv */; };
+		C1D1D82620A77DC5000EB92C /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = C1D1D82520A77DC5000EB92C /* Shaders */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +73,9 @@
 		C15CAE9B1EEDEE24004FA3C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C15CAE9D1EEDEE24004FA3C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C17DCCD91EEDFF80007D1D3D /* FelixEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FelixEngine.xcodeproj; path = ../../FelixEngine/FelixEngine.xcodeproj; sourceTree = "<group>"; };
+		C1D1D808209E5CC2000EB92C /* frag.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = frag.spv; sourceTree = "<group>"; };
+		C1D1D809209E5CC2000EB92C /* vert.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = vert.spv; sourceTree = "<group>"; };
+		C1D1D82520A77DC5000EB92C /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,8 +134,11 @@
 				C15CAE981EEDEE24004FA3C7 /* Assets.xcassets */,
 				C15CAE9A1EEDEE24004FA3C7 /* LaunchScreen.storyboard */,
 				C15CAE9D1EEDEE24004FA3C7 /* Info.plist */,
+				C1D1D82520A77DC5000EB92C /* Shaders */,
 				C15CAE8C1EEDEE24004FA3C7 /* Supporting Files */,
 				C1443B0B1EF5A0940059BA9D /* Shaders.metal */,
+				C1D1D808209E5CC2000EB92C /* frag.spv */,
+				C1D1D809209E5CC2000EB92C /* vert.spv */,
 			);
 			path = HelloTriangle;
 			sourceTree = "<group>";
@@ -159,6 +168,7 @@
 			buildPhases = (
 				C15CAE851EEDEE24004FA3C7 /* Sources */,
 				C15CAE861EEDEE24004FA3C7 /* Frameworks */,
+				C1D1D81F20A7715A000EB92C /* Run Script */,
 				C15CAE871EEDEE24004FA3C7 /* Resources */,
 				C17DCCE21EEDFF95007D1D3D /* CopyFiles */,
 			);
@@ -227,13 +237,33 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1D1D82620A77DC5000EB92C /* Shaders in Resources */,
 				C15CAE9C1EEDEE24004FA3C7 /* LaunchScreen.storyboard in Resources */,
 				C15CAE991EEDEE24004FA3C7 /* Assets.xcassets in Resources */,
 				C15CAE971EEDEE24004FA3C7 /* Main.storyboard in Resources */,
+				C1D1D80B209E5CC3000EB92C /* vert.spv in Resources */,
+				C1D1D80A209E5CC3000EB92C /* frag.spv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C1D1D81F20A7715A000EB92C /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/../../ThirdParty/MoltenVK/macOS/MoltenVKShaderConverter -gi -d $SRCROOT/HelloTriangle/Shaders -so\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C15CAE851EEDEE24004FA3C7 /* Sources */ = {

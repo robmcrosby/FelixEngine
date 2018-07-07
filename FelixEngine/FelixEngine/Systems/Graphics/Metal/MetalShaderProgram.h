@@ -33,12 +33,18 @@ namespace fx {
     IndexMap _vertexIndexMap;
     IndexMap _fragmentIndexMap;
     
+  private:
+    static unsigned int shaderCount;
+    unsigned int _shaderId;
+    
   public:
     MetalShaderProgram(id <MTLDevice> device);
     virtual ~MetalShaderProgram();
     
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
     void encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task);
+    
+    virtual unsigned int getShaderId() const;
     
   private:
     void addPipeline(MetalFrameBuffer *frame, const BlendState &blending);

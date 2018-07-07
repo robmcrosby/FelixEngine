@@ -10,7 +10,7 @@
 
 
 Hello3D::Hello3D() {
-  _uniformMap = std::make_shared<fx::UniformMap>();
+  
 }
 
 Hello3D::~Hello3D() {
@@ -18,6 +18,8 @@ Hello3D::~Hello3D() {
 }
 
 void Hello3D::initalize() {
+  _uniformMap = std::make_shared<fx::UniformMap>();
+  
   _task.frame = _graphics->getFrameBuffer("MainWindow");
   _task.frame->setToWindow(0);
   _task.frame->addDepthBuffer();

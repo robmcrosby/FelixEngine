@@ -22,6 +22,7 @@
 		C11B29551F0C1B760042D306 /* HelloFBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C11B29531F0C1B760042D306 /* HelloFBO.cpp */; };
 		C11B29571F0C1BBC0042D306 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C11B29561F0C1BBC0042D306 /* Shaders.metal */; };
 		C11B29591F0C2DAF0042D306 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C11B29581F0C2DAF0042D306 /* bunny.mesh */; };
+		C191F65420ED79EC00714F8B /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = C191F65320ED79EB00714F8B /* Shaders */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C11B29541F0C1B760042D306 /* HelloFBO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloFBO.h; sourceTree = "<group>"; };
 		C11B29561F0C1BBC0042D306 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C11B29581F0C2DAF0042D306 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
+		C191F65320ED79EB00714F8B /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				C11B29341F0C1A700042D306 /* Assets.xcassets */,
 				C11B29361F0C1A700042D306 /* LaunchScreen.storyboard */,
 				C11B29391F0C1A700042D306 /* Info.plist */,
+				C191F65320ED79EB00714F8B /* Shaders */,
 				C11B29281F0C1A700042D306 /* Supporting Files */,
 				C11B29561F0C1BBC0042D306 /* Shaders.metal */,
 			);
@@ -165,6 +168,7 @@
 			buildPhases = (
 				C11B29211F0C1A700042D306 /* Sources */,
 				C11B29221F0C1A700042D306 /* Frameworks */,
+				C191F65520ED7A1900714F8B /* ShellScript */,
 				C11B29231F0C1A700042D306 /* Resources */,
 				C11B29511F0C1B3A0042D306 /* CopyFiles */,
 			);
@@ -236,12 +240,29 @@
 				C11B29381F0C1A700042D306 /* LaunchScreen.storyboard in Resources */,
 				C11B29591F0C2DAF0042D306 /* bunny.mesh in Resources */,
 				C11B29351F0C1A700042D306 /* Assets.xcassets in Resources */,
+				C191F65420ED79EC00714F8B /* Shaders in Resources */,
 				C11B29331F0C1A700042D306 /* Main.storyboard in Resources */,
 				C11B29401F0C1AF50042D306 /* test.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C191F65520ED7A1900714F8B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/../../ThirdParty/MoltenVK/macOS/MoltenVKShaderConverter -gi -d $SRCROOT/HelloFBO/Shaders -so\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C11B29211F0C1A700042D306 /* Sources */ = {

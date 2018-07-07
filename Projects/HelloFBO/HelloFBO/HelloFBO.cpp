@@ -10,9 +10,7 @@
 
 
 HelloFBO::HelloFBO() {
-  _firstUniformMap = std::make_shared<fx::UniformMap>();
-  _secondUniformMap = std::make_shared<fx::UniformMap>();
-  _secondTextureMap = std::make_shared<fx::TextureMap>();
+  
 }
 
 HelloFBO::~HelloFBO() {
@@ -20,6 +18,10 @@ HelloFBO::~HelloFBO() {
 }
 
 void HelloFBO::initalize() {
+  _firstUniformMap = std::make_shared<fx::UniformMap>();
+  _secondUniformMap = std::make_shared<fx::UniformMap>();
+  _secondTextureMap = std::make_shared<fx::TextureMap>();
+  
   setupFirstTask();
   setupSecondTask();
 }
@@ -89,12 +91,13 @@ void HelloFBO::setupSecondTask() {
   _secondTask.frame->setToWindow(0);
   
   _secondTask.shader = _graphics->createShaderProgram();
-  _secondTask.shader->loadShaderFunctions("basic_uv", "basic_texture");
+  _secondTask.shader->loadShaderFunctions("texture_vertex", "texture_fragment");
   
   _secondTask.mesh = _graphics->createVertexMesh();
   _secondTask.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);
   _secondTask.mesh->setVertexBuffer("UV", 2, 4, uvBuffer);
   _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  _secondTask.mesh->loadBuffers();
   
   _secondTextureMap->addTexture(_firstTask.frame->getColorTexture(0));
   _secondTask.textures = _secondTextureMap;

@@ -14,12 +14,14 @@
 #include "UniformMap.h"
 #include <Metal/Metal.h>
 
+
 using namespace fx;
 using namespace std;
 
+unsigned int MetalShaderProgram::shaderCount = 0;
 
 MetalShaderProgram::MetalShaderProgram(id <MTLDevice> device): _device(device), _vertex(nil), _fragment(nil) {
-  
+  _shaderId = shaderCount++;
 }
 
 MetalShaderProgram::~MetalShaderProgram() {
@@ -66,6 +68,10 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
       setUniform(encoder, uniform.first, uniform.second);
     ++itr;
   }
+}
+
+unsigned int MetalShaderProgram::getShaderId() const {
+  return _shaderId;
 }
 
 void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const string &name, const Uniform &uniform) {

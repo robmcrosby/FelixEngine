@@ -64,6 +64,13 @@ namespace fx {
     
     void enableDepthTesting() {depthState.enableDefaultTesting();}
     void enableBlending() {blendState.enableDefaultBlending();}
+    
+    uint32_t getActionStateKey() const {
+      uint32_t key = depthStencilAction.key();
+      for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i)
+        key |= colorActions[i].key() << (4*(i+1));
+      return key;
+    }
   };
 }
 

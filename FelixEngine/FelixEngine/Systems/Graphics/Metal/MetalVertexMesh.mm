@@ -12,8 +12,11 @@
 #include "GraphicTask.h"
 #include <Metal/Metal.h>
 
+
 using namespace fx;
 using namespace std;
+
+unsigned int MetalVertexMesh::meshCount = 0;
 
 MetalVertexMesh::MetalVertexMesh(id <MTLDevice> device) {
   _device = device;
@@ -21,6 +24,7 @@ MetalVertexMesh::MetalVertexMesh(id <MTLDevice> device) {
   _primitive = MTLPrimitiveTypeTriangle;
   _indexCount = 0;
   _vertexCount = 0;
+  _meshId = meshCount++;
 }
 
 MetalVertexMesh::~MetalVertexMesh() {
@@ -74,6 +78,14 @@ bool MetalVertexMesh::setVertexBuffer(const std::string &name, size_t size, size
   }
   
   return mtlBuffer != nil;
+}
+
+bool MetalVertexMesh::loadBuffers() {
+  return true;
+}
+
+unsigned int MetalVertexMesh::getMeshId() const {
+  return _meshId;
 }
 
 void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances) {
