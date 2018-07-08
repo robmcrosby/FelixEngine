@@ -11,7 +11,7 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Quaternion.h>
 
 
@@ -22,8 +22,7 @@ struct MVPUniform {
 
 class Hello3D: public fx::Application {
 private:
-  fx::GraphicTask _task;
-  fx::UniformsPtr _uniformMap;
+  fx::RenderPassPtr _renderPass;
   MVPUniform _mvpUniform;
   
 public:

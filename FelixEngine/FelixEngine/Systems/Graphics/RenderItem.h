@@ -14,6 +14,7 @@
 #include "GraphicStates.h"
 #include "UniformMap.h"
 #include "TextureMap.h"
+#include "FileSystem.h"
 
 
 namespace fx {
@@ -50,6 +51,11 @@ namespace fx {
     }
     void setMesh(const std::string &name) {mesh = Graphics::getInstance().getVertexMesh(name);}
     bool loadMeshData(const VertexMeshData &data) {return getMesh()->load(data);}
+    bool loadMeshFile(const std::string &file) {
+      VertexMeshData data;
+      FileSystem::loadMesh(data, file);
+      return loadMeshData(data);
+    }
     void setMeshPrimativeType(VERTEX_PRIMITIVE type) {getMesh()->setPrimativeType(type);}
     bool setMeshIndexBuffer(size_t count, const int *buffer) {
       return getMesh()->setIndexBuffer(count, buffer);
@@ -59,6 +65,8 @@ namespace fx {
     }
     bool loadMesh() {return getMesh()->loadBuffers();}
     
+    void enableDepthTesting() {depthState.enableDefaultTesting();}
+    void enableBlending() {blendState.enableDefaultBlending();}
   };
 }
 
