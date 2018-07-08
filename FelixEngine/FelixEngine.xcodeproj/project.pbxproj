@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C10D82621F0E6B8B0005629F /* Scene.cpp */; };
-		C10D82651F0E6B8B0005629F /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C10D82631F0E6B8B0005629F /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* iOSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */; };
@@ -43,12 +41,6 @@
 		C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */; };
 		C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */; };
 		C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1412E5D1F37D892001E8D83 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		C142C0B01F77601D00B45750 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0AE1F77601D00B45750 /* Light.cpp */; };
-		C142C0B11F77601D00B45750 /* Light.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0AF1F77601D00B45750 /* Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C142C0B31F7B152100B45750 /* RenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0B21F7B152100B45750 /* RenderItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0B41F7B163B00B45750 /* RenderItem.cpp */; };
-		C142C0E11F8DA07200B45750 /* Resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C142C0DF1F8DA07000B45750 /* Resources.cpp */; };
-		C142C0E21F8DA07200B45750 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = C142C0E01F8DA07000B45750 /* Resources.h */; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEE1EF346290059BA9D /* Quaternion.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,15 +66,16 @@
 		C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08E1F353ECD00212AAA /* ARKitTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = C160E08F1F353ECD00212AAA /* ARKitTracker.mm */; };
 		C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */; };
-		C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1A5E3801F3659620071D515 /* ARCamera.cpp */; };
-		C1A5E3831F3659620071D515 /* ARCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1A5E3811F3659620071D515 /* ARCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C191F65F20F18E6400714F8B /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F65E20F18E6400714F8B /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66520F1905500714F8B /* MetalRenderPass.h */; };
+		C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */ = {isa = PBXBuildFile; fileRef = C191F66620F1905500714F8B /* MetalRenderPass.mm */; };
+		C191F66B20F1907600714F8B /* MetalRenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66920F1907600714F8B /* MetalRenderItem.h */; };
+		C191F66C20F1907600714F8B /* MetalRenderItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C191F66A20F1907600714F8B /* MetalRenderItem.mm */; };
+		C191F66D20F191BE00714F8B /* RenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66020F18E7C00714F8B /* RenderItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3FDC21F54E8BB001F7DB5 /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */; };
-		C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4F331F1ECF23008FDF01 /* Material.cpp */; };
-		C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */; };
-		C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C1CC9D181F110CCB00A938D0 /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D1D7DE209AA705000EB92C /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D7DD209AA705000EB92C /* MoltenVK.framework */; };
 		C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7E2209B32E9000EB92C /* VulkanGraphics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1D1D7E8209B33AF000EB92C /* MetalView.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7E6209B33AF000EB92C /* MetalView.h */; };
@@ -98,11 +91,6 @@
 		C1D1D81A20A64F4C000EB92C /* VulkanCommandBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81820A64F4C000EB92C /* VulkanCommandBuffer.h */; };
 		C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */; };
 		C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */; };
-		C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EA51F0F080B0021F704 /* Model.cpp */; };
-		C1E60EA81F0F080B0021F704 /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EA61F0F080B0021F704 /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1E60EAC1F0F08370021F704 /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EAA1F0F08370021F704 /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E60EB11F0F09860021F704 /* Camera.cpp */; };
-		C1E60EB41F0F09860021F704 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E60EB21F0F09860021F704 /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D61F353A680005367E /* ARKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
@@ -120,8 +108,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C10D82621F0E6B8B0005629F /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		C10D82631F0E6B8B0005629F /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		C1136C371EF0BCC600BA1322 /* iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSViewController.h; path = iOS/iOSViewController.h; sourceTree = "<group>"; };
@@ -156,12 +142,6 @@
 		C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalTextureSampler.h; path = Systems/Graphics/Metal/MetalTextureSampler.h; sourceTree = "<group>"; };
 		C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalTextureSampler.mm; path = Systems/Graphics/Metal/MetalTextureSampler.mm; sourceTree = "<group>"; };
 		C1412E5D1F37D892001E8D83 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		C142C0AE1F77601D00B45750 /* Light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
-		C142C0AF1F77601D00B45750 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
-		C142C0B21F7B152100B45750 /* RenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderItem.h; sourceTree = "<group>"; };
-		C142C0B41F7B163B00B45750 /* RenderItem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RenderItem.cpp; sourceTree = "<group>"; };
-		C142C0DF1F8DA07000B45750 /* Resources.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Resources.cpp; sourceTree = "<group>"; };
-		C142C0E01F8DA07000B45750 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Resources.h; sourceTree = "<group>"; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
 		C1443AEE1EF346290059BA9D /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = Utilities/Quaternion.h; sourceTree = "<group>"; };
@@ -190,15 +170,16 @@
 		C160E08F1F353ECD00212AAA /* ARKitTracker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARKitTracker.mm; path = Systems/Tracking/ARKit/ARKitTracker.mm; sourceTree = "<group>"; };
 		C17C1D4F20CB676600E102B9 /* VulkanFrameAttachment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanFrameAttachment.cpp; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.cpp; sourceTree = "<group>"; };
 		C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanFrameAttachment.h; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.h; sourceTree = "<group>"; };
-		C1A5E3801F3659620071D515 /* ARCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARCamera.cpp; sourceTree = "<group>"; };
-		C1A5E3811F3659620071D515 /* ARCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARCamera.h; sourceTree = "<group>"; };
+		C191F65E20F18E6400714F8B /* RenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderPass.h; path = Systems/Graphics/RenderPass.h; sourceTree = "<group>"; };
+		C191F66020F18E7C00714F8B /* RenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderItem.h; path = Systems/Graphics/RenderItem.h; sourceTree = "<group>"; };
+		C191F66520F1905500714F8B /* MetalRenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalRenderPass.h; path = Systems/Graphics/Metal/MetalRenderPass.h; sourceTree = "<group>"; };
+		C191F66620F1905500714F8B /* MetalRenderPass.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalRenderPass.mm; path = Systems/Graphics/Metal/MetalRenderPass.mm; sourceTree = "<group>"; };
+		C191F66920F1907600714F8B /* MetalRenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalRenderItem.h; path = Systems/Graphics/Metal/MetalRenderItem.h; sourceTree = "<group>"; };
+		C191F66A20F1907600714F8B /* MetalRenderItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalRenderItem.mm; path = Systems/Graphics/Metal/MetalRenderItem.mm; sourceTree = "<group>"; };
 		C1B3FDC21F54E8BB001F7DB5 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Systems/Events/Event.h; sourceTree = "<group>"; };
 		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = Utilities/StringUtils.h; sourceTree = "<group>"; };
 		C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicResources.cpp; path = Systems/Graphics/GraphicResources.cpp; sourceTree = "<group>"; };
-		C1BB4F331F1ECF23008FDF01 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
-		C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderPass.cpp; sourceTree = "<group>"; };
-		C1CC9D181F110CCB00A938D0 /* RenderPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderPass.h; sourceTree = "<group>"; };
 		C1D1D7DD209AA705000EB92C /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../ThirdParty/MoltenVK/iOS/MoltenVK.framework; sourceTree = "<group>"; };
 		C1D1D7E2209B32E9000EB92C /* VulkanGraphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanGraphics.h; path = Systems/Graphics/Vulkan/VulkanGraphics.h; sourceTree = "<group>"; };
 		C1D1D7E3209B32E9000EB92C /* VulkanGraphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = VulkanGraphics.mm; path = Systems/Graphics/Vulkan/VulkanGraphics.mm; sourceTree = "<group>"; };
@@ -224,11 +205,6 @@
 		C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanCommandPool.h; path = Systems/Graphics/Vulkan/VulkanCommandPool.h; sourceTree = "<group>"; };
 		C1D1D83020B0EC87000EB92C /* VulkanBufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanBufferPool.cpp; path = Systems/Graphics/Vulkan/VulkanBufferPool.cpp; sourceTree = "<group>"; };
 		C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanBufferPool.h; path = Systems/Graphics/Vulkan/VulkanBufferPool.h; sourceTree = "<group>"; };
-		C1E60EA51F0F080B0021F704 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
-		C1E60EA61F0F080B0021F704 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
-		C1E60EAA1F0F08370021F704 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
-		C1E60EB11F0F09860021F704 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
-		C1E60EB21F0F09860021F704 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalFunctions.h; path = Systems/Graphics/Metal/MetalFunctions.h; sourceTree = "<group>"; };
 		C1F7D9D61F353A680005367E /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -254,20 +230,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C10D82611F0E6B610005629F /* Scene */ = {
-			isa = PBXGroup;
-			children = (
-				C10D82631F0E6B8B0005629F /* Scene.h */,
-				C10D82621F0E6B8B0005629F /* Scene.cpp */,
-				C142C0B21F7B152100B45750 /* RenderItem.h */,
-				C142C0B41F7B163B00B45750 /* RenderItem.cpp */,
-				C1CC9D181F110CCB00A938D0 /* RenderPass.h */,
-				C1CC9D171F110CCB00A938D0 /* RenderPass.cpp */,
-				C1CC9D1B1F11144C00A938D0 /* Components */,
-			);
-			path = Scene;
-			sourceTree = "<group>";
-		};
 		C1136C361EF0BC6500BA1322 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +295,8 @@
 				C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */,
 				C14549512059E32C003156A0 /* MeshBuilder.h */,
 				C14549502059E32C003156A0 /* MeshBuilder.cpp */,
+				C191F66020F18E7C00714F8B /* RenderItem.h */,
+				C191F65E20F18E6400714F8B /* RenderPass.h */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 				C1D1D7E1209B31D9000EB92C /* VulkanGraphics */,
 			);
@@ -362,17 +326,12 @@
 				C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */,
 				C1D1D7E6209B33AF000EB92C /* MetalView.h */,
 				C1D1D7E7209B33AF000EB92C /* MetalView.m */,
+				C191F66920F1907600714F8B /* MetalRenderItem.h */,
+				C191F66A20F1907600714F8B /* MetalRenderItem.mm */,
+				C191F66520F1905500714F8B /* MetalRenderPass.h */,
+				C191F66620F1905500714F8B /* MetalRenderPass.mm */,
 			);
 			name = MetalGraphics;
-			sourceTree = "<group>";
-		};
-		C142C0DE1F8D9FEB00B45750 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				C142C0E01F8DA07000B45750 /* Resources.h */,
-				C142C0DF1F8DA07000B45750 /* Resources.cpp */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		C1443AE91EF344830059BA9D /* Utilities */ = {
@@ -415,7 +374,6 @@
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C1136C331EF0BB6E00BA1322 /* Application.h */,
 				C1136C321EF0BB6E00BA1322 /* Application.cpp */,
-				C10D82611F0E6B610005629F /* Scene */,
 				C1443AE91EF344830059BA9D /* Utilities */,
 				C1136C481EF2223C00BA1322 /* Systems */,
 				C1136C361EF0BC6500BA1322 /* iOS */,
@@ -432,26 +390,6 @@
 			name = ARKitTracking;
 			sourceTree = "<group>";
 		};
-		C1A5E3841F36596D0071D515 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				C1E60EA61F0F080B0021F704 /* Model.h */,
-				C1E60EA51F0F080B0021F704 /* Model.cpp */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
-		C1A5E3851F3659740071D515 /* Cameras */ = {
-			isa = PBXGroup;
-			children = (
-				C1E60EB21F0F09860021F704 /* Camera.h */,
-				C1E60EB11F0F09860021F704 /* Camera.cpp */,
-				C1A5E3811F3659620071D515 /* ARCamera.h */,
-				C1A5E3801F3659620071D515 /* ARCamera.cpp */,
-			);
-			name = Cameras;
-			sourceTree = "<group>";
-		};
 		C1B3FDC11F54E81B001F7DB5 /* Events */ = {
 			isa = PBXGroup;
 			children = (
@@ -461,20 +399,6 @@
 				C15C16C21F695E8B007E2C1E /* EventSubject.h */,
 			);
 			name = Events;
-			sourceTree = "<group>";
-		};
-		C1CC9D1B1F11144C00A938D0 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				C142C0DE1F8D9FEB00B45750 /* Resources */,
-				C1A5E3851F3659740071D515 /* Cameras */,
-				C1A5E3841F36596D0071D515 /* Models */,
-				C1E60EAA1F0F08370021F704 /* Material.h */,
-				C1BB4F331F1ECF23008FDF01 /* Material.cpp */,
-				C142C0AF1F77601D00B45750 /* Light.h */,
-				C142C0AE1F77601D00B45750 /* Light.cpp */,
-			);
-			name = Components;
 			sourceTree = "<group>";
 		};
 		C1D1D7E1209B31D9000EB92C /* VulkanGraphics */ = {
@@ -522,29 +446,29 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C142C0B11F77601D00B45750 /* Light.h in Headers */,
 				C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */,
 				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
-				C142C0E21F8DA07200B45750 /* Resources.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
+				C191F66B20F1907600714F8B /* MetalRenderItem.h in Headers */,
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
 				C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */,
 				C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */,
-				C142C0B31F7B152100B45750 /* RenderItem.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1D1D801209D209E000EB92C /* Vulkan.h in Headers */,
+				C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
 				C14549532059E32C003156A0 /* MeshBuilder.h in Headers */,
+				C191F65F20F18E6400714F8B /* RenderPass.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
@@ -554,14 +478,11 @@
 				C1136C581EF224F700BA1322 /* MetalGraphics.h in Headers */,
 				C1D1D81A20A64F4C000EB92C /* VulkanCommandBuffer.h in Headers */,
 				C1443AFC1EF496240059BA9D /* GraphicResources.h in Headers */,
-				C1CC9D1A1F110CCB00A938D0 /* RenderPass.h in Headers */,
 				C1136C541EF2246700BA1322 /* Graphics.h in Headers */,
 				C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */,
 				C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */,
-				C1E60EAC1F0F08370021F704 /* Material.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
-				C1A5E3831F3659620071D515 /* ARCamera.h in Headers */,
 				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
 				C1D1D7F9209BB6B7000EB92C /* VulkanUniformBuffer.h in Headers */,
 				C1401D051F001BFC00BE9958 /* VertexMeshData.h in Headers */,
@@ -570,8 +491,6 @@
 				C1D1D7E8209B33AF000EB92C /* MetalView.h in Headers */,
 				C1401D151F05CCED00BE9958 /* UniformMap.h in Headers */,
 				C15CAEB21EEDEF33004FA3C7 /* FelixEngine.h in Headers */,
-				C10D82651F0E6B8B0005629F /* Scene.h in Headers */,
-				C1E60EA81F0F080B0021F704 /* Model.h in Headers */,
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
 				C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
@@ -580,9 +499,9 @@
 				C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */,
 				C1136C351EF0BB6E00BA1322 /* Application.h in Headers */,
 				C1401D561F0BE28900BE9958 /* ImageBufferData.h in Headers */,
+				C191F66D20F191BE00714F8B /* RenderItem.h in Headers */,
 				C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */,
 				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
-				C1E60EB41F0F09860021F704 /* Camera.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,29 +575,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C142C0B01F77601D00B45750 /* Light.cpp in Sources */,
-				C1BB4F341F1ECF23008FDF01 /* Material.cpp in Sources */,
-				C1A5E3821F3659620071D515 /* ARCamera.cpp in Sources */,
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
-				C142C0E11F8DA07200B45750 /* Resources.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
-				C1E60EB31F0F09860021F704 /* Camera.cpp in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
-				C1CC9D191F110CCB00A938D0 /* RenderPass.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
-				C142C0B51F7B163B00B45750 /* RenderItem.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,
-				C10D82641F0E6B8B0005629F /* Scene.cpp in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
-				C1E60EA71F0F080B0021F704 /* Model.cpp in Sources */,
+				C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */,
+				C191F66C20F1907600714F8B /* MetalRenderItem.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,

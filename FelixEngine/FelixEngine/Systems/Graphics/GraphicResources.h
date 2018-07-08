@@ -113,6 +113,10 @@ namespace fx {
   struct BufferPool {
     virtual ~BufferPool() {}
   };
+  
+  struct RenderPass {
+    virtual ~RenderPass() {}
+  };
 }
 
 

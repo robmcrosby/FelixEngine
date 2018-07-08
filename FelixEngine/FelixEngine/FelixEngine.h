@@ -26,6 +26,8 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/GraphicStates.h>
 #import <FelixEngine/GraphicTask.h>
 #import <FelixEngine/GraphicStructures.h>
+#import <FelixEngine/RenderTask.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/TrackerSystem.h>
 #import <FelixEngine/Vector.h>
 #import <FelixEngine/Matrix.h>
@@ -45,7 +47,6 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 
 #import <FelixEngine/Scene.h>
 #import <FelixEngine/Object.h>
-#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/Material.h>
