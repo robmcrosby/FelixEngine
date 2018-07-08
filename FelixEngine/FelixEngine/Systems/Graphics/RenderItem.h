@@ -67,6 +67,22 @@ namespace fx {
     
     void enableDepthTesting() {depthState.enableDefaultTesting();}
     void enableBlending() {blendState.enableDefaultBlending();}
+    
+    TextureMap& getTextureMap() {
+      if (!textures)
+        textures = TextureMap::make();
+      return *textures;
+    }
+    void addTexture(TextureBufferPtr texture, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(texture, sampler);}
+    void addTexture(ImageBufferData &imageData, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(imageData, sampler);}
+    bool addTextureFile(const std::string &fileName, SamplerState sampler = SamplerState()) {
+      fx::ImageBufferData imageData;
+      if (fx::FileSystem::loadImage(imageData, fileName)) {
+        addTexture(imageData, sampler);
+        return true;
+      }
+      return false;
+    }
   };
 }
 
