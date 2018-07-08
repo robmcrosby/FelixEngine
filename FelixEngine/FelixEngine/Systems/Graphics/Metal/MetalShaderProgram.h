@@ -7,6 +7,7 @@
 //
 
 #include "GraphicResources.h"
+#include "UniformMap.h"
 #include <map>
 
 @protocol MTLDevice;
@@ -43,6 +44,8 @@ namespace fx {
     
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
     void encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task);
+    void encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame, BlendState blendState);
+    void encode(id <MTLRenderCommandEncoder> encoder, UniformsPtr uniforms);
     
     virtual unsigned int getShaderId() const;
     

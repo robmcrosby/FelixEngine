@@ -29,7 +29,36 @@ namespace fx {
     
     int instances;
     
-    RenderItem() {}
+    CULL_MODE  cullMode;
+    DepthState depthState;
+    BlendState blendState;
+    
+    RenderItem(): instances(1), cullMode(CULL_NONE) {}
+    
+    ShaderProgramPtr getShader() {
+      if (!shader)
+        shader = Graphics::getInstance().createShaderProgram();
+      return shader;
+    }
+    void setShader(const std::string &name) {shader = Graphics::getInstance().getShaderProgram(name);}
+    bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) {return getShader()->loadShaderFunctions(vertex, fragment);}
+    
+    VertexMeshPtr getMesh() {
+      if (!mesh)
+        mesh = Graphics::getInstance().createVertexMesh();
+      return mesh;
+    }
+    void setMesh(const std::string &name) {mesh = Graphics::getInstance().getVertexMesh(name);}
+    bool loadMeshData(const VertexMeshData &data) {return getMesh()->load(data);}
+    void setMeshPrimativeType(VERTEX_PRIMITIVE type) {getMesh()->setPrimativeType(type);}
+    bool setMeshIndexBuffer(size_t count, const int *buffer) {
+      return getMesh()->setIndexBuffer(count, buffer);
+    }
+    bool setMeshVertexBuffer(const std::string &name, size_t size, size_t count, const float *buffer) {
+      return getMesh()->setVertexBuffer(name, size, count, buffer);
+    }
+    bool loadMesh() {return getMesh()->loadBuffers();}
+    
   };
 }
 

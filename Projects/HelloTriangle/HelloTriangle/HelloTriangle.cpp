@@ -23,19 +23,17 @@ void HelloTriangle::initalize() {
      0.8, -0.8, 0.0
   };
   
-  _task.frame = _graphics->getFrameBuffer("MainWindow");
-  _task.frame->setToWindow(0);
-  
-  _task.shader = _graphics->createShaderProgram();
-  _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
-  
-  _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->setVertexBuffer("vertex_array", 3, 3, vertexBuffer);
-  _task.mesh->loadBuffers();
-  
-  _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  fx::RenderItem renderItem;
+  renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
+  renderItem.setMeshVertexBuffer("vertex_array", 3, 3, vertexBuffer);
+  renderItem.loadMesh();
+
+  _renderPass = _graphics->createRenderPass();
+  _renderPass->setFrameToWindow(0);
+  _renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _renderPass->addRenderItem(renderItem);
 }
 
 void HelloTriangle::update(float td) {
-  _graphics->addTask(_task);
+  _renderPass->render();
 }

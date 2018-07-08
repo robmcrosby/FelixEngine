@@ -10,8 +10,14 @@
 #define MetalRenderPass_h
 
 #include "RenderPass.h"
+#include "Macros.h"
+
 
 @protocol MTLDevice;
+@protocol MTLCommandBuffer;
+
+OBJC_CLASS(MetalDepthStencil)
+OBJC_CLASS(MetalTextureSampler)
 
 namespace fx {
   
@@ -20,13 +26,18 @@ namespace fx {
    */
   class MetalRenderPass: public RenderPass {
     public:
-    id <MTLDevice> _device;
+    id <MTLDevice>        _device;
+    id <MTLCommandBuffer> _buffer;
+    
+    MetalDepthStencil   *_depthStencilStates;
+    MetalTextureSampler *_samplerStates;
     
     public:
     MetalRenderPass(id <MTLDevice> device);
     virtual ~MetalRenderPass();
     
     virtual void render();
+    void setCommandBuffer(id <MTLCommandBuffer> buffer);
   };
 }
 
