@@ -69,8 +69,6 @@
 		C191F65F20F18E6400714F8B /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F65E20F18E6400714F8B /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66520F1905500714F8B /* MetalRenderPass.h */; };
 		C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */ = {isa = PBXBuildFile; fileRef = C191F66620F1905500714F8B /* MetalRenderPass.mm */; };
-		C191F66B20F1907600714F8B /* MetalRenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66920F1907600714F8B /* MetalRenderItem.h */; };
-		C191F66C20F1907600714F8B /* MetalRenderItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = C191F66A20F1907600714F8B /* MetalRenderItem.mm */; };
 		C191F66D20F191BE00714F8B /* RenderItem.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66020F18E7C00714F8B /* RenderItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */ = {isa = PBXBuildFile; fileRef = C1B3FDC21F54E8BB001F7DB5 /* Event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */ = {isa = PBXBuildFile; fileRef = C1BB4F291F1C255E008FDF01 /* XMLTree.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -174,8 +172,6 @@
 		C191F66020F18E7C00714F8B /* RenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderItem.h; path = Systems/Graphics/RenderItem.h; sourceTree = "<group>"; };
 		C191F66520F1905500714F8B /* MetalRenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalRenderPass.h; path = Systems/Graphics/Metal/MetalRenderPass.h; sourceTree = "<group>"; };
 		C191F66620F1905500714F8B /* MetalRenderPass.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalRenderPass.mm; path = Systems/Graphics/Metal/MetalRenderPass.mm; sourceTree = "<group>"; };
-		C191F66920F1907600714F8B /* MetalRenderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalRenderItem.h; path = Systems/Graphics/Metal/MetalRenderItem.h; sourceTree = "<group>"; };
-		C191F66A20F1907600714F8B /* MetalRenderItem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalRenderItem.mm; path = Systems/Graphics/Metal/MetalRenderItem.mm; sourceTree = "<group>"; };
 		C1B3FDC21F54E8BB001F7DB5 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Event.h; path = Systems/Events/Event.h; sourceTree = "<group>"; };
 		C1BB4F291F1C255E008FDF01 /* XMLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XMLTree.h; path = Utilities/XMLTree.h; sourceTree = "<group>"; };
 		C1BB4F2D1F1C33C3008FDF01 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtils.h; path = Utilities/StringUtils.h; sourceTree = "<group>"; };
@@ -326,8 +322,6 @@
 				C154C0DE1FCFA66900D3DCFF /* MetalShaders.metal */,
 				C1D1D7E6209B33AF000EB92C /* MetalView.h */,
 				C1D1D7E7209B33AF000EB92C /* MetalView.m */,
-				C191F66920F1907600714F8B /* MetalRenderItem.h */,
-				C191F66A20F1907600714F8B /* MetalRenderItem.mm */,
 				C191F66520F1905500714F8B /* MetalRenderPass.h */,
 				C191F66620F1905500714F8B /* MetalRenderPass.mm */,
 			);
@@ -453,7 +447,6 @@
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
-				C191F66B20F1907600714F8B /* MetalRenderItem.h in Headers */,
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
@@ -590,7 +583,6 @@
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
 				C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */,
-				C191F66C20F1907600714F8B /* MetalRenderItem.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,

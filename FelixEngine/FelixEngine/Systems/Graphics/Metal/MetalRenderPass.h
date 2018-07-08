@@ -25,6 +25,8 @@ namespace fx {
     public:
     MetalRenderPass(id <MTLDevice> device);
     virtual ~MetalRenderPass();
+    
+    virtual void render();
   };
 }
 

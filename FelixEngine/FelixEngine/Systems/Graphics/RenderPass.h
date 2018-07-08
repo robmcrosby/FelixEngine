@@ -9,18 +9,40 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
-//#include "RenderItem.h"
+#include "RenderItem.h"
 
 
 namespace fx {
+  
+  /**
+   *
+   */
+  typedef std::vector<RenderItem> RenderItems;
+  
   /**
    *
    */
   struct RenderPass {
+    FrameBufferPtr   frame;
     
+    ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
+    ActionState depthStencilAction;
     
-    RenderPass() {}
+    CULL_MODE cullMode;
+    DepthState depthState;
+    BlendState blendState;
+    
+    UniformsPtr uniforms;
+    
+    RenderItems renderItems;
+    
+    RenderPass(): uniforms(UniformMap::make()) {}
     virtual ~RenderPass() {}
+    
+    void addRenderItem(const RenderItem &item) {renderItems.push_back(item);}
+    virtual void render() = 0;
+    
+    Uniform& operator[](const std::string name) {return (*uniforms)[name];}
   };
 }
 

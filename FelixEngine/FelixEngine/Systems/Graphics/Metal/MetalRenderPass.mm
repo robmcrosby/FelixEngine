@@ -20,3 +20,7 @@ MetalRenderPass::MetalRenderPass(id <MTLDevice> device): _device(device) {
 MetalRenderPass::~MetalRenderPass() {
 
 }
+
+void MetalRenderPass::render() {
+  
+}

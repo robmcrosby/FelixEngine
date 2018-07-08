@@ -23,6 +23,7 @@
 #include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
 #include "MetalTextureSampler.h"
+#include "MetalRenderPass.h"
 
 #define MAX_INFLIGHT_FRAMES 3
 
@@ -141,13 +142,8 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
 }
 
 RenderPassPtr MetalGraphics::createRenderPass() {
-  // TODO: Implement
-  return nullptr;
-}
-
-RenderItemPtr MetalGraphics::createRenderItem() {
-  // TODO: Implement
-  return nullptr;
+  shared_ptr<MetalRenderPass> renderPass = make_shared<MetalRenderPass>(_data->device);
+  return renderPass;
 }
 
 void MetalGraphics::nextFrame() {
@@ -205,10 +201,6 @@ void MetalGraphics::addTask(const GraphicTask &task) {
   // Encode the Vertex Buffers and End Encoding
   mesh->encode(encoder, shader, task.instances);
   [encoder endEncoding];
-}
-
-void MetalGraphics::renderPass(RenderPassPtr pass) {
-  // TODO: Implement
 }
 
 void MetalGraphics::presentFrame() {

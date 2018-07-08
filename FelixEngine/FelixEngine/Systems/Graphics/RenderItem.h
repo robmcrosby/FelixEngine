@@ -21,10 +21,15 @@ namespace fx {
    *
    */
   struct RenderItem {
+    ShaderProgramPtr shader;
+    VertexMeshPtr    mesh;
     
+    UniformsList uniforms;
+    TexturesPtr textures;
+    
+    int instances;
     
     RenderItem() {}
-    virtual ~RenderItem() {}
   };
 }
 
