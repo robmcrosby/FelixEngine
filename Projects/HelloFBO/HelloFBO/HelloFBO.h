@@ -11,7 +11,7 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Quaternion.h>
 
 struct MVPUniform {
@@ -21,13 +21,10 @@ struct MVPUniform {
 
 class HelloFBO: public fx::Application {
 private:
-  fx::GraphicTask _firstTask;
-  fx::UniformsPtr _firstUniformMap;
-  MVPUniform _firstUniform;
+  fx::RenderPassPtr _firstRenderPass;
+  fx::RenderPassPtr _secondRenderPass;
   
-  fx::GraphicTask _secondTask;
-  fx::UniformsPtr _secondUniformMap;
-  fx::TexturesPtr _secondTextureMap;
+  MVPUniform _firstUniform;
   MVPUniform _secondUniform;
   
 public:
@@ -38,8 +35,8 @@ public:
   virtual void update(float td);
   
 private:
-  void setupFirstTask();
-  void setupSecondTask();
+  void setupFirstPass();
+  void setupSecondPass();
 };
 
 #endif /* HelloFBO_h */

@@ -49,7 +49,11 @@ namespace fx {
     ivec2 getFrameSize() {return getFrame()->size();}
     void setFrame(const std::string &name) {frame = Graphics::getInstance().getFrameBuffer(name);}
     bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
+    bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
+    bool addColorTexture() {return getFrame()->addColorTexture();}
     bool addDepthBuffer() {return getFrame()->addDepthBuffer();}
+    TextureBufferPtr getColorTexture(int index = 0) {return getFrame()->getColorTexture(0);}
+    
     
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
