@@ -10,7 +10,7 @@
 #include "Camera.h"
 #include "GraphicTask.h"
 #include "GraphicResources.h"
-#include "RenderPass.h"
+//#include "RenderPass.h"
 
 
 using namespace fx;
@@ -21,10 +21,10 @@ CameraBuilder Camera::cameraBuilder = CameraBuilder();
 Camera::Camera() {
   _scene = nullptr;
   _transform = Transform::make();
-  _uniforms = UniformMap::make();;
-  (*_uniforms)["camera"] = properties();
+  _uniformMap = UniformMap::make();;
+  (*_uniformMap)["camera"] = properties();
   
-  _projectionType = PROJ_ORTHO;
+  _projectionType = PROJECTION_ORTHO;
   _near = 1.0;
   _far = 100.0;
   _scale = 1.0;
@@ -40,8 +40,8 @@ Camera::~Camera() {
 
 bool Camera::loadXML(const XMLTree::Node &node) {
   bool success = true;
-  if (node.hasAttribute("pass"))
-    addToRenderPass(node.attribute("pass"));
+  //if (node.hasAttribute("pass"))
+  //  addToRenderPass(node.attribute("pass"));
   if (node.hasAttribute("frame"))
     setFrame(node.attribute("frame"));
   if (node.hasAttribute("shader"))
@@ -77,14 +77,14 @@ STR_Camera Camera::properties() {
 }
 
 void Camera::update(float dt) {
-  (*_uniforms)["camera"] = properties();
-  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
-    (*pass)->setCamera(this);
+  (*_uniformMap)["camera"] = properties();
+  //for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
+  //  (*pass)->setCamera(this);
 }
 
 void Camera::setupTemplateTask(GraphicTask &task) {
   task.frame = _frame;
-  task.uniforms.push_back(_uniforms);
+  task.uniforms.push_back(_uniformMap);
 }
 
 void Camera::applyToTask(GraphicTask &task) {
@@ -170,19 +170,19 @@ void Camera::setShader(const string &name) {
 }
 
 void Camera::setProjection(const mat4 &projection) {
-  _projectionType = PROJ_MATRIX;
+  _projectionType = PROJECTION_MATRIX;
   _projection = projection;
 }
 
 void Camera::setOrthographic(float scale, float near, float far) {
-  _projectionType = PROJ_ORTHO;
+  _projectionType = PROJECTION_ORTHO;
   _scale = scale;
   _near = near;
   _far = far;
 }
 
 void Camera::setFrustum(float angle, float near, float far) {
-  _projectionType = PROJ_FRUSTUM;
+  _projectionType = PROJECTION_FRUSTUM;
   _angle = angle;
   _near = near;
   _far = far;
@@ -190,11 +190,11 @@ void Camera::setFrustum(float angle, float near, float far) {
 
 mat4 Camera::projection() const {
   switch (_projectionType) {
-    case PROJ_ORTHO:
+    case PROJECTION_ORTHO:
       return orthoProjection();
-    case PROJ_FRUSTUM:
+    case PROJECTION_FRUSTUM:
       return frustumProjection();
-    case PROJ_MATRIX:
+    case PROJECTION_MATRIX:
       return _projection;
   }
 }

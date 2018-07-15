@@ -19,6 +19,7 @@
 
 namespace fx {
   class Scene;
+  typedef std::shared_ptr<Scene> ScenePtr;
   
   struct iObject {
     virtual ~iObject() {}
@@ -107,6 +108,7 @@ namespace fx {
     void update(float td);
     
   public:
+    static ScenePtr make();
     static BuilderMap& getBuilderMap();
   };
 }

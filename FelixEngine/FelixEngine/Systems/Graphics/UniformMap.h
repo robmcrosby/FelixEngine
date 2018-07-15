@@ -53,7 +53,7 @@ namespace fx {
   
   class UniformMap;
   typedef std::shared_ptr<UniformMap> UniformsPtr;
-  typedef std::list<UniformsPtr> UniformsList;
+  typedef std::vector<UniformsPtr> UniformsList;
   
   class UniformMap {
   private:

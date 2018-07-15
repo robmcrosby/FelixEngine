@@ -6,36 +6,36 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "ARCamera.h"
-#include "TrackerSystem.h"
-
-
-using namespace fx;
-using namespace std;
-
-
-ARCameraBuilder ARCamera::arCameraBuilder = ARCameraBuilder();
-
-ARCamera::ARCamera() {
-  
-}
-
-ARCamera::~ARCamera() {
-  
-}
-
-void ARCamera::update(float td) {
-  Camera::update(td);
-  
-  TrackerSystem *tracker = &TrackerSystem::getInstance();
-  if (tracker != nullptr) {
-    setView(tracker->getCameraView());
-    setProjection(tracker->getCameraProjection());
-  }
-}
-
-void ARCamera::applyToTask(GraphicTask &task) {
-  TrackerSystem &tracker = TrackerSystem::getInstance();
-  if (!tracker.drawLiveCamera())
-    Camera::setupTemplateTask(task);
-}
+//#include "ARCamera.h"
+//#include "TrackerSystem.h"
+//
+//
+//using namespace fx;
+//using namespace std;
+//
+//
+//ARCameraBuilder ARCamera::arCameraBuilder = ARCameraBuilder();
+//
+//ARCamera::ARCamera() {
+//  
+//}
+//
+//ARCamera::~ARCamera() {
+//  
+//}
+//
+//void ARCamera::update(float td) {
+//  Camera::update(td);
+//  
+//  TrackerSystem *tracker = &TrackerSystem::getInstance();
+//  if (tracker != nullptr) {
+//    setView(tracker->getCameraView());
+//    setProjection(tracker->getCameraProjection());
+//  }
+//}
+//
+//void ARCamera::applyToTask(GraphicTask &task) {
+//  TrackerSystem &tracker = TrackerSystem::getInstance();
+//  if (!tracker.drawLiveCamera())
+//    Camera::setupTemplateTask(task);
+//}

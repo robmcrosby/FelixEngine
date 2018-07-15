@@ -210,13 +210,14 @@ void MetalGraphics::addTask(const GraphicTask &task) {
 }
 
 void MetalGraphics::presentFrame() {
-  _windowBuffer->present(_data->buffer);
+  if (_windowBuffer != nullptr) {
+    _windowBuffer->present(_data->buffer);
   
-  __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
-  [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
-    dispatch_semaphore_signal(semaphore);
-  }];
-  
-  [_data->buffer commit];
+    __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
+    [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+      dispatch_semaphore_signal(semaphore);
+    }];
+    [_data->buffer commit];
+  }
   _data->buffer = nil;
 }

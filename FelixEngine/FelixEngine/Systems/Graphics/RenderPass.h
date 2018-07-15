@@ -29,7 +29,7 @@ namespace fx {
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
     ActionState depthStencilAction;
     
-    UniformsPtr uniforms;
+    UniformsList uniforms;
     
     RenderItems renderItems;
     
@@ -78,10 +78,11 @@ namespace fx {
       depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     }
     
-    UniformMap& getUniformMap() {
-      if (!uniforms)
-        uniforms = UniformMap::make();
-      return *uniforms.get();
+    void addUniformMap(UniformsPtr uniformMap) {uniforms.push_back(uniformMap);}
+    UniformMap& getUniformMap(int index = 0) {
+      while (uniforms.size() <= index)
+        uniforms.push_back(UniformMap::make());
+      return *uniforms.at(index).get();
     }
   };
 }

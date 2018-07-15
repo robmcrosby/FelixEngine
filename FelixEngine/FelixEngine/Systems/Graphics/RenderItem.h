@@ -26,7 +26,7 @@ namespace fx {
     VertexMeshPtr    mesh;
     
     UniformsList uniforms;
-    TexturesPtr textures;
+    TexturesPtr  textures;
     
     int instances;
     
@@ -67,6 +67,13 @@ namespace fx {
     
     void enableDepthTesting() {depthState.enableDefaultTesting();}
     void enableBlending() {blendState.enableDefaultBlending();}
+    
+    void addUniformMap(UniformsPtr uniformMap) {uniforms.push_back(uniformMap);}
+    UniformMap& getUniformMap(int index = 0) {
+      while (uniforms.size() <= index)
+        uniforms.push_back(UniformMap::make());
+      return *uniforms.at(index).get();
+    }
     
     TextureMap& getTextureMap() {
       if (!textures)

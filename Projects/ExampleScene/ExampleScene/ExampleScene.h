@@ -17,10 +17,10 @@
 
 class ExampleScene: public fx::Application {
   private:
-  fx::RenderScheme _renderScheme;
+  //fx::RenderScheme _renderScheme;
   
-  fx::Scene _scene;
-  fx::ModelPtr _model;
+  fx::ScenePtr _scene;
+  //fx::ModelPtr _model;
   
   public:
   ExampleScene();

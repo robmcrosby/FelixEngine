@@ -105,6 +105,10 @@ void Scene::update(float td) {
   }
 }
 
+ScenePtr Scene::make() {
+  return make_shared<Scene>();
+}
+
 BuilderMap& Scene::getBuilderMap() {
   static BuilderMap instance;
   return instance;

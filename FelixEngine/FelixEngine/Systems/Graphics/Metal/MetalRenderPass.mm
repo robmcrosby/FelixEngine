@@ -46,10 +46,10 @@ void MetalRenderPass::render() {
     shader->encode(encoder, mtlFrame, item.blendState);
 
     // Encode the Uniform Buffers to the Shader
-    shader->encode(encoder, uniforms);
-    UniformsList::const_iterator itr = item.uniforms.begin();
-    while (itr != item.uniforms.end())
-      shader->encode(encoder, *itr);
+    for (const auto &uniformMap : uniforms)
+      shader->encode(encoder, uniformMap);
+    for (const auto &uniformMap : item.uniforms)
+      shader->encode(encoder, uniformMap);
     
     // Set the Depth/Stencil State
     [encoder setDepthStencilState:[_depthStencilStates depthStencilStateForFlags:item.depthState.flags]];
@@ -71,7 +71,7 @@ void MetalRenderPass::render() {
     // Set the Textures
     if (item.textures) {
       int index = 0;
-      for (auto texture : *item.textures) {
+      for (auto &texture : *item.textures) {
         id <MTLSamplerState> sampler = [_samplerStates samplerStateForFlags:texture.sampler.flags];
         MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
         mtlTextureBuffer->encode(encoder, sampler, index);

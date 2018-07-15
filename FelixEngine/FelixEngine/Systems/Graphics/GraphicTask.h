@@ -23,7 +23,7 @@ namespace fx {
     VertexMeshPtr    mesh;
     
     UniformsList uniforms;
-    TexturesPtr textures;
+    TexturesPtr  textures;
     
     int instances;
     

@@ -65,6 +65,20 @@
 		C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08B1F353CD600212AAA /* TrackerSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = C160E08E1F353ECD00212AAA /* ARKitTracker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */ = {isa = PBXBuildFile; fileRef = C160E08F1F353ECD00212AAA /* ARKitTracker.mm */; };
+		C1707B1920F4372800A77FAC /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B0720F4372800A77FAC /* Resources.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B1A20F4372800A77FAC /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B0820F4372800A77FAC /* Scene.cpp */; };
+		C1707B1B20F4372800A77FAC /* Light.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B0920F4372800A77FAC /* Light.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B1C20F4372800A77FAC /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B0A20F4372800A77FAC /* Camera.cpp */; };
+		C1707B1D20F4372800A77FAC /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B0B20F4372800A77FAC /* Camera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B1E20F4372800A77FAC /* Material.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B0C20F4372800A77FAC /* Material.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B1F20F4372800A77FAC /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B0D20F4372800A77FAC /* Light.cpp */; };
+		C1707B2120F4372800A77FAC /* Resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B0F20F4372800A77FAC /* Resources.cpp */; };
+		C1707B2220F4372800A77FAC /* ARCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B1020F4372800A77FAC /* ARCamera.cpp */; };
+		C1707B2320F4372800A77FAC /* ARCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B1120F4372800A77FAC /* ARCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B2420F4372800A77FAC /* Model.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B1220F4372800A77FAC /* Model.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1707B2520F4372800A77FAC /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B1320F4372800A77FAC /* Model.cpp */; };
+		C1707B2620F4372800A77FAC /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1707B1420F4372800A77FAC /* Material.cpp */; };
+		C1707B2820F4372800A77FAC /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = C1707B1620F4372800A77FAC /* Scene.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */; };
 		C191F65F20F18E6400714F8B /* RenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F65E20F18E6400714F8B /* RenderPass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */ = {isa = PBXBuildFile; fileRef = C191F66520F1905500714F8B /* MetalRenderPass.h */; };
@@ -166,6 +180,20 @@
 		C160E08B1F353CD600212AAA /* TrackerSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TrackerSystem.h; path = Systems/Tracking/TrackerSystem.h; sourceTree = "<group>"; };
 		C160E08E1F353ECD00212AAA /* ARKitTracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKitTracker.h; path = Systems/Tracking/ARKit/ARKitTracker.h; sourceTree = "<group>"; };
 		C160E08F1F353ECD00212AAA /* ARKitTracker.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ARKitTracker.mm; path = Systems/Tracking/ARKit/ARKitTracker.mm; sourceTree = "<group>"; };
+		C1707B0720F4372800A77FAC /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resources.h; sourceTree = "<group>"; };
+		C1707B0820F4372800A77FAC /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		C1707B0920F4372800A77FAC /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		C1707B0A20F4372800A77FAC /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		C1707B0B20F4372800A77FAC /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		C1707B0C20F4372800A77FAC /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		C1707B0D20F4372800A77FAC /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
+		C1707B0F20F4372800A77FAC /* Resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Resources.cpp; sourceTree = "<group>"; };
+		C1707B1020F4372800A77FAC /* ARCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ARCamera.cpp; sourceTree = "<group>"; };
+		C1707B1120F4372800A77FAC /* ARCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARCamera.h; sourceTree = "<group>"; };
+		C1707B1220F4372800A77FAC /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		C1707B1320F4372800A77FAC /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		C1707B1420F4372800A77FAC /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		C1707B1620F4372800A77FAC /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		C17C1D4F20CB676600E102B9 /* VulkanFrameAttachment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanFrameAttachment.cpp; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.cpp; sourceTree = "<group>"; };
 		C17C1D5020CB676600E102B9 /* VulkanFrameAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanFrameAttachment.h; path = Systems/Graphics/Vulkan/VulkanFrameAttachment.h; sourceTree = "<group>"; };
 		C191F65E20F18E6400714F8B /* RenderPass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RenderPass.h; path = Systems/Graphics/RenderPass.h; sourceTree = "<group>"; };
@@ -368,6 +396,7 @@
 				C15CAEB11EEDEF33004FA3C7 /* Info.plist */,
 				C1136C331EF0BB6E00BA1322 /* Application.h */,
 				C1136C321EF0BB6E00BA1322 /* Application.cpp */,
+				C1707B0420F4372800A77FAC /* Scene */,
 				C1443AE91EF344830059BA9D /* Utilities */,
 				C1136C481EF2223C00BA1322 /* Systems */,
 				C1136C361EF0BC6500BA1322 /* iOS */,
@@ -382,6 +411,27 @@
 				C160E08F1F353ECD00212AAA /* ARKitTracker.mm */,
 			);
 			name = ARKitTracking;
+			sourceTree = "<group>";
+		};
+		C1707B0420F4372800A77FAC /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				C1707B1620F4372800A77FAC /* Scene.h */,
+				C1707B0820F4372800A77FAC /* Scene.cpp */,
+				C1707B1220F4372800A77FAC /* Model.h */,
+				C1707B1320F4372800A77FAC /* Model.cpp */,
+				C1707B0C20F4372800A77FAC /* Material.h */,
+				C1707B1420F4372800A77FAC /* Material.cpp */,
+				C1707B0920F4372800A77FAC /* Light.h */,
+				C1707B0D20F4372800A77FAC /* Light.cpp */,
+				C1707B0720F4372800A77FAC /* Resources.h */,
+				C1707B0F20F4372800A77FAC /* Resources.cpp */,
+				C1707B0B20F4372800A77FAC /* Camera.h */,
+				C1707B0A20F4372800A77FAC /* Camera.cpp */,
+				C1707B1120F4372800A77FAC /* ARCamera.h */,
+				C1707B1020F4372800A77FAC /* ARCamera.cpp */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 		C1B3FDC11F54E81B001F7DB5 /* Events */ = {
@@ -450,18 +500,24 @@
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
 				C13EBCAF1F5C65D100C3BB9D /* EventHandler.h in Headers */,
 				C1443AEB1EF345000059BA9D /* Vector.h in Headers */,
+				C1707B2820F4372800A77FAC /* Scene.h in Headers */,
 				C1B3FDC31F54E8BB001F7DB5 /* Event.h in Headers */,
 				C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */,
 				C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1D1D801209D209E000EB92C /* Vulkan.h in Headers */,
+				C1707B1920F4372800A77FAC /* Resources.h in Headers */,
 				C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
+				C1707B1D20F4372800A77FAC /* Camera.h in Headers */,
+				C1707B2420F4372800A77FAC /* Model.h in Headers */,
 				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
 				C14549532059E32C003156A0 /* MeshBuilder.h in Headers */,
+				C1707B1B20F4372800A77FAC /* Light.h in Headers */,
 				C191F65F20F18E6400714F8B /* RenderPass.h in Headers */,
+				C1707B2320F4372800A77FAC /* ARCamera.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */,
 				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
@@ -495,6 +551,7 @@
 				C191F66D20F191BE00714F8B /* RenderItem.h in Headers */,
 				C17C1D5220CB676600E102B9 /* VulkanFrameAttachment.h in Headers */,
 				C1443B031EF49A2A0059BA9D /* MetalShaderProgram.h in Headers */,
+				C1707B1E20F4372800A77FAC /* Material.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,17 +628,24 @@
 				C1BB4F301F1D8FA8008FDF01 /* GraphicResources.cpp in Sources */,
 				C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */,
 				C154C0DF1FCFA66900D3DCFF /* MetalShaders.metal in Sources */,
+				C1707B1C20F4372800A77FAC /* Camera.cpp in Sources */,
 				C1401D521F08A07500BE9958 /* MetalTextureBuffer.mm in Sources */,
+				C1707B2120F4372800A77FAC /* Resources.cpp in Sources */,
+				C1707B2620F4372800A77FAC /* Material.cpp in Sources */,
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
+				C1707B2220F4372800A77FAC /* ARCamera.cpp in Sources */,
+				C1707B1F20F4372800A77FAC /* Light.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
+				C1707B2520F4372800A77FAC /* Model.cpp in Sources */,
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,
 				C1136C591EF224F700BA1322 /* MetalGraphics.mm in Sources */,
+				C1707B1A20F4372800A77FAC /* Scene.cpp in Sources */,
 				C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,

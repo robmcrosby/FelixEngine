@@ -58,9 +58,8 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const Grap
   MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame.get());
   encode(encoder, frame, task.blendState);
   
-  UniformsList::const_iterator itr = task.uniforms.begin();
-  while (itr != task.uniforms.end())
-    encode(encoder, *itr);
+  for (const auto &uniformMap : task.uniforms)
+    encode(encoder, uniformMap);
 }
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame, BlendState blendState) {
