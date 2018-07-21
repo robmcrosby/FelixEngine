@@ -71,25 +71,6 @@ void Camera::update(float dt) {
   }
 }
 
-//void Camera::setupTemplateTask(GraphicTask &task) {
-//  task.frame = _frame;
-//  task.uniforms.push_back(_uniformMap);
-//}
-//
-//void Camera::applyToTask(GraphicTask &task) {
-//  // Set Clear Color
-//  if (isClearingColor())
-//    task.setClearColor(clearColor());
-//  else
-//    task.setDefaultColorActions();
-//
-//  // Set Clear Depth
-//  if (isClearingDepth())
-//    task.setClearDepthStencil(clearDepth());
-//  else
-//    task.setDefaultDepthStencilActions();
-//}
-
 bool Camera::setView(const XMLTree::Node &node) {
   if (node.hasAttributes("eye", "center", "up")) {
     vec3 eye(node.attribute("eye"));
@@ -125,27 +106,6 @@ bool Camera::setProjection(const XMLTree::Node &node) {
     }
   }
   return true;
-}
-
-bool Camera::setToRenderPass(const XMLTree::Node &node) {
-  // TODO
-  return false;
-}
-
-void Camera::setToRenderPass(const string &name) {
-  setToRenderPass(Graphics::getInstance().getRenderPass(name));
-}
-
-void Camera::setToRenderPass(RenderPassPtr pass) {
-  _renderPasses.insert(pass);
-}
-
-void Camera::removeFromRenderPass(const string &name) {
-  removeFromRenderPass(Graphics::getInstance().getRenderPass(name));
-}
-
-void Camera::removeFromRenderPass(RenderPassPtr pass) {
-  _renderPasses.erase(pass);
 }
 
 void Camera::setProjection(const mat4 &projection) {

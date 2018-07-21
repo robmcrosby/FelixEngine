@@ -46,11 +46,13 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/EventSubject.h>
 
 #import <FelixEngine/Scene.h>
+#import <FelixEngine/Drawable.h>
 #import <FelixEngine/Object.h>
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Light.h>
+#import <FelixEngine/LightRig.h>
 
 // iOS Platform
 #import <FelixEngine/iOSFileSystem.h>

@@ -17,8 +17,7 @@
 
 class ExampleScene: public fx::Application {
   private:
-  //fx::RenderScheme _renderScheme;
-  
+  fx::RenderPassPtr _renderPass;
   fx::ScenePtr _scene;
   //fx::ModelPtr _model;
   

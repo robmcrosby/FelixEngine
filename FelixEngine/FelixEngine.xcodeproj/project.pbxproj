@@ -104,6 +104,9 @@
 		C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */; };
 		C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */; };
 		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1EC49E12103E6650067E842 /* LightRig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1EC49DF2103E6650067E842 /* LightRig.cpp */; };
+		C1EC49E22103E6650067E842 /* LightRig.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E02103E6650067E842 /* LightRig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1EC49E42103EAE60067E842 /* Drawable.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E32103EAE60067E842 /* Drawable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F7D9D61F353A680005367E /* ARKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -230,6 +233,9 @@
 		C1D1D83020B0EC87000EB92C /* VulkanBufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanBufferPool.cpp; path = Systems/Graphics/Vulkan/VulkanBufferPool.cpp; sourceTree = "<group>"; };
 		C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanBufferPool.h; path = Systems/Graphics/Vulkan/VulkanBufferPool.h; sourceTree = "<group>"; };
 		C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalFunctions.h; path = Systems/Graphics/Metal/MetalFunctions.h; sourceTree = "<group>"; };
+		C1EC49DF2103E6650067E842 /* LightRig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightRig.cpp; sourceTree = "<group>"; };
+		C1EC49E02103E6650067E842 /* LightRig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightRig.h; sourceTree = "<group>"; };
+		C1EC49E32103EAE60067E842 /* Drawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		C1F7D9D61F353A680005367E /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -420,10 +426,13 @@
 				C1707B0820F4372800A77FAC /* Scene.cpp */,
 				C1707B1220F4372800A77FAC /* Model.h */,
 				C1707B1320F4372800A77FAC /* Model.cpp */,
+				C1EC49E32103EAE60067E842 /* Drawable.h */,
 				C1707B0C20F4372800A77FAC /* Material.h */,
 				C1707B1420F4372800A77FAC /* Material.cpp */,
 				C1707B0920F4372800A77FAC /* Light.h */,
 				C1707B0D20F4372800A77FAC /* Light.cpp */,
+				C1EC49E02103E6650067E842 /* LightRig.h */,
+				C1EC49DF2103E6650067E842 /* LightRig.cpp */,
 				C1707B0720F4372800A77FAC /* Resources.h */,
 				C1707B0F20F4372800A77FAC /* Resources.cpp */,
 				C1707B0B20F4372800A77FAC /* Camera.h */,
@@ -492,6 +501,7 @@
 			files = (
 				C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */,
 				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
+				C1EC49E42103EAE60067E842 /* Drawable.h in Headers */,
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
@@ -531,6 +541,7 @@
 				C1401CFD1EFF2BF800BE9958 /* MeshLoader.h in Headers */,
 				C1401D101F04861200BE9958 /* MetalDepthStencil.h in Headers */,
 				C1443AFF1EF49A100059BA9D /* MetalFrameBuffer.h in Headers */,
+				C1EC49E22103E6650067E842 /* LightRig.h in Headers */,
 				C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */,
 				C1401D511F08A07500BE9958 /* MetalTextureBuffer.h in Headers */,
 				C1D1D7F9209BB6B7000EB92C /* VulkanUniformBuffer.h in Headers */,
@@ -641,6 +652,7 @@
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
+				C1EC49E12103E6650067E842 /* LightRig.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1707B2520F4372800A77FAC /* Model.cpp in Sources */,
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,

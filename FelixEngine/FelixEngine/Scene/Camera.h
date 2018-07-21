@@ -9,12 +9,10 @@
 #ifndef Camera_h
 #define Camera_h
 
-#include "Scene.h"
+#include "Drawable.h"
 #include "Graphics.h"
-#include "UniformMap.h"
 #include "Transform.h"
 #include "GraphicStructures.h"
-#include "RenderPass.h"
 
 
 namespace fx {
@@ -26,15 +24,12 @@ namespace fx {
     PROJECTION_MATRIX,
   };
   
-  class Camera: public iObject {
+  class Camera: public Drawable {
   private:
     static CameraBuilder cameraBuilder;
 
   protected:
-    Scene *_scene;
-
     TransformPtr _transform;
-    RenderPasses _renderPasses;
 
     PROJECTION_TYPE _projectionType;
     float _near;
@@ -47,7 +42,6 @@ namespace fx {
     Camera();
     virtual ~Camera();
 
-    virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     virtual STR_Camera properties(vec2 frameSize);
@@ -74,16 +68,9 @@ namespace fx {
     void setOrthographic(float scale, float near, float far);
     void setFrustum(float angle, float near, float far);
 
-    mat4 projection(vec2 frameSize) const;
-    mat4 orthoProjection(vec2 frameSize) const;
-    mat4 frustumProjection(vec2 frameSize) const;
-    
-    bool setToRenderPass(const XMLTree::Node &node);
-    void setToRenderPass(const std::string &name);
-    void setToRenderPass(RenderPassPtr pass);
-    
-    void removeFromRenderPass(const std::string &name);
-    void removeFromRenderPass(RenderPassPtr pass);
+    mat4 projection(vec2 frameSize = vec2(1.0f, 1.0f)) const;
+    mat4 orthoProjection(vec2 frameSize = vec2(1.0f, 1.0f)) const;
+    mat4 frustumProjection(vec2 frameSize = vec2(1.0f, 1.0f)) const;
 
   private:
     bool loadXMLItem(const XMLTree::Node &node);

@@ -10,7 +10,7 @@
 #import <FelixEngine/Model.h>
 #import <FelixEngine/Material.h>
 #import <FelixEngine/Camera.h>
-#import <FelixEngine/Light.h>
+#import <FelixEngine/LightRig.h>
 #import <FelixEngine/MeshBuilder.h>
 
 #include <set>
@@ -27,17 +27,19 @@ ExampleScene::~ExampleScene() {
 void ExampleScene::initalize() {
   _scene = fx::Scene::make();
   
-  fx::RenderPassPtr renderPass = _graphics->createRenderPass();
-  renderPass->setFrameToWindow(0);
-  renderPass->addDepthBuffer();
-  renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
-  renderPass->setClearDepthStencil();
+  _renderPass = _graphics->createRenderPass();
+  _renderPass->setFrameToWindow(0);
+  _renderPass->addDepthBuffer();
+  _renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _renderPass->setClearDepthStencil();
   
   fx::CameraPtr camera = _scene->get<fx::Camera>("Camera");
-  camera->setToRenderPass(renderPass);
+  camera->setToRenderPass(_renderPass);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
-
+  
+  fx::LightRigPtr lightRig = _scene->get<fx::LightRig>("Lights");
+  lightRig->setToRenderPass(_renderPass);
   
 //  fx::FrameBufferPtr frame = _graphics->getFrameBuffer("MainWindow");
 //  frame->setToWindow(0);
@@ -98,7 +100,10 @@ void ExampleScene::initalize() {
 
 void ExampleScene::update(float td) {
 //  _model->setRotation(_model->localRotation() * fx::quat::RotZ(td));
-//  _scene.update(td);
+  _scene->update(td);
+  
+  _renderPass->render();
+  _renderPass->clearRenderItems();
 //
 //  fx::RenderPass::renderPasses(_renderScheme);
 //  fx::RenderPass::resetPasses();
