@@ -9,12 +9,12 @@
 #ifndef Camera_h
 #define Camera_h
 
-//#include "RenderItem.h"
 #include "Scene.h"
 #include "Graphics.h"
 #include "UniformMap.h"
 #include "Transform.h"
 #include "GraphicStructures.h"
+#include "RenderPass.h"
 
 
 namespace fx {
@@ -34,10 +34,7 @@ namespace fx {
     Scene *_scene;
 
     TransformPtr _transform;
-    UniformsPtr  _uniformMap;
-
-    FrameBufferPtr  _frame;
-    ShaderProgramPtr _shader;
+    RenderPasses _renderPasses;
 
     PROJECTION_TYPE _projectionType;
     float _near;
@@ -46,12 +43,6 @@ namespace fx {
     float _angle;
     mat4 _projection;
 
-    bool _isClearingColor;
-    vec4 _clearColor;
-
-    bool _isClearingDepth;
-    float _clearDepth;
-
   public:
     Camera();
     virtual ~Camera();
@@ -59,11 +50,7 @@ namespace fx {
     virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
-
-    virtual void setupTemplateTask(GraphicTask &task);
-    virtual void applyToTask(GraphicTask &task);
-
-    virtual STR_Camera properties();
+    virtual STR_Camera properties(vec2 frameSize);
 
     bool setView(const XMLTree::Node &node);
     void setView(const mat4 &view);
@@ -87,29 +74,16 @@ namespace fx {
     void setOrthographic(float scale, float near, float far);
     void setFrustum(float angle, float near, float far);
 
-    mat4 projection() const;
-    mat4 orthoProjection() const;
-    mat4 frustumProjection() const;
-
-    bool setFrame(const XMLTree::Node &node);
-    void setFrame(const std::string &name);
-    void setFrame(FrameBufferPtr &frame) {_frame = frame;}
-    FrameBufferPtr frame() {return _frame;}
-
-    bool setShader(const XMLTree::Node &node);
-    void setShader(const std::string &name);
-    void setShader(ShaderProgramPtr &shader) {_shader = shader;}
-    ShaderProgramPtr shader() {return _shader;}
-
-    bool setClearState(const XMLTree::Node &node);
-
-    void setClearColor(const vec4 &color = vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    vec4 clearColor() const {return _clearColor;}
-    bool isClearingColor() const {return _isClearingColor;}
-
-    void setClearDepth(float depth = 1.0f);
-    float clearDepth() const {return _clearDepth;}
-    bool isClearingDepth() const {return _isClearingDepth;}
+    mat4 projection(vec2 frameSize) const;
+    mat4 orthoProjection(vec2 frameSize) const;
+    mat4 frustumProjection(vec2 frameSize) const;
+    
+    bool setToRenderPass(const XMLTree::Node &node);
+    void setToRenderPass(const std::string &name);
+    void setToRenderPass(RenderPassPtr pass);
+    
+    void removeFromRenderPass(const std::string &name);
+    void removeFromRenderPass(RenderPassPtr pass);
 
   private:
     bool loadXMLItem(const XMLTree::Node &node);

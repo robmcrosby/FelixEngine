@@ -11,6 +11,7 @@
 
 #include "RenderItem.h"
 #include "Graphics.h"
+#include <set>
 
 
 namespace fx {
@@ -19,6 +20,11 @@ namespace fx {
    *
    */
   typedef std::vector<RenderItem> RenderItems;
+  
+  /**
+   *
+   */
+  typedef std::set<RenderPassPtr> RenderPasses;
   
   /**
    *
@@ -84,6 +90,7 @@ namespace fx {
         uniforms.push_back(UniformMap::make());
       return *uniforms.at(index).get();
     }
+    void clearUniformMaps() {uniforms.clear();}
   };
 }
 

@@ -27,13 +27,16 @@ ExampleScene::~ExampleScene() {
 void ExampleScene::initalize() {
   _scene = fx::Scene::make();
   
+  fx::RenderPassPtr renderPass = _graphics->createRenderPass();
+  renderPass->setFrameToWindow(0);
+  renderPass->addDepthBuffer();
+  renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  renderPass->setClearDepthStencil();
+  
   fx::CameraPtr camera = _scene->get<fx::Camera>("Camera");
-  //camera->setFrame(frame);
+  camera->setToRenderPass(renderPass);
   camera->setOrthographic(2.0f, -100.0f, 100.0f);
   camera->lookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
-  camera->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-  camera->setClearDepth();
-  //camera->addToRenderPass("MainPass");
 
   
 //  fx::FrameBufferPtr frame = _graphics->getFrameBuffer("MainWindow");

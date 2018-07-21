@@ -36,6 +36,7 @@ namespace fx {
   class Graphics {
   protected:
     std::map<std::string, std::weak_ptr<FrameBuffer> >   frameMap;
+    std::map<std::string, std::weak_ptr<RenderPass> >    passMap;
     std::map<std::string, std::weak_ptr<ShaderProgram> > shaderMap;
     std::map<std::string, std::weak_ptr<VertexMesh> >    vertexMap;
     std::map<std::string, std::weak_ptr<UniformBuffer> > uniformMap;
@@ -69,6 +70,15 @@ namespace fx {
         frameMap[name] = frame;
       }
       return frame;
+    }
+    
+    RenderPassPtr getRenderPass(const std::string &name) {
+      RenderPassPtr renderPass = passMap[name].lock();
+      if (!renderPass) {
+        renderPass = createRenderPass();
+        passMap[name] = renderPass;
+      }
+      return renderPass;
     }
     
     ShaderProgramPtr  getShaderProgram(const std::string &name) {
