@@ -26,6 +26,7 @@ namespace fx {
     TexturesPtr  textures;
     
     int instances;
+    int layer;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
     ActionState depthStencilAction;
@@ -34,7 +35,7 @@ namespace fx {
     DepthState depthState;
     BlendState blendState;
     
-    GraphicTask(): instances(1), cullMode(CULL_NONE) {}
+    GraphicTask(): instances(1), layer(0), cullMode(CULL_NONE) {}
     
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {

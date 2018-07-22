@@ -29,12 +29,13 @@ namespace fx {
     TexturesPtr  textures;
     
     int instances;
+    int layer;
     
     CULL_MODE  cullMode;
     DepthState depthState;
     BlendState blendState;
     
-    RenderItem(): instances(1), cullMode(CULL_NONE) {}
+    RenderItem(): instances(1), layer(0), cullMode(CULL_NONE) {}
     
     ShaderProgramPtr getShader() {
       if (!shader)

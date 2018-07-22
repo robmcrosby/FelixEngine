@@ -19,7 +19,7 @@ class ExampleScene: public fx::Application {
   private:
   fx::RenderPassPtr _renderPass;
   fx::ScenePtr _scene;
-  //fx::ModelPtr _model;
+  fx::ModelPtr _model;
   
   public:
   ExampleScene();

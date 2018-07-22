@@ -27,9 +27,6 @@ namespace fx {
     Drawable() {}
     virtual ~Drawable() {}
     
-    /**
-     *
-     */
     virtual void setScene(Scene *scene) {_scene = scene;}
     
     /**
