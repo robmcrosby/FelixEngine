@@ -41,7 +41,6 @@ namespace fx {
     virtual RenderPassPtr    createRenderPass();
     
     virtual void nextFrame();
-    virtual void addTask(const GraphicTask &task);
     virtual void presentFrame();
   };
   

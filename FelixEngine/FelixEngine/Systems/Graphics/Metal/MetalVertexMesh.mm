@@ -9,7 +9,6 @@
 #include "MetalVertexMesh.h"
 #include "MetalShaderProgram.h"
 #include "VertexMeshData.h"
-#include "GraphicTask.h"
 #include <Metal/Metal.h>
 
 
@@ -111,40 +110,5 @@ void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderPr
                 vertexStart:0
                 vertexCount:_vertexCount
               instanceCount:instances];
-  }
-}
-
-void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
-  
-  // Set the Triangle Culling Mode
-  if (task.cullMode == CULL_FRONT)
-    [encoder setCullMode:MTLCullModeFront];
-  else if (task.cullMode == CULL_BACK)
-    [encoder setCullMode:MTLCullModeBack];
-  
-  // Set the Vertex Buffers
-  for (auto buffer : _buffers) {
-    if (shader->_vertexIndexMap.count(buffer.first)) {
-      NSUInteger index = shader->_vertexIndexMap.at(buffer.first);
-      [encoder setVertexBuffer:buffer.second offset:0 atIndex:index];
-    }
-  }
-  
-  // Draw the Mesh
-  MTLPrimitiveType primitive = (MTLPrimitiveType)_primitive;
-  if (_indices != nil) {
-    [encoder drawIndexedPrimitives:primitive
-                        indexCount:_indexCount
-                         indexType:MTLIndexTypeUInt32
-                       indexBuffer:_indices
-                 indexBufferOffset:0
-                     instanceCount:task.instances];
-  }
-  else {
-    [encoder drawPrimitives:primitive
-                vertexStart:0
-                vertexCount:_vertexCount
-              instanceCount:task.instances];
   }
 }

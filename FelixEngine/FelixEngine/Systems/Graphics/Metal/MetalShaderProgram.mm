@@ -10,7 +10,6 @@
 #include "MetalFrameBuffer.h"
 #include "MetalUniformBuffer.h"
 #include "MetalTextureSampler.h"
-#include "GraphicTask.h"
 #include <Metal/Metal.h>
 
 
@@ -52,14 +51,6 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
     return true;
   }
   return false;
-}
-
-void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, const GraphicTask &task) {
-  MetalFrameBuffer *frame = static_cast<MetalFrameBuffer*>(task.frame.get());
-  encode(encoder, frame, task.blendState);
-  
-  for (const auto &uniformMap : task.uniforms)
-    encode(encoder, uniformMap);
 }
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame, BlendState blendState) {

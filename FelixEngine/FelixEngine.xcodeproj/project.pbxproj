@@ -54,7 +54,6 @@
 		C1443B071EF49A5C0059BA9D /* MetalVertexMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */; };
 		C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */; };
 		C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B091EF49E5D0059BA9D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C14549502059E32C003156A0 /* MeshBuilder.cpp */; };
 		C14549532059E32C003156A0 /* MeshBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = C14549512059E32C003156A0 /* MeshBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C154C0DD1FCE389100D3DCFF /* GraphicStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -170,7 +169,6 @@
 		C1443B051EF49A5C0059BA9D /* MetalVertexMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalVertexMesh.h; path = Systems/Graphics/Metal/MetalVertexMesh.h; sourceTree = "<group>"; };
 		C1443B061EF49A5C0059BA9D /* MetalVertexMesh.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalVertexMesh.mm; path = Systems/Graphics/Metal/MetalVertexMesh.mm; sourceTree = "<group>"; };
 		C1443B091EF49E5D0059BA9D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = Utilities/Macros.h; sourceTree = "<group>"; };
-		C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicTask.h; path = Systems/Graphics/GraphicTask.h; sourceTree = "<group>"; };
 		C14549502059E32C003156A0 /* MeshBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MeshBuilder.cpp; path = Systems/Graphics/MeshBuilder.cpp; sourceTree = "<group>"; };
 		C14549512059E32C003156A0 /* MeshBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshBuilder.h; path = Systems/Graphics/MeshBuilder.h; sourceTree = "<group>"; };
 		C154C0DC1FCE389100D3DCFF /* GraphicStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GraphicStructures.h; path = Systems/Graphics/GraphicStructures.h; sourceTree = "<group>"; };
@@ -317,7 +315,6 @@
 				C1443AFB1EF496240059BA9D /* GraphicResources.h */,
 				C1BB4F2F1F1D8FA8008FDF01 /* GraphicResources.cpp */,
 				C1401C971EF8054200BE9958 /* GraphicStates.h */,
-				C1443B0D1EF5DCE20059BA9D /* GraphicTask.h */,
 				C1401D131F05CCED00BE9958 /* UniformMap.h */,
 				C1401D5F1F0BEB1600BE9958 /* TextureMap.h */,
 				C1401D041F001BFC00BE9958 /* VertexMeshData.h */,
@@ -530,7 +527,6 @@
 				C1707B2320F4372800A77FAC /* ARCamera.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */,
-				C1443B0E1EF5DCE20059BA9D /* GraphicTask.h in Headers */,
 				C1D1D7F1209BB666000EB92C /* VulkanShaderProgram.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */,

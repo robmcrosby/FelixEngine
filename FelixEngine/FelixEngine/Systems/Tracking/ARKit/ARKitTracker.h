@@ -8,7 +8,7 @@
 
 #include "TrackerSystem.h"
 #include "Graphics.h"
-#include "GraphicTask.h"
+#include "UniformMap.h"
 #include "Macros.h"
 
 #ifndef ARKitTracker_h
@@ -38,7 +38,7 @@ namespace fx {
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
     
     UniformsPtr _uniformMap;
-    GraphicTask _task;
+    //GraphicTask _task;
     
     TrackedPlanes _trackedPlanes;
     

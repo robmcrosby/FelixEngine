@@ -12,7 +12,6 @@
 #include <FelixEngine/Application.h>
 #include <FelixEngine/Scene.h>
 #include <FelixEngine/Graphics.h>
-#include <FelixEngine/GraphicTask.h>
 #include <FelixEngine/RenderPass.h>
 #include <FelixEngine/Transform.h>
 #include <FelixEngine/Model.h>

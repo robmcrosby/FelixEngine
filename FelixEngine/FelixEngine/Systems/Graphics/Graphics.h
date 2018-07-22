@@ -15,7 +15,6 @@
 
 namespace fx {
   class Application;
-  class GraphicTask;
   
   class FrameBuffer;
   class ShaderProgram;
@@ -60,7 +59,6 @@ namespace fx {
     virtual RenderPassPtr    createRenderPass()    = 0;
     
     virtual void nextFrame() = 0;
-    virtual void addTask(const GraphicTask &task) = 0;
     virtual void presentFrame() = 0;
     
     FrameBufferPtr getFrameBuffer(const std::string &name) {

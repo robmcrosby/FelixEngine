@@ -24,7 +24,6 @@ FOUNDATION_EXPORT const unsigned char FelixEngineVersionString[];
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/GraphicResources.h>
 #import <FelixEngine/GraphicStates.h>
-#import <FelixEngine/GraphicTask.h>
 #import <FelixEngine/GraphicStructures.h>
 #import <FelixEngine/RenderTask.h>
 #import <FelixEngine/RenderPass.h>

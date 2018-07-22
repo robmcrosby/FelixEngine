@@ -8,7 +8,6 @@
 
 
 #include "Camera.h"
-#include "GraphicTask.h"
 #include "GraphicResources.h"
 
 

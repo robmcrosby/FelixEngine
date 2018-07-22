@@ -57,14 +57,6 @@ void Material::update(float dt) {
   (*_uniforms)["material"] = _properties;
 }
 
-//void Material::setToTask(GraphicTask &task) {
-//  task.uniforms.push_back(_uniforms);
-//  task.textures = _textures;
-//  task.shader = _shader;
-//  task.depthState = _depthState;
-//  task.blendState = _blendState;
-//}
-
 bool Material::setShader(const XMLTree::Node &node) {
   _shader = Graphics::getInstance().getShaderProgram(node.attribute("name"));
   return _shader->loadXML(node);

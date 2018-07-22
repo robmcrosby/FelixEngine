@@ -9,7 +9,6 @@
 #include "MetalFrameBuffer.h"
 #include "MetalTextureBuffer.h"
 #include "MetalGraphics.h"
-#include "GraphicTask.h"
 
 #include <Metal/Metal.h>
 #include <UIKit/UIKit.h>
@@ -129,10 +128,6 @@ TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {
   return _idFlag | blending.flags;
-}
-
-id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
-  return createEncoder(buffer, task.depthStencilAction, (ActionState*)task.colorActions);
 }
 
 id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const ActionState &depthStencilAction, const ActionState *colorActions) {
