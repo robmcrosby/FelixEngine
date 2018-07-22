@@ -21,7 +21,7 @@ namespace fx {
   class Drawable: public iObject {
   protected:
     Scene *_scene;
-    RenderPasses _renderPasses;
+    std::set<RenderPassPtr> _renderPasses;
     
   public:
     Drawable() {}

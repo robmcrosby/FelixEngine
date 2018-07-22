@@ -10,6 +10,7 @@
 #define Scene_h
 
 #include "EventSubject.h"
+#include "RenderPass.h"
 #include "XMLTree.h"
 #include <memory>
 #include <string>
@@ -69,6 +70,9 @@ namespace fx {
     Objects   _objects;
     ObjectMap _objectMap;
     
+    std::vector<RenderPassPtr> _renderingPasses;
+    std::map<std::string, RenderPassPtr> _renderingPassMap;
+    
   public:
     Scene();
     ~Scene();
@@ -106,6 +110,12 @@ namespace fx {
     void removeObject(const std::string &name);
     
     void update(float td);
+    
+    void addRenderingPass(RenderPassPtr renderPass);
+    void clearRenderingPasses();
+    
+    RenderPassPtr createRenderingPass();
+    RenderPassPtr getRenderingPass(const std::string &name);
     
   public:
     static ScenePtr make();

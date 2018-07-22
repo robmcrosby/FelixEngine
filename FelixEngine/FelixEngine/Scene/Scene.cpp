@@ -98,11 +98,41 @@ void Scene::removeObject(const string &name) {
 }
 
 void Scene::update(float td) {
+  // Update each of the objects in the Scene
   Objects::iterator itr = _objects.begin();
   while (itr != _objects.end()) {
     (*itr)->update(td);
     ++itr;
   }
+  
+  // Render each of the Render Passes
+  for (auto &pass : _renderingPasses)
+    pass->render();
+  
+  // Clear each of the Render Passes
+  for (auto &pass : _renderingPasses)
+    pass->clearRenderItems();
+}
+
+void Scene::addRenderingPass(RenderPassPtr renderPass) {
+  _renderingPasses.push_back(renderPass);
+}
+
+void Scene::clearRenderingPasses() {
+  _renderingPasses.clear();
+  _renderingPassMap.clear();
+}
+
+RenderPassPtr Scene::createRenderingPass() {
+  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+  addRenderingPass(renderPass);
+  return renderPass;
+}
+
+RenderPassPtr Scene::getRenderingPass(const string &name) {
+  if (!_renderingPassMap.count(name))
+    _renderingPassMap[name] = createRenderingPass();
+  return _renderingPassMap.at(name);
 }
 
 ScenePtr Scene::make() {

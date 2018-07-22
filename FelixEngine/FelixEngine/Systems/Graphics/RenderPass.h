@@ -24,11 +24,6 @@ namespace fx {
   /**
    *
    */
-  typedef std::set<RenderPassPtr> RenderPasses;
-  
-  /**
-   *
-   */
   struct RenderPass {
     FrameBufferPtr frame;
     
