@@ -14,6 +14,7 @@
 #include "UniformMap.h"
 #include "Transform.h"
 #include "GraphicStructures.h"
+#include "Light.h"
 
 
 namespace fx {
@@ -24,6 +25,7 @@ namespace fx {
     static LightRigBuilder lightRigBuilder;
     
   protected:
+    std::vector<LightPtr> _lights;
     
   public:
     LightRig();
@@ -31,6 +33,13 @@ namespace fx {
     
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
+    
+    void addDirectionalLight(vec3 direction, vec3 color, float energy);
+    void addPointLight(vec3 location, vec3 color, float energy);
+    
+    void addLight(LightPtr light);
+    LightPtr getLight(int index);
+    void clearLights();
   };
 }
 

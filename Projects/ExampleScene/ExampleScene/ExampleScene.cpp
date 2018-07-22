@@ -40,6 +40,10 @@ void ExampleScene::initalize() {
   
   fx::LightRigPtr lightRig = _scene->get<fx::LightRig>("Lights");
   lightRig->setToRenderPass(_renderPass);
+  lightRig->addDirectionalLight(fx::vec3(-1.0f, -1.0f, 0.0f), fx::vec3(0.8f, 0.9f, 1.0f), 0.8f);
+  lightRig->addPointLight(fx::vec3(1.0f, -1.0f, 2.0f), fx::vec3(0.4f, 0.4f, 1.0f), 0.4f);
+  lightRig->addPointLight(fx::vec3(-4.0f, 1.0f, -6.0f), fx::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+  
   
 //  fx::FrameBufferPtr frame = _graphics->getFrameBuffer("MainWindow");
 //  frame->setToWindow(0);
