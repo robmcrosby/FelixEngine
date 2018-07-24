@@ -17,8 +17,6 @@
 
 class XMLScene: public fx::Application {
 private:
-  fx::RenderScheme _renderScheme;
-  
   fx::Scene _scene;
   fx::TransformPtr _transform;
   

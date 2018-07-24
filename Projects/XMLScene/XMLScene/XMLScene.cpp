@@ -23,13 +23,9 @@ void XMLScene::initalize() {
   _scene.loadXMLFile("Scene.xml");
   fx::ModelPtr model = _scene.get<fx::Model>("Model");
   model->transform()->setParrent(_transform);
-  _renderScheme.push_back("MainPass");
 }
 
 void XMLScene::update(float td) {
   _transform->setRotation(_transform->localRotation() * fx::quat::RotY(td));
   _scene.update(td);
-  
-  fx::RenderPass::renderPasses(_renderScheme);
-  fx::RenderPass::resetPasses();
 }

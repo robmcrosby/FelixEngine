@@ -59,6 +59,10 @@ bool Scene::loadXML(const XMLTree::Node &node) {
 }
 
 bool Scene::loadObject(const XMLTree::Node &node) {
+  if (node == "RenderPass") {
+    RenderPassPtr renderPass = getRenderingPass(node);
+    return renderPass ? true : false;
+  }
   SharedObject obj = build(node);
   return obj ? true : false;
 }
@@ -133,6 +137,16 @@ RenderPassPtr Scene::getRenderingPass(const string &name) {
   if (!_renderingPassMap.count(name))
     _renderingPassMap[name] = createRenderingPass();
   return _renderingPassMap.at(name);
+}
+
+RenderPassPtr Scene::getRenderingPass(const XMLTree::Node &node) {
+  RenderPassPtr renderPass;
+  if (node.hasAttribute("name"))
+    renderPass = getRenderingPass(node.attribute("name"));
+  else
+    renderPass = createRenderingPass();
+  renderPass->loadXML(node);
+  return renderPass;
 }
 
 ScenePtr Scene::make() {

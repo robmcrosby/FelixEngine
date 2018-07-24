@@ -9,8 +9,10 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
+#include "iObject.h"
 #include "RenderItem.h"
 #include "Graphics.h"
+#include "XMLTree.h"
 #include <set>
 
 
@@ -24,7 +26,7 @@ namespace fx {
   /**
    *
    */
-  struct RenderPass {
+  struct RenderPass: public iObject {
     FrameBufferPtr frame;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
@@ -86,6 +88,12 @@ namespace fx {
       return *uniforms.at(index).get();
     }
     void clearUniformMaps() {uniforms.clear();}
+    
+    virtual void setScene(Scene *scene) {}
+    virtual void update(float dt) {}
+    virtual bool loadXML(const XMLTree::Node &node) {
+      return true;
+    }
   };
 }
 

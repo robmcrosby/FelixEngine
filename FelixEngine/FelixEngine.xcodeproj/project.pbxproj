@@ -103,6 +103,7 @@
 		C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */; };
 		C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */; };
 		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E7554A21075C4000808F41 /* iObject.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E7554921075B9000808F41 /* iObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1EC49E12103E6650067E842 /* LightRig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1EC49DF2103E6650067E842 /* LightRig.cpp */; };
 		C1EC49E22103E6650067E842 /* LightRig.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E02103E6650067E842 /* LightRig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1EC49E42103EAE60067E842 /* Drawable.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E32103EAE60067E842 /* Drawable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -231,6 +232,7 @@
 		C1D1D83020B0EC87000EB92C /* VulkanBufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VulkanBufferPool.cpp; path = Systems/Graphics/Vulkan/VulkanBufferPool.cpp; sourceTree = "<group>"; };
 		C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanBufferPool.h; path = Systems/Graphics/Vulkan/VulkanBufferPool.h; sourceTree = "<group>"; };
 		C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalFunctions.h; path = Systems/Graphics/Metal/MetalFunctions.h; sourceTree = "<group>"; };
+		C1E7554921075B9000808F41 /* iObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iObject.h; sourceTree = "<group>"; };
 		C1EC49DF2103E6650067E842 /* LightRig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightRig.cpp; sourceTree = "<group>"; };
 		C1EC49E02103E6650067E842 /* LightRig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightRig.h; sourceTree = "<group>"; };
 		C1EC49E32103EAE60067E842 /* Drawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 		C1707B0420F4372800A77FAC /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				C1E7554921075B9000808F41 /* iObject.h */,
 				C1707B1620F4372800A77FAC /* Scene.h */,
 				C1707B0820F4372800A77FAC /* Scene.cpp */,
 				C1707B1220F4372800A77FAC /* Model.h */,
@@ -527,6 +530,7 @@
 				C1707B2320F4372800A77FAC /* ARCamera.h in Headers */,
 				C1401CF91EFEDAB700BE9958 /* IndexedMap.h in Headers */,
 				C1D1D7E4209B32E9000EB92C /* VulkanGraphics.h in Headers */,
+				C1E7554A21075C4000808F41 /* iObject.h in Headers */,
 				C1D1D7F1209BB666000EB92C /* VulkanShaderProgram.h in Headers */,
 				C1136C511EF2232C00BA1322 /* iOSFileSystem.h in Headers */,
 				C1401D081F01E26E00BE9958 /* MetalUniformBuffer.h in Headers */,
