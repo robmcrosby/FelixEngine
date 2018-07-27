@@ -24,8 +24,12 @@ LightRig::~LightRig() {
 }
 
 bool LightRig::loadXML(const XMLTree::Node &node) {
-  // TODO
-  return false;
+  bool success = true;
+  if (node.hasAttribute("pass"))
+    setToRenderPass(node.attribute("pass"));
+  for (auto &subNode : node)
+    success &= loadXMLItem(*subNode);
+  return success;
 }
 
 void LightRig::update(float dt) {
@@ -37,6 +41,21 @@ void LightRig::update(float dt) {
   // Set the Light Parameters to Each Render Pass
   for (auto &pass : _renderPasses)
     pass->getUniformMap()["lights"] = parameters;
+}
+
+bool LightRig::loadXMLItem(const XMLTree::Node &node) {
+  if (node == "Light")
+    return addLight(node);
+  if (node == "RenderPass")
+    return setToRenderPass(node);
+  cerr << "Unknown XML Node in LightRig: " << endl << node << endl;
+  return false;
+}
+
+bool LightRig::addLight(const XMLTree::Node &node) {
+  LightPtr light = _scene->get<Light>(node.attribute("name"));
+  addLight(light);
+  return light->loadXML(node);
 }
 
 void LightRig::addDirectionalLight(vec3 direction, vec3 color, float energy) {

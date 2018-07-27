@@ -51,13 +51,24 @@ namespace fx {
     }
     ivec2 getFrameSize() {return getFrame()->size();}
     void setFrame(const std::string &name) {frame = Graphics::getInstance().getFrameBuffer(name);}
+    bool setFrame(const XMLTree::Node &node) {
+      if (node.hasAttribute("name"))
+        setFrame(node.attribute("name"));
+      return getFrame()->loadXML(node);
+    }
     bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
     bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
     bool addColorTexture() {return getFrame()->addColorTexture();}
     bool addDepthBuffer() {return getFrame()->addDepthBuffer();}
     TextureBufferPtr getColorTexture(int index = 0) {return getFrame()->getColorTexture(0);}
     
-    
+    bool setClearSettings(const XMLTree::Node &node) {
+      if (node.hasAttribute("color"))
+        setClearColor(node.attribute("color"));
+      if (node.hasAttribute("depth"))
+        setClearDepthStencil(node.attributeAsFloat("depth"));
+      return true;
+    }
     void setClearColor(const vec4 &color) {
       for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
         colorActions[i].loadAction = LOAD_CLEAR;
@@ -92,7 +103,21 @@ namespace fx {
     virtual void setScene(Scene *scene) {}
     virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node) {
-      return true;
+      bool success = true;
+      if (node.hasAttribute("frame"))
+        setFrame(node.attribute("frame"));
+      for (auto subNode : node)
+        success &= loadXMLItem(*subNode);
+      return success;
+    }
+    
+    bool loadXMLItem(const XMLTree::Node &node) {
+      if (node == "Frame")
+        return setFrame(node);
+      if (node == "Clear")
+        return setClearSettings(node);
+      std::cerr << "Unknown XML Node in RenderPass:" << std::endl << node << std::endl;
+      return false;
     }
   };
 }

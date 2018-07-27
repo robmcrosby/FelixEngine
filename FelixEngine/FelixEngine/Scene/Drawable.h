@@ -43,15 +43,16 @@ namespace fx {
      *
      */
     bool setToRenderPass(const XMLTree::Node &node) {
-      // TODO
-      return false;
+      RenderPassPtr renderPass = _scene->getRenderingPass(node.attribute("name"));
+      setToRenderPass(renderPass);
+      return renderPass->loadXML(node);
     }
     
     /**
      *
      */
     void setToRenderPass(const std::string &name) {
-      setToRenderPass(Graphics::getInstance().getRenderPass(name));
+      setToRenderPass(_scene->getRenderingPass(name));
     }
     
     /**

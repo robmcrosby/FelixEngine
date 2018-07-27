@@ -50,6 +50,7 @@ bool Material::loadXMLItem(const XMLTree::Node &node) {
     return addTexture(node);
   if (node == "Textures")
     return addTexture(node);
+  cerr << "Unknown XML Node in Material:" << endl << node << endl;
   return false;
 }
 

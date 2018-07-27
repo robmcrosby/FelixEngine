@@ -72,7 +72,7 @@ bool MetalVertexMesh::setVertexBuffer(const std::string &name, size_t size, size
     memcpy(mtlBuffer.contents, buffer, length);
   }
   else {
-    id <MTLBuffer> mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
+    mtlBuffer = [_device newBufferWithBytes:buffer length:length options:MTLResourceCPUCacheModeDefaultCache];
     _buffers[name] = mtlBuffer;
   }
   

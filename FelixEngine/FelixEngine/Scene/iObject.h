@@ -10,10 +10,7 @@
 #define iObject_h
 
 #include "XMLTree.h"
-#include <memory>
-#include <string>
 #include <set>
-#include <map>
 
 
 namespace fx {

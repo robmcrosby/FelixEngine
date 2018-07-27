@@ -51,6 +51,7 @@ bool Model::loadXMLItem(const XMLTree::Node &node) {
     return setMesh(node);
   if (node == "Material")
     return setMaterial(node);
+  cerr << "Unkown XML Node in Model:" << endl << node << endl;
   return false;
 }
 

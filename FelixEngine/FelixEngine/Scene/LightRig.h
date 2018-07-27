@@ -34,6 +34,9 @@ namespace fx {
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     
+    bool loadXMLItem(const XMLTree::Node &node);
+    bool addLight(const XMLTree::Node &node);
+    
     void addDirectionalLight(vec3 direction, vec3 color, float energy);
     void addPointLight(vec3 location, vec3 color, float energy);
     

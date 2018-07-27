@@ -56,7 +56,7 @@ bool Light::loadXMLItem(const XMLTree::Node &node) {
     setColor(node.contents());
     return true;
   }
-  cerr << "Unknown XML: " << node.element() << " in Light" << endl;
+  cerr << "Unknown XML Node in Light:" << endl << node << endl;
   return false;
 }
 
