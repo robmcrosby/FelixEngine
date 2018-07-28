@@ -18,8 +18,6 @@
 
 class Shaders: public fx::Application {
 private:
-  fx::RenderScheme _renderScheme;
-  
   fx::Scene _scene;
   std::vector<fx::ModelPtr> _models;
   fx::quat _rotation;

@@ -10,6 +10,7 @@
 #define GraphicResources_h
 
 #include "Graphics.h"
+#include "iObject.h"
 #include "GraphicStates.h"
 #include "XMLTree.h"
 #include "Vector.h"
@@ -32,19 +33,26 @@ namespace fx {
     VERTEX_TRIANGLE_STRIP,
   };
   
-  struct ShaderProgram {
+  
+  struct ShaderProgram: iObject {
     virtual ~ShaderProgram() {}
     
+    virtual void setScene(Scene *scene) {}
+    virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
+    
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment) = 0;
     
     virtual unsigned int getShaderId() const = 0;
   };
   
-  struct VertexMesh {
+  struct VertexMesh: iObject {
     virtual ~VertexMesh() {}
     
+    virtual void setScene(Scene *scene) {}
+    virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
+    
     virtual bool load(const VertexMeshData &data) = 0;
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;
     virtual bool setIndexBuffer(size_t count, const int *buffer) = 0;
@@ -83,10 +91,13 @@ namespace fx {
     }
   };
   
-  struct TextureBuffer {
+  struct TextureBuffer: iObject {
     virtual ~TextureBuffer() {}
     
+    virtual void setScene(Scene *scene) {}
+    virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
+    
     virtual bool load(const ImageBufferData &data) = 0;
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;
@@ -95,10 +106,13 @@ namespace fx {
     virtual SamplerState defaultSampler() const = 0;
   };
   
-  struct FrameBuffer {
+  struct FrameBuffer: iObject {
     virtual ~FrameBuffer() {}
     
+    virtual void setScene(Scene *scene) {}
+    virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
+    
     virtual bool setToWindow(int index) = 0;
     
     virtual bool resize(int width, int height) = 0;
