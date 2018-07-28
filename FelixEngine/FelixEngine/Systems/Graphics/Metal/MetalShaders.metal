@@ -101,6 +101,37 @@ fragment half4 f_texture_shadeless(InputTexture           input     [[ stage_in 
 
 
 
+vertex OutputTexture video_vertex(const device packed_float3 *position  [[ buffer(0) ]],
+                                  const device packed_float2 *uv0       [[ buffer(1) ]],
+                                  constant     float4x4      *transform [[ buffer(2) ]],
+                                  unsigned int   vid       [[ vertex_id ]]) {
+  OutputTexture output;
+  output.position = float4(position[vid], 1.0);
+  output.coordinate = (*transform * float4(uv0[vid], 0.0, 1.0)).xy;
+  return output;
+}
+
+fragment float4 video_fragment_Y_CbCr(InputTexture input [[ stage_in ]],
+                                      texture2d<float, access::sample> capturedImageTextureY    [[ texture(0) ]],
+                                      texture2d<float, access::sample> capturedImageTextureCbCr [[ texture(1) ]]) {
+  constexpr sampler colorSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
+  const float4x4 ycbcrToRGBTransform = float4x4(
+                                                float4(+1.0000f, +1.0000f, +1.0000f, +0.0000f),
+                                                float4(+0.0000f, -0.3441f, +1.7720f, +0.0000f),
+                                                float4(+1.4020f, -0.7141f, +0.0000f, +0.0000f),
+                                                float4(-0.7010f, +0.5291f, -0.8860f, +1.0000f)
+                                                );
+  
+  // Sample Y and CbCr textures to get the YCbCr color at the given texture coordinate
+  float4 ycbcr = float4(capturedImageTextureY.sample(colorSampler, input.coordinate).r,
+                        capturedImageTextureCbCr.sample(colorSampler, input.coordinate).rg, 1.0);
+  
+  // Return converted RGB color
+  return ycbcrToRGBTransform * ycbcr;
+}
+
+
+
 
 struct OutputNormal {
   float4 position [[ position   ]];

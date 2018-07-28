@@ -36,6 +36,7 @@
       </Transform>
     </Light>
   </LightRig>
+  <ARVideo name="Video" pass="MainPass"/>
   <Model name="Model" pass="MainPass">
     <Mesh name="Mesh" file="bunny.mesh"/>
     <Material name="Material">

@@ -107,8 +107,6 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
   [_arSession runWithConfiguration: configuration];
   
-  setupLiveCamera();
-  
   return true;
 }
 
@@ -161,42 +159,42 @@ TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
 
-bool ARKitTracker::drawLiveCamera() {
-  bool draw = _cameraImageY && _cameraImageY->loaded() && _cameraImageCbCr && _cameraImageCbCr->loaded();
-  if (draw) {
-    vector<vec4> vertices;
-    calculateVertices(vertices);
-//    _task.mesh->setVertexBuffer("Vertices", vertices);
-//    _task.mesh->loadBuffers();
-//    _graphics->addTask(_task);
-  }
-  return draw;
-}
+//bool ARKitTracker::drawLiveCamera() {
+//  bool draw = _cameraImageY && _cameraImageY->loaded() && _cameraImageCbCr && _cameraImageCbCr->loaded();
+//  if (draw) {
+//    vector<vec4> vertices;
+//    calculateVertices(vertices);
+////    _task.mesh->setVertexBuffer("Vertices", vertices);
+////    _task.mesh->loadBuffers();
+////    _graphics->addTask(_task);
+//  }
+//  return draw;
+//}
 
-void ARKitTracker::setupLiveCamera() {
-  vector<vec4> vertices;
-  calculateVertices(vertices);
-  
-//  _task.frame = _graphics->getFrameBuffer("MainWindow");
-//  //_task.frame->setToWindow(0);
+//void ARKitTracker::setupLiveCamera() {
+//  vector<vec4> vertices;
+//  calculateVertices(vertices);
 //
-//  _task.shader = _graphics->createShaderProgram();
-//  _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");
-//
-//  _task.mesh = _graphics->createVertexMesh();
-//  _task.mesh->setVertexBuffer("Vertices", vertices);
-//  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
-//  _task.mesh->loadBuffers();
-//
-//  _task.textures = make_shared<TextureMap>();
-//  _task.textures->addTexture(_cameraImageY);
-//  _task.textures->addTexture(_cameraImageCbCr);
-//  _task.setClearDepthStencil();
-//
-//  _task.uniforms.push_back(_uniformMap);
-//
-//  _task.colorActions[0].loadAction = LOAD_NONE;
-}
+////  _task.frame = _graphics->getFrameBuffer("MainWindow");
+////  //_task.frame->setToWindow(0);
+////
+////  _task.shader = _graphics->createShaderProgram();
+////  _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");
+////
+////  _task.mesh = _graphics->createVertexMesh();
+////  _task.mesh->setVertexBuffer("Vertices", vertices);
+////  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+////  _task.mesh->loadBuffers();
+////
+////  _task.textures = make_shared<TextureMap>();
+////  _task.textures->addTexture(_cameraImageY);
+////  _task.textures->addTexture(_cameraImageCbCr);
+////  _task.setClearDepthStencil();
+////
+////  _task.uniforms.push_back(_uniformMap);
+////
+////  _task.colorActions[0].loadAction = LOAD_NONE;
+//}
 
 const TrackedPlanes& ARKitTracker::trackedPlanes() const {
   return _trackedPlanes;
@@ -308,26 +306,26 @@ void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
   _trackedPlanes.push_back(plane);
 }
 
-void ARKitTracker::calculateVertices(vector<vec4> &vertices) {
-//  // Add the Vertices
-//  vertices.clear();
-//  vertices.push_back(vec4(-1.0f, -1.0f, 0.0f, 1.0f));
-//  vertices.push_back(vec4(-1.0f,  1.0f, 0.0f, 0.0f));
-//  vertices.push_back(vec4(1.0f, -1.0f, 1.0f, 1.0f));
-//  vertices.push_back(vec4(1.0f,  1.0f, 1.0f, 0.0f));
-//
-//  ARFrame *frame = _arSession.currentFrame;
-//  if (frame != nil) {
-//    // Get the Image Correction Transform
-//    CGSize viewport = CGSizeMake(_task.frame->size().x, _task.frame->size().y);
-//    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
-//    affine = CGAffineTransformInvert(affine);
-//
-//    // Transform the UVs of the Vertices
-//    for (auto &vertex : vertices) {
-//      CGPoint coord = CGPointApplyAffineTransform(CGPointMake(vertex.z, vertex.w), affine);
-//      vertex.z = coord.x;
-//      vertex.w = coord.y;
-//    }
-//  }
-}
+//void ARKitTracker::calculateVertices(vector<vec4> &vertices) {
+////  // Add the Vertices
+////  vertices.clear();
+////  vertices.push_back(vec4(-1.0f, -1.0f, 0.0f, 1.0f));
+////  vertices.push_back(vec4(-1.0f,  1.0f, 0.0f, 0.0f));
+////  vertices.push_back(vec4(1.0f, -1.0f, 1.0f, 1.0f));
+////  vertices.push_back(vec4(1.0f,  1.0f, 1.0f, 0.0f));
+////
+////  ARFrame *frame = _arSession.currentFrame;
+////  if (frame != nil) {
+////    // Get the Image Correction Transform
+////    CGSize viewport = CGSizeMake(_task.frame->size().x, _task.frame->size().y);
+////    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
+////    affine = CGAffineTransformInvert(affine);
+////
+////    // Transform the UVs of the Vertices
+////    for (auto &vertex : vertices) {
+////      CGPoint coord = CGPointApplyAffineTransform(CGPointMake(vertex.z, vertex.w), affine);
+////      vertex.z = coord.x;
+////      vertex.w = coord.y;
+////    }
+////  }
+//}

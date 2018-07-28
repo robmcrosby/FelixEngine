@@ -58,9 +58,6 @@ namespace fx {
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
     
-    virtual bool drawLiveCamera();
-    void setupLiveCamera();
-    
     virtual const TrackedPlanes& trackedPlanes() const;
     
   public:
@@ -76,7 +73,6 @@ namespace fx {
     
   private:
     void updateTrackedPlane(const TrackedPlane &plane);
-    void calculateVertices(std::vector<vec4> &vertices);
   };
   
 }

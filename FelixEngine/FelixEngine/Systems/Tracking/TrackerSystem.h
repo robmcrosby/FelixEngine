@@ -79,8 +79,6 @@ namespace fx {
     virtual TextureBufferPtr getCameraImageY() = 0;
     virtual TextureBufferPtr getCameraImageCbCr() = 0;
     
-    virtual bool drawLiveCamera() = 0;
-    
     void setDelegate(TrackerDelegate *delegate) {_delegate = delegate;}
     
     virtual void enablePlaneDetection(bool enable = true) {_planeDetectionEnabled = enable;}

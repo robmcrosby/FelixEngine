@@ -79,6 +79,14 @@ namespace fx {
       _textures.push_back(texture);
     }
     
+    bool loaded() const {
+      for (auto &texture : _textures) {
+        if (!texture.buffer || !texture.buffer->loaded())
+          return false;
+      }
+      return true;
+    }
+    
     BufferPoolPtr bufferPool() {return _bufferPool;}
   };
 }

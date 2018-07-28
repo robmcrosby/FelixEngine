@@ -23,7 +23,7 @@ namespace fx {
   private:
     static ModelBuilder modelBuilder;
     
-  private:
+  protected:
     bool _hidden;
     
     MaterialPtr _material;
@@ -40,6 +40,8 @@ namespace fx {
     
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}
+    
+    bool renderable() const;
     
     void setInstances(unsigned int instances);
     unsigned int instances() const {return _renderItem.instances;}

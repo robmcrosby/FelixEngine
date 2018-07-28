@@ -104,6 +104,8 @@
 		C1D1D83320B0EC87000EB92C /* VulkanBufferPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */; };
 		C1E6BFDA1FE5BFBB006DACD1 /* MetalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1E7554A21075C4000808F41 /* iObject.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E7554921075B9000808F41 /* iObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C1E7554D210CCF9800808F41 /* ARVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1E7554B210CCF9800808F41 /* ARVideo.cpp */; };
+		C1E7554E210CCF9800808F41 /* ARVideo.h in Headers */ = {isa = PBXBuildFile; fileRef = C1E7554C210CCF9800808F41 /* ARVideo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1EC49E12103E6650067E842 /* LightRig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1EC49DF2103E6650067E842 /* LightRig.cpp */; };
 		C1EC49E22103E6650067E842 /* LightRig.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E02103E6650067E842 /* LightRig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1EC49E42103EAE60067E842 /* Drawable.h in Headers */ = {isa = PBXBuildFile; fileRef = C1EC49E32103EAE60067E842 /* Drawable.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -233,6 +235,8 @@
 		C1D1D83120B0EC87000EB92C /* VulkanBufferPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VulkanBufferPool.h; path = Systems/Graphics/Vulkan/VulkanBufferPool.h; sourceTree = "<group>"; };
 		C1E6BFD91FE5BF83006DACD1 /* MetalFunctions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalFunctions.h; path = Systems/Graphics/Metal/MetalFunctions.h; sourceTree = "<group>"; };
 		C1E7554921075B9000808F41 /* iObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iObject.h; sourceTree = "<group>"; };
+		C1E7554B210CCF9800808F41 /* ARVideo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARVideo.cpp; sourceTree = "<group>"; };
+		C1E7554C210CCF9800808F41 /* ARVideo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARVideo.h; sourceTree = "<group>"; };
 		C1EC49DF2103E6650067E842 /* LightRig.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightRig.cpp; sourceTree = "<group>"; };
 		C1EC49E02103E6650067E842 /* LightRig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightRig.h; sourceTree = "<group>"; };
 		C1EC49E32103EAE60067E842 /* Drawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
@@ -439,6 +443,8 @@
 				C1707B0A20F4372800A77FAC /* Camera.cpp */,
 				C1707B1120F4372800A77FAC /* ARCamera.h */,
 				C1707B1020F4372800A77FAC /* ARCamera.cpp */,
+				C1E7554C210CCF9800808F41 /* ARVideo.h */,
+				C1E7554B210CCF9800808F41 /* ARVideo.cpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -502,6 +508,7 @@
 				C15C16C11F68B4E5007E2C1E /* EventListenerSet.h in Headers */,
 				C1BB4F2A1F1C255E008FDF01 /* XMLTree.h in Headers */,
 				C1EC49E42103EAE60067E842 /* Drawable.h in Headers */,
+				C1E7554E210CCF9800808F41 /* ARVideo.h in Headers */,
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
@@ -646,6 +653,7 @@
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
+				C1E7554D210CCF9800808F41 /* ARVideo.cpp in Sources */,
 				C1707B2220F4372800A77FAC /* ARCamera.cpp in Sources */,
 				C1707B1F20F4372800A77FAC /* Light.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
@@ -797,6 +805,7 @@
 				);
 				INFOPLIST_FILE = FelixEngine/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_HEADER_SEARCH_PATHS = FelixEngine/Systems/Graphics/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.FelixEngine;
@@ -825,6 +834,7 @@
 				);
 				INFOPLIST_FILE = FelixEngine/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_HEADER_SEARCH_PATHS = FelixEngine/Systems/Graphics/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.FelixEngine.FelixEngine;

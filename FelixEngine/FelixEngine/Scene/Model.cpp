@@ -65,7 +65,7 @@ void Model::update(float dt) {
   }
   _uniforms->update();
   
-  if (!_hidden && _renderItem.instances > 0) {
+  if (renderable()) {
     // Make copy of the Model's Render Item
     RenderItem item = _renderItem;
     
@@ -85,6 +85,12 @@ void Model::update(float dt) {
     for (auto &pass : _renderPasses)
       pass->addRenderItem(item);
   }
+}
+
+bool Model::renderable() const {
+  if (!_hidden && _renderItem.instances > 0 && _renderItem.mesh && _renderItem.texturesLoaded())
+    return _renderItem.shader || (_material && _material->shader());
+  return false;
 }
 
 void Model::setInstances(unsigned int instances) {
