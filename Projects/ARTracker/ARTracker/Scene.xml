@@ -1,44 +1,43 @@
 <?xml version="1.0"?>
 <Scene name="scene">
-  <ARCamera name="Camera" pass="MainPass">
-    <Frame name="MainWindow" window="0">
+  <RenderPass name="MainPass">
+    <Frame name="MainFrame" window="0">
       <Buffer type="depth"/>
     </Frame>
-    <Projection type="ortho" scale="2.0" near="-100.0" far="100"/>
-    <View eye="10.0, 10.0, 10.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
+  </RenderPass>
+  <ARCamera name="Camera" pass="MainPass">
+    <Projection type="ortho" scale="0.2" near="-100.0" far="100"/>
+    <View eye="2.0, 2.0, 2.0" center="0.0, 0.0, 0.0" up="0.0, 1.0, 0.0"/>
   </ARCamera>
-  <Light energy="0.8" name="LightA" type="directional" pass="MainPass">
-    <Color>0.8, 0.9, 1.0</Color>
-    <Transform>
-      <Scale>1.0, 1.0, 1.0</Scale>
-      <Rotation>-0.377409, 0.262945, -0.158328, 0.873702</Rotation>
-      <Location>1.0, 1.0, 1.0</Location>
-    </Transform>
-  </Light>
-  <Light energy="0.4" name="LightB" type="point" pass="MainPass">
-    <Color>0.4, 0.4, 1.0</Color>
-    <Transform>
-      <Scale>1.0, 1.0, 1.0</Scale>
-      <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
-      <Location>1.0, -1.0, 2.0</Location>
-    </Transform>
-  </Light>
-  <Light energy="1.0" name="LightC" type="point" pass="MainPass">
-    <Color>1.0, 1.0, 1.0</Color>
-    <Transform>
-      <Scale>1.0, 1.0, 1.0</Scale>
-      <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
-      <Location>-4.0, 1.0, -6.0</Location>
-    </Transform>
-  </Light>
+  <LightRig name="LightRig" pass="MainPass">
+    <Light energy="0.8" name="LightA" type="directional">
+      <Color>0.8, 0.9, 1.0</Color>
+      <Transform>
+        <Scale>1.0, 1.0, 1.0</Scale>
+        <Rotation>-0.377409, 0.262945, -0.158328, 0.873702</Rotation>
+        <Location>1.0, 1.0, 1.0</Location>
+      </Transform>
+    </Light>
+    <Light energy="0.4" name="LightB" type="point">
+      <Color>0.4, 0.4, 1.0</Color>
+      <Transform>
+        <Scale>1.0, 1.0, 1.0</Scale>
+        <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
+        <Location>1.0, -1.0, 2.0</Location>
+      </Transform>
+    </Light>
+    <Light energy="1.0" name="LightC" type="point">
+      <Color>1.0, 1.0, 1.0</Color>
+      <Transform>
+        <Scale>1.0, 1.0, 1.0</Scale>
+        <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
+        <Location>-4.0, 1.0, -6.0</Location>
+      </Transform>
+    </Light>
+  </LightRig>
   <Model name="Model" pass="MainPass">
     <Mesh name="Mesh" file="bunny.mesh"/>
-    <Transform>
-      <Scale>0.01, 0.01, 0.01</Scale>
-      <Rotation>0.5, -0.5, 0.5, 0.5</Rotation>
-      <Location>0.0, 0.0, 0.0</Location>
-    </Transform>
     <Material name="Material">
       <Shader name="Shader" vertex="basic_vertex" fragment="basic_fragment"/>
       <Ambiant color="0.7, 0.7, 0.7" factor="0.2"/>
@@ -46,5 +45,10 @@
       <Specular color="1.0, 1.0, 1.0" factor="0.6" hardness="20.0"/>
       <DepthState write="true" function="less"/>
     </Material>
+    <Transform>
+      <Scale>0.01, 0.01, 0.01</Scale>
+      <Rotation>0.5, -0.5, 0.5, 0.5</Rotation>
+      <Location>0.0, 0.0, 0.0</Location>
+    </Transform>
   </Model>
 </Scene>
