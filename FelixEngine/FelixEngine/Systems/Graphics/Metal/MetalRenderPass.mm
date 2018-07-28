@@ -35,12 +35,12 @@ MetalRenderPass::~MetalRenderPass() {
 void MetalRenderPass::render() {
   MetalFrameBuffer *mtlFrame  = static_cast<MetalFrameBuffer*>(frame.get());
 
+  // Create Render Encoder
+  id <MTLRenderCommandEncoder> encoder = mtlFrame->createEncoder(_buffer, depthStencilAction, colorActions);
+  
   for (auto &item : renderItems) {
     MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(item.shader.get());
     MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(item.mesh.get());
-
-    // Create Render Encoder
-    id <MTLRenderCommandEncoder> encoder = mtlFrame->createEncoder(_buffer, depthStencilAction, colorActions);
 
     // Encode the Shader Program, Render Pipeline
     shader->encode(encoder, mtlFrame, item.blendState);
@@ -79,10 +79,11 @@ void MetalRenderPass::render() {
       }
     }
     
-    // Encode the Vertex Buffers and End Encoding
+    // Encode the Vertex Buffers
     mesh->encode(encoder, shader, item.instances);
-    [encoder endEncoding];
   }
+  // End Encoding
+  [encoder endEncoding];
 }
 
 void MetalRenderPass::setCommandBuffer(id <MTLCommandBuffer> buffer) {
