@@ -92,6 +92,7 @@ namespace fx {
       return false;
     }
     bool texturesLoaded() const {return !textures || textures->loaded();}
+    bool operator<(const RenderItem &other) const {return layer < other.layer;}
   };
 }
 

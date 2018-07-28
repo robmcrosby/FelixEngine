@@ -34,13 +34,21 @@ namespace fx {
     
     UniformsList uniforms;
     
+    bool sortItems;
+    bool itemsSorted;
     RenderItems renderItems;
     
-    RenderPass() {}
+    RenderPass(): sortItems(0), itemsSorted(0) {}
     virtual ~RenderPass() {}
     
-    void addRenderItem(const RenderItem &item) {renderItems.push_back(item);}
-    void clearRenderItems() {renderItems.clear();}
+    void addRenderItem(const RenderItem &item) {
+      itemsSorted = false;
+      renderItems.push_back(item);
+    }
+    void clearRenderItems() {
+      itemsSorted = true;
+      renderItems.clear();
+    }
     
     virtual void render() = 0;
     
@@ -106,6 +114,8 @@ namespace fx {
       bool success = true;
       if (node.hasAttribute("frame"))
         setFrame(node.attribute("frame"));
+      if (node.hasAttribute("sorted"))
+        sortItems = node.attributeAsBoolean("sorted");
       for (auto subNode : node)
         success &= loadXMLItem(*subNode);
       return success;
@@ -118,6 +128,13 @@ namespace fx {
         return setClearSettings(node);
       std::cerr << "Unknown XML Node in RenderPass:" << std::endl << node << std::endl;
       return false;
+    }
+    
+    void sortRenderItems() {
+      if (sortItems && !itemsSorted) {
+        sort(renderItems.begin(), renderItems.end());
+        itemsSorted = true;
+      }
     }
   };
 }

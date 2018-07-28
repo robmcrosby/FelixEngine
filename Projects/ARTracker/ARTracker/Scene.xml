@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Scene name="scene">
-  <RenderPass name="MainPass">
+  <RenderPass name="MainPass" sorted="true">
     <Frame name="MainFrame" window="0">
       <Buffer type="depth"/>
     </Frame>
@@ -36,7 +36,7 @@
       </Transform>
     </Light>
   </LightRig>
-  <ARVideo name="Video" pass="MainPass"/>
+  <ARVideo name="Video" pass="MainPass" layer="-1"/>
   <Model name="Model" pass="MainPass">
     <Mesh name="Mesh" file="bunny.mesh"/>
     <Material name="Material">

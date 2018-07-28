@@ -38,7 +38,8 @@ bool Model::loadXML(const XMLTree::Node &node) {
     setToRenderPass(node.attribute("pass"));
   if (node.hasAttribute("hidden"))
     setHidden(node.attributeAsBoolean("hidden"));
-  
+  if (node.hasAttribute("layer"))
+    setLayer(node.attributeAsInt("layer"));
   for (auto subNode : node)
     success &= loadXMLItem(*subNode);
   return success;
