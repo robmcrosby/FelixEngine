@@ -14,10 +14,14 @@
 #import <FelixEngine/Model.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/TrackerSystem.h>
+#import <map>
 
 class ARPlaneDetect: public fx::Application, public fx::TrackerDelegate {
 private:
   fx::Scene _scene;
+  fx::ModelPtr _model;
+  
+  std::map<std::string, fx::TrackedPlane> _trackedPlanes;
   
 public:
   ARPlaneDetect();

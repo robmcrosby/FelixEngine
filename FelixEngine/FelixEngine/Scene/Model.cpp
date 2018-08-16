@@ -62,6 +62,7 @@ void Model::update(float dt) {
   for (int i = 0; i < _transforms.size(); ++i) {
     STR_Model &model = (STR_Model&)models[i];
     model.model = _transforms[i]->globalTransform();
+    model.texture = mat4();
     model.rotation = _transforms[i]->globalRotation().toVec4();
   }
   _uniforms->update();
@@ -124,7 +125,7 @@ void Model::setMesh(const std::string &name) {
 }
 
 void Model::loadMesh(const std::string &file) {
-  _renderItem.mesh = MeshBuilder::createFromFile("Mesh.mesh");
+  _renderItem.mesh = MeshBuilder::createFromFile(file);
 }
 
 void Model::setScale(float scale, int index) {
@@ -157,7 +158,6 @@ quat Model::localRotation(int index) const {
 void Model::setLocation(const vec3 &location, int index) {
   if (index < _transforms.size())
     _transforms[index]->setLocation(location);
-  
 }
 vec3 Model::localLocation(int index) const {
   if (index < _transforms.size())

@@ -107,7 +107,7 @@ vertex OutputTexture video_vertex(const device packed_float3 *position  [[ buffe
                                   unsigned int   vid       [[ vertex_id ]]) {
   OutputTexture output;
   output.position = float4(position[vid], 1.0);
-  output.coordinate = (*transform * float4(uv0[vid], 0.0, 1.0)).xy;
+  output.coordinate = transform_coordinate(*transform, float2(uv0[vid]));
   return output;
 }
 
@@ -292,7 +292,7 @@ vertex OutputTextureNormal v_texture_normal(const device packed_float3 *position
   output.location = location.xyz;
   output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
   output.view = camera->position.xyz - output.position.xyz;
-  output.coordinate = float2(uv0[vid]);
+  output.coordinate = transform_coordinate(model->texture, float2(uv0[vid]));
   return output;
 }
 
