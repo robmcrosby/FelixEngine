@@ -18,6 +18,8 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 Model::Model(): _hidden(0) {
   _scene = nullptr;
   _transforms.push_back(Transform::make());
+  _modelTransforms.push_back(mat4());
+  _textureTransforms.push_back(mat4());
   
   _uniforms = UniformMap::make();
   (*_uniforms)["model"] = STR_Model();
@@ -61,9 +63,9 @@ void Model::update(float dt) {
   models.resize(_transforms.size());
   for (int i = 0; i < _transforms.size(); ++i) {
     STR_Model &model = (STR_Model&)models[i];
-    model.model = _transforms[i]->globalTransform();
-    model.texture = mat4();
-    model.rotation = _transforms[i]->globalRotation().toVec4();
+    model.model = globalModelTransform(i);
+    model.texture = textureTransform(i);
+    model.rotation = _transforms.at(i)->globalRotation().toVec4();
   }
   _uniforms->update();
   
@@ -96,8 +98,11 @@ bool Model::renderable() const {
 }
 
 void Model::setInstances(unsigned int instances) {
-  while (instances > _transforms.size())
+  while (instances > _transforms.size()) {
     _transforms.push_back(Transform::make());
+    _modelTransforms.push_back(mat4());
+    _textureTransforms.push_back(mat4());
+  }
   _renderItem.instances = instances;
   
   if (!(*_uniforms)["model"].usingBuffer() && instances > 4) {
@@ -169,4 +174,44 @@ TransformPtr Model::transform(int index) {
   if (index < _transforms.size())
     return _transforms[index];
   return Transform::make();
+}
+
+void Model::setModelTransform(const mat4 &transform, int index) {
+  if (index < _modelTransforms.size())
+    _modelTransforms[index] = transform;
+}
+
+mat4 Model::modelTransform(int index) {
+  if (index < _modelTransforms.size())
+    return _modelTransforms.at(index);
+  return mat4();
+}
+
+void Model::setTextureTransform(const mat4 &transform, int index) {
+  if (index < _textureTransforms.size())
+    _textureTransforms[index] = transform;
+}
+
+mat4 Model::textureTransform(int index) {
+  if (index < _textureTransforms.size())
+    return _textureTransforms.at(index);
+  return mat4();
+}
+
+mat4 Model::globalModelTransform(int index) {
+  if (index < _transforms.size()) {
+    if (index < _modelTransforms.size())
+      return _transforms.at(index)->globalTransform() * _modelTransforms.at(index);
+    return _transforms.at(index)->globalTransform();
+  }
+  return mat4();
+}
+
+mat4 Model::localModelTransform(int index) {
+  if (index < _transforms.size()) {
+    if (index < _modelTransforms.size())
+      return _transforms.at(index)->localTransform() * _modelTransforms.at(index);
+    return _transforms.at(index)->localTransform();
+  }
+  return mat4();
 }

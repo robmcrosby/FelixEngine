@@ -31,6 +31,9 @@ namespace fx {
     Transforms  _transforms;
     RenderItem  _renderItem;
     
+    std::vector<mat4> _modelTransforms;
+    std::vector<mat4> _textureTransforms;
+    
   public:
     Model();
     virtual ~Model();
@@ -74,6 +77,16 @@ namespace fx {
     vec3 localLocation(int index = 0) const;
     
     TransformPtr transform(int index = 0);
+    
+    void setModelTransform(const mat4 &transform, int index = 0);
+    mat4 modelTransform(int index = 0);
+    
+    void setTextureTransform(const mat4 &transform, int index = 0);
+    void setTextureTransform(const mat3 &transform, int index = 0) {setTextureTransform(mat4(transform), index);}
+    mat4 textureTransform(int index = 0);
+    
+    mat4 globalModelTransform(int index = 0);
+    mat4 localModelTransform(int index = 0);
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);
