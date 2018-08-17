@@ -14,7 +14,7 @@
 
 using namespace std;
 
-ARPlaneDetect::ARPlaneDetect() {
+ARPlaneDetect::ARPlaneDetect(): _trackerSystem(0) {
   
 }
 
@@ -44,29 +44,32 @@ void ARPlaneDetect::initalize() {
 }
 
 void ARPlaneDetect::update(float td) {
-  _model->setInstances((unsigned int)_trackedPlanes.size());
-  int index = 0;
-  for (auto itr : _trackedPlanes) {
-    fx::TrackedPlane &plane = itr.second;
-    _model->setScale(0.01f, index);
-    _model->setRotation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f), index);
-    _model->setLocation(plane.transform * vec3(0.0f, 0.0f, 0.0f) + plane.center, index++);
+  if (_trackerSystem) {
+    const fx::TrackedPlanes &planes = _trackerSystem->trackedPlanes();
+    _model->setInstances((unsigned int)planes.size());
+    int index = 0;
+    for (auto plane : planes) {
+      _model->setScale(0.01f, index);
+      _model->setRotation(fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f), index);
+      _model->setLocation(plane.transform * vec3(0.0f, 0.0f, 0.0f) + plane.center, index++);
+    }
   }
-  
   _scene.update(td);
+}
+
+void ARPlaneDetect::setTrackerSystem(fx::TrackerSystem *tracker) {
+  _trackerSystem = tracker;
+  tracker->setDelegate(this);
 }
 
 void ARPlaneDetect::trackedPlaneAdded(fx::TrackedPlane plane) {
   //cout << "Tracked Plane Added" << endl;
-  _trackedPlanes[plane.uuid] = plane;
 }
 
 void ARPlaneDetect::trackedPlaneUpdated(fx::TrackedPlane plane) {
   //cout << "Tracked Plane Updated" << endl;
-  _trackedPlanes[plane.uuid] = plane;
 }
 
 void ARPlaneDetect::trackedPlaneRemoved(fx::TrackedPlane plane) {
   //cout << "Tracked Plane Removed" << endl;
-  _trackedPlanes.erase(plane.uuid);
 }

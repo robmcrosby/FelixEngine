@@ -18,10 +18,9 @@
 
 class ARPlaneDetect: public fx::Application, public fx::TrackerDelegate {
 private:
+  fx::TrackerSystem *_trackerSystem;
   fx::Scene _scene;
   fx::ModelPtr _model;
-  
-  std::map<std::string, fx::TrackedPlane> _trackedPlanes;
   
 public:
   ARPlaneDetect();
@@ -30,6 +29,7 @@ public:
   virtual void initalize();
   virtual void update(float td);
   
+  void setTrackerSystem(fx::TrackerSystem *tracker);
   virtual void trackedPlaneAdded(fx::TrackedPlane plane);
   virtual void trackedPlaneUpdated(fx::TrackedPlane plane);
   virtual void trackedPlaneRemoved(fx::TrackedPlane plane);
