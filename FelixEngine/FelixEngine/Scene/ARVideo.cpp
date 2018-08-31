@@ -33,7 +33,7 @@ bool ARVideo::loadXML(const XMLTree::Node &node) {
   }
   _renderItem.addTexture(tracker->getCameraImageY());
   _renderItem.addTexture(tracker->getCameraImageCbCr());
-  _renderItem.mesh = MeshBuilder::createUVPlane();
+  _renderItem.mesh = MeshBuilder::createPlane();
   _renderItem.loadShaderFunctions("video_vertex", "video_fragment_Y_CbCr");
   _renderItem.getUniformMap()["transform"] = tracker->getImageTransform();
   

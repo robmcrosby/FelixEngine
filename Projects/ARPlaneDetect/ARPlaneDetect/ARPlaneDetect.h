@@ -20,7 +20,7 @@ class ARPlaneDetect: public fx::Application, public fx::TrackerDelegate {
 private:
   fx::TrackerSystem *_trackerSystem;
   fx::Scene _scene;
-  fx::ModelPtr _model;
+  fx::ModelPtr _planes;
   
 public:
   ARPlaneDetect();

@@ -22,12 +22,18 @@ VertexMeshPtr MeshBuilder::createFromFile(const std::string &file) {
   return mesh;
 }
 
-VertexMeshPtr MeshBuilder::createUVPlane() {
+VertexMeshPtr MeshBuilder::createPlane() {
   float positionBuffer[] = {
     -1.0f, -1.0f, 0.0f,
     -1.0f,  1.0f, 0.0f,
      1.0f, -1.0f, 0.0f,
      1.0f,  1.0f, 0.0f
+  };
+  float normalBuffer[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f
   };
   float uvBuffer[] = {
     0.0f, 1.0f,
@@ -39,6 +45,7 @@ VertexMeshPtr MeshBuilder::createUVPlane() {
   // Create the Mesh and set the buffers
   VertexMeshPtr mesh = Graphics::getInstance().createVertexMesh();
   mesh->setVertexBuffer("position", 3, 4, positionBuffer);
+  mesh->setVertexBuffer("normal", 3, 4, normalBuffer);
   mesh->setVertexBuffer("uv0", 3, 4, uvBuffer);
   mesh->setPrimativeType(VERTEX_TRIANGLE_STRIP);
   
