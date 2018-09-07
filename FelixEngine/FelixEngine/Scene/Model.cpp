@@ -201,7 +201,7 @@ mat4 Model::textureTransform(int index) {
 mat4 Model::globalModelTransform(int index) {
   if (index < _transforms.size()) {
     if (index < _modelTransforms.size())
-      return _transforms.at(index)->globalTransform() * _modelTransforms.at(index);
+      return _modelTransforms.at(index) * _transforms.at(index)->globalTransform();
     return _transforms.at(index)->globalTransform();
   }
   return mat4();

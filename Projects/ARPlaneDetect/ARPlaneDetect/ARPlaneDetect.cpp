@@ -49,10 +49,11 @@ void ARPlaneDetect::update(float td) {
     _planes->setInstances((unsigned int)planes.size());
     int index = 0;
     for (auto plane : planes) {
+      _planes->setModelTransform(plane.transform, index);
       _planes->setRotation(fx::quat::RotX(M_PI/2.0f), index);
       _planes->setScale(fx::vec3(plane.extent.x/2.0, plane.extent.y/2.0, 1.0f), index);
-      //_planes->setScale(0.1f, index);
-      _planes->setLocation(plane.transform * vec3(0.0f, 0.0f, 0.0f) + plane.center, index);
+      _planes->setLocation(plane.center, index);
+//      _planes->setLocation(plane.transform * vec3(0.0f, 0.0f, 0.0f) + plane.center, index);
       index++;
     }
   }
