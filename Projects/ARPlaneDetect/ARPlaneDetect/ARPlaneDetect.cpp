@@ -11,6 +11,9 @@
 #include <FelixEngine/Model.h>
 #include <FelixEngine/Material.h>
 #include <FelixEngine/MeshBuilder.h>
+#import <FelixEngine/Graphics.h>
+
+#define GRID_SCALE 20.0f
 
 using namespace std;
 
@@ -25,14 +28,23 @@ ARPlaneDetect::~ARPlaneDetect() {
 void ARPlaneDetect::initalize() {
   _scene.loadXMLFile("Scene.xml");
   
+  fx::TextureBufferPtr dotTexture = _scene.getTextureBuffer("DotTexture");
+  dotTexture->loadFile("dot.png");
+  
+  fx::SamplerState dotTextureSampler;
+  dotTextureSampler.setMinFilter(fx::FILTER_LINEAR);
+  dotTextureSampler.setMagFilter(fx::FILTER_LINEAR);
+  dotTextureSampler.setSCoord(fx::COORD_REPEAT);
+  dotTextureSampler.setTCoord(fx::COORD_REPEAT);
+  dotTextureSampler.setRCoord(fx::COORD_REPEAT);
+  
   // Define a Material
   fx::MaterialPtr material = _scene.get<fx::Material>("Material");
-  material->loadShader("v_shadeless", "f_shadeless");
+  material->loadShader("v_texture", "f_texture_shadeless");
   material->enableDepthTesting();
-  material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
-  material->setDiffuse(fx::vec3(0.7, 0.7, 0.7), 0.8);
-  material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6);
-  material->setSpecularHardness(20.0);
+  material->setAmbiant(fx::vec3(1.0, 1.0, 1.0), 0.6);
+  material->addTexture(dotTexture, dotTextureSampler);
+  material->blendState().enableDefaultBlending();
   
   fx::VertexMeshPtr planeMesh = fx::MeshBuilder::createPlane();
   _planes = _scene.get<fx::Model>("Planes");
@@ -53,7 +65,7 @@ void ARPlaneDetect::update(float td) {
       _planes->setRotation(fx::quat::RotX(M_PI/2.0f), index);
       _planes->setScale(fx::vec3(plane.extent.x/2.0, plane.extent.y/2.0, 1.0f), index);
       _planes->setLocation(plane.center, index);
-//      _planes->setLocation(plane.transform * vec3(0.0f, 0.0f, 0.0f) + plane.center, index);
+      _planes->setTextureTransform(mat4::Scale(fx::vec3(GRID_SCALE*plane.extent.x, GRID_SCALE*plane.extent.y, 1.0f)), index);
       index++;
     }
   }

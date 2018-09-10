@@ -86,7 +86,7 @@ vertex OutputTexture v_texture(const device packed_float3 *position   [[ buffer(
   OutputTexture output;
   float4 location = model[iid].model * float4(position[vid], 1.0);
   output.position = camera->projection * camera->view * location;
-  output.coordinate = transform_coordinate(model->texture, float2(uv0[vid]));
+  output.coordinate = transform_coordinate(model[iid].texture, float2(uv0[vid]));
   return output;
 }
 
@@ -95,8 +95,7 @@ fragment half4 f_texture_shadeless(InputTexture           input     [[ stage_in 
                                    texture2d<float>       texture2D [[ texture(0) ]],
                                    sampler                sampler2D [[ sampler(0) ]]) {
   float4 texture = texture2D.sample(sampler2D, input.coordinate);
-  float3 color = texture.xyz * material->ambiant.xyz * material->ambiant.a;
-  return half4(color.x, color.y, color.z, 1.0);
+  return half4(texture * material->ambiant);
 }
 
 

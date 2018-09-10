@@ -24,6 +24,7 @@
 		C1412EA71F3BD3A4001E8D83 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1412EA41F3BD395001E8D83 /* bunny.mesh */; };
 		C1412EA81F3BD3A9001E8D83 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1412EA51F3BD395001E8D83 /* Scene.xml */; };
 		C1412EA91F3BD41F001E8D83 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1412EA61F3BD395001E8D83 /* Shaders.metal */; };
+		C180FB522144968C001E8BB0 /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = C180FB512144968C001E8BB0 /* dot.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		C1412EA41F3BD395001E8D83 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
 		C1412EA51F3BD395001E8D83 /* Scene.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
 		C1412EA61F3BD395001E8D83 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		C180FB512144968C001E8BB0 /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				C1412EA21F3BD2AC001E8D83 /* ARPlaneDetect.h */,
 				C1412EA11F3BD2AC001E8D83 /* ARPlaneDetect.cpp */,
 				C1412EA61F3BD395001E8D83 /* Shaders.metal */,
+				C180FB512144968C001E8BB0 /* dot.png */,
 				C1412E7B1F3BCACE001E8D83 /* Main.storyboard */,
 				C1412E7E1F3BCACE001E8D83 /* Assets.xcassets */,
 				C1412E801F3BCACE001E8D83 /* LaunchScreen.storyboard */,
@@ -234,6 +237,7 @@
 				C1412EA81F3BD3A9001E8D83 /* Scene.xml in Resources */,
 				C1412EA71F3BD3A4001E8D83 /* bunny.mesh in Resources */,
 				C1412E821F3BCACE001E8D83 /* LaunchScreen.storyboard in Resources */,
+				C180FB522144968C001E8BB0 /* dot.png in Resources */,
 				C1412E7F1F3BCACE001E8D83 /* Assets.xcassets in Resources */,
 				C1412E7D1F3BCACE001E8D83 /* Main.storyboard in Resources */,
 			);
