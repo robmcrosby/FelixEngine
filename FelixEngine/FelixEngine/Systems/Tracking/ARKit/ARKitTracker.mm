@@ -259,6 +259,8 @@ void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
+  plane.position = plane.transform.w.xyz();
+  plane.rotation = quat(plane.transform);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   updateTrackedPlane(plane);
@@ -274,6 +276,8 @@ void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
+  plane.position = plane.transform.w.xyz();
+  plane.rotation = quat(plane.transform);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   updateTrackedPlane(plane);
@@ -289,6 +293,8 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
+  plane.position = plane.transform.w.xyz();
+  plane.rotation = quat(plane.transform);
   plane.extent = vec2(anchor.extent.x, anchor.extent.z);
   
   updateTrackedPlane(plane);

@@ -51,7 +51,7 @@ void ARPlaneDetect::initalize() {
   _planes->setMesh(planeMesh);
   _planes->setMaterial(material);
   _planes->setToRenderPass("MainPass");
-  _planes->setFaceCulling(fx::CULL_FRONT);
+  //_planes->setFaceCulling(fx::CULL_FRONT);
   _planes->setInstances(0);
 }
 
@@ -66,6 +66,12 @@ void ARPlaneDetect::update(float td) {
       _planes->setScale(fx::vec3(plane.extent.x/2.0, plane.extent.y/2.0, 1.0f), index);
       _planes->setLocation(plane.center, index);
       _planes->setTextureTransform(mat4::Scale(fx::vec3(GRID_SCALE*plane.extent.x, GRID_SCALE*plane.extent.y, 1.0f)), index);
+      
+//      _planes->setRotation(plane.rotation * fx::quat::RotX(M_PI/2.0f), index);
+//      _planes->setScale(fx::vec3(plane.extent.x/2.0, plane.extent.y/2.0, 1.0f), index);
+//      _planes->setLocation(plane.position + plane.center, index);
+//      _planes->setTextureTransform(mat4::Scale(fx::vec3(GRID_SCALE*plane.extent.x, GRID_SCALE*plane.extent.y, 1.0f)), index);
+      
       index++;
     }
   }

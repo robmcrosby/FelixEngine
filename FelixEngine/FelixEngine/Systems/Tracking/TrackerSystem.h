@@ -9,7 +9,7 @@
 #ifndef TrackerSystem_h
 #define TrackerSystem_h
 
-#include "Matrix.h"
+#include "Quaternion.h"
 #include "Graphics.h"
 #include <vector>
 
@@ -27,6 +27,8 @@ namespace fx {
     std::string uuid;
     mat4 transform;
     vec3 center;
+    vec3 position;
+    quat rotation;
     vec2 extent;
   };
   typedef std::vector<TrackedPlane> TrackedPlanes;
