@@ -9,7 +9,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-device float3 rotate_quat(float4 rot, float3 v);
+float3 rotate_quat(float4 rot, float3 v);
 
 struct MVPUniform {
   float4x4 projection;
@@ -29,7 +29,7 @@ struct NormalInput {
   float3 normal [[user(normal)]];
 };
 
-device float3 rotate_quat(float4 rot, float3 v) {
+float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 

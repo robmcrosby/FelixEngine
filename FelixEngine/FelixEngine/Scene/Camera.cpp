@@ -83,7 +83,7 @@ bool Camera::setView(const XMLTree::Node &node) {
 
 void Camera::setView(const mat4 &view) {
   setRotation(view);
-  setLocation(view.inverse() * vec3());
+  setLocation(view * vec3());
 }
 
 mat4 Camera::view() const {

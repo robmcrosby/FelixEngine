@@ -67,6 +67,10 @@
   }
 }
 
+//- (void)findPlaneForTouchPosX:(float)x posY:(float)y {
+//  //self.tracker
+//}
+
 @end
 
 
@@ -111,8 +115,9 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
 }
 
 mat4 ARKitTracker::getCameraView() {
-  matrix_float4x4 view = matrix_invert(_arSession.currentFrame.camera.transform);
-  return mat4::RotZ(-Pi/2.0f) * mat4((float*)&view.columns[0]);
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  matrix_float4x4 view = matrix_invert([_arSession.currentFrame.camera viewMatrixForOrientation:orientation]);
+  return (float*)&view.columns[0];
 }
 
 mat4 ARKitTracker::getCameraProjection() {
@@ -122,7 +127,6 @@ mat4 ARKitTracker::getCameraProjection() {
                                                     viewportSize:viewport
                                                            zNear:0.001
                                                             zFar:1000.0];
-  
   return (float*)&proj.columns[0];
 }
 
@@ -158,43 +162,6 @@ TextureBufferPtr ARKitTracker::getCameraImageY() {
 TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
-
-//bool ARKitTracker::drawLiveCamera() {
-//  bool draw = _cameraImageY && _cameraImageY->loaded() && _cameraImageCbCr && _cameraImageCbCr->loaded();
-//  if (draw) {
-//    vector<vec4> vertices;
-//    calculateVertices(vertices);
-////    _task.mesh->setVertexBuffer("Vertices", vertices);
-////    _task.mesh->loadBuffers();
-////    _graphics->addTask(_task);
-//  }
-//  return draw;
-//}
-
-//void ARKitTracker::setupLiveCamera() {
-//  vector<vec4> vertices;
-//  calculateVertices(vertices);
-//
-////  _task.frame = _graphics->getFrameBuffer("MainWindow");
-////  //_task.frame->setToWindow(0);
-////
-////  _task.shader = _graphics->createShaderProgram();
-////  _task.shader->loadShaderFunctions("camera_vertex", "camera_fragment");
-////
-////  _task.mesh = _graphics->createVertexMesh();
-////  _task.mesh->setVertexBuffer("Vertices", vertices);
-////  _task.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
-////  _task.mesh->loadBuffers();
-////
-////  _task.textures = make_shared<TextureMap>();
-////  _task.textures->addTexture(_cameraImageY);
-////  _task.textures->addTexture(_cameraImageCbCr);
-////  _task.setClearDepthStencil();
-////
-////  _task.uniforms.push_back(_uniformMap);
-////
-////  _task.colorActions[0].loadAction = LOAD_NONE;
-//}
 
 const TrackedPlanes& ARKitTracker::trackedPlanes() const {
   return _trackedPlanes;
