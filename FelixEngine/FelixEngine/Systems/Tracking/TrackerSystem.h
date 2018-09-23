@@ -33,6 +33,7 @@ namespace fx {
   
   struct ARPlane {
     std::string uuid;
+    u_int32_t type;
     mat4 transform;
     vec3 center;
     vec3 position;

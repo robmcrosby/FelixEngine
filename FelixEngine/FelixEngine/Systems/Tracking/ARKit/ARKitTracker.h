@@ -14,10 +14,8 @@
 #ifndef ARKitTracker_h
 #define ARKitTracker_h
 
-OBJC_CLASS(ARSession)
 OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
-OBJC_CLASS(ARAnchor)
 OBJC_CLASS(ARPlaneAnchor)
 
 namespace fx {
@@ -28,7 +26,6 @@ namespace fx {
   class ARKitTracker: public TrackerSystem {
   private:
     MetalGraphics *_graphics;
-    ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     
     ARPoints _pointCloud;
@@ -37,7 +34,6 @@ namespace fx {
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
     
     UniformsPtr _uniformMap;
-    //GraphicTask _task;
     
     ARPlanes _trackedPlanes;
     

@@ -16,20 +16,86 @@
 @interface ARDelegate : NSObject <ARSessionDelegate>
 @property (nonatomic, assign) fx::ARKitTracker *tracker;
 @property (nonatomic) CVMetalTextureCacheRef textureCache;
+
+@property (nonatomic) ARSession *arSession;
+@property (nonatomic) BOOL sessionRunning;
+@property (nonatomic) ARWorldTrackingConfiguration *configuration;
 @end
 
 @implementation ARDelegate
 
+- (id)init {
+  self = [super init];
+  if (self != nil) {
+    self.configuration = [ARWorldTrackingConfiguration new];
+    self.arSession = [ARSession new];
+    [self.arSession setDelegate:self];
+  }
+  return self;
+}
+
+- (void)startSession {
+  [self.arSession runWithConfiguration:self.configuration];
+  self.sessionRunning = YES;
+}
+
+- (void)setFeatureTracking:(u_int32_t)flags {
+  // Set Plane Tracking
+  self.configuration.planeDetection = flags & fx::FEATURE_TRACKING_PLANES_HORIZONTAL ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
+  if (@available(iOS 11.3, *))
+    self.configuration.planeDetection |= flags & fx::FEATURE_TRACKING_PLANES_VERTICAL ? ARPlaneDetectionVertical : ARPlaneDetectionNone;
+  
+  // Update ARSession if Running
+  if (self.sessionRunning)
+    [_arSession runWithConfiguration:self.configuration];
+}
+
+- (fx::mat4)getCameraView {
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  matrix_float4x4 view = matrix_invert([_arSession.currentFrame.camera viewMatrixForOrientation:orientation]);
+  return (float*)&view.columns[0];
+}
+
+- (fx::mat4)getCameraProjection {
+  CGSize viewport = UIScreen.mainScreen.bounds.size;
+  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+  matrix_float4x4 proj = [_arSession.currentFrame.camera projectionMatrixForOrientation:orientation
+                                                                           viewportSize:viewport
+                                                                                  zNear:0.001
+                                                                                   zFar:1000.0];
+  return (float*)&proj.columns[0];
+}
+
+- (fx::mat4)getImageTransform {
+  fx::mat4 transform;
+  ARFrame *frame = _arSession.currentFrame;
+  if (frame != nil) {
+    CGSize viewport = UIScreen.mainScreen.bounds.size;
+    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
+    affine = CGAffineTransformInvert(affine);
+    transform.x.x = affine.a;
+    transform.x.y = affine.b;
+    transform.y.x = affine.c;
+    transform.y.y = affine.d;
+    transform.w.x = affine.tx;
+    transform.w.y = affine.ty;
+  }
+  return transform;
+}
+
 - (void)session:(ARSession *)session didFailWithError:(NSError *)error {
   NSLog(@"%@", error.localizedRecoverySuggestion);
+  self.sessionRunning = NO;
   self.tracker->arSessionFailed();
 }
 
 - (void)sessionWasInterrupted:(ARSession *)session {
+  self.sessionRunning = NO;
   self.tracker->arSessionInterupted();
 }
 
 - (void)sessionInterruptionEnded:(ARSession *)session {
+  self.sessionRunning = NO;
   self.tracker->arSessionInteruptEnd();
 }
 
@@ -84,9 +150,6 @@ ARKitTracker::ARKitTracker() {
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
   
-  _arSession = [ARSession new];
-  [_arSession setDelegate:_arDelegate];
-  
   _uniformMap = UniformMap::make();
 }
 
@@ -105,56 +168,30 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageY = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   
-  ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
-  ARPlaneDetection planeDetection = ARPlaneDetectionNone;
-  planeDetection |= horizontalPlaneDetectionEnabled() ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
-  if (@available(iOS 11.3, *))
-    planeDetection |= verticalPlaneDetectionEnabled() ? ARPlaneDetectionVertical : ARPlaneDetectionNone;
-  configuration.planeDetection = planeDetection;
-  [_arSession runWithConfiguration: configuration];
-  
+  [_arDelegate startSession];
   return true;
 }
 
 mat4 ARKitTracker::getCameraView() {
-  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-  matrix_float4x4 view = matrix_invert([_arSession.currentFrame.camera viewMatrixForOrientation:orientation]);
-  return (float*)&view.columns[0];
+  return [_arDelegate getCameraView];
 }
 
 mat4 ARKitTracker::getCameraProjection() {
-  CGSize viewport = UIScreen.mainScreen.bounds.size;
-  UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-  matrix_float4x4 proj = [_arSession.currentFrame.camera projectionMatrixForOrientation:orientation
-                                                    viewportSize:viewport
-                                                           zNear:0.001
-                                                            zFar:1000.0];
-  return (float*)&proj.columns[0];
+  return [_arDelegate getCameraProjection];
 }
 
 mat4 ARKitTracker::getImageTransform() {
-  mat4 transform;
-  ARFrame *frame = _arSession.currentFrame;
-  if (frame != nil) {
-    CGSize viewport = UIScreen.mainScreen.bounds.size;
-    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
-    affine = CGAffineTransformInvert(affine);
-    transform.x.x = affine.a;
-    transform.x.y = affine.b;
-    transform.y.x = affine.c;
-    transform.y.y = affine.d;
-    transform.w.x = affine.tx;
-    transform.w.y = affine.ty;
-  }
-  return transform;
+  return [_arDelegate getImageTransform];
 }
 
 void ARKitTracker::enableFeatureTracking(unsigned int featureFlags) {
   TrackerSystem::enableFeatureTracking(featureFlags);
+  [_arDelegate setFeatureTracking:_freatureTrackingFlags];
 }
 
 void ARKitTracker::disableFeatureTracking(unsigned int featureFlags) {
   TrackerSystem::disableFeatureTracking(featureFlags);
+  [_arDelegate setFeatureTracking:_freatureTrackingFlags];
 }
 
 const ARPoints& ARKitTracker::getPointCloud() const {
@@ -230,6 +267,7 @@ void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
   
   ARPlane plane;
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
+  plane.type = anchor.alignment == ARPlaneAnchorAlignmentHorizontal ? FEATURE_TRACKING_PLANES_HORIZONTAL : FEATURE_TRACKING_PLANES_VERTICAL;
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
   plane.position = plane.transform.w.xyz();
