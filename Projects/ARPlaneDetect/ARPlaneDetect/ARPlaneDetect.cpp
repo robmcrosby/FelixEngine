@@ -57,7 +57,7 @@ void ARPlaneDetect::initalize() {
 
 void ARPlaneDetect::update(float td) {
   if (_trackerSystem) {
-    const fx::TrackedPlanes &planes = _trackerSystem->trackedPlanes();
+    const fx::ARPlanes &planes = _trackerSystem->trackedPlanes();
     _planes->setInstances((unsigned int)planes.size());
     int index = 0;
     for (auto plane : planes) {
@@ -83,14 +83,14 @@ void ARPlaneDetect::setTrackerSystem(fx::TrackerSystem *tracker) {
   tracker->setDelegate(this);
 }
 
-void ARPlaneDetect::trackedPlaneAdded(fx::TrackedPlane plane) {
+void ARPlaneDetect::trackedPlaneAdded(fx::ARPlane plane) {
   //cout << "Tracked Plane Added" << endl;
 }
 
-void ARPlaneDetect::trackedPlaneUpdated(fx::TrackedPlane plane) {
+void ARPlaneDetect::trackedPlaneUpdated(fx::ARPlane plane) {
   //cout << "Tracked Plane Updated" << endl;
 }
 
-void ARPlaneDetect::trackedPlaneRemoved(fx::TrackedPlane plane) {
+void ARPlaneDetect::trackedPlaneRemoved(fx::ARPlane plane) {
   //cout << "Tracked Plane Removed" << endl;
 }

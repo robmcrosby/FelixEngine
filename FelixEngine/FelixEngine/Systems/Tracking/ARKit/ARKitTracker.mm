@@ -84,8 +84,6 @@ ARKitTracker::ARKitTracker() {
   _arDelegate = [ARDelegate new];
   [_arDelegate setTracker:this];
   
-  _pointCloudEnabled = false;
-  
   _arSession = [ARSession new];
   [_arSession setDelegate:_arDelegate];
   
@@ -108,7 +106,11 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   
   ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
-  configuration.planeDetection = _planeDetectionEnabled ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
+  ARPlaneDetection planeDetection = ARPlaneDetectionNone;
+  planeDetection |= horizontalPlaneDetectionEnabled() ? ARPlaneDetectionHorizontal : ARPlaneDetectionNone;
+  if (@available(iOS 11.3, *))
+    planeDetection |= verticalPlaneDetectionEnabled() ? ARPlaneDetectionVertical : ARPlaneDetectionNone;
+  configuration.planeDetection = planeDetection;
   [_arSession runWithConfiguration: configuration];
   
   return true;
@@ -147,11 +149,15 @@ mat4 ARKitTracker::getImageTransform() {
   return transform;
 }
 
-void ARKitTracker::enablePointCloud(bool enable) {
-  _pointCloudEnabled = enable;
+void ARKitTracker::enableFeatureTracking(unsigned int featureFlags) {
+  TrackerSystem::enableFeatureTracking(featureFlags);
 }
 
-const ARPointVector& ARKitTracker::getPointCloud() const {
+void ARKitTracker::disableFeatureTracking(unsigned int featureFlags) {
+  TrackerSystem::disableFeatureTracking(featureFlags);
+}
+
+const ARPoints& ARKitTracker::getPointCloud() const {
   return _pointCloud;
 }
 
@@ -163,7 +169,7 @@ TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
 }
 
-const TrackedPlanes& ARKitTracker::trackedPlanes() const {
+const ARPlanes& ARKitTracker::trackedPlanes() const {
   return _trackedPlanes;
 }
 
@@ -202,7 +208,7 @@ void ARKitTracker::arSessionUpdateFrame(ARFrame *frame) {
     }
   }
   
-  if (_pointCloudEnabled) {
+  if (pointCloudEnabled()) {
     ARPointCloud *pointCloud = [frame rawFeaturePoints];
     long size = [pointCloud count];
     _pointCloud.resize(size);
@@ -222,7 +228,7 @@ void ARKitTracker::planeAnchorAdded(ARPlaneAnchor *anchor) {
   matrix_float4x4 transform = anchor.transform;
   vector_float3 center = anchor.center;
   
-  TrackedPlane plane;
+  ARPlane plane;
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
@@ -239,7 +245,7 @@ void ARKitTracker::planeAnchorUpdated(ARPlaneAnchor *anchor) {
   matrix_float4x4 transform = anchor.transform;
   vector_float3 center = anchor.center;
   
-  TrackedPlane plane;
+  ARPlane plane;
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
@@ -256,7 +262,7 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
   matrix_float4x4 transform = anchor.transform;
   vector_float3 center = anchor.center;
   
-  TrackedPlane plane;
+  ARPlane plane;
   plane.uuid = [[anchor.identifier UUIDString] UTF8String];
   plane.transform = mat4((float*)&transform.columns[0]);
   plane.center = vec3(center.x, center.y, center.z);
@@ -269,7 +275,7 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
     _delegate->trackedPlaneRemoved(plane);
 }
 
-void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
+void ARKitTracker::updateTrackedPlane(const ARPlane &plane) {
   for (auto &tracked : _trackedPlanes) {
     if (tracked.uuid == plane.uuid) {
       tracked = plane;
@@ -278,27 +284,3 @@ void ARKitTracker::updateTrackedPlane(const TrackedPlane &plane) {
   }
   _trackedPlanes.push_back(plane);
 }
-
-//void ARKitTracker::calculateVertices(vector<vec4> &vertices) {
-////  // Add the Vertices
-////  vertices.clear();
-////  vertices.push_back(vec4(-1.0f, -1.0f, 0.0f, 1.0f));
-////  vertices.push_back(vec4(-1.0f,  1.0f, 0.0f, 0.0f));
-////  vertices.push_back(vec4(1.0f, -1.0f, 1.0f, 1.0f));
-////  vertices.push_back(vec4(1.0f,  1.0f, 1.0f, 0.0f));
-////
-////  ARFrame *frame = _arSession.currentFrame;
-////  if (frame != nil) {
-////    // Get the Image Correction Transform
-////    CGSize viewport = CGSizeMake(_task.frame->size().x, _task.frame->size().y);
-////    CGAffineTransform affine = [frame displayTransformForOrientation:UIInterfaceOrientationPortrait viewportSize:viewport];
-////    affine = CGAffineTransformInvert(affine);
-////
-////    // Transform the UVs of the Vertices
-////    for (auto &vertex : vertices) {
-////      CGPoint coord = CGPointApplyAffineTransform(CGPointMake(vertex.z, vertex.w), affine);
-////      vertex.z = coord.x;
-////      vertex.w = coord.y;
-////    }
-////  }
-//}

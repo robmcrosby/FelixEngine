@@ -31,8 +31,7 @@ namespace fx {
     ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     
-    bool _pointCloudEnabled;
-    ARPointVector _pointCloud;
+    ARPoints _pointCloud;
     
     std::shared_ptr<MetalTextureBuffer> _cameraImageY;
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
@@ -40,7 +39,7 @@ namespace fx {
     UniformsPtr _uniformMap;
     //GraphicTask _task;
     
-    TrackedPlanes _trackedPlanes;
+    ARPlanes _trackedPlanes;
     
   public:
     ARKitTracker();
@@ -52,13 +51,15 @@ namespace fx {
     virtual mat4 getCameraProjection();
     virtual mat4 getImageTransform();
     
-    virtual void enablePointCloud(bool enable);
-    virtual const ARPointVector& getPointCloud() const;
+    virtual void enableFeatureTracking(unsigned int featureFlags);
+    virtual void disableFeatureTracking(unsigned int featureFlags);
+    
+    virtual const ARPoints& getPointCloud() const;
     
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
     
-    virtual const TrackedPlanes& trackedPlanes() const;
+    virtual const ARPlanes& trackedPlanes() const;
     
   public:
     void arSessionFailed();
@@ -72,7 +73,7 @@ namespace fx {
     void planeAnchorRemoved(ARPlaneAnchor *anchor);
     
   private:
-    void updateTrackedPlane(const TrackedPlane &plane);
+    void updateTrackedPlane(const ARPlane &plane);
   };
   
 }

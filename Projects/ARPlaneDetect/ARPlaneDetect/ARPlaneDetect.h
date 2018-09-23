@@ -30,9 +30,9 @@ public:
   virtual void update(float td);
   
   void setTrackerSystem(fx::TrackerSystem *tracker);
-  virtual void trackedPlaneAdded(fx::TrackedPlane plane);
-  virtual void trackedPlaneUpdated(fx::TrackedPlane plane);
-  virtual void trackedPlaneRemoved(fx::TrackedPlane plane);
+  virtual void trackedPlaneAdded(fx::ARPlane plane);
+  virtual void trackedPlaneUpdated(fx::ARPlane plane);
+  virtual void trackedPlaneRemoved(fx::ARPlane plane);
 };
 
 #endif /* ARPlaneDetect_h */
