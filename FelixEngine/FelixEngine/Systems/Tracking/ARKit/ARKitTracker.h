@@ -55,6 +55,8 @@ namespace fx {
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
     
+    virtual ARHitResults hitTest(const Touch &touch);
+    
     virtual const ARPlanes& trackedPlanes() const;
     
   public:
@@ -67,6 +69,8 @@ namespace fx {
     void planeAnchorAdded(ARPlaneAnchor *anchor);
     void planeAnchorUpdated(ARPlaneAnchor *anchor);
     void planeAnchorRemoved(ARPlaneAnchor *anchor);
+    
+    ARPlane planeForAnchor(ARPlaneAnchor *anchor);
     
   private:
     void updateTrackedPlane(const ARPlane &plane);

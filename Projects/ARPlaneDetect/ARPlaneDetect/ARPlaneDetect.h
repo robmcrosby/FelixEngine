@@ -29,6 +29,10 @@ public:
   virtual void initalize();
   virtual void update(float td);
   
+  virtual void handle(const fx::Event &event);
+  
+  void handleTouchDown(const fx::Event &event);
+  
   void setTrackerSystem(fx::TrackerSystem *tracker);
   virtual void trackedPlaneAdded(fx::ARPlane plane);
   virtual void trackedPlaneUpdated(fx::ARPlane plane);

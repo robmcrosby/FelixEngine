@@ -16,6 +16,7 @@
 
 namespace fx {
   class TextureBuffer;
+  class Touch;
   
   enum TRACKING_STATUS {
     TRACKING_NOT_AVALIBLE,
@@ -58,6 +59,13 @@ namespace fx {
   };
   typedef std::vector<ARPoint> ARPoints;
   
+  struct ARHitResult {
+    ARPlane plane;
+    mat4 world;
+    mat4 local;
+  };
+  typedef std::vector<ARHitResult> ARHitResults;
+  
   class TrackerSystem {
   protected:
     static TrackerSystem *instance;
@@ -87,6 +95,8 @@ namespace fx {
     virtual TextureBufferPtr getCameraImageCbCr() = 0;
     
     void setDelegate(TrackerDelegate *delegate) {_delegate = delegate;}
+    
+    virtual ARHitResults hitTest(const Touch &touch) = 0;
     
     virtual void enableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags |= featureFlags;}
     virtual void disableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags &= ~featureFlags;}

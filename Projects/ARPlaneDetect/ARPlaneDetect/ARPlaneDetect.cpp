@@ -78,6 +78,28 @@ void ARPlaneDetect::update(float td) {
   _scene.update(td);
 }
 
+void ARPlaneDetect::handle(const fx::Event &event) {
+  if (event.catagory == fx::EVENT_INPUT) {
+    if (event.type == fx::INPUT_TOUCH_DOWN)
+      handleTouchDown(event);
+  }
+}
+
+void ARPlaneDetect::handleTouchDown(const fx::Event &event) {
+  // Disable Plane Detection
+  if (_trackerSystem->planeDetectionEnabled())
+    _trackerSystem->disablePlaneDetection();
+  
+  if (event.message.size() > 0) {
+    const Touch &touch = (const Touch&)event.message[0];
+    ARHitResults results = _trackerSystem->hitTest(touch);
+    if (results.size() > 0) {
+      std::cout << "Found Hit on Plane" << std::endl;
+    }
+    std::cout << touch.location << std::endl;
+  }
+}
+
 void ARPlaneDetect::setTrackerSystem(fx::TrackerSystem *tracker) {
   _trackerSystem = tracker;
   tracker->setDelegate(this);
