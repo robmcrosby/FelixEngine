@@ -53,6 +53,9 @@ void ARPlaneDetect::initalize() {
   _planes->setToRenderPass("MainPass");
   //_planes->setFaceCulling(fx::CULL_FRONT);
   _planes->setInstances(0);
+  
+  _bunny = _scene.get<fx::Model>("Bunny");
+  _bunny->setHidden();
 }
 
 void ARPlaneDetect::update(float td) {
@@ -94,9 +97,11 @@ void ARPlaneDetect::handleTouchDown(const fx::Event &event) {
     const Touch &touch = (const Touch&)event.message[0];
     ARHitResults results = _trackerSystem->hitTest(touch);
     if (results.size() > 0) {
-      std::cout << "Found Hit on Plane" << std::endl;
+      _bunny->setModelTransform(results.front().world);
+      _bunny->setHidden(false);
     }
-    std::cout << touch.location << std::endl;
+    
+    cout << "Touch" << touch.location << endl;
   }
 }
 

@@ -208,7 +208,7 @@ TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
 }
 
 ARHitResults ARKitTracker::hitTest(const Touch &touch) {
-  CGPoint touchPoint = CGPointMake(touch.location.x, touch.location.y);
+  CGPoint touchPoint = CGPointMake(touch.location.y, 1.0 - touch.location.x);
   NSArray *hitTestResults = [_arDelegate.arSession.currentFrame hitTest:touchPoint types:ARHitTestResultTypeExistingPlane];
   ARHitResults hitResults;
   
@@ -219,6 +219,7 @@ ARHitResults ARKitTracker::hitTest(const Touch &touch) {
     
     ARHitResult hitResult;
     hitResult.plane = planeForAnchor(anchor);
+    hitResult.distance = (float)result.distance;
     hitResult.world = mat4((float*)&world.columns[0]);
     hitResult.local = mat4((float*)&local.columns[0]);
     hitResults.push_back(hitResult);

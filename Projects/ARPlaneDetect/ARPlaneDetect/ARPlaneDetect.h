@@ -21,6 +21,7 @@ private:
   fx::TrackerSystem *_trackerSystem;
   fx::Scene _scene;
   fx::ModelPtr _planes;
+  fx::ModelPtr _bunny;
   
 public:
   ARPlaneDetect();
