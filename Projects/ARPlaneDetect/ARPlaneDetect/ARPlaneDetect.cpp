@@ -96,12 +96,13 @@ void ARPlaneDetect::handleTouchDown(const fx::Event &event) {
   if (event.message.size() > 0) {
     const Touch &touch = (const Touch&)event.message[0];
     ARHitResults results = _trackerSystem->hitTest(touch);
-    if (results.size() > 0) {
-      _bunny->setModelTransform(results.front().world);
-      _bunny->setHidden(false);
+    for (auto &result : results) {
+      if (result.onPlane) {
+        _bunny->setModelTransform(result.world);
+        _bunny->setHidden(false);
+        break;
+      }
     }
-    
-    cout << "Touch" << touch.location << endl;
   }
 }
 

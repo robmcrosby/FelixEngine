@@ -222,6 +222,10 @@ ARHitResults ARKitTracker::hitTest(const Touch &touch) {
     hitResult.distance = (float)result.distance;
     hitResult.world = mat4((float*)&world.columns[0]);
     hitResult.local = mat4((float*)&local.columns[0]);
+    
+    vec3 pt = hitResult.local * vec3(0.0f, 0.0f, 0.0f) - hitResult.plane.center;
+    vec2 ext = hitResult.plane.extent/2.0f;
+    hitResult.onPlane = pt.x > -ext.x && pt.x < ext.x && pt.z > -ext.y && pt.z < ext.y;
     hitResults.push_back(hitResult);
   }
   return hitResults;

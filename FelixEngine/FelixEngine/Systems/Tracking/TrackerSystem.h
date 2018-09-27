@@ -61,6 +61,7 @@ namespace fx {
   
   struct ARHitResult {
     ARPlane plane;
+    bool onPlane;
     float distance;
     mat4 world;
     mat4 local;
