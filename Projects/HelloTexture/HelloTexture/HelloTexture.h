@@ -11,7 +11,7 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
 
 struct MVPUniform {
   fx::mat4 projection, view, model;
@@ -19,9 +19,7 @@ struct MVPUniform {
 
 class HelloTexture: public fx::Application {
 private:
-  fx::GraphicTask _task;
-  fx::UniformsPtr _uniformMap;
-  fx::TexturesPtr _textureMap;
+  fx::RenderPassPtr _renderPass;
   MVPUniform _mvpUniform;
   
 public:

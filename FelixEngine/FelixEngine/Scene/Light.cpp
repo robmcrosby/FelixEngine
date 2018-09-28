@@ -7,7 +7,6 @@
 //
 
 #include "Light.h"
-#include "RenderPass.h"
 
 
 using namespace fx;
@@ -27,8 +26,6 @@ Light::Light() {
   _softAngle = 0.0f;
   
   _directional = false;
-  
-  _layer = 0;
 }
 
 Light::~Light() {
@@ -38,8 +35,6 @@ Light::~Light() {
 bool Light::loadXML(const XMLTree::Node &node) {
   bool success = true;
   
-  if (node.hasAttribute("pass"))
-    addToRenderPass(node.attribute("pass"));
   if (node.hasAttribute("energy"))
     setEnergy(node.attributeAsFloat("energy"));
   if (node.hasAttribute("type")) {
@@ -61,15 +56,10 @@ bool Light::loadXMLItem(const XMLTree::Node &node) {
     setColor(node.contents());
     return true;
   }
-  cerr << "Unknown XML: " << node.element() << " in Light" << endl;
+  cerr << "Unknown XML Node in Light:" << endl << node << endl;
   return false;
 }
 
 void Light::update(float dt) {
-  for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass)
-    (*pass)->addLight(this);
-}
-
-void Light::applyToTask(GraphicTask &task) {
-  
+  // TODO
 }

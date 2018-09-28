@@ -43,7 +43,7 @@ void ARPoints::update(float td) {
   _scene.update(td);
   
   if (_tracker != nullptr) {
-    const fx::ARPointVector &points = _tracker->getPointCloud();
+    const fx::ARPoints &points = _tracker->getPointCloud();
 //    _model->setInstances(points.size() > 0 ? (int)points.size() : 1);
     for (int i = 0; i < points.size(); ++i) {
       _pointCloud[points[i].identifier] = points[i].position;

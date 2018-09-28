@@ -9,22 +9,18 @@
 #ifndef Light_h
 #define Light_h
 
-#include "RenderItem.h"
-#include "Scene.h"
-#include "GraphicTask.h"
+#include "Drawable.h"
 #include "Transform.h"
 #include "GraphicStructures.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Light)
   
-  class Light: public RenderItem, public iObject {
+  class Light: public RenderItem, public Drawable {
   private:
     static LightBuilder lightBuilder;
     
   private:
-    Scene *_scene;
-    
     TransformPtr _transform;
     
     vec3 _color;
@@ -39,8 +35,6 @@ namespace fx {
     
     bool _directional;
     
-    int _layer;
-    
   private:
     bool loadXMLItem(const XMLTree::Node &node);
     
@@ -48,14 +42,8 @@ namespace fx {
     Light();
     virtual ~Light();
     
-    virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
-    
-    virtual void applyToTask(GraphicTask &task);
-    
-    void setLayer(int layer) {_layer = layer;}
-    int layer() const {return _layer;}
     
     STR_Light peramaters() const {
       STR_Light peramaters;

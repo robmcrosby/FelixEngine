@@ -9,56 +9,51 @@
 #ifndef Model_h
 #define Model_h
 
-#include "RenderItem.h"
-#include "Scene.h"
+#include "Drawable.h"
 #include "Material.h"
 #include "Graphics.h"
 #include "Transform.h"
 #include "UniformMap.h"
+#include "RenderItem.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Model)
   
-  class Model: public RenderItem, public iObject {
+  class Model: public Drawable {
   private:
     static ModelBuilder modelBuilder;
     
-  private:
-    Scene *_scene;
-    
-    MaterialPtr   _material;
-    VertexMeshPtr _mesh;
-    UniformsPtr   _uniforms;
-    
-    unsigned int _instances;
-    Transforms _transforms;
-    
+  protected:
     bool _hidden;
-    int _layer;
     
-    CULL_MODE _cullMode;
+    MaterialPtr _material;
+    UniformsPtr _uniforms;
+    Transforms  _transforms;
+    RenderItem  _renderItem;
+    
+    std::vector<mat4> _modelTransforms;
+    std::vector<mat4> _textureTransforms;
     
   public:
     Model();
     virtual ~Model();
     
-    virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
-    
-    virtual void applyToTask(GraphicTask &task);
     
     void setHidden(bool hidden = true) {_hidden = hidden;}
     bool hidden() const {return _hidden;}
     
+    bool renderable() const;
+    
     void setInstances(unsigned int instances);
-    unsigned int instances() const {return _instances;}
+    unsigned int instances() const {return _renderItem.instances;}
     
-    void setLayer(int layer) {_layer = layer;}
-    int layer() const {return _layer;}
+    void setLayer(int layer) {_renderItem.layer = layer;}
+    int layer() const {return _renderItem.layer;}
     
-    void setFaceCulling(CULL_MODE mode) {_cullMode = mode;}
-    CULL_MODE faceCulling() const {return _cullMode;}
+    void setFaceCulling(CULL_MODE mode) {_renderItem.cullMode = mode;}
+    CULL_MODE faceCulling() const {return _renderItem.cullMode;}
     
     bool setMaterial(const XMLTree::Node &node);
     void setMaterial(const std::string &name);
@@ -67,8 +62,9 @@ namespace fx {
     
     bool setMesh(const XMLTree::Node &node);
     void setMesh(const std::string &name);
-    void setMesh(VertexMeshPtr &mesh) {_mesh = mesh;}
-    VertexMeshPtr mesh() const {return _mesh;}
+    void setMesh(VertexMeshPtr &mesh) {_renderItem.mesh = mesh;}
+    VertexMeshPtr mesh() const {return _renderItem.mesh;}
+    void loadMesh(const std::string &file);
     
     void setScale(float scale, int index = 0);
     void setScale(const vec3 &scale, int index = 0);
@@ -81,6 +77,16 @@ namespace fx {
     vec3 localLocation(int index = 0) const;
     
     TransformPtr transform(int index = 0);
+    
+    void setModelTransform(const mat4 &transform, int index = 0);
+    mat4 modelTransform(int index = 0);
+    
+    void setTextureTransform(const mat4 &transform, int index = 0);
+    void setTextureTransform(const mat3 &transform, int index = 0) {setTextureTransform(mat4(transform), index);}
+    mat4 textureTransform(int index = 0);
+    
+    mat4 globalModelTransform(int index = 0);
+    mat4 localModelTransform(int index = 0);
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);

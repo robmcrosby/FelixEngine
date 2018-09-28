@@ -9,13 +9,14 @@
 #ifndef TrackerSystem_h
 #define TrackerSystem_h
 
-#include "Matrix.h"
+#include "Quaternion.h"
 #include "Graphics.h"
 #include <vector>
 
 
 namespace fx {
   class TextureBuffer;
+  class Touch;
   
   enum TRACKING_STATUS {
     TRACKING_NOT_AVALIBLE,
@@ -23,20 +24,31 @@ namespace fx {
     TRACKING_NORMAL,
   };
   
-  struct TrackedPlane {
+  enum FEATURE_TRACKING_FLAGS {
+    FEATURE_TRACKING_NONE              = 0x00,
+    FEATURE_TRACKING_POINTS            = 0x01,
+    FEATURE_TRACKING_PLANES_HORIZONTAL = 0x02,
+    FEATURE_TRACKING_PLANES_VERTICAL   = 0x04,
+    FEATURE_TRACKING_GEOMETRY          = 0x08,
+  };
+  
+  struct ARPlane {
     std::string uuid;
+    u_int32_t type;
     mat4 transform;
     vec3 center;
+    vec3 position;
+    quat rotation;
     vec2 extent;
   };
-  typedef std::vector<TrackedPlane> TrackedPlanes;
+  typedef std::vector<ARPlane> ARPlanes;
   
   struct TrackerDelegate {
     virtual ~TrackerDelegate() {}
     
-    virtual void trackedPlaneAdded(TrackedPlane plane) = 0;
-    virtual void trackedPlaneUpdated(TrackedPlane plane) = 0;
-    virtual void trackedPlaneRemoved(TrackedPlane plane) = 0;
+    virtual void trackedPlaneAdded(ARPlane plane) = 0;
+    virtual void trackedPlaneUpdated(ARPlane plane) = 0;
+    virtual void trackedPlaneRemoved(ARPlane plane) = 0;
   };
   
   struct ARPoint {
@@ -45,7 +57,16 @@ namespace fx {
     long identifier;
     fx::vec3 position;
   };
-  typedef std::vector<ARPoint> ARPointVector;
+  typedef std::vector<ARPoint> ARPoints;
+  
+  struct ARHitResult {
+    ARPlane plane;
+    bool onPlane;
+    float distance;
+    mat4 world;
+    mat4 local;
+  };
+  typedef std::vector<ARHitResult> ARHitResults;
   
   class TrackerSystem {
   protected:
@@ -55,15 +76,14 @@ namespace fx {
     TRACKING_STATUS _trackingStatus;
     TrackerDelegate *_delegate;
     
-    bool _planeDetectionEnabled;
+    u_int32_t _freatureTrackingFlags;
     
   public:
     static TrackerSystem& getInstance() {return *instance;}
     
   public:
-    TrackerSystem(): _trackingStatus(TRACKING_NOT_AVALIBLE) {
+    TrackerSystem(): _trackingStatus(TRACKING_NOT_AVALIBLE), _freatureTrackingFlags(0) {
       _delegate = nullptr;
-      _planeDetectionEnabled = false;
     }
     virtual ~TrackerSystem() {}
     
@@ -73,20 +93,33 @@ namespace fx {
     virtual mat4 getCameraProjection() = 0;
     virtual mat4 getImageTransform() = 0;
     
-    virtual void enablePointCloud(bool enable) = 0;
-    virtual const ARPointVector& getPointCloud() const = 0;
-    
     virtual TextureBufferPtr getCameraImageY() = 0;
     virtual TextureBufferPtr getCameraImageCbCr() = 0;
     
-    virtual bool drawLiveCamera() = 0;
-    
     void setDelegate(TrackerDelegate *delegate) {_delegate = delegate;}
     
-    virtual void enablePlaneDetection(bool enable = true) {_planeDetectionEnabled = enable;}
-    bool planeDetectionEnabled() const {return _planeDetectionEnabled;}
+    virtual ARHitResults hitTest(const Touch &touch) = 0;
     
-    virtual const TrackedPlanes& trackedPlanes() const = 0;
+    virtual void enableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags |= featureFlags;}
+    virtual void disableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags &= ~featureFlags;}
+    
+    void enablePointCloud() {enableFeatureTracking(FEATURE_TRACKING_POINTS);}
+    void disablePointCloud() {disableFeatureTracking(FEATURE_TRACKING_POINTS);}
+    bool pointCloudEnabled() {return _freatureTrackingFlags & FEATURE_TRACKING_POINTS;}
+    virtual const ARPoints& getPointCloud() const = 0;
+    
+    void enablePlaneDetection() {enableFeatureTracking(FEATURE_TRACKING_PLANES_VERTICAL | FEATURE_TRACKING_PLANES_HORIZONTAL);}
+    void disablePlaneDetection() {disableFeatureTracking(FEATURE_TRACKING_PLANES_VERTICAL | FEATURE_TRACKING_PLANES_HORIZONTAL);}
+    bool planeDetectionEnabled() const {return _freatureTrackingFlags & (FEATURE_TRACKING_PLANES_VERTICAL | FEATURE_TRACKING_PLANES_HORIZONTAL);}
+    virtual const ARPlanes& trackedPlanes() const = 0;
+    
+    void enableHorizontalPlaneDetection() {enableFeatureTracking(FEATURE_TRACKING_PLANES_HORIZONTAL);}
+    void disableHorizontalPlaneDetection() {disableFeatureTracking(FEATURE_TRACKING_PLANES_HORIZONTAL);}
+    bool horizontalPlaneDetectionEnabled() {return _freatureTrackingFlags & FEATURE_TRACKING_PLANES_HORIZONTAL;}
+    
+    void enableVerticalPlaneDetection() {enableFeatureTracking(FEATURE_TRACKING_PLANES_VERTICAL);}
+    void disableVerticalPlaneDetection() {disableFeatureTracking(FEATURE_TRACKING_PLANES_VERTICAL);}
+    bool verticalPlaneDetectionEnabled() {return _freatureTrackingFlags & FEATURE_TRACKING_PLANES_VERTICAL;}
   };
 }
 

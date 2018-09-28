@@ -14,7 +14,6 @@
 #include <QuartzCore/CAMetalLayer.h>
 
 #include "GraphicResources.h"
-#include "GraphicTask.h"
 
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
@@ -23,6 +22,7 @@
 #include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
 #include "MetalTextureSampler.h"
+#include "MetalRenderPass.h"
 
 #define MAX_INFLIGHT_FRAMES 3
 
@@ -38,6 +38,9 @@ namespace fx {
     MetalTextureSampler *samplerStates;
     
     dispatch_semaphore_t frameBoundarySemaphore;
+    
+    // TODO: Put in Better Structure
+    std::vector<MetalRenderPass*> renderPasses;
     
     ~MTLGraphicsData() {}
   };
@@ -140,6 +143,12 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
   return pool;
 }
 
+RenderPassPtr MetalGraphics::createRenderPass() {
+  shared_ptr<MetalRenderPass> renderPass = make_shared<MetalRenderPass>(_data->device);
+  _data->renderPasses.push_back(renderPass.get());
+  return renderPass;
+}
+
 void MetalGraphics::nextFrame() {
   dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   
@@ -150,61 +159,19 @@ void MetalGraphics::nextFrame() {
   }
   
   _data->buffer = [_data->queue commandBuffer];
-}
-
-void MetalGraphics::addTask(const GraphicTask &task) {
-  MetalFrameBuffer   *frame  = static_cast<MetalFrameBuffer*>(task.frame.get());
-  MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(task.shader.get());
-  MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(task.mesh.get());
-  
-  // Create Render Encoder
-  id <MTLRenderCommandEncoder> encoder = frame->createEncoder(_data->buffer, task);
-  
-  // Encode the Shader Program, Render Pipeline, and Uniform Buffers
-  shader->encode(encoder, task);
-  
-  // Set the Depth/Stencil State
-  int flags = task.depthState.flags;
-  [encoder setDepthStencilState:[_data->depthStencilStates depthStencilStateForFlags:flags]];
-  
-  // Set Blending Color
-  if (task.blendState.enabled()) {
-    [encoder setBlendColorRed:task.blendState.color.r
-                        green:task.blendState.color.g
-                         blue:task.blendState.color.b
-                        alpha:task.blendState.color.a];
-  }
-  
-  // Set Culling Mode
-  if (task.cullMode == CULL_BACK)
-    [encoder setCullMode:MTLCullModeBack];
-  else if (task.cullMode == CULL_FRONT)
-    [encoder setCullMode:MTLCullModeFront];
-  
-  // Set the Textures
-  if (task.textures != nullptr) {
-    int index = 0;
-    for (auto texture : *task.textures) {
-      id <MTLSamplerState> sampler = [_data->samplerStates samplerStateForFlags:texture.sampler.flags];
-      MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
-      mtlTextureBuffer->encode(encoder, sampler, index);
-      ++index;
-    }
-  }
-  
-  // Encode the Vertex Buffers and End Encoding
-  mesh->encode(encoder, shader, task.instances);
-  [encoder endEncoding];
+  for (auto &renderPass : _data->renderPasses)
+    renderPass->setCommandBuffer(_data->buffer);
 }
 
 void MetalGraphics::presentFrame() {
-  _windowBuffer->present(_data->buffer);
+  if (_windowBuffer != nullptr) {
+    _windowBuffer->present(_data->buffer);
   
-  __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
-  [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
-    dispatch_semaphore_signal(semaphore);
-  }];
-  
-  [_data->buffer commit];
+    __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
+    [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+      dispatch_semaphore_signal(semaphore);
+    }];
+    [_data->buffer commit];
+  }
   _data->buffer = nil;
 }

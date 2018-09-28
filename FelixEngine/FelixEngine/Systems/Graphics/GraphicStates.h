@@ -208,7 +208,7 @@ namespace fx {
     
     void setInput(int input, int shift)
     {
-      int mask = BLEND_INPUT_MASK << shift;
+      int mask = BLEND_INPUT_COMP_MASK << shift;
       flags = (flags & ~mask) | ((input << shift) & mask);
     }
     void setSrc(int input) {setInput(input, BLEND_INPUT_SRC_COLOR_SHIFT);}
@@ -224,10 +224,10 @@ namespace fx {
     int equation() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_COMP_MASK;}
     int equationAlpha() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}
     
-    int src() const {return (flags >> BLEND_INPUT_SRC_COLOR_SHIFT) & BLEND_INPUT_MASK;}
-    int dst() const {return (flags >> BLEND_INPUT_DEST_COLOR_SHIFT) & BLEND_INPUT_MASK;}
-    int srcAlpha() const {return (flags >> BLEND_INPUT_SRC_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
-    int dstAlpha() const {return (flags >> BLEND_INPUT_DEST_ALPHA_SHIFT) & BLEND_INPUT_MASK;}
+    int src() const {return (flags >> BLEND_INPUT_SRC_COLOR_SHIFT) & BLEND_INPUT_COMP_MASK;}
+    int dst() const {return (flags >> BLEND_INPUT_DEST_COLOR_SHIFT) & BLEND_INPUT_COMP_MASK;}
+    int srcAlpha() const {return (flags >> BLEND_INPUT_SRC_ALPHA_SHIFT) & BLEND_INPUT_COMP_MASK;}
+    int dstAlpha() const {return (flags >> BLEND_INPUT_DEST_ALPHA_SHIFT) & BLEND_INPUT_COMP_MASK;}
     
     bool enabled() const {return (flags >> BLEND_EQ_COLOR_SHIFT) & BLEND_EQ_MASK;}
     bool seperate() const {return (flags >> BLEND_EQ_ALPHA_SHIFT) & BLEND_EQ_COMP_MASK;}

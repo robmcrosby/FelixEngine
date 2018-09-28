@@ -51,10 +51,10 @@ fragment half4 tri_fragment() {
 }
 
 
-device float3 rotate_quat(float4 rot, float3 v);
-device float light_attenuation(float distance, float2 factors);
-device float shade_diffuse(float3 normal, float3 light);
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness);
+float3 rotate_quat(float4 rot, float3 v);
+float light_attenuation(float distance, float2 factors);
+float shade_diffuse(float3 normal, float3 light);
+float shade_specular(float3 normal, float3 view, float3 light, float hardness);
 
 
 struct VertexOutput {
@@ -70,19 +70,19 @@ struct FragmentInput {
   float3 view     [[ user(view)     ]];
 };
 
-device float3 rotate_quat(float4 rot, float3 v) {
+float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 
-device float light_attenuation(float distance, float2 factors) {
+float light_attenuation(float distance, float2 factors) {
   return 1.0 / (1.0 + distance*factors.x + distance*distance*factors.y);
 }
 
-device float shade_diffuse(float3 normal, float3 light) {
+float shade_diffuse(float3 normal, float3 light) {
   return saturate(dot(normal, light));
 }
 
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
+float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
   float3 halfAngle = normalize(view + light);
   return pow(saturate(dot(normal, halfAngle)), hardness);
 }

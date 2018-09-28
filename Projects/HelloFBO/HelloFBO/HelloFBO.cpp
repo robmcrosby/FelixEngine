@@ -18,61 +18,49 @@ HelloFBO::~HelloFBO() {
 }
 
 void HelloFBO::initalize() {
-  _firstUniformMap = std::make_shared<fx::UniformMap>();
-  _secondUniformMap = std::make_shared<fx::UniformMap>();
-  _secondTextureMap = std::make_shared<fx::TextureMap>();
-  
-  setupFirstTask();
-  setupSecondTask();
+  setupFirstPass();
+  setupSecondPass();
 }
 
 void HelloFBO::update(float td) {
   // Rotate the Model
   _firstUniform.rotation *= fx::quat::RotZ(td);
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
-  
+
   // Update the Model Uniforms
-  (*_firstUniformMap)["MVP"] = _firstUniform;
-  _firstUniformMap->update();
+  _firstRenderPass->getUniformMap()["MVP"] = _firstUniform;
+  _firstRenderPass->getUniformMap().update();
   
-  _graphics->addTask(_firstTask);
-  _graphics->addTask(_secondTask);
+  _firstRenderPass->render();
+  _secondRenderPass->render();
 }
 
-void HelloFBO::setupFirstTask() {
-  _firstTask.frame = _graphics->createFrameBuffer();
-  _firstTask.frame->resize(1024, 1024);
-  _firstTask.frame->addColorTexture();
-  _firstTask.frame->addDepthBuffer();
+void HelloFBO::setupFirstPass() {
+  fx::RenderItem renderItem;
+  renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
+  renderItem.loadMeshFile("bunny.mesh");
+  renderItem.cullMode = fx::CULL_BACK;
+  renderItem.enableDepthTesting();
   
-  _firstTask.shader = _graphics->createShaderProgram();
-  _firstTask.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
+  _firstRenderPass = _graphics->createRenderPass();
+  _firstRenderPass->addRenderItem(renderItem);
+  _firstRenderPass->setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+  _firstRenderPass->setClearDepthStencil();
+  _firstRenderPass->resizeFrame(1024, 1024);
+  _firstRenderPass->addColorTexture();
+  _firstRenderPass->addDepthBuffer();
   
-  fx::VertexMeshData meshData;
-  fx::FileSystem::loadMesh(meshData, "bunny.mesh");
-  
-  _firstTask.mesh = _graphics->createVertexMesh();
-  _firstTask.mesh->load(meshData);
-  
-  fx::vec2 size = fx::vec2(_firstTask.frame->size());
+  fx::vec2 size = fx::vec2(_firstRenderPass->getFrameSize());
   float width = 2.0f;
   float height = 2.0f * size.h/size.w;
   _firstUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _firstUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _firstUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _firstUniform.model = _firstUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.2f, 0.2f, 0.2f));
-  (*_firstUniformMap)["MVP"] = _firstUniform;
-  _firstTask.uniforms.push_back(_firstUniformMap);
-  
-  _firstTask.cullMode = fx::CULL_BACK;
-  
-  _firstTask.setClearColor(fx::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-  _firstTask.setClearDepthStencil();
-  
-  _firstTask.enableDepthTesting();
+  _firstRenderPass->getUniformMap()["MVP"] = _firstUniform;
 }
 
-void HelloFBO::setupSecondTask() {
+void HelloFBO::setupSecondPass() {
   float vertexBuffer[] = {
     -1.0f, -1.0f, 0.0f, 1.0f,
     -1.0f,  1.0f, 0.0f, 1.0f,
@@ -86,30 +74,26 @@ void HelloFBO::setupSecondTask() {
     1.0f, 1.0f,
     1.0f, 0.0f
   };
+
+  fx::RenderItem renderItem;
+  renderItem.loadShaderFunctions("texture_vertex", "texture_fragment");
+  renderItem.setMeshVertexBuffer("Position", 4, 4, vertexBuffer);
+  renderItem.setMeshVertexBuffer("UV", 2, 4, uvBuffer);
+  renderItem.setMeshPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
+  renderItem.loadMesh();
+  renderItem.addTexture(_firstRenderPass->getColorTexture());
   
-  _secondTask.frame = _graphics->getFrameBuffer("MainWindow");
-  _secondTask.frame->setToWindow(0);
+  _secondRenderPass = _graphics->createRenderPass();
+  _secondRenderPass->addRenderItem(renderItem);
+  _secondRenderPass->setFrameToWindow(0);
+  _secondRenderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   
-  _secondTask.shader = _graphics->createShaderProgram();
-  _secondTask.shader->loadShaderFunctions("texture_vertex", "texture_fragment");
-  
-  _secondTask.mesh = _graphics->createVertexMesh();
-  _secondTask.mesh->setVertexBuffer("Position", 4, 4, vertexBuffer);
-  _secondTask.mesh->setVertexBuffer("UV", 2, 4, uvBuffer);
-  _secondTask.mesh->setPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
-  _secondTask.mesh->loadBuffers();
-  
-  _secondTextureMap->addTexture(_firstTask.frame->getColorTexture(0));
-  _secondTask.textures = _secondTextureMap;
-  
-  fx::vec2 size = fx::vec2(_secondTask.frame->size());
+  fx::vec2 size = fx::vec2(_secondRenderPass->getFrameSize());
   float width = 2.0f;
   float height = 2.0f * size.h/size.w;
   _secondUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _secondUniform.view = fx::mat4();
   _secondUniform.model = fx::mat4::Scale(fx::vec3(0.8f, 0.8f, 0.8f));
-  (*_secondUniformMap)["MVP"] = _secondUniform;
-  _secondTask.uniforms.push_back(_secondUniformMap);
-  
-  _secondTask.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _secondRenderPass->getUniformMap()["MVP"] = _secondUniform;
+
 }

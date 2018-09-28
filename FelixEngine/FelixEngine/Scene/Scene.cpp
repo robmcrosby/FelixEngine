@@ -37,28 +37,19 @@ bool Scene::loadXML(const XMLTree::Node &node) {
   for (auto &subNode : node)
     success &= loadObject(*subNode);
   return success;
-  
-//  for (auto subNode : node) {
-//    if (*subNode == "FrameBuffer") {
-//      if (subNode->hasAttribute("window"))
-//        success &= addWindow(*subNode);
-//      else
-//        success &= addFrame(*subNode);
-//    }
-//    else if (*subNode == "ShaderProgram")
-//      success &= addShader(*subNode);
-//    else if (*subNode == "VertexMesh")
-//      success &= addMesh(*subNode);
-//    else if (*subNode == "LightRig")
-//      success &= addLightRig(*subNode);
-//    else if (*subNode == "Material")
-//      success &= addMaterial(*subNode);
-//    else
-//      success &= addModel(*subNode) || addCamera(*subNode);
-//  }
 }
 
 bool Scene::loadObject(const XMLTree::Node &node) {
+  if (node == "RenderPass")
+    return getRenderingPass(node.attribute("name"))->loadXML(node);
+  if (node == "Shader")
+    return getShaderProgram(node.attribute("name"))->loadXML(node);
+  if (node == "Frame")
+    return getFrameBuffer(node.attribute("name"))->loadXML(node);
+  if (node == "Mesh")
+    return getVertexMesh(node.attribute("name"))->loadXML(node);
+  if (node == "Texture")
+    return getTextureBuffer(node.attribute("name"))->loadXML(node);
   SharedObject obj = build(node);
   return obj ? true : false;
 }
@@ -98,11 +89,85 @@ void Scene::removeObject(const string &name) {
 }
 
 void Scene::update(float td) {
+  // Update each of the objects in the Scene
   Objects::iterator itr = _objects.begin();
   while (itr != _objects.end()) {
     (*itr)->update(td);
     ++itr;
   }
+  
+  // Render each of the Render Passes
+  for (auto &pass : _renderingPasses)
+    pass->render();
+  
+  // Clear each of the Render Passes
+  for (auto &pass : _renderingPasses)
+    pass->clearRenderItems();
+}
+
+void Scene::addRenderingPass(RenderPassPtr renderPass) {
+  _renderingPasses.push_back(renderPass);
+}
+
+void Scene::clearRenderingPasses() {
+  _renderingPasses.clear();
+  _renderingPassMap.clear();
+}
+
+RenderPassPtr Scene::createRenderingPass() {
+  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+  addRenderingPass(renderPass);
+  return renderPass;
+}
+
+RenderPassPtr Scene::getRenderingPass(const string &name) {
+  if (name == "")
+    return createRenderingPass();
+  if (!_renderingPassMap.count(name))
+    _renderingPassMap[name] = createRenderingPass();
+  return _renderingPassMap.at(name);
+}
+
+RenderPassPtr Scene::getRenderingPass(const XMLTree::Node &node) {
+  RenderPassPtr renderPass;
+  if (node.hasAttribute("name"))
+    renderPass = getRenderingPass(node.attribute("name"));
+  else
+    renderPass = createRenderingPass();
+  renderPass->loadXML(node);
+  return renderPass;
+}
+
+ShaderProgramPtr Scene::getShaderProgram(const std::string &name) {
+  ShaderProgramPtr shader = Graphics::getInstance().getShaderProgram(name);
+  SharedObject object = static_pointer_cast<iObject>(shader);
+  addObject(object);
+  return shader;
+}
+
+FrameBufferPtr Scene::getFrameBuffer(const std::string &name) {
+  FrameBufferPtr frame = Graphics::getInstance().getFrameBuffer(name);
+  SharedObject object = static_pointer_cast<iObject>(frame);
+  addObject(object);
+  return frame;
+}
+
+VertexMeshPtr Scene::getVertexMesh(const string &name) {
+  VertexMeshPtr mesh = Graphics::getInstance().getVertexMesh(name);
+  SharedObject object = static_pointer_cast<iObject>(mesh);
+  addObject(object);
+  return mesh;
+}
+
+TextureBufferPtr Scene::getTextureBuffer(const string &name) {
+  TextureBufferPtr texture = Graphics::getInstance().getTextureBuffer(name);
+  SharedObject object = static_pointer_cast<iObject>(texture);
+  addObject(object);
+  return texture;
+}
+
+ScenePtr Scene::make() {
+  return make_shared<Scene>();
 }
 
 BuilderMap& Scene::getBuilderMap() {

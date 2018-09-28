@@ -22,12 +22,8 @@ ARTracker::~ARTracker() {
 
 void ARTracker::initalize() {
   _scene.loadXMLFile("Scene.xml");
-  _renderScheme.push_back("MainPass");
 }
 
 void ARTracker::update(float td) {
   _scene.update(td);
-  
-  fx::RenderPass::renderPasses(_renderScheme);
-  fx::RenderPass::resetPasses();
 }

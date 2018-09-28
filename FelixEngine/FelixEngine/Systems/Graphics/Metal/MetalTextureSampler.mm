@@ -7,7 +7,7 @@
 //
 
 #import "MetalTextureSampler.h"
-#import "GraphicTask.h"
+#import "GraphicStates.h"
 
 
 using namespace fx;

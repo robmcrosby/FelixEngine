@@ -9,7 +9,6 @@
 #include "MetalFrameBuffer.h"
 #include "MetalTextureBuffer.h"
 #include "MetalGraphics.h"
-#include "GraphicTask.h"
 
 #include <Metal/Metal.h>
 #include <UIKit/UIKit.h>
@@ -131,16 +130,16 @@ int MetalFrameBuffer::pipelineId(const BlendState &blending) const {
   return _idFlag | blending.flags;
 }
 
-id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task) {
+id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer> buffer, const ActionState &depthStencilAction, const ActionState *colorActions) {
   if (_metalLayer != nil && _drawable == nil)
     getNextDrawable();
   
   MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
   int index = 0;
   for (id <MTLTexture> colorAttachment : _colorAttachments) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.colorActions[index].loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.colorActions[index].storeAction);
-    vec4 color = task.colorActions[index].clearColor;
+    MTLLoadAction loadAction = getMetalLoadAction(colorActions[index].loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(colorActions[index].storeAction);
+    vec4 color = colorActions[index].clearColor;
     
     descriptor.colorAttachments[index].texture     = colorAttachment;
     descriptor.colorAttachments[index].loadAction  = loadAction;
@@ -150,23 +149,23 @@ id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer
   }
   
   if (_depthAttachment != nil) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAction.loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAction.storeAction);
+    MTLLoadAction loadAction = getMetalLoadAction(depthStencilAction.loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(depthStencilAction.storeAction);
     
     descriptor.depthAttachment.texture     = _depthAttachment;
     descriptor.depthAttachment.loadAction  = loadAction;
     descriptor.depthAttachment.storeAction = storeAction;
-    descriptor.depthAttachment.clearDepth  = (double)task.depthStencilAction.clearColor.r;
+    descriptor.depthAttachment.clearDepth  = (double)depthStencilAction.clearColor.r;
   }
   
   if (_stencilAttachment != nil) {
-    MTLLoadAction loadAction = getMetalLoadAction(task.depthStencilAction.loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(task.depthStencilAction.storeAction);
+    MTLLoadAction loadAction = getMetalLoadAction(depthStencilAction.loadAction);
+    MTLStoreAction storeAction = getMetalStoreAction(depthStencilAction.storeAction);
     
     descriptor.stencilAttachment.texture      = _stencilAttachment;
     descriptor.stencilAttachment.loadAction   = loadAction;
     descriptor.stencilAttachment.storeAction  = storeAction;
-    descriptor.stencilAttachment.clearStencil = (uint32_t)task.depthStencilAction.clearColor.g;
+    descriptor.stencilAttachment.clearStencil = (uint32_t)depthStencilAction.clearColor.g;
   }
   
   return [buffer renderCommandEncoderWithDescriptor:descriptor];

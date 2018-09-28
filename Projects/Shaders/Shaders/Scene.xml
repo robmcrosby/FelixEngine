@@ -1,27 +1,11 @@
 <?xml version="1.0" ?>
 <Scene name="test">
-  <Frame name="MainFrame" window="0">
-    <Buffer type="depth"/>
-  </Frame>
-  <Mesh file="Mesh.mesh" name="Mesh"/>
-  <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
-  <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
-    <Color>1.000000, 1.000000, 1.000000</Color>
-    <Transform>
-      <Scale>1.000000, 1.000000, 1.000000</Scale>
-      <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
-      <Location>4.076245, 5.903862, -1.005454</Location>
-    </Transform>
-  </Light>
-  <Light energy="0.500000" name="LightB" pass="MainPass" type="point">
-    <Color>0.098603, 0.068963, 1.000000</Color>
-    <Falloff/>
-    <Transform>
-      <Scale>1.000000, 1.000000, 1.000000</Scale>
-      <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
-      <Location>-2.271056, -0.135679, 4.769545</Location>
-    </Transform>
-  </Light>
+  <RenderPass name="MainPass">
+    <Frame name="MainFrame" window="0">
+      <Buffer type="depth"/>
+    </Frame>
+    <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
+  </RenderPass>
   <Camera frame="MainFrame" name="Camera" pass="MainPass">
     <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
     <Transform>
@@ -29,8 +13,28 @@
       <Rotation>-0.240452, 0.395910, 0.141601, 0.874864</Rotation>
       <Location>6.186304, 5.972611, 6.016000</Location>
     </Transform>
-    <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </Camera>
+  <LightRig name="LightRig" pass="MainPass">
+    <Light energy="1.000000" name="LightA" pass="MainPass" type="directional">
+      <Color>1.000000, 1.000000, 1.000000</Color>
+      <Transform>
+        <Scale>1.000000, 1.000000, 1.000000</Scale>
+        <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
+        <Location>4.076245, 5.903862, -1.005454</Location>
+      </Transform>
+    </Light>
+    <Light energy="0.500000" name="LightB" pass="MainPass" type="point">
+      <Color>0.098603, 0.068963, 1.000000</Color>
+      <Falloff/>
+      <Transform>
+        <Scale>1.000000, 1.000000, 1.000000</Scale>
+        <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+        <Location>-2.271056, -0.135679, 4.769545</Location>
+      </Transform>
+    </Light>
+  </LightRig>
+  <Mesh file="Mesh.mesh" name="Mesh"/>
+  <Texture name="Texture" file="grid.png" min="linear" mag="linear"/>
   <Model mesh="Mesh" name="ModelA" pass="MainPass">
     <Material name="MaterialA">
       <Shader name="Shadeless" vertex="v_shadeless" fragment="f_shadeless"/>

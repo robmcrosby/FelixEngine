@@ -14,6 +14,7 @@
 namespace fx {
   struct MeshBuilder {
     static VertexMeshPtr createFromFile(const std::string &file);
+    static VertexMeshPtr createPlane();
     static VertexMeshPtr createCube(float size = 1.0f);
   };
 }

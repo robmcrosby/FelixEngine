@@ -25,17 +25,10 @@ ARCamera::~ARCamera() {
 }
 
 void ARCamera::update(float td) {
-  Camera::update(td);
-  
   TrackerSystem *tracker = &TrackerSystem::getInstance();
   if (tracker != nullptr) {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());
   }
-}
-
-void ARCamera::applyToTask(GraphicTask &task) {
-  TrackerSystem &tracker = TrackerSystem::getInstance();
-  if (!tracker.drawLiveCamera())
-    Camera::setupTemplateTask(task);
+  Camera::update(td);
 }

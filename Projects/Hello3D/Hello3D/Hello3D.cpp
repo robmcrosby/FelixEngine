@@ -18,48 +18,36 @@ Hello3D::~Hello3D() {
 }
 
 void Hello3D::initalize() {
-  _uniformMap = std::make_shared<fx::UniformMap>();
+  fx::RenderItem renderItem;
+  renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
+  renderItem.loadMeshFile("bunnyMesh.mesh");
+  renderItem.cullMode = fx::CULL_BACK;
+  renderItem.enableDepthTesting();
   
-  _task.frame = _graphics->getFrameBuffer("MainWindow");
-  _task.frame->setToWindow(0);
-  _task.frame->addDepthBuffer();
+  _renderPass = _graphics->createRenderPass();
+  _renderPass->setFrameToWindow(0);
+  _renderPass->addDepthBuffer();
+  _renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  _renderPass->setClearDepthStencil();
+  _renderPass->addRenderItem(renderItem);
   
-  _task.shader = _graphics->createShaderProgram();
-  _task.shader->loadShaderFunctions("basic_vertex", "basic_fragment");
-  
-  fx::VertexMeshData meshData;
-  fx::FileSystem::loadMesh(meshData, "bunnyMesh.mesh");
-  
-  _task.mesh = _graphics->createVertexMesh();
-  _task.mesh->load(meshData);
-  
-  fx::vec2 size = fx::vec2(_task.frame->size());
+  fx::vec2 size = fx::vec2(_renderPass->getFrameSize());
   float width = 2.0f;
   float height = 2.0f * size.h/size.w;
   _mvpUniform.projection = fx::mat4::Ortho(-width/2.0f, width/2.0f, -height/2.0f, height/2.0f, -100.0f, 100.0f);
   _mvpUniform.view = fx::mat4::LookAt(fx::vec3(10.0f, 10.0f, 10.0f), fx::vec3(0.0f, 0.0f, 0.0f), fx::vec3(0.0f, 1.0f, 0.0f));
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * fx::quat::RotZ(M_PI/2.0f);
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
-  
-  (*_uniformMap)["MVP"] = _mvpUniform;
-  _task.uniforms.push_back(_uniformMap);
-  
-  _task.cullMode = fx::CULL_BACK;
-  
-  _task.setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
-  _task.setClearDepthStencil();
-  
-  _task.enableDepthTesting();
+  _renderPass->getUniformMap()["MVP"] = _mvpUniform;
 }
 
 void Hello3D::update(float td) {
   // Rotate the Model
   _mvpUniform.rotation *= fx::quat::RotZ(0.02f);
   _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
+
+  _renderPass->getUniformMap()["MVP"] = _mvpUniform;
+  _renderPass->getUniformMap().update();
   
-  // Update the Model Uniforms
-  (*_uniformMap)["MVP"] = _mvpUniform;
-  _uniformMap->update();
-  
-  _graphics->addTask(_task);
+  _renderPass->render();
 }

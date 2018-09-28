@@ -8,16 +8,14 @@
 
 #include "TrackerSystem.h"
 #include "Graphics.h"
-#include "GraphicTask.h"
+#include "UniformMap.h"
 #include "Macros.h"
 
 #ifndef ARKitTracker_h
 #define ARKitTracker_h
 
-OBJC_CLASS(ARSession)
 OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
-OBJC_CLASS(ARAnchor)
 OBJC_CLASS(ARPlaneAnchor)
 
 namespace fx {
@@ -28,19 +26,16 @@ namespace fx {
   class ARKitTracker: public TrackerSystem {
   private:
     MetalGraphics *_graphics;
-    ARSession     *_arSession;
     ARDelegate    *_arDelegate;
     
-    bool _pointCloudEnabled;
-    ARPointVector _pointCloud;
+    ARPoints _pointCloud;
     
     std::shared_ptr<MetalTextureBuffer> _cameraImageY;
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
     
     UniformsPtr _uniformMap;
-    GraphicTask _task;
     
-    TrackedPlanes _trackedPlanes;
+    ARPlanes _trackedPlanes;
     
   public:
     ARKitTracker();
@@ -52,16 +47,17 @@ namespace fx {
     virtual mat4 getCameraProjection();
     virtual mat4 getImageTransform();
     
-    virtual void enablePointCloud(bool enable);
-    virtual const ARPointVector& getPointCloud() const;
+    virtual void enableFeatureTracking(unsigned int featureFlags);
+    virtual void disableFeatureTracking(unsigned int featureFlags);
+    
+    virtual const ARPoints& getPointCloud() const;
     
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
     
-    virtual bool drawLiveCamera();
-    void setupLiveCamera();
+    virtual ARHitResults hitTest(const Touch &touch);
     
-    virtual const TrackedPlanes& trackedPlanes() const;
+    virtual const ARPlanes& trackedPlanes() const;
     
   public:
     void arSessionFailed();
@@ -74,9 +70,10 @@ namespace fx {
     void planeAnchorUpdated(ARPlaneAnchor *anchor);
     void planeAnchorRemoved(ARPlaneAnchor *anchor);
     
+    ARPlane planeForAnchor(ARPlaneAnchor *anchor);
+    
   private:
-    void updateTrackedPlane(const TrackedPlane &plane);
-    void calculateVertices(std::vector<vec4> &vertices);
+    void updateTrackedPlane(const ARPlane &plane);
   };
   
 }

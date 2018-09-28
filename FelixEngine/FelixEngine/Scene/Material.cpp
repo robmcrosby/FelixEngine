@@ -7,7 +7,6 @@
 //
 
 #include "Material.h"
-#include "GraphicTask.h"
 
 
 using namespace fx;
@@ -51,19 +50,12 @@ bool Material::loadXMLItem(const XMLTree::Node &node) {
     return addTexture(node);
   if (node == "Textures")
     return addTexture(node);
+  cerr << "Unknown XML Node in Material:" << endl << node << endl;
   return false;
 }
 
 void Material::update(float dt) {
   (*_uniforms)["material"] = _properties;
-}
-
-void Material::setToTask(GraphicTask &task) {
-  task.uniforms.push_back(_uniforms);
-  task.textures = _textures;
-  task.shader = _shader;
-  task.depthState = _depthState;
-  task.blendState = _blendState;
 }
 
 bool Material::setShader(const XMLTree::Node &node) {
@@ -73,6 +65,11 @@ bool Material::setShader(const XMLTree::Node &node) {
 
 void Material::setShader(const string &name) {
   _shader = Graphics::getInstance().getShaderProgram(name);
+}
+
+bool Material::loadShader(const string &vertex, const string &fragment) {
+  _shader = Graphics::getInstance().createShaderProgram();
+  return _shader->loadShaderFunctions(vertex, fragment);
 }
 
 bool Material::addTexture(const XMLTree::Node &node) {

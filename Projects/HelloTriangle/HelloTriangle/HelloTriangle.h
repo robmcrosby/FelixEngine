@@ -11,11 +11,12 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Graphics.h>
-#import <FelixEngine/GraphicTask.h>
+#import <FelixEngine/RenderPass.h>
+
 
 class HelloTriangle: public fx::Application {
 private:
-  fx::GraphicTask _task;
+  fx::RenderPassPtr _renderPass;
   
 public:
   HelloTriangle();

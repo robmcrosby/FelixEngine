@@ -31,7 +31,6 @@ void Shaders::initalize() {
   _models.push_back(_scene.get<fx::Model>("ModelI"));
   
   _rotation = _models.front()->transform()->localRotation();
-  _renderScheme.push_back("MainPass");
 }
 
 void Shaders::update(float td) {
@@ -40,7 +39,4 @@ void Shaders::update(float td) {
     model->transform()->setRotation(_rotation);
   
   _scene.update(td);
-  
-  fx::RenderPass::renderPasses(_renderScheme);
-  fx::RenderPass::resetPasses();
 }

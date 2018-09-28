@@ -11,11 +11,9 @@
 
 #import <FelixEngine/Application.h>
 #import <FelixEngine/Scene.h>
-#import <FelixEngine/RenderPass.h>
 
 class ARTracker: public fx::Application {
 private:
-  fx::RenderScheme _renderScheme;
   fx::Scene _scene;
   
 public:

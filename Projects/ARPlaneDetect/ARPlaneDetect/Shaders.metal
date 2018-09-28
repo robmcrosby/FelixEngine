@@ -15,6 +15,7 @@ using namespace metal;
 
 struct Model {
   float4x4 model;
+  float4x4 texture;
   float4   rotation;
 };
 
@@ -39,10 +40,10 @@ struct Light {
 };
 
 
-device float3 rotate_quat(float4 rot, float3 v);
-device float light_attenuation(float distance, float2 factors);
-device float shade_diffuse(float3 normal, float3 light);
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness);
+float3 rotate_quat(float4 rot, float3 v);
+float light_attenuation(float distance, float2 factors);
+float shade_diffuse(float3 normal, float3 light);
+float shade_specular(float3 normal, float3 view, float3 light, float hardness);
 
 
 struct VertexOutput {
@@ -58,19 +59,19 @@ struct FragmentInput {
   float3 view     [[ user(view)     ]];
 };
 
-device float3 rotate_quat(float4 rot, float3 v) {
+float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 
-device float light_attenuation(float distance, float2 factors) {
+float light_attenuation(float distance, float2 factors) {
   return 1.0 / (1.0 + distance*factors.x + distance*distance*factors.y);
 }
 
-device float shade_diffuse(float3 normal, float3 light) {
+float shade_diffuse(float3 normal, float3 light) {
   return saturate(dot(normal, light));
 }
 
-device float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
+float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
   float3 halfAngle = normalize(view + light);
   return pow(saturate(dot(normal, halfAngle)), hardness);
 }
@@ -79,12 +80,13 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
                                  const device packed_float4 *Normal   [[ buffer(1) ]],
                                  constant     Camera        *camera   [[ buffer(2) ]],
                                  constant     Model         *model    [[ buffer(3) ]],
-                                 unsigned int   vid      [[ vertex_id ]]) {
+                                              unsigned int   vid      [[ vertex_id ]],
+                                              unsigned int   iid      [[ instance_id ]]) {
   VertexOutput output;
-  float4 location = model->model * float4(Position[vid]);
+  float4 location = model[iid].model * float4(Position[vid]);
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, float4(Normal[vid]).xyz);
+  output.normal = rotate_quat(model[iid].rotation, float4(Normal[vid]).xyz);
   output.view   = camera->position.xyz - output.position.xyz;
   return output;
 }

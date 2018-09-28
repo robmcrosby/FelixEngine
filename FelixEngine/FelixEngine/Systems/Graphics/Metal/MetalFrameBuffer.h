@@ -23,7 +23,6 @@
 
 namespace fx {
   typedef std::vector<id <MTLTexture> > attachmentsList;
-  class GraphicTask;
   class BlendState;
   
   class MetalFrameBuffer: public FrameBuffer {
@@ -58,7 +57,7 @@ namespace fx {
     
     int pipelineId(const BlendState &blending) const;
     
-    id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const GraphicTask &task);
+    id <MTLRenderCommandEncoder> createEncoder(id<MTLCommandBuffer> buffer, const ActionState &depthStencilAction, const ActionState *colorActions);
     MTLRenderPipelineDescriptor* createPipelineDescriptor(const BlendState &blending) const;
     
   private:

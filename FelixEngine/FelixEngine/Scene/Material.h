@@ -44,17 +44,17 @@ namespace fx {
     virtual bool loadXML(const XMLTree::Node &node);
     virtual void update(float dt);
     
-    virtual void setToTask(GraphicTask &task);
-    
     bool setShader(const XMLTree::Node &node);
     void setShader(const std::string &name);
     void setShader(ShaderProgramPtr &shader) {_shader = shader;}
     ShaderProgramPtr shader() {return _shader;}
+    bool loadShader(const std::string &vertex, const std::string &fragment);
     
     bool addTexture(const XMLTree::Node &node);
     bool addTextures(const XMLTree::Node &node);
     void addTexture(TextureBufferPtr &texture, SamplerState sampler = SamplerState());
     TexturesPtr textures() {return _textures;}
+    UniformsPtr uniforms() {return _uniforms;}
     
     STR_Material& properties() {return _properties;}
     
@@ -83,7 +83,6 @@ namespace fx {
     float diffuseSmooth() const {return _properties.factors.w;}
     float diffuseRoughness() const {return _properties.factors.z;}
     float diffuseAlbedo() const {return _properties.factors.w;}
-    
     
     bool setSpecular(const XMLTree::Node &node);
     void setSpecular(const vec3 &color, float factor);

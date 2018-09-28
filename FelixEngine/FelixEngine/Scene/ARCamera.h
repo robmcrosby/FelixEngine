@@ -10,7 +10,6 @@
 #define ARCamera_h
 
 #include "Camera.h"
-#include "GraphicTask.h"
 
 namespace fx {
   DEFINE_OBJ_BUILDER(ARCamera)
@@ -24,7 +23,6 @@ namespace fx {
     virtual ~ARCamera();
     
     virtual void update(float td);
-    virtual void applyToTask(GraphicTask &task);
   };
 }
 

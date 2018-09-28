@@ -10,16 +10,14 @@
 #define ExampleScene_h
 
 #import <FelixEngine/Application.h>
-#import <FelixEngine/GraphicTask.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Scene.h>
 #import <FelixEngine/Model.h>
 
 class ExampleScene: public fx::Application {
   private:
-  fx::RenderScheme _renderScheme;
-  
-  fx::Scene _scene;
+  fx::RenderPassPtr _renderPass;
+  fx::ScenePtr _scene;
   fx::ModelPtr _model;
   
   public:
