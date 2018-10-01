@@ -112,6 +112,8 @@ namespace fx {
     virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node) {
       bool success = true;
+      if (node.hasAttribute("width") && node.hasAttribute("height"))
+        resizeFrame(node.attributeAsInt("width"), node.attributeAsInt("height"));
       if (node.hasAttribute("frame"))
         setFrame(node.attribute("frame"));
       if (node.hasAttribute("sorted"))

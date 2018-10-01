@@ -8,6 +8,7 @@
 
 #include "GraphicResources.h"
 #include "FileSystem.h"
+#include "MeshBuilder.h"
 
 
 using namespace fx;
@@ -27,6 +28,9 @@ bool VertexMesh::loadXML(const XMLTree::Node &node) {
   if (node.hasAttribute("file")) {
     if (FileSystem::loadMesh(meshData, node.attribute("file")))
       return load(meshData);
+  }
+  else if (node.hasAttribute("primitive")) {
+    return MeshBuilder::loadPrimitiveToMesh(this, node);
   }
   else {
     if (meshData.loadXML(node))

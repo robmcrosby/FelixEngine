@@ -23,6 +23,8 @@
 		C1407B37215EFBD500A35875 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1407B36215EFBD500A35875 /* Shaders.metal */; };
 		C1407B39215EFBDD00A35875 /* bunny.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1407B38215EFBDD00A35875 /* bunny.mesh */; };
 		C1407B3C215EFC3500A35875 /* ARScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1407B3A215EFC3500A35875 /* ARScanner.cpp */; };
+		C1407B3E21618AB700A35875 /* Scene.xml in Resources */ = {isa = PBXBuildFile; fileRef = C1407B3D21618AB600A35875 /* Scene.xml */; };
+		C1407B402161924100A35875 /* Mesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = C1407B3F2161924100A35875 /* Mesh.mesh */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		C1407B38215EFBDD00A35875 /* bunny.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunny.mesh; sourceTree = "<group>"; };
 		C1407B3A215EFC3500A35875 /* ARScanner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ARScanner.cpp; sourceTree = "<group>"; };
 		C1407B3B215EFC3500A35875 /* ARScanner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARScanner.h; sourceTree = "<group>"; };
+		C1407B3D21618AB600A35875 /* Scene.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Scene.xml; sourceTree = "<group>"; };
+		C1407B3F2161924100A35875 /* Mesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = Mesh.mesh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 		C1407B08215EF83000A35875 /* ARScanner */ = {
 			isa = PBXGroup;
 			children = (
+				C1407B3F2161924100A35875 /* Mesh.mesh */,
+				C1407B3D21618AB600A35875 /* Scene.xml */,
 				C1407B38215EFBDD00A35875 /* bunny.mesh */,
 				C1407B36215EFBD500A35875 /* Shaders.metal */,
 				C1407B09215EF83000A35875 /* AppDelegate.h */,
@@ -230,6 +236,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1407B3E21618AB700A35875 /* Scene.xml in Resources */,
+				C1407B402161924100A35875 /* Mesh.mesh in Resources */,
 				C1407B16215EF83300A35875 /* LaunchScreen.storyboard in Resources */,
 				C1407B39215EFBDD00A35875 /* bunny.mesh in Resources */,
 				C1407B13215EF83300A35875 /* Assets.xcassets in Resources */,

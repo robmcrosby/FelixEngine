@@ -10,9 +10,11 @@
 #define ARScanner_h
 
 #import <FelixEngine/Application.h>
+#import <FelixEngine/Scene.h>
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Quaternion.h>
+#import <FelixEngine/Transform.h>
 
 struct MVPUniform {
   fx::mat4 projection, view, model;
@@ -21,11 +23,14 @@ struct MVPUniform {
 
 class ARScanner: public fx::Application {
 private:
-  fx::RenderPassPtr _firstRenderPass;
-  fx::RenderPassPtr _secondRenderPass;
+  fx::Scene _scene;
+  fx::TransformPtr _transform;
   
-  MVPUniform _firstUniform;
-  MVPUniform _secondUniform;
+//  fx::RenderPassPtr _firstRenderPass;
+//  fx::RenderPassPtr _secondRenderPass;
+//
+//  MVPUniform _firstUniform;
+//  MVPUniform _secondUniform;
   
 public:
   ARScanner();
@@ -35,8 +40,8 @@ public:
   virtual void update(float td);
   
 private:
-  void setupFirstPass();
-  void setupSecondPass();
+//  void setupFirstPass();
+//  void setupSecondPass();
 };
 
 #endif /* ARScanner_h */

@@ -22,38 +22,9 @@ VertexMeshPtr MeshBuilder::createFromFile(const std::string &file) {
   return mesh;
 }
 
-VertexMeshPtr MeshBuilder::createPlane() {
-  float positionBuffer[] = {
-    -1.0f, -1.0f, 0.0f,
-    -1.0f,  1.0f, 0.0f,
-     1.0f, -1.0f, 0.0f,
-     1.0f,  1.0f, 0.0f
-  };
-  float normalBuffer[] = {
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f
-  };
-  float uvBuffer[] = {
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f
-  };
-  
-  // Create the Mesh and set the buffers
+VertexMeshPtr MeshBuilder::createPlane(vec2 size) {
   VertexMeshPtr mesh = Graphics::getInstance().createVertexMesh();
-  mesh->setVertexBuffer("position", 3, 4, positionBuffer);
-  mesh->setVertexBuffer("normal", 3, 4, normalBuffer);
-  mesh->setVertexBuffer("uv0", 3, 4, uvBuffer);
-  mesh->setPrimativeType(VERTEX_TRIANGLE_STRIP);
-  
-  // Load and return the mesh
-  if (!mesh->loadBuffers()) {
-    cerr << "Error Loading UV Plane" << endl;
-    assert(false);
-  }
+  MeshBuilder::loadPlaneToMesh(mesh.get(), size);
   return mesh;
 }
 
@@ -104,4 +75,52 @@ VertexMeshPtr MeshBuilder::createCube(float size) {
   VertexMeshPtr mesh = Graphics::getInstance().createVertexMesh();
   mesh->load(meshData);
   return mesh;
+}
+
+bool MeshBuilder::loadPrimitiveToMesh(VertexMesh *mesh, const XMLTree::Node &node) {
+  string primitive = node.attribute("primitive");
+  if (primitive == "plane") {
+    vec2 size = node.hasAttribute("size") ? node.attribute("size") : vec2(2.0f, 2.0f);
+    MeshBuilder::loadPlaneToMesh(mesh, size);
+    return true;
+  }
+  // TODO: Implement More Mesh Primitives
+  
+  cerr << "Unknown Mesh Primitive: " << primitive << endl;
+  return false;
+}
+
+void MeshBuilder::loadPlaneToMesh(VertexMesh *mesh, vec2 size) {
+  size /= 2.0f;
+  
+  float positionBuffer[] = {
+    -size.x, -size.y, 0.0f,
+    -size.x,  size.y, 0.0f,
+     size.x, -size.y, 0.0f,
+     size.x,  size.y, 0.0f
+  };
+  float normalBuffer[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f
+  };
+  float uvBuffer[] = {
+    0.0f, 1.0f,
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
+  };
+  
+  // Set the buffers
+  mesh->setVertexBuffer("position", 3, 4, positionBuffer);
+  mesh->setVertexBuffer("normal", 3, 4, normalBuffer);
+  mesh->setVertexBuffer("uv0", 3, 4, uvBuffer);
+  mesh->setPrimativeType(VERTEX_TRIANGLE_STRIP);
+  
+  // Load the mesh
+  if (!mesh->loadBuffers()) {
+    cerr << "Error Loading UV Plane" << endl;
+    assert(false);
+  }
 }
