@@ -106,6 +106,7 @@ void Scene::update(float td) {
 }
 
 void Scene::addRenderingPass(RenderPassPtr renderPass) {
+  renderPass->setScene(this);
   _renderingPasses.push_back(renderPass);
 }
 

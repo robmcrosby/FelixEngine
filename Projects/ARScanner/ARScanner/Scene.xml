@@ -1,5 +1,12 @@
 <?xml version="1.0" ?>
 <Scene name="test">
+  <RenderPass name="ScanPass">
+    <Frame name="ScanFrame" width="1024" height="1024">
+      <Texture name="ScanTexture" type="color"/>
+      <Buffer type="depth"/>
+    </Frame>
+    <Clear color="0.0, 0.0, 0.0, 1.0" depth="1.0"/>
+  </RenderPass>
   <RenderPass name="MainPass">
     <Frame name="MainFrame" window="0">
       <Buffer type="depth"/>

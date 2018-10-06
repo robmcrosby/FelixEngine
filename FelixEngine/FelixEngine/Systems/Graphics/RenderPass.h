@@ -27,6 +27,7 @@ namespace fx {
    *
    */
   struct RenderPass: public iObject {
+    Scene *_scene;
     FrameBufferPtr frame;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
@@ -38,106 +39,41 @@ namespace fx {
     bool itemsSorted;
     RenderItems renderItems;
     
-    RenderPass(): sortItems(0), itemsSorted(0) {}
-    virtual ~RenderPass() {}
+    RenderPass();
+    virtual ~RenderPass();
     
-    void addRenderItem(const RenderItem &item) {
-      itemsSorted = false;
-      renderItems.push_back(item);
-    }
-    void clearRenderItems() {
-      itemsSorted = true;
-      renderItems.clear();
-    }
+    void addRenderItem(const RenderItem &item);
+    void clearRenderItems();
     
     virtual void render() = 0;
     
-    FrameBufferPtr getFrame() {
-      if (!frame)
-        frame = Graphics::getInstance().createFrameBuffer();
-      return frame;
-    }
-    ivec2 getFrameSize() {return getFrame()->size();}
-    void setFrame(const std::string &name) {frame = Graphics::getInstance().getFrameBuffer(name);}
-    bool setFrame(const XMLTree::Node &node) {
-      if (node.hasAttribute("name"))
-        setFrame(node.attribute("name"));
-      return getFrame()->loadXML(node);
-    }
-    bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
-    bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
-    bool addColorTexture() {return getFrame()->addColorTexture();}
-    bool addDepthBuffer() {return getFrame()->addDepthBuffer();}
-    TextureBufferPtr getColorTexture(int index = 0) {return getFrame()->getColorTexture(0);}
+    FrameBufferPtr getFrame();
+    ivec2 getFrameSize();
+    void setFrame(const std::string &name);
+    bool setFrame(const XMLTree::Node &node);
+    bool setFrameToWindow(int index);
+    bool resizeFrame(int width, int height);
+    bool addColorTexture();
+    bool addDepthBuffer();
+    TextureBufferPtr getColorTexture(int index = 0);
     
-    bool setClearSettings(const XMLTree::Node &node) {
-      if (node.hasAttribute("color"))
-        setClearColor(node.attribute("color"));
-      if (node.hasAttribute("depth"))
-        setClearDepthStencil(node.attributeAsFloat("depth"));
-      return true;
-    }
-    void setClearColor(const vec4 &color) {
-      for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
-        colorActions[i].loadAction = LOAD_CLEAR;
-        colorActions[i].clearColor = color;
-      }
-    }
-    void setDefaultColorActions() {
-      for (int i = 0; i < MAX_COLOR_ATTACHEMENTS; ++i) {
-        colorActions[i].loadAction = LOAD_LAST;
-        colorActions[i].storeAction = STORE_SAVE;
-        colorActions[i].clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-      }
-    }
-    void setClearDepthStencil(float depth = 1.0f, int stencil = 0) {
-      depthStencilAction.loadAction = LOAD_CLEAR;
-      depthStencilAction.clearColor = vec4(depth, (float)stencil, 0.0f, 1.0f);
-    }
-    void setDefaultDepthStencilActions() {
-      depthStencilAction.loadAction = LOAD_LAST;
-      depthStencilAction.storeAction = STORE_SAVE;
-      depthStencilAction.clearColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    }
+    bool setClearSettings(const XMLTree::Node &node);
+    void setClearColor(const vec4 &color);
+    void setDefaultColorActions();
+    void setClearDepthStencil(float depth = 1.0f, int stencil = 0);
+    void setDefaultDepthStencilActions();
     
-    void addUniformMap(UniformsPtr uniformMap) {uniforms.push_back(uniformMap);}
-    UniformMap& getUniformMap(int index = 0) {
-      while (uniforms.size() <= index)
-        uniforms.push_back(UniformMap::make());
-      return *uniforms.at(index).get();
-    }
-    void clearUniformMaps() {uniforms.clear();}
+    void addUniformMap(UniformsPtr uniformMap);
+    UniformMap& getUniformMap(int index = 0);
+    void clearUniformMaps();
     
-    virtual void setScene(Scene *scene) {}
+    virtual void setScene(Scene *scene);
     virtual void update(float dt) {}
-    virtual bool loadXML(const XMLTree::Node &node) {
-      bool success = true;
-      if (node.hasAttribute("width") && node.hasAttribute("height"))
-        resizeFrame(node.attributeAsInt("width"), node.attributeAsInt("height"));
-      if (node.hasAttribute("frame"))
-        setFrame(node.attribute("frame"));
-      if (node.hasAttribute("sorted"))
-        sortItems = node.attributeAsBoolean("sorted");
-      for (auto subNode : node)
-        success &= loadXMLItem(*subNode);
-      return success;
-    }
     
-    bool loadXMLItem(const XMLTree::Node &node) {
-      if (node == "Frame")
-        return setFrame(node);
-      if (node == "Clear")
-        return setClearSettings(node);
-      std::cerr << "Unknown XML Node in RenderPass:" << std::endl << node << std::endl;
-      return false;
-    }
+    virtual bool loadXML(const XMLTree::Node &node);
+    bool loadXMLItem(const XMLTree::Node &node);
     
-    void sortRenderItems() {
-      if (sortItems && !itemsSorted) {
-        sort(renderItems.begin(), renderItems.end());
-        itemsSorted = true;
-      }
-    }
+    void sortRenderItems();
   };
 }
 

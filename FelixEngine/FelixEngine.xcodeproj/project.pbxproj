@@ -40,6 +40,7 @@
 		C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D5F1F0BEB1600BE9958 /* TextureMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */ = {isa = PBXBuildFile; fileRef = C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */; };
 		C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */; };
+		C1407B4221695E1C00A35875 /* RenderPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1407B4121695E1C00A35875 /* RenderPass.cpp */; };
 		C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1412E5D1F37D892001E8D83 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C1443AEB1EF345000059BA9D /* Vector.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEA1EF345000059BA9D /* Vector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1443AED1EF345570059BA9D /* Matrix.h in Headers */ = {isa = PBXBuildFile; fileRef = C1443AEC1EF345570059BA9D /* Matrix.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -158,6 +159,7 @@
 		C1401D5F1F0BEB1600BE9958 /* TextureMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureMap.h; path = Systems/Graphics/TextureMap.h; sourceTree = "<group>"; };
 		C1401D611F0BF59700BE9958 /* MetalTextureSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalTextureSampler.h; path = Systems/Graphics/Metal/MetalTextureSampler.h; sourceTree = "<group>"; };
 		C1401D621F0BF59700BE9958 /* MetalTextureSampler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalTextureSampler.mm; path = Systems/Graphics/Metal/MetalTextureSampler.mm; sourceTree = "<group>"; };
+		C1407B4121695E1C00A35875 /* RenderPass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPass.cpp; path = Systems/Graphics/RenderPass.cpp; sourceTree = "<group>"; };
 		C1412E5D1F37D892001E8D83 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C1443AEA1EF345000059BA9D /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = Utilities/Vector.h; sourceTree = "<group>"; };
 		C1443AEC1EF345570059BA9D /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = Utilities/Matrix.h; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 				C14549502059E32C003156A0 /* MeshBuilder.cpp */,
 				C191F66020F18E7C00714F8B /* RenderItem.h */,
 				C191F65E20F18E6400714F8B /* RenderPass.h */,
+				C1407B4121695E1C00A35875 /* RenderPass.cpp */,
 				C1136C551EF224AA00BA1322 /* MetalGraphics */,
 				C1D1D7E1209B31D9000EB92C /* VulkanGraphics */,
 			);
@@ -661,6 +664,7 @@
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,
 				C14549522059E32C003156A0 /* MeshBuilder.cpp in Sources */,
 				C1EC49E12103E6650067E842 /* LightRig.cpp in Sources */,
+				C1407B4221695E1C00A35875 /* RenderPass.cpp in Sources */,
 				C1136C441EF1FC4A00BA1322 /* Application.cpp in Sources */,
 				C1707B2520F4372800A77FAC /* Model.cpp in Sources */,
 				C1D1D7E9209B33AF000EB92C /* MetalView.m in Sources */,

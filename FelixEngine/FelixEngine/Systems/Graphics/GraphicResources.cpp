@@ -66,17 +66,28 @@ bool TextureBuffer::loadFile(const std::string &file) {
   return false;
 }
 
+void FrameBuffer::setScene(Scene *scene) {
+  _scene = scene;
+}
 
 bool FrameBuffer::loadXML(const XMLTree::Node &node) {
   bool success = true;
-  if (node.hasAttribute("window"))
+  if (node.hasAttribute("window")) {
+    // Set to Existing Window Texture
     success &= setToWindow(node.attributeAsInt("window"));
+  }
+  else {
+    // Create A Frame Buffer Object
+    int width = node.hasAttribute("width") ? node.attributeAsInt("width") : 512;
+    int height = node.hasAttribute("height") ? node.attributeAsInt("height") : 512;
+    resize(width, height);
+  }
   
   for (auto subnode : node) {
     if (subnode->attribute("type") == "depth")
       addDepthBuffer();
     else
-      addColorTexture();
+      addColorTexture(node.attribute("name"));
   }
   return success;
 }

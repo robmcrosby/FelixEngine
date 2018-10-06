@@ -108,9 +108,12 @@ namespace fx {
   };
   
   struct FrameBuffer: iObject {
+    Scene *_scene;
+    
+    FrameBuffer(): _scene(0) {}
     virtual ~FrameBuffer() {}
     
-    virtual void setScene(Scene *scene) {}
+    virtual void setScene(Scene *scene);
     virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
     
@@ -120,7 +123,7 @@ namespace fx {
     virtual ivec2 size() const = 0;
     
     virtual bool addDepthBuffer() = 0;
-    virtual bool addColorTexture() = 0;
+    virtual bool addColorTexture(const std::string &name = "") = 0;
     
     virtual TextureBufferPtr getColorTexture(int index) = 0;
   };

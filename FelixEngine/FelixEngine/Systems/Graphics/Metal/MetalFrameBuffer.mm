@@ -9,6 +9,7 @@
 #include "MetalFrameBuffer.h"
 #include "MetalTextureBuffer.h"
 #include "MetalGraphics.h"
+#include "Scene.h"
 
 #include <Metal/Metal.h>
 #include <UIKit/UIKit.h>
@@ -112,18 +113,28 @@ bool MetalFrameBuffer::addDepthBuffer() {
   return _depthAttachment != nil;
 }
 
-bool MetalFrameBuffer::addColorTexture() {
+bool MetalFrameBuffer::addColorTexture(const std::string &name) {
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
                                                                                         width:(NSUInteger)_size.w
                                                                                        height:(NSUInteger)_size.h
                                                                                     mipmapped:NO];
   descriptor.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
   _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
+  
+  if (_scene == nullptr || name == "") {
+    _colorTextures.push_back(make_shared<MetalTextureBuffer>(_device, _colorAttachments.back()));
+  }
+  else {
+    MetalTexturePtr texture = static_pointer_cast<MetalTextureBuffer>(_scene->getTextureBuffer(name));
+    texture->setMetalTexture(_colorAttachments.back());
+    _colorTextures.push_back(texture);
+  }
   return _colorAttachments.back() != nil;
 }
 
 TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
-  return make_shared<MetalTextureBuffer>(_device, _colorAttachments.at(index)); //new MetalTextureBuffer(_device, _colorAttachments.at(index));
+  return _colorTextures.at(index);
+  //return make_shared<MetalTextureBuffer>(_device, _colorAttachments.at(index)); //new MetalTextureBuffer(_device, _colorAttachments.at(index));
 }
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {

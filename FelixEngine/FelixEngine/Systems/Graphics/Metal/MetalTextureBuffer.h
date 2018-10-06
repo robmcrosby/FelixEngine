@@ -8,6 +8,9 @@
 
 #include "GraphicResources.h"
 
+#ifndef MetalTextureBuffer_h
+#define MetalTextureBuffer_h
+
 @protocol MTLDevice;
 @protocol MTLTexture;
 @protocol MTLRenderCommandEncoder;
@@ -15,6 +18,9 @@
 
 
 namespace fx {
+  //class MetalTextureBuffer;
+  //typedef std::shared_ptr<MetalTextureBuffer> MetalTexturePtr;
+  
   class MetalTextureBuffer: public TextureBuffer {
   public:
     id <MTLDevice> _device;
@@ -37,4 +43,8 @@ namespace fx {
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
     void setMetalTexture(id <MTLTexture> texture);
   };
+  
+  typedef std::shared_ptr<MetalTextureBuffer> MetalTexturePtr;
 }
+
+#endif /* MetalTextureBuffer_h */

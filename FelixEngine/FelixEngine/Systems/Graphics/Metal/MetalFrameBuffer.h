@@ -7,6 +7,7 @@
 //
 
 #include "GraphicResources.h"
+#include "MetalTextureBuffer.h"
 #include <vector>
 
 @protocol MTLDevice;
@@ -22,7 +23,8 @@
 
 
 namespace fx {
-  typedef std::vector<id <MTLTexture> > attachmentsList;
+  typedef std::vector<id <MTLTexture> > AttachmentsList;
+  typedef std::vector<MetalTexturePtr> TexturesList;
   class BlendState;
   
   class MetalFrameBuffer: public FrameBuffer {
@@ -30,7 +32,8 @@ namespace fx {
     id <MTLDevice>  _device;
     id <MTLTexture> _depthAttachment;
     id <MTLTexture> _stencilAttachment;
-    attachmentsList _colorAttachments;
+    AttachmentsList _colorAttachments;
+    TexturesList    _colorTextures;
     
     CAMetalLayer *_metalLayer;
     id <CAMetalDrawable> _drawable;
@@ -48,7 +51,7 @@ namespace fx {
     virtual ivec2 size() const;
     
     virtual bool addDepthBuffer();
-    virtual bool addColorTexture();
+    virtual bool addColorTexture(const std::string &name);
     
     virtual TextureBufferPtr getColorTexture(int index);
     
