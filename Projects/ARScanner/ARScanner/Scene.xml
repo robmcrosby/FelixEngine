@@ -21,7 +21,15 @@
       <Location>6.186304, 5.972611, 6.016000</Location>
     </Transform>
   </Camera>
-  <LightRig name="LightRig" pass="MainPass">
+  <Camera name="Camera2" pass="ScanPass">
+    <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
+    <Transform>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Rotation>-0.240452, 0.395910, 0.141601, 0.874864</Rotation>
+      <Location>6.186304, 5.972611, 6.016000</Location>
+    </Transform>
+  </Camera>
+  <LightRig name="LightRig" pass="ScanPass">
     <Light energy="1.000000" type="directional">
       <Color>1.000000, 1.000000, 1.000000</Color>
       <Transform>
@@ -40,7 +48,7 @@
       </Transform>
     </Light>
   </LightRig>
-  <Model name="Model" pass="MainPass">
+  <Model name="Model" pass="ScanPass">
     <Mesh name="BunnyMesh" file="Mesh.mesh"/>
     <Material>
       <Shader vertex="v_normal" fragment="f_lambert_phong_2"/>
@@ -57,15 +65,14 @@
   </Model>
   <Model name="Plane" pass="MainPass">
     <Mesh name="PlaneMesh" primitive="plane"/>
-    <Material>
-      <Shader vertex="v_normal" fragment="f_lambert_phong_2"/>
-      <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
-      <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
-      <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
+    <Material name="Textured">
+      <Shader name="TexturedShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
+      <Texture name="ScanTexture"/>
+      <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
       <DepthState function="less" write="true"/>
     </Material>
     <Transform>
-      <Scale>1.000000, 1.000000, 1.000000</Scale>
+      <Scale>4.000000, 4.000000, 4.000000</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
       <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>

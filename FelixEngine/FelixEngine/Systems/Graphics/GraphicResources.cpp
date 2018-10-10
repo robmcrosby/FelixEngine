@@ -87,7 +87,7 @@ bool FrameBuffer::loadXML(const XMLTree::Node &node) {
     if (subnode->attribute("type") == "depth")
       addDepthBuffer();
     else
-      addColorTexture(node.attribute("name"));
+      addColorTexture(subnode->attribute("name"));
   }
   return success;
 }
