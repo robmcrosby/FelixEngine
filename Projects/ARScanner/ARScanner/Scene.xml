@@ -7,7 +7,7 @@
     </Frame>
     <Clear color="0.0, 0.0, 0.0, 1.0" depth="1.0"/>
   </RenderPass>
-  <RenderPass name="MainPass">
+  <RenderPass name="MainPass" sorted="true">
     <Frame name="MainFrame" window="0">
       <Buffer type="depth"/>
     </Frame>
@@ -77,4 +77,5 @@
       <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>
   </Model>
+  <ARVideo name="Video" pass="MainPass" layer="-1"/>
 </Scene>
