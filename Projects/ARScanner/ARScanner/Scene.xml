@@ -48,6 +48,7 @@
       </Transform>
     </Light>
   </LightRig>
+  <Mesh name="PlaneMesh" primitive="plane"/>
   <Model name="Model" pass="ScanPass">
     <Mesh name="BunnyMesh" file="Mesh.mesh"/>
     <Material>
@@ -63,8 +64,7 @@
       <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>
   </Model>
-  <Model name="Plane" pass="MainPass">
-    <Mesh name="PlaneMesh" primitive="plane"/>
+  <Model name="Preview" pass="MainPass" mesh="PlaneMesh">
     <Material name="Textured">
       <Shader name="TexturedShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
       <Texture name="ScanTexture"/>
@@ -72,7 +72,7 @@
       <DepthState function="less" write="true"/>
     </Material>
     <Transform>
-      <Scale>4.000000, 4.000000, 4.000000</Scale>
+      <Scale>1.000000, 1.000000, 1.000000</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
       <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>
