@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Projects/USDZViewer/USDZViewer.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Projects/ARPoints/ARPoints.xcodeproj">
    </FileRef>
    <FileRef
