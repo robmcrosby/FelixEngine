@@ -7,23 +7,67 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1255F61236108920021C567 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1255F60236108920021C567 /* CoreGraphics.framework */; };
+		C1255F63236108990021C567 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1255F62236108990021C567 /* Metal.framework */; };
+		C1255F65236108A80021C567 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1255F64236108A80021C567 /* QuartzCore.framework */; };
+		C1255F66236108AD0021C567 /* FelixEngine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1255F5C236108250021C567 /* FelixEngine.framework */; };
+		C1255F68236108C80021C567 /* FelixEngine.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C1255F5C236108250021C567 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C1255F6B236275E90021C567 /* UsdzViewer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1255F69236275E90021C567 /* UsdzViewer.cpp */; };
+		C1255F6D236277790021C567 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = C1255F6C236277790021C567 /* Shaders.metal */; };
 		C1A5BD75235FC58500B3CD21 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A5BD74235FC58500B3CD21 /* AppDelegate.m */; };
 		C1A5BD78235FC58500B3CD21 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A5BD77235FC58500B3CD21 /* SceneDelegate.m */; };
-		C1A5BD7B235FC58500B3CD21 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A5BD7A235FC58500B3CD21 /* ViewController.m */; };
+		C1A5BD7B235FC58500B3CD21 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A5BD7A235FC58500B3CD21 /* ViewController.mm */; };
 		C1A5BD7E235FC58500B3CD21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1A5BD7C235FC58500B3CD21 /* Main.storyboard */; };
 		C1A5BD80235FC58900B3CD21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1A5BD7F235FC58900B3CD21 /* Assets.xcassets */; };
 		C1A5BD83235FC58900B3CD21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1A5BD81235FC58900B3CD21 /* LaunchScreen.storyboard */; };
 		C1A5BD86235FC58900B3CD21 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1A5BD85235FC58900B3CD21 /* main.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C1255F5B236108250021C567 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1255F57236108250021C567 /* FelixEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C15CAEAD1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+		C1255F5D236108700021C567 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1255F57236108250021C567 /* FelixEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C15CAEAC1EEDEF33004FA3C7;
+			remoteInfo = FelixEngine;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C1255F67236108BF0021C567 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C1255F68236108C80021C567 /* FelixEngine.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		C1255F57236108250021C567 /* FelixEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FelixEngine.xcodeproj; path = ../../FelixEngine/FelixEngine.xcodeproj; sourceTree = "<group>"; };
+		C1255F60236108920021C567 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C1255F62236108990021C567 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C1255F64236108A80021C567 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C1255F69236275E90021C567 /* UsdzViewer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UsdzViewer.cpp; sourceTree = "<group>"; };
+		C1255F6A236275E90021C567 /* UsdzViewer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UsdzViewer.h; sourceTree = "<group>"; };
+		C1255F6C236277790021C567 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		C1A5BD70235FC58500B3CD21 /* USDZViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USDZViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1A5BD73235FC58500B3CD21 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C1A5BD74235FC58500B3CD21 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C1A5BD76235FC58500B3CD21 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		C1A5BD77235FC58500B3CD21 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		C1A5BD79235FC58500B3CD21 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		C1A5BD7A235FC58500B3CD21 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C1A5BD7A235FC58500B3CD21 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		C1A5BD7D235FC58500B3CD21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C1A5BD7F235FC58900B3CD21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C1A5BD82235FC58900B3CD21 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -36,17 +80,41 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1255F66236108AD0021C567 /* FelixEngine.framework in Frameworks */,
+				C1255F65236108A80021C567 /* QuartzCore.framework in Frameworks */,
+				C1255F63236108990021C567 /* Metal.framework in Frameworks */,
+				C1255F61236108920021C567 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C1255F58236108250021C567 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1255F5C236108250021C567 /* FelixEngine.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C1255F5F236108920021C567 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C1255F64236108A80021C567 /* QuartzCore.framework */,
+				C1255F62236108990021C567 /* Metal.framework */,
+				C1255F60236108920021C567 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C1A5BD67235FC58500B3CD21 = {
 			isa = PBXGroup;
 			children = (
+				C1255F57236108250021C567 /* FelixEngine.xcodeproj */,
 				C1A5BD72235FC58500B3CD21 /* USDZViewer */,
 				C1A5BD71235FC58500B3CD21 /* Products */,
+				C1255F5F236108920021C567 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,8 +134,11 @@
 				C1A5BD76235FC58500B3CD21 /* SceneDelegate.h */,
 				C1A5BD77235FC58500B3CD21 /* SceneDelegate.m */,
 				C1A5BD79235FC58500B3CD21 /* ViewController.h */,
-				C1A5BD7A235FC58500B3CD21 /* ViewController.m */,
+				C1A5BD7A235FC58500B3CD21 /* ViewController.mm */,
+				C1255F6A236275E90021C567 /* UsdzViewer.h */,
+				C1255F69236275E90021C567 /* UsdzViewer.cpp */,
 				C1A5BD7C235FC58500B3CD21 /* Main.storyboard */,
+				C1255F6C236277790021C567 /* Shaders.metal */,
 				C1A5BD7F235FC58900B3CD21 /* Assets.xcassets */,
 				C1A5BD81235FC58900B3CD21 /* LaunchScreen.storyboard */,
 				C1A5BD84235FC58900B3CD21 /* Info.plist */,
@@ -86,10 +157,12 @@
 				C1A5BD6C235FC58500B3CD21 /* Sources */,
 				C1A5BD6D235FC58500B3CD21 /* Frameworks */,
 				C1A5BD6E235FC58500B3CD21 /* Resources */,
+				C1255F67236108BF0021C567 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C1255F5E236108700021C567 /* PBXTargetDependency */,
 			);
 			name = USDZViewer;
 			productName = USDZViewer;
@@ -121,12 +194,28 @@
 			mainGroup = C1A5BD67235FC58500B3CD21;
 			productRefGroup = C1A5BD71235FC58500B3CD21 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C1255F58236108250021C567 /* Products */;
+					ProjectRef = C1255F57236108250021C567 /* FelixEngine.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C1A5BD6F235FC58500B3CD21 /* USDZViewer */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C1255F5C236108250021C567 /* FelixEngine.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FelixEngine.framework;
+			remoteRef = C1255F5B236108250021C567 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C1A5BD6E235FC58500B3CD21 /* Resources */ = {
@@ -146,14 +235,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1A5BD7B235FC58500B3CD21 /* ViewController.m in Sources */,
+				C1255F6D236277790021C567 /* Shaders.metal in Sources */,
+				C1A5BD7B235FC58500B3CD21 /* ViewController.mm in Sources */,
 				C1A5BD75235FC58500B3CD21 /* AppDelegate.m in Sources */,
 				C1A5BD86235FC58900B3CD21 /* main.m in Sources */,
 				C1A5BD78235FC58500B3CD21 /* SceneDelegate.m in Sources */,
+				C1255F6B236275E90021C567 /* UsdzViewer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1255F5E236108700021C567 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FelixEngine;
+			targetProxy = C1255F5D236108700021C567 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C1A5BD7C235FC58500B3CD21 /* Main.storyboard */ = {
@@ -291,6 +390,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = USDZViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -308,6 +408,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = USDZViewer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
