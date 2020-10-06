@@ -59,12 +59,15 @@ bool iOSFileSystem::loadFileData(fx::FileData &data, const std::string &fileName
   return true;
 }
 
-bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const std::string &file) const {
+bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const {
   string fileType = getFilePostfix(file);
   string filePath = findPathForFile(file);
   
   if (fileType == "mesh") {
     return MeshLoader::loadFromBinaryFile(mesh, filePath);
+  }
+  else if (fileType == "usdz") {
+    return MeshLoader::loadFromUsdzFile(mesh, filePath);
   }
   
   cerr << "Unknown Mesh File: " << file << endl;

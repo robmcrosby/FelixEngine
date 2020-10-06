@@ -95,3 +95,8 @@ bool MeshLoader::readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is)
   cerr << "Error Reading Index Buffer" << endl;
   return false;
 }
+
+bool MeshLoader::loadFromUsdzFile(VertexMeshData &mesh, const string &file) {
+  cout << "Load Usdz: " << file << endl;
+  return false;
+}

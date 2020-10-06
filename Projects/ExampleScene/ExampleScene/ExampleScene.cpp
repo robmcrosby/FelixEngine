@@ -64,6 +64,9 @@ void ExampleScene::initalize() {
   _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
   _model->setFaceCulling(fx::CULL_FRONT);
   _model->setToRenderPass(_renderPass);
+  
+  _modelB = _scene->get<fx::Model>("Suzanne");
+  _modelB->loadMesh("Suzanne.usdz");
 }
 
 void ExampleScene::update(float td) {
