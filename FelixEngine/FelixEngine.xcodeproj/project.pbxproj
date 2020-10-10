@@ -97,7 +97,6 @@
 		C1D1D7F9209BB6B7000EB92C /* VulkanUniformBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7F7209BB6B7000EB92C /* VulkanUniformBuffer.h */; };
 		C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7FB209BB712000EB92C /* VulkanTextureBuffer.h */; };
 		C1D1D801209D209E000EB92C /* Vulkan.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D7FF209D209E000EB92C /* Vulkan.h */; };
-		C1D1D805209D2C15000EB92C /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D804209D2C15000EB92C /* GLKit.framework */; };
 		C1D1D807209D2D30000EB92C /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D1D806209D2D30000EB92C /* IOSurface.framework */; };
 		C1D1D81A20A64F4C000EB92C /* VulkanCommandBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81820A64F4C000EB92C /* VulkanCommandBuffer.h */; };
 		C1D1D81E20A650D8000EB92C /* VulkanCommandPool.h in Headers */ = {isa = PBXBuildFile; fileRef = C1D1D81C20A650D8000EB92C /* VulkanCommandPool.h */; };
@@ -249,7 +248,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1D1D807209D2D30000EB92C /* IOSurface.framework in Frameworks */,
-				C1D1D805209D2C15000EB92C /* GLKit.framework in Frameworks */,
 				C1D1D7DE209AA705000EB92C /* MoltenVK.framework in Frameworks */,
 				C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */,
 				C1F7D9D71F353A6F0005367E /* ARKit.framework in Frameworks */,
