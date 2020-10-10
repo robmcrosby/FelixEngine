@@ -9,10 +9,10 @@
 #ifndef Application_h
 #define Application_h
 
-#include "EventSubject.h"
-#include "FileSystem.h"
-#include "Graphics.h"
-#include "TrackerSystem.h"
+#include <FelixEngine/EventSubject.h>
+#include <FelixEngine/FileSystem.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/TrackerSystem.h>
 
 namespace fx {
   class Application: public EventSubject {

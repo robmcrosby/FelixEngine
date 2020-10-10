@@ -9,12 +9,12 @@
 #ifndef RenderItem_h
 #define RenderItem_h
 
-#include "Graphics.h"
-#include "GraphicResources.h"
-#include "GraphicStates.h"
-#include "UniformMap.h"
-#include "TextureMap.h"
-#include "FileSystem.h"
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/GraphicResources.h>
+#include <FelixEngine/GraphicStates.h>
+#include <FelixEngine/UniformMap.h>
+#include <FelixEngine/TextureMap.h>
+#include <FelixEngine/FileSystem.h>
 
 
 namespace fx {

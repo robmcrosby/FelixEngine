@@ -13,7 +13,7 @@
 #include <metal_stdlib>
 using namespace metal;
 #else
-#include "Matrix.h"
+#include <FelixEngine/Matrix.h>
 using namespace fx;
 #endif
 

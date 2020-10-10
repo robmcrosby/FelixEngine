@@ -9,7 +9,7 @@
 #ifndef Matrix_h
 #define Matrix_h
 
-#include "Vector.h"
+#include <FelixEngine/Vector.h>
 
 #define SWAP_ROWS(a, b) {float *tmp = a; a = b; b = tmp;}
 

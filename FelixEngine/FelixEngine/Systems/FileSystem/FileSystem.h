@@ -11,8 +11,8 @@
 
 #include <string>
 #include <sstream>
-#include "VertexMeshData.h"
-#include "ImageBufferData.h"
+#include <FelixEngine/VertexMeshData.h>
+#include <FelixEngine/ImageBufferData.h>
 
 
 namespace fx {
@@ -89,17 +89,37 @@ namespace fx {
     static size_t readL(uint32_t *buffer, size_t count, std::istream &is);
   };
 
-  static size_t readB(int *buffer, long count, std::istream &is) {return FileSystem::readB((uint32_t*)buffer, count, is);}
-  static size_t readB(int &i, std::istream &is) {return FileSystem::readB((uint32_t*)&i, 1, is);}
+  static inline size_t readB(int *buffer, long count, std::istream &is) {
+    return FileSystem::readB((uint32_t*)buffer, count, is);
+  }
 
-  static size_t readB(float *buffer, long count, std::istream &is) {return FileSystem::readB((uint32_t*)buffer, count, is);}
-  static size_t readB(float &f, std::istream &is) {return FileSystem::readB((uint32_t*)&f, 1, is);}
+  static inline size_t readB(int &i, std::istream &is) {
+    return FileSystem::readB((uint32_t*)&i, 1, is);
+  }
 
-  static size_t readL(int *buffer, long count, std::istream &is) {return FileSystem::readL((uint32_t*)buffer, count, is);}
-  static size_t readL(int &i, std::istream &is) {return FileSystem::readL((uint32_t*)&i, 1, is);}
+  static inline size_t readB(float *buffer, long count, std::istream &is) {
+    return FileSystem::readB((uint32_t*)buffer, count, is);
+  }
 
-  static size_t readL(float *buffer, long count, std::istream &is) {return FileSystem::readL((uint32_t*)buffer, count, is);}
-  static size_t readL(float &f, std::istream &is) {return FileSystem::readL((uint32_t*)&f, 1, is);}
+  static inline size_t readB(float &f, std::istream &is) {
+    return FileSystem::readB((uint32_t*)&f, 1, is);
+  }
+
+  static inline size_t readL(int *buffer, long count, std::istream &is) {
+    return FileSystem::readL((uint32_t*)buffer, count, is);
+  }
+
+  static inline size_t readL(int &i, std::istream &is) {
+    return FileSystem::readL((uint32_t*)&i, 1, is);
+  }
+
+  static inline size_t readL(float *buffer, long count, std::istream &is) {
+    return FileSystem::readL((uint32_t*)buffer, count, is);
+  }
+
+  static inline size_t readL(float &f, std::istream &is) {
+    return FileSystem::readL((uint32_t*)&f, 1, is);
+  }
 }
 
 #endif /* FileSystem_h */

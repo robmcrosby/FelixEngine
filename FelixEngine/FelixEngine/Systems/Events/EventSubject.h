@@ -9,7 +9,7 @@
 #ifndef EventSubject_h
 #define EventSubject_h
 
-#include "EventHandler.h"
+#include <FelixEngine/EventHandler.h>
 
 
 namespace fx {

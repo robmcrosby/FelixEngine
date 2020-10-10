@@ -9,7 +9,7 @@
 #ifndef EventListenerSet_h
 #define EventListenerSet_h
 
-#include "Event.h"
+#include <FelixEngine/Event.h>
 
 namespace fx {
   

@@ -10,7 +10,7 @@
 #define EventHandler_h
 
 #include <list>
-#include "EventListenerSet.h"
+#include <FelixEngine/EventListenerSet.h>
 
 
 namespace fx {

@@ -9,12 +9,12 @@
 #ifndef Model_h
 #define Model_h
 
-#include "Drawable.h"
-#include "Material.h"
-#include "Graphics.h"
-#include "Transform.h"
-#include "UniformMap.h"
-#include "RenderItem.h"
+#include <FelixEngine/Drawable.h>
+#include <FelixEngine/Material.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/Transform.h>
+#include <FelixEngine/UniformMap.h>
+#include <FelixEngine/RenderItem.h>
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Model)

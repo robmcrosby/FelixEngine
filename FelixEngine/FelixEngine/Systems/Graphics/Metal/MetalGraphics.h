@@ -6,8 +6,8 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "Graphics.h"
-#include "Macros.h"
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/Macros.h>
 
 #ifndef MetalGraphics_h
 #define MetalGraphics_h

@@ -9,10 +9,10 @@
 #ifndef RenderPass_h
 #define RenderPass_h
 
-#include "iObject.h"
-#include "RenderItem.h"
-#include "Graphics.h"
-#include "XMLTree.h"
+#include <FelixEngine/iObject.h>
+#include <FelixEngine/RenderItem.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/XMLTree.h>
 #include <set>
 
 

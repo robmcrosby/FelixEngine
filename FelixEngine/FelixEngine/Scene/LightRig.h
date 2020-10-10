@@ -9,12 +9,12 @@
 #ifndef LightRig_h
 #define LightRig_h
 
-#include "Drawable.h"
-#include "Graphics.h"
-#include "UniformMap.h"
-#include "Transform.h"
-#include "GraphicStructures.h"
-#include "Light.h"
+#include <FelixEngine/Drawable.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/UniformMap.h>
+#include <FelixEngine/Transform.h>
+#include <FelixEngine/GraphicStructures.h>
+#include <FelixEngine/Light.h>
 
 
 namespace fx {

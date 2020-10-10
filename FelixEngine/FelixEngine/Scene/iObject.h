@@ -9,7 +9,7 @@
 #ifndef iObject_h
 #define iObject_h
 
-#include "XMLTree.h"
+#include <FelixEngine/XMLTree.h>
 #include <set>
 
 

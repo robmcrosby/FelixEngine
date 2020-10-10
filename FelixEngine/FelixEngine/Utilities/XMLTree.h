@@ -16,8 +16,8 @@
 #include <fstream>
 #include <cstdarg>
 
-#include "StringUtils.h"
-#include "Vector.h"
+#include <FelixEngine/StringUtils.h>
+#include <FelixEngine/Vector.h>
 
 
 namespace fx

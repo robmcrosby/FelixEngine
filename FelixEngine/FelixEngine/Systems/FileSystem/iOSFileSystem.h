@@ -6,7 +6,7 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "FileSystem.h"
+#include <FelixEngine/FileSystem.h>
 
 #ifndef iOSFileSystem_h
 #define iOSFileSystem_h

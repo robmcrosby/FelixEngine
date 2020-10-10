@@ -9,12 +9,12 @@
 #ifndef Material_h
 #define Material_h
 
-#include "Scene.h"
-#include "Graphics.h"
-#include "GraphicStates.h"
-#include "TextureMap.h"
-#include "UniformMap.h"
-#include "GraphicStructures.h"
+#include <FelixEngine/Scene.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/GraphicStates.h>
+#include <FelixEngine/TextureMap.h>
+#include <FelixEngine/UniformMap.h>
+#include <FelixEngine/GraphicStructures.h>
 
 
 namespace fx {

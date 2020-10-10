@@ -9,8 +9,8 @@
 #ifndef TextureMap_h
 #define TextureMap_h
 
-#include "Graphics.h"
-#include "GraphicResources.h"
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/GraphicResources.h>
 #include <vector>
 
 

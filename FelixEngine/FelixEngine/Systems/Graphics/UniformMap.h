@@ -9,9 +9,9 @@
 #ifndef UniformMap_h
 #define UniformMap_h
 
-#include "Graphics.h"
-#include "Variant.h"
-#include "GraphicResources.h"
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/Variant.h>
+#include <FelixEngine/GraphicResources.h>
 #include <vector>
 #include <map>
 

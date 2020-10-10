@@ -9,8 +9,8 @@
 #ifndef VertexMeshData_h
 #define VertexMeshData_h
 
-#include "GraphicResources.h"
-#include "StringUtils.h"
+#include <FelixEngine/GraphicResources.h>
+#include <FelixEngine/StringUtils.h>
 #include <vector>
 #include <map>
 

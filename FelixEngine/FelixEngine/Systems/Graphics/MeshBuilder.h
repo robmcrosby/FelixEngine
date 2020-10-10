@@ -9,7 +9,7 @@
 #ifndef MeshBuilder_h
 #define MeshBuilder_h
 
-#include "GraphicResources.h"
+#include <FelixEngine/GraphicResources.h>
 
 namespace fx {
   struct MeshBuilder {

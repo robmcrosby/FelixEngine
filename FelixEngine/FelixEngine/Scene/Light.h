@@ -9,9 +9,9 @@
 #ifndef Light_h
 #define Light_h
 
-#include "Drawable.h"
-#include "Transform.h"
-#include "GraphicStructures.h"
+#include <FelixEngine/Drawable.h>
+#include <FelixEngine/Transform.h>
+#include <FelixEngine/GraphicStructures.h>
 
 namespace fx {
   DEFINE_OBJ_BUILDER(Light)

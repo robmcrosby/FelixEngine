@@ -9,7 +9,7 @@
 #ifndef Event_h
 #define Event_h
 
-#include "Variant.h"
+#include <FelixEngine/Variant.h>
 #include <memory>
 
 namespace fx {

@@ -9,7 +9,7 @@
 #ifndef ImageBufferData_h
 #define ImageBufferData_h
 
-#include "GraphicResources.h"
+#include <FelixEngine/GraphicResources.h>
 #include <vector>
 
 

@@ -14,8 +14,8 @@
 #include <list>
 #include <stdint.h>
 
-#include "Vector.h"
-#include "Matrix.h"
+#include <FelixEngine/Vector.h>
+#include <FelixEngine/Matrix.h>
 
 #define RGBA_STR "rgba"
 

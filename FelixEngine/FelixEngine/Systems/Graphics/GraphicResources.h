@@ -9,12 +9,12 @@
 #ifndef GraphicResources_h
 #define GraphicResources_h
 
-#include "Graphics.h"
-#include "iObject.h"
-#include "GraphicStates.h"
-#include "XMLTree.h"
-#include "Vector.h"
-#include "Matrix.h"
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/iObject.h>
+#include <FelixEngine/GraphicStates.h>
+#include <FelixEngine/XMLTree.h>
+#include <FelixEngine/Vector.h>
+#include <FelixEngine/Matrix.h>
 #include <vector>
 
 

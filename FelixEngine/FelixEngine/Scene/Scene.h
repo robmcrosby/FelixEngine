@@ -9,9 +9,9 @@
 #ifndef Scene_h
 #define Scene_h
 
-#include "EventSubject.h"
-#include "RenderPass.h"
-#include "iObject.h"
+#include <FelixEngine/EventSubject.h>
+#include <FelixEngine/RenderPass.h>
+#include <FelixEngine/iObject.h>
 
 
 namespace fx {

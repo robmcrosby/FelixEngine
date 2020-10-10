@@ -9,8 +9,8 @@
 #ifndef Drawable_h
 #define Drawable_h
 
-#include "Scene.h"
-#include "RenderPass.h"
+#include <FelixEngine/Scene.h>
+#include <FelixEngine/RenderPass.h>
 
 
 namespace fx {

@@ -9,7 +9,7 @@
 #ifndef Quaternion_h
 #define Quaternion_h
 
-#include "Matrix.h"
+#include <FelixEngine/Matrix.h>
 
 
 namespace fx

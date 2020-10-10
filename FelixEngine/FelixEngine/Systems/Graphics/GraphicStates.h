@@ -9,8 +9,8 @@
 #ifndef GraphicStates_h
 #define GraphicStates_h
 
-#include "Matrix.h"
-#include "XMLTree.h"
+#include <FelixEngine/Matrix.h>
+#include <FelixEngine/XMLTree.h>
 
 #define MAX_COLOR_ATTACHEMENTS 4
 

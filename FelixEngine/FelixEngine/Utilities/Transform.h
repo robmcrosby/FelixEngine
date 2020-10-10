@@ -9,8 +9,8 @@
 #ifndef Transform_h
 #define Transform_h
 
-#include "Quaternion.h"
-#include "XMLTree.h"
+#include <FelixEngine/Quaternion.h>
+#include <FelixEngine/XMLTree.h>
 #include <memory>
 
 namespace fx

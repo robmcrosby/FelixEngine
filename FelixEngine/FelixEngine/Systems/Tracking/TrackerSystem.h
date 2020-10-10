@@ -9,8 +9,8 @@
 #ifndef TrackerSystem_h
 #define TrackerSystem_h
 
-#include "Quaternion.h"
-#include "Graphics.h"
+#include <FelixEngine/Quaternion.h>
+#include <FelixEngine/Graphics.h>
 #include <vector>
 
 

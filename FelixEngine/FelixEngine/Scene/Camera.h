@@ -9,10 +9,10 @@
 #ifndef Camera_h
 #define Camera_h
 
-#include "Drawable.h"
-#include "Graphics.h"
-#include "Transform.h"
-#include "GraphicStructures.h"
+#include <FelixEngine/Drawable.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/Transform.h>
+#include <FelixEngine/GraphicStructures.h>
 
 
 namespace fx {
