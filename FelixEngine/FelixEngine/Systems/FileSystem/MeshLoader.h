@@ -21,6 +21,7 @@ namespace fx {
     static bool readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is);
     
     static bool loadFromUsdzFile(VertexMeshData &mesh, const std::string &file);
+    static bool loadFromUsdzSteam(VertexMeshData &mesh, std::istream &is);
   };
 }
 

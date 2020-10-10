@@ -85,15 +85,21 @@ namespace fx {
      */
     static std::string getFileName(const std::string &file);
     
-    static size_t read(uint32_t *buffer, size_t size, std::istream &is);
-    static size_t read(uint32_t &i, std::istream &is) {return read(&i, 1, is);}
-    
-    static size_t read(int *buffer, long size, std::istream &is) {return read((uint32_t*)buffer, size, is);}
-    static size_t read(int &i, std::istream &is) {return read((uint32_t*)&i, 1, is);}
-    
-    static size_t read(float *buffer, long size, std::istream &is) {return read((uint32_t*)buffer, size, is);}
-    static size_t read(float &f, std::istream &is) {return read((uint32_t*)&f, 1, is);}
+    static size_t readB(uint32_t *buffer, size_t count, std::istream &is);
+    static size_t readL(uint32_t *buffer, size_t count, std::istream &is);
   };
+
+  static size_t readB(int *buffer, long count, std::istream &is) {return FileSystem::readB((uint32_t*)buffer, count, is);}
+  static size_t readB(int &i, std::istream &is) {return FileSystem::readB((uint32_t*)&i, 1, is);}
+
+  static size_t readB(float *buffer, long count, std::istream &is) {return FileSystem::readB((uint32_t*)buffer, count, is);}
+  static size_t readB(float &f, std::istream &is) {return FileSystem::readB((uint32_t*)&f, 1, is);}
+
+  static size_t readL(int *buffer, long count, std::istream &is) {return FileSystem::readL((uint32_t*)buffer, count, is);}
+  static size_t readL(int &i, std::istream &is) {return FileSystem::readL((uint32_t*)&i, 1, is);}
+
+  static size_t readL(float *buffer, long count, std::istream &is) {return FileSystem::readL((uint32_t*)buffer, count, is);}
+  static size_t readL(float &f, std::istream &is) {return FileSystem::readL((uint32_t*)&f, 1, is);}
 }
 
 #endif /* FileSystem_h */

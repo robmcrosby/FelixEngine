@@ -41,12 +41,22 @@ string FileSystem::getFileName(const std::string &file)
   return "";
 }
 
-size_t FileSystem::read(uint32_t *buffer, size_t size, istream &is) {
-  is.read((char*)buffer, size*sizeof(uint32_t));
+size_t FileSystem::readB(uint32_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint32_t));
   
   // Convert Endianess
-  for (size_t i = 0; i < size; ++i, ++buffer)
+  for (size_t i = 0; i < count; ++i, ++buffer)
     *buffer = EndianU32_BtoN(*buffer);
+  
+  return is.gcount();
+}
+
+size_t FileSystem::readL(uint32_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint32_t));
+  
+  // Convert Endianess
+  for (size_t i = 0; i < count; ++i, ++buffer)
+    *buffer = EndianU32_LtoN(*buffer);
   
   return is.gcount();
 }
