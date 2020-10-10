@@ -120,6 +120,13 @@ namespace fx {
   static inline size_t readL(float &f, std::istream &is) {
     return FileSystem::readL((uint32_t*)&f, 1, is);
   }
+
+  static inline std::string readStr(size_t count, std::istream &is) {
+    std::vector<char> buffer(count+1);
+    is.read(&buffer[0], count);
+    buffer[count] = '\0';
+    return &buffer[0];
+  }
 }
 
 #endif /* FileSystem_h */

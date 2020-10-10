@@ -8,6 +8,7 @@
 
 #include "iOSFileSystem.h"
 #include "MeshLoader.h"
+#include "USDArchive.h"
 #include "XMLTree.h"
 
 #import <Foundation/Foundation.h>
@@ -67,10 +68,18 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
     return MeshLoader::loadFromBinaryFile(mesh, filePath);
   }
   else if (fileType == "usdz") {
-    return MeshLoader::loadFromUsdzFile(mesh, filePath);
+    USDArchive archive;
+    if (archive.open(filePath)) {
+      cout << "Opened USD Archive" << endl;
+    }
+    else {
+      cerr << "Unable to open USD Archive" << endl;
+    }
+    //return MeshLoader::loadFromUsdzFile(mesh, filePath);
   }
-  
-  cerr << "Unknown Mesh File: " << file << endl;
+  else {
+    cerr << "Unknown Mesh File: " << file << endl;
+  }
   return false;
 }
 
