@@ -41,8 +41,35 @@ bool USDArchive::open(const string &filePath) {
     success = read(usdzFile);
     usdzFile.close();
   }
-  
   return success;
+}
+
+FileList USDArchive::allFiles() const {
+  FileList files;
+  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
+    files.push_back(itr->name);
+  }
+  return files;
+}
+
+FileList USDArchive::sceneFiles() const {
+  FileList files;
+  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
+    string ext = itr->name.substr(itr->name.length()-4);
+    if (ext == "usdc")
+      files.push_back(itr->name);
+  }
+  return files;
+}
+
+FileList USDArchive::imageFiles() const {
+  FileList files;
+  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
+    string ext = itr->name.substr(itr->name.length()-3);
+    if (ext == "png")
+      files.push_back(itr->name);
+  }
+  return files;
 }
 
 bool USDArchive::read(istream &is) {

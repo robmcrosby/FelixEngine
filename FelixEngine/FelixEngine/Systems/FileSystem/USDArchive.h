@@ -20,6 +20,7 @@ namespace fx {
     size_t offset;
   };
   typedef std::vector<USDEntry> USDEntryList;
+  typedef std::vector<std::string> FileList;
   
   /** USDArchive  */
   class USDArchive {
@@ -32,6 +33,10 @@ namespace fx {
     ~USDArchive();
     
     bool open(const std::string &filePath);
+    
+    FileList allFiles() const;
+    FileList sceneFiles() const;
+    FileList imageFiles() const;
     
   private:
     bool read(std::istream &is);

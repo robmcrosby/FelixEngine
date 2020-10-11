@@ -71,6 +71,7 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
     USDArchive archive;
     if (archive.open(filePath)) {
       cout << "Opened USD Archive" << endl;
+      FileList files = archive.sceneFiles();
     }
     else {
       cerr << "Unable to open USD Archive" << endl;
