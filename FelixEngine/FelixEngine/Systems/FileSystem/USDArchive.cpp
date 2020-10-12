@@ -52,7 +52,7 @@ FileList USDArchive::allFiles() const {
   return files;
 }
 
-FileList USDArchive::sceneFiles() const {
+FileList USDArchive::crateFiles() const {
   FileList files;
   for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
     string ext = itr->name.substr(itr->name.length()-4);
@@ -70,6 +70,29 @@ FileList USDArchive::imageFiles() const {
       files.push_back(itr->name);
   }
   return files;
+}
+
+USDEntry USDArchive::getEntry(const string &name) const {
+  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
+    if (itr->name == name)
+      return *itr;
+  }
+  return USDEntry();
+}
+
+USDCrate USDArchive::getUSDCrate(const string &name) const {
+  USDCrate crate;
+  USDEntry entry = getEntry(name);
+  crate.open(_filePath, entry.fileOffset, entry.fileLength);
+  return crate;
+}
+
+USDCrate USDArchive::getFirstUSDCrate() const {
+  FileList files = crateFiles();
+  if (files.size() > 0)
+    return getUSDCrate(files.front());
+  cerr << "No USD Files in USD Archive" << endl;
+  return USDCrate();
 }
 
 bool USDArchive::read(istream &is) {
@@ -111,8 +134,18 @@ bool USDArchive::read(istream &is) {
     int headerOffset;
     is.seekg(entryOffset + 38);
     readL(headerOffset, is);
-    _entries[i].offset = headerOffset;
-    //cout << "headerOffset: " << _entries[i].offset << endl;
+    _entries[i].headerOffset = headerOffset;
+    
+    int fileLength;
+    is.seekg(headerOffset + 18);
+    readL(fileLength, is);
+    _entries[i].fileLength = fileLength;
+    
+    int fileOffset;
+    is.seekg(headerOffset + 26);
+    readL(fileOffset, is);
+    fileOffset = (fileOffset & 0xffff) + (fileOffset >> 16);
+    _entries[i].fileOffset = headerOffset + fileOffset + 30;
     
     int strLength;
     is.seekg(entryOffset + 24);
