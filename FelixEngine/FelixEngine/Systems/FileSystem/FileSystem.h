@@ -105,6 +105,14 @@ namespace fx {
     return FileSystem::readB((uint32_t*)&f, 1, is);
   }
 
+  static inline size_t readB(long *buffer, long count, std::istream &is) {
+    return FileSystem::readB((uint32_t*)buffer, count*2, is);
+  }
+
+  static inline size_t readB(long &i, std::istream &is) {
+    return FileSystem::readB((uint32_t*)&i, 2, is);
+  }
+
   static inline size_t readL(int *buffer, long count, std::istream &is) {
     return FileSystem::readL((uint32_t*)buffer, count, is);
   }
@@ -119,6 +127,14 @@ namespace fx {
 
   static inline size_t readL(float &f, std::istream &is) {
     return FileSystem::readL((uint32_t*)&f, 1, is);
+  }
+
+  static inline size_t readL(long *buffer, long count, std::istream &is) {
+    return FileSystem::readL((uint32_t*)buffer, count*2, is);
+  }
+
+  static inline size_t readL(long &i, std::istream &is) {
+    return FileSystem::readL((uint32_t*)&i, 2, is);
   }
 
   static inline std::string readStr(size_t count, std::istream &is) {

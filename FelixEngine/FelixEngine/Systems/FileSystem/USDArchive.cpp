@@ -27,6 +27,8 @@ USDArchive::~USDArchive() {
 }
 
 bool USDArchive::open(const string &filePath) {
+  _filePath = filePath;
+  
   bool success = true;
   ifstream usdzFile;
   
@@ -37,7 +39,6 @@ bool USDArchive::open(const string &filePath) {
     success = false;
   }
   else {
-    _filePath = filePath;
     success = read(usdzFile);
     usdzFile.close();
   }

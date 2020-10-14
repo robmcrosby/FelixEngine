@@ -15,6 +15,13 @@
 
 namespace fx {
 
+  struct USDTocSection {
+    long start;
+    long size;
+  };
+  typedef std::map<std::string, USDTocSection> USDTableOfContents;
+  typedef std::vector<std::string> StringVector;
+
   /** USDArchive  */
   class USDCrate {
   private:
@@ -27,6 +34,10 @@ namespace fx {
     ~USDCrate();
     
     bool open(const std::string &filePath, size_t offset = 0, size_t length = 0);
+    
+  private:
+    bool read(std::istream &is);
+    StringVector readTokens(long start, std::istream &is);
   };
 
 }
