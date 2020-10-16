@@ -41,22 +41,50 @@ string FileSystem::getFileName(const std::string &file)
   return "";
 }
 
+size_t FileSystem::readB(uint16_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint16_t));
+  // Convert Endianess
+  for (size_t i = 0; i < count; ++i, ++buffer)
+    *buffer = EndianU16_BtoN(*buffer);
+  return is.gcount();
+}
+
+size_t FileSystem::readL(uint16_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint16_t));
+  // Convert Endianess
+  for (size_t i = 0; i < count; ++i, ++buffer)
+    *buffer = EndianU16_LtoN(*buffer);
+  return is.gcount();
+}
+
 size_t FileSystem::readB(uint32_t *buffer, size_t count, istream &is) {
   is.read((char*)buffer, count*sizeof(uint32_t));
-  
   // Convert Endianess
   for (size_t i = 0; i < count; ++i, ++buffer)
     *buffer = EndianU32_BtoN(*buffer);
-  
   return is.gcount();
 }
 
 size_t FileSystem::readL(uint32_t *buffer, size_t count, istream &is) {
   is.read((char*)buffer, count*sizeof(uint32_t));
-  
   // Convert Endianess
   for (size_t i = 0; i < count; ++i, ++buffer)
     *buffer = EndianU32_LtoN(*buffer);
-  
+  return is.gcount();
+}
+
+size_t FileSystem::readB(uint64_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint64_t));
+  // Convert Endianess
+  for (size_t i = 0; i < count; ++i, ++buffer)
+    *buffer = EndianU64_BtoN(*buffer);
+  return is.gcount();
+}
+
+size_t FileSystem::readL(uint64_t *buffer, size_t count, istream &is) {
+  is.read((char*)buffer, count*sizeof(uint64_t));
+  // Convert Endianess
+  for (size_t i = 0; i < count; ++i, ++buffer)
+    *buffer = EndianU64_LtoN(*buffer);
   return is.gcount();
 }

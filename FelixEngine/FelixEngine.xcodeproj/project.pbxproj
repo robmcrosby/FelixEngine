@@ -11,6 +11,8 @@
 		AD56824125320366005B3CFB /* USDArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56823F25320366005B3CFB /* USDArchive.h */; };
 		AD5682442533C37B005B3CFB /* USDCrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5682422533C37B005B3CFB /* USDCrate.cpp */; };
 		AD5682452533C37B005B3CFB /* USDCrate.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5682432533C37B005B3CFB /* USDCrate.h */; };
+		AD56824C2538C092005B3CFB /* CompressionUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56824A2538C092005B3CFB /* CompressionUtils.cpp */; };
+		AD56824D2538C092005B3CFB /* CompressionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824B2538C092005B3CFB /* CompressionUtils.h */; };
 		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* iOSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */; };
@@ -132,6 +134,8 @@
 		AD56823F25320366005B3CFB /* USDArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = USDArchive.h; path = Systems/FileSystem/USDArchive.h; sourceTree = "<group>"; };
 		AD5682422533C37B005B3CFB /* USDCrate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USDCrate.cpp; path = Systems/FileSystem/USDCrate.cpp; sourceTree = "<group>"; };
 		AD5682432533C37B005B3CFB /* USDCrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = USDCrate.h; path = Systems/FileSystem/USDCrate.h; sourceTree = "<group>"; };
+		AD56824A2538C092005B3CFB /* CompressionUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CompressionUtils.cpp; path = Systems/FileSystem/CompressionUtils.cpp; sourceTree = "<group>"; };
+		AD56824B2538C092005B3CFB /* CompressionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CompressionUtils.h; path = Systems/FileSystem/CompressionUtils.h; sourceTree = "<group>"; };
 		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		C1136C371EF0BCC600BA1322 /* iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSViewController.h; path = iOS/iOSViewController.h; sourceTree = "<group>"; };
@@ -320,6 +324,8 @@
 				AD56823E25320366005B3CFB /* USDArchive.cpp */,
 				AD5682432533C37B005B3CFB /* USDCrate.h */,
 				AD5682422533C37B005B3CFB /* USDCrate.cpp */,
+				AD56824B2538C092005B3CFB /* CompressionUtils.h */,
+				AD56824A2538C092005B3CFB /* CompressionUtils.cpp */,
 			);
 			name = FileSystem;
 			sourceTree = "<group>";
@@ -572,6 +578,7 @@
 				C1443AEF1EF346290059BA9D /* Quaternion.h in Headers */,
 				C1401D631F0BF59700BE9958 /* MetalTextureSampler.h in Headers */,
 				C1443B0A1EF49E5D0059BA9D /* Macros.h in Headers */,
+				AD56824D2538C092005B3CFB /* CompressionUtils.h in Headers */,
 				C1BB4F2E1F1C33C3008FDF01 /* StringUtils.h in Headers */,
 				AD5682452533C37B005B3CFB /* USDCrate.h in Headers */,
 				C154C0DD1FCE389100D3DCFF /* GraphicStructures.h in Headers */,
@@ -686,6 +693,7 @@
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,
 				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,
+				AD56824C2538C092005B3CFB /* CompressionUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

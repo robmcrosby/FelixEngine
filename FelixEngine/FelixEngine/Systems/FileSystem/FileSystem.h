@@ -85,9 +85,23 @@ namespace fx {
      */
     static std::string getFileName(const std::string &file);
     
+    static size_t readB(uint16_t *buffer, size_t count, std::istream &is);
+    static size_t readL(uint16_t *buffer, size_t count, std::istream &is);
+    
     static size_t readB(uint32_t *buffer, size_t count, std::istream &is);
     static size_t readL(uint32_t *buffer, size_t count, std::istream &is);
+    
+    static size_t readB(uint64_t *buffer, size_t count, std::istream &is);
+    static size_t readL(uint64_t *buffer, size_t count, std::istream &is);
   };
+
+  static inline size_t readB(short *buffer, long count, std::istream &is) {
+    return FileSystem::readB((uint16_t*)buffer, count, is);
+  }
+
+  static inline size_t readB(short &i, std::istream &is) {
+    return FileSystem::readB((uint16_t*)&i, 1, is);
+  }
 
   static inline size_t readB(int *buffer, long count, std::istream &is) {
     return FileSystem::readB((uint32_t*)buffer, count, is);
@@ -106,11 +120,19 @@ namespace fx {
   }
 
   static inline size_t readB(long *buffer, long count, std::istream &is) {
-    return FileSystem::readB((uint32_t*)buffer, count*2, is);
+    return FileSystem::readB((uint64_t*)buffer, count, is);
   }
 
   static inline size_t readB(long &i, std::istream &is) {
-    return FileSystem::readB((uint32_t*)&i, 2, is);
+    return FileSystem::readB((uint64_t*)&i, 1, is);
+  }
+
+  static inline size_t readL(short *buffer, long count, std::istream &is) {
+    return FileSystem::readL((uint16_t*)buffer, count, is);
+  }
+
+  static inline size_t readL(short &i, std::istream &is) {
+    return FileSystem::readL((uint16_t*)&i, 1, is);
   }
 
   static inline size_t readL(int *buffer, long count, std::istream &is) {
@@ -130,19 +152,26 @@ namespace fx {
   }
 
   static inline size_t readL(long *buffer, long count, std::istream &is) {
-    return FileSystem::readL((uint32_t*)buffer, count*2, is);
+    return FileSystem::readL((uint64_t*)buffer, count, is);
   }
 
   static inline size_t readL(long &i, std::istream &is) {
-    return FileSystem::readL((uint32_t*)&i, 2, is);
+    return FileSystem::readL((uint64_t*)&i, 1, is);
   }
 
   static inline std::string readStr(size_t count, std::istream &is) {
-    std::vector<char> buffer(count+1);
+    FileData buffer(count+1);
     is.read(&buffer[0], count);
     buffer[count] = '\0';
     return &buffer[0];
   }
+
+  static inline FileData readData(size_t size, std::istream &is) {
+    FileData buffer(size);
+    is.read(&buffer[0], size);
+    return buffer;
+  }
+    
 }
 
 #endif /* FileSystem_h */

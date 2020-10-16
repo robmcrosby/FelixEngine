@@ -7,6 +7,7 @@
 //
 
 #include "USDCrate.h"
+#include "CompressionUtils.h"
 
 
 using namespace std;
@@ -76,16 +77,22 @@ bool USDCrate::read(istream &is) {
 }
 
 StringVector USDCrate::readTokens(long start, istream &is) {
-  
+  // Get Number of Tokens and Compressed Size
   is.seekg(_fileOffset + start);
   long numTokens, compressedSize;
   readL(numTokens, is);
   readL(compressedSize, is);
   
-  vector<char> buffer(compressedSize);
-  is.read(&buffer[0], compressedSize);
+  // Read/Decompress Data
+  FileData buffer;
+  CompressionUtils::decompressLZ4(buffer, is, compressedSize);
   
+  // Get the Tokens
   StringVector tokens;
-  
+  char *ptr = &buffer[0];
+  while (numTokens-- > 0) {
+    tokens.push_back(ptr);
+    ptr += tokens.back().length() + 1;
+  }
   return tokens;
 }
