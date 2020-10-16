@@ -19,6 +19,7 @@ namespace fx {
   public:
     virtual ~CompressionUtils() {}
     
+    static bool decompressUSD32(IntVector &dst, FileData &src, size_t count);
     static bool decompressLZ4(FileData &dst, std::istream &is, size_t size);
   
   private:

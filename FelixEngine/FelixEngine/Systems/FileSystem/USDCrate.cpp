@@ -72,6 +72,7 @@ bool USDCrate::read(istream &is) {
   
   // Read Tokens
   StringVector tokens = readTokens(toc["TOKENS"].start, is);
+  vector<int> fields = readFields(toc["FIELDS"].start, is);
   
   return true;
 }
@@ -79,11 +80,10 @@ bool USDCrate::read(istream &is) {
 StringVector USDCrate::readTokens(long start, istream &is) {
   // Get Number of Tokens and Compressed Size
   is.seekg(_fileOffset + start);
-  long numTokens, compressedSize;
-  readL(numTokens, is);
-  readL(compressedSize, is);
+  long numTokens = readLongL(is);
+  long compressedSize = readLongL(is);
   
-  // Read/Decompress Data
+  // Read and Decompress Data
   FileData buffer;
   CompressionUtils::decompressLZ4(buffer, is, compressedSize);
   
@@ -95,4 +95,18 @@ StringVector USDCrate::readTokens(long start, istream &is) {
     ptr += tokens.back().length() + 1;
   }
   return tokens;
+}
+
+IntVector USDCrate::readFields(long start, istream &is) {
+  // Get Number of Fields
+  is.seekg(_fileOffset + start);
+  long numFields = readLongL(is);
+  long compressedSize = readLongL(is);
+  
+  FileData buffer;
+  CompressionUtils::decompressLZ4(buffer, is, compressedSize);
+  
+  IntVector fields;
+  CompressionUtils::decompressUSD32(fields, buffer, numFields);
+  return fields;
 }

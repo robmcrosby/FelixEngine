@@ -132,27 +132,26 @@ bool USDArchive::read(istream &is) {
     }
     size_t entryOffset = is.tellg();
     
-    int headerOffset;
+    // Get Header Offset
     is.seekg(entryOffset + 38);
-    readL(headerOffset, is);
+    int headerOffset = readIntL(is);
     _entries[i].headerOffset = headerOffset;
     
-    int fileLength;
+    // Get File Length
     is.seekg(headerOffset + 18);
-    readL(fileLength, is);
-    _entries[i].fileLength = fileLength;
+    _entries[i].fileLength = readIntL(is);
     
-    int fileOffset;
+    // Get File Offset
     is.seekg(headerOffset + 26);
-    readL(fileOffset, is);
+    int fileOffset = readIntL(is);
     fileOffset = (fileOffset & 0xffff) + (fileOffset >> 16);
     _entries[i].fileOffset = headerOffset + fileOffset + 30;
     
-    int strLength;
+    // Get File Name Length
     is.seekg(entryOffset + 24);
-    readL(strLength, is);
-    strLength &= 0xffff;
+    int strLength = readShortL(is);
     
+    // Get the File Name
     is.seekg(entryOffset + 42);
     _entries[i].name = readStr(strLength, is);
     //cout << "name: " << _entries[i].name << endl;

@@ -16,6 +16,37 @@ using namespace fx;
 using namespace std;
 
 
+bool CompressionUtils::decompressUSD32(IntVector &dst, FileData &src, size_t count) {
+  bool success = true;
+  
+  size_t numCodes = (count*2 + 7)/8;
+  memstream is((uint8_t*)&src[0], src.size());
+  int commonValue = readIntL(is);
+  int preValue = 0;
+  
+  memstream codes((uint8_t*)&src[4], numCodes);
+  memstream vints((uint8_t*)&src[numCodes+4], src.size()-numCodes-4);
+  
+  size_t cp = 0;
+  while (cp < count) {
+    int token = codes.get();
+    for (int i = 0; cp < count && i < 4; ++i) {
+      int code = (token >> i*2) & 0x3;
+      if (code == 0)
+        preValue += commonValue;
+      else if (code == 1)
+        preValue += (char)vints.get();
+      else if (code == 2)
+        preValue += readShortL(vints);
+      else
+        preValue += readIntL(vints);
+      dst.push_back(preValue);
+      ++cp;
+    }
+  }
+  return success;
+}
+
 bool CompressionUtils::decompressLZ4(FileData &dst, istream &is, size_t size) {
   bool success = true;
   if (is.peek() == 0) {
@@ -24,9 +55,7 @@ bool CompressionUtils::decompressLZ4(FileData &dst, istream &is, size_t size) {
   }
   else {
     size_t ptr = 9, base = is.tellg();
-    int chunkSize;
-    readL(chunkSize, is);
-    chunkSize -= 1;
+    int chunkSize = readIntL(is) - 1;
     
     while (success && chunkSize > 0) {
       is.seekg(base + ptr);

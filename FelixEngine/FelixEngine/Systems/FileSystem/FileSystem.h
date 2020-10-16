@@ -20,7 +20,31 @@ namespace fx {
   
   /** define for FileData */
   typedef std::vector<char> FileData;
+
+  /** define for IntVector */
+  typedef std::vector<int> IntVector;
+
+
+
+  class membuf : public std::basic_streambuf<char> {
+  public:
+    membuf(const uint8_t *p, size_t l) {
+      setg((char*)p, (char*)p, (char*)p + l);
+    }
+  };
+
+  class memstream : public std::istream {
+  public:
+    memstream(const uint8_t *p, size_t l) :
+      std::istream(&_buffer),
+      _buffer(p, l) {
+        rdbuf(&_buffer);
+      }
+  private:
+    membuf _buffer;
+  };
   
+
   /** File System */
   class FileSystem {
   protected:
@@ -171,7 +195,24 @@ namespace fx {
     is.read(&buffer[0], size);
     return buffer;
   }
-    
+
+  static inline short readShortL(std::istream &is) {
+    short value;
+    readL(value, is);
+    return value;
+  }
+
+  static inline int readIntL(std::istream &is) {
+    int value;
+    readL(value, is);
+    return value;
+  }
+  
+  static inline long readLongL(std::istream &is) {
+    long value;
+    readL(value, is);
+    return value;
+  }
 }
 
 #endif /* FileSystem_h */
