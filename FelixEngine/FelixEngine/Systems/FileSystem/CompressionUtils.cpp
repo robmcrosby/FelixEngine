@@ -48,12 +48,11 @@ bool CompressionUtils::decompressLZ4(FileData &dst, istream &is, size_t size) {
 
 bool CompressionUtils::decompressLZ4Chunk(FileData &dst, istream &is, size_t size) {
   bool success = true;
+  size += is.tellg();
   
-  size_t ptr = 0;
-  while (ptr < size) {
+  while (is.tellg() < size) {
     // Get Token
     int token = is.get();
-    ++ptr;
     
     // Literal Length
     int litLen = (token >> 4) & 0x0f;
@@ -62,23 +61,20 @@ bool CompressionUtils::decompressLZ4Chunk(FileData &dst, istream &is, size_t siz
       do {
         value = is.get();
         litLen += value;
-        ++ptr;
       } while (value == 255);
     }
     
     // Append the Literal
     FileData literal = readData(litLen, is);
     dst.insert(dst.end(), literal.begin(), literal.end());
-    ptr += litLen;
     
     // Leave Loop if Last Literal
-    if (ptr >= size)
+    if (is.tellg() >= size)
       break;
     
     // Match Offset
     short offset;
     readL(offset, is);
-    ptr += 2;
     
     // Match Length
     int matchLen = token & 0x0f;
@@ -87,7 +83,6 @@ bool CompressionUtils::decompressLZ4Chunk(FileData &dst, istream &is, size_t siz
       do {
         value = is.get();
         matchLen += value;
-        ++ptr;
       } while (value == 255);
     }
     matchLen += MIN_MATCH;
