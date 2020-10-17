@@ -66,14 +66,15 @@ bool USDCrate::read(istream &is) {
   USDTableOfContents toc;
   for (; numSections > 0; --numSections) {
     string sectionName = readStr(16, is);
-    readL(toc[sectionName].start, is);
-    readL(toc[sectionName].size, is);
+    toc[sectionName] = readLongL(is);
+    readLongL(is);
   }
   
-  StringVector tokens = readTokens(toc["TOKENS"].start, is);
-  IntVector fields = readIntVector(toc["FIELDS"].start, is);
-  LongVector reps = readReps(toc["FIELDS"].start, is);
-  IntVector fieldSets = readIntVector(toc["FIELDSETS"].start, is);
+  StringVector tokens = readTokens(toc["TOKENS"], is);
+  IntVector fields = readIntVector(toc["FIELDS"], is);
+  LongVector reps = readReps(toc["FIELDS"], is);
+  IntVector fieldSets = readIntVector(toc["FIELDSETS"], is);
+  readPaths(toc["PATHS"], is);
   
   return true;
 }
@@ -114,9 +115,22 @@ LongVector USDCrate::readReps(long start, istream &is) {
   return reps;
 }
 
-IntVector USDCrate::readIntVector(long start, std::istream &is) {
+void USDCrate::readPaths(long start, std::istream &is) {
+  is.seekg(_fileOffset + start + 8);
+  long numItems = readLongL(is);
+  IntVector paths = decompressIntVector(numItems, is);
+  IntVector tokens = decompressIntVector(numItems, is);
+  IntVector jumps = decompressIntVector(numItems, is);
+  cout << numItems << endl;
+}
+
+IntVector USDCrate::readIntVector(long start, istream &is) {
   is.seekg(_fileOffset + start);
   long numItems = readLongL(is);
+  return decompressIntVector(numItems, is);
+}
+
+IntVector USDCrate::decompressIntVector(long numItems, istream &is) {
   long compressedSize = readLongL(is);
 
   FileData buffer;

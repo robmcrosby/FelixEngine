@@ -15,12 +15,7 @@
 
 namespace fx {
 
-  struct USDTocSection {
-    long start;
-    long size;
-  };
-  typedef std::map<std::string, USDTocSection> USDTableOfContents;
-  typedef std::vector<std::string> StringVector;
+  typedef std::map<std::string, long> USDTableOfContents;
 
   /** USDArchive  */
   class USDCrate {
@@ -39,8 +34,10 @@ namespace fx {
     bool read(std::istream &is);
     StringVector readTokens(long start, std::istream &is);
     LongVector readReps(long start, std::istream &is);
+    void readPaths(long start, std::istream &is);
     
     IntVector readIntVector(long start, std::istream &is);
+    IntVector decompressIntVector(long numItems, std::istream &is);
   };
 
 }
