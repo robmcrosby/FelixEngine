@@ -23,7 +23,7 @@ namespace fx {
 
   /** define for IntVector */
   typedef std::vector<int> IntVector;
-
+  typedef std::vector<long> LongVector;
 
 
   class membuf : public std::basic_streambuf<char> {

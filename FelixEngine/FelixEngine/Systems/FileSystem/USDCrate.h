@@ -38,7 +38,9 @@ namespace fx {
   private:
     bool read(std::istream &is);
     StringVector readTokens(long start, std::istream &is);
-    IntVector readFields(long start, std::istream &is);
+    LongVector readReps(long start, std::istream &is);
+    
+    IntVector readIntVector(long start, std::istream &is);
   };
 
 }

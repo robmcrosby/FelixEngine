@@ -16,6 +16,16 @@ using namespace fx;
 using namespace std;
 
 
+bool CompressionUtils::decodeLongsL(LongVector &dst, FileData &src) {
+  bool success = true;
+  
+  memstream is((uint8_t*)&src[0], src.size());
+  for (size_t i = src.size()/sizeof(long); i > 0; --i) {
+    dst.push_back(readLongL(is));
+  }
+  return success;
+}
+
 bool CompressionUtils::decompressUSD32(IntVector &dst, FileData &src, size_t count) {
   bool success = true;
   

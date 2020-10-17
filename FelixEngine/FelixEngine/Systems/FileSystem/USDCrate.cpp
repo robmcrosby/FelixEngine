@@ -70,9 +70,10 @@ bool USDCrate::read(istream &is) {
     readL(toc[sectionName].size, is);
   }
   
-  // Read Tokens
   StringVector tokens = readTokens(toc["TOKENS"].start, is);
-  vector<int> fields = readFields(toc["FIELDS"].start, is);
+  IntVector fields = readIntVector(toc["FIELDS"].start, is);
+  LongVector reps = readReps(toc["FIELDS"].start, is);
+  IntVector fieldSets = readIntVector(toc["FIELDSETS"].start, is);
   
   return true;
 }
@@ -97,16 +98,32 @@ StringVector USDCrate::readTokens(long start, istream &is) {
   return tokens;
 }
 
-IntVector USDCrate::readFields(long start, istream &is) {
-  // Get Number of Fields
-  is.seekg(_fileOffset + start);
-  long numFields = readLongL(is);
+LongVector USDCrate::readReps(long start, istream &is) {
+  is.seekg(_fileOffset + start + 8);
   long compressedSize = readLongL(is);
   
+  is.seekg(_fileOffset + start + 16 + compressedSize);
+  compressedSize = readLongL(is);
+
   FileData buffer;
   CompressionUtils::decompressLZ4(buffer, is, compressedSize);
   
-  IntVector fields;
-  CompressionUtils::decompressUSD32(fields, buffer, numFields);
-  return fields;
+  LongVector reps;
+  CompressionUtils::decodeLongsL(reps, buffer);
+  
+  return reps;
+}
+
+IntVector USDCrate::readIntVector(long start, std::istream &is) {
+  is.seekg(_fileOffset + start);
+  long numItems = readLongL(is);
+  long compressedSize = readLongL(is);
+
+  FileData buffer;
+  CompressionUtils::decompressLZ4(buffer, is, compressedSize);
+  
+  IntVector items;
+  CompressionUtils::decompressUSD32(items, buffer, numItems);
+  
+  return items;
 }
