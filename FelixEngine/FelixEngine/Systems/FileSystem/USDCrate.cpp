@@ -63,7 +63,7 @@ bool USDCrate::read(istream &is) {
   readL(numSections, is);
   
   // Get the Section Names and Offsets
-  USDTableOfContents toc;
+  map<string, long> toc;
   for (; numSections > 0; --numSections) {
     string sectionName = readStr(16, is);
     toc[sectionName] = readLongL(is);
@@ -74,7 +74,8 @@ bool USDCrate::read(istream &is) {
   IntVector fields = readIntVector(toc["FIELDS"], is);
   LongVector reps = readReps(toc["FIELDS"], is);
   IntVector fieldSets = readIntVector(toc["FIELDSETS"], is);
-  readPaths(toc["PATHS"], is);
+  PathVector paths = readPaths(toc["PATHS"], is, tokens);
+  SpecMap specs = readSpecMap(toc["SPECS"], is);
   
   return true;
 }
@@ -115,13 +116,36 @@ LongVector USDCrate::readReps(long start, istream &is) {
   return reps;
 }
 
-void USDCrate::readPaths(long start, std::istream &is) {
+PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens) {
   is.seekg(_fileOffset + start + 8);
-  long numItems = readLongL(is);
-  IntVector paths = decompressIntVector(numItems, is);
-  IntVector tokens = decompressIntVector(numItems, is);
-  IntVector jumps = decompressIntVector(numItems, is);
-  cout << numItems << endl;
+  long numPaths = readLongL(is);
+  IntVector pathInts = decompressIntVector(numPaths, is);
+  IntVector tokenInts = decompressIntVector(numPaths, is);
+  IntVector jumpInts = decompressIntVector(numPaths, is);
+  
+  PathVector paths(numPaths);
+  for (int i = 0; i < numPaths; ++i) {
+    paths[i].path = pathInts[i];
+    paths[i].jump = jumpInts[i];
+    paths[i].leaf = tokenInts[i] < 0;
+    paths[i].token = tokens[abs(tokenInts[i])];
+  }
+  return paths;
+}
+
+SpecMap USDCrate::readSpecMap(long start, istream &is) {
+  is.seekg(_fileOffset + start);
+  long numSpecs = readLongL(is);
+  IntVector paths = decompressIntVector(numSpecs, is);
+  IntVector fsets = decompressIntVector(numSpecs, is);
+  IntVector types = decompressIntVector(numSpecs, is);
+  
+  SpecMap specs;
+  for (int i = 0; i < numSpecs; ++i) {
+    specs[paths[i]].fset = fsets[i];
+    specs[paths[i]].type = types[i];
+  }
+  return specs;
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

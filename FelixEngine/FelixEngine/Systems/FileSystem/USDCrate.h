@@ -15,7 +15,19 @@
 
 namespace fx {
 
-  typedef std::map<std::string, long> USDTableOfContents;
+  struct Path {
+    int path;
+    int jump;
+    bool leaf;
+    std::string token;
+  };
+  typedef std::vector<Path> PathVector;
+  
+  struct Spec {
+    int fset;
+    int type;
+  };
+  typedef std::map<int, Spec> SpecMap;
 
   /** USDArchive  */
   class USDCrate {
@@ -34,7 +46,9 @@ namespace fx {
     bool read(std::istream &is);
     StringVector readTokens(long start, std::istream &is);
     LongVector readReps(long start, std::istream &is);
-    void readPaths(long start, std::istream &is);
+    PathVector readPaths(long start, std::istream &is, StringVector &tokens);
+    SpecMap readSpecMap(long start, std::istream &is);
+    
     
     IntVector readIntVector(long start, std::istream &is);
     IntVector decompressIntVector(long numItems, std::istream &is);
