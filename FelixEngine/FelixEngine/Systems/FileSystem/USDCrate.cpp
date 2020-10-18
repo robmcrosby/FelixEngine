@@ -78,17 +78,16 @@ bool USDCrate::read(istream &is) {
   PathVector paths = readPaths(toc["PATHS"], is, tokens, specs);
   
   vector<USDItem*> itemStack;
-  itemStack.push_back(&_usdData);
   for (auto path = paths.begin(); path != paths.end(); ++path) {
     if (path->leaf) {
       USDAttribute &att = itemStack.back()->attributes[path->token];
+      att.name = path->token;
       att.reps = path->spec.reps;
       if (att.reps.count("typeName") > 0 && att.reps["typeName"].type == USD_TOKEN)
         att.typeName = tokens[att.reps["typeName"].payload];
       // Pop The Item Stack
-      if (path->jump == -2) {
+      if (path->jump == -2)
         itemStack.pop_back();
-      }
       //cout << "-" << path->token <<  ": " << path->jump << endl;
     }
     else {
@@ -97,15 +96,20 @@ bool USDCrate::read(istream &is) {
       item.reps = path->spec.reps;
       if (item.reps.count("typeName") > 0 && item.reps["typeName"].type == USD_TOKEN)
         item.typeName = tokens[item.reps["typeName"].payload];
-      itemStack.back()->children.push_back(item);
-      itemStack.push_back(&itemStack.back()->children.back());
+      if (itemStack.size() > 0) {
+        itemStack.back()->children.push_back(item);
+        itemStack.push_back(&itemStack.back()->children.back());
+      }
+      else {
+        _usdData.push_back(item);
+        itemStack.push_back(&_usdData.back());
+      }
       //cout << "+" << path->token << ": " << path->jump << endl;
     }
     
   }
   
-  printUSD(_usdData);
-  
+  printUSD();
   return true;
 }
 
@@ -191,24 +195,9 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
   return paths;
 }
 
-void USDCrate::printUSD(USDItem &item, string indent) {
-  cout << indent << "+" << item.typeName << " " << item.name << endl;
-  // Print Meta Data
-  //for (auto itr = item.reps.begin(); itr != item.reps.end(); ++itr)
-  //  cout << indent << " " << itr->first << ": " << itr->second.type << endl;
-  
-  // Print Attributes
-  for (auto att = item.attributes.begin(); att != item.attributes.end(); ++att) {
-    cout << indent << "  -" << att->second.typeName << " " << att->first << endl;
-    // Print Attribute Meta Data
-    //for (auto itr = att->second.reps.begin(); itr != att->second.reps.end(); ++itr)
-    //  cout << indent << "   " << itr->first << ": " << itr->second.type << endl;
-  }
-  
-  // Print Children
-  for (auto itr = item.children.begin(); itr != item.children.end(); ++itr) {
-    printUSD(*itr, indent + "  ");
-  }
+void USDCrate::printUSD() {
+  for (auto itr = _usdData.begin(); itr != _usdData.end(); ++itr)
+    itr->print(cout);
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

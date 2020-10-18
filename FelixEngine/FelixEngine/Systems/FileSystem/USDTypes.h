@@ -97,8 +97,13 @@ namespace fx {
   typedef std::vector<Path> PathVector;
 
   struct USDAttribute {
+    std::string name;
     std::string typeName;
+    USD_TYPE dataType;
+    FileData data;
     RepMap reps;
+    
+    void print(std::ostream &os, std::string indent = "") const;
   };
   typedef std::map<std::string, USDAttribute> USDAttributeMap;
 
@@ -108,7 +113,10 @@ namespace fx {
     USDAttributeMap attributes;
     std::vector<USDItem> children;
     RepMap reps;
+    
+    void print(std::ostream &os, std::string indent = "") const;
   };
+  typedef std::vector<USDItem> USDData;
 }
 
 

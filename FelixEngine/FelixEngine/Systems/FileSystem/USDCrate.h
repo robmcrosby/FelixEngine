@@ -21,7 +21,7 @@ namespace fx {
     size_t _fileOffset;
     size_t _fileLength;
     
-    USDItem _usdData;
+    USDData _usdData;
   
   public:
     USDCrate();
@@ -36,7 +36,7 @@ namespace fx {
     SpecMap readSpecMap(long start, std::istream &is, IntVector &fieldSets, IntVector &fields, StringVector &tokens, RepVector &reps);
     PathVector readPaths(long start, std::istream &is, StringVector &tokens, SpecMap &specs);
     
-    void printUSD(USDItem &item, std::string indent = "");
+    void printUSD();
     
     IntVector readIntVector(long start, std::istream &is);
     IntVector decompressIntVector(long numItems, std::istream &is);
