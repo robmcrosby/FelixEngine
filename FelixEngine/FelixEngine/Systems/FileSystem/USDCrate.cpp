@@ -72,10 +72,39 @@ bool USDCrate::read(istream &is) {
   
   StringVector tokens = readTokens(toc["TOKENS"], is);
   IntVector fields = readIntVector(toc["FIELDS"], is);
-  LongVector reps = readReps(toc["FIELDS"], is);
+  RepVector reps = readReps(toc["FIELDS"], is);
   IntVector fieldSets = readIntVector(toc["FIELDSETS"], is);
-  PathVector paths = readPaths(toc["PATHS"], is, tokens);
-  SpecMap specs = readSpecMap(toc["SPECS"], is);
+  SpecMap specs = readSpecMap(toc["SPECS"], is, fieldSets, fields, tokens, reps);
+  PathVector paths = readPaths(toc["PATHS"], is, tokens, specs);
+  
+  vector<USDItem*> itemStack;
+  itemStack.push_back(&_usdData);
+  for (auto path = paths.begin(); path != paths.end(); ++path) {
+    if (path->leaf) {
+      USDAttribute &att = itemStack.back()->attributes[path->token];
+      att.reps = path->spec.reps;
+      if (att.reps.count("typeName") > 0 && att.reps["typeName"].type == USD_TOKEN)
+        att.typeName = tokens[att.reps["typeName"].payload];
+      // Pop The Item Stack
+      if (path->jump == -2) {
+        itemStack.pop_back();
+      }
+      //cout << "-" << path->token <<  ": " << path->jump << endl;
+    }
+    else {
+      USDItem item;
+      item.name = path->token;
+      item.reps = path->spec.reps;
+      if (item.reps.count("typeName") > 0 && item.reps["typeName"].type == USD_TOKEN)
+        item.typeName = tokens[item.reps["typeName"].payload];
+      itemStack.back()->children.push_back(item);
+      itemStack.push_back(&itemStack.back()->children.back());
+      //cout << "+" << path->token << ": " << path->jump << endl;
+    }
+    
+  }
+  
+  printUSD(_usdData);
   
   return true;
 }
@@ -100,7 +129,7 @@ StringVector USDCrate::readTokens(long start, istream &is) {
   return tokens;
 }
 
-LongVector USDCrate::readReps(long start, istream &is) {
+RepVector USDCrate::readReps(long start, istream &is) {
   is.seekg(_fileOffset + start + 8);
   long compressedSize = readLongL(is);
   
@@ -110,30 +139,22 @@ LongVector USDCrate::readReps(long start, istream &is) {
   FileData buffer;
   CompressionUtils::decompressLZ4(buffer, is, compressedSize);
   
-  LongVector reps;
-  CompressionUtils::decodeLongsL(reps, buffer);
+  LongVector values;
+  CompressionUtils::decodeLongsL(values, buffer);
+  
+  RepVector reps(values.size());
+  for (int i = 0; i < values.size(); ++i) {
+    reps[i].type = (USD_TYPE)(values[i] >> 48 & 0xff);
+    reps[i].array = values[i] >> 63 & 1;
+    reps[i].inlined = values[i] >> 62 & 1;
+    reps[i].compressed = values[i] >> 61 & 1;
+    reps[i].payload = values[i] & 0xffffffffffff;
+  }
   
   return reps;
 }
 
-PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens) {
-  is.seekg(_fileOffset + start + 8);
-  long numPaths = readLongL(is);
-  IntVector pathInts = decompressIntVector(numPaths, is);
-  IntVector tokenInts = decompressIntVector(numPaths, is);
-  IntVector jumpInts = decompressIntVector(numPaths, is);
-  
-  PathVector paths(numPaths);
-  for (int i = 0; i < numPaths; ++i) {
-    paths[i].path = pathInts[i];
-    paths[i].jump = jumpInts[i];
-    paths[i].leaf = tokenInts[i] < 0;
-    paths[i].token = tokens[abs(tokenInts[i])];
-  }
-  return paths;
-}
-
-SpecMap USDCrate::readSpecMap(long start, istream &is) {
+SpecMap USDCrate::readSpecMap(long start, istream &is, IntVector &fieldSets, IntVector &fields, StringVector &tokens, RepVector &reps) {
   is.seekg(_fileOffset + start);
   long numSpecs = readLongL(is);
   IntVector paths = decompressIntVector(numSpecs, is);
@@ -142,10 +163,52 @@ SpecMap USDCrate::readSpecMap(long start, istream &is) {
   
   SpecMap specs;
   for (int i = 0; i < numSpecs; ++i) {
-    specs[paths[i]].fset = fsets[i];
     specs[paths[i]].type = types[i];
+    int fIndex = fsets[i];
+    while (fIndex < fieldSets.size() && fieldSets[fIndex] >= 0) {
+      int f = fieldSets[fIndex++];
+      string name = tokens[fields[f]];
+      specs[paths[i]].reps[name] = reps[f];
+    }
   }
   return specs;
+}
+
+PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, SpecMap &specs) {
+  is.seekg(_fileOffset + start + 8);
+  long numPaths = readLongL(is);
+  IntVector pathInts = decompressIntVector(numPaths, is);
+  IntVector tokenInts = decompressIntVector(numPaths, is);
+  IntVector jumpInts = decompressIntVector(numPaths, is);
+  
+  PathVector paths(numPaths);
+  for (int i = 0; i < numPaths; ++i) {
+    paths[i].jump = jumpInts[i];
+    paths[i].leaf = tokenInts[i] < 0;
+    paths[i].spec = specs[pathInts[i]];
+    paths[i].token = tokens[abs(tokenInts[i])];
+  }
+  return paths;
+}
+
+void USDCrate::printUSD(USDItem &item, string indent) {
+  cout << indent << "+" << item.typeName << " " << item.name << endl;
+  // Print Meta Data
+  //for (auto itr = item.reps.begin(); itr != item.reps.end(); ++itr)
+  //  cout << indent << " " << itr->first << ": " << itr->second.type << endl;
+  
+  // Print Attributes
+  for (auto att = item.attributes.begin(); att != item.attributes.end(); ++att) {
+    cout << indent << "  -" << att->second.typeName << " " << att->first << endl;
+    // Print Attribute Meta Data
+    //for (auto itr = att->second.reps.begin(); itr != att->second.reps.end(); ++itr)
+    //  cout << indent << "   " << itr->first << ": " << itr->second.type << endl;
+  }
+  
+  // Print Children
+  for (auto itr = item.children.begin(); itr != item.children.end(); ++itr) {
+    printUSD(*itr, indent + "  ");
+  }
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

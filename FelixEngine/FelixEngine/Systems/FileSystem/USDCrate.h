@@ -9,32 +9,19 @@
 #ifndef USDCrate_h
 #define USDCrate_h
 
-#include "FileSystem.h"
+#include "USDTypes.h"
 #include <sstream>
 
 
 namespace fx {
-
-  struct Path {
-    int path;
-    int jump;
-    bool leaf;
-    std::string token;
-  };
-  typedef std::vector<Path> PathVector;
-  
-  struct Spec {
-    int fset;
-    int type;
-  };
-  typedef std::map<int, Spec> SpecMap;
-
   /** USDArchive  */
   class USDCrate {
   private:
     std::string _filePath;
     size_t _fileOffset;
     size_t _fileLength;
+    
+    USDItem _usdData;
   
   public:
     USDCrate();
@@ -45,10 +32,11 @@ namespace fx {
   private:
     bool read(std::istream &is);
     StringVector readTokens(long start, std::istream &is);
-    LongVector readReps(long start, std::istream &is);
-    PathVector readPaths(long start, std::istream &is, StringVector &tokens);
-    SpecMap readSpecMap(long start, std::istream &is);
+    RepVector readReps(long start, std::istream &is);
+    SpecMap readSpecMap(long start, std::istream &is, IntVector &fieldSets, IntVector &fields, StringVector &tokens, RepVector &reps);
+    PathVector readPaths(long start, std::istream &is, StringVector &tokens, SpecMap &specs);
     
+    void printUSD(USDItem &item, std::string indent = "");
     
     IntVector readIntVector(long start, std::istream &is);
     IntVector decompressIntVector(long numItems, std::istream &is);
