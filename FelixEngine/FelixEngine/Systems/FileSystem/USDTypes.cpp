@@ -13,6 +13,13 @@ using namespace fx;
 using namespace std;
 
 
+void USDAttribute::setToPath(Path &path, StringVector &tokens) {
+  name = path.token;
+  reps = path.spec.reps;
+  if (reps.count("typeName") > 0 && reps["typeName"].type == USD_TOKEN)
+    typeName = tokens[reps["typeName"].payload];
+}
+
 void USDAttribute::print(ostream &os, string indent) const {
   os << indent << "-" << typeName << " " << name << endl;
   
@@ -21,6 +28,13 @@ void USDAttribute::print(ostream &os, string indent) const {
     os << indent << "  " << itr->first << ": " << itr->second.type << endl;
 }
 
+
+void USDItem::setToPath(Path &path, StringVector &tokens) {
+  name = path.token;
+  reps = path.spec.reps;
+  if (reps.count("typeName") > 0 && reps["typeName"].type == USD_TOKEN)
+    typeName = tokens[reps["typeName"].payload];
+}
 
 void USDItem::print(ostream &os, string indent) const {
   os << indent << "+" << typeName << " " << name << endl;

@@ -103,6 +103,7 @@ namespace fx {
     FileData data;
     RepMap reps;
     
+    void setToPath(Path &path, StringVector &tokens);
     void print(std::ostream &os, std::string indent = "") const;
   };
   typedef std::map<std::string, USDAttribute> USDAttributeMap;
@@ -114,6 +115,7 @@ namespace fx {
     std::vector<USDItem> children;
     RepMap reps;
     
+    void setToPath(Path &path, StringVector &tokens);
     void print(std::ostream &os, std::string indent = "") const;
   };
   typedef std::vector<USDItem> USDData;

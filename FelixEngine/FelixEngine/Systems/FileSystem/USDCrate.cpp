@@ -81,21 +81,14 @@ bool USDCrate::read(istream &is) {
   for (auto path = paths.begin(); path != paths.end(); ++path) {
     if (path->leaf) {
       USDAttribute &att = itemStack.back()->attributes[path->token];
-      att.name = path->token;
-      att.reps = path->spec.reps;
-      if (att.reps.count("typeName") > 0 && att.reps["typeName"].type == USD_TOKEN)
-        att.typeName = tokens[att.reps["typeName"].payload];
-      // Pop The Item Stack
+      att.setToPath(*path, tokens);
       if (path->jump == -2)
         itemStack.pop_back();
       //cout << "-" << path->token <<  ": " << path->jump << endl;
     }
     else {
       USDItem item;
-      item.name = path->token;
-      item.reps = path->spec.reps;
-      if (item.reps.count("typeName") > 0 && item.reps["typeName"].type == USD_TOKEN)
-        item.typeName = tokens[item.reps["typeName"].payload];
+      item.setToPath(*path, tokens);
       if (itemStack.size() > 0) {
         itemStack.back()->children.push_back(item);
         itemStack.push_back(&itemStack.back()->children.back());
