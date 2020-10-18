@@ -89,6 +89,7 @@ namespace fx {
   typedef std::map<int, Spec> SpecMap;
 
   struct Path {
+    int index;
     int jump;
     bool leaf;
     Spec spec;
@@ -103,7 +104,7 @@ namespace fx {
     FileData data;
     RepMap reps;
     
-    void setToPath(Path &path, StringVector &tokens);
+    void setToPath(Path &path, StringMap &paths, StringVector &tokens, size_t fileOffset, std::istream &is);
     void print(std::ostream &os, std::string indent = "") const;
     
     void setTokenValue(const std::string &token);
@@ -111,6 +112,9 @@ namespace fx {
     
     void setAssetValue(const std::string &asset);
     std::string assetValue() const;
+    
+    void setPathValue(const std::string &path);
+    std::string pathValue() const;
     
     void setValue(float value);
     float floatValue() const;

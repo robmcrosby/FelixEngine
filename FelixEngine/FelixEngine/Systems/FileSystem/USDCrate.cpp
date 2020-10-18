@@ -77,11 +77,25 @@ bool USDCrate::read(istream &is) {
   SpecMap specs = readSpecMap(toc["SPECS"], is, fieldSets, fields, tokens, reps);
   PathVector paths = readPaths(toc["PATHS"], is, tokens, specs);
   
+  StringMap pathMap;
+  StringVector nameStack;
+  for (auto path = paths.begin(); path != paths.end(); ++path) {
+    if (path->leaf) {
+      pathMap[path->index] = nameStack.back()+"/"+path->token;
+      if (path->jump == -2)
+        nameStack.pop_back();
+    }
+    else {
+      pathMap[path->index] = (nameStack.size() > 0 ? (nameStack.back() + "/" + path->token) : "");
+      nameStack.push_back(pathMap[path->index]);
+    }
+  }
+  
   vector<USDItem*> itemStack;
   for (auto path = paths.begin(); path != paths.end(); ++path) {
     if (path->leaf) {
       USDAttribute &att = itemStack.back()->attributes[path->token];
-      att.setToPath(*path, tokens);
+      att.setToPath(*path, pathMap, tokens, _fileOffset, is);
       if (path->jump == -2)
         itemStack.pop_back();
       //cout << "-" << path->token <<  ": " << path->jump << endl;
@@ -180,6 +194,7 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
   
   PathVector paths(numPaths);
   for (int i = 0; i < numPaths; ++i) {
+    paths[i].index = pathInts[i];
     paths[i].jump = jumpInts[i];
     paths[i].leaf = tokenInts[i] < 0;
     paths[i].spec = specs[pathInts[i]];

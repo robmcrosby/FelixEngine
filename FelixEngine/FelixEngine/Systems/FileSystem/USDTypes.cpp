@@ -13,7 +13,7 @@ using namespace fx;
 using namespace std;
 
 
-void USDAttribute::setToPath(Path &path, StringVector &tokens) {
+void USDAttribute::setToPath(Path &path, StringMap &paths, StringVector &tokens, size_t fileOffset, istream &is) {
   name = path.token;
   reps = path.spec.reps;
   if (reps.count("typeName") > 0 && reps["typeName"].type == USD_TOKEN)
@@ -27,6 +27,15 @@ void USDAttribute::setToPath(Path &path, StringVector &tokens) {
     else if (rep.type == USD_FLOAT && !rep.array && rep.inlined)
       setValue((float)rep.payload);
   }
+  else if (reps.count("targetChildren") > 0) {
+    typeName = "rel";
+    is.seekg(fileOffset + reps["targetChildren"].payload + 8);
+    setPathValue(paths[readIntL(is)]);
+  }
+  else if (reps.count("connectionChildren") > 0) {
+    is.seekg(fileOffset + reps["connectionChildren"].payload + 8);
+    setPathValue(paths[readIntL(is)]);
+  }
 }
 
 void USDAttribute::print(ostream &os, string indent) const {
@@ -38,6 +47,12 @@ void USDAttribute::print(ostream &os, string indent) const {
       os << " = <" << assetValue() << ">" << endl;
     else if (dataType == USD_FLOAT)
       os << " = " << floatValue() << endl;
+    else if (dataType == USD_PATH_VECTOR) {
+      if (typeName == "rel")
+        os << " = <" << pathValue() << ">" << endl;
+      else
+        os << ".connect = <" << pathValue() << ">" << endl;
+    }
   }
   else {
     os << endl;
@@ -73,6 +88,17 @@ void USDAttribute::setAssetValue(const string &asset) {
 }
 
 string USDAttribute::assetValue() const {
+  return &data[0];
+}
+
+void USDAttribute::setPathValue(const string &path) {
+  dataType = USD_PATH_VECTOR;
+  data.resize(path.size()+1);
+  memcpy(&data[0], &path[0], path.size());
+  data[path.size()] = '\0';
+}
+
+string USDAttribute::pathValue() const {
   return &data[0];
 }
 
