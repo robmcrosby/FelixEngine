@@ -105,6 +105,15 @@ namespace fx {
     
     void setToPath(Path &path, StringVector &tokens);
     void print(std::ostream &os, std::string indent = "") const;
+    
+    void setTokenValue(const std::string &token);
+    std::string tokenValue() const;
+    
+    void setAssetValue(const std::string &asset);
+    std::string assetValue() const;
+    
+    void setValue(float value);
+    float floatValue() const;
   };
   typedef std::map<std::string, USDAttribute> USDAttributeMap;
 
