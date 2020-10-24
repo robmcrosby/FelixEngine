@@ -21,7 +21,7 @@ namespace fx {
     size_t _fileOffset;
     size_t _fileLength;
     
-    USDData _usdData;
+    std::vector<USDItem> _usdData;
   
   public:
     USDCrate();

@@ -99,12 +99,17 @@ namespace fx {
 
   class USDCrate;
 
-  struct USDAttribute {
+  struct USDItem {
     std::string name;
     std::string typeName;
     USD_TYPE dataType;
     FileData data;
     RepMap reps;
+    
+    std::map<std::string, USDItem> attributes;
+    std::vector<USDItem> children;
+    
+    bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
     void setToPath(Path &path, StringMap &paths, StringVector &tokens, size_t fileOffset, std::istream &is);
     void print(std::ostream &os, std::string indent = "") const;
@@ -130,19 +135,6 @@ namespace fx {
     void setValue(vec4 value);
     vec4 vec4Value() const;
   };
-  typedef std::map<std::string, USDAttribute> USDAttributeMap;
-
-  struct USDItem {
-    std::string name;
-    std::string typeName;
-    USDAttributeMap attributes;
-    std::vector<USDItem> children;
-    RepMap reps;
-    
-    void setToPath(Path &path, StringVector &tokens);
-    void print(std::ostream &os, std::string indent = "") const;
-  };
-  typedef std::vector<USDItem> USDData;
 }
 
 

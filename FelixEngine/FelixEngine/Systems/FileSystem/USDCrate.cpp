@@ -94,7 +94,7 @@ bool USDCrate::read(istream &is) {
   vector<USDItem*> itemStack;
   for (auto path = paths.begin(); path != paths.end(); ++path) {
     if (path->leaf) {
-      USDAttribute &att = itemStack.back()->attributes[path->token];
+      USDItem &att = itemStack.back()->attributes[path->token];
       att.setToPath(*path, pathMap, tokens, _fileOffset, is);
       if (path->jump == -2)
         itemStack.pop_back();
@@ -102,7 +102,7 @@ bool USDCrate::read(istream &is) {
     }
     else {
       USDItem item;
-      item.setToPath(*path, tokens);
+      item.setToPath(*path, pathMap, tokens, _fileOffset, is);
       if (itemStack.size() > 0) {
         itemStack.back()->children.push_back(item);
         itemStack.push_back(&itemStack.back()->children.back());
