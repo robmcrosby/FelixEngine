@@ -7,14 +7,16 @@
 //
 
 #include "USDTypes.h"
+#include "USDCrate.h"
 
 
 using namespace fx;
 using namespace std;
 
 
-void USDItem::setToPath(Path &path, StringMap &paths, StringVector &tokens, size_t fileOffset, istream &is) {
+void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, size_t fileOffset, istream &is) {
   name = path.token;
+  pathString = pathStr;
   reps = path.spec.reps;
   if (reps.count("typeName") > 0 && reps["typeName"].type == USD_TOKEN)
     typeName = tokens[reps["typeName"].payload];
@@ -24,6 +26,8 @@ void USDItem::setToPath(Path &path, StringMap &paths, StringVector &tokens, size
       setTokenValue(tokens[rep.payload]);
     else if (rep.type == USD_ASSET && !rep.array && rep.inlined)
       setAssetValue(tokens[rep.payload]);
+    else if (rep.type == USD_INT && !rep.array && rep.inlined)
+      setValue((int)rep.payload);
     else if (rep.type == USD_FLOAT && !rep.array && rep.inlined)
       setValue((float)rep.payload);
     else if (rep.type == USD_VEC2_F) {
@@ -54,15 +58,15 @@ void USDItem::setToPath(Path &path, StringMap &paths, StringVector &tokens, size
   else if (reps.count("targetChildren") > 0) {
     typeName = "rel";
     is.seekg(fileOffset + reps["targetChildren"].payload + 8);
-    setPathValue(paths[readIntL(is)]);
+    setPathValue(readIntL(is));
   }
   else if (reps.count("connectionChildren") > 0) {
     is.seekg(fileOffset + reps["connectionChildren"].payload + 8);
-    setPathValue(paths[readIntL(is)]);
+    setPathValue(readIntL(is));
   }
 }
 
-void USDItem::print(ostream &os, string indent) const {
+void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
   if (isAttribute()) {
     os << indent << "-" << typeName << " " << name;
     if (dataType != USD_INVALID && data.size() > 0) {
@@ -70,6 +74,8 @@ void USDItem::print(ostream &os, string indent) const {
         os << " = \"" << tokenValue() << "\"" << endl;
       else if (dataType == USD_ASSET)
         os << " = <" << assetValue() << ">" << endl;
+      else if (dataType == USD_INT)
+        os << " = " << intValue() << endl;
       else if (dataType == USD_FLOAT)
         os << " = " << floatValue() << endl;
       else if (dataType == USD_VEC2_F)
@@ -80,9 +86,9 @@ void USDItem::print(ostream &os, string indent) const {
         os << " = " << vec4Value() << endl;
       else if (dataType == USD_PATH_VECTOR) {
         if (typeName == "rel")
-          os << " = <" << pathValue() << ">" << endl;
+          os << " = <" << crate->_usdItems[pathValue()].pathString << ">" << endl;
         else
-          os << ".connect = <" << pathValue() << ">" << endl;
+          os << ".connect = <" << crate->_usdItems[pathValue()].pathString << ">" << endl;
       }
     }
     else {
@@ -107,19 +113,17 @@ void USDItem::print(ostream &os, string indent) const {
     
     // Print Attributes
     for (auto itr = attributes.begin(); itr != attributes.end(); ++itr)
-      itr->second.print(os, indent + "  ");
+      crate->_usdItems[itr->second].print(os, crate, indent + "  ");
     
     // Print Children
     for (auto itr = children.begin(); itr != children.end(); ++itr)
-      itr->print(os, indent + "  ");
+      crate->_usdItems[*itr].print(os, crate, indent + "  ");
   }
 }
 
 void USDItem::setTokenValue(const string &token) {
+  setValue(token);
   dataType = USD_TOKEN;
-  data.resize(token.size()+1);
-  memcpy(&data[0], &token[0], token.size());
-  data[token.size()] = '\0';
 }
 
 string USDItem::tokenValue() const {
@@ -127,31 +131,48 @@ string USDItem::tokenValue() const {
 }
 
 void USDItem::setAssetValue(const string &asset) {
+  setValue(asset);
   dataType = USD_ASSET;
-  data.resize(asset.size()+1);
-  memcpy(&data[0], &asset[0], asset.size());
-  data[asset.size()] = '\0';
 }
 
 string USDItem::assetValue() const {
   return &data[0];
 }
 
-void USDItem::setPathValue(const string &path) {
+void USDItem::setPathValue(int path) {
+  setValue(path);
   dataType = USD_PATH_VECTOR;
-  data.resize(path.size()+1);
-  memcpy(&data[0], &path[0], path.size());
-  data[path.size()] = '\0';
 }
 
-string USDItem::pathValue() const {
+int USDItem::pathValue() const {
+  return intValue();
+}
+
+void USDItem::setValue(const string &str) {
+  dataType = USD_STRING;
+  data.resize(str.size()+1);
+  memcpy(&data[0], &str[0], str.size());
+  data[str.size()] = '\0';
+}
+
+string USDItem::stringValue() const {
   return &data[0];
+}
+
+void USDItem::setValue(int value) {
+  dataType = USD_INT;
+  data.resize(sizeof(int));
+  memcpy(&data[0], &value, sizeof(int));
 }
 
 void USDItem::setValue(float value) {
   dataType = USD_FLOAT;
   data.resize(sizeof(float));
   memcpy(&data[0], &value, sizeof(float));
+}
+
+int USDItem::intValue() const {
+  return (int)*(&data[0]);
 }
 
 float USDItem::floatValue() const {

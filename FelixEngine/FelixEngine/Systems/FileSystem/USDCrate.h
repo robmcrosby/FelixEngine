@@ -17,11 +17,15 @@ namespace fx {
   /** USDArchive  */
   class USDCrate {
   private:
+    friend USDItem;
+    
     std::string _filePath;
     size_t _fileOffset;
     size_t _fileLength;
     
-    std::vector<USDItem> _usdData;
+    int _rootItem;
+    std::vector<USDItem> _usdItems;
+    std::map<std::string, int> _pathMap;
   
   public:
     USDCrate();

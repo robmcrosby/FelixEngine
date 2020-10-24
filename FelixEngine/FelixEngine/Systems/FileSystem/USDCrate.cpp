@@ -77,43 +77,37 @@ bool USDCrate::read(istream &is) {
   SpecMap specs = readSpecMap(toc["SPECS"], is, fieldSets, fields, tokens, reps);
   PathVector paths = readPaths(toc["PATHS"], is, tokens, specs);
   
-  StringMap pathMap;
-  StringVector nameStack;
-  for (auto path = paths.begin(); path != paths.end(); ++path) {
-    if (path->leaf) {
-      pathMap[path->index] = nameStack.back()+"/"+path->token;
-      if (path->jump == -2)
-        nameStack.pop_back();
-    }
-    else {
-      pathMap[path->index] = (nameStack.size() > 0 ? (nameStack.back() + "/" + path->token) : "");
-      nameStack.push_back(pathMap[path->index]);
-    }
-  }
+  _usdItems.resize(paths.size());
+  _pathMap.clear();
   
-  vector<USDItem*> itemStack;
+  StringVector pathStack;
+  IntVector itemStack;
+  
   for (auto path = paths.begin(); path != paths.end(); ++path) {
+    std::string pathStr = (pathStack.size() > 0 ? (pathStack.back() + "/" + path->token) : "");
+    _pathMap[pathStr] = path->index;
+    USDItem &item = _usdItems[path->index];
+    item.setToPath(*path, pathStr, tokens, _fileOffset, is);
+    
     if (path->leaf) {
-      USDItem &att = itemStack.back()->attributes[path->token];
-      att.setToPath(*path, pathMap, tokens, _fileOffset, is);
-      if (path->jump == -2)
+      USDItem &parent = _usdItems[itemStack.back()];
+      parent.attributes[item.name] = path->index;
+      if (path->jump == -2) {
         itemStack.pop_back();
-      //cout << "-" << path->token <<  ": " << path->jump << endl;
+        pathStack.pop_back();
+      }
     }
     else {
-      USDItem item;
-      item.setToPath(*path, pathMap, tokens, _fileOffset, is);
       if (itemStack.size() > 0) {
-        itemStack.back()->children.push_back(item);
-        itemStack.push_back(&itemStack.back()->children.back());
+        USDItem &parent = _usdItems[itemStack.back()];
+        parent.children.push_back(path->index);
       }
       else {
-        _usdData.push_back(item);
-        itemStack.push_back(&_usdData.back());
+        _rootItem = path->index;
       }
-      //cout << "+" << path->token << ": " << path->jump << endl;
+      itemStack.push_back(path->index);
+      pathStack.push_back(pathStr);
     }
-    
   }
   
   printUSD();
@@ -204,8 +198,11 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
 }
 
 void USDCrate::printUSD() {
-  for (auto itr = _usdData.begin(); itr != _usdData.end(); ++itr)
-    itr->print(cout);
+  USDItem &rootItem = _usdItems[_rootItem];
+  rootItem.print(cout, this);
+  
+  //for (auto itr = _usdData.begin(); itr != _usdData.end(); ++itr)
+  //  itr->print(cout);
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

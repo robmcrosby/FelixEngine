@@ -101,18 +101,22 @@ namespace fx {
 
   struct USDItem {
     std::string name;
+    std::string pathString;
     std::string typeName;
     USD_TYPE dataType;
     FileData data;
     RepMap reps;
     
-    std::map<std::string, USDItem> attributes;
-    std::vector<USDItem> children;
+    std::map<std::string, int> attributes;
+    IntVector children;
+    
+    //std::map<std::string, USDItem> attributes;
+    //std::vector<USDItem> children;
     
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
-    void setToPath(Path &path, StringMap &paths, StringVector &tokens, size_t fileOffset, std::istream &is);
-    void print(std::ostream &os, std::string indent = "") const;
+    void setToPath(Path &path, std::string &pathStr, StringVector &tokens, size_t fileOffset, std::istream &is);
+    void print(std::ostream &os, USDCrate *crate, std::string indent = "") const;
     
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;
@@ -120,8 +124,14 @@ namespace fx {
     void setAssetValue(const std::string &asset);
     std::string assetValue() const;
     
-    void setPathValue(const std::string &path);
-    std::string pathValue() const;
+    void setPathValue(int path);
+    int pathValue() const;
+    
+    void setValue(const std::string &str);
+    std::string stringValue() const;
+    
+    void setValue(int value);
+    int intValue() const;
     
     void setValue(float value);
     float floatValue() const;
