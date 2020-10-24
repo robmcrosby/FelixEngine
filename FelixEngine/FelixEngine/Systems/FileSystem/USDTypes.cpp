@@ -26,6 +26,30 @@ void USDAttribute::setToPath(Path &path, StringMap &paths, StringVector &tokens,
       setAssetValue(tokens[rep.payload]);
     else if (rep.type == USD_FLOAT && !rep.array && rep.inlined)
       setValue((float)rep.payload);
+    else if (rep.type == USD_VEC2_F) {
+      if (!rep.inlined && !rep.array) {
+        is.seekg(fileOffset + rep.payload);
+        vec2 value;
+        readL(&value.x, 2, is);
+        setValue(value);
+      }
+    }
+    else if (rep.type == USD_VEC3_F) {
+      if (!rep.inlined && !rep.array) {
+        is.seekg(fileOffset + rep.payload);
+        vec3 value;
+        readL(&value.x, 3, is);
+        setValue(value);
+      }
+    }
+    else if (rep.type == USD_VEC4_F) {
+      if (!rep.inlined && !rep.array) {
+        is.seekg(fileOffset + rep.payload);
+        vec4 value;
+        readL(&value.x, 4, is);
+        setValue(value);
+      }
+    }
   }
   else if (reps.count("targetChildren") > 0) {
     typeName = "rel";
@@ -47,6 +71,12 @@ void USDAttribute::print(ostream &os, string indent) const {
       os << " = <" << assetValue() << ">" << endl;
     else if (dataType == USD_FLOAT)
       os << " = " << floatValue() << endl;
+    else if (dataType == USD_VEC2_F)
+      os << " = " << vec2Value() << endl;
+    else if (dataType == USD_VEC3_F)
+      os << " = " << vec3Value() << endl;
+    else if (dataType == USD_VEC4_F)
+      os << " = " << vec4Value() << endl;
     else if (dataType == USD_PATH_VECTOR) {
       if (typeName == "rel")
         os << " = <" << pathValue() << ">" << endl;
@@ -110,6 +140,36 @@ void USDAttribute::setValue(float value) {
 
 float USDAttribute::floatValue() const {
   return (float)*(&data[0]);
+}
+
+void USDAttribute::setValue(vec2 value) {
+  dataType = USD_VEC2_F;
+  data.resize(sizeof(vec2));
+  memcpy(&data[0], value.ptr(), sizeof(vec2));
+}
+
+vec2 USDAttribute::vec2Value() const {
+  return ((vec2*)(&data[0]))[0];
+}
+
+void USDAttribute::setValue(vec3 value) {
+  dataType = USD_VEC3_F;
+  data.resize(sizeof(vec3));
+  memcpy(&data[0], value.ptr(), sizeof(vec3));
+}
+
+vec3 USDAttribute::vec3Value() const {
+  return ((vec3*)(&data[0]))[0];
+}
+
+void USDAttribute::setValue(vec4 value) {
+  dataType = USD_VEC4_F;
+  data.resize(sizeof(vec4));
+  memcpy(&data[0], value.ptr(), sizeof(vec4));
+}
+
+vec4 USDAttribute::vec4Value() const {
+  return ((vec4*)(&data[0]))[0];
 }
 
 

@@ -97,6 +97,8 @@ namespace fx {
   };
   typedef std::vector<Path> PathVector;
 
+  class USDCrate;
+
   struct USDAttribute {
     std::string name;
     std::string typeName;
@@ -118,6 +120,15 @@ namespace fx {
     
     void setValue(float value);
     float floatValue() const;
+    
+    void setValue(vec2 value);
+    vec2 vec2Value() const;
+    
+    void setValue(vec3 value);
+    vec3 vec3Value() const;
+    
+    void setValue(vec4 value);
+    vec4 vec4Value() const;
   };
   typedef std::map<std::string, USDAttribute> USDAttributeMap;
 
