@@ -22,6 +22,7 @@ namespace fx {
     std::string _filePath;
     size_t _fileOffset;
     size_t _fileLength;
+    std::ifstream *_fileStream;
     
     int _rootItem;
     std::vector<USDItem> _usdItems;
@@ -32,9 +33,11 @@ namespace fx {
     ~USDCrate();
     
     bool open(const std::string &filePath, size_t offset = 0, size_t length = 0);
+    bool open();
+    void close();
     
   private:
-    bool read(std::istream &is);
+    bool readTableOfContents();
     StringVector readTokens(long start, std::istream &is);
     RepVector readReps(long start, std::istream &is);
     SpecMap readSpecMap(long start, std::istream &is, IntVector &fieldSets, IntVector &fields, StringVector &tokens, RepVector &reps);

@@ -14,7 +14,7 @@ using namespace std;
 using namespace fx;
 
 
-USDCrate::USDCrate(): _fileOffset(0), _fileLength(0) {
+USDCrate::USDCrate(): _fileOffset(0), _fileLength(0), _fileStream(0) {
   
 }
 
@@ -27,23 +27,38 @@ bool USDCrate::open(const string &filePath, size_t offset, size_t length) {
   _fileOffset = offset;
   _fileLength = length;
   
-  bool success = true;
-  ifstream usdcFile;
-  
-  usdcFile.open(filePath, ios::in | ios::binary);
-  if (!usdcFile.is_open())
-  {
-    cerr << "Error Opening USDC File" << endl;
-    success = false;
-  }
-  else {
-    success = read(usdcFile);
-    usdcFile.close();
+  bool success = open();
+  if (success) {
+    success = readTableOfContents();
+    if (!success)
+      close();
   }
   return success;
 }
 
-bool USDCrate::read(istream &is) {
+bool USDCrate::open() {
+  _fileStream = new ifstream();
+  _fileStream->open(_filePath, ios::in | ios::binary);
+  if (!_fileStream->is_open()) {
+    cerr << "Error Opening USDC File: " << _filePath << endl;
+    delete _fileStream;
+    _fileStream = nullptr;
+    return false;
+  }
+  return true;
+}
+
+void USDCrate::close() {
+  if (_fileStream) {
+    _fileStream->close();
+    delete _fileStream;
+  }
+  _fileStream = nullptr;
+}
+
+bool USDCrate::readTableOfContents() {
+  istream &is = *_fileStream;
+  
   // Check that a USD Crate file is being read
   is.seekg(_fileOffset);
   string fileStr = readStr(9, is);
@@ -87,7 +102,7 @@ bool USDCrate::read(istream &is) {
     std::string pathStr = (pathStack.size() > 0 ? (pathStack.back() + "/" + path->token) : "");
     _pathMap[pathStr] = path->index;
     USDItem &item = _usdItems[path->index];
-    item.setToPath(*path, pathStr, tokens, _fileOffset, is);
+    item.setToPath(*path, pathStr, tokens, this);
     
     if (path->leaf) {
       USDItem &parent = _usdItems[itemStack.back()];
@@ -200,9 +215,6 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
 void USDCrate::printUSD() {
   USDItem &rootItem = _usdItems[_rootItem];
   rootItem.print(cout, this);
-  
-  //for (auto itr = _usdData.begin(); itr != _usdData.end(); ++itr)
-  //  itr->print(cout);
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

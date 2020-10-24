@@ -85,6 +85,7 @@ USDCrate USDArchive::getUSDCrate(const string &name) const {
   USDCrate crate;
   USDEntry entry = getEntry(name);
   crate.open(_filePath, entry.fileOffset, entry.fileLength);
+  crate.close();
   return crate;
 }
 

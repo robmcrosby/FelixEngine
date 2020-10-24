@@ -14,10 +14,14 @@ using namespace fx;
 using namespace std;
 
 
-void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, size_t fileOffset, istream &is) {
+void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCrate *crate) {
   name = path.token;
   pathString = pathStr;
   reps = path.spec.reps;
+  
+  size_t fileOffset = crate->_fileOffset;
+  istream &is = *crate->_fileStream;
+  
   if (reps.count("typeName") > 0 && reps["typeName"].type == USD_TOKEN)
     typeName = tokens[reps["typeName"].payload];
   if (reps.count("default")) {
