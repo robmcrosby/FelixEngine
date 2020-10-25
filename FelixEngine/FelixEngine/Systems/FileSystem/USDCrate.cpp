@@ -94,6 +94,9 @@ bool USDCrate::readTableOfContents() {
   
   _usdItems.resize(paths.size());
   _pathMap.clear();
+  _objects.clear();
+  _meshes.clear();
+  _materials.clear();
   
   StringVector pathStack;
   IntVector itemStack;
@@ -113,6 +116,13 @@ bool USDCrate::readTableOfContents() {
       }
     }
     else {
+      if (item.typeName == "Xform")
+        _objects.push_back(item.pathString);
+      else if (item.typeName == "Mesh")
+        _meshes.push_back(item.pathString);
+      else if (item.typeName == "Material")
+        _materials.push_back(item.pathString);
+      
       if (itemStack.size() > 0) {
         USDItem &parent = _usdItems[itemStack.back()];
         parent.children.push_back(path->index);

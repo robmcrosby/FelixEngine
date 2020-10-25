@@ -25,7 +25,7 @@ namespace fx {
   typedef std::vector<int> IntVector;
   typedef std::vector<long> LongVector;
   typedef std::vector<std::string> StringVector;
-  typedef std::map<int, std::string> StringMap;
+  typedef std::map<std::string, int> StringMap;
 
 
   class membuf : public std::basic_streambuf<char> {

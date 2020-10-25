@@ -26,7 +26,11 @@ namespace fx {
     
     int _rootItem;
     std::vector<USDItem> _usdItems;
-    std::map<std::string, int> _pathMap;
+    StringMap _pathMap;
+    
+    StringVector _objects;
+    StringVector _meshes;
+    StringVector _materials;
   
   public:
     USDCrate();
@@ -35,6 +39,10 @@ namespace fx {
     bool open(const std::string &filePath, size_t offset = 0, size_t length = 0);
     bool open();
     void close();
+    
+    const StringVector& objectPaths() const {return _objects;}
+    const StringVector& meshPaths() const {return _meshes;}
+    const StringVector& materialPaths() const {return _materials;}
     
   private:
     bool readTableOfContents();
