@@ -17,6 +17,7 @@ using namespace std;
 void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCrate *crate) {
   name = path.token;
   pathString = pathStr;
+  isArray = false;
   reps = path.spec.reps;
   
   size_t fileOffset = crate->_fileOffset;
@@ -26,16 +27,18 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
     typeName = tokens[reps["typeName"].payload];
   if (reps.count("default")) {
     Rep rep = reps["default"];
-    if (rep.type == USD_TOKEN && !rep.array && rep.inlined)
+    if (rep.array)
+      setArray(rep.type, rep.payload);
+    else if (rep.type == USD_TOKEN && rep.inlined)
       setTokenValue(tokens[rep.payload]);
-    else if (rep.type == USD_ASSET && !rep.array && rep.inlined)
+    else if (rep.type == USD_ASSET && rep.inlined)
       setAssetValue(tokens[rep.payload]);
-    else if (rep.type == USD_INT && !rep.array && rep.inlined)
+    else if (rep.type == USD_INT && rep.inlined)
       setValue((int)rep.payload);
-    else if (rep.type == USD_FLOAT && !rep.array && rep.inlined)
+    else if (rep.type == USD_FLOAT && rep.inlined)
       setValue((float)rep.payload);
     else if (rep.type == USD_VEC2_F) {
-      if (!rep.inlined && !rep.array) {
+      if (!rep.inlined) {
         is.seekg(fileOffset + rep.payload);
         vec2 value;
         readL(&value.x, 2, is);
@@ -43,7 +46,7 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
       }
     }
     else if (rep.type == USD_VEC3_F) {
-      if (!rep.inlined && !rep.array) {
+      if (!rep.inlined) {
         is.seekg(fileOffset + rep.payload);
         vec3 value;
         readL(&value.x, 3, is);
@@ -73,7 +76,7 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
 void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
   if (isAttribute()) {
     os << indent << "-" << typeName << " " << name;
-    if (dataType != USD_INVALID && data.size() > 0) {
+    if (dataType != USD_INVALID && data.size() > 0 && !isArray) {
       if (dataType == USD_TOKEN)
         os << " = \"" << tokenValue() << "\"" << endl;
       else if (dataType == USD_ASSET)
@@ -94,6 +97,9 @@ void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
         else
           os << ".connect = <" << crate->_usdItems[pathValue()].pathString << ">" << endl;
       }
+    }
+    else if (dataType != USD_INVALID && isArray) {
+      os << " = {...}" << endl;
     }
     else {
       os << endl;
@@ -127,6 +133,7 @@ void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
 
 void USDItem::setTokenValue(const string &token) {
   setValue(token);
+  isArray = false;
   dataType = USD_TOKEN;
 }
 
@@ -136,6 +143,7 @@ string USDItem::tokenValue() const {
 
 void USDItem::setAssetValue(const string &asset) {
   setValue(asset);
+  isArray = false;
   dataType = USD_ASSET;
 }
 
@@ -145,6 +153,7 @@ string USDItem::assetValue() const {
 
 void USDItem::setPathValue(int path) {
   setValue(path);
+  isArray = false;
   dataType = USD_PATH_VECTOR;
 }
 
@@ -154,6 +163,7 @@ int USDItem::pathValue() const {
 
 void USDItem::setValue(const string &str) {
   dataType = USD_STRING;
+  isArray = false;
   data.resize(str.size()+1);
   memcpy(&data[0], &str[0], str.size());
   data[str.size()] = '\0';
@@ -165,18 +175,31 @@ string USDItem::stringValue() const {
 
 void USDItem::setValue(int value) {
   dataType = USD_INT;
+  isArray = false;
   data.resize(sizeof(int));
   memcpy(&data[0], &value, sizeof(int));
 }
 
-void USDItem::setValue(float value) {
-  dataType = USD_FLOAT;
-  data.resize(sizeof(float));
-  memcpy(&data[0], &value, sizeof(float));
-}
-
 int USDItem::intValue() const {
   return (int)*(&data[0]);
+}
+
+void USDItem::setValue(long value) {
+  dataType = USD_INT64;
+  isArray = false;
+  data.resize(sizeof(long));
+  memcpy(&data[0], &value, sizeof(long));
+}
+
+long USDItem::longValue() const {
+  return (int)*(&data[0]);
+}
+
+void USDItem::setValue(float value) {
+  dataType = USD_FLOAT;
+  isArray = false;
+  data.resize(sizeof(float));
+  memcpy(&data[0], &value, sizeof(float));
 }
 
 float USDItem::floatValue() const {
@@ -185,6 +208,7 @@ float USDItem::floatValue() const {
 
 void USDItem::setValue(vec2 value) {
   dataType = USD_VEC2_F;
+  isArray = false;
   data.resize(sizeof(vec2));
   memcpy(&data[0], value.ptr(), sizeof(vec2));
 }
@@ -195,6 +219,7 @@ vec2 USDItem::vec2Value() const {
 
 void USDItem::setValue(vec3 value) {
   dataType = USD_VEC3_F;
+  isArray = false;
   data.resize(sizeof(vec3));
   memcpy(&data[0], value.ptr(), sizeof(vec3));
 }
@@ -205,10 +230,57 @@ vec3 USDItem::vec3Value() const {
 
 void USDItem::setValue(vec4 value) {
   dataType = USD_VEC4_F;
+  isArray = false;
   data.resize(sizeof(vec4));
   memcpy(&data[0], value.ptr(), sizeof(vec4));
 }
 
 vec4 USDItem::vec4Value() const {
   return ((vec4*)(&data[0]))[0];
+}
+
+void USDItem::setArray(USD_TYPE type, long offset) {
+  setValue(offset);
+  dataType = type;
+  isArray = true;
+}
+
+bool USDItem::getArray(vector<int> &dst, USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = readLongL(is);
+  dst.resize(count);
+  return readL(&dst[0], count, is) == count * sizeof(int);
+}
+
+bool USDItem::getArray(std::vector<float> &dst, USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = readLongL(is);
+  dst.resize(count);
+  return readL(&dst[0], count, is) == count * sizeof(float);
+}
+
+bool USDItem::getArray(std::vector<vec2> &dst, USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = readLongL(is);
+  dst.resize(count);
+  return readL(&dst[0].x, count*2, is) == count*2 * sizeof(float);
+}
+
+bool USDItem::getArray(std::vector<vec3> &dst, USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = readLongL(is);
+  dst.resize(count);
+  return readL(&dst[0].x, count*3, is) == count*3 * sizeof(float);
+}
+
+bool USDItem::getArray(std::vector<vec4> &dst, USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = readLongL(is);
+  dst.resize(count);
+  return readL(&dst[0].x, count*4, is) == count*4 * sizeof(float);
 }

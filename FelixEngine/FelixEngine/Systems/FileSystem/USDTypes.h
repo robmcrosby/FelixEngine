@@ -105,13 +105,11 @@ namespace fx {
     std::string typeName;
     USD_TYPE dataType;
     FileData data;
+    bool isArray;
     RepMap reps;
     
     std::map<std::string, int> attributes;
     IntVector children;
-    
-    //std::map<std::string, USDItem> attributes;
-    //std::vector<USDItem> children;
     
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
@@ -133,6 +131,9 @@ namespace fx {
     void setValue(int value);
     int intValue() const;
     
+    void setValue(long value);
+    long longValue() const;
+    
     void setValue(float value);
     float floatValue() const;
     
@@ -144,6 +145,13 @@ namespace fx {
     
     void setValue(vec4 value);
     vec4 vec4Value() const;
+    
+    void setArray(USD_TYPE type, long offset);
+    bool getArray(std::vector<int> &dst, USDCrate *crate) const;
+    bool getArray(std::vector<float> &dst, USDCrate *crate) const;
+    bool getArray(std::vector<vec2> &dst, USDCrate *crate) const;
+    bool getArray(std::vector<vec3> &dst, USDCrate *crate) const;
+    bool getArray(std::vector<vec4> &dst, USDCrate *crate) const;
   };
 }
 
