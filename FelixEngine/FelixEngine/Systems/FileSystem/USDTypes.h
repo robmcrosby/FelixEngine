@@ -106,6 +106,7 @@ namespace fx {
     USD_TYPE dataType;
     FileData data;
     bool isArray;
+    bool isCompressed;
     RepMap reps;
     
     std::map<std::string, int> attributes;
@@ -146,8 +147,17 @@ namespace fx {
     void setValue(vec4 value);
     vec4 vec4Value() const;
     
-    void setArray(USD_TYPE type, long offset);
-    bool getArray(std::vector<int> &dst, USDCrate *crate) const;
+    void setValue(double2x2 value);
+    double2x2 double2x2Value() const;
+    
+    void setValue(double3x3 value);
+    double3x3 double3x3Value() const;
+    
+    void setValue(double4x4 value);
+    double4x4 double4x4Value() const;
+    
+    void setArray(USD_TYPE type, long offset, bool compressed);
+    bool getArray(IntVector &dst, USDCrate *crate) const;
     bool getArray(std::vector<float> &dst, USDCrate *crate) const;
     bool getArray(std::vector<vec2> &dst, USDCrate *crate) const;
     bool getArray(std::vector<vec3> &dst, USDCrate *crate) const;

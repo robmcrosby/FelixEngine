@@ -185,6 +185,14 @@ namespace fx {
     return FileSystem::readL((uint64_t*)&i, 1, is);
   }
 
+  static inline size_t readL(double &f, std::istream &is) {
+    return FileSystem::readL((uint64_t*)&f, 1, is);
+  }
+
+  static inline size_t readL(double *buffer, long count, std::istream &is) {
+    return FileSystem::readL((uint64_t*)buffer, count, is);
+  }
+
   static inline std::string readStr(size_t count, std::istream &is) {
     FileData buffer(count+1);
     is.read(&buffer[0], count);

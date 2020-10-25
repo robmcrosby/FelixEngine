@@ -22,6 +22,7 @@ namespace fx {
     std::string _filePath;
     size_t _fileOffset;
     size_t _fileLength;
+    int _fileVersion;
     std::ifstream *_fileStream;
     
     int _rootItem;

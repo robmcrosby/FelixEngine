@@ -8,6 +8,7 @@
 
 #include "USDTypes.h"
 #include "USDCrate.h"
+#include "CompressionUtils.h"
 
 
 using namespace fx;
@@ -28,7 +29,7 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
   if (reps.count("default")) {
     Rep rep = reps["default"];
     if (rep.array)
-      setArray(rep.type, rep.payload);
+      setArray(rep.type, rep.payload, rep.compressed);
     else if (rep.type == USD_TOKEN && rep.inlined)
       setTokenValue(tokens[rep.payload]);
     else if (rep.type == USD_ASSET && rep.inlined)
@@ -54,10 +55,34 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
       }
     }
     else if (rep.type == USD_VEC4_F) {
-      if (!rep.inlined && !rep.array) {
+      if (!rep.inlined) {
         is.seekg(fileOffset + rep.payload);
         vec4 value;
         readL(&value.x, 4, is);
+        setValue(value);
+      }
+    }
+    else if (rep.type == USD_MATRIX_2D) {
+      if (!rep.inlined) {
+        is.seekg(fileOffset + rep.payload);
+        double2x2 value;
+        readL(&value.x.x, 4, is);
+        setValue(value);
+      }
+    }
+    else if (rep.type == USD_MATRIX_3D) {
+      if (!rep.inlined) {
+        is.seekg(fileOffset + rep.payload);
+        double3x3 value;
+        readL(&value.x.x, 9, is);
+        setValue(value);
+      }
+    }
+    else if (rep.type == USD_MATRIX_4D) {
+      if (!rep.inlined) {
+        is.seekg(fileOffset + rep.payload);
+        double4x4 value;
+        readL(&value.x.x, 16, is);
         setValue(value);
       }
     }
@@ -97,6 +122,12 @@ void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
         else
           os << ".connect = <" << crate->_usdItems[pathValue()].pathString << ">" << endl;
       }
+      else if (dataType == USD_MATRIX_2D)
+        os << " = " << endl << double2x2Value();
+      else if (dataType == USD_MATRIX_3D)
+        os << " = " << endl << double3x3Value();
+      else if (dataType == USD_MATRIX_4D)
+        os << " = " << endl << double4x4Value();
     }
     else if (dataType != USD_INVALID && isArray) {
       os << " = {...}" << endl;
@@ -192,7 +223,7 @@ void USDItem::setValue(long value) {
 }
 
 long USDItem::longValue() const {
-  return (int)*(&data[0]);
+  return ((long*)&data[0])[0];
 }
 
 void USDItem::setValue(float value) {
@@ -239,16 +270,55 @@ vec4 USDItem::vec4Value() const {
   return ((vec4*)(&data[0]))[0];
 }
 
-void USDItem::setArray(USD_TYPE type, long offset) {
+void USDItem::setValue(double2x2 value) {
+  dataType = USD_MATRIX_2D;
+  isArray = false;
+  data.resize(sizeof(double2x2));
+  memcpy(&data[0], value.ptr(), sizeof(double2x2));
+}
+
+double2x2 USDItem::double2x2Value() const {
+  return ((double2x2*)(&data[0]))[0];
+}
+
+void USDItem::setValue(double3x3 value) {
+  dataType = USD_MATRIX_3D;
+  isArray = false;
+  data.resize(sizeof(double3x3));
+  memcpy(&data[0], value.ptr(), sizeof(double3x3));
+}
+
+double3x3 USDItem::double3x3Value() const {
+  return ((double3x3*)(&data[0]))[0];
+}
+
+void USDItem::setValue(double4x4 value) {
+  dataType = USD_MATRIX_4D;
+  isArray = false;
+  data.resize(sizeof(double4x4));
+  memcpy(&data[0], value.ptr(), sizeof(double4x4));
+}
+
+double4x4 USDItem::double4x4Value() const {
+  return ((double4x4*)(&data[0]))[0];
+}
+
+void USDItem::setArray(USD_TYPE type, long offset, bool compressed) {
   setValue(offset);
   dataType = type;
   isArray = true;
+  isCompressed = compressed;
 }
 
-bool USDItem::getArray(vector<int> &dst, USDCrate *crate) const {
+bool USDItem::getArray(IntVector &dst, USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
-  size_t count = readLongL(is);
+  long count = crate->_fileVersion < 7 ? (long)readIntL(is) : readLongL(is);
+  if (isCompressed) {
+    long compressedSize = readLongL(is);
+    FileData buffer;
+    return CompressionUtils::decompressLZ4(buffer, is, compressedSize) && CompressionUtils::decompressUSD32(dst, buffer, count);
+  }
   dst.resize(count);
   return readL(&dst[0], count, is) == count * sizeof(int);
 }
@@ -256,7 +326,7 @@ bool USDItem::getArray(vector<int> &dst, USDCrate *crate) const {
 bool USDItem::getArray(std::vector<float> &dst, USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
-  size_t count = readLongL(is);
+  size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
   dst.resize(count);
   return readL(&dst[0], count, is) == count * sizeof(float);
 }
@@ -264,7 +334,7 @@ bool USDItem::getArray(std::vector<float> &dst, USDCrate *crate) const {
 bool USDItem::getArray(std::vector<vec2> &dst, USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
-  size_t count = readLongL(is);
+  size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
   dst.resize(count);
   return readL(&dst[0].x, count*2, is) == count*2 * sizeof(float);
 }
@@ -272,7 +342,7 @@ bool USDItem::getArray(std::vector<vec2> &dst, USDCrate *crate) const {
 bool USDItem::getArray(std::vector<vec3> &dst, USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
-  size_t count = readLongL(is);
+  size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
   dst.resize(count);
   return readL(&dst[0].x, count*3, is) == count*3 * sizeof(float);
 }
@@ -280,7 +350,7 @@ bool USDItem::getArray(std::vector<vec3> &dst, USDCrate *crate) const {
 bool USDItem::getArray(std::vector<vec4> &dst, USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
-  size_t count = readLongL(is);
+  size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
   dst.resize(count);
   return readL(&dst[0].x, count*4, is) == count*4 * sizeof(float);
 }

@@ -67,6 +67,9 @@ bool USDCrate::readTableOfContents() {
     return false;
   }
   
+  // Get USDC Version
+  _fileVersion = is.get();
+  
   // Get Table of Contents Offset
   is.seekg(_fileOffset + 16);
   long tocOffset;

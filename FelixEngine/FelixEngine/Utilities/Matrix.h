@@ -610,6 +610,10 @@ namespace fx
   typedef Matrix2<float> float2x2;
   typedef Matrix3<float> float3x3;
   typedef Matrix4<float> float4x4;
+
+  typedef Matrix2<double> double2x2;
+  typedef Matrix3<double> double3x3;
+  typedef Matrix4<double> double4x4;
 }
 
 #endif /* Matrix_h */
