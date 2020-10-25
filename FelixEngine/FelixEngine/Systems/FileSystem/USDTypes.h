@@ -157,11 +157,11 @@ namespace fx {
     double4x4 double4x4Value() const;
     
     void setArray(USD_TYPE type, long offset, bool compressed);
-    bool getArray(IntVector &dst, USDCrate *crate) const;
-    bool getArray(std::vector<float> &dst, USDCrate *crate) const;
-    bool getArray(std::vector<vec2> &dst, USDCrate *crate) const;
-    bool getArray(std::vector<vec3> &dst, USDCrate *crate) const;
-    bool getArray(std::vector<vec4> &dst, USDCrate *crate) const;
+    bool getArray(IntVector &dst, const USDCrate *crate) const;
+    bool getArray(std::vector<float> &dst, const USDCrate *crate) const;
+    bool getArray(std::vector<vec2> &dst, const USDCrate *crate) const;
+    bool getArray(std::vector<vec3> &dst, const USDCrate *crate) const;
+    bool getArray(std::vector<vec4> &dst, const USDCrate *crate) const;
   };
 }
 

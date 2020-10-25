@@ -70,9 +70,8 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
   else if (fileType == "usdz") {
     USDArchive archive;
     if (archive.open(filePath)) {
-      //cout << "Opened USD Archive" << endl;
-      //FileList files = archive.crateFiles();
       USDCrate crate = archive.getFirstUSDCrate();
+      return MeshLoader::loadFromCrateFile(mesh, crate);
     }
     else {
       cerr << "Unable to open USD Archive" << endl;

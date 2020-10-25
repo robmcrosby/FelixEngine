@@ -310,7 +310,7 @@ void USDItem::setArray(USD_TYPE type, long offset, bool compressed) {
   isCompressed = compressed;
 }
 
-bool USDItem::getArray(IntVector &dst, USDCrate *crate) const {
+bool USDItem::getArray(IntVector &dst, const USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   long count = crate->_fileVersion < 7 ? (long)readIntL(is) : readLongL(is);
@@ -323,7 +323,7 @@ bool USDItem::getArray(IntVector &dst, USDCrate *crate) const {
   return readL(&dst[0], count, is) == count * sizeof(int);
 }
 
-bool USDItem::getArray(std::vector<float> &dst, USDCrate *crate) const {
+bool USDItem::getArray(std::vector<float> &dst, const USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -331,7 +331,7 @@ bool USDItem::getArray(std::vector<float> &dst, USDCrate *crate) const {
   return readL(&dst[0], count, is) == count * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec2> &dst, USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec2> &dst, const USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -339,7 +339,7 @@ bool USDItem::getArray(std::vector<vec2> &dst, USDCrate *crate) const {
   return readL(&dst[0].x, count*2, is) == count*2 * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec3> &dst, USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec3> &dst, const USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -347,7 +347,7 @@ bool USDItem::getArray(std::vector<vec3> &dst, USDCrate *crate) const {
   return readL(&dst[0].x, count*3, is) == count*3 * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec4> &dst, USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec4> &dst, const USDCrate *crate) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);

@@ -56,6 +56,16 @@ void USDCrate::close() {
   _fileStream = nullptr;
 }
 
+bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
+  string path = itemPath + "/" + attribute;
+  if (_pathMap.count(path) > 0) {
+    const USDItem &item = _usdItems[_pathMap.at(path)];
+    return item.getArray(buffer, this);
+  }
+  cout << "getArray: " << path << endl;
+  return false;
+}
+
 bool USDCrate::readTableOfContents() {
   istream &is = *_fileStream;
   
@@ -137,8 +147,7 @@ bool USDCrate::readTableOfContents() {
       pathStack.push_back(pathStr);
     }
   }
-  
-  printUSD();
+  //printUSD();
   return true;
 }
 

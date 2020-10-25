@@ -7,6 +7,7 @@
 //
 
 #include "MeshLoader.h"
+#include "USDCrate.h"
 #include <fstream>
 
 #define NAME_BUFFER_SIZE 32
@@ -93,5 +94,35 @@ bool MeshLoader::readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is)
   }
   
   cerr << "Error Reading Index Buffer" << endl;
+  return false;
+}
+
+bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate) {
+  mesh.primitiveType = VERTEX_TRIANGLES;
+  
+  crate.open();
+  
+  crate.printUSD();
+  
+  StringVector meshPaths = crate.meshPaths();
+  for (auto path = meshPaths.begin(); path != meshPaths.end(); ++path) {
+    IntVector counts, indices;
+    crate.getArray(counts, *path, "faceVertexCounts");
+    crate.getArray(indices, *path, "faceVertexIndices");
+    
+    cout << "faceVertexCounts: {";
+    for (auto itr = counts.begin(); itr != counts.end(); ++itr)
+      cout << *itr << ", ";
+    cout << "}" << endl;
+    
+    cout << "faceVertexIndices: {";
+    for (auto itr = indices.begin(); itr != indices.end(); ++itr)
+      cout << *itr << ", ";
+    cout << "}" << endl;
+  }
+  
+  crate.close();
+  
+  //cout << "loadFromCrateFile" << endl;
   return false;
 }

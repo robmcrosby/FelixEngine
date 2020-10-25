@@ -45,14 +45,16 @@ namespace fx {
     const StringVector& meshPaths() const {return _meshes;}
     const StringVector& materialPaths() const {return _materials;}
     
+    bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
+    
+    void printUSD();
+    
   private:
     bool readTableOfContents();
     StringVector readTokens(long start, std::istream &is);
     RepVector readReps(long start, std::istream &is);
     SpecMap readSpecMap(long start, std::istream &is, IntVector &fieldSets, IntVector &fields, StringVector &tokens, RepVector &reps);
     PathVector readPaths(long start, std::istream &is, StringVector &tokens, SpecMap &specs);
-    
-    void printUSD();
     
     IntVector readIntVector(long start, std::istream &is);
     IntVector decompressIntVector(long numItems, std::istream &is);
