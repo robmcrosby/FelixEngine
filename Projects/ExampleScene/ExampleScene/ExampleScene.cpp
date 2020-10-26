@@ -57,7 +57,8 @@ void ExampleScene::initalize() {
   
   // Setup the Bunny Model
   _model = _scene->get<fx::Model>("Bunny");
-  _model->loadMesh("Mesh.mesh");
+  //_model->loadMesh("Mesh.mesh");
+  _model->loadMesh("Suzanne.usdz");
   _model->setMaterial(material);
   _model->setScale(0.4f);
   _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
@@ -65,8 +66,11 @@ void ExampleScene::initalize() {
   _model->setFaceCulling(fx::CULL_FRONT);
   _model->setToRenderPass(_renderPass);
   
-  _modelB = _scene->get<fx::Model>("Suzanne");
-  _modelB->loadMesh("Suzanne.usdz");
+  //_modelB = _scene->get<fx::Model>("Suzanne");
+  //_modelB->loadMesh("Suzanne.usdz");
+  
+  _modelB = _scene->get<fx::Model>("Cube");
+  _modelB->loadMesh("Cube.usdz");
 }
 
 void ExampleScene::update(float td) {

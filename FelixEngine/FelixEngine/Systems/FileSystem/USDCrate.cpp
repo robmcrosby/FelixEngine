@@ -62,7 +62,17 @@ bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string 
     const USDItem &item = _usdItems[_pathMap.at(path)];
     return item.getArray(buffer, this);
   }
-  cout << "getArray: " << path << endl;
+  cerr << "Error finding path: " << path << endl;
+  return false;
+}
+
+bool USDCrate::appendBuffer(VertexBuffer &buffer, const string &itemPath, const string &attribute) const {
+  string path = itemPath + "/" + attribute;
+  if (_pathMap.count(path) > 0) {
+    const USDItem &item = _usdItems[_pathMap.at(path)];
+    return item.appendBuffer(buffer, this);
+  }
+  cerr << "Error finding path: " << path << endl;
   return false;
 }
 

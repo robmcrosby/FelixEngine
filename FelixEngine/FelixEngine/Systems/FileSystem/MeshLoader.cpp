@@ -110,16 +110,43 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate) {
     crate.getArray(counts, *path, "faceVertexCounts");
     crate.getArray(indices, *path, "faceVertexIndices");
     
-    cout << "faceVertexCounts: {";
-    for (auto itr = counts.begin(); itr != counts.end(); ++itr)
-      cout << *itr << ", ";
-    cout << "}" << endl;
+    //vector<vec3> positions, normals;
+    //crate.getArray(positions, *path, "points");
+    //crate.getArray(normals, *path, "primvars:normals");
     
-    cout << "faceVertexIndices: {";
-    for (auto itr = indices.begin(); itr != indices.end(); ++itr)
-      cout << *itr << ", ";
-    cout << "}" << endl;
+    int i = 0, offset = (int)mesh.buffers["position"].size()/3;
+    ivec2 range((int)mesh.indices.size(), 0);
+    
+    for (auto count = counts.begin(); count != counts.end(); ++count) {
+      for (int j = i+1; j < i+*count-1;) {
+        mesh.indices.push_back(offset + indices[i]);
+        mesh.indices.push_back(offset + indices[j]);
+        mesh.indices.push_back(offset + indices[++j]);
+      }
+      i += *count;
+    }
+    range.end = (int)mesh.indices.size();
+    mesh.subMeshes.push_back(range);
+    
+    crate.appendBuffer(mesh.buffers["position"], *path, "points");
+    crate.appendBuffer(mesh.buffers["normal"], *path, "primvars:normals");
+    
+//    cout << "faceVertexCounts: {";
+//    for (auto itr = counts.begin(); itr != counts.end(); ++itr)
+//      cout << *itr << ", ";
+//    cout << "}" << endl;
+//
+//    cout << "faceVertexIndices: {";
+//    for (auto itr = indices.begin(); itr != indices.end(); ++itr)
+//      cout << *itr << ", ";
+//    cout << "}" << endl;
   }
+  mesh.totalVertices = (int)mesh.buffers["position"].size()/3;
+  
+//  cout << "mesh.indices: {";
+//  for (auto itr = mesh.indices.begin(); itr != mesh.indices.end(); ++itr)
+//    cout << *itr << ", ";
+//  cout << "}" << endl;
   
   crate.close();
   

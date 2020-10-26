@@ -162,6 +162,8 @@ namespace fx {
     bool getArray(std::vector<vec2> &dst, const USDCrate *crate) const;
     bool getArray(std::vector<vec3> &dst, const USDCrate *crate) const;
     bool getArray(std::vector<vec4> &dst, const USDCrate *crate) const;
+    
+    bool appendBuffer(VertexBuffer &dst, const USDCrate *crate) const;
   };
 }
 

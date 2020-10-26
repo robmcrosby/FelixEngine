@@ -354,3 +354,23 @@ bool USDItem::getArray(std::vector<vec4> &dst, const USDCrate *crate) const {
   dst.resize(count);
   return readL(&dst[0].x, count*4, is) == count*4 * sizeof(float);
 }
+
+bool USDItem::appendBuffer(VertexBuffer &dst, const USDCrate *crate) const {
+  istream &is = *crate->_fileStream;
+  is.seekg(crate->_fileOffset + longValue());
+  size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
+  if (dataType == USD_VEC2_F)
+    count *= 2;
+  else if (dataType == USD_VEC3_F)
+    count *= 3;
+  else if (dataType == USD_VEC4_F)
+    count *= 4;
+  else if (dataType != USD_FLOAT) {
+    cerr << "Error appending to Vertex Buffer: ";
+    cerr << "Unsupported Data Type" << endl;
+    return false;
+  }
+  size_t base = dst.size();
+  dst.resize(base + count);
+  return readL(&dst[base], count, is) == count * sizeof(float);
+}
