@@ -46,6 +46,7 @@ namespace fx {
     const StringVector& materialPaths() const {return _materials;}
     
     bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
+    bool getArray(std::vector<vec3> &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool appendBuffer(VertexBuffer &buffer, const std::string &itemPath, const std::string &attribute) const;
     
     void printUSD();

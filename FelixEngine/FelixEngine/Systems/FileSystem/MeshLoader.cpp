@@ -16,6 +16,27 @@
 using namespace fx;
 using namespace std;
 
+
+typedef std::map<long, int> IndexMap;
+
+void addPointNormal(VertexMeshData &mesh, IndexMap &indexMap, int pos, vector<vec3> &positions, int normal, vector<vec3> &normals) {
+  long key = (long)pos | (long)normal << 32;
+  if (indexMap.count(key) > 0)
+    mesh.indices.push_back(indexMap.at(key));
+  else {
+    int index = (int)mesh.buffers["position"].size()/3;
+    mesh.buffers["position"].push_back(positions[pos].x);
+    mesh.buffers["position"].push_back(positions[pos].y);
+    mesh.buffers["position"].push_back(positions[pos].z);
+    mesh.buffers["normal"].push_back(normals[normal].x);
+    mesh.buffers["normal"].push_back(normals[normal].y);
+    mesh.buffers["normal"].push_back(normals[normal].z);
+    mesh.indices.push_back(index);
+  }
+}
+
+
+
 bool MeshLoader::loadFromBinaryFile(VertexMeshData &mesh, const string &file) {
   ifstream meshFile;
   meshFile.open(file, ios::in | ios::binary);
@@ -106,30 +127,35 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate) {
   
   StringVector meshPaths = crate.meshPaths();
   for (auto path = meshPaths.begin(); path != meshPaths.end(); ++path) {
-    IntVector counts, indices;
+    IntVector counts, vertexIndices, normalIndices;
     crate.getArray(counts, *path, "faceVertexCounts");
-    crate.getArray(indices, *path, "faceVertexIndices");
+    crate.getArray(vertexIndices, *path, "faceVertexIndices");
+    crate.getArray(normalIndices, *path, "primvars:normals:indices");
     
-    //vector<vec3> positions, normals;
-    //crate.getArray(positions, *path, "points");
-    //crate.getArray(normals, *path, "primvars:normals");
+    vector<vec3> positions, normals;
+    crate.getArray(positions, *path, "points");
+    crate.getArray(normals, *path, "primvars:normals");
     
-    int i = 0, offset = (int)mesh.buffers["position"].size()/3;
+    int i = 0; //offset = (int)mesh.buffers["position"].size()/3;
+    IndexMap indexMap;
     ivec2 range((int)mesh.indices.size(), 0);
     
     for (auto count = counts.begin(); count != counts.end(); ++count) {
-      for (int j = i+1; j < i+*count-1;) {
-        mesh.indices.push_back(offset + indices[i]);
-        mesh.indices.push_back(offset + indices[j]);
-        mesh.indices.push_back(offset + indices[++j]);
+      for (int j = i+1; j < i+*count-1; ++j) {
+        addPointNormal(mesh, indexMap, vertexIndices[i], positions, normalIndices[i], normals);
+        addPointNormal(mesh, indexMap, vertexIndices[j], positions, normalIndices[j], normals);
+        addPointNormal(mesh, indexMap, vertexIndices[j+1], positions, normalIndices[j+1], normals);
+//        mesh.indices.push_back(offset + indices[i]);
+//        mesh.indices.push_back(offset + indices[j]);
+//        mesh.indices.push_back(offset + indices[++j]);
       }
       i += *count;
     }
     range.end = (int)mesh.indices.size();
     mesh.subMeshes.push_back(range);
     
-    crate.appendBuffer(mesh.buffers["position"], *path, "points");
-    crate.appendBuffer(mesh.buffers["normal"], *path, "primvars:normals");
+    //crate.appendBuffer(mesh.buffers["position"], *path, "points");
+    //crate.appendBuffer(mesh.buffers["normal"], *path, "primvars:normals");
     
 //    cout << "faceVertexCounts: {";
 //    for (auto itr = counts.begin(); itr != counts.end(); ++itr)
