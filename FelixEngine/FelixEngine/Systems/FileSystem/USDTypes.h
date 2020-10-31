@@ -109,6 +109,7 @@ namespace fx {
     bool isCompressed;
     RepMap reps;
     
+    StringVector attributeNames;
     std::map<std::string, int> attributes;
     IntVector children;
     

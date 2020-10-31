@@ -142,6 +142,7 @@ bool USDCrate::readTableOfContents() {
     
     if (path->leaf) {
       USDItem &parent = _usdItems[itemStack.back()];
+      parent.attributeNames.push_back(item.name);
       parent.attributes[item.name] = path->index;
       if (path->jump == -2) {
         itemStack.pop_back();
