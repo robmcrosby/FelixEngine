@@ -84,21 +84,56 @@ void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const 
   }
 }
 
+void MetalShaderProgram::setDescriptorAttributes(MTLRenderPipelineDescriptor *descriptor) {
+  for (auto itr = _attributeTypeMap.begin(); itr != _attributeTypeMap.end(); ++itr) {
+    long index = _vertexIndexMap[itr->first];
+    
+    MTLDataType dataType = (MTLDataType)itr->second;
+    MTLVertexFormat format = MTLVertexFormatFloat;
+    long stride = sizeof(float);
+    if (dataType == MTLDataTypeFloat2) {
+      stride = sizeof(float2);
+      format = MTLVertexFormatFloat2;
+    }
+    else if (dataType == MTLDataTypeFloat3) {
+      stride = sizeof(float3);
+      format = MTLVertexFormatFloat3;
+    }
+    else if (dataType == MTLDataTypeFloat4) {
+      stride = sizeof(float4);
+      format = MTLVertexFormatFloat4;
+    }
+    
+    descriptor.vertexDescriptor.attributes[index].bufferIndex = index;
+    descriptor.vertexDescriptor.attributes[index].offset = 0;
+    descriptor.vertexDescriptor.attributes[index].format = format;
+    descriptor.vertexDescriptor.layouts[index].stride = stride;
+  }
+}
+
 void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &blending) {
   MTLRenderPipelineDescriptor *descriptor = frame->createPipelineDescriptor(blending);
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
+  setDescriptorAttributes(descriptor);
   
   int pipelineId = frame->pipelineId(blending);
   _pipelines[pipelineId] = [_device newRenderPipelineStateWithDescriptor:descriptor error:nil];
 }
 
 void MetalShaderProgram::extractIndexMaps() {
+  // Get Vertex Attributes from Vertex Shader
+  for (MTLVertexAttribute *att in _vertex.vertexAttributes) {
+    _attributeTypeMap[[att.name UTF8String]] = att.attributeType;
+    _vertexIndexMap[[att.name UTF8String]] = att.attributeIndex;
+  }
+  
   // Create a basic Pipeline Descriptor
   MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;
   descriptor.colorAttachments[0].pixelFormat = MTLPixelFormatRGBA8Unorm;
+  setDescriptorAttributes(descriptor);
   
   // Create the Pipeline with Reflection
   MTLRenderPipelineReflection *reflection;

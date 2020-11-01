@@ -25,7 +25,8 @@ void HelloTriangle::initalize() {
   
   fx::RenderItem renderItem;
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
-  renderItem.setMeshVertexBuffer("vertex_array", 3, 3, vertexBuffer);
+  renderItem.setMeshVertexBuffer("position", 3, 3, vertexBuffer);
+  //renderItem.setMeshVertexBuffer("vertex_array", 3, 3, vertexBuffer);
   renderItem.loadMesh();
 
   _renderPass = _graphics->createRenderPass();

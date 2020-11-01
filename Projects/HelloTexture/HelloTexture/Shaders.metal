@@ -15,6 +15,11 @@ struct MVPUniform {
   float4x4 model;
 };
 
+struct VertexInput {
+  float3 position [[attribute(0)]];
+  float2 uvMap    [[attribute(1)]];
+};
+
 struct VertexOutput {
   float4 position [[position]];
   float2 uv       [[user(uv)]];
@@ -24,15 +29,22 @@ struct FragmentInput {
   float2 uv [[user(uv)]];
 };
 
-vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
-                                 const device packed_float2 *uvMap    [[ buffer(1) ]],
-                                 constant     MVPUniform    *MVP      [[ buffer(2) ]],
-                                              unsigned int   vid      [[ vertex_id ]]) {
+vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]], constant MVPUniform &MVP [[buffer(2)]]) {
   VertexOutput output;
-  output.position = MVP->projection * MVP->view * MVP->model * float4(position[vid], 1.0);
-  output.uv = float2(uvMap[vid]);
+  output.position = MVP.projection * MVP.view * MVP.model * float4(vert.position, 1.0);
+  output.uv = vert.uvMap;
   return output;
 }
+
+//vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
+//                                 const device packed_float2 *uvMap    [[ buffer(1) ]],
+//                                 constant     MVPUniform    &MVP      [[ buffer(2) ]],
+//                                              unsigned int   vid      [[ vertex_id ]]) {
+//  VertexOutput output;
+//  output.position = MVP.projection * MVP.view * MVP.model * float4(position[vid], 1.0);
+//  output.uv = float2(uvMap[vid]);
+//  return output;
+//}
 
 fragment half4 basic_fragment(FragmentInput     input     [[ stage_in ]],
                               texture2d<float>  texture2D [[ texture(0) ]],

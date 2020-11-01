@@ -15,6 +15,9 @@
 @protocol MTLRenderPipelineState;
 @protocol MTLRenderCommandEncoder;
 
+@class MTLRenderPipelineDescriptor;
+
+
 namespace fx {
   class MetalFrameBuffer;
   class Uniform;
@@ -30,6 +33,7 @@ namespace fx {
     id <MTLFunction> _fragment;
     
     PipelineMap _pipelines;
+    IndexMap _attributeTypeMap;
     IndexMap _vertexIndexMap;
     IndexMap _fragmentIndexMap;
     
@@ -50,6 +54,7 @@ namespace fx {
   private:
     void addPipeline(MetalFrameBuffer *frame, const BlendState &blending);
     void setUniform(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Uniform &uniform);
+    void setDescriptorAttributes(MTLRenderPipelineDescriptor *descriptor);
     void extractIndexMaps();
   };
 }
