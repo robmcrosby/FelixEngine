@@ -81,6 +81,7 @@ namespace fx {
         textures = TextureMap::make();
       return *textures;
     }
+    void addTexture(const RGBA &color) {getTextureMap().addTexture(color);}
     void addTexture(TextureBufferPtr texture, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(texture, sampler);}
     void addTexture(ImageBufferData &imageData, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(imageData, sampler);}
     bool addTextureFile(const std::string &fileName, SamplerState sampler = SamplerState()) {

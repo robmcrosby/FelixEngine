@@ -38,6 +38,7 @@ void HelloTexture::initalize() {
   
   // Load the Texture
   renderItem.addTextureFile("test.png");
+  //renderItem.addTexture(fx::RGBA(255, 0, 0, 255));
   
   // Load the Mesh
   renderItem.setMeshVertexBuffer("position", 3, 4, vertexBuffer);

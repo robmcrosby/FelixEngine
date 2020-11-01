@@ -98,6 +98,7 @@ namespace fx {
     virtual void update(float dt) {}
     virtual bool loadXML(const XMLTree::Node &node);
     virtual bool loadFile(const std::string &file);
+    virtual bool loadColor(const RGBA &color);
     
     virtual bool load(const ImageBufferData &data) = 0;
     virtual bool loaded() const = 0;

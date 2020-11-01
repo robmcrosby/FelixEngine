@@ -21,6 +21,7 @@ namespace fx {
     id <MTLTexture> _texture;
     int _width, _height;
     SamplerState _samplerState;
+    vec4 _default;
  
   public:
     MetalTextureBuffer(id <MTLDevice> device);

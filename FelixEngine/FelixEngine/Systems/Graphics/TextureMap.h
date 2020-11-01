@@ -51,6 +51,12 @@ namespace fx {
       return success;
     }
     
+    bool addTexture(const RGBA &color) {
+      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), SamplerState());
+      _textures.push_back(texture);
+      return texture.buffer->loadColor(color);
+    }
+    
     bool addTexture(const XMLTree::Node &node) {
       bool success = true;
       TextureBufferPtr texture;

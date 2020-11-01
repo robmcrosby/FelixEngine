@@ -62,6 +62,13 @@ bool TextureBuffer::loadFile(const std::string &file) {
   return false;
 }
 
+bool TextureBuffer::loadColor(const RGBA &color) {
+  ImageBufferData image;
+  image.resize(1, 1);
+  image.buffer.at(0) = color;
+  return load(image);
+}
+
 
 bool FrameBuffer::loadXML(const XMLTree::Node &node) {
   bool success = true;
