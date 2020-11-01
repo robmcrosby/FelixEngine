@@ -13,19 +13,21 @@
 
 
 
+struct Vertex {
+  float3 position [[ attribute(0) ]];
+};
 
 struct OutputShadeless {
   float4 position [[ position ]];
 };
 
-vertex OutputShadeless v_shadeless(const device packed_float3 *position [[ buffer(0) ]],
-                                   constant     STR_Camera    *camera   [[ buffer(1) ]],
-                                   constant     STR_Model     *model    [[ buffer(2) ]],
-                                   unsigned     int            vid      [[ vertex_id ]],
-                                   unsigned     int            iid      [[ instance_id ]]) {
+vertex OutputShadeless v_shadeless(Vertex  input  [[ stage_in    ]],
+                      constant STR_Camera &camera [[ buffer(1)   ]],
+                      constant STR_Model  *model  [[ buffer(2)   ]],
+                      unsigned int         iid    [[ instance_id ]]) {
   OutputShadeless output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
   return output;
 }
 
@@ -36,6 +38,10 @@ fragment half4 f_shadeless(constant STR_Material *material [[ buffer(0) ]]) {
 
 
 
+struct VertexColor {
+  float3 position [[ attribute(0) ]];
+  float3 color0   [[ attribute(1) ]];
+};
 
 struct OutputColor {
   float4 position [[ position    ]];
@@ -46,27 +52,29 @@ struct InputColor {
   float3 color [[ user(color) ]];
 };
 
-vertex OutputColor v_color(const device packed_float3 *position [[ buffer(0) ]],
-                           const device packed_float3 *color0   [[ buffer(1) ]],
-                           constant     STR_Camera    *camera   [[ buffer(2) ]],
-                           constant     STR_Model     *model    [[ buffer(3) ]],
-                           unsigned     int            vid      [[ vertex_id ]],
-                           unsigned     int            iid      [[ instance_id ]]) {
+vertex OutputColor v_color(VertexColor  input  [[ stage_in    ]],
+                   constant STR_Camera &camera [[ buffer(2)   ]],
+                   constant STR_Model  *model  [[ buffer(3)   ]],
+                   unsigned int         iid    [[ instance_id ]]) {
   OutputColor output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
-  output.color = float3(color0[vid]);
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
+  output.color = input.color0;
   return output;
 }
 
-fragment half4 f_color_shadeless(InputColor             input     [[ stage_in ]],
-                                 constant STR_Material *material  [[ buffer(0) ]]) {
+fragment half4 f_color_shadeless(InputColor  input    [[ stage_in ]],
+                      constant STR_Material *material [[ buffer(0) ]]) {
   float3 color = input.color * material->ambiant.xyz * material->ambiant.a;
   return half4(color.x, color.y, color.z, 1.0);
 }
 
 
 
+struct VertexTexture {
+  float3 position [[ attribute(0) ]];
+  float2 uv0      [[ attribute(1) ]];
+};
 
 struct OutputTexture {
   float4 position   [[ position ]];
@@ -77,42 +85,39 @@ struct InputTexture {
   float2 coordinate [[ user(uv) ]];
 };
 
-vertex OutputTexture v_texture(const device packed_float3 *position   [[ buffer(0) ]],
-                               const device packed_float2 *uv0        [[ buffer(1) ]],
-                               constant     STR_Camera    *camera     [[ buffer(2) ]],
-                               constant     STR_Model     *model      [[ buffer(3) ]],
-                               unsigned     int            vid        [[ vertex_id ]],
-                               unsigned     int            iid        [[ instance_id ]]) {
+vertex OutputTexture v_texture(VertexTexture  input  [[ stage_in    ]],
+                         constant STR_Camera &camera [[ buffer(2)   ]],
+                         constant STR_Model  *model  [[ buffer(3)   ]],
+                         unsigned int         iid    [[ instance_id ]]) {
   OutputTexture output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
-  output.coordinate = transform_coordinate(model[iid].texture, float2(uv0[vid]));
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
+  output.coordinate = transform_coordinate(model[iid].texture, input.uv0);
   return output;
 }
 
-fragment half4 f_texture_shadeless(InputTexture           input     [[ stage_in ]],
-                                   constant STR_Material *material  [[ buffer(0) ]],
-                                   texture2d<float>       texture2D [[ texture(0) ]],
-                                   sampler                sampler2D [[ sampler(0) ]]) {
+fragment half4 f_texture_shadeless(InputTexture  input     [[ stage_in   ]],
+                          constant STR_Material *material  [[ buffer(0)  ]],
+                               texture2d<float>  texture2D [[ texture(0) ]],
+                                        sampler  sampler2D [[ sampler(0) ]]) {
   float4 texture = texture2D.sample(sampler2D, input.coordinate);
   return half4(texture * material->ambiant);
 }
 
 
 
-vertex OutputTexture video_vertex(const device packed_float3 *position  [[ buffer(0) ]],
-                                  const device packed_float2 *uv0       [[ buffer(1) ]],
-                                  constant     float4x4      *transform [[ buffer(2) ]],
-                                  unsigned int   vid       [[ vertex_id ]]) {
+vertex OutputTexture video_vertex(VertexTexture  input     [[ stage_in  ]],
+                              constant float4x4 &transform [[ buffer(2) ]],
+                                   unsigned int  vid       [[ vertex_id ]]) {
   OutputTexture output;
-  output.position = float4(position[vid], 1.0);
-  output.coordinate = transform_coordinate(*transform, float2(uv0[vid]));
+  output.position = float4(input.position, 1.0);
+  output.coordinate = transform_coordinate(transform, input.uv0);
   return output;
 }
 
-fragment float4 video_fragment_Y_CbCr(InputTexture input [[ stage_in ]],
-                                      texture2d<float, access::sample> capturedImageTextureY    [[ texture(0) ]],
-                                      texture2d<float, access::sample> capturedImageTextureCbCr [[ texture(1) ]]) {
+fragment float4 video_fragment_Y_CbCr(InputTexture input                    [[ stage_in   ]],
+                  texture2d<float, access::sample> capturedImageTextureY    [[ texture(0) ]],
+                  texture2d<float, access::sample> capturedImageTextureCbCr [[ texture(1) ]]) {
   constexpr sampler colorSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
   const float4x4 ycbcrToRGBTransform = float4x4(
                                                 float4(+1.0000f, +1.0000f, +1.0000f, +0.0000f),
@@ -130,7 +135,10 @@ fragment float4 video_fragment_Y_CbCr(InputTexture input [[ stage_in ]],
 }
 
 
-
+struct VertexNormal {
+  float3 position [[ attribute(0) ]];
+  float3 normal   [[ attribute(1) ]];
+};
 
 struct OutputNormal {
   float4 position [[ position   ]];
@@ -145,18 +153,16 @@ struct InputNormal {
   float3 view     [[ user(view) ]];
 };
 
-vertex OutputNormal v_normal(const device packed_float3 *position [[ buffer(0) ]],
-                             const device packed_float3 *normal   [[ buffer(1) ]],
-                             constant     STR_Camera    *camera   [[ buffer(2) ]],
-                             constant     STR_Model     *model    [[ buffer(3) ]],
-                             unsigned     int            vid      [[ vertex_id ]],
-                             unsigned     int            iid      [[ instance_id ]]) {
+vertex OutputNormal v_normal(VertexNormal  input  [[ stage_in    ]],
+                      constant STR_Camera &camera [[ buffer(2)   ]],
+                      constant STR_Model  *model  [[ buffer(3)   ]],
+                      unsigned int         iid    [[ instance_id ]]) {
   OutputNormal output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
-  output.view = camera->position.xyz - output.position.xyz;
+  output.normal = rotate_quat(model[iid].rotation, float3(input.normal));
+  output.view = camera.position.xyz - output.position.xyz;
   return output;
 }
 
@@ -194,7 +200,11 @@ LIGHT_FUNCS(minnaert, cooktorr)
 LIGHT_FUNCS(minnaert, toon_s)
 
 
-
+struct VertexColorNormal {
+  float3 position [[ attribute(0) ]];
+  float3 normal   [[ attribute(1) ]];
+  float3 color0   [[ attribute(2) ]];
+};
 
 struct OutputColorNormal {
   float4 position [[ position    ]];
@@ -211,20 +221,17 @@ struct InputColorNormal {
   float3 color    [[ user(color) ]];
 };
 
-vertex OutputColorNormal v_color_normal(const device packed_float3 *position [[ buffer(0) ]],
-                                        const device packed_float3 *normal   [[ buffer(1) ]],
-                                        const device packed_float3 *color0   [[ buffer(2) ]],
-                                        constant     STR_Camera    *camera   [[ buffer(3) ]],
-                                        constant     STR_Model     *model    [[ buffer(4) ]],
-                                        unsigned     int            vid      [[ vertex_id ]],
-                                        unsigned     int            iid      [[ instance_id ]]) {
+vertex OutputColorNormal v_color_normal(VertexColorNormal  input  [[ stage_in    ]],
+                                     constant STR_Camera  &camera [[ buffer(3)   ]],
+                                     constant STR_Model   *model  [[ buffer(4)   ]],
+                                     unsigned int          iid    [[ instance_id ]]) {
   OutputColorNormal output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
-  output.view = camera->position.xyz - output.position.xyz;
-  output.color = float3(color0[vid]);
+  output.normal = rotate_quat(model[iid].rotation, input.normal);
+  output.view = camera.position.xyz - output.position.xyz;
+  output.color = input.color0;
   return output;
 }
 
@@ -262,6 +269,11 @@ LIGHT_COLOR_FUNCS(minnaert, cooktorr)
 LIGHT_COLOR_FUNCS(minnaert, toon_s)
 
 
+struct VertexTextureNormal {
+  float3 position [[ attribute(0) ]];
+  float3 normal   [[ attribute(1) ]];
+  float2 uv0      [[ attribute(2) ]];
+};
 
 struct OutputTextureNormal {
   float4 position   [[ position   ]];
@@ -278,20 +290,17 @@ struct InputTextureNormal {
   float2 coordinate [[ user(uv)   ]];
 };
 
-vertex OutputTextureNormal v_texture_normal(const device packed_float3 *position [[ buffer(0) ]],
-                                            const device packed_float3 *normal   [[ buffer(1) ]],
-                                            const device packed_float2 *uv0      [[ buffer(2) ]],
-                                            constant     STR_Camera    *camera   [[ buffer(3) ]],
-                                            constant     STR_Model     *model    [[ buffer(4) ]],
-                                            unsigned     int            vid      [[ vertex_id ]],
-                                            unsigned     int            iid      [[ instance_id ]]) {
+vertex OutputTextureNormal v_texture_normal(VertexTextureNormal   input  [[ stage_in    ]],
+                                            constant  STR_Camera &camera [[ buffer(3)   ]],
+                                            constant  STR_Model  *model  [[ buffer(4)   ]],
+                                            unsigned  int         iid    [[ instance_id ]]) {
   OutputTextureNormal output;
-  float4 location = model[iid].model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model[iid].rotation, float3(normal[vid]));
-  output.view = camera->position.xyz - output.position.xyz;
-  output.coordinate = transform_coordinate(model->texture, float2(uv0[vid]));
+  output.normal = rotate_quat(model[iid].rotation, input.normal);
+  output.view = camera.position.xyz - output.position.xyz;
+  output.coordinate = transform_coordinate(model->texture, input.uv0);
   return output;
 }
 

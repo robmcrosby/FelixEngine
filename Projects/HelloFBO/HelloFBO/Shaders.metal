@@ -18,7 +18,10 @@ struct MVPUniform {
   float4   rotation;
 };
 
-
+struct VertexInput {
+  float4 Position [[attribute(0)]];
+  float4 Normal   [[attribute(1)]];
+};
 
 struct NormalOutput {
   float4 position [[position]];
@@ -33,14 +36,10 @@ float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 
-vertex NormalOutput basic_vertex(const device packed_float4 *Position [[ buffer(0) ]],
-                                 const device packed_float4 *Normal   [[ buffer(1) ]],
-                                 constant     MVPUniform    *MVP      [[ buffer(2) ]],
-                                 unsigned int   vid      [[ vertex_id ]]) {
+vertex NormalOutput basic_vertex(VertexInput vert [[stage_in]], constant MVPUniform &MVP [[buffer(2)]]) {
   NormalOutput output;
-  float4 normal = Normal[vid];
-  output.normal = rotate_quat(MVP->rotation, normal.xyz);
-  output.position = MVP->projection * MVP->view * MVP->model * float4(Position[vid]);
+  output.normal = rotate_quat(MVP.rotation, vert.Normal.xyz);
+  output.position = MVP.projection * MVP.view * MVP.model * float4(vert.Position);
   return output;
 }
 

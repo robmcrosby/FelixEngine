@@ -56,6 +56,10 @@ float light_attenuation(float distance, float2 factors);
 float shade_diffuse(float3 normal, float3 light);
 float shade_specular(float3 normal, float3 view, float3 light, float hardness);
 
+struct VertexInput {
+  float3 position [[ attribute(0) ]];
+  float3 normal   [[ attribute(1) ]];
+};
 
 struct VertexOutput {
   float4 position [[ position       ]];
@@ -87,17 +91,15 @@ float shade_specular(float3 normal, float3 view, float3 light, float hardness) {
   return pow(saturate(dot(normal, halfAngle)), hardness);
 }
 
-vertex VertexOutput basic_vertex(const device packed_float3 *position [[ buffer(0) ]],
-                                 const device packed_float3 *normal   [[ buffer(1) ]],
-                                 constant     Camera        *camera   [[ buffer(2) ]],
-                                 constant     Model         *model    [[ buffer(3) ]],
-                                              unsigned int   vid      [[ vertex_id ]]) {
+vertex VertexOutput basic_vertex(VertexInput  input  [[ stage_in  ]],
+                        constant Camera      &camera [[ buffer(2) ]],
+                        constant Model       &model  [[ buffer(3) ]]) {
   VertexOutput output;
-  float4 location = model->model * float4(position[vid], 1.0);
-  output.position = camera->projection * camera->view * location;
+  float4 location = model.model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
   output.location = location.xyz;
-  output.normal = rotate_quat(model->rotation, normal[vid]);
-  output.view   = camera->position.xyz - output.position.xyz;
+  output.normal = rotate_quat(model.rotation, input.normal);
+  output.view   = camera.position.xyz - output.position.xyz;
   return output;
 }
 
