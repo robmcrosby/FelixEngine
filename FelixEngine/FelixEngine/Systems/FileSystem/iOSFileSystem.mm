@@ -86,41 +86,49 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
 
 bool iOSFileSystem::loadImageData(ImageBufferData &image, const string &file) const {
   string filePath = findPathForFile(file);
-  
   UIImage *uiImage = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:filePath.c_str()]];
-  if (uiImage != nil) {
-    CGImageRef imageRef = [uiImage CGImage];
-    NSUInteger width = CGImageGetWidth(imageRef);
-    NSUInteger height = CGImageGetHeight(imageRef);
-    NSUInteger bytesPerPixel = 4;
-    NSUInteger bytesPerRow = bytesPerPixel * width;
-    NSUInteger bitsPerComponent = 8;
-    
-    // Resize the Image Buffer
-    image.resize((int)width, (int)height);
-    uint8_t *rawData = (uint8_t*)image.ptr();
-    
-    // Create a Core Graphics Context
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(rawData, width, height,
-                                                 bitsPerComponent, bytesPerRow, colorSpace,
-                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-    CGColorSpaceRelease(colorSpace);
-    
-    // Flip the image
-    //CGContextTranslateCTM(context, 0, height);
-    //CGContextScaleCTM(context, 1, -1);
-    
-    // Draw the image to the Image Buffer
-    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
-    CGContextRelease(context);
-    
-    return true;
-  }
-  else {
-    cerr << "Error Loading Image File: " << file << endl;
-  }
+  if (uiImage != nil)
+    return exportImageData(image, uiImage);
+  cerr << "Error Loading Image File: " << file << endl;
   return false;
+}
+
+bool iOSFileSystem::loadImageData(ImageBufferData &image, const FileData &data) const {
+  UIImage *uiImage = [UIImage imageWithData:[NSData dataWithBytes:&data[0] length:data.size()]];
+  if (uiImage != nil)
+    return exportImageData(image, uiImage);
+  cerr << "Error Loading Image From Data" << endl;
+  return false;
+}
+
+bool iOSFileSystem::exportImageData(ImageBufferData &image, UIImage *uiImage) const {
+  CGImageRef imageRef = [uiImage CGImage];
+  NSUInteger width = CGImageGetWidth(imageRef);
+  NSUInteger height = CGImageGetHeight(imageRef);
+  NSUInteger bytesPerPixel = 4;
+  NSUInteger bytesPerRow = bytesPerPixel * width;
+  NSUInteger bitsPerComponent = 8;
+  
+  // Resize the Image Buffer
+  image.resize((int)width, (int)height);
+  uint8_t *rawData = (uint8_t*)image.ptr();
+  
+  // Create a Core Graphics Context
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+                                               bitsPerComponent, bytesPerRow, colorSpace,
+                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+  CGColorSpaceRelease(colorSpace);
+  
+  // Flip the image
+  //CGContextTranslateCTM(context, 0, height);
+  //CGContextScaleCTM(context, 1, -1);
+  
+  // Draw the image to the Image Buffer
+  CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+  CGContextRelease(context);
+  
+  return true;
 }
 
 bool iOSFileSystem::loadXMLTreeFile(XMLTree &tree, const std::string &file) const {

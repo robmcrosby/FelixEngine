@@ -9,6 +9,7 @@
 
 #include "Scene.h"
 #include "FileSystem.h"
+#include "USDArchive.h"
 
 using namespace fx;
 using namespace std;
@@ -21,7 +22,7 @@ Scene::~Scene() {
   
 }
 
-bool Scene::loadXMLFile(const std::string &file) {
+bool Scene::loadXMLFile(const std::string &file, const string &pass) {
   XMLTree tree;
   if (FileSystem::loadXMLTree(tree, file)) {
     for (auto node : tree) {
@@ -50,6 +51,8 @@ bool Scene::loadObject(const XMLTree::Node &node) {
     return getVertexMesh(node.attribute("name"))->loadXML(node);
   if (node == "Texture")
     return getTextureBuffer(node.attribute("name"))->loadXML(node);
+  if (node == "External")
+    return loadExternal(node);
   SharedObject obj = build(node);
   return obj ? true : false;
 }
@@ -66,6 +69,27 @@ SharedObject Scene::build(const XMLTree::Node &node) {
   if (obj)
     obj->loadXML(node);
   return obj;
+}
+
+bool Scene::loadExternal(const XMLTree::Node &node) {
+  if (node.hasAttribute("file")) {
+    string file = node.attribute("file");
+    string fileType = FileSystem::getFilePostfix(file);
+    if (fileType == "xml")
+      return loadXMLFile(file, node.attribute("pass"));
+    if (fileType == "usdz")
+      return loadUSDZFile(file, node.attribute("pass"));
+  }
+  return false;
+}
+
+bool Scene::loadUSDZFile(const string &file, const string &pass) {
+  string filePath = FileSystem::findFile(file);
+  USDArchive archive;
+  if (archive.open(filePath)) {
+    cout << "Opened Archive: " << file << endl;
+  }
+  return false;
 }
 
 void Scene::addObject(SharedObject &obj, const string &name) {

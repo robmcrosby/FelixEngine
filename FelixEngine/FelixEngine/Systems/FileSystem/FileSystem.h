@@ -58,6 +58,7 @@ namespace fx {
     virtual bool loadFileData(FileData &data, const std::string &file) const = 0;
     virtual bool loadMeshFile(VertexMeshData &mesh, const std::string &file) const = 0;
     virtual bool loadImageData(ImageBufferData &image, const std::string &file) const = 0;
+    virtual bool loadImageData(ImageBufferData &image, const FileData &data) const = 0;
     virtual bool loadXMLTreeFile(XMLTree &tree, const std::string &file) const = 0;
     
     virtual bool fileExistsAtPath(const std::string &filePath) const = 0;
@@ -83,6 +84,10 @@ namespace fx {
     
     static bool loadImage(ImageBufferData &image, const std::string &file) {
       return instance != nullptr && instance->loadImageData(image, file);
+    }
+    
+    static bool loadImage(ImageBufferData &image, const FileData &data) {
+      return instance != nullptr && instance->loadImageData(image, data);
     }
     
     static bool loadXMLTree(XMLTree &tree, const std::string &file) {

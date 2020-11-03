@@ -28,9 +28,12 @@ namespace fx {
     Scene();
     ~Scene();
     
-    bool loadXMLFile(const std::string &file);
+    bool loadXMLFile(const std::string &file, const std::string &pass = "");
     bool loadXML(const XMLTree::Node &node);
     bool loadObject(const XMLTree::Node &node);
+    bool loadExternal(const XMLTree::Node &node);
+    
+    bool loadUSDZFile(const std::string &file, const std::string &pass = "");
     
     template <typename T, typename... Args>
     std::shared_ptr<T> make(const std::string &name, Args... args) {

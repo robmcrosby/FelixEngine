@@ -48,4 +48,5 @@
       <Location>0.000000, 0.000000, -0.000000</Location>
     </Transform>
   </Model>
+  <External file="Suzanne.usdz" pass="MainPass"/>
 </Scene>

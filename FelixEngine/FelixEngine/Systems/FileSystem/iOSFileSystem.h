@@ -11,6 +11,10 @@
 #ifndef iOSFileSystem_h
 #define iOSFileSystem_h
 
+
+@class UIImage;
+
+
 namespace fx {
   
   /** iOS File System */
@@ -26,10 +30,14 @@ namespace fx {
     virtual bool loadFileData(FileData &data, const std::string &file) const;
     virtual bool loadMeshFile(VertexMeshData &mesh, const std::string &file) const;
     virtual bool loadImageData(ImageBufferData &image, const std::string &file) const;
+    virtual bool loadImageData(ImageBufferData &image, const FileData &data) const;
     virtual bool loadXMLTreeFile(XMLTree &tree, const std::string &file) const;
     
     virtual bool fileExistsAtPath(const std::string &filePath) const;
     virtual std::string findPathForFile(const std::string &file) const;
+    
+  private:
+    bool exportImageData(ImageBufferData &image, UIImage *uiImage) const;
   };
   
 }
