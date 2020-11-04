@@ -62,7 +62,58 @@ string USDCrate::getName(const string &path) const {
   return "";
 }
 
+bool USDCrate::getFaceCounts(IntVector &buffer, const string &meshPath) const {
+  return getArray(buffer, meshPath, "faceVertexCounts");
+}
+
+bool USDCrate::getFaceIndices(IntVector &buffer, const string &meshPath) const {
+  return getArray(buffer, meshPath, "faceVertexIndices");
+}
+
+bool USDCrate::getPoints(vector<vec3> &buffer, const string &meshPath) const {
+  return getArray(buffer, meshPath, "points");
+}
+
+bool USDCrate::getNormalIndices(IntVector &buffer, const string &meshPath) const {
+  return getArray(buffer, meshPath, "primvars:normals:indices");
+}
+
+bool USDCrate::getNormals(vector<vec3> &buffer, const string &meshPath) const {
+  return getArray(buffer, meshPath, "primvars:normals");
+}
+
+StringVector USDCrate::getUVNames(const string &meshPath) const {
+  StringVector names;
+  if (_pathMap.count(meshPath) > 0) {
+    const USDItem &mesh = _usdItems.at(_pathMap.at(meshPath));
+    for (auto i = mesh.attributes.begin(); i != mesh.attributes.end(); ++i) {
+      const USDItem &attribute = _usdItems.at(*i);
+      if (attribute.typeName == "texCoord2f[]")
+        names.push_back(attribute.name.substr(9));
+    }
+  }
+  return names;
+}
+
+bool USDCrate::getUVIndices(IntVector &buffer, const string &meshPath, const string &name) const {
+  return getArray(buffer, meshPath, "primvars:" + name + ":indices");
+}
+
+bool USDCrate::getUVs(vector<vec2> &buffer, const string &meshPath, const string &name) const {
+  return getArray(buffer, meshPath, "primvars:" + name);
+}
+
 bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
+  string path = itemPath + "/" + attribute;
+  if (_pathMap.count(path) > 0) {
+    const USDItem &item = _usdItems[_pathMap.at(path)];
+    return item.getArray(buffer, this);
+  }
+  cerr << "Error finding path: " << path << endl;
+  return false;
+}
+
+bool USDCrate::getArray(vector<vec2> &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
   if (_pathMap.count(path) > 0) {
     const USDItem &item = _usdItems[_pathMap.at(path)];
@@ -148,8 +199,7 @@ bool USDCrate::readTableOfContents() {
     
     if (path->leaf) {
       USDItem &parent = _usdItems[itemStack.back()];
-      parent.attributeNames.push_back(item.name);
-      parent.attributes[item.name] = path->index;
+      parent.attributes.push_back(path->index);
       if (path->jump == -2) {
         itemStack.pop_back();
         pathStack.pop_back();
@@ -264,6 +314,18 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
 void USDCrate::printUSD() const {
   const USDItem &rootItem = _usdItems.at(_rootItem);
   rootItem.print(cout, this);
+}
+
+int USDCrate::findAttributeIndex(const string &itemPath, const string &name) const {
+  if (_pathMap.count(itemPath) > 0) {
+    const USDItem &item = _usdItems.at(_pathMap.at(itemPath));
+    for (auto i = item.attributes.begin(); i != item.attributes.end(); ++i) {
+      const USDItem &attribute = _usdItems.at(*i);
+      if (attribute.name == name)
+        return *i;
+    }
+  }
+  return -1;
 }
 
 IntVector USDCrate::readIntVector(long start, istream &is) {

@@ -154,7 +154,7 @@ void USDItem::print(ostream &os, const USDCrate *crate, string indent) const {
     
     // Print Attributes
     for (auto itr = attributes.begin(); itr != attributes.end(); ++itr)
-      crate->_usdItems[itr->second].print(os, crate, indent + "  ");
+      crate->_usdItems[*itr].print(os, crate, indent + "  ");
     
     // Print Children
     for (auto itr = children.begin(); itr != children.end(); ++itr)

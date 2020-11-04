@@ -109,8 +109,7 @@ namespace fx {
     bool isCompressed;
     RepMap reps;
     
-    StringVector attributeNames;
-    std::map<std::string, int> attributes;
+    IntVector attributes;
     IntVector children;
     
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}

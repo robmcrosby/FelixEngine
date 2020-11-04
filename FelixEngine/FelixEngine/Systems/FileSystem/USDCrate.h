@@ -48,12 +48,26 @@ namespace fx {
     std::string getName(const std::string &path) const;
     
     bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
+    bool getArray(std::vector<vec2> &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool getArray(std::vector<vec3> &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool appendBuffer(VertexBuffer &buffer, const std::string &itemPath, const std::string &attribute) const;
+    
+    bool getFaceCounts(IntVector &buffer, const std::string &meshPath) const;
+    bool getFaceIndices(IntVector &buffer, const std::string &meshPath) const;
+    bool getPoints(std::vector<vec3> &buffer, const std::string &meshPath) const;
+    
+    bool getNormalIndices(IntVector &buffer, const std::string &meshPath) const;
+    bool getNormals(std::vector<vec3> &buffer, const std::string &meshPath) const;
+    
+    StringVector getUVNames(const std::string &meshPath) const;
+    bool getUVIndices(IntVector &buffer, const std::string &meshPath, const std::string &name) const;
+    bool getUVs(std::vector<vec2> &buffer, const std::string &meshPath, const std::string &name) const;
     
     void printUSD() const;
     
   private:
+    int findAttributeIndex(const std::string &itemPath, const std::string &name) const;
+    
     bool readTableOfContents();
     StringVector readTokens(long start, std::istream &is);
     RepVector readReps(long start, std::istream &is);
