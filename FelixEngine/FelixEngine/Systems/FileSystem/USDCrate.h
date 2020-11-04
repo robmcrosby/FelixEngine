@@ -23,7 +23,7 @@ namespace fx {
     size_t _fileOffset;
     size_t _fileLength;
     int _fileVersion;
-    std::ifstream *_fileStream;
+    mutable std::ifstream *_fileStream;
     
     int _rootItem;
     std::vector<USDItem> _usdItems;
@@ -38,12 +38,14 @@ namespace fx {
     ~USDCrate();
     
     bool open(const std::string &filePath, size_t offset = 0, size_t length = 0);
-    bool open();
-    void close();
+    bool open() const;
+    void close() const;
     
     const StringVector& objectPaths() const {return _objects;}
     const StringVector& meshPaths() const {return _meshes;}
     const StringVector& materialPaths() const {return _materials;}
+    
+    std::string getName(const std::string &path) const;
     
     bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool getArray(std::vector<vec3> &buffer, const std::string &itemPath, const std::string &attribute) const;

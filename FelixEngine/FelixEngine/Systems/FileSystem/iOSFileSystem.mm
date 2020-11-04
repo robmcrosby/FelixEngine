@@ -76,7 +76,6 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
     else {
       cerr << "Unable to open USD Archive" << endl;
     }
-    //return MeshLoader::loadFromUsdzFile(mesh, filePath);
   }
   else {
     cerr << "Unknown Mesh File: " << file << endl;

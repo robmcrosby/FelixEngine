@@ -118,7 +118,16 @@ bool MeshLoader::readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is)
   return false;
 }
 
-bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate) {
+bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) {
+  bool success = true;
+  crate.printUSD();
+  
+  StringVector meshPaths = crate.meshPaths();
+  for (auto path = meshPaths.begin(); path != meshPaths.end(); ++path) {
+    success &= loadFromCrateFile(mesh, crate, *path);
+  }
+  return success;
+/*
   mesh.primitiveType = VERTEX_TRIANGLES;
   
   crate.open();
@@ -177,5 +186,42 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate) {
   crate.close();
   
   //cout << "loadFromCrateFile" << endl;
+  return false;
+ */
+}
+
+bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, const string &path) {
+  if (crate.open()) {
+    mesh.primitiveType = VERTEX_TRIANGLES;
+    
+    IntVector counts, vertexIndices, normalIndices;
+    crate.getArray(counts, path, "faceVertexCounts");
+    crate.getArray(vertexIndices, path, "faceVertexIndices");
+    crate.getArray(normalIndices, path, "primvars:normals:indices");
+    
+    vector<vec3> positions, normals;
+    crate.getArray(positions, path, "points");
+    crate.getArray(normals, path, "primvars:normals");
+    
+    int i = 0;
+    IndexMap indexMap;
+    ivec2 range((int)mesh.indices.size(), 0);
+    
+    for (auto count = counts.begin(); count != counts.end(); ++count) {
+      for (int j = i+1; j < i+*count-1; ++j) {
+        addPointNormal(mesh, indexMap, vertexIndices[i], positions, normalIndices[i], normals);
+        addPointNormal(mesh, indexMap, vertexIndices[j], positions, normalIndices[j], normals);
+        addPointNormal(mesh, indexMap, vertexIndices[j+1], positions, normalIndices[j+1], normals);
+      }
+      i += *count;
+    }
+    range.end = (int)mesh.indices.size();
+    mesh.subMeshes.push_back(range);
+    
+    mesh.totalVertices = (int)mesh.buffers["position"].size()/3;
+    
+    crate.close();
+    return true;
+  }
   return false;
 }

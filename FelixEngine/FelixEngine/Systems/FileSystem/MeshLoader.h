@@ -22,7 +22,8 @@ namespace fx {
     static bool readBufferBinaryStream(VertexMeshData &mesh, int vertexCount, std::istream &is);
     static bool readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is);
     
-    static bool loadFromCrateFile(VertexMeshData &mesh, USDCrate &crate);
+    static bool loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate);
+    static bool loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, const std::string &path);
   };
 }
 

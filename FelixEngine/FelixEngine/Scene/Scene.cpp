@@ -110,7 +110,28 @@ bool Scene::loadUSDZFile(const string &file, const string &pass) {
 }
 
 bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
-  crate.printUSD();
+//  cout << "Materials:" << endl;
+//  StringVector materials = crate.materialPaths();
+//  for (auto path = materials.begin(); path != materials.end(); ++path) {
+//    string name = crate.getName(*path);
+//    cout << " " << name << endl;
+//  }
+  
+  cout << "Meshes:" << endl;
+  StringVector meshes = crate.meshPaths();
+  for (auto path = meshes.begin(); path != meshes.end(); ++path) {
+    string name = crate.getName(*path);
+    cout << " " << name << endl;
+  }
+  
+//  cout << "Objects:" << endl;
+//  StringVector objects = crate.objectPaths();
+//  for (auto path = objects.begin(); path != objects.end(); ++path) {
+//    string name = crate.getName(*path);
+//    cout << " " << name << endl;
+//  }
+  
+  //crate.printUSD();
   return false;
 }
 

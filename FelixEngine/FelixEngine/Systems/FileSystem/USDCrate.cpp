@@ -36,7 +36,7 @@ bool USDCrate::open(const string &filePath, size_t offset, size_t length) {
   return success;
 }
 
-bool USDCrate::open() {
+bool USDCrate::open() const {
   _fileStream = new ifstream();
   _fileStream->open(_filePath, ios::in | ios::binary);
   if (!_fileStream->is_open()) {
@@ -48,12 +48,18 @@ bool USDCrate::open() {
   return true;
 }
 
-void USDCrate::close() {
+void USDCrate::close() const {
   if (_fileStream) {
     _fileStream->close();
     delete _fileStream;
   }
   _fileStream = nullptr;
+}
+
+string USDCrate::getName(const string &path) const {
+  if (_pathMap.count(path))
+    return _usdItems.at(_pathMap.at(path)).name;
+  return "";
 }
 
 bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
