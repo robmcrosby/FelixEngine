@@ -116,7 +116,7 @@ namespace fx {
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
     void setToPath(Path &path, std::string &pathStr, StringVector &tokens, USDCrate *crate);
-    void print(std::ostream &os, USDCrate *crate, std::string indent = "") const;
+    void print(std::ostream &os, const USDCrate *crate, std::string indent = "") const;
     
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;

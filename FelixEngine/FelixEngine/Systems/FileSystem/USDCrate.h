@@ -49,7 +49,7 @@ namespace fx {
     bool getArray(std::vector<vec3> &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool appendBuffer(VertexBuffer &buffer, const std::string &itemPath, const std::string &attribute) const;
     
-    void printUSD();
+    void printUSD() const;
     
   private:
     bool readTableOfContents();

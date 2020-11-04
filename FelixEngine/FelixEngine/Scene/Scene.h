@@ -15,6 +15,7 @@
 
 
 namespace fx {
+  class USDCrate;
   
   class Scene: public EventSubject {
   private:
@@ -34,6 +35,7 @@ namespace fx {
     bool loadExternal(const XMLTree::Node &node);
     
     bool loadUSDZFile(const std::string &file, const std::string &pass = "");
+    bool loadUSDCrate(const USDCrate &crate, const std::string &pass = "");
     
     template <typename T, typename... Args>
     std::shared_ptr<T> make(const std::string &name, Args... args) {

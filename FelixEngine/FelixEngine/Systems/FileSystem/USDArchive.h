@@ -36,7 +36,7 @@ namespace fx {
     USDArchive();
     ~USDArchive();
     
-    bool open(const std::string &filePath);
+    bool read(const std::string &filePath);
     
     FileList allFiles() const;
     FileList crateFiles() const;
@@ -46,6 +46,8 @@ namespace fx {
     
     USDCrate getUSDCrate(const std::string &name) const;
     USDCrate getFirstUSDCrate() const;
+    
+    bool loadImage(ImageBufferData &image, const std::string &name) const;
     
   private:
     bool read(std::istream &is);

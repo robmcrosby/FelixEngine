@@ -69,7 +69,7 @@ bool iOSFileSystem::loadMeshFile(VertexMeshData &mesh, const string &file) const
   }
   else if (fileType == "usdz") {
     USDArchive archive;
-    if (archive.open(filePath)) {
+    if (archive.read(filePath)) {
       USDCrate crate = archive.getFirstUSDCrate();
       return MeshLoader::loadFromCrateFile(mesh, crate);
     }

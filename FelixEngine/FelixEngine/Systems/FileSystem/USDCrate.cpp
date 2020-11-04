@@ -255,8 +255,8 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
   return paths;
 }
 
-void USDCrate::printUSD() {
-  USDItem &rootItem = _usdItems[_rootItem];
+void USDCrate::printUSD() const {
+  const USDItem &rootItem = _usdItems.at(_rootItem);
   rootItem.print(cout, this);
 }
 

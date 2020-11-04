@@ -84,11 +84,33 @@ bool Scene::loadExternal(const XMLTree::Node &node) {
 }
 
 bool Scene::loadUSDZFile(const string &file, const string &pass) {
+  bool success = true;
   string filePath = FileSystem::findFile(file);
   USDArchive archive;
-  if (archive.open(filePath)) {
-    cout << "Opened Archive: " << file << endl;
+  if (archive.read(filePath)) {
+    // Load All Image Files From USD Archive
+    StringVector images = archive.imageFiles();
+    for (auto name = images.begin(); name != images.end(); ++name) {
+      ImageBufferData imageData;
+      success &= archive.loadImage(imageData, *name) && getTextureBuffer(*name)->load(imageData);
+    }
+    
+    // Load Objects from USD Crate Files
+    StringVector crates = archive.crateFiles();
+    for (auto name = crates.begin(); name != crates.end(); ++name) {
+      USDCrate crate = archive.getUSDCrate(*name);
+      success &= loadUSDCrate(crate, pass);
+    }
   }
+  else {
+    cerr << "Error Opening USDZ File" << endl;
+    success = false;
+  }
+  return success;
+}
+
+bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
+  crate.printUSD();
   return false;
 }
 

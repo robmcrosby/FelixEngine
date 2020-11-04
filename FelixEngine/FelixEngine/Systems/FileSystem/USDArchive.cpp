@@ -26,7 +26,7 @@ USDArchive::~USDArchive() {
   
 }
 
-bool USDArchive::open(const string &filePath) {
+bool USDArchive::read(const string &filePath) {
   _filePath = filePath;
   
   bool success = true;
@@ -95,6 +95,25 @@ USDCrate USDArchive::getFirstUSDCrate() const {
     return getUSDCrate(files.front());
   cerr << "No USD Files in USD Archive" << endl;
   return USDCrate();
+}
+
+bool USDArchive::loadImage(ImageBufferData &image, const string &name) const {
+  USDEntry entry = getEntry(name);
+  if (entry.fileLength > 0) {
+    ifstream file;
+    file.open(_filePath, ios::in | ios::binary);
+    if (file.is_open()) {
+      FileData data(entry.fileLength);
+      file.seekg(entry.fileOffset);
+      file.read(&data[0], entry.fileLength);
+      file.close();
+      return FileSystem::loadImage(image, data);
+    }
+    cerr << "Error opening USDZ file: " << _filePath << endl;
+    return false;
+  }
+  cerr << name << " not found in USDZ File" << endl;
+  return false;
 }
 
 bool USDArchive::read(istream &is) {

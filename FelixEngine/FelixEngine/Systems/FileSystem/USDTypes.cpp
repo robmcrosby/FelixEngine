@@ -98,7 +98,7 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
   }
 }
 
-void USDItem::print(ostream &os, USDCrate *crate, string indent) const {
+void USDItem::print(ostream &os, const USDCrate *crate, string indent) const {
   if (isAttribute()) {
     os << indent << "-" << typeName << " " << name;
     if (dataType != USD_INVALID && data.size() > 0 && !isArray) {
