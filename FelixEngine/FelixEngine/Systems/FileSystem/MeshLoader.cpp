@@ -177,8 +177,16 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, 
       crate.getNormals(normals.buffer, path);
     }
     else {
-      normals.indices.resize(faces.indices.size(), 0);
-      normals.buffer.push_back(vec3(0.0f, 1.0f, 0.0f));
+      // Create Normals if Not Avalible
+      int i = 0;
+      for (auto face = faceCounts.begin(); face != faceCounts.end(); ++face) {
+        for (int j = 0; j < *face; ++j)
+          normals.indices.push_back((int)normals.buffer.size());
+        vec3 v1 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+1));
+        vec3 v2 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+2));
+        normals.buffer.push_back(v1.cross(v2).normalized());
+        i += *face;
+      }
     }
     normals.offset = (int)ceil(log2((double)faces.buffer.size()));
     
@@ -196,6 +204,7 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, 
       offset += (int)ceil(log2((double)uv.buffer.size()));
     }
     if (uvMap.size() == 0) {
+      // Create UVs if None Found
       Vec2Set &uv = uvMap["uv_0"];
       uv.indices.resize(faces.indices.size(), 0);
       uv.buffer.push_back(vec2(0.0f, 0.0f));
