@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "FileSystem.h"
 #include "USDArchive.h"
+#include "MeshLoader.h"
 
 using namespace fx;
 using namespace std;
@@ -110,6 +111,7 @@ bool Scene::loadUSDZFile(const string &file, const string &pass) {
 }
 
 bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
+  bool success = true;
 //  cout << "Materials:" << endl;
 //  StringVector materials = crate.materialPaths();
 //  for (auto path = materials.begin(); path != materials.end(); ++path) {
@@ -117,11 +119,11 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
 //    cout << " " << name << endl;
 //  }
   
-  cout << "Meshes:" << endl;
   StringVector meshes = crate.meshPaths();
   for (auto path = meshes.begin(); path != meshes.end(); ++path) {
-    string name = crate.getName(*path);
-    cout << " " << name << endl;
+    VertexMeshData data;
+    MeshLoader::loadFromCrateFile(data, crate, *path);
+    success &= getVertexMesh(crate.getName(*path))->load(data);
   }
   
 //  cout << "Objects:" << endl;
@@ -132,7 +134,7 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
 //  }
   
   //crate.printUSD();
-  return false;
+  return success;
 }
 
 void Scene::addObject(SharedObject &obj, const string &name) {
