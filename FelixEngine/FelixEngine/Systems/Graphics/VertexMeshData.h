@@ -30,7 +30,7 @@ namespace fx {
     BufferMap   buffers;
     
     VertexMeshData(): primitiveType(VERTEX_TRIANGLES), totalVertices(0) {}
-    bool loadXML(const XMLTree::Node &node) {
+    bool load(const XMLTree::Node &node) {
       bool success = true;
       
       if (node.hasAttribute("type") && node.attribute("type") == "strip")

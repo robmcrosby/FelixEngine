@@ -20,7 +20,7 @@ namespace fx {
   struct iObject {
     virtual ~iObject() {}
     virtual void setScene(Scene *scene) = 0;
-    virtual bool loadXML(const XMLTree::Node &node) = 0;
+    virtual bool load(const XMLTree::Node &node) = 0;
     virtual void update(float dt) = 0;
   };
   typedef std::shared_ptr<iObject> SharedObject;

@@ -45,7 +45,7 @@ namespace fx {
     bool setToRenderPass(const XMLTree::Node &node) {
       RenderPassPtr renderPass = _scene->getRenderingPass(node.attribute("name"));
       setToRenderPass(renderPass);
-      return renderPass->loadXML(node);
+      return renderPass->load(node);
     }
     
     /**

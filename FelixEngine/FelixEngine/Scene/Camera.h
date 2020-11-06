@@ -42,7 +42,7 @@ namespace fx {
     Camera();
     virtual ~Camera();
 
-    virtual bool loadXML(const XMLTree::Node &node);
+    virtual bool load(const XMLTree::Node &node);
     virtual void update(float dt);
     virtual STR_Camera properties(vec2 frameSize);
 

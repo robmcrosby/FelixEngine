@@ -23,7 +23,7 @@ LightRig::~LightRig() {
   
 }
 
-bool LightRig::loadXML(const XMLTree::Node &node) {
+bool LightRig::load(const XMLTree::Node &node) {
   bool success = true;
   if (node.hasAttribute("pass"))
     setToRenderPass(node.attribute("pass"));
@@ -55,7 +55,7 @@ bool LightRig::loadXMLItem(const XMLTree::Node &node) {
 bool LightRig::addLight(const XMLTree::Node &node) {
   LightPtr light = _scene->get<Light>(node.attribute("name"));
   addLight(light);
-  return light->loadXML(node);
+  return light->load(node);
 }
 
 void LightRig::addDirectionalLight(vec3 direction, vec3 color, float energy) {

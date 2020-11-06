@@ -31,7 +31,7 @@ namespace fx {
     LightRig();
     virtual ~LightRig();
     
-    virtual bool loadXML(const XMLTree::Node &node);
+    virtual bool load(const XMLTree::Node &node);
     virtual void update(float dt);
     
     bool loadXMLItem(const XMLTree::Node &node);

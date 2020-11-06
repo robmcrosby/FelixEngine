@@ -31,7 +31,7 @@ Camera::~Camera() {
   
 }
 
-bool Camera::loadXML(const XMLTree::Node &node) {
+bool Camera::load(const XMLTree::Node &node) {
   bool success = true;
   // Set to a Render Pass
   if (node.hasAttribute("pass"))
@@ -51,7 +51,7 @@ bool Camera::loadXMLItem(const XMLTree::Node &node) {
   if (node == "RenderPass")
     return setToRenderPass(node);
   if (node == "Transform")
-    return _transform->loadXML(node);
+    return _transform->load(node);
   return false;
 }
 

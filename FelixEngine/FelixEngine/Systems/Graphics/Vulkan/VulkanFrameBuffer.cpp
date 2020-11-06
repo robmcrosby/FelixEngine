@@ -26,7 +26,7 @@ VulkanFrameBuffer::~VulkanFrameBuffer() {
   clearBuffers();
 }
 
-bool VulkanFrameBuffer::loadXML(const XMLTree::Node &node) {
+bool VulkanFrameBuffer::load(const XMLTree::Node &node) {
   return true;
 }
 

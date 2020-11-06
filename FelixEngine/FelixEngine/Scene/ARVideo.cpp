@@ -25,7 +25,7 @@ ARVideo::~ARVideo() {
   
 }
 
-bool ARVideo::loadXML(const XMLTree::Node &node) {
+bool ARVideo::load(const XMLTree::Node &node) {
   TrackerSystem *tracker = &TrackerSystem::getInstance();
   if (!tracker) {
     cerr << "An Initialized Tracking System Must be present when using ARVideo" << endl;
@@ -37,7 +37,7 @@ bool ARVideo::loadXML(const XMLTree::Node &node) {
   _renderItem.loadShaderFunctions("video_vertex", "video_fragment_Y_CbCr");
   _renderItem.getUniformMap()["transform"] = tracker->getImageTransform();
   
-  return Model::loadXML(node);
+  return Model::load(node);
 }
 
 void ARVideo::update(float td) {

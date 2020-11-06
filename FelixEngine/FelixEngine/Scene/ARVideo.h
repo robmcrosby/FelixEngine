@@ -22,7 +22,7 @@ namespace fx {
     ARVideo();
     virtual ~ARVideo();
     
-    virtual bool loadXML(const XMLTree::Node &node);
+    virtual bool load(const XMLTree::Node &node);
     virtual void update(float td);
   };
 }

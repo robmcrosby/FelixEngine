@@ -62,7 +62,7 @@ namespace fx {
     bool setFrame(const XMLTree::Node &node) {
       if (node.hasAttribute("name"))
         setFrame(node.attribute("name"));
-      return getFrame()->loadXML(node);
+      return getFrame()->load(node);
     }
     bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
     bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
@@ -110,7 +110,7 @@ namespace fx {
     
     virtual void setScene(Scene *scene) {}
     virtual void update(float dt) {}
-    virtual bool loadXML(const XMLTree::Node &node) {
+    virtual bool load(const XMLTree::Node &node) {
       bool success = true;
       if (node.hasAttribute("frame"))
         setFrame(node.attribute("frame"));

@@ -83,7 +83,7 @@ namespace fx
     void setParrent(TransformPtr parrent) {_parrent = parrent;}
     void clearParrent() {_parrent.reset();}
     
-    bool loadXML(const XMLTree::Node &node) {
+    bool load(const XMLTree::Node &node) {
       bool success = true;
       for (auto &subNode : node)
         success &= loadXMLItem(*subNode);

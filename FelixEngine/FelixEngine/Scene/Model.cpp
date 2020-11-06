@@ -30,7 +30,7 @@ Model::~Model() {
   
 }
 
-bool Model::loadXML(const XMLTree::Node &node) {
+bool Model::load(const XMLTree::Node &node) {
   bool success = true;
   if (node.hasAttribute("mesh"))
     setMesh(node.attribute("mesh"));
@@ -49,7 +49,7 @@ bool Model::loadXML(const XMLTree::Node &node) {
 
 bool Model::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Transform" && _transforms.size() > 0)
-    return _transforms.front()->loadXML(node);
+    return _transforms.front()->load(node);
   if (node == "Mesh")
     return setMesh(node);
   if (node == "Material")
@@ -112,7 +112,7 @@ void Model::setInstances(unsigned int instances) {
 
 bool Model::setMaterial(const XMLTree::Node &node) {
   _material = _scene->get<Material>(node.attribute("name"));
-  return _material->loadXML(node);
+  return _material->load(node);
 }
 
 void Model::setMaterial(const std::string &name) {
@@ -122,7 +122,7 @@ void Model::setMaterial(const std::string &name) {
 
 bool Model::setMesh(const XMLTree::Node &node) {
   _renderItem.mesh = Graphics::getInstance().getVertexMesh(node.attribute("name"));
-  return _renderItem.mesh->loadXML(node);
+  return _renderItem.mesh->load(node);
 }
 
 void Model::setMesh(const std::string &name) {

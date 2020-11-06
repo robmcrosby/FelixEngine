@@ -36,7 +36,7 @@ namespace fx {
     VulkanFrameBuffer();
     virtual ~VulkanFrameBuffer();
     
-    virtual bool loadXML(const XMLTree::Node &node);
+    virtual bool load(const XMLTree::Node &node);
     virtual bool setToWindow(int index);
     
     virtual bool resize(int width, int height);

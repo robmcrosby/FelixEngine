@@ -41,7 +41,7 @@ namespace fx {
     virtual ~Material();
     
     virtual void setScene(Scene *scene) {_scene = scene;}
-    virtual bool loadXML(const XMLTree::Node &node);
+    virtual bool load(const XMLTree::Node &node);
     virtual void update(float dt);
     
     bool setShader(const XMLTree::Node &node);

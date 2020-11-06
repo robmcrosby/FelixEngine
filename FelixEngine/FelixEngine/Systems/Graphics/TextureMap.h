@@ -44,7 +44,7 @@ namespace fx {
     
     size_t size() const {return _textures.size();}
     
-    bool loadXML(const XMLTree::Node &node) {
+    bool load(const XMLTree::Node &node) {
       bool success = true;
       for (auto &subNode : node)
         success &= addTexture(*subNode);
@@ -63,11 +63,11 @@ namespace fx {
       if (node.hasAttribute("name")) {
         texture = Graphics::getInstance().getTextureBuffer(node.attribute("name"));
         if (node.hasAttribute("file"))
-          success = texture->loadXML(node);
+          success = texture->load(node);
       }
       else {
         texture = Graphics::getInstance().createTextureBuffer();
-        success = texture->loadXML(node);
+        success = texture->load(node);
       }
       addTexture(texture, node);
       return success;

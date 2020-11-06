@@ -30,7 +30,7 @@ namespace fx {
     ~Scene();
     
     bool loadXMLFile(const std::string &file, const std::string &pass = "");
-    bool loadXML(const XMLTree::Node &node);
+    bool load(const XMLTree::Node &node);
     bool loadObject(const XMLTree::Node &node);
     bool loadExternal(const XMLTree::Node &node);
     

@@ -32,7 +32,7 @@ Light::~Light() {
   
 }
 
-bool Light::loadXML(const XMLTree::Node &node) {
+bool Light::load(const XMLTree::Node &node) {
   bool success = true;
   
   if (node.hasAttribute("energy"))
@@ -51,7 +51,7 @@ bool Light::loadXML(const XMLTree::Node &node) {
 
 bool Light::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Transform")
-    return _transform->loadXML(node);
+    return _transform->load(node);
   if (node == "Color") {
     setColor(node.contents());
     return true;

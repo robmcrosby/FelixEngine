@@ -8,31 +8,36 @@
 
 #include "GraphicResources.h"
 #include "FileSystem.h"
+#include "MeshLoader.h"
 
 
 using namespace fx;
 using namespace std;
 
 
-bool ShaderProgram::loadXML(const XMLTree::Node &node) {
+bool ShaderProgram::load(const XMLTree::Node &node) {
   if (node.hasAttributes("vertex", "fragment"))
     return loadShaderFunctions(node.attribute("vertex"), node.attribute("fragment"));
   return false;
 }
 
 
-bool VertexMesh::loadXML(const XMLTree::Node &node) {
+bool VertexMesh::load(const XMLTree::Node &node) {
   VertexMeshData meshData;
-  
   if (node.hasAttribute("file")) {
     if (FileSystem::loadMesh(meshData, node.attribute("file")))
       return load(meshData);
   }
   else {
-    if (meshData.loadXML(node))
+    if (meshData.load(node))
       return load(meshData);
   }
   return false;
+}
+
+bool VertexMesh::load(const USDCrate &crate, const string &path) {
+  VertexMeshData data;
+  return MeshLoader::loadFromCrateFile(data, crate, path) && load(data);
 }
 
 bool VertexMesh::setVertexBuffer(const string &name, const vector<float> &buffer) {
@@ -48,7 +53,7 @@ bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer)
 }
 
 
-bool TextureBuffer::loadXML(const XMLTree::Node &node) {
+bool TextureBuffer::load(const XMLTree::Node &node) {
   setDefaultSampler(node);
   if (node.hasAttribute("file"))
     return loadFile(node.attribute("file"));
@@ -70,7 +75,7 @@ bool TextureBuffer::loadColor(const RGBA &color) {
 }
 
 
-bool FrameBuffer::loadXML(const XMLTree::Node &node) {
+bool FrameBuffer::load(const XMLTree::Node &node) {
   bool success = true;
   if (node.hasAttribute("window"))
     success &= setToWindow(node.attributeAsInt("window"));

@@ -28,13 +28,13 @@ bool Scene::loadXMLFile(const std::string &file, const string &pass) {
   if (FileSystem::loadXMLTree(tree, file)) {
     for (auto node : tree) {
       if (*node == "Scene")
-        return loadXML(*node);
+        return load(*node);
     }
   }
   return false;
 }
 
-bool Scene::loadXML(const XMLTree::Node &node) {
+bool Scene::load(const XMLTree::Node &node) {
   bool success = true;
   for (auto &subNode : node)
     success &= loadObject(*subNode);
@@ -43,15 +43,15 @@ bool Scene::loadXML(const XMLTree::Node &node) {
 
 bool Scene::loadObject(const XMLTree::Node &node) {
   if (node == "RenderPass")
-    return getRenderingPass(node.attribute("name"))->loadXML(node);
+    return getRenderingPass(node.attribute("name"))->load(node);
   if (node == "Shader")
-    return getShaderProgram(node.attribute("name"))->loadXML(node);
+    return getShaderProgram(node.attribute("name"))->load(node);
   if (node == "Frame")
-    return getFrameBuffer(node.attribute("name"))->loadXML(node);
+    return getFrameBuffer(node.attribute("name"))->load(node);
   if (node == "Mesh")
-    return getVertexMesh(node.attribute("name"))->loadXML(node);
+    return getVertexMesh(node.attribute("name"))->load(node);
   if (node == "Texture")
-    return getTextureBuffer(node.attribute("name"))->loadXML(node);
+    return getTextureBuffer(node.attribute("name"))->load(node);
   if (node == "External")
     return loadExternal(node);
   SharedObject obj = build(node);
@@ -68,7 +68,7 @@ SharedObject Scene::build(const std::string &type, const std::string &name) {
 SharedObject Scene::build(const XMLTree::Node &node) {
   SharedObject obj = build(node.element(), node.attribute("name"));
   if (obj)
-    obj->loadXML(node);
+    obj->load(node);
   return obj;
 }
 
@@ -119,12 +119,10 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
 //    cout << " " << name << endl;
 //  }
   
+  // Load Meshes
   StringVector meshes = crate.meshPaths();
-  for (auto path = meshes.begin(); path != meshes.end(); ++path) {
-    VertexMeshData data;
-    MeshLoader::loadFromCrateFile(data, crate, *path);
-    success &= getVertexMesh(crate.getName(*path))->load(data);
-  }
+  for (auto path = meshes.begin(); path != meshes.end(); ++path)
+    success &= getVertexMesh(crate.getName(*path))->load(crate, *path);
   
 //  cout << "Objects:" << endl;
 //  StringVector objects = crate.objectPaths();
@@ -203,7 +201,7 @@ RenderPassPtr Scene::getRenderingPass(const XMLTree::Node &node) {
     renderPass = getRenderingPass(node.attribute("name"));
   else
     renderPass = createRenderingPass();
-  renderPass->loadXML(node);
+  renderPass->load(node);
   return renderPass;
 }
 
