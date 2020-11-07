@@ -11,6 +11,7 @@
 #include "FileSystem.h"
 #include "USDArchive.h"
 #include "MeshLoader.h"
+#include "Material.h"
 
 using namespace fx;
 using namespace std;
@@ -112,12 +113,11 @@ bool Scene::loadUSDZFile(const string &file, const string &pass) {
 
 bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   bool success = true;
-//  cout << "Materials:" << endl;
-//  StringVector materials = crate.materialPaths();
-//  for (auto path = materials.begin(); path != materials.end(); ++path) {
-//    string name = crate.getName(*path);
-//    cout << " " << name << endl;
-//  }
+  
+  // Load Materials
+  StringVector materials = crate.materialPaths();
+  for (auto path = materials.begin(); path != materials.end(); ++path)
+    success &= get<Material>(crate.getName(*path))->load(crate, *path);
   
   // Load Meshes
   StringVector meshes = crate.meshPaths();

@@ -7,6 +7,7 @@
 //
 
 #include "Material.h"
+#include "USDCrate.h"
 
 
 using namespace fx;
@@ -31,6 +32,11 @@ bool Material::load(const XMLTree::Node &node) {
   for (auto subNode : node)
     success &= loadXMLItem(*subNode);
   return success;
+}
+
+bool Material::load(const USDCrate &crate, const string &path) {
+  cout << "Load Crate: " << path;
+  return false;
 }
 
 bool Material::loadXMLItem(const XMLTree::Node &node) {

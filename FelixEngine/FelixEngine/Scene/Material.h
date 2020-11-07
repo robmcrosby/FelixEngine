@@ -18,6 +18,8 @@
 
 
 namespace fx {
+  class USDCrate;
+
   DEFINE_OBJ_BUILDER(Material)
   
   class Material: public iObject {
@@ -42,6 +44,7 @@ namespace fx {
     
     virtual void setScene(Scene *scene) {_scene = scene;}
     virtual bool load(const XMLTree::Node &node);
+    virtual bool load(const USDCrate &crate, const std::string &path);
     virtual void update(float dt);
     
     bool setShader(const XMLTree::Node &node);
