@@ -72,6 +72,10 @@ bool USDCrate::hasAttribute(const string &itemPath, const string &attribute) con
   return _pathMap.count(path) > 0;
 }
 
+bool USDCrate::hasInput(const string &itemPath, const string &name) const {
+  return hasAttribute(itemPath, "inputs:" + name);
+}
+
 bool USDCrate::isTextureInput(const string &itemPath, const string &name) const {
   string path = getInputPath(itemPath, name);
   if (path != "") {
@@ -106,6 +110,35 @@ string USDCrate::getShaderPath(const string &materialPath) const {
     int index = _usdItems.at(_pathMap.at(attributePath)).pathValue();
     if (index >= 0 && index < _usdItems.size())
       return getParentPath(_usdItems.at(index).pathString);
+  }
+  return "";
+}
+
+string USDCrate::getFirstMeshPath(const string &path) const {
+  StringVector meshPaths;
+  getMeshPaths(meshPaths, path);
+  return meshPaths.size() > 0 ? meshPaths.front() : "";
+}
+
+bool USDCrate::getMeshPaths(StringVector &paths, const string &path) const {
+  if (_pathMap.count(path) > 0) {
+    const USDItem &item = _usdItems.at(_pathMap.at(path));
+    for (auto itr = item.children.begin(); itr != item.children.end(); ++itr) {
+      const USDItem &child = _usdItems.at(*itr);
+      if (child.typeName == "Mesh")
+        paths.push_back(child.pathString);
+    }
+    return paths.size() > 0;
+  }
+  return false;
+}
+
+string USDCrate::getMaterialPath(const string &path) const {
+  string attPath = getAttributePath(path, "material:binding");
+  if (attPath != "") {
+    int index = _usdItems.at(_pathMap.at(attPath)).pathValue();
+    if (index >= 0 && index < _usdItems.size())
+      return _usdItems.at(index).pathString;
   }
   return "";
 }

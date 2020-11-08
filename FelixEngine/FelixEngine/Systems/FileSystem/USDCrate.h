@@ -49,6 +49,7 @@ namespace fx {
     std::string getParentPath(const std::string &path) const;
     
     bool hasAttribute(const std::string &itemPath, const std::string &attribute) const;
+    bool hasInput(const std::string &itemPath, const std::string &name) const;
     
     bool isTextureInput(const std::string &itemPath, const std::string &name) const;
     
@@ -56,6 +57,11 @@ namespace fx {
     std::string getInputPath(const std::string &itemPath, const std::string &name) const;
     std::string getTexturePath(const std::string &itemPath, const std::string &name) const;
     std::string getShaderPath(const std::string &materialPath) const;
+    
+    std::string getFirstMeshPath(const std::string &path) const;
+    bool getMeshPaths(StringVector &paths, const std::string &path) const;
+    
+    std::string getMaterialPath(const std::string &path) const;
     
     bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool getArray(std::vector<vec2> &buffer, const std::string &itemPath, const std::string &attribute) const;

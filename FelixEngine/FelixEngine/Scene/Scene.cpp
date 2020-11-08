@@ -11,7 +11,8 @@
 #include "FileSystem.h"
 #include "USDArchive.h"
 #include "MeshLoader.h"
-#include "Material.h"
+#include "Model.h"
+
 
 using namespace fx;
 using namespace std;
@@ -123,6 +124,11 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   StringVector meshes = crate.meshPaths();
   for (auto path = meshes.begin(); path != meshes.end(); ++path)
     success &= getVertexMesh(crate.getName(*path))->load(crate, *path);
+  
+  // Load Models
+  StringVector models = crate.objectPaths();
+  for (auto path = models.begin(); path != models.end(); ++path)
+    success &= get<Model>(crate.getName(*path))->load(crate, *path, pass);
   
 //  cout << "Objects:" << endl;
 //  StringVector objects = crate.objectPaths();

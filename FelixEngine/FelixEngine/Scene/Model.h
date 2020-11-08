@@ -39,6 +39,7 @@ namespace fx {
     virtual ~Model();
     
     virtual bool load(const XMLTree::Node &node);
+    virtual bool load(const USDCrate &crate, const std::string &path, const std::string &pass);
     virtual void update(float dt);
     
     void setHidden(bool hidden = true) {_hidden = hidden;}

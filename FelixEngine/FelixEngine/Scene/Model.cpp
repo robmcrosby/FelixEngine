@@ -8,6 +8,7 @@
 
 #include "Model.h"
 #include "MeshBuilder.h"
+#include "USDCrate.h"
 
 
 using namespace fx;
@@ -44,6 +45,30 @@ bool Model::load(const XMLTree::Node &node) {
     setLayer(node.attributeAsInt("layer"));
   for (auto subNode : node)
     success &= loadXMLItem(*subNode);
+  return success;
+}
+
+bool Model::load(const USDCrate &crate, const string &path, const string &pass) {
+  bool success = true;
+//  cout << "Add Model: " << crate.getName(path) << endl;
+//  crate.printUSD();
+  
+  string meshPath = crate.getFirstMeshPath(path);
+  if (meshPath != "") {
+    setMesh(crate.getName(meshPath));
+    string materialPath = crate.getMaterialPath(meshPath);
+    if (materialPath != "")
+      setMaterial(crate.getName(materialPath));
+  }
+  
+  if (pass != "")
+    setToRenderPass(pass);
+  
+  _renderItem.depthState.enableTesting();
+  _renderItem.depthState.setWriting(true);
+  _renderItem.depthState.setFunction(DEPTH_TEST_LESS);
+  //_renderItem.cullMode = CULL_FRONT;
+  
   return success;
 }
 
