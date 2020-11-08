@@ -35,7 +35,13 @@ bool Material::load(const XMLTree::Node &node) {
 }
 
 bool Material::load(const USDCrate &crate, const string &path) {
-  cout << "Load Crate: " << path;
+  //cout << "Load Crate: " << path;
+  crate.printUSD();
+  string shaderPath = crate.getShaderPath(path);
+  string diffusePath = crate.getInputPath(shaderPath, "diffuseColor");
+  cout << "diffuseColor: " << diffusePath << endl;
+  cout << "is Texture: " << crate.isTextureInput(shaderPath, "diffuseColor") << endl;
+  cout << "diffuseTexture: " << crate.getTexturePath(shaderPath, "diffuseColor") <<  endl;
   return false;
 }
 

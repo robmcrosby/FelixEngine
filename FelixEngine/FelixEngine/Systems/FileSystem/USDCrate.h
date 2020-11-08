@@ -46,6 +46,16 @@ namespace fx {
     const StringVector& materialPaths() const {return _materials;}
     
     std::string getName(const std::string &path) const;
+    std::string getParentPath(const std::string &path) const;
+    
+    bool hasAttribute(const std::string &itemPath, const std::string &attribute) const;
+    
+    bool isTextureInput(const std::string &itemPath, const std::string &name) const;
+    
+    std::string getAttributePath(const std::string &itemPath, const std::string &attribute) const;
+    std::string getInputPath(const std::string &itemPath, const std::string &name) const;
+    std::string getTexturePath(const std::string &itemPath, const std::string &name) const;
+    std::string getShaderPath(const std::string &materialPath) const;
     
     bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
     bool getArray(std::vector<vec2> &buffer, const std::string &itemPath, const std::string &attribute) const;

@@ -62,6 +62,54 @@ string USDCrate::getName(const string &path) const {
   return "";
 }
 
+string USDCrate::getParentPath(const string &path) const {
+  size_t pos = path.find_last_of("/");
+  return pos != string::npos ? path.substr(0, pos) : "";
+}
+
+bool USDCrate::hasAttribute(const string &itemPath, const string &attribute) const {
+  string path = itemPath + "/" + attribute;
+  return _pathMap.count(path) > 0;
+}
+
+bool USDCrate::isTextureInput(const string &itemPath, const string &name) const {
+  string path = getInputPath(itemPath, name);
+  if (path != "") {
+    const USDItem &input = _usdItems.at(_pathMap.at(path));
+    return input.dataType == USD_PATH_VECTOR;
+  }
+  return false;
+}
+
+string USDCrate::getAttributePath(const string &itemPath, const string &attribute) const {
+  string path = itemPath + "/" + attribute;
+  return _pathMap.count(path) > 0 ? path : "";
+}
+
+string USDCrate::getInputPath(const string &itemPath, const string &name) const {
+  return getAttributePath(itemPath, "inputs:" + name);
+}
+
+string USDCrate::getTexturePath(const string &itemPath, const string &name) const {
+  string path = getInputPath(itemPath, name);
+  if (path != "") {
+    int index = _usdItems.at(_pathMap.at(path)).pathValue();
+    if (index >= 0 && index < _usdItems.size())
+      return getParentPath(_usdItems.at(index).pathString);
+  }
+  return "";
+}
+
+string USDCrate::getShaderPath(const string &materialPath) const {
+  string attributePath = getAttributePath(materialPath, "outputs:surface");
+  if (attributePath != "") {
+    int index = _usdItems.at(_pathMap.at(attributePath)).pathValue();
+    if (index >= 0 && index < _usdItems.size())
+      return getParentPath(_usdItems.at(index).pathString);
+  }
+  return "";
+}
+
 bool USDCrate::getFaceCounts(IntVector &buffer, const string &meshPath) const {
   return getArray(buffer, meshPath, "faceVertexCounts");
 }
