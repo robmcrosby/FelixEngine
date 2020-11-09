@@ -64,10 +64,7 @@ bool Model::load(const USDCrate &crate, const string &path, const string &pass) 
   if (pass != "")
     setToRenderPass(pass);
   
-  _renderItem.depthState.enableTesting();
-  _renderItem.depthState.setWriting(true);
-  _renderItem.depthState.setFunction(DEPTH_TEST_LESS);
-  //_renderItem.cullMode = CULL_FRONT;
+  setFaceCulling(CULL_FRONT);
   
   return success;
 }

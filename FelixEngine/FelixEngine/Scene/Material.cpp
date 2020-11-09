@@ -47,6 +47,8 @@ bool Material::load(const USDCrate &crate, const string &path) {
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_normal", "f_lambert_phong_2");
   
+  _depthState.enableDefaultTesting();
+  
   return true;
 }
 
