@@ -123,8 +123,8 @@ string USDCrate::getFirstMeshPath(const string &path) const {
 bool USDCrate::getMeshPaths(StringVector &paths, const string &path) const {
   if (_pathMap.count(path) > 0) {
     const USDItem &item = _usdItems.at(_pathMap.at(path));
-    for (auto itr = item.children.begin(); itr != item.children.end(); ++itr) {
-      const USDItem &child = _usdItems.at(*itr);
+    for (int index : item.children) {
+      const USDItem &child = _usdItems.at(index);
       if (child.typeName == "Mesh")
         paths.push_back(child.pathString);
     }
@@ -167,8 +167,8 @@ StringVector USDCrate::getUVNames(const string &meshPath) const {
   StringVector names;
   if (_pathMap.count(meshPath) > 0) {
     const USDItem &mesh = _usdItems.at(_pathMap.at(meshPath));
-    for (auto i = mesh.attributes.begin(); i != mesh.attributes.end(); ++i) {
-      const USDItem &attribute = _usdItems.at(*i);
+    for (int index : mesh.attributes) {
+      const USDItem &attribute = _usdItems.at(index);
       if (attribute.typeName == "texCoord2f[]")
         names.push_back(attribute.name.substr(9));
     }
@@ -272,16 +272,16 @@ bool USDCrate::readTableOfContents() {
   StringVector pathStack;
   IntVector itemStack;
   
-  for (auto path = paths.begin(); path != paths.end(); ++path) {
-    std::string pathStr = (pathStack.size() > 0 ? (pathStack.back() + "/" + path->token) : "");
-    _pathMap[pathStr] = path->index;
-    USDItem &item = _usdItems[path->index];
-    item.setToPath(*path, pathStr, tokens, this);
+  for (auto &path : paths) {
+    std::string pathStr = (pathStack.size() > 0 ? (pathStack.back() + "/" + path.token) : "");
+    _pathMap[pathStr] = path.index;
+    USDItem &item = _usdItems[path.index];
+    item.setToPath(path, pathStr, tokens, this);
     
-    if (path->leaf) {
+    if (path.leaf) {
       USDItem &parent = _usdItems[itemStack.back()];
-      parent.attributes.push_back(path->index);
-      if (path->jump == -2) {
+      parent.attributes.push_back(path.index);
+      if (path.jump == -2) {
         itemStack.pop_back();
         pathStack.pop_back();
       }
@@ -296,12 +296,12 @@ bool USDCrate::readTableOfContents() {
       
       if (itemStack.size() > 0) {
         USDItem &parent = _usdItems[itemStack.back()];
-        parent.children.push_back(path->index);
+        parent.children.push_back(path.index);
       }
       else {
-        _rootItem = path->index;
+        _rootItem = path.index;
       }
-      itemStack.push_back(path->index);
+      itemStack.push_back(path.index);
       pathStack.push_back(pathStr);
     }
   }
@@ -400,10 +400,10 @@ void USDCrate::printUSD() const {
 int USDCrate::findAttributeIndex(const string &itemPath, const string &name) const {
   if (_pathMap.count(itemPath) > 0) {
     const USDItem &item = _usdItems.at(_pathMap.at(itemPath));
-    for (auto i = item.attributes.begin(); i != item.attributes.end(); ++i) {
-      const USDItem &attribute = _usdItems.at(*i);
+    for (int index : item.attributes) {
+      const USDItem &attribute = _usdItems.at(index);
       if (attribute.name == name)
-        return *i;
+        return index;
     }
   }
   return -1;

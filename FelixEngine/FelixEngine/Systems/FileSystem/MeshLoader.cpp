@@ -35,8 +35,8 @@ typedef map<string, Vec2Set> Vec2SetMap;
 void addVertex(VertexMeshData &mesh, IndexMap &indexMap, int index, Vec3Set &faces, Vec3Set &normals, Vec2SetMap &uvs) {
   long key = faces.indices[index];
   key |= normals.indices[index] << normals.offset;
-  for (auto uv = uvs.begin(); uv != uvs.end(); ++uv)
-    key |= uv->second.indices[index] << uv->second.offset;
+  for (auto &uv : uvs)
+    key |= uv.second.indices[index] << uv.second.offset;
   
   if (indexMap.count(key) > 0)
     mesh.indices.push_back(indexMap.at(key));
@@ -54,10 +54,10 @@ void addVertex(VertexMeshData &mesh, IndexMap &indexMap, int index, Vec3Set &fac
     mesh.buffers["normal"].push_back(normal.y);
     mesh.buffers["normal"].push_back(normal.z);
     
-    for (auto uv = uvs.begin(); uv != uvs.end(); ++uv) {
-      vec2 &coord = uv->second.buffer[uv->second.indices[index]];
-      mesh.buffers[uv->first].push_back(coord.x);
-      mesh.buffers[uv->first].push_back(coord.y);
+    for (auto &uv : uvs) {
+      vec2 &coord = uv.second.buffer[uv.second.indices[index]];
+      mesh.buffers[uv.first].push_back(coord.x);
+      mesh.buffers[uv.first].push_back(coord.y);
     }
   }
 }
@@ -149,10 +149,9 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) 
   bool success = true;
   crate.printUSD();
   
-  StringVector meshPaths = crate.meshPaths();
-  for (auto path = meshPaths.begin(); path != meshPaths.end(); ++path) {
-    success &= loadFromCrateFile(mesh, crate, *path);
-  }
+  StringVector paths = crate.meshPaths();
+  for (auto &path : paths)
+    success &= loadFromCrateFile(mesh, crate, path);
   return success;
 }
 
@@ -179,13 +178,13 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, 
     else {
       // Create Normals if Not Avalible
       int i = 0;
-      for (auto face = faceCounts.begin(); face != faceCounts.end(); ++face) {
-        for (int j = 0; j < *face; ++j)
+      for (int faceCount : faceCounts) {
+        for (int j = 0; j < faceCount; ++j)
           normals.indices.push_back((int)normals.buffer.size());
         vec3 v1 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+1));
         vec3 v2 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+2));
         normals.buffer.push_back(v1.cross(v2).normalized());
-        i += *face;
+        i += faceCount;
       }
     }
     normals.offset = (int)ceil(log2((double)faces.buffer.size()));
@@ -215,13 +214,13 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, 
     IndexMap indexMap;
     ivec2 range((int)mesh.indices.size(), 0);
 
-    for (auto count = faceCounts.begin(); count != faceCounts.end(); ++count) {
-      for (int j = i+1; j < i+*count-1;) {
+    for (int faceCount : faceCounts) {
+      for (int j = i+1; j < i+faceCount-1;) {
         addVertex(mesh, indexMap, i, faces, normals, uvMap);
         addVertex(mesh, indexMap, j, faces, normals, uvMap);
         addVertex(mesh, indexMap, ++j, faces, normals, uvMap);
       }
-      i += *count;
+      i += faceCount;
     }
     range.end = (int)mesh.indices.size();
     mesh.subMeshes.push_back(range);

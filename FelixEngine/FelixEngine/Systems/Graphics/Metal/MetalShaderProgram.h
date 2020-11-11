@@ -36,6 +36,7 @@ namespace fx {
     IndexMap _attributeTypeMap;
     IndexMap _vertexIndexMap;
     IndexMap _fragmentIndexMap;
+    IndexMap _textureIndexMap;
     
   private:
     static unsigned int shaderCount;

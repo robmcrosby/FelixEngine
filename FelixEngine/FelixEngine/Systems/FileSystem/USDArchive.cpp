@@ -47,36 +47,35 @@ bool USDArchive::read(const string &filePath) {
 
 FileList USDArchive::allFiles() const {
   FileList files;
-  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
-    files.push_back(itr->name);
-  }
+  for (auto &entry : _entries)
+    files.push_back(entry.name);
   return files;
 }
 
 FileList USDArchive::crateFiles() const {
   FileList files;
-  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
-    string ext = itr->name.substr(itr->name.length()-4);
+  for (auto &entry : _entries) {
+    string ext = entry.name.substr(entry.name.length()-4);
     if (ext == "usdc")
-      files.push_back(itr->name);
+      files.push_back(entry.name);
   }
   return files;
 }
 
 FileList USDArchive::imageFiles() const {
   FileList files;
-  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
-    string ext = itr->name.substr(itr->name.length()-3);
+  for (auto &entry : _entries) {
+    string ext = entry.name.substr(entry.name.length()-3);
     if (ext == "png")
-      files.push_back(itr->name);
+      files.push_back(entry.name);
   }
   return files;
 }
 
 USDEntry USDArchive::getEntry(const string &name) const {
-  for (auto itr = _entries.begin(); itr != _entries.end(); ++itr) {
-    if (itr->name == name)
-      return *itr;
+  for (auto &entry : _entries) {
+    if (entry.name == name)
+      return entry;
   }
   return USDEntry();
 }

@@ -69,8 +69,8 @@ void ExampleScene::initalize() {
   //_modelB = _scene->get<fx::Model>("Suzanne");
   //_modelB->loadMesh("Suzanne.usdz");
   
-  _modelB = _scene->get<fx::Model>("Cube");
-  _modelB->loadMesh("Cube.usdz");
+  //_modelB = _scene->get<fx::Model>("Cube");
+  //_modelB->loadMesh("Cube.usdz");
 }
 
 void ExampleScene::update(float td) {

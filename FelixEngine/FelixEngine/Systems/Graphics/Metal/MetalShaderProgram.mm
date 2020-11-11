@@ -145,6 +145,11 @@ void MetalShaderProgram::extractIndexMaps() {
   // Extract the Reflection Information
   for (MTLArgument *arg in reflection.vertexArguments)
     _vertexIndexMap[[arg.name UTF8String]] = arg.index;
-  for (MTLArgument *arg in reflection.fragmentArguments)
-    _fragmentIndexMap[[arg.name UTF8String]] = arg.index;
+  
+  for (MTLArgument *arg in reflection.fragmentArguments) {
+    if (arg.type == MTLArgumentTypeTexture)
+      _textureIndexMap[[arg.name UTF8String]] = arg.index;
+    else
+      _fragmentIndexMap[[arg.name UTF8String]] = arg.index;
+  }
 }

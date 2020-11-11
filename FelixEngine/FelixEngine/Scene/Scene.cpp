@@ -93,15 +93,15 @@ bool Scene::loadUSDZFile(const string &file, const string &pass) {
   if (archive.read(filePath)) {
     // Load All Image Files From USD Archive
     StringVector images = archive.imageFiles();
-    for (auto name = images.begin(); name != images.end(); ++name) {
+    for (auto &name : images) {
       ImageBufferData imageData;
-      success &= archive.loadImage(imageData, *name) && getTextureBuffer(*name)->load(imageData);
+      success &= archive.loadImage(imageData, name) && getTextureBuffer(name)->load(imageData);
     }
     
     // Load Objects from USD Crate Files
     StringVector crates = archive.crateFiles();
-    for (auto name = crates.begin(); name != crates.end(); ++name) {
-      USDCrate crate = archive.getUSDCrate(*name);
+    for (auto &name : crates) {
+      USDCrate crate = archive.getUSDCrate(name);
       success &= loadUSDCrate(crate, pass);
     }
   }
@@ -117,25 +117,18 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   
   // Load Materials
   StringVector materials = crate.materialPaths();
-  for (auto path = materials.begin(); path != materials.end(); ++path)
-    success &= get<Material>(crate.getName(*path))->load(crate, *path);
+  for (auto &path : materials)
+    success &= get<Material>(crate.getName(path))->load(crate, path);
   
   // Load Meshes
   StringVector meshes = crate.meshPaths();
-  for (auto path = meshes.begin(); path != meshes.end(); ++path)
-    success &= getVertexMesh(crate.getName(*path))->load(crate, *path);
+  for (auto &path : meshes)
+    success &= getVertexMesh(crate.getName(path))->load(crate, path);
   
   // Load Models
   StringVector models = crate.objectPaths();
-  for (auto path = models.begin(); path != models.end(); ++path)
-    success &= get<Model>(crate.getName(*path))->load(crate, *path, pass);
-  
-//  cout << "Objects:" << endl;
-//  StringVector objects = crate.objectPaths();
-//  for (auto path = objects.begin(); path != objects.end(); ++path) {
-//    string name = crate.getName(*path);
-//    cout << " " << name << endl;
-//  }
+  for (auto &path : models)
+    success &= get<Model>(crate.getName(path))->load(crate, path, pass);
   
   //crate.printUSD();
   return success;
