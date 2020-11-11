@@ -65,7 +65,7 @@ namespace fx {
         Texture texture;
         texture.sampler = node;
         if (node.hasAttribute("texture"))
-          texture.buffer = Graphics::getInstance().getTextureBuffer(node.attribute("name"));
+          texture.buffer = Graphics::getInstance().getTextureBuffer(node.attribute("texture"));
         else
           texture.buffer = Graphics::getInstance().createTextureBuffer();
         if (node.hasAttribute("file"))
