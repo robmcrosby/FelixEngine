@@ -35,7 +35,7 @@ namespace fx {
     virtual void setDefaultSampler(SamplerState state) {_samplerState = state;}
     virtual SamplerState defaultSampler() const {return _samplerState;}
     
-    void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, int index);
+    void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, unsigned long index);
     void setMetalTexture(id <MTLTexture> texture);
   };
 }

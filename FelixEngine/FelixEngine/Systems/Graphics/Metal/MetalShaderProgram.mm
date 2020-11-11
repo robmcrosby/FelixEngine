@@ -10,6 +10,7 @@
 #include "MetalFrameBuffer.h"
 #include "MetalUniformBuffer.h"
 #include "MetalTextureSampler.h"
+#include "MetalTextureBuffer.h"
 #include <Metal/Metal.h>
 
 
@@ -62,8 +63,15 @@ void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrame
 
 void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, UniformsPtr uniforms) {
   if (uniforms) {
-    for (auto uniform : *uniforms)
+    for (auto &uniform : *uniforms)
       setUniform(encoder, uniform.first, uniform.second);
+  }
+}
+
+void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, TexturesPtr textures, MetalTextureSampler *samplers) {
+  if (textures) {
+    for (auto &texture : *textures)
+      setTexture(encoder, texture.first, texture.second, samplers);
   }
 }
 
@@ -81,6 +89,14 @@ void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const 
       [encoder setVertexBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_vertexIndexMap.at(name)];
     if (_fragmentIndexMap.count(name) > 0)
       [encoder setFragmentBytes:uniform.ptr() length:uniform.sizeInBytes() atIndex:_fragmentIndexMap.at(name)];
+  }
+}
+
+void MetalShaderProgram::setTexture(id <MTLRenderCommandEncoder> encoder, const string &name, const Texture &texture, MetalTextureSampler *samplers) {
+  if (_textureIndexMap.count(name) > 0) {
+    id <MTLSamplerState> sampler = [samplers samplerStateForFlags:texture.sampler.flags];
+    MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
+    mtlTextureBuffer->encode(encoder, sampler, _textureIndexMap.at(name));
   }
 }
 

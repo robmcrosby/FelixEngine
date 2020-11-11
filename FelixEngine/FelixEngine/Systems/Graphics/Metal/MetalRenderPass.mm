@@ -14,8 +14,6 @@
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
-#include "MetalUniformBuffer.h"
-#include "MetalTextureBuffer.h"
 #include "MetalDepthStencil.h"
 #include "MetalTextureSampler.h"
 
@@ -69,17 +67,8 @@ void MetalRenderPass::render() {
     else if (item.cullMode == CULL_FRONT)
       [encoder setCullMode:MTLCullModeFront];
     
-    // Set the Textures
-    if (item.textures) {
-      for (auto &texture : *item.textures) {
-        int index = (int)shader->getTextureIndex(texture.first);
-        if (index >= 0) {
-          id <MTLSamplerState> sampler = [_samplerStates samplerStateForFlags:texture.second.sampler.flags];
-          MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.second.buffer.get());
-          mtlTextureBuffer->encode(encoder, sampler, index);
-        }
-      }
-    }
+    // Encode the Textures
+    shader->encode(encoder, item.textures, _samplerStates);
     
     // Encode the Vertex Buffers
     mesh->encode(encoder, shader, item.instances);
