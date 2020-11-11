@@ -43,7 +43,7 @@ void ARPlaneDetect::initalize() {
   material->loadShader("v_texture", "f_texture_shadeless");
   material->enableDepthTesting();
   material->setAmbiant(fx::vec3(1.0, 1.0, 1.0), 0.6);
-  material->addTexture(dotTexture, dotTextureSampler);
+  material->setTexture("texture2D", dotTexture, dotTextureSampler);
   material->blendState().enableDefaultBlending();
   
   fx::VertexMeshPtr planeMesh = fx::MeshBuilder::createPlane();

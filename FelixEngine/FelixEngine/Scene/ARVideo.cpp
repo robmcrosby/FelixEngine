@@ -31,8 +31,8 @@ bool ARVideo::load(const XMLTree::Node &node) {
     cerr << "An Initialized Tracking System Must be present when using ARVideo" << endl;
     assert(false);
   }
-  _renderItem.addTexture(tracker->getCameraImageY());
-  _renderItem.addTexture(tracker->getCameraImageCbCr());
+  _renderItem.setTexture("capturedImageTextureY", tracker->getCameraImageY());
+  _renderItem.setTexture("capturedImageTextureCbCr", tracker->getCameraImageCbCr());
   _renderItem.mesh = MeshBuilder::createPlane();
   _renderItem.loadShaderFunctions("video_vertex", "video_fragment_Y_CbCr");
   _renderItem.getUniformMap()["transform"] = tracker->getImageTransform();

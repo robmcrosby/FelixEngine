@@ -62,7 +62,7 @@
   <Model mesh="Mesh" name="ModelC" pass="MainPass">
     <Material name="MaterialC">
       <Shader name="TextureShadeless" vertex="v_texture" fragment="f_texture_shadeless"/>
-      <Texture name="Texture"/>
+      <Texture name="texture2D" texture="Texture"/>
       <Ambiant color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
       <DepthState function="less" write="true"/>
     </Material>
@@ -103,7 +103,7 @@
   <Model mesh="Mesh" name="ModelF" pass="MainPass">
     <Material name="MaterialF">
       <Shader name="LambertPhongTexture" vertex="v_texture_normal" fragment="f_texture_lambert_phong_2"/>
-      <Texture name="Texture"/>
+      <Texture name="texture2D" texture="Texture"/>
       <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
       <Diffuse color="1.000000, 1.000000, 1.000000" factor="1.000000"/>
       <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>

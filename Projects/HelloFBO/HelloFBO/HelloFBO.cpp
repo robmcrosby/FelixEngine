@@ -81,7 +81,7 @@ void HelloFBO::setupSecondPass() {
   renderItem.setMeshVertexBuffer("UV", 2, 4, uvBuffer);
   renderItem.setMeshPrimativeType(fx::VERTEX_TRIANGLE_STRIP);
   renderItem.loadMesh();
-  renderItem.addTexture(_firstRenderPass->getColorTexture());
+  renderItem.setTexture("texture2D", _firstRenderPass->getColorTexture());
   
   _secondRenderPass = _graphics->createRenderPass();
   _secondRenderPass->addRenderItem(renderItem);

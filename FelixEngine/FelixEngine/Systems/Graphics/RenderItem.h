@@ -81,16 +81,16 @@ namespace fx {
         textures = TextureMap::make();
       return *textures;
     }
-    void addTexture(const RGBA &color) {getTextureMap().addTexture(color);}
-    void addTexture(TextureBufferPtr texture, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(texture, sampler);}
-    void addTexture(ImageBufferData &imageData, SamplerState sampler = SamplerState()) {getTextureMap().addTexture(imageData, sampler);}
-    bool addTextureFile(const std::string &fileName, SamplerState sampler = SamplerState()) {
-      fx::ImageBufferData imageData;
-      if (fx::FileSystem::loadImage(imageData, fileName)) {
-        addTexture(imageData, sampler);
-        return true;
-      }
-      return false;
+    void setTexture(const std::string &name, const RGBA &color) {getTextureMap().setColor(name, color);}
+    void setTexture(const std::string &name, TextureBufferPtr texture, SamplerState sampler = SamplerState()) {
+      getTextureMap().setTexture(name, texture, sampler);
+    }
+    void setTexture(const std::string &name, ImageBufferData &imageData, SamplerState sampler = SamplerState()) {
+      getTextureMap().setTexture(name, imageData, sampler);
+    }
+    bool setTextureFile(const std::string &name, const std::string &fileName, SamplerState sampler = SamplerState()) {
+      ImageBufferData imageData;
+      return FileSystem::loadImage(imageData, fileName) && getTextureMap().setTexture(name, imageData, sampler);
     }
     bool texturesLoaded() const {return !textures || textures->loaded();}
     bool operator<(const RenderItem &other) const {return layer < other.layer;}

@@ -71,12 +71,13 @@ void MetalRenderPass::render() {
     
     // Set the Textures
     if (item.textures) {
-      int index = 0;
       for (auto &texture : *item.textures) {
-        id <MTLSamplerState> sampler = [_samplerStates samplerStateForFlags:texture.sampler.flags];
-        MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
-        mtlTextureBuffer->encode(encoder, sampler, index);
-        ++index;
+        int index = (int)shader->getTextureIndex(texture.first);
+        if (index >= 0) {
+          id <MTLSamplerState> sampler = [_samplerStates samplerStateForFlags:texture.second.sampler.flags];
+          MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.second.buffer.get());
+          mtlTextureBuffer->encode(encoder, sampler, index);
+        }
       }
     }
     

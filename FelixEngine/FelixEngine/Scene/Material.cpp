@@ -66,9 +66,9 @@ bool Material::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Shader")
     return setShader(node);
   if (node == "Texture")
-    return addTexture(node);
+    return setTexture(node);
   if (node == "Textures")
-    return addTexture(node);
+    return setTextures(node);
   cerr << "Unknown XML Node in Material:" << endl << node << endl;
   return false;
 }
@@ -91,22 +91,22 @@ bool Material::loadShader(const string &vertex, const string &fragment) {
   return _shader->loadShaderFunctions(vertex, fragment);
 }
 
-bool Material::addTexture(const XMLTree::Node &node) {
+bool Material::setTexture(const XMLTree::Node &node) {
   if (!_textures)
     _textures = TextureMap::make();
-  return _textures->addTexture(node);
+  return _textures->setTexture(node);
 }
 
-bool Material::addTextures(const XMLTree::Node &node) {
+bool Material::setTextures(const XMLTree::Node &node) {
   if (!_textures)
     _textures = TextureMap::make();
   return _textures->load(node);
 }
 
-void Material::addTexture(TextureBufferPtr &texture, SamplerState sampler) {
+void Material::setTexture(const string &name, TextureBufferPtr &texture, SamplerState sampler) {
   if (!_textures)
     _textures = TextureMap::make();
-  _textures->addTexture(texture, sampler);
+  _textures->setTexture(name, texture, sampler);
 }
 
 bool Material::setAmbiant(const XMLTree::Node &node) {

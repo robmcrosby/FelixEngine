@@ -19,6 +19,8 @@ namespace fx {
     TextureBufferPtr buffer;
     SamplerState sampler;
     
+    Texture() {}
+    Texture(const Texture &that): buffer(that.buffer), sampler(that.sampler) {}
     Texture(TextureBufferPtr b, SamplerState s): buffer(b), sampler(s) {}
   };
   
@@ -27,7 +29,7 @@ namespace fx {
   
   class TextureMap {
   private:
-    std::vector<Texture> _textures;
+    std::map<std::string, Texture> _map;
     BufferPoolPtr _bufferPool;
     
   public:
@@ -36,61 +38,67 @@ namespace fx {
     TextureMap() {_bufferPool = Graphics::getInstance().createBufferPool();}
     ~TextureMap() {}
     
-    std::vector<Texture>::iterator begin() {return _textures.begin();}
-    std::vector<Texture>::iterator end() {return _textures.end();}
+    std::map<std::string, Texture>::iterator begin() {return _map.begin();}
+    std::map<std::string, Texture>::iterator end() {return _map.end();}
     
-    std::vector<Texture>::const_iterator begin() const {return _textures.begin();}
-    std::vector<Texture>::const_iterator end() const {return _textures.end();}
+    std::map<std::string, Texture>::const_iterator begin() const {return _map.begin();}
+    std::map<std::string, Texture>::const_iterator end() const {return _map.end();}
     
-    size_t size() const {return _textures.size();}
+    size_t size() const {return _map.size();}
     
     bool load(const XMLTree::Node &node) {
       bool success = true;
       for (auto &subNode : node)
-        success &= addTexture(*subNode);
+        success &= setTexture(*subNode);
       return success;
     }
     
-    bool addTexture(const RGBA &color) {
+    bool setColor(const std::string &name, const RGBA &color) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), SamplerState());
-      _textures.push_back(texture);
+      _map[name] = texture;
       return texture.buffer->loadColor(color);
     }
     
-    bool addTexture(const XMLTree::Node &node) {
+    bool setTexture(const XMLTree::Node &node) {
       bool success = true;
-      TextureBufferPtr texture;
       if (node.hasAttribute("name")) {
-        texture = Graphics::getInstance().getTextureBuffer(node.attribute("name"));
+        Texture texture;
+        texture.sampler = node;
+        if (node.hasAttribute("texture"))
+          texture.buffer = Graphics::getInstance().getTextureBuffer(node.attribute("name"));
+        else
+          texture.buffer = Graphics::getInstance().createTextureBuffer();
         if (node.hasAttribute("file"))
-          success = texture->load(node);
+          success = texture.buffer->loadFile(node.attribute("file"));
+        _map[node.attribute("name")] = texture;
       }
       else {
-        texture = Graphics::getInstance().createTextureBuffer();
-        success = texture->load(node);
+        std::cerr << "Texture Needs Name" << std::endl;
+        success = false;
       }
-      addTexture(texture, node);
       return success;
     }
     
-    bool addTexture(const ImageBufferData &image, SamplerState sampler = SamplerState()) {
+    bool setTexture(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
-      bool loaded = texture.buffer->load(image);
-      _textures.push_back(texture);
-      return loaded;
+      _map[name] = texture;
+      return texture.buffer->load(image);
     }
     
-    void addTexture(TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
-      Texture texture = Texture(buffer, sampler);
-      _textures.push_back(texture);
+    void setTexture(const std::string &name, TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
+      _map[name] = Texture(buffer, sampler);
     }
     
     bool loaded() const {
-      for (auto &texture : _textures) {
-        if (!texture.buffer || !texture.buffer->loaded())
+      for (auto &texture : _map) {
+        if (!texture.second.buffer || !texture.second.buffer->loaded())
           return false;
       }
       return true;
+    }
+    
+    Texture& operator[](const std::string name) {
+      return _map[name];
     }
     
     BufferPoolPtr bufferPool() {return _bufferPool;}

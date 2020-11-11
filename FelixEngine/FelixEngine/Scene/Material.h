@@ -53,9 +53,9 @@ namespace fx {
     ShaderProgramPtr shader() {return _shader;}
     bool loadShader(const std::string &vertex, const std::string &fragment);
     
-    bool addTexture(const XMLTree::Node &node);
-    bool addTextures(const XMLTree::Node &node);
-    void addTexture(TextureBufferPtr &texture, SamplerState sampler = SamplerState());
+    bool setTexture(const XMLTree::Node &node);
+    bool setTextures(const XMLTree::Node &node);
+    void setTexture(const std::string &name, TextureBufferPtr &texture, SamplerState sampler = SamplerState());
     TexturesPtr textures() {return _textures;}
     UniformsPtr uniforms() {return _uniforms;}
     

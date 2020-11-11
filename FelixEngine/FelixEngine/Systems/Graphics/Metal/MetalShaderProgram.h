@@ -52,6 +52,10 @@ namespace fx {
     
     virtual unsigned int getShaderId() const;
     
+    unsigned long getTextureIndex(const std::string &name) const {
+      return _textureIndexMap.count(name) ? _textureIndexMap.at(name) : -1;
+    }
+    
   private:
     void addPipeline(MetalFrameBuffer *frame, const BlendState &blending);
     void setUniform(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Uniform &uniform);
