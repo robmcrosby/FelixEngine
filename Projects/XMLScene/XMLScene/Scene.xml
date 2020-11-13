@@ -35,13 +35,13 @@
   </LightRig>
   <Model name="Model" pass="MainPass">
     <Mesh file="Mesh.mesh"/>
-    <Material>
+    <StdMaterial>
       <Shader vertex="v_normal" fragment="f_lambert_phong_2"/>
       <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
       <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
       <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
       <DepthState function="less" write="true"/>
-    </Material>
+    </StdMaterial>
     <Transform>
       <Scale>1.000000, 1.000000, 1.000000</Scale>
       <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

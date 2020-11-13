@@ -17,7 +17,7 @@ MaterialBuilder Material::materialBuilder = MaterialBuilder();
 
 Material::Material(): _scene(0) {
   _uniforms = UniformMap::make();
-  (*_uniforms)["material"] = _properties;
+  //(*_uniforms)["material"] = _properties;
 }
 
 Material::~Material() {
@@ -42,7 +42,7 @@ bool Material::load(const USDCrate &crate, const string &path) {
 //  cout << "diffuseColor: " << diffusePath << endl;
 //  cout << "is Texture: " << crate.isTextureInput(shaderPath, "diffuseColor") << endl;
 //  cout << "diffuseTexture: " << crate.getTexturePath(shaderPath, "diffuseColor") <<  endl;
-  setDiffuse(vec3(1.0, 0.0, 0.0), 1.0);
+//  setDiffuse(vec3(1.0, 0.0, 0.0), 1.0);
   
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_normal", "f_lambert_phong_2");
@@ -53,12 +53,12 @@ bool Material::load(const USDCrate &crate, const string &path) {
 }
 
 bool Material::loadXMLItem(const XMLTree::Node &node) {
-  if (node == "Ambiant")
-    return setAmbiant(node);
-  if (node == "Diffuse")
-    return setDiffuse(node);
-  if (node == "Specular")
-    return setSpecular(node);
+//  if (node == "Ambiant")
+//    return setAmbiant(node);
+//  if (node == "Diffuse")
+//    return setDiffuse(node);
+//  if (node == "Specular")
+//    return setSpecular(node);
   if (node == "DepthState")
     return _depthState.loadXml(node);
   if (node == "BlendState")
@@ -74,7 +74,7 @@ bool Material::loadXMLItem(const XMLTree::Node &node) {
 }
 
 void Material::update(float dt) {
-  (*_uniforms)["material"] = _properties;
+  //(*_uniforms)["material"] = _properties;
 }
 
 bool Material::setShader(const XMLTree::Node &node) {
@@ -109,44 +109,44 @@ void Material::setTexture(const string &name, TextureBufferPtr &texture, Sampler
   _textures->setTexture(name, texture, sampler);
 }
 
-bool Material::setAmbiant(const XMLTree::Node &node) {
-  if (node.hasAttributes("color", "factor")) {
-    setAmbiant(node.attribute("color"), node.attributeAsFloat("factor"));
-    return true;
-  }
-  return false;
-}
-
-bool Material::setDiffuse(const XMLTree::Node &node) {
-  if (node.hasAttribute("size"))
-    setDiffuseSize(node.attributeAsFloat("size"));
-  if (node.hasAttribute("smooth"))
-    setDiffuseSmooth(node.attributeAsFloat("smooth"));
-  if (node.hasAttribute("roughness"))
-    setDiffuseRoughness(node.attributeAsFloat("roughness"));
-  if (node.hasAttribute("albedo"))
-    setDiffuseAlbedo(node.attributeAsFloat("albedo"));
-  if (node.hasAttributes("color", "factor")) {
-    setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
-    return true;
-  }
-  return false;
-}
-
-void Material::setSpecular(const vec3 &color, float factor) {
-  _properties.specular = vec4(color, factor);
-}
-
-bool Material::setSpecular(const XMLTree::Node &node) {
-  if (node.hasAttribute("size"))
-    setSpecularSize(node.attributeAsFloat("size"));
-  if (node.hasAttribute("smooth"))
-    setSpecularSmooth(node.attributeAsFloat("smooth"));
-  if (node.hasAttribute("hardness"))
-    setSpecularHardness(node.attributeAsFloat("hardness"));
-  if (node.hasAttributes("color", "factor")) {
-    setSpecular(node.attribute("color"), node.attributeAsFloat("factor"));
-    return true;
-  }
-  return false;
-}
+//bool Material::setAmbiant(const XMLTree::Node &node) {
+//  if (node.hasAttributes("color", "factor")) {
+//    setAmbiant(node.attribute("color"), node.attributeAsFloat("factor"));
+//    return true;
+//  }
+//  return false;
+//}
+//
+//bool Material::setDiffuse(const XMLTree::Node &node) {
+//  if (node.hasAttribute("size"))
+//    setDiffuseSize(node.attributeAsFloat("size"));
+//  if (node.hasAttribute("smooth"))
+//    setDiffuseSmooth(node.attributeAsFloat("smooth"));
+//  if (node.hasAttribute("roughness"))
+//    setDiffuseRoughness(node.attributeAsFloat("roughness"));
+//  if (node.hasAttribute("albedo"))
+//    setDiffuseAlbedo(node.attributeAsFloat("albedo"));
+//  if (node.hasAttributes("color", "factor")) {
+//    setDiffuse(node.attribute("color"), node.attributeAsFloat("factor"));
+//    return true;
+//  }
+//  return false;
+//}
+//
+//void Material::setSpecular(const vec3 &color, float factor) {
+//  _properties.specular = vec4(color, factor);
+//}
+//
+//bool Material::setSpecular(const XMLTree::Node &node) {
+//  if (node.hasAttribute("size"))
+//    setSpecularSize(node.attributeAsFloat("size"));
+//  if (node.hasAttribute("smooth"))
+//    setSpecularSmooth(node.attributeAsFloat("smooth"));
+//  if (node.hasAttribute("hardness"))
+//    setSpecularHardness(node.attributeAsFloat("hardness"));
+//  if (node.hasAttributes("color", "factor")) {
+//    setSpecular(node.attribute("color"), node.attributeAsFloat("factor"));
+//    return true;
+//  }
+//  return false;
+//}

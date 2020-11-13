@@ -15,6 +15,8 @@
 		AD56824D2538C092005B3CFB /* CompressionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824B2538C092005B3CFB /* CompressionUtils.h */; };
 		AD56824F253C155F005B3CFB /* USDTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824E253C14D9005B3CFB /* USDTypes.h */; };
 		AD568251253CBC0C005B3CFB /* USDTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD568250253CBC0C005B3CFB /* USDTypes.cpp */; };
+		ADEA77B3255CA5350026DC39 /* StdMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADEA77B1255CA5350026DC39 /* StdMaterial.cpp */; };
+		ADEA77B4255CA5350026DC39 /* StdMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEA77B2255CA5350026DC39 /* StdMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* iOSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */; };
@@ -138,6 +140,8 @@
 		AD56824B2538C092005B3CFB /* CompressionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CompressionUtils.h; path = Systems/FileSystem/CompressionUtils.h; sourceTree = "<group>"; };
 		AD56824E253C14D9005B3CFB /* USDTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = USDTypes.h; path = Systems/FileSystem/USDTypes.h; sourceTree = "<group>"; };
 		AD568250253CBC0C005B3CFB /* USDTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USDTypes.cpp; path = Systems/FileSystem/USDTypes.cpp; sourceTree = "<group>"; };
+		ADEA77B1255CA5350026DC39 /* StdMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StdMaterial.cpp; sourceTree = "<group>"; };
+		ADEA77B2255CA5350026DC39 /* StdMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StdMaterial.h; sourceTree = "<group>"; };
 		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		C1136C371EF0BCC600BA1322 /* iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSViewController.h; path = iOS/iOSViewController.h; sourceTree = "<group>"; };
@@ -451,6 +455,8 @@
 				C1EC49E32103EAE60067E842 /* Drawable.h */,
 				C1707B0C20F4372800A77FAC /* Material.h */,
 				C1707B1420F4372800A77FAC /* Material.cpp */,
+				ADEA77B2255CA5350026DC39 /* StdMaterial.h */,
+				ADEA77B1255CA5350026DC39 /* StdMaterial.cpp */,
 				C1707B0920F4372800A77FAC /* Light.h */,
 				C1707B0D20F4372800A77FAC /* Light.cpp */,
 				C1EC49E02103E6650067E842 /* LightRig.h */,
@@ -539,6 +545,7 @@
 				C1D1D7ED209BB637000EB92C /* VulkanFrameBuffer.h in Headers */,
 				C160E08C1F353CDA00212AAA /* TrackerSystem.h in Headers */,
 				C1D1D801209D209E000EB92C /* Vulkan.h in Headers */,
+				ADEA77B4255CA5350026DC39 /* StdMaterial.h in Headers */,
 				C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
@@ -689,6 +696,7 @@
 				C191F66820F1905500714F8B /* MetalRenderPass.mm in Sources */,
 				C1401D111F04861200BE9958 /* MetalDepthStencil.mm in Sources */,
 				AD5682442533C37B005B3CFB /* USDCrate.cpp in Sources */,
+				ADEA77B3255CA5350026DC39 /* StdMaterial.cpp in Sources */,
 				C1136C521EF2232C00BA1322 /* iOSFileSystem.mm in Sources */,
 				C1401D641F0BF59700BE9958 /* MetalTextureSampler.mm in Sources */,
 				C1443B081EF49A5C0059BA9D /* MetalVertexMesh.mm in Sources */,

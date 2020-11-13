@@ -26,10 +26,10 @@ namespace fx {
   private:
     static MaterialBuilder materialBuilder;
     
-  private:
+  protected:
     Scene *_scene;
     
-    STR_Material _properties;
+    //STR_Material _properties;
     
     TexturesPtr      _textures;
     ShaderProgramPtr _shader;
@@ -59,7 +59,7 @@ namespace fx {
     TexturesPtr textures() {return _textures;}
     UniformsPtr uniforms() {return _uniforms;}
     
-    STR_Material& properties() {return _properties;}
+    //STR_Material& properties() {return _properties;}
     
     DepthState& depthState() {return _depthState;}
     void enableDepthTesting() {_depthState.enableDefaultTesting();}
@@ -68,35 +68,6 @@ namespace fx {
     BlendState& blendState() {return _blendState;}
     void enableBlending() {_blendState.enableDefaultBlending();}
     void disableBlending() {_blendState.disable();}
-    
-    bool setAmbiant(const XMLTree::Node &node);
-    void setAmbiant(const vec3 &color, float factor) {_properties.ambiant = vec4(color, factor);}
-    vec3 ambiantColor() const {return _properties.ambiant.xyz();}
-    float ambiantFactor() const {return _properties.ambiant.a;}
-    
-    bool setDiffuse(const XMLTree::Node &node);
-    void setDiffuse(const vec3 &color, float factor) {_properties.diffuse = vec4(color, factor);}
-    void setDiffuseSize(float size) {_properties.factors.z = size;}
-    void setDiffuseSmooth(float smooth) {_properties.factors.w = smooth;}
-    void setDiffuseRoughness(float roughness) {_properties.factors.z = roughness;}
-    void setDiffuseAlbedo(float albedo) {_properties.factors.w = albedo;}
-    vec3 diffuseColor() const {return _properties.diffuse.xyz();}
-    float diffuseFactor() const {return _properties.diffuse.a;}
-    float diffuseSize() const {return _properties.factors.z;}
-    float diffuseSmooth() const {return _properties.factors.w;}
-    float diffuseRoughness() const {return _properties.factors.z;}
-    float diffuseAlbedo() const {return _properties.factors.w;}
-    
-    bool setSpecular(const XMLTree::Node &node);
-    void setSpecular(const vec3 &color, float factor);
-    void setSpecularHardness(float hardness) {_properties.factors.x = hardness;}
-    void setSpecularSize(float size) {_properties.factors.x = size;}
-    void setSpecularSmooth(float smooth) {_properties.factors.y = smooth;}
-    vec3 specularColor() const {return _properties.specular.xyz();}
-    float specularFactor() const {return _properties.specular.a;}
-    float specularHardness() const {return _properties.factors.x;}
-    float specularSize() const {return _properties.factors.x;}
-    float specularSmooth() const {return _properties.factors.y;}
     
   private:
     bool loadXMLItem(const XMLTree::Node &node);

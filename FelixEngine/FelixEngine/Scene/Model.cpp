@@ -72,11 +72,19 @@ bool Model::load(const USDCrate &crate, const string &path, const string &pass) 
 bool Model::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Transform" && _transforms.size() > 0)
     return _transforms.front()->load(node);
-  if (node == "Mesh")
+  else if (node == "Mesh")
     return setMesh(node);
-  if (node == "Material")
+  else if (node == "Material")
     return setMaterial(node);
-  cerr << "Unkown XML Node in Model:" << endl << node << endl;
+  else {
+    SharedObject obj = _scene->build(node);
+    MaterialPtr material(dynamic_pointer_cast<Material>(obj));
+    if (material) {
+      setMaterial(material);
+      return true;
+    }
+    cerr << "Unkown XML Node in Model:" << endl << node << endl;
+  }
   return false;
 }
 

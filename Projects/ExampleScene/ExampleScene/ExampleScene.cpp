@@ -8,7 +8,7 @@
 
 #include "ExampleScene.h"
 #import <FelixEngine/Model.h>
-#import <FelixEngine/Material.h>
+#import <FelixEngine/StdMaterial.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/LightRig.h>
 #import <FelixEngine/MeshBuilder.h>
@@ -47,7 +47,7 @@ void ExampleScene::initalize() {
   lightRig->setToRenderPass(_renderPass);
   
   // Define a Material
-  fx::MaterialPtr material = _scene->get<fx::Material>("Material");
+  fx::StdMaterialPtr material = _scene->get<fx::StdMaterial>("Material");
   material->loadShader("basic_vertex", "basic_fragment");
   material->enableDepthTesting();
   material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
@@ -55,11 +55,13 @@ void ExampleScene::initalize() {
   material->setSpecular(fx::vec3(1.0, 1.0, 1.0), 0.6);
   material->setSpecularHardness(20.0);
   
+  fx::MaterialPtr mat(std::static_pointer_cast<fx::Material>(material));
+  
   // Setup the Bunny Model
   _model = _scene->get<fx::Model>("Bunny");
   //_model->loadMesh("Mesh.mesh");
   _model->loadMesh("Suzanne.usdz");
-  _model->setMaterial(material);
+  _model->setMaterial(mat);
   _model->setScale(0.4f);
   _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
   _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
