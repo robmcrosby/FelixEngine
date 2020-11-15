@@ -12,6 +12,7 @@
 #include "USDArchive.h"
 #include "MeshLoader.h"
 #include "Model.h"
+#include "PbrMaterial.h"
 
 
 using namespace fx;
@@ -118,7 +119,7 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   // Load Materials
   StringVector materials = crate.materialPaths();
   for (auto &path : materials)
-    success &= get<Material>(crate.getName(path))->load(crate, path);
+    success &= get<PbrMaterial>(crate.getName(path))->load(crate, path);
   
   // Load Meshes
   StringVector meshes = crate.meshPaths();
