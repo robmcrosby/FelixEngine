@@ -1,30 +1,30 @@
 //
-//  StdMaterial.cpp
+//  PhongMaterial.cpp
 //  FelixEngine
 //
 //  Created by Robert Crosby on 11/11/20.
 //  Copyright © 2020 Robert Crosby. All rights reserved.
 //
 
-#include "StdMaterial.h"
+#include "PhongMaterial.h"
 
 
 using namespace fx;
 using namespace std;
 
 
-StdMaterialBuilder StdMaterial::materialBuilder = StdMaterialBuilder();
+PhongMaterialBuilder PhongMaterial::materialBuilder = PhongMaterialBuilder();
 
 
-StdMaterial::StdMaterial(): Material() {
+PhongMaterial::PhongMaterial(): Material() {
   (*_uniforms)["material"] = _properties;
 }
 
-StdMaterial::~StdMaterial() {
+PhongMaterial::~PhongMaterial() {
   
 }
 
-bool StdMaterial::load(const XMLTree::Node &node) {
+bool PhongMaterial::load(const XMLTree::Node &node) {
   bool success = true;
   if (node.hasAttribute("shader"))
     setShader(node.attribute("shader"));
@@ -34,7 +34,7 @@ bool StdMaterial::load(const XMLTree::Node &node) {
   return success;
 }
 
-bool StdMaterial::load(const USDCrate &crate, const string &path) {
+bool PhongMaterial::load(const USDCrate &crate, const string &path) {
   //cout << "Load Crate: " << path;
 //  crate.printUSD();
 //  string shaderPath = crate.getShaderPath(path);
@@ -52,12 +52,12 @@ bool StdMaterial::load(const USDCrate &crate, const string &path) {
   return true;
 }
 
-void StdMaterial::update(float dt) {
+void PhongMaterial::update(float dt) {
   Material::update(dt);
   (*_uniforms)["material"] = _properties;
 }
 
-bool StdMaterial::loadXMLItem(const XMLTree::Node &node) {
+bool PhongMaterial::loadXMLItem(const XMLTree::Node &node) {
   if (node == "Ambiant")
     return setAmbiant(node);
   if (node == "Diffuse")
@@ -78,7 +78,7 @@ bool StdMaterial::loadXMLItem(const XMLTree::Node &node) {
   return false;
 }
 
-bool StdMaterial::setAmbiant(const XMLTree::Node &node) {
+bool PhongMaterial::setAmbiant(const XMLTree::Node &node) {
   if (node.hasAttributes("color", "factor")) {
     setAmbiant(node.attribute("color"), node.attributeAsFloat("factor"));
     return true;
@@ -86,7 +86,7 @@ bool StdMaterial::setAmbiant(const XMLTree::Node &node) {
   return false;
 }
 
-bool StdMaterial::setDiffuse(const XMLTree::Node &node) {
+bool PhongMaterial::setDiffuse(const XMLTree::Node &node) {
   if (node.hasAttribute("size"))
     setDiffuseSize(node.attributeAsFloat("size"));
   if (node.hasAttribute("smooth"))
@@ -102,11 +102,11 @@ bool StdMaterial::setDiffuse(const XMLTree::Node &node) {
   return false;
 }
 
-void StdMaterial::setSpecular(const vec3 &color, float factor) {
+void PhongMaterial::setSpecular(const vec3 &color, float factor) {
   _properties.specular = vec4(color, factor);
 }
 
-bool StdMaterial::setSpecular(const XMLTree::Node &node) {
+bool PhongMaterial::setSpecular(const XMLTree::Node &node) {
   if (node.hasAttribute("size"))
     setSpecularSize(node.attributeAsFloat("size"));
   if (node.hasAttribute("smooth"))

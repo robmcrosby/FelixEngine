@@ -1,30 +1,30 @@
 //
-//  StdMaterial.h
+//  PhongMaterial.h
 //  FelixEngine
 //
 //  Created by Robert Crosby on 11/11/20.
 //  Copyright © 2020 Robert Crosby. All rights reserved.
 //
 
-#ifndef StdMaterial_h
-#define StdMaterial_h
+#ifndef PhongMaterial_h
+#define PhongMaterial_h
 
 #include "Material.h"
 
 
 namespace fx {
-  DEFINE_OBJ_BUILDER(StdMaterial)
+  DEFINE_OBJ_BUILDER(PhongMaterial)
   
-  class StdMaterial: public Material {
+  class PhongMaterial: public Material {
   private:
-    static StdMaterialBuilder materialBuilder;
+    static PhongMaterialBuilder materialBuilder;
     
   private:
     STR_Material _properties;
     
   public:
-    StdMaterial();
-    virtual ~StdMaterial();
+    PhongMaterial();
+    virtual ~PhongMaterial();
     
     virtual bool load(const XMLTree::Node &node);
     virtual bool load(const USDCrate &crate, const std::string &path);
@@ -66,4 +66,4 @@ namespace fx {
   };
 }
 
-#endif /* StdMaterial_h */
+#endif /* PhongMaterial_h */

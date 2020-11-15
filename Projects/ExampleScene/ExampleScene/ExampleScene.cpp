@@ -8,7 +8,7 @@
 
 #include "ExampleScene.h"
 #import <FelixEngine/Model.h>
-#import <FelixEngine/StdMaterial.h>
+#import <FelixEngine/PhongMaterial.h>
 #import <FelixEngine/Camera.h>
 #import <FelixEngine/LightRig.h>
 #import <FelixEngine/MeshBuilder.h>
@@ -47,7 +47,7 @@ void ExampleScene::initalize() {
   lightRig->setToRenderPass(_renderPass);
   
   // Define a Material
-  fx::StdMaterialPtr material = _scene->get<fx::StdMaterial>("Material");
+  fx::PhongMaterialPtr material = _scene->get<fx::PhongMaterial>("Material");
   material->loadShader("basic_vertex", "basic_fragment");
   material->enableDepthTesting();
   material->setAmbiant(fx::vec3(0.7, 0.7, 0.7), 0.2);
