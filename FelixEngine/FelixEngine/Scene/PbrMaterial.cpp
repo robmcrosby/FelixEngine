@@ -17,6 +17,8 @@ PbrMaterialBuilder PbrMaterial::materialBuilder = PbrMaterialBuilder();
 
 
 PbrMaterial::PbrMaterial(): Material() {
+  if (!_textures)
+    _textures = TextureMap::make();
 }
 
 PbrMaterial::~PbrMaterial() {
@@ -44,6 +46,8 @@ bool PbrMaterial::load(const USDCrate &crate, const string &path) {
 
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
+  
+  _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
 
   _depthState.enableDefaultTesting();
 

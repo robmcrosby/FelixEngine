@@ -340,6 +340,8 @@ LIGHT_TEXTURE_FUNCS(minnaert, cooktorr)
 LIGHT_TEXTURE_FUNCS(minnaert, toon_s)
 
 
-fragment half4 f_pbr_shadeless(InputTextureNormal input [[stage_in]]) {
-  return half4(input.coordinate.x, input.coordinate.y, 1.0, 1.0);
+fragment half4 f_pbr_shadeless(InputTextureNormal input [[stage_in]],
+                               texture2d<float> diffuseColor [[texture(0)]], sampler diffuseSampler [[sampler(0)]]) {
+  float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate);
+  return half4(diffuse);
 }
