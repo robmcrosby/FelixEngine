@@ -195,7 +195,7 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, 
     Vec2SetMap uvMap;
     for (int i = 0; i < uvNames.size(); ++i) {
       stringstream ss;
-      ss << "uv_" << i;
+      ss << "uv" << i;
       Vec2Set &uv = uvMap[ss.str()];
       crate.getUVIndices(uv.indices, path, uvNames[i]);
       crate.getUVs(uv.buffer, path, uvNames[i]);

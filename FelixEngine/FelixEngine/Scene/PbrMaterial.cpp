@@ -17,7 +17,6 @@ PbrMaterialBuilder PbrMaterial::materialBuilder = PbrMaterialBuilder();
 
 
 PbrMaterial::PbrMaterial(): Material() {
-  (*_uniforms)["material"] = _properties;
 }
 
 PbrMaterial::~PbrMaterial() {
@@ -42,10 +41,9 @@ bool PbrMaterial::load(const USDCrate &crate, const string &path) {
 //  cout << "diffuseColor: " << diffusePath << endl;
 //  cout << "is Texture: " << crate.isTextureInput(shaderPath, "diffuseColor") << endl;
 //  cout << "diffuseTexture: " << crate.getTexturePath(shaderPath, "diffuseColor") <<  endl;
-  setDiffuse(vec3(0.0, 1.0, 0.0), 1.0);
 
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
-  _shader->loadShaderFunctions("v_normal", "f_lambert_phong_2");
+  _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
 
   _depthState.enableDefaultTesting();
 
@@ -54,5 +52,4 @@ bool PbrMaterial::load(const USDCrate &crate, const string &path) {
 
 void PbrMaterial::update(float dt) {
   Material::update(dt);
-  (*_uniforms)["material"] = _properties;
 }

@@ -338,3 +338,8 @@ LIGHT_TEXTURE_FUNCS(toon_d, toon_s)
 LIGHT_TEXTURE_FUNCS(minnaert, phong)
 LIGHT_TEXTURE_FUNCS(minnaert, cooktorr)
 LIGHT_TEXTURE_FUNCS(minnaert, toon_s)
+
+
+fragment half4 f_pbr_shadeless(InputTextureNormal input [[stage_in]]) {
+  return half4(input.coordinate.x, input.coordinate.y, 1.0, 1.0);
+}
