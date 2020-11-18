@@ -55,7 +55,10 @@ namespace fx {
     
     bool setTexture(const XMLTree::Node &node);
     bool setTextures(const XMLTree::Node &node);
+    
+    bool setTexture(const std::string &name, const RGBA &color);
     void setTexture(const std::string &name, TextureBufferPtr &texture, SamplerState sampler = SamplerState());
+    
     TexturesPtr textures() {return _textures;}
     UniformsPtr uniforms() {return _uniforms;}
     
@@ -69,8 +72,8 @@ namespace fx {
     void enableBlending() {_blendState.enableDefaultBlending();}
     void disableBlending() {_blendState.disable();}
     
-  private:
-    bool loadXMLItem(const XMLTree::Node &node);
+  protected:
+    virtual bool loadItem(const XMLTree::Node &node);
   };
 }
 

@@ -30,35 +30,15 @@ bool Material::load(const XMLTree::Node &node) {
     setShader(node.attribute("shader"));
   
   for (auto subNode : node)
-    success &= loadXMLItem(*subNode);
+    success &= loadItem(*subNode);
   return success;
 }
 
 bool Material::load(const USDCrate &crate, const string &path) {
-  //cout << "Load Crate: " << path;
-//  crate.printUSD();
-//  string shaderPath = crate.getShaderPath(path);
-//  string diffusePath = crate.getInputPath(shaderPath, "diffuseColor");
-//  cout << "diffuseColor: " << diffusePath << endl;
-//  cout << "is Texture: " << crate.isTextureInput(shaderPath, "diffuseColor") << endl;
-//  cout << "diffuseTexture: " << crate.getTexturePath(shaderPath, "diffuseColor") <<  endl;
-//  setDiffuse(vec3(1.0, 0.0, 0.0), 1.0);
-  
-  _shader = Graphics::getInstance().getShaderProgram("TestShader");
-  _shader->loadShaderFunctions("v_normal", "f_lambert_phong_2");
-  
-  _depthState.enableDefaultTesting();
-  
-  return true;
+  return false;
 }
 
-bool Material::loadXMLItem(const XMLTree::Node &node) {
-//  if (node == "Ambiant")
-//    return setAmbiant(node);
-//  if (node == "Diffuse")
-//    return setDiffuse(node);
-//  if (node == "Specular")
-//    return setSpecular(node);
+bool Material::loadItem(const XMLTree::Node &node) {
   if (node == "DepthState")
     return _depthState.loadXml(node);
   if (node == "BlendState")
@@ -107,6 +87,12 @@ void Material::setTexture(const string &name, TextureBufferPtr &texture, Sampler
   if (!_textures)
     _textures = TextureMap::make();
   _textures->setTexture(name, texture, sampler);
+}
+
+bool Material::setTexture(const std::string &name, const RGBA &color) {
+  if (!_textures)
+    _textures = TextureMap::make();
+  return _textures->setColor(name, color);
 }
 
 //bool Material::setAmbiant(const XMLTree::Node &node) {

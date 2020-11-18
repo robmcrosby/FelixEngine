@@ -26,9 +26,9 @@ PbrMaterial::~PbrMaterial() {
 }
 
 bool PbrMaterial::load(const XMLTree::Node &node) {
-  bool success = true;
-  if (node.hasAttribute("shader"))
-    setShader(node.attribute("shader"));
+  bool success = Material::load(node);
+  //if (node.hasAttribute("shader"))
+  //  setShader(node.attribute("shader"));
   
   //for (auto subNode : node)
   //  success &= loadXMLItem(*subNode);

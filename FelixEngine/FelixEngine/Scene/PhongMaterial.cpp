@@ -24,16 +24,6 @@ PhongMaterial::~PhongMaterial() {
   
 }
 
-bool PhongMaterial::load(const XMLTree::Node &node) {
-  bool success = true;
-  if (node.hasAttribute("shader"))
-    setShader(node.attribute("shader"));
-  
-  for (auto subNode : node)
-    success &= loadXMLItem(*subNode);
-  return success;
-}
-
 bool PhongMaterial::load(const USDCrate &crate, const string &path) {
   //cout << "Load Crate: " << path;
 //  crate.printUSD();
@@ -57,25 +47,14 @@ void PhongMaterial::update(float dt) {
   (*_uniforms)["material"] = _properties;
 }
 
-bool PhongMaterial::loadXMLItem(const XMLTree::Node &node) {
+bool PhongMaterial::loadItem(const XMLTree::Node &node) {
   if (node == "Ambiant")
     return setAmbiant(node);
   if (node == "Diffuse")
     return setDiffuse(node);
   if (node == "Specular")
     return setSpecular(node);
-  if (node == "DepthState")
-    return _depthState.loadXml(node);
-  if (node == "BlendState")
-    return _blendState.loadXml(node);
-  if (node == "Shader")
-    return setShader(node);
-  if (node == "Texture")
-    return setTexture(node);
-  if (node == "Textures")
-    return setTextures(node);
-  cerr << "Unknown XML Node in Material:" << endl << node << endl;
-  return false;
+  return Material::loadItem(node);
 }
 
 bool PhongMaterial::setAmbiant(const XMLTree::Node &node) {

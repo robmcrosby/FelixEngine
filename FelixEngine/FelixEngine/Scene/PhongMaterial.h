@@ -26,7 +26,6 @@ namespace fx {
     PhongMaterial();
     virtual ~PhongMaterial();
     
-    virtual bool load(const XMLTree::Node &node);
     virtual bool load(const USDCrate &crate, const std::string &path);
     virtual void update(float dt);
     
@@ -61,8 +60,8 @@ namespace fx {
     float specularSize() const {return _properties.factors.x;}
     float specularSmooth() const {return _properties.factors.y;}
     
-  private:
-    bool loadXMLItem(const XMLTree::Node &node);
+  protected:
+    virtual bool loadItem(const XMLTree::Node &node);
   };
 }
 
