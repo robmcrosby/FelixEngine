@@ -7,6 +7,7 @@
 //
 
 #include "PbrMaterial.h"
+#include "USDCrate.h"
 
 
 using namespace fx;
@@ -37,17 +38,24 @@ bool PbrMaterial::load(const XMLTree::Node &node) {
 
 bool PbrMaterial::load(const USDCrate &crate, const string &path) {
   //cout << "Load Crate: " << path;
-//  crate.printUSD();
-//  string shaderPath = crate.getShaderPath(path);
-//  string diffusePath = crate.getInputPath(shaderPath, "diffuseColor");
-//  cout << "diffuseColor: " << diffusePath << endl;
-//  cout << "is Texture: " << crate.isTextureInput(shaderPath, "diffuseColor") << endl;
-//  cout << "diffuseTexture: " << crate.getTexturePath(shaderPath, "diffuseColor") <<  endl;
+  crate.printUSD();
 
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
   
-  _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
+  string shaderPath = crate.getShaderPath(path);
+  
+  if (crate.isTextureInput(shaderPath, "diffuseColor")) {
+    string textureFile = crate.getTextureFile(shaderPath, "diffuseColor");
+    TextureBufferPtr texture = _scene->getTextureBuffer(textureFile);
+    _textures->setTexture("diffuseColor", texture);
+  }
+  else {
+    RGBA color = crate.getColorInput(shaderPath, "diffuseColor");
+    _textures->setColor("diffuseColor", color);
+  }
+  
+  //_textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
 
   _depthState.enableDefaultTesting();
 

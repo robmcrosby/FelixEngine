@@ -46,10 +46,15 @@ namespace fx {
     const StringVector& materialPaths() const {return _materials;}
     
     std::string getName(const std::string &path) const;
+    std::string getStringValue(const std::string &path) const;
     std::string getParentPath(const std::string &path) const;
     
-    bool hasAttribute(const std::string &itemPath, const std::string &attribute) const;
-    bool hasInput(const std::string &itemPath, const std::string &name) const;
+    inline bool hasItem(const std::string &path) const {return _pathMap.count(path) > 0;}
+    inline bool hasAttribute(const std::string &path, const std::string &att) const {return hasItem(path+"/"+att);}
+    inline bool hasInput(const std::string &path, const std::string &name) const {return hasAttribute(path, "inputs:"+name);}
+    
+    inline USDItem& getItem(const std::string &path) {return _usdItems.at(_pathMap.at(path));}
+    inline const USDItem& getItem(const std::string &path) const {return _usdItems.at(_pathMap.at(path));}
     
     bool isTextureInput(const std::string &itemPath, const std::string &name) const;
     
@@ -57,6 +62,9 @@ namespace fx {
     std::string getInputPath(const std::string &itemPath, const std::string &name) const;
     std::string getTexturePath(const std::string &itemPath, const std::string &name) const;
     std::string getShaderPath(const std::string &materialPath) const;
+    
+    std::string getTextureFile(const std::string &itemPath, const std::string &name) const;
+    RGBA getColorInput(const std::string &itemPath, const std::string &name) const;
     
     std::string getFirstMeshPath(const std::string &path) const;
     bool getMeshPaths(StringVector &paths, const std::string &path) const;
@@ -78,6 +86,8 @@ namespace fx {
     StringVector getUVNames(const std::string &meshPath) const;
     bool getUVIndices(IntVector &buffer, const std::string &meshPath, const std::string &name) const;
     bool getUVs(std::vector<vec2> &buffer, const std::string &meshPath, const std::string &name) const;
+    
+    vec4 getFloat4(const std::string &path) const;
     
     void printUSD() const;
     

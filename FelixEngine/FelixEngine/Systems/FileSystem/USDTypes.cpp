@@ -45,6 +45,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         readL(&value.x, 2, is);
         setValue(value);
       }
+      else {
+        setValue(vec2());
+      }
     }
     else if (rep.type == USD_VEC3_F) {
       if (!rep.inlined) {
@@ -52,6 +55,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         vec3 value;
         readL(&value.x, 3, is);
         setValue(value);
+      }
+      else {
+        setValue(vec3());
       }
     }
     else if (rep.type == USD_VEC4_F) {
@@ -61,6 +67,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         readL(&value.x, 4, is);
         setValue(value);
       }
+      else {
+        setValue(vec4());
+      }
     }
     else if (rep.type == USD_MATRIX_2D) {
       if (!rep.inlined) {
@@ -68,6 +77,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         double2x2 value;
         readL(&value.x.x, 4, is);
         setValue(value);
+      }
+      else {
+        setValue(double2x2());
       }
     }
     else if (rep.type == USD_MATRIX_3D) {
@@ -77,6 +89,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         readL(&value.x.x, 9, is);
         setValue(value);
       }
+      else {
+        setValue(double3x3());
+      }
     }
     else if (rep.type == USD_MATRIX_4D) {
       if (!rep.inlined) {
@@ -84,6 +99,9 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
         double4x4 value;
         readL(&value.x.x, 16, is);
         setValue(value);
+      }
+      else {
+        setValue(double4x4());
       }
     }
   }
@@ -111,11 +129,11 @@ void USDItem::print(ostream &os, const USDCrate *crate, string indent) const {
       else if (dataType == USD_FLOAT)
         os << " = " << floatValue() << endl;
       else if (dataType == USD_VEC2_F)
-        os << " = " << vec2Value() << endl;
+        os << " = " << float2Value() << endl;
       else if (dataType == USD_VEC3_F)
-        os << " = " << vec3Value() << endl;
+        os << " = " << float3Value() << endl;
       else if (dataType == USD_VEC4_F)
-        os << " = " << vec4Value() << endl;
+        os << " = " << float4Value() << endl;
       else if (dataType == USD_PATH_VECTOR) {
         if (typeName == "rel")
           os << " = <" << crate->_usdItems[pathValue()].pathString << ">" << endl;
@@ -244,7 +262,7 @@ void USDItem::setValue(vec2 value) {
   memcpy(&data[0], value.ptr(), sizeof(vec2));
 }
 
-vec2 USDItem::vec2Value() const {
+vec2 USDItem::float2Value() const {
   return ((vec2*)(&data[0]))[0];
 }
 
@@ -255,7 +273,7 @@ void USDItem::setValue(vec3 value) {
   memcpy(&data[0], value.ptr(), sizeof(vec3));
 }
 
-vec3 USDItem::vec3Value() const {
+vec3 USDItem::float3Value() const {
   return ((vec3*)(&data[0]))[0];
 }
 
@@ -266,7 +284,7 @@ void USDItem::setValue(vec4 value) {
   memcpy(&data[0], value.ptr(), sizeof(vec4));
 }
 
-vec4 USDItem::vec4Value() const {
+vec4 USDItem::float4Value() const {
   return ((vec4*)(&data[0]))[0];
 }
 

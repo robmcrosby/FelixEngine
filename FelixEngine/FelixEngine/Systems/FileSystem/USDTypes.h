@@ -139,13 +139,13 @@ namespace fx {
     float floatValue() const;
     
     void setValue(vec2 value);
-    vec2 vec2Value() const;
+    vec2 float2Value() const;
     
     void setValue(vec3 value);
-    vec3 vec3Value() const;
+    vec3 float3Value() const;
     
     void setValue(vec4 value);
-    vec4 vec4Value() const;
+    vec4 float4Value() const;
     
     void setValue(double2x2 value);
     double2x2 double2x2Value() const;

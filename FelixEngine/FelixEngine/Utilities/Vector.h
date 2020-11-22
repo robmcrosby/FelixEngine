@@ -28,6 +28,7 @@ namespace fx
   struct Vector2
   {
     Vector2(): x(0), y(0) {}
+    Vector2(T s): x(s), y(s) {}
     Vector2(T x, T y): x(x), y(y) {}
     Vector2(const std::string &str): x(0), y(0) {parse(str);}
     
@@ -150,6 +151,7 @@ namespace fx
   template <typename T>
   struct Vector3 {
     Vector3(): x(0), y(0), z(0) {}
+    Vector3(T s): x(s), y(s), z(s) {}
     Vector3(T x, T y, T z): x(x), y(y), z(z) {}
     Vector3(const Vector2<T> &v, T z): x(v.x), y(v.y), z(z) {}
     Vector3(T x, const Vector2<T> &v): x(x), y(v.y), z(v.z) {}
@@ -266,6 +268,7 @@ namespace fx
   template <typename T>
   struct Vector4 {
     Vector4(): x(0), y(0), z(0), w(0) {}
+    Vector4(T s): x(s), y(s), z(s), w(s) {}
     Vector4(T x, T y, T z, T w): x(x), y(y), z(z), w(w) {}
     Vector4(const std::string &str): x(0), y(0), z(0), w(0) {parse(str);}
     

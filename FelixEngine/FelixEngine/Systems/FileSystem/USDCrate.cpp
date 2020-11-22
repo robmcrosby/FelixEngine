@@ -57,8 +57,14 @@ void USDCrate::close() const {
 }
 
 string USDCrate::getName(const string &path) const {
-  if (_pathMap.count(path))
-    return _usdItems.at(_pathMap.at(path)).name;
+  if (hasItem(path))
+    return getItem(path).name;
+  return "";
+}
+
+string USDCrate::getStringValue(const string &path) const {
+  if (hasItem(path))
+    return getItem(path).stringValue();
   return "";
 }
 
@@ -67,27 +73,16 @@ string USDCrate::getParentPath(const string &path) const {
   return pos != string::npos ? path.substr(0, pos) : "";
 }
 
-bool USDCrate::hasAttribute(const string &itemPath, const string &attribute) const {
-  string path = itemPath + "/" + attribute;
-  return _pathMap.count(path) > 0;
-}
-
-bool USDCrate::hasInput(const string &itemPath, const string &name) const {
-  return hasAttribute(itemPath, "inputs:" + name);
-}
-
 bool USDCrate::isTextureInput(const string &itemPath, const string &name) const {
   string path = getInputPath(itemPath, name);
-  if (path != "") {
-    const USDItem &input = _usdItems.at(_pathMap.at(path));
-    return input.dataType == USD_PATH_VECTOR;
-  }
+  if (path != "")
+    return getItem(path).dataType == USD_PATH_VECTOR;
   return false;
 }
 
 string USDCrate::getAttributePath(const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
-  return _pathMap.count(path) > 0 ? path : "";
+  return hasItem(path) ? path : "";
 }
 
 string USDCrate::getInputPath(const string &itemPath, const string &name) const {
@@ -97,7 +92,7 @@ string USDCrate::getInputPath(const string &itemPath, const string &name) const 
 string USDCrate::getTexturePath(const string &itemPath, const string &name) const {
   string path = getInputPath(itemPath, name);
   if (path != "") {
-    int index = _usdItems.at(_pathMap.at(path)).pathValue();
+    int index = getItem(path).pathValue();
     if (index >= 0 && index < _usdItems.size())
       return getParentPath(_usdItems.at(index).pathString);
   }
@@ -107,11 +102,28 @@ string USDCrate::getTexturePath(const string &itemPath, const string &name) cons
 string USDCrate::getShaderPath(const string &materialPath) const {
   string attributePath = getAttributePath(materialPath, "outputs:surface");
   if (attributePath != "") {
-    int index = _usdItems.at(_pathMap.at(attributePath)).pathValue();
+    int index = getItem(attributePath).pathValue();
     if (index >= 0 && index < _usdItems.size())
       return getParentPath(_usdItems.at(index).pathString);
   }
   return "";
+}
+
+string USDCrate::getTextureFile(const string &itemPath, const string &name) const {
+  return getStringValue(getInputPath(getTexturePath(itemPath, name), "file"));
+}
+
+RGBA USDCrate::getColorInput(const string &itemPath, const string &name) const {
+  if (isTextureInput(itemPath, name))
+    return getFloat4(getInputPath(getTexturePath(itemPath, name), "fallback")) * 255.0f;
+  else if (hasInput(itemPath, name)) {
+    const USDItem &item = getItem(getInputPath(itemPath, name));
+    if (item.dataType == USD_FLOAT)
+      return RGBA(vec3(item.floatValue() * 255.0f), 255);
+    if (item.dataType == USD_VEC3_F)
+      return RGBA(item.float3Value() * 255.0f, 255);
+  }
+  return RGBA(0, 0, 0, 255);
 }
 
 string USDCrate::getFirstMeshPath(const string &path) const {
@@ -121,8 +133,8 @@ string USDCrate::getFirstMeshPath(const string &path) const {
 }
 
 bool USDCrate::getMeshPaths(StringVector &paths, const string &path) const {
-  if (_pathMap.count(path) > 0) {
-    const USDItem &item = _usdItems.at(_pathMap.at(path));
+  if (hasItem(path)) {
+    const USDItem &item = getItem(path);
     for (int index : item.children) {
       const USDItem &child = _usdItems.at(index);
       if (child.typeName == "Mesh")
@@ -136,7 +148,7 @@ bool USDCrate::getMeshPaths(StringVector &paths, const string &path) const {
 string USDCrate::getMaterialPath(const string &path) const {
   string attPath = getAttributePath(path, "material:binding");
   if (attPath != "") {
-    int index = _usdItems.at(_pathMap.at(attPath)).pathValue();
+    int index = getItem(attPath).pathValue();
     if (index >= 0 && index < _usdItems.size())
       return _usdItems.at(index).pathString;
   }
@@ -165,8 +177,8 @@ bool USDCrate::getNormals(vector<vec3> &buffer, const string &meshPath) const {
 
 StringVector USDCrate::getUVNames(const string &meshPath) const {
   StringVector names;
-  if (_pathMap.count(meshPath) > 0) {
-    const USDItem &mesh = _usdItems.at(_pathMap.at(meshPath));
+  if (hasItem(meshPath)) {
+    const USDItem &mesh = getItem(meshPath);
     for (int index : mesh.attributes) {
       const USDItem &attribute = _usdItems.at(index);
       if (attribute.typeName == "texCoord2f[]")
@@ -184,42 +196,38 @@ bool USDCrate::getUVs(vector<vec2> &buffer, const string &meshPath, const string
   return getArray(buffer, meshPath, "primvars:" + name);
 }
 
+vec4 USDCrate::getFloat4(const string &path) const {
+  return hasItem(path) ? getItem(path).float4Value() : vec4();
+}
+
 bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
-  if (_pathMap.count(path) > 0) {
-    const USDItem &item = _usdItems[_pathMap.at(path)];
-    return item.getArray(buffer, this);
-  }
+  if (hasItem(path))
+    return getItem(path).getArray(buffer, this);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
 
 bool USDCrate::getArray(vector<vec2> &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
-  if (_pathMap.count(path) > 0) {
-    const USDItem &item = _usdItems[_pathMap.at(path)];
-    return item.getArray(buffer, this);
-  }
+  if (hasItem(path))
+    return getItem(path).getArray(buffer, this);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
 
 bool USDCrate::getArray(vector<vec3> &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
-  if (_pathMap.count(path) > 0) {
-    const USDItem &item = _usdItems[_pathMap.at(path)];
-    return item.getArray(buffer, this);
-  }
+  if (hasItem(path))
+    return getItem(path).getArray(buffer, this);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
 
 bool USDCrate::appendBuffer(VertexBuffer &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
-  if (_pathMap.count(path) > 0) {
-    const USDItem &item = _usdItems[_pathMap.at(path)];
-    return item.appendBuffer(buffer, this);
-  }
+  if (hasItem(path))
+    return getItem(path).appendBuffer(buffer, this);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
@@ -398,8 +406,8 @@ void USDCrate::printUSD() const {
 }
 
 int USDCrate::findAttributeIndex(const string &itemPath, const string &name) const {
-  if (_pathMap.count(itemPath) > 0) {
-    const USDItem &item = _usdItems.at(_pathMap.at(itemPath));
+  if (hasItem(itemPath)) {
+    const USDItem &item = getItem(itemPath);
     for (int index : item.attributes) {
       const USDItem &attribute = _usdItems.at(index);
       if (attribute.name == name)
