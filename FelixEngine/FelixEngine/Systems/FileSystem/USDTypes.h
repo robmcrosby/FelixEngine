@@ -100,6 +100,8 @@ namespace fx {
   class USDCrate;
 
   struct USDItem {
+    const USDCrate *crate;
+    
     std::string name;
     std::string pathString;
     std::string typeName;
@@ -107,15 +109,20 @@ namespace fx {
     FileData data;
     bool isArray;
     bool isCompressed;
+    
     RepMap reps;
     
     IntVector attributes;
     IntVector children;
     
+    USDItem(): crate(0) {}
+    
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
     void setToPath(Path &path, std::string &pathStr, StringVector &tokens, USDCrate *crate);
-    void print(std::ostream &os, const USDCrate *crate, std::string indent = "") const;
+    
+    std::ostream& print(std::ostream &os, std::string indent = "") const;
+    friend std::ostream& operator<<(std::ostream &os, const USDItem &item) {return item.print(os);}
     
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;
@@ -157,13 +164,13 @@ namespace fx {
     double4x4 double4x4Value() const;
     
     void setArray(USD_TYPE type, long offset, bool compressed);
-    bool getArray(IntVector &dst, const USDCrate *crate) const;
-    bool getArray(std::vector<float> &dst, const USDCrate *crate) const;
-    bool getArray(std::vector<vec2> &dst, const USDCrate *crate) const;
-    bool getArray(std::vector<vec3> &dst, const USDCrate *crate) const;
-    bool getArray(std::vector<vec4> &dst, const USDCrate *crate) const;
+    bool getArray(IntVector &dst) const;
+    bool getArray(std::vector<float> &dst) const;
+    bool getArray(std::vector<vec2> &dst) const;
+    bool getArray(std::vector<vec3> &dst) const;
+    bool getArray(std::vector<vec4> &dst) const;
     
-    bool appendBuffer(VertexBuffer &dst, const USDCrate *crate) const;
+    bool appendBuffer(VertexBuffer &dst) const;
   };
 }
 

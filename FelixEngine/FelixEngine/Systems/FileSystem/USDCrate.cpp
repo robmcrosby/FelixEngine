@@ -18,8 +18,31 @@ USDCrate::USDCrate(): _fileOffset(0), _fileLength(0), _fileStream(0) {
   
 }
 
+USDCrate::USDCrate(const USDCrate &crate): _fileOffset(0), _fileLength(0), _fileStream(0) {
+  *this = crate;
+}
+
 USDCrate::~USDCrate() {
   
+}
+
+USDCrate& USDCrate::operator=(const USDCrate &crate) {
+  _filePath    = crate._filePath;
+  _fileOffset  = crate._fileOffset;
+  _fileLength  = crate._fileLength;
+  _fileVersion = crate._fileVersion;
+  _rootItem    = crate._rootItem;
+  
+  _usdItems = crate._usdItems;
+  for (auto &item : _usdItems)
+    item.crate = this;
+  
+  _pathMap   = crate._pathMap;
+  _objects   = crate._objects;
+  _meshes    = crate._meshes;
+  _materials = crate._materials;
+  
+  return *this;
 }
 
 bool USDCrate::open(const string &filePath, size_t offset, size_t length) {
@@ -203,7 +226,7 @@ vec4 USDCrate::getFloat4(const string &path) const {
 bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
   if (hasItem(path))
-    return getItem(path).getArray(buffer, this);
+    return getItem(path).getArray(buffer);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
@@ -211,7 +234,7 @@ bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string 
 bool USDCrate::getArray(vector<vec2> &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
   if (hasItem(path))
-    return getItem(path).getArray(buffer, this);
+    return getItem(path).getArray(buffer);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
@@ -219,7 +242,7 @@ bool USDCrate::getArray(vector<vec2> &buffer, const string &itemPath, const stri
 bool USDCrate::getArray(vector<vec3> &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
   if (hasItem(path))
-    return getItem(path).getArray(buffer, this);
+    return getItem(path).getArray(buffer);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
@@ -227,7 +250,7 @@ bool USDCrate::getArray(vector<vec3> &buffer, const string &itemPath, const stri
 bool USDCrate::appendBuffer(VertexBuffer &buffer, const string &itemPath, const string &attribute) const {
   string path = itemPath + "/" + attribute;
   if (hasItem(path))
-    return getItem(path).appendBuffer(buffer, this);
+    return getItem(path).appendBuffer(buffer);
   cerr << "Error finding path: " << path << endl;
   return false;
 }
@@ -313,7 +336,6 @@ bool USDCrate::readTableOfContents() {
       pathStack.push_back(pathStr);
     }
   }
-  //printUSD();
   return true;
 }
 
@@ -400,9 +422,8 @@ PathVector USDCrate::readPaths(long start, istream &is, StringVector &tokens, Sp
   return paths;
 }
 
-void USDCrate::printUSD() const {
-  const USDItem &rootItem = _usdItems.at(_rootItem);
-  rootItem.print(cout, this);
+ostream& USDCrate::print(ostream &os) const {
+  return os << _usdItems.at(_rootItem);
 }
 
 int USDCrate::findAttributeIndex(const string &itemPath, const string &name) const {

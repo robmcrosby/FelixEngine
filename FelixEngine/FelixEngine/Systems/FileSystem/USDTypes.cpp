@@ -16,6 +16,8 @@ using namespace std;
 
 
 void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCrate *crate) {
+  this->crate = crate;
+  
   name = path.token;
   pathString = pathStr;
   isArray = false;
@@ -116,7 +118,7 @@ void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCr
   }
 }
 
-void USDItem::print(ostream &os, const USDCrate *crate, string indent) const {
+ostream& USDItem::print(ostream &os, string indent) const {
   if (isAttribute()) {
     os << indent << "-" << typeName << " " << name;
     if (dataType != USD_INVALID && data.size() > 0 && !isArray) {
@@ -172,12 +174,13 @@ void USDItem::print(ostream &os, const USDCrate *crate, string indent) const {
     
     // Print Attributes
     for (auto itr = attributes.begin(); itr != attributes.end(); ++itr)
-      crate->_usdItems[*itr].print(os, crate, indent + "  ");
+      crate->_usdItems[*itr].print(os, indent + "  ");
     
     // Print Children
     for (auto itr = children.begin(); itr != children.end(); ++itr)
-      crate->_usdItems[*itr].print(os, crate, indent + "  ");
+      crate->_usdItems[*itr].print(os, indent + "  ");
   }
+  return os;
 }
 
 void USDItem::setTokenValue(const string &token) {
@@ -328,7 +331,7 @@ void USDItem::setArray(USD_TYPE type, long offset, bool compressed) {
   isCompressed = compressed;
 }
 
-bool USDItem::getArray(IntVector &dst, const USDCrate *crate) const {
+bool USDItem::getArray(IntVector &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   long count = crate->_fileVersion < 7 ? (long)readIntL(is) : readLongL(is);
@@ -341,7 +344,7 @@ bool USDItem::getArray(IntVector &dst, const USDCrate *crate) const {
   return readL(&dst[0], count, is) == count * sizeof(int);
 }
 
-bool USDItem::getArray(std::vector<float> &dst, const USDCrate *crate) const {
+bool USDItem::getArray(std::vector<float> &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -349,7 +352,7 @@ bool USDItem::getArray(std::vector<float> &dst, const USDCrate *crate) const {
   return readL(&dst[0], count, is) == count * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec2> &dst, const USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec2> &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -357,7 +360,7 @@ bool USDItem::getArray(std::vector<vec2> &dst, const USDCrate *crate) const {
   return readL(&dst[0].x, count*2, is) == count*2 * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec3> &dst, const USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec3> &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -365,7 +368,7 @@ bool USDItem::getArray(std::vector<vec3> &dst, const USDCrate *crate) const {
   return readL(&dst[0].x, count*3, is) == count*3 * sizeof(float);
 }
 
-bool USDItem::getArray(std::vector<vec4> &dst, const USDCrate *crate) const {
+bool USDItem::getArray(std::vector<vec4> &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);
@@ -373,7 +376,7 @@ bool USDItem::getArray(std::vector<vec4> &dst, const USDCrate *crate) const {
   return readL(&dst[0].x, count*4, is) == count*4 * sizeof(float);
 }
 
-bool USDItem::appendBuffer(VertexBuffer &dst, const USDCrate *crate) const {
+bool USDItem::appendBuffer(VertexBuffer &dst) const {
   istream &is = *crate->_fileStream;
   is.seekg(crate->_fileOffset + longValue());
   size_t count = crate->_fileVersion < 7 ? readIntL(is) : readLongL(is);

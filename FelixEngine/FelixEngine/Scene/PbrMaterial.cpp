@@ -38,7 +38,7 @@ bool PbrMaterial::load(const XMLTree::Node &node) {
 
 bool PbrMaterial::load(const USDCrate &crate, const string &path) {
   //cout << "Load Crate: " << path;
-  crate.printUSD();
+  cout << crate << endl;
 
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");

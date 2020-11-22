@@ -131,7 +131,6 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   for (auto &path : models)
     success &= get<Model>(crate.getName(path))->load(crate, path, pass);
   
-  //crate.printUSD();
   return success;
 }
 

@@ -35,7 +35,10 @@ namespace fx {
   
   public:
     USDCrate();
+    USDCrate(const USDCrate &crate);
     ~USDCrate();
+    
+    USDCrate& operator=(const USDCrate &crate);
     
     bool open(const std::string &filePath, size_t offset = 0, size_t length = 0);
     bool open() const;
@@ -89,7 +92,8 @@ namespace fx {
     
     vec4 getFloat4(const std::string &path) const;
     
-    void printUSD() const;
+    std::ostream& print(std::ostream& os) const;
+    friend std::ostream& operator<<(std::ostream &os, const USDCrate &crate) {return crate.print(os);}
     
   private:
     int findAttributeIndex(const std::string &itemPath, const std::string &name) const;
