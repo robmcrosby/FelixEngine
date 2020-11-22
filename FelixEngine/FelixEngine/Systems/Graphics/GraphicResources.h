@@ -22,6 +22,7 @@ namespace fx {
   class VertexMeshData;
   class ImageBufferData;
   class USDCrate;
+  class USDItem;
   
   enum SHADER_PART {
     SHADER_VERTEX = 0,
@@ -53,7 +54,7 @@ namespace fx {
     virtual void setScene(Scene *scene) {}
     virtual void update(float dt) {}
     virtual bool load(const XMLTree::Node &node);
-    virtual bool load(const USDCrate &crate, const std::string &path);
+    virtual bool load(const USDItem &item);
     
     virtual bool load(const VertexMeshData &data) = 0;
     virtual void setPrimativeType(VERTEX_PRIMITIVE type) = 0;

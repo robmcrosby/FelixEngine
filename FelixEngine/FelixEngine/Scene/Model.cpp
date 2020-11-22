@@ -48,11 +48,14 @@ bool Model::load(const XMLTree::Node &node) {
   return success;
 }
 
-bool Model::load(const USDCrate &crate, const string &path, const string &pass) {
+bool Model::load(const USDItem &item, const std::string &pass) {
   bool success = true;
-//  cout << "Add Model: " << crate.getName(path) << endl;
   
-  string meshPath = crate.getFirstMeshPath(path);
+  cout << "Load Model Item" << endl;
+  cout << item << endl;
+  
+  const USDCrate &crate = *item.crate;
+  string meshPath = crate.getFirstMeshPath(item.pathString);
   if (meshPath != "") {
     setMesh(crate.getName(meshPath));
     string materialPath = crate.getMaterialPath(meshPath);

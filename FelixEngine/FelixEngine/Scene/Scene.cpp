@@ -119,17 +119,17 @@ bool Scene::loadUSDCrate(const USDCrate &crate, const string &pass) {
   // Load Materials
   StringVector materials = crate.materialPaths();
   for (auto &path : materials)
-    success &= get<PbrMaterial>(crate.getName(path))->load(crate, path);
+    success &= get<PbrMaterial>(crate.getName(path))->load(crate.getItem(path));
   
   // Load Meshes
   StringVector meshes = crate.meshPaths();
   for (auto &path : meshes)
-    success &= getVertexMesh(crate.getName(path))->load(crate, path);
+    success &= getVertexMesh(crate.getName(path))->load(crate.getItem(path));
   
   // Load Models
   StringVector models = crate.objectPaths();
   for (auto &path : models)
-    success &= get<Model>(crate.getName(path))->load(crate, path, pass);
+    success &= get<Model>(crate.getName(path))->load(crate.getItem(path), pass);
   
   return success;
 }

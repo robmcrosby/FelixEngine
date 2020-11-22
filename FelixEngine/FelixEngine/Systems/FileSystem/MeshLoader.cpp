@@ -151,12 +151,15 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) 
   
   StringVector paths = crate.meshPaths();
   for (auto &path : paths)
-    success &= loadFromCrateFile(mesh, crate, path);
+    success &= loadFromCrateFile(mesh, crate.getItem(path));
   return success;
 }
 
-bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, const string &path) {
+bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDItem &item) {
+  const USDCrate &crate = *item.crate;
   if (crate.open()) {
+    string path = item.pathString;
+    
     mesh.primitiveType = VERTEX_TRIANGLES;
     
     // Get Face Counts

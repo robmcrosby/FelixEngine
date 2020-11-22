@@ -15,6 +15,7 @@
 
 namespace fx {
   class USDCrate;
+  class USDItem;
 
   struct MeshLoader {
     static bool loadFromBinaryFile(VertexMeshData &mesh, const std::string &file);
@@ -23,7 +24,7 @@ namespace fx {
     static bool readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is);
     
     static bool loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate);
-    static bool loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate, const std::string &path);
+    static bool loadFromCrateFile(VertexMeshData &mesh, const USDItem &item);
   };
 }
 

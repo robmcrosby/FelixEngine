@@ -24,7 +24,7 @@ namespace fx {
     virtual ~PbrMaterial();
     
     virtual bool load(const XMLTree::Node &node);
-    virtual bool load(const USDCrate &crate, const std::string &path);
+    virtual bool load(const USDItem &item);
     virtual void update(float dt);
   };
 }

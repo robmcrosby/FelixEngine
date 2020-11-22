@@ -9,6 +9,7 @@
 #include "GraphicResources.h"
 #include "FileSystem.h"
 #include "MeshLoader.h"
+#include "USDCrate.h"
 
 
 using namespace fx;
@@ -35,9 +36,9 @@ bool VertexMesh::load(const XMLTree::Node &node) {
   return false;
 }
 
-bool VertexMesh::load(const USDCrate &crate, const string &path) {
+bool VertexMesh::load(const USDItem &item) {
   VertexMeshData data;
-  return MeshLoader::loadFromCrateFile(data, crate, path) && load(data);
+  return MeshLoader::loadFromCrateFile(data, item) && load(data);
 }
 
 bool VertexMesh::setVertexBuffer(const string &name, const vector<float> &buffer) {

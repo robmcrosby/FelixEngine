@@ -34,7 +34,7 @@ bool Material::load(const XMLTree::Node &node) {
   return success;
 }
 
-bool Material::load(const USDCrate &crate, const string &path) {
+bool Material::load(const USDItem &item) {
   return false;
 }
 
