@@ -15,6 +15,15 @@ using namespace fx;
 using namespace std;
 
 
+bool USDItem::openCrate() const {
+  return crate && crate->open();
+}
+
+void USDItem::closeCrate() const {
+  if (crate)
+    crate->close();
+}
+
 void USDItem::setToPath(Path &path, string &pathStr, StringVector &tokens, USDCrate *crate) {
   this->crate = crate;
   
@@ -181,6 +190,25 @@ ostream& USDItem::print(ostream &os, string indent) const {
       crate->_usdItems[*itr].print(os, indent + "  ");
   }
   return os;
+}
+
+const USDItem* USDItem::getAttribute(const string &name) const {
+  for (auto index : attributes) {
+    const USDItem &item = crate->getItem(index);
+    if (item.name == name)
+      return &item;
+  }
+  return nullptr;
+}
+
+StringVector USDItem::getUVNames() const {
+  StringVector names;
+  for (int index : attributes) {
+    const USDItem &attribute = crate->getItem(index);
+    if (attribute.typeName == "texCoord2f[]")
+      names.push_back(attribute.name.substr(9));
+  }
+  return names;
 }
 
 void USDItem::setTokenValue(const string &token) {

@@ -156,28 +156,23 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) 
 }
 
 bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDItem &item) {
-  const USDCrate &crate = *item.crate;
-  if (crate.open()) {
-    string path = item.pathString;
-    
+  if (item.openCrate()) {
     mesh.primitiveType = VERTEX_TRIANGLES;
     
     // Get Face Counts
     IntVector faceCounts;
-    crate.getFaceCounts(faceCounts, path);
+    item.getAttributeArray(faceCounts, "faceVertexCounts");
     
     // Get Face Vertices
     Vec3Set faces;
-    crate.getFaceIndices(faces.indices, path);
-    crate.getPoints(faces.buffer, path);
+    item.getAttributeArray(faces.indices, "faceVertexIndices");
+    item.getAttributeArray(faces.buffer, "points");
     faces.offset = 0;
     
     // Get Normals
     Vec3Set normals;
-    crate.getNormalIndices(normals.indices, path);
-    if (normals.indices.size() > 0) {
-      crate.getNormals(normals.buffer, path);
-    }
+    if (item.getAttributeArray(normals.indices, "primvars:normals:indices"))
+      item.getAttributeArray(normals.buffer, "primvars:normals");
     else {
       // Create Normals if Not Avalible
       int i = 0;
@@ -194,20 +189,20 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDItem &item) {
     
     // Get UVs
     int offset = normals.offset + (int)ceil(log2((double)normals.buffer.size()));
-    StringVector uvNames = crate.getUVNames(path);
+    StringVector uvNames = item.getUVNames();
     Vec2SetMap uvMap;
     for (int i = 0; i < uvNames.size(); ++i) {
       stringstream ss;
       ss << "uv" << i;
       Vec2Set &uv = uvMap[ss.str()];
-      crate.getUVIndices(uv.indices, path, uvNames[i]);
-      crate.getUVs(uv.buffer, path, uvNames[i]);
+      item.getAttributeArray(uv.indices, "primvars:" + uvNames[i] + ":indices");
+      item.getAttributeArray(uv.buffer, "primvars:" + uvNames[i]);
       uv.offset = offset;
       offset += (int)ceil(log2((double)uv.buffer.size()));
     }
     if (uvMap.size() == 0) {
       // Create UVs if None Found
-      Vec2Set &uv = uvMap["uv_0"];
+      Vec2Set &uv = uvMap["uv0"];
       uv.indices.resize(faces.indices.size(), 0);
       uv.buffer.push_back(vec2(0.0f, 0.0f));
       uv.offset = 0;
@@ -230,7 +225,7 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDItem &item) {
 
     mesh.totalVertices = (int)mesh.buffers["position"].size()/3;
     
-    crate.close();
+    item.closeCrate();
     return true;
   }
   return false;;

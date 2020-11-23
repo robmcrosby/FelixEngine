@@ -56,6 +56,9 @@ namespace fx {
     inline bool hasAttribute(const std::string &path, const std::string &att) const {return hasItem(path+"/"+att);}
     inline bool hasInput(const std::string &path, const std::string &name) const {return hasAttribute(path, "inputs:"+name);}
     
+    inline USDItem& getItem(int index) {return _usdItems.at(index);}
+    inline const USDItem& getItem(int index) const {return _usdItems.at(index);}
+    
     inline USDItem& getItem(const std::string &path) {return _usdItems.at(_pathMap.at(path));}
     inline const USDItem& getItem(const std::string &path) const {return _usdItems.at(_pathMap.at(path));}
     

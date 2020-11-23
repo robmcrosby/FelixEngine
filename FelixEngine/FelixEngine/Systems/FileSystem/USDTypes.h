@@ -117,12 +117,18 @@ namespace fx {
     
     USDItem(): crate(0) {}
     
+    bool openCrate() const;
+    void closeCrate() const;
+    
     bool isAttribute() const {return attributes.size() == 0 && children.size() == 0;}
     
     void setToPath(Path &path, std::string &pathStr, StringVector &tokens, USDCrate *crate);
     
     std::ostream& print(std::ostream &os, std::string indent = "") const;
     friend std::ostream& operator<<(std::ostream &os, const USDItem &item) {return item.print(os);}
+    
+    const USDItem* getAttribute(const std::string &name) const;
+    StringVector getUVNames() const;
     
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;
@@ -169,6 +175,12 @@ namespace fx {
     bool getArray(std::vector<vec2> &dst) const;
     bool getArray(std::vector<vec3> &dst) const;
     bool getArray(std::vector<vec4> &dst) const;
+    
+    template <typename T>
+    bool getAttributeArray(T &dst, const std::string &name) const {
+      const USDItem *item = getAttribute(name);
+      return item ? item->getArray(dst) : false;
+    }
     
     bool appendBuffer(VertexBuffer &dst) const;
   };
