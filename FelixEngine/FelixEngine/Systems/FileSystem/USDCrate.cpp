@@ -178,81 +178,8 @@ string USDCrate::getMaterialPath(const string &path) const {
   return "";
 }
 
-bool USDCrate::getFaceCounts(IntVector &buffer, const string &meshPath) const {
-  return getArray(buffer, meshPath, "faceVertexCounts");
-}
-
-bool USDCrate::getFaceIndices(IntVector &buffer, const string &meshPath) const {
-  return getArray(buffer, meshPath, "faceVertexIndices");
-}
-
-bool USDCrate::getPoints(vector<vec3> &buffer, const string &meshPath) const {
-  return getArray(buffer, meshPath, "points");
-}
-
-bool USDCrate::getNormalIndices(IntVector &buffer, const string &meshPath) const {
-  return getArray(buffer, meshPath, "primvars:normals:indices");
-}
-
-bool USDCrate::getNormals(vector<vec3> &buffer, const string &meshPath) const {
-  return getArray(buffer, meshPath, "primvars:normals");
-}
-
-StringVector USDCrate::getUVNames(const string &meshPath) const {
-  StringVector names;
-  if (hasItem(meshPath)) {
-    const USDItem &mesh = getItem(meshPath);
-    for (int index : mesh.attributes) {
-      const USDItem &attribute = _usdItems.at(index);
-      if (attribute.typeName == "texCoord2f[]")
-        names.push_back(attribute.name.substr(9));
-    }
-  }
-  return names;
-}
-
-bool USDCrate::getUVIndices(IntVector &buffer, const string &meshPath, const string &name) const {
-  return getArray(buffer, meshPath, "primvars:" + name + ":indices");
-}
-
-bool USDCrate::getUVs(vector<vec2> &buffer, const string &meshPath, const string &name) const {
-  return getArray(buffer, meshPath, "primvars:" + name);
-}
-
 vec4 USDCrate::getFloat4(const string &path) const {
   return hasItem(path) ? getItem(path).float4Value() : vec4();
-}
-
-bool USDCrate::getArray(IntVector &buffer, const string &itemPath, const string &attribute) const {
-  string path = itemPath + "/" + attribute;
-  if (hasItem(path))
-    return getItem(path).getArray(buffer);
-  cerr << "Error finding path: " << path << endl;
-  return false;
-}
-
-bool USDCrate::getArray(vector<vec2> &buffer, const string &itemPath, const string &attribute) const {
-  string path = itemPath + "/" + attribute;
-  if (hasItem(path))
-    return getItem(path).getArray(buffer);
-  cerr << "Error finding path: " << path << endl;
-  return false;
-}
-
-bool USDCrate::getArray(vector<vec3> &buffer, const string &itemPath, const string &attribute) const {
-  string path = itemPath + "/" + attribute;
-  if (hasItem(path))
-    return getItem(path).getArray(buffer);
-  cerr << "Error finding path: " << path << endl;
-  return false;
-}
-
-bool USDCrate::appendBuffer(VertexBuffer &buffer, const string &itemPath, const string &attribute) const {
-  string path = itemPath + "/" + attribute;
-  if (hasItem(path))
-    return getItem(path).appendBuffer(buffer);
-  cerr << "Error finding path: " << path << endl;
-  return false;
 }
 
 bool USDCrate::readTableOfContents() {

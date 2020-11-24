@@ -77,22 +77,6 @@ namespace fx {
     
     std::string getMaterialPath(const std::string &path) const;
     
-    bool getArray(IntVector &buffer, const std::string &itemPath, const std::string &attribute) const;
-    bool getArray(std::vector<vec2> &buffer, const std::string &itemPath, const std::string &attribute) const;
-    bool getArray(std::vector<vec3> &buffer, const std::string &itemPath, const std::string &attribute) const;
-    bool appendBuffer(VertexBuffer &buffer, const std::string &itemPath, const std::string &attribute) const;
-    
-    bool getFaceCounts(IntVector &buffer, const std::string &meshPath) const;
-    bool getFaceIndices(IntVector &buffer, const std::string &meshPath) const;
-    bool getPoints(std::vector<vec3> &buffer, const std::string &meshPath) const;
-    
-    bool getNormalIndices(IntVector &buffer, const std::string &meshPath) const;
-    bool getNormals(std::vector<vec3> &buffer, const std::string &meshPath) const;
-    
-    StringVector getUVNames(const std::string &meshPath) const;
-    bool getUVIndices(IntVector &buffer, const std::string &meshPath, const std::string &name) const;
-    bool getUVs(std::vector<vec2> &buffer, const std::string &meshPath, const std::string &name) const;
-    
     vec4 getFloat4(const std::string &path) const;
     
     std::ostream& print(std::ostream& os) const;

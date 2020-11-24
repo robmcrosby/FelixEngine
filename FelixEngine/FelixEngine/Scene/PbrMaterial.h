@@ -12,6 +12,7 @@
 #include "Material.h"
 
 
+
 namespace fx {
   DEFINE_OBJ_BUILDER(PbrMaterial)
   
@@ -26,6 +27,9 @@ namespace fx {
     virtual bool load(const XMLTree::Node &node);
     virtual bool load(const USDItem &item);
     virtual void update(float dt);
+    
+  private:
+    void addTexture(const std::string &name, const USDItem *input, RGBA def);
   };
 }
 

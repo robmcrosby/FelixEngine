@@ -147,7 +147,7 @@ bool MeshLoader::readIndicesBinaryStream(VertexMeshData &mesh, std::istream &is)
 
 bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) {
   bool success = true;
-  cout << crate << endl;
+  //cout << crate << endl;
   
   StringVector paths = crate.meshPaths();
   for (auto &path : paths)

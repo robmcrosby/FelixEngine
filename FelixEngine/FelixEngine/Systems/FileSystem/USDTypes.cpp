@@ -192,6 +192,15 @@ ostream& USDItem::print(ostream &os, string indent) const {
   return os;
 }
 
+const USDItem* USDItem::getLinkedItem() const {
+  return dataType == USD_PATH_VECTOR ? &crate->getItem(pathValue()) : nullptr;
+}
+
+const USDItem* USDItem::getConnectedItem() const {
+  const USDItem *link = getLinkedItem();
+  return link ? link->getParent() : nullptr;
+}
+
 const USDItem* USDItem::getAttribute(const string &name) const {
   for (auto index : attributes) {
     const USDItem &item = crate->getItem(index);
@@ -199,6 +208,28 @@ const USDItem* USDItem::getAttribute(const string &name) const {
       return &item;
   }
   return nullptr;
+}
+
+const USDItem* USDItem::getLinkedItem(const string &name) const {
+  const USDItem *attribute = getAttribute(name);
+  return attribute ? attribute->getLinkedItem() : nullptr;
+}
+
+const USDItem* USDItem::getConnectedItem(const string &name) const {
+  const USDItem *attribute = getAttribute(name);
+  return attribute ? attribute->getConnectedItem() : nullptr;
+}
+
+const USDItem* USDItem::getParent() const {
+  string path = getParentPath();
+  if (path != "" && crate->hasItem(path))
+    return &crate->getItem(path);
+  return nullptr;
+}
+
+string USDItem::getParentPath() const {
+  size_t pos = pathString.find_last_of("/");
+  return pos != string::npos ? pathString.substr(0, pos) : "";
 }
 
 StringVector USDItem::getUVNames() const {
@@ -251,6 +282,11 @@ void USDItem::setValue(const string &str) {
 
 string USDItem::stringValue() const {
   return &data[0];
+}
+
+string USDItem::stringValue(const string &name) const {
+  const USDItem *attribute = getAttribute(name);
+  return attribute ? attribute->stringValue() : "";
 }
 
 void USDItem::setValue(int value) {

@@ -63,13 +63,24 @@ bool PbrMaterial::load(const XMLTree::Node &node) {
 //}
 
 bool PbrMaterial::load(const USDItem &item) {
-  //cout << "Load Material Item" << endl;
-  //cout << item << endl;
+  cout << "Load Material Item" << endl;
+  cout << item << endl;
   
   _shader = Graphics::getInstance().getShaderProgram("TestShader");
   _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
   
-  _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
+  const USDItem *shaderItem = item.getConnectedItem("outputs:surface");
+  if (shaderItem) {
+    cout << "Shader Item" << endl;
+    cout << *shaderItem << endl;
+    
+    addTexture("diffuseColor", shaderItem->getAttribute("inputs:diffuseColor"), RGBA(0, 0, 0, 255));
+    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:normal"), RGBA(127, 255, 127, 255));
+    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:metallic"), RGBA(0, 0, 0, 255));
+  }
+  else {
+    _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
+  }
   
   _depthState.enableDefaultTesting();
   
@@ -78,4 +89,21 @@ bool PbrMaterial::load(const USDItem &item) {
 
 void PbrMaterial::update(float dt) {
   Material::update(dt);
+}
+
+void PbrMaterial::addTexture(const string &name, const USDItem *input, RGBA def) {
+  if (input) {
+    const USDItem *textureItem = input->getConnectedItem();
+    if (textureItem) {
+      string textureName = textureItem->stringValue("inputs:file");
+      TextureBufferPtr texture = _scene->getTextureBuffer(textureName);
+      _textures->setTexture(name, texture);
+    }
+    else {
+      _textures->setColor(name, def);
+    }
+  }
+  else {
+    _textures->setColor(name, def);
+  }
 }

@@ -127,7 +127,15 @@ namespace fx {
     std::ostream& print(std::ostream &os, std::string indent = "") const;
     friend std::ostream& operator<<(std::ostream &os, const USDItem &item) {return item.print(os);}
     
+    const USDItem* getLinkedItem() const;
+    const USDItem* getConnectedItem() const;
+    
     const USDItem* getAttribute(const std::string &name) const;
+    const USDItem* getLinkedItem(const std::string &name) const;
+    const USDItem* getConnectedItem(const std::string &name) const;
+    const USDItem* getParent() const;
+    
+    std::string getParentPath() const;
     StringVector getUVNames() const;
     
     void setTokenValue(const std::string &token);
@@ -141,6 +149,7 @@ namespace fx {
     
     void setValue(const std::string &str);
     std::string stringValue() const;
+    std::string stringValue(const std::string &name) const;
     
     void setValue(int value);
     int intValue() const;

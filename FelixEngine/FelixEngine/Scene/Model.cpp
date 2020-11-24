@@ -51,8 +51,8 @@ bool Model::load(const XMLTree::Node &node) {
 bool Model::load(const USDItem &item, const std::string &pass) {
   bool success = true;
   
-  cout << "Load Model Item" << endl;
-  cout << item << endl;
+  //cout << "Load Model Item" << endl;
+  //cout << item << endl;
   
   const USDCrate &crate = *item.crate;
   string meshPath = crate.getFirstMeshPath(item.pathString);
