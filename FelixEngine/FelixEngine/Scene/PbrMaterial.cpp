@@ -77,6 +77,7 @@ bool PbrMaterial::load(const USDItem &item) {
     addTexture("diffuseColor", shaderItem->getAttribute("inputs:diffuseColor"), RGBA(0, 0, 0, 255));
     //addTexture("diffuseColor", shaderItem->getAttribute("inputs:normal"), RGBA(127, 255, 127, 255));
     //addTexture("diffuseColor", shaderItem->getAttribute("inputs:metallic"), RGBA(0, 0, 0, 255));
+    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:specularColor"), RGBA(0, 0, 0, 255));
   }
   else {
     _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
@@ -96,14 +97,21 @@ void PbrMaterial::addTexture(const string &name, const USDItem *input, RGBA def)
     const USDItem *textureItem = input->getConnectedItem();
     if (textureItem) {
       string textureName = textureItem->stringValue("inputs:file");
-      TextureBufferPtr texture = _scene->getTextureBuffer(textureName);
-      _textures->setTexture(name, texture);
+      if (textureName != "") {
+        TextureBufferPtr texture = _scene->getTextureBuffer(textureName);
+        SamplerState sampler;
+        sampler.setSCoord(COORD_REPEAT);
+        sampler.setTCoord(COORD_REPEAT);
+        sampler.setMinFilter(FILTER_LINEAR);
+        sampler.setMagFilter(FILTER_LINEAR);
+        _textures->setTexture(name, texture, sampler);
+      }
+      else
+        _textures->setColor(name, textureItem->getColorValue("inputs:fallback", def));
     }
-    else {
-      _textures->setColor(name, def);
-    }
+    else
+      _textures->setColor(name, input->getColorValue(def));
   }
-  else {
+  else
     _textures->setColor(name, def);
-  }
 }

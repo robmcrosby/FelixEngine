@@ -138,6 +138,9 @@ namespace fx {
     std::string getParentPath() const;
     StringVector getUVNames() const;
     
+    RGBA getColorValue(RGBA def) const;
+    RGBA getColorValue(const std::string &name, RGBA def) const;
+    
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;
     

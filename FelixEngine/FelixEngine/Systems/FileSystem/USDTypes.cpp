@@ -242,6 +242,21 @@ StringVector USDItem::getUVNames() const {
   return names;
 }
 
+RGBA USDItem::getColorValue(RGBA def) const {
+  if (dataType == USD_FLOAT)
+    return RGBA(vec3(floatValue() * 255.0f), 255);
+  if (dataType == USD_VEC3_F)
+    return RGBA(float3Value() * 255.0f, 255);
+  if (dataType == USD_VEC4_F)
+    return RGBA(float4Value() * 255.0f);
+  return def;
+}
+
+RGBA USDItem::getColorValue(const string &name, RGBA def) const {
+  const USDItem *attribute = getAttribute(name);
+  return attribute ? attribute->getColorValue(def) : def;
+}
+
 void USDItem::setTokenValue(const string &token) {
   setValue(token);
   isArray = false;
