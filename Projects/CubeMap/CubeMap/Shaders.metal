@@ -53,6 +53,6 @@ vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]],  constant MVPUni
 //}
 
 fragment half4 basic_fragment(FragmentInput input [[ stage_in ]]) {
-  float d = dot(input.normal, float3(0.0, 1.0, 0.0));
+  float d = dot(input.normal, float3(0.0, 0.0, 1.0));
   return half4(d, d, d, 1.0);
 }
