@@ -10,6 +10,7 @@
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
+#import <FelixEngine/iOSMotionSystem.h>
 
 @interface ViewController ()
 
@@ -34,6 +35,11 @@
   //fx::VulkanGraphics *graphics = new fx::VulkanGraphics();
   graphics->initalize(self.view);
   self.cubeMapApp->setGraphics(graphics);
+  
+  // Add and initalize iOS Motion
+  fx::iOSMotionSystem *motion = new fx::iOSMotionSystem();
+  motion->initalize(1.0/60.0);
+  self.cubeMapApp->setMotionSystem(motion);
   
   // Set the Application
   [self setApplication: self.cubeMapApp];

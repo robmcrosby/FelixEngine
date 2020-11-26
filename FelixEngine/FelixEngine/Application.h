@@ -12,6 +12,7 @@
 #include <FelixEngine/EventSubject.h>
 #include <FelixEngine/FileSystem.h>
 #include <FelixEngine/Graphics.h>
+#include <FelixEngine/MotionSystem.h>
 #include <FelixEngine/TrackerSystem.h>
 
 namespace fx {
@@ -19,6 +20,7 @@ namespace fx {
   protected:
     FileSystem *_fileSystem;
     Graphics *_graphics;
+    MotionSystem *_motionSystem;
     TrackerSystem *_tracker;
     
   public:
@@ -41,6 +43,9 @@ namespace fx {
     
     Graphics& graphics() const {return *_graphics;}
     void setGraphics(Graphics *graphics) {_graphics = graphics;}
+    
+    MotionSystem& motionSystem() const {return *_motionSystem;}
+    void setMotionSystem(MotionSystem *motionSystem) {_motionSystem = motionSystem;}
     
     TrackerSystem& trackerSystem() const {return *_tracker;}
     void setTrackerSystem(TrackerSystem *tracker) {_tracker = tracker;}

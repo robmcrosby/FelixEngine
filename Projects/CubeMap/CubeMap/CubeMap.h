@@ -12,6 +12,7 @@
 #import <FelixEngine/Graphics.h>
 #import <FelixEngine/RenderPass.h>
 #import <FelixEngine/Quaternion.h>
+#import <FelixEngine/MotionSystem.h>
 
 
 struct MVPUniform {

@@ -42,8 +42,9 @@ void CubeMap::initalize() {
 
 void CubeMap::update(float td) {
   // Rotate the Model
-  _mvpUniform.rotation *= fx::quat::RotZ(0.02f);
-  _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
+  //_mvpUniform.rotation *= fx::quat::RotZ(0.02f);
+  _mvpUniform.rotation = motionSystem().getOrientation();
+  _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.5f, 0.5f, 0.5f)) * fx::mat4::Trans3d(fx::vec3(0.0, 0.0, 1.0f));
 
   _renderPass->getUniformMap()["MVP"] = _mvpUniform;
   _renderPass->getUniformMap().update();

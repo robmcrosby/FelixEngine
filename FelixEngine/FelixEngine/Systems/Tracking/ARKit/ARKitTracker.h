@@ -22,7 +22,7 @@ namespace fx {
   class MetalGraphics;
   class MetalTextureBuffer;
   
-  /** iOS File System */
+  /** AR Kit Tracker  */
   class ARKitTracker: public TrackerSystem {
   private:
     MetalGraphics *_graphics;

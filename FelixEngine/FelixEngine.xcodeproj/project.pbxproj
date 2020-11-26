@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD5048B7256F698000A1E2C0 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5048B6256F697500A1E2C0 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD5048B9256F6B4000A1E2C0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5048B8256F6B4000A1E2C0 /* CoreMotion.framework */; };
+		AD5048BC256F6D5100A1E2C0 /* iOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AD5048BD256F6D5100A1E2C0 /* iOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5048BB256F6D5100A1E2C0 /* iOSMotionSystem.mm */; };
 		AD56824025320366005B3CFB /* USDArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56823E25320366005B3CFB /* USDArchive.cpp */; };
 		AD56824125320366005B3CFB /* USDArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56823F25320366005B3CFB /* USDArchive.h */; };
 		AD5682442533C37B005B3CFB /* USDCrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5682422533C37B005B3CFB /* USDCrate.cpp */; };
@@ -134,6 +138,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD5048B6256F697500A1E2C0 /* MotionSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = Systems/MotionSystem/MotionSystem.h; sourceTree = "<group>"; };
+		AD5048B8256F6B4000A1E2C0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iOSMotionSystem.h; path = Systems/MotionSystem/iOSMotionSystem.h; sourceTree = "<group>"; };
+		AD5048BB256F6D5100A1E2C0 /* iOSMotionSystem.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = iOSMotionSystem.mm; path = Systems/MotionSystem/iOSMotionSystem.mm; sourceTree = "<group>"; };
 		AD56823E25320366005B3CFB /* USDArchive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USDArchive.cpp; path = Systems/FileSystem/USDArchive.cpp; sourceTree = "<group>"; };
 		AD56823F25320366005B3CFB /* USDArchive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = USDArchive.h; path = Systems/FileSystem/USDArchive.h; sourceTree = "<group>"; };
 		AD5682422533C37B005B3CFB /* USDCrate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USDCrate.cpp; path = Systems/FileSystem/USDCrate.cpp; sourceTree = "<group>"; };
@@ -267,6 +275,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD5048B9256F6B4000A1E2C0 /* CoreMotion.framework in Frameworks */,
 				C1D1D807209D2D30000EB92C /* IOSurface.framework in Frameworks */,
 				C1D1D7DE209AA705000EB92C /* MoltenVK.framework in Frameworks */,
 				C1412E5E1F37D899001E8D83 /* CoreVideo.framework in Frameworks */,
@@ -282,6 +291,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AD5048B5256F694800A1E2C0 /* MotionSystem */ = {
+			isa = PBXGroup;
+			children = (
+				AD5048B6256F697500A1E2C0 /* MotionSystem.h */,
+				AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */,
+				AD5048BB256F6D5100A1E2C0 /* iOSMotionSystem.mm */,
+			);
+			name = MotionSystem;
+			sourceTree = "<group>";
+		};
 		C1136C361EF0BC6500BA1322 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +313,7 @@
 		C1136C3F1EF0E01900BA1322 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AD5048B8256F6B4000A1E2C0 /* CoreMotion.framework */,
 				C1D1D806209D2D30000EB92C /* IOSurface.framework */,
 				C1D1D804209D2C15000EB92C /* GLKit.framework */,
 				C1D1D7DD209AA705000EB92C /* MoltenVK.framework */,
@@ -314,6 +334,7 @@
 				C1B3FDC11F54E81B001F7DB5 /* Events */,
 				C1136C4A1EF2225500BA1322 /* Graphics */,
 				C1136C491EF2224500BA1322 /* FileSystem */,
+				AD5048B5256F694800A1E2C0 /* MotionSystem */,
 				C1F7D9D81F353C580005367E /* TrackerSystem */,
 			);
 			name = Systems;
@@ -554,11 +575,13 @@
 				ADEA77B8256198E10026DC39 /* PbrMaterial.h in Headers */,
 				ADEA77B4255CA5350026DC39 /* PhongMaterial.h in Headers */,
 				C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */,
+				AD5048BC256F6D5100A1E2C0 /* iOSMotionSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
 				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C1707B1D20F4372800A77FAC /* Camera.h in Headers */,
 				C1707B2420F4372800A77FAC /* Model.h in Headers */,
+				AD5048B7256F698000A1E2C0 /* MotionSystem.h in Headers */,
 				C130FF201FA8AD45001C6FFF /* Transform.h in Headers */,
 				C14549532059E32C003156A0 /* MeshBuilder.h in Headers */,
 				C1707B1B20F4372800A77FAC /* Light.h in Headers */,
@@ -689,6 +712,7 @@
 				C1E7554D210CCF9800808F41 /* ARVideo.cpp in Sources */,
 				C1707B2220F4372800A77FAC /* ARCamera.cpp in Sources */,
 				C1707B1F20F4372800A77FAC /* Light.cpp in Sources */,
+				AD5048BD256F6D5100A1E2C0 /* iOSMotionSystem.mm in Sources */,
 				AD56824025320366005B3CFB /* USDArchive.cpp in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
