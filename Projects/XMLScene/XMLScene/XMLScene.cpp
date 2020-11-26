@@ -20,7 +20,7 @@ XMLScene::~XMLScene() {
 }
 
 void XMLScene::initalize() {
-  _scene.loadXMLFile("Scene.xml");
+  _scene.loadXMLFile("SceneB.xml");
   //fx::ModelPtr model = _scene.get<fx::Model>("Model");
   fx::ModelPtr model = _scene.get<fx::Model>("BakeObject");
   model->transform()->setParrent(_transform);

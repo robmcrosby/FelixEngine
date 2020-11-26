@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD1BF014256EE7A40003C375 /* SceneB.xml in Resources */ = {isa = PBXBuildFile; fileRef = AD1BF013256EE7A40003C375 /* SceneB.xml */; };
 		ADF6D347255126AC003300A1 /* Suzanne.usdz in Resources */ = {isa = PBXBuildFile; fileRef = ADF6D346255126AC003300A1 /* Suzanne.usdz */; };
 		C1BB4EFD1F1C2068008FDF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4EFC1F1C2068008FDF01 /* main.m */; };
 		C1BB4F001F1C2068008FDF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD1BF013256EE7A40003C375 /* SceneB.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SceneB.xml; sourceTree = "<group>"; };
 		ADF6D346255126AC003300A1 /* Suzanne.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = Suzanne.usdz; sourceTree = "<group>"; };
 		C1BB4EF81F1C2068008FDF01 /* XMLScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XMLScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BB4EFC1F1C2068008FDF01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			children = (
 				ADF6D346255126AC003300A1 /* Suzanne.usdz */,
 				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
+				AD1BF013256EE7A40003C375 /* SceneB.xml */,
 				C1C1FF461FCB33330091E342 /* Mesh.mesh */,
 				C1BB4EFE1F1C2068008FDF01 /* AppDelegate.h */,
 				C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */,
@@ -236,6 +239,7 @@
 				C1BB4F0B1F1C2068008FDF01 /* LaunchScreen.storyboard in Resources */,
 				C1C1FF471FCB33330091E342 /* Mesh.mesh in Resources */,
 				C1BB4F081F1C2068008FDF01 /* Assets.xcassets in Resources */,
+				AD1BF014256EE7A40003C375 /* SceneB.xml in Resources */,
 				C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */,
 				ADF6D347255126AC003300A1 /* Suzanne.usdz in Resources */,
 				C1BB4F061F1C2068008FDF01 /* Main.storyboard in Resources */,
