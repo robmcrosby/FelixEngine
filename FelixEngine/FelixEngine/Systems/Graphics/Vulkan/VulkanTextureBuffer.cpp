@@ -28,10 +28,10 @@ VulkanTextureBuffer::~VulkanTextureBuffer() {
   clearTexture();
 }
 
-bool VulkanTextureBuffer::load(const ImageBufferData &data) {
-  size_t imageSize = data.sizeInBytes();
-  _width = data.size.w;
-  _height = data.size.h;
+bool VulkanTextureBuffer::loadImage(const ImageBufferData &image) {
+  size_t imageSize = image.sizeInBytes();
+  _width = image.size.w;
+  _height = image.size.h;
   
   // Set the texture format
   _textureFormat = VK_FORMAT_R8G8B8A8_UNORM;
@@ -41,7 +41,7 @@ bool VulkanTextureBuffer::load(const ImageBufferData &data) {
   VkDeviceMemory stagingBufferMemory = Vulkan::allocateMemory(stagingBuffer, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
   
   // Upload the Image to the Staging Buffer
-  Vulkan::upload(stagingBufferMemory, data.ptr(), imageSize);
+  Vulkan::upload(stagingBufferMemory, image.ptr(), imageSize);
   
   // Create and Allocate the Texture Image
   _textureImage = Vulkan::createImage(_width, _height, _textureFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
@@ -60,6 +60,10 @@ bool VulkanTextureBuffer::load(const ImageBufferData &data) {
   vkFreeMemory(Vulkan::device, stagingBufferMemory, nullptr);
   
   return true;
+}
+
+bool VulkanTextureBuffer::loadCubeMap(const ImageBufferSet &images) {
+  return false;
 }
 
 bool VulkanTextureBuffer::loadSwapBuffer(VkFormat format, VkImage image, int width, int height) {

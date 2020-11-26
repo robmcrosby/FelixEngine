@@ -30,7 +30,7 @@ namespace fx {
     
     size_t sizeInBytes() const {return buffer.size()*sizeof(RGBA);}
   };
+  typedef std::vector<ImageBufferData> ImageBufferSet;
 }
-
 
 #endif /* ImageBufferData_h */

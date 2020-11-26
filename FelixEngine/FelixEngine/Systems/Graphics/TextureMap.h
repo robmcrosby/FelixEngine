@@ -69,7 +69,7 @@ namespace fx {
         else
           texture.buffer = Graphics::getInstance().createTextureBuffer();
         if (node.hasAttribute("file"))
-          success = texture.buffer->loadFile(node.attribute("file"));
+          success = texture.buffer->loadImageFile(node.attribute("file"));
         _map[node.attribute("name")] = texture;
       }
       else {
@@ -79,10 +79,16 @@ namespace fx {
       return success;
     }
     
-    bool setTexture(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
+    bool setTexture2D(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
       _map[name] = texture;
-      return texture.buffer->load(image);
+      return texture.buffer->loadImage(image);
+    }
+    
+    bool setTextureCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {
+      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
+      _map[name] = texture;
+      return texture.buffer->loadCubeMap(images);
     }
     
     void setTexture(const std::string &name, TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {

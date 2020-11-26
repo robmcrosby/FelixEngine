@@ -33,7 +33,8 @@ namespace fx {
     VulkanTextureBuffer();
     virtual ~VulkanTextureBuffer();
     
-    bool load(const ImageBufferData &data);
+    bool loadImage(const ImageBufferData &image);
+    bool loadCubeMap(const ImageBufferSet &images);
     bool loadSwapBuffer(VkFormat format, VkImage image, int width, int height);
     bool loadDepthBuffer(VkFormat format, int width, int height);
     bool loaded() const;

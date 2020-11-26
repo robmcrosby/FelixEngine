@@ -28,7 +28,8 @@ namespace fx {
     MetalTextureBuffer(id <MTLDevice> device, id <MTLTexture> texture);
     virtual ~MetalTextureBuffer();
     
-    virtual bool load(const ImageBufferData &data);
+    virtual bool loadImage(const ImageBufferData &image);
+    virtual bool loadCubeMap(const ImageBufferSet &images);
     virtual bool loaded() const;
     virtual ivec2 size() const;
     

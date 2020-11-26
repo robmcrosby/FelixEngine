@@ -8,6 +8,8 @@
 #include "CubeMap.h"
 
 
+using namespace std;
+
 CubeMap::CubeMap() {
   
 }
@@ -17,9 +19,22 @@ CubeMap::~CubeMap() {
 }
 
 void CubeMap::initalize() {
+  vector<string> cubeMapFiles;
+  cubeMapFiles.push_back("px.png");
+  cubeMapFiles.push_back("nx.png");
+  cubeMapFiles.push_back("py.png");
+  cubeMapFiles.push_back("ny.png");
+  cubeMapFiles.push_back("pz.png");
+  cubeMapFiles.push_back("nz.png");
+  
+  fx::SamplerState sampler;
+  sampler.setMagFilter(fx::FILTER_LINEAR);
+  sampler.setMinFilter(fx::FILTER_LINEAR);
+  
   fx::RenderItem renderItem;
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
   renderItem.loadMeshFile("bunnyMesh.mesh");
+  renderItem.setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
   renderItem.cullMode = fx::CULL_BACK;
   renderItem.enableDepthTesting();
   

@@ -37,7 +37,7 @@ void HelloTexture::initalize() {
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
   
   // Load the Texture
-  renderItem.setTextureFile("texture2D", "test.png");
+  renderItem.setTexture2DFile("texture2D", "test.png");
   //renderItem.setTexture("texture2D", fx::RGBA(255, 0, 0, 255));
   
   // Load the Mesh

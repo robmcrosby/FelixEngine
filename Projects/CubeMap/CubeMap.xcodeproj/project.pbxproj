@@ -22,6 +22,12 @@
 		AD5048AE256F50C200A1E2C0 /* CubeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5048AC256F50C200A1E2C0 /* CubeMap.cpp */; };
 		AD5048B0256F521E00A1E2C0 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = AD5048AF256F521E00A1E2C0 /* Shaders.metal */; };
 		AD5048B4256F54CB00A1E2C0 /* bunnyMesh.mesh in Resources */ = {isa = PBXBuildFile; fileRef = AD5048B3256F54CA00A1E2C0 /* bunnyMesh.mesh */; };
+		AD5048C52570309C00A1E2C0 /* ny.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048BF2570309C00A1E2C0 /* ny.png */; };
+		AD5048C62570309C00A1E2C0 /* pz.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C02570309C00A1E2C0 /* pz.png */; };
+		AD5048C72570309C00A1E2C0 /* nx.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C12570309C00A1E2C0 /* nx.png */; };
+		AD5048C82570309C00A1E2C0 /* nz.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C22570309C00A1E2C0 /* nz.png */; };
+		AD5048C92570309C00A1E2C0 /* px.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C32570309C00A1E2C0 /* px.png */; };
+		AD5048CA2570309C00A1E2C0 /* py.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C42570309C00A1E2C0 /* py.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +81,12 @@
 		AD5048AD256F50C200A1E2C0 /* CubeMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CubeMap.h; sourceTree = "<group>"; };
 		AD5048AF256F521E00A1E2C0 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		AD5048B3256F54CA00A1E2C0 /* bunnyMesh.mesh */ = {isa = PBXFileReference; lastKnownFileType = file; path = bunnyMesh.mesh; sourceTree = "<group>"; };
+		AD5048BF2570309C00A1E2C0 /* ny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ny.png; sourceTree = "<group>"; };
+		AD5048C02570309C00A1E2C0 /* pz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pz.png; sourceTree = "<group>"; };
+		AD5048C12570309C00A1E2C0 /* nx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nx.png; sourceTree = "<group>"; };
+		AD5048C22570309C00A1E2C0 /* nz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nz.png; sourceTree = "<group>"; };
+		AD5048C32570309C00A1E2C0 /* px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = px.png; sourceTree = "<group>"; };
+		AD5048C42570309C00A1E2C0 /* py.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = py.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +125,7 @@
 		AD50487F256F4E4E00A1E2C0 /* CubeMap */ = {
 			isa = PBXGroup;
 			children = (
+				AD5048BE2570306D00A1E2C0 /* Textures */,
 				AD504880256F4E4E00A1E2C0 /* AppDelegate.h */,
 				AD504881256F4E4E00A1E2C0 /* AppDelegate.m */,
 				AD504883256F4E4E00A1E2C0 /* SceneDelegate.h */,
@@ -148,6 +161,19 @@
 				AD5048A4256F4F3900A1E2C0 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD5048BE2570306D00A1E2C0 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				AD5048C12570309C00A1E2C0 /* nx.png */,
+				AD5048BF2570309C00A1E2C0 /* ny.png */,
+				AD5048C22570309C00A1E2C0 /* nz.png */,
+				AD5048C32570309C00A1E2C0 /* px.png */,
+				AD5048C42570309C00A1E2C0 /* py.png */,
+				AD5048C02570309C00A1E2C0 /* pz.png */,
+			);
+			path = Textures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,8 +250,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD5048CA2570309C00A1E2C0 /* py.png in Resources */,
+				AD5048C52570309C00A1E2C0 /* ny.png in Resources */,
+				AD5048C82570309C00A1E2C0 /* nz.png in Resources */,
 				AD504890256F4E4F00A1E2C0 /* LaunchScreen.storyboard in Resources */,
 				AD50488D256F4E4F00A1E2C0 /* Assets.xcassets in Resources */,
+				AD5048C62570309C00A1E2C0 /* pz.png in Resources */,
+				AD5048C92570309C00A1E2C0 /* px.png in Resources */,
+				AD5048C72570309C00A1E2C0 /* nx.png in Resources */,
 				AD5048B4256F54CB00A1E2C0 /* bunnyMesh.mesh in Resources */,
 				AD50488B256F4E4E00A1E2C0 /* Main.storyboard in Resources */,
 			);

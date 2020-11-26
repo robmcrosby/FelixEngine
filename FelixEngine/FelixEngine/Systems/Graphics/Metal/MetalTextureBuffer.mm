@@ -28,9 +28,9 @@ MetalTextureBuffer::~MetalTextureBuffer() {
   
 }
 
-bool MetalTextureBuffer::load(const ImageBufferData &data) {
-  _width = data.size.w;
-  _height = data.size.h;
+bool MetalTextureBuffer::loadImage(const ImageBufferData &image) {
+  _width = image.size.width;
+  _height = image.size.height;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
                                                                                         width:_width
                                                                                        height:_height
@@ -41,10 +41,31 @@ bool MetalTextureBuffer::load(const ImageBufferData &data) {
   if (_texture != nil) {
     MTLRegion region = MTLRegionMake2D(0, 0, _width, _height);
     NSUInteger bytesPerRow = _width * 4;
-    [_texture replaceRegion:region mipmapLevel:0 withBytes:data.ptr() bytesPerRow:bytesPerRow];
+    [_texture replaceRegion:region mipmapLevel:0 withBytes:image.ptr() bytesPerRow:bytesPerRow];
     return true;
   }
   cerr << "Error Creating Metal Texture" << endl;
+  return false;
+}
+
+bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images) {
+  _width = images.front().size.width;
+  _height = images.front().size.height;
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+                                                                                           size:_width
+                                                                                      mipmapped:NO];
+  [descriptor setUsage:MTLTextureUsageShaderRead];
+  
+  _texture = [_device newTextureWithDescriptor:descriptor];
+  if (_texture != nil) {
+    MTLRegion region = MTLRegionMake2D(0, 0, _width, _height);
+    NSUInteger bytesPerRow = _width * 4;
+    NSUInteger bytesPerImage = bytesPerRow * _height;
+    for (int i = 0; i < images.size(); ++i)
+      [_texture replaceRegion:region mipmapLevel:0 slice:i withBytes:images.at(i).ptr() bytesPerRow:bytesPerRow bytesPerImage:bytesPerImage];
+    return true;
+  }
+  cerr << "Error Creating Metal Cube Map" << endl;
   return false;
 }
 

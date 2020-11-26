@@ -57,22 +57,31 @@ bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer)
 bool TextureBuffer::load(const XMLTree::Node &node) {
   setDefaultSampler(node);
   if (node.hasAttribute("file"))
-    return loadFile(node.attribute("file"));
+    return loadImageFile(node.attribute("file"));
   return false;
 }
 
-bool TextureBuffer::loadFile(const std::string &file) {
+bool TextureBuffer::loadImageFile(const string &file) {
   ImageBufferData image;
   if (FileSystem::loadImage(image, file))
-    return load(image);
+    return loadImage(image);
   return false;
+}
+
+bool TextureBuffer::loadCubeMapFiles(const vector<string> &files) {
+  ImageBufferSet images(files.size());
+  for (int i = 0; i < files.size(); ++i) {
+    if (!FileSystem::loadImage(images[i], files[i]))
+      return false;
+  }
+  return loadCubeMap(images);
 }
 
 bool TextureBuffer::loadColor(const RGBA &color) {
   ImageBufferData image;
   image.resize(1, 1);
   image.buffer.at(0) = color;
-  return load(image);
+  return loadImage(image);
 }
 
 
