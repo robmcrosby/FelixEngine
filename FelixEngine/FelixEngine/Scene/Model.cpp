@@ -66,6 +66,7 @@ bool Model::load(const USDItem &item, const std::string &pass) {
   _transforms.front()->setRotation(quat::RotX(-1.5f));
   
 //  const USDItem *transformItem = item.getAttribute("xformOp:transform");
+//  if (transformItem) {
 //    double4x4 transform = transformItem->double4x4Value();
 //    //_transforms.front() = transform;
 //  }
