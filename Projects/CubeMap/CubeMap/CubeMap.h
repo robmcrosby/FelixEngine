@@ -18,6 +18,7 @@
 struct MVPUniform {
   fx::mat4 projection, view, model;
   fx::quat rotation;
+  fx::vec4 camera;
 };
 
 class CubeMap: public fx::Application {
