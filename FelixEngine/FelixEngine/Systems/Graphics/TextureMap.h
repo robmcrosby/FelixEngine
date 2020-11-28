@@ -69,7 +69,7 @@ namespace fx {
         else
           texture.buffer = Graphics::getInstance().createTextureBuffer();
         if (node.hasAttribute("file"))
-          success = texture.buffer->loadImageFile(node.attribute("file"));
+          success = texture.buffer->loadImageFile(node.attribute("file"), texture.sampler.mipMappingEnabled());
         _map[node.attribute("name")] = texture;
       }
       else {
@@ -82,7 +82,7 @@ namespace fx {
     bool setTexture2D(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
       _map[name] = texture;
-      return texture.buffer->loadImage(image);
+      return texture.buffer->loadImage(image, sampler.mipMappingEnabled());
     }
     
     bool setTextureCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {

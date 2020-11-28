@@ -57,14 +57,14 @@ bool VertexMesh::setVertexBuffer(const string &name, const vector<vec4> &buffer)
 bool TextureBuffer::load(const XMLTree::Node &node) {
   setDefaultSampler(node);
   if (node.hasAttribute("file"))
-    return loadImageFile(node.attribute("file"));
+    return loadImageFile(node.attribute("file"), defaultSampler().mipMappingEnabled());
   return false;
 }
 
-bool TextureBuffer::loadImageFile(const string &file) {
+bool TextureBuffer::loadImageFile(const string &file, bool generateMipMap) {
   ImageBufferData image;
   if (FileSystem::loadImage(image, file))
-    return loadImage(image);
+    return loadImage(image, generateMipMap);
   return false;
 }
 
@@ -81,7 +81,7 @@ bool TextureBuffer::loadColor(const RGBA &color) {
   ImageBufferData image;
   image.resize(1, 1);
   image[0] = color;
-  return loadImage(image);
+  return loadImage(image, false);
 }
 
 

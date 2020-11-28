@@ -96,7 +96,7 @@ bool Scene::loadUSDZFile(const string &file, const string &pass) {
     StringVector images = archive.imageFiles();
     for (auto &name : images) {
       ImageBufferData imageData;
-      success &= archive.loadImage(imageData, name) && getTextureBuffer(name)->loadImage(imageData);
+      success &= archive.loadImage(imageData, name) && getTextureBuffer(name)->loadImage(imageData, false);
     }
     
     // Load Objects from USD Crate Files

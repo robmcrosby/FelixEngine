@@ -11,6 +11,7 @@
 
 @protocol MTLDevice;
 @protocol MTLTexture;
+@protocol MTLCommandQueue;
 @protocol MTLCommandBuffer;
 @protocol MTLRenderCommandEncoder;
 @protocol CAMetalDrawable;
@@ -27,7 +28,8 @@ namespace fx {
   
   class MetalFrameBuffer: public FrameBuffer {
   public:
-    id <MTLDevice>  _device;
+    id <MTLDevice> _device;
+    id <MTLCommandQueue> _queue;
     id <MTLTexture> _depthAttachment;
     id <MTLTexture> _stencilAttachment;
     attachmentsList _colorAttachments;
@@ -39,7 +41,7 @@ namespace fx {
     int _idFlag;
     
   public:
-    MetalFrameBuffer(id <MTLDevice> device);
+    MetalFrameBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue);
     virtual ~MetalFrameBuffer();
     
     virtual bool setToWindow(int index);

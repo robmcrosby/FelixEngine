@@ -37,9 +37,15 @@ void HelloTexture::initalize() {
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
   
   // Load the Texture
-  renderItem.setTextureFile("texture2D", "test.png");
+  fx::SamplerState sampler;
+  sampler.enableMipMapping();
+  sampler.setMagFilter(fx::FILTER_LINEAR);
+  sampler.setMinFilter(fx::FILTER_LINEAR);
+  sampler.setMipFilter(fx::FILTER_LINEAR);
+  
+  renderItem.setTextureFile("texture2D", "test.png", sampler);
   //renderItem.setTextureFile("texture2D", "environment.hdr");
-  //renderItem.setTextureFile("texture2D", "environment2.jpeg");
+  //renderItem.setTextureFile("texture2D", "environment2.jpeg", sampler);
   //renderItem.setTexture("texture2D", fx::RGBA(255, 0, 0, 255));
   
   // Load the Mesh

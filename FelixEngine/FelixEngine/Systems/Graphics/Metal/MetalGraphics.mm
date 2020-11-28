@@ -114,7 +114,7 @@ bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
 }
 
 FrameBufferPtr MetalGraphics::createFrameBuffer() {
-  shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device);
+  shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device, _data->queue);
   return frame;
 }
 
@@ -134,7 +134,7 @@ UniformBufferPtr MetalGraphics::createUniformBuffer() {
 }
 
 TextureBufferPtr MetalGraphics::createTextureBuffer() {
-  shared_ptr<MetalTextureBuffer> texture = make_shared<MetalTextureBuffer>(_data->device);
+  shared_ptr<MetalTextureBuffer> texture = make_shared<MetalTextureBuffer>(_data->device, _data->queue);
   return texture;
 }
 

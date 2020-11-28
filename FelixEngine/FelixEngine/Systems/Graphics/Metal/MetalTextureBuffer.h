@@ -10,6 +10,7 @@
 
 @protocol MTLDevice;
 @protocol MTLTexture;
+@protocol MTLCommandQueue;
 @protocol MTLRenderCommandEncoder;
 @protocol MTLSamplerState;
 
@@ -19,16 +20,18 @@ namespace fx {
   public:
     id <MTLDevice> _device;
     id <MTLTexture> _texture;
-    int _width, _height;
+    id <MTLCommandQueue> _queue;
+    int _width, _height, _mipLevels;
+    bool _loaded;
     SamplerState _samplerState;
     vec4 _default;
  
   public:
-    MetalTextureBuffer(id <MTLDevice> device);
-    MetalTextureBuffer(id <MTLDevice> device, id <MTLTexture> texture);
+    MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue);
+    MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue, id <MTLTexture> texture);
     virtual ~MetalTextureBuffer();
     
-    virtual bool loadImage(const ImageBufferData &image);
+    virtual bool loadImage(const ImageBufferData &image, bool generateMipMap);
     virtual bool loadCubeMap(const ImageBufferSet &images);
     virtual bool loaded() const;
     virtual ivec2 size() const;
@@ -38,5 +41,8 @@ namespace fx {
     
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, unsigned long index);
     void setMetalTexture(id <MTLTexture> texture);
+    
+  private:
+    void encodeGenerateMipMap();
   };
 }

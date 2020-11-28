@@ -41,7 +41,8 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
 }
 
 
-MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device): _device(device), _depthAttachment(nil), _stencilAttachment(nil) {
+MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue):
+    _device(device), _queue(queue), _depthAttachment(nil), _stencilAttachment(nil) {
   static int bufferCount = 1;
   _idFlag = bufferCount++ << ID_FLAG_OFFSET;
   
@@ -123,7 +124,7 @@ bool MetalFrameBuffer::addColorTexture() {
 }
 
 TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
-  return make_shared<MetalTextureBuffer>(_device, _colorAttachments.at(index)); //new MetalTextureBuffer(_device, _colorAttachments.at(index));
+  return make_shared<MetalTextureBuffer>(_device, _queue, _colorAttachments.at(index));
 }
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {

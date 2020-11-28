@@ -49,6 +49,7 @@ vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]], constant MVPUnif
 fragment half4 basic_fragment(FragmentInput     input     [[ stage_in ]],
                               texture2d<float>  texture2D [[ texture(0) ]],
                               sampler           sampler2D [[ sampler(0) ]]) {
-  float4 color = texture2D.sample(sampler2D, input.uv);
+  //float4 color = texture2D.sample(sampler2D, input.uv);
+  float4 color = texture2D.sample(sampler2D, input.uv, level(5.0));
   return half4(color.r, color.g, color.b, color.a);
 }

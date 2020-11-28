@@ -28,7 +28,7 @@ VulkanTextureBuffer::~VulkanTextureBuffer() {
   clearTexture();
 }
 
-bool VulkanTextureBuffer::loadImage(const ImageBufferData &image) {
+bool VulkanTextureBuffer::loadImage(const ImageBufferData &image, bool generateMipMap) {
   size_t imageSize = image.sizeInBytes();
   _width = image.size.w;
   _height = image.size.h;
