@@ -14,21 +14,25 @@
 
 
 namespace fx {
-  typedef std::vector<RGBA> ImageBuffer;
+  typedef std::vector<uint8_t> ImageBuffer;
   
   struct ImageBufferData {
     ImageBuffer buffer;
     ivec2 size;
+    int pixelBytes;
     
-    void resize(int width, int height) {
+    void resize(int width, int height, int pixel = 4) {
       size = ivec2(width, height);
-      buffer.resize(width*height);
+      pixelBytes = pixel;
+      buffer.resize(width*height*pixel);
     }
     
     void* ptr() {return (void*)&buffer.at(0);}
     const void* ptr() const {return (void*)&buffer.at(0);}
     
-    size_t sizeInBytes() const {return buffer.size()*sizeof(RGBA);}
+    size_t sizeInBytes() const {return buffer.size();}
+    
+    RGBA& operator[](int i) {return (RGBA&)buffer[i*4];}
   };
   typedef std::vector<ImageBufferData> ImageBufferSet;
 }

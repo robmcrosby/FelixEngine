@@ -80,7 +80,7 @@ bool TextureBuffer::loadCubeMapFiles(const vector<string> &files) {
 bool TextureBuffer::loadColor(const RGBA &color) {
   ImageBufferData image;
   image.resize(1, 1);
-  image.buffer.at(0) = color;
+  image[0] = color;
   return loadImage(image);
 }
 
