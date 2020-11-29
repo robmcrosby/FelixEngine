@@ -45,7 +45,7 @@ vertex VertexOutput skybox_vertex(VertexInput vert [[stage_in]],
   float3 location = (MVP.model * float4(vert.position, 1.0)).xyz;
   float3 view = normalize(location - MVP.camera.xyz);
   //float3 view = normalize(MVP.camera.xyz);
-  output.texCoords = view; //reflect(view, normal);
+  output.texCoords = view * float3(1.0, 1.0, -1.0); //reflect(view, normal);
   return output;
 }
 
@@ -59,7 +59,7 @@ vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]],
   //float3 location = (MVP.model * float4(vert.position, 1.0)).xyz;
   //float3 view = normalize(MVP.camera.xyz - location);
   float3 view = normalize(MVP.camera.xyz);
-  output.texCoords = reflect(view, normal);
+  output.texCoords = reflect(view, normal) * float3(1.0, 1.0, -1.0);
   return output;
 }
 
