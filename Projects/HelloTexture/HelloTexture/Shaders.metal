@@ -46,10 +46,42 @@ vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]], constant MVPUnif
 //  return output;
 //}
 
+fragment half4 project_fragment(FragmentInput     input     [[ stage_in ]],
+                              texture2d<float>  texture2D [[ texture(0) ]],
+                              sampler           sampler2D [[ sampler(0) ]]) {
+  
+  // Right
+  float3 loc(1 - 2*input.uv.x, 1, 1 - 2*input.uv.y);
+  
+  // Left
+  //float3 loc(2*input.uv.x - 1, -1, 1 - 2*input.uv.y);
+  
+  // Front
+  //float3 loc(1, 2*input.uv.x - 1, 1 - 2*input.uv.y);
+  
+  // Back
+  //float3 loc(-1, 1 - 2*input.uv.x, 1 - 2*input.uv.y);
+  
+  // Top
+  //float3 loc(2*input.uv.y - 1, 2*input.uv.x - 1, 1.0);
+  
+  // Bottom
+  //float3 loc(1 - 2*input.uv.y, 2*input.uv.x - 1, -1.0);
+  
+  float theta = atan2(loc.y, loc.x);
+  float r = sqrt(loc.x*loc.x + loc.y*loc.y);
+  float phi = atan2(loc.z, r);
+  
+  float2 coords(0.5*(theta + M_PI_F) / M_PI_F, (M_PI_F/2 - phi) / M_PI_F);
+  
+  float4 color = texture2D.sample(sampler2D, coords);
+  return half4(color.r, color.g, color.b, color.a);
+}
+
 fragment half4 basic_fragment(FragmentInput     input     [[ stage_in ]],
                               texture2d<float>  texture2D [[ texture(0) ]],
                               sampler           sampler2D [[ sampler(0) ]]) {
-  //float4 color = texture2D.sample(sampler2D, input.uv);
-  float4 color = texture2D.sample(sampler2D, input.uv, level(5.0));
+  float4 color = texture2D.sample(sampler2D, input.uv);
+  //float4 color = texture2D.sample(sampler2D, input.uv, level(5.0));
   return half4(color.r, color.g, color.b, color.a);
 }

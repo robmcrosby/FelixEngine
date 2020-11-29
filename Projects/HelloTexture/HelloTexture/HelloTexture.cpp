@@ -35,15 +35,19 @@ void HelloTexture::initalize() {
   
   // Load the Shader
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
+  //renderItem.loadShaderFunctions("basic_vertex", "project_fragment");
   
   // Load the Texture
   fx::SamplerState sampler;
-  sampler.enableMipMapping();
+  //sampler.enableMipMapping();
+  sampler.setSCoord(fx::COORD_REPEAT);
+  sampler.setTCoord(fx::COORD_REPEAT);
   sampler.setMagFilter(fx::FILTER_LINEAR);
   sampler.setMinFilter(fx::FILTER_LINEAR);
-  sampler.setMipFilter(fx::FILTER_LINEAR);
+  //sampler.setMipFilter(fx::FILTER_LINEAR);
   
-  renderItem.setTextureFile("texture2D", "test.png", sampler);
+  //renderItem.setTextureFile("texture2D", "test.png", sampler);
+  renderItem.setTextureFile("texture2D", "colorGrid.png", sampler);
   //renderItem.setTextureFile("texture2D", "environment.hdr");
   //renderItem.setTextureFile("texture2D", "environment2.jpeg", sampler);
   //renderItem.setTexture("texture2D", fx::RGBA(255, 0, 0, 255));
