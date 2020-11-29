@@ -34,7 +34,9 @@ void CubeMap::initalize() {
   fx::RenderItem renderItem;
   renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
   renderItem.loadMeshFile("bunnyMesh.mesh");
-  renderItem.setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
+  //renderItem.setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
+  //renderItem.setCubeMapFile("cubeMap", "colorGrid.png", sampler);
+  renderItem.setCubeMapFile("cubeMap", "environment.hdr", sampler);
   renderItem.cullMode = fx::CULL_BACK;
   renderItem.enableDepthTesting();
   

@@ -35,6 +35,7 @@ namespace fx {
     
     bool loadImage(const ImageBufferData &image, bool generateMipMap);
     bool loadCubeMap(const ImageBufferSet &images);
+    bool loadCubeMap(const ImageBufferData &image);
     bool loadSwapBuffer(VkFormat format, VkImage image, int width, int height);
     bool loadDepthBuffer(VkFormat format, int width, int height);
     bool loaded() const;

@@ -106,6 +106,7 @@ namespace fx {
     
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferSet &images) = 0;
+    virtual bool loadCubeMap(const ImageBufferData &image) = 0;
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;
     

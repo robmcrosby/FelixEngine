@@ -13,6 +13,41 @@
 
 
 
+struct OutputCube {
+  float4 position [[ position ]];
+  float2 uv [[ user(uv) ]];
+};
+
+struct InputCube {
+  float2 uv [[ user(uv) ]];
+};
+
+vertex OutputCube v_cube_gen(const device packed_float2 *vertices [[ buffer(0) ]],
+                                          unsigned int   vid      [[ vertex_id ]]) {
+  OutputCube output;
+  output.position = float4(vertices[vid], 0.0, 1.0);
+  output.uv = vertices[vid];
+  return output;
+}
+
+fragment half4 f_cube_gen(InputCube input      [[ stage_in ]],
+                    constant float4 &rotation  [[ buffer(0) ]],
+                   texture2d<float> srcTexture [[ texture(0) ]]) {
+  constexpr sampler sampler2D (mag_filter::linear, min_filter::linear);
+  
+  float3 loc = rotate_quat(rotation, float3(1, input.uv.x, input.uv.y));
+  
+  float theta = atan2(loc.y, loc.x);
+  float r = sqrt(loc.x*loc.x + loc.y*loc.y);
+  float phi = atan2(loc.z, r);
+  
+  float2 coords(0.5*(theta + M_PI_F) / M_PI_F, (M_PI_F/2 - phi) / M_PI_F);
+  
+  float4 color = srcTexture.sample(sampler2D, coords);
+  return half4(color.r, color.g, color.b, color.a);
+}
+
+
 struct Vertex {
   float3 position [[ attribute(0) ]];
 };

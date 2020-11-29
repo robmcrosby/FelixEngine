@@ -91,6 +91,12 @@ namespace fx {
       return texture.buffer->loadCubeMap(images);
     }
     
+    bool setTextureCubeMap(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
+      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
+      _map[name] = texture;
+      return texture.buffer->loadCubeMap(image);
+    }
+    
     void setTexture(const std::string &name, TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
       _map[name] = Texture(buffer, sampler);
     }

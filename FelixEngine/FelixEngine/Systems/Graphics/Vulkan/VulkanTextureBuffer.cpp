@@ -66,6 +66,10 @@ bool VulkanTextureBuffer::loadCubeMap(const ImageBufferSet &images) {
   return false;
 }
 
+bool VulkanTextureBuffer::loadCubeMap(const ImageBufferData &image) {
+  return false;
+}
+
 bool VulkanTextureBuffer::loadSwapBuffer(VkFormat format, VkImage image, int width, int height) {
   _width = width;
   _height = height;

@@ -100,6 +100,10 @@ namespace fx {
       }
       return getTextureMap().setTextureCubeMap(name, images);
     }
+    bool setCubeMapFile(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
+      ImageBufferData imageData;
+      return FileSystem::loadImage(imageData, file) && getTextureMap().setTextureCubeMap(name, imageData, sampler);
+    }
     bool texturesLoaded() const {return !textures || textures->loaded();}
     bool operator<(const RenderItem &other) const {return layer < other.layer;}
   };

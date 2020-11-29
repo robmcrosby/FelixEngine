@@ -28,6 +28,8 @@
 		AD5048C82570309C00A1E2C0 /* nz.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C22570309C00A1E2C0 /* nz.png */; };
 		AD5048C92570309C00A1E2C0 /* px.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C32570309C00A1E2C0 /* px.png */; };
 		AD5048CA2570309C00A1E2C0 /* py.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C42570309C00A1E2C0 /* py.png */; };
+		AD5048D42573921700A1E2C0 /* colorGrid.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048D32573921700A1E2C0 /* colorGrid.png */; };
+		AD5048D62573994200A1E2C0 /* environment.hdr in Resources */ = {isa = PBXBuildFile; fileRef = AD5048D52573994200A1E2C0 /* environment.hdr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		AD5048C22570309C00A1E2C0 /* nz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nz.png; sourceTree = "<group>"; };
 		AD5048C32570309C00A1E2C0 /* px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = px.png; sourceTree = "<group>"; };
 		AD5048C42570309C00A1E2C0 /* py.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = py.png; sourceTree = "<group>"; };
+		AD5048D32573921700A1E2C0 /* colorGrid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colorGrid.png; sourceTree = "<group>"; };
+		AD5048D52573994200A1E2C0 /* environment.hdr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = environment.hdr; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +129,8 @@
 		AD50487F256F4E4E00A1E2C0 /* CubeMap */ = {
 			isa = PBXGroup;
 			children = (
+				AD5048D52573994200A1E2C0 /* environment.hdr */,
+				AD5048D32573921700A1E2C0 /* colorGrid.png */,
 				AD5048BE2570306D00A1E2C0 /* Textures */,
 				AD504880256F4E4E00A1E2C0 /* AppDelegate.h */,
 				AD504881256F4E4E00A1E2C0 /* AppDelegate.m */,
@@ -254,12 +260,14 @@
 				AD5048C52570309C00A1E2C0 /* ny.png in Resources */,
 				AD5048C82570309C00A1E2C0 /* nz.png in Resources */,
 				AD504890256F4E4F00A1E2C0 /* LaunchScreen.storyboard in Resources */,
+				AD5048D62573994200A1E2C0 /* environment.hdr in Resources */,
 				AD50488D256F4E4F00A1E2C0 /* Assets.xcassets in Resources */,
 				AD5048C62570309C00A1E2C0 /* pz.png in Resources */,
 				AD5048C92570309C00A1E2C0 /* px.png in Resources */,
 				AD5048C72570309C00A1E2C0 /* nx.png in Resources */,
 				AD5048B4256F54CB00A1E2C0 /* bunnyMesh.mesh in Resources */,
 				AD50488B256F4E4E00A1E2C0 /* Main.storyboard in Resources */,
+				AD5048D42573921700A1E2C0 /* colorGrid.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
