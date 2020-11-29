@@ -54,5 +54,6 @@ fragment half4 basic_fragment(FragmentInput     input       [[stage_in]],
                               sampler           cubeSampler [[sampler(0)]]) {
   //float d = dot(input.normal, float3(0.0, 0.0, 1.0));
   //return half4(d, d, d, 1.0);
+  //return cubeMap.sample(cubeSampler, input.texCoords, level(8));
   return cubeMap.sample(cubeSampler, input.texCoords);
 }

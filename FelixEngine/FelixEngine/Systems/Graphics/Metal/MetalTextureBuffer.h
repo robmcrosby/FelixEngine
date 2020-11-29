@@ -32,8 +32,8 @@ namespace fx {
     virtual ~MetalTextureBuffer();
     
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap);
-    virtual bool loadCubeMap(const ImageBufferSet &images);
-    virtual bool loadCubeMap(const ImageBufferData &image);
+    virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap);
+    virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap);
     virtual bool loaded() const;
     virtual ivec2 size() const;
     
@@ -45,6 +45,6 @@ namespace fx {
     
   private:
     void encodeGenerateMipMap();
-    void encodeGenerateCubeMap(const ImageBufferData &image);
+    void encodeGenerateCubeMap(const ImageBufferData &image, bool generateMipMap);
   };
 }

@@ -68,13 +68,20 @@ bool TextureBuffer::loadImageFile(const string &file, bool generateMipMap) {
   return false;
 }
 
-bool TextureBuffer::loadCubeMapFiles(const vector<string> &files) {
+bool TextureBuffer::loadCubeMapFile(const string &file, bool generateMipMap) {
+  ImageBufferData image;
+  if (FileSystem::loadImage(image, file))
+    return loadCubeMap(image, generateMipMap);
+  return false;
+}
+
+bool TextureBuffer::loadCubeMapFiles(const vector<string> &files, bool generateMipMap) {
   ImageBufferSet images(files.size());
   for (int i = 0; i < files.size(); ++i) {
     if (!FileSystem::loadImage(images[i], files[i]))
       return false;
   }
-  return loadCubeMap(images);
+  return loadCubeMap(images, generateMipMap);
 }
 
 bool TextureBuffer::loadColor(const RGBA &color) {

@@ -98,7 +98,7 @@ namespace fx {
         if (!FileSystem::loadImage(images[i], files[i]))
           return false;
       }
-      return getTextureMap().setTextureCubeMap(name, images);
+      return getTextureMap().setTextureCubeMap(name, images, sampler);
     }
     bool setCubeMapFile(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
       ImageBufferData imageData;

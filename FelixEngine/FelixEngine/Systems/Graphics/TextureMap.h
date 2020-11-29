@@ -88,13 +88,13 @@ namespace fx {
     bool setTextureCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
       _map[name] = texture;
-      return texture.buffer->loadCubeMap(images);
+      return texture.buffer->loadCubeMap(images, sampler.mipMappingEnabled());
     }
     
     bool setTextureCubeMap(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
       Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
       _map[name] = texture;
-      return texture.buffer->loadCubeMap(image);
+      return texture.buffer->loadCubeMap(image, sampler.mipMappingEnabled());
     }
     
     void setTexture(const std::string &name, TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
