@@ -171,8 +171,8 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   rotationData.push_back(quat::RotZ(-M_PI/2.0f)); // Left
   rotationData.push_back(quat::RotY(-M_PI/2.0f)); // Up
   rotationData.push_back(quat::RotY(M_PI/2.0f));  // Down
-  rotationData.push_back(quat::RotZ(M_PI));       // Back
   rotationData.push_back(quat::RotZ(0.0f));       // Front
+  rotationData.push_back(quat::RotZ(M_PI));       // Back
   id <MTLBuffer> rotations = [_device newBufferWithLength:6*sizeof(quat) options:MTLResourceCPUCacheModeDefaultCache];
   memcpy(rotations.contents, &rotationData[0], 6*sizeof(quat));
   

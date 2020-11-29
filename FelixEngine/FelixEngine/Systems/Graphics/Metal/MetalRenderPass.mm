@@ -68,6 +68,7 @@ void MetalRenderPass::render() {
       [encoder setCullMode:MTLCullModeFront];
     
     // Encode the Textures
+    shader->encode(encoder, textures, _samplerStates);
     shader->encode(encoder, item.textures, _samplerStates);
     
     // Encode the Vertex Buffers

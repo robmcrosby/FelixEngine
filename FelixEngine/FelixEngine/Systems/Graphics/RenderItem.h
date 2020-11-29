@@ -105,6 +105,7 @@ namespace fx {
       return FileSystem::loadImage(imageData, file) && getTextureMap().setTextureCubeMap(name, imageData, sampler);
     }
     bool texturesLoaded() const {return !textures || textures->loaded();}
+    
     bool operator<(const RenderItem &other) const {return layer < other.layer;}
   };
 }

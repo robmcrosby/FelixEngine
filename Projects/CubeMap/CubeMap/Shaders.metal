@@ -36,6 +36,20 @@ float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
 
+vertex VertexOutput skybox_vertex(VertexInput vert [[stage_in]],
+                        constant MVPUniform  &MVP [[buffer(2)]]) {
+  VertexOutput output;
+  output.position = MVP.projection * MVP.view * MVP.model * float4(vert.position, 1.0);
+  
+  //float3 normal = normalize(rotate_quat(MVP.rotation, vert.normal));
+  float3 location = (MVP.model * float4(vert.position, 1.0)).xyz;
+  float3 view = normalize(location - MVP.camera.xyz);
+  //float3 view = normalize(MVP.camera.xyz);
+  output.texCoords = view; //reflect(view, normal);
+  return output;
+}
+
+
 vertex VertexOutput basic_vertex(VertexInput vert [[stage_in]],
                         constant MVPUniform  &MVP [[buffer(2)]]) {
   VertexOutput output;

@@ -6,6 +6,7 @@
 //
 
 #include "CubeMap.h"
+#include <FelixEngine/MeshBuilder.h>
 
 
 using namespace std;
@@ -33,26 +34,31 @@ void CubeMap::initalize() {
   sampler.setMagFilter(fx::FILTER_LINEAR);
   sampler.setMinFilter(fx::FILTER_LINEAR);
   
-  fx::RenderItem renderItem;
-  renderItem.loadShaderFunctions("basic_vertex", "basic_fragment");
-  renderItem.loadMeshFile("bunnyMesh.mesh");
-  renderItem.setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
-  //renderItem.setCubeMapFile("cubeMap", "colorGrid.png", sampler);
-  //renderItem.setCubeMapFile("cubeMap", "environment.hdr", sampler);
-  renderItem.cullMode = fx::CULL_BACK;
-  renderItem.enableDepthTesting();
+  fx::RenderItem skybox;
+  skybox.loadShaderFunctions("skybox_vertex", "basic_fragment");
+  skybox.mesh = fx::MeshBuilder::createCube(100.0f);
+  
+  fx::RenderItem object;
+  object.loadShaderFunctions("basic_vertex", "basic_fragment");
+  object.loadMeshFile("bunnyMesh.mesh");
+  object.cullMode = fx::CULL_BACK;
+  object.enableDepthTesting();
   
   _renderPass = _graphics->createRenderPass();
   _renderPass->setFrameToWindow(0);
   _renderPass->addDepthBuffer();
-  _renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
+  //_renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   _renderPass->setClearDepthStencil();
-  _renderPass->addRenderItem(renderItem);
+  _renderPass->setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
+  //_renderPass->setCubeMapFile("cubeMap", "colorGrid.png", sampler);
+  //_renderPass->setCubeMapFile("cubeMap", "environment.hdr", sampler);
+  _renderPass->addRenderItem(skybox);
+  _renderPass->addRenderItem(object);
   
   fx::vec2 size = fx::vec2(_renderPass->getFrameSize());
   float width = 0.2f;
   float height = 0.2f * size.h/size.w;
-  _mvpUniform.projection = fx::mat4::Frustum(-width, width, -height, height, 1.0, 100.0);
+  _mvpUniform.projection = fx::mat4::Frustum(-width, width, -height, height, 1.0, 1000.0);
   _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f);
   _mvpUniform.model = _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.6f, 0.6f, 0.6f));
   _renderPass->getUniformMap()["MVP"] = _mvpUniform;
