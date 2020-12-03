@@ -20,6 +20,7 @@ namespace fx {
     ImageBuffer buffer;
     ivec2 size;
     int pixelBytes;
+    std::string colorSpace;
     
     void resize(int width, int height, int pixel = 4) {
       size = ivec2(width, height);

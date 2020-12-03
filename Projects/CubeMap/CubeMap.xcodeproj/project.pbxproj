@@ -30,6 +30,7 @@
 		AD5048CA2570309C00A1E2C0 /* py.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048C42570309C00A1E2C0 /* py.png */; };
 		AD5048D42573921700A1E2C0 /* colorGrid.png in Resources */ = {isa = PBXBuildFile; fileRef = AD5048D32573921700A1E2C0 /* colorGrid.png */; };
 		AD5048D62573994200A1E2C0 /* environment.hdr in Resources */ = {isa = PBXBuildFile; fileRef = AD5048D52573994200A1E2C0 /* environment.hdr */; };
+		ADF39CB22574C71900CD57C0 /* environment2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = ADF39CB12574C71900CD57C0 /* environment2.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		AD5048C42570309C00A1E2C0 /* py.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = py.png; sourceTree = "<group>"; };
 		AD5048D32573921700A1E2C0 /* colorGrid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = colorGrid.png; sourceTree = "<group>"; };
 		AD5048D52573994200A1E2C0 /* environment.hdr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = environment.hdr; sourceTree = "<group>"; };
+		ADF39CB12574C71900CD57C0 /* environment2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = environment2.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 		AD50487F256F4E4E00A1E2C0 /* CubeMap */ = {
 			isa = PBXGroup;
 			children = (
+				ADF39CB12574C71900CD57C0 /* environment2.jpeg */,
 				AD5048D52573994200A1E2C0 /* environment.hdr */,
 				AD5048D32573921700A1E2C0 /* colorGrid.png */,
 				AD5048BE2570306D00A1E2C0 /* Textures */,
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADF39CB22574C71900CD57C0 /* environment2.jpeg in Resources */,
 				AD5048CA2570309C00A1E2C0 /* py.png in Resources */,
 				AD5048C52570309C00A1E2C0 /* ny.png in Resources */,
 				AD5048C82570309C00A1E2C0 /* nz.png in Resources */,

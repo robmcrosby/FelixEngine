@@ -32,9 +32,8 @@ vertex OutputCube v_cube_gen(const device packed_float2 *vertices [[ buffer(0) ]
 
 fragment half4 f_cube_gen(InputCube input      [[ stage_in ]],
                     constant float4 &rotation  [[ buffer(0) ]],
-                   texture2d<float> srcTexture [[ texture(0) ]]) {
-  constexpr sampler sampler2D (mag_filter::linear, min_filter::linear);
-  
+                   texture2d<float> srcTexture [[ texture(0) ]],
+                            sampler sampler2D  [[ sampler(0) ]]) {
   float3 loc = rotate_quat(rotation, float3(1, input.uv.x, input.uv.y));
   
   float theta = atan2(loc.y, loc.x);

@@ -104,20 +104,37 @@ bool iOSFileSystem::exportImageData(ImageBufferData &image, UIImage *uiImage) co
   CGImageRef imageRef = [uiImage CGImage];
   NSUInteger width = CGImageGetWidth(imageRef);
   NSUInteger height = CGImageGetHeight(imageRef);
-  NSUInteger bytesPerPixel = 4;
+  NSUInteger bytesPerPixel = CGImageGetBitsPerPixel(imageRef) > 32 ? 8 : 4;
   NSUInteger bytesPerRow = bytesPerPixel * width;
-  NSUInteger bitsPerComponent = 8;
+  NSUInteger bitsPerComponent = 2 * bytesPerPixel; //CGImageGetBitsPerComponent(imageRef);
+  
+//  cout << "BitsPerPixel: " << CGImageGetBitsPerPixel(imageRef) << endl;
+//  cout << "BitsPerComponent: " << CGImageGetBitsPerComponent(imageRef) << endl;
+//  cout << "ByteOrder: " << CGImageGetByteOrderInfo(imageRef) << endl;
+//  cout << "BitmapInfo: " << CGImageGetBitmapInfo(imageRef) << endl;
+//  cout << "AlphaInfo: " << CGImageGetAlphaInfo(imageRef) << endl;
+  
+  CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+  if (!CGColorSpaceGetName(colorSpace))
+    colorSpace = CGColorSpaceCreateDeviceRGB();
+  NSString *csName = (__bridge NSString *)CGColorSpaceGetName(colorSpace);
+  image.colorSpace = [[csName substringFromIndex:13] UTF8String];
   
   // Resize the Image Buffer
-  image.resize((int)width, (int)height);
+  image.resize((int)width, (int)height, (int)bytesPerPixel);
   uint8_t *rawData = (uint8_t*)image.ptr();
   
+  // Set the bitmap info flags
+  u_int32_t bitmapInfo = 0;
+  if (bytesPerPixel == 4)
+    bitmapInfo = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+  else
+    bitmapInfo = kCGImageAlphaNoneSkipLast|kCGBitmapFloatComponents|kCGImageByteOrder16Little;
+  
   // Create a Core Graphics Context
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(rawData, width, height,
-                                               bitsPerComponent, bytesPerRow, colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-  CGColorSpaceRelease(colorSpace);
+  CGContextRef context = CGBitmapContextCreate(rawData, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo);
+  
+  //CGColorSpaceRelease(colorSpace);
   
   // Flip the image
   //CGContextTranslateCTM(context, 0, height);

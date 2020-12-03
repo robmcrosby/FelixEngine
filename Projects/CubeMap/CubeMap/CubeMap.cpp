@@ -32,7 +32,6 @@ void CubeMap::initalize() {
   sampler.enableMipMapping();
   sampler.setMinFilter(fx::FILTER_LINEAR);
   sampler.setMagFilter(fx::FILTER_LINEAR);
-  sampler.setMinFilter(fx::FILTER_LINEAR);
   
   fx::RenderItem skybox;
   skybox.loadShaderFunctions("skybox_vertex", "basic_fragment");
@@ -52,6 +51,7 @@ void CubeMap::initalize() {
   _renderPass->setCubeMapFiles("cubeMap", cubeMapFiles, sampler);
   //_renderPass->setCubeMapFile("cubeMap", "colorGrid.png", sampler);
   //_renderPass->setCubeMapFile("cubeMap", "environment.hdr", sampler);
+  //_renderPass->setCubeMapFile("cubeMap", "environment2.jpeg", sampler);
   _renderPass->addRenderItem(skybox);
   _renderPass->addRenderItem(object);
   
