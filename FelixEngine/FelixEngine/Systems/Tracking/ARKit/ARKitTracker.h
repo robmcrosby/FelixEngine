@@ -6,10 +6,10 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "TrackerSystem.h"
-#include "Graphics.h"
-#include "UniformMap.h"
-#include "Macros.h"
+#include <FelixEngine/TrackerSystem.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/UniformMap.h>
+#include <FelixEngine/Macros.h>
 
 #ifndef ARKitTracker_h
 #define ARKitTracker_h
@@ -17,6 +17,7 @@
 OBJC_CLASS(ARFrame)
 OBJC_CLASS(ARDelegate)
 OBJC_CLASS(ARPlaneAnchor)
+OBJC_CLASS(AREnvironmentProbeAnchor);
 
 namespace fx {
   class MetalGraphics;
@@ -32,6 +33,7 @@ namespace fx {
     
     std::shared_ptr<MetalTextureBuffer> _cameraImageY;
     std::shared_ptr<MetalTextureBuffer> _cameraImageCbCr;
+    std::shared_ptr<MetalTextureBuffer> _environmentMap;
     
     UniformsPtr _uniformMap;
     
@@ -54,6 +56,7 @@ namespace fx {
     
     virtual TextureBufferPtr getCameraImageY();
     virtual TextureBufferPtr getCameraImageCbCr();
+    virtual TextureBufferPtr getEnvironmentMap();
     
     virtual ARHitResults hitTest(const Touch &touch);
     
@@ -69,6 +72,10 @@ namespace fx {
     void planeAnchorAdded(ARPlaneAnchor *anchor);
     void planeAnchorUpdated(ARPlaneAnchor *anchor);
     void planeAnchorRemoved(ARPlaneAnchor *anchor);
+    
+    void environmentProbeAdded(AREnvironmentProbeAnchor *anchor);
+    void environmentProbeUpdated(AREnvironmentProbeAnchor *anchor);
+    void environmentProbeRemoved(AREnvironmentProbeAnchor *anchor);
     
     ARPlane planeForAnchor(ARPlaneAnchor *anchor);
     

@@ -89,6 +89,13 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
   return output;
 }
 
+fragment half4 cube_fragment(FragmentInput      input       [[ stage_in  ]],
+                             texturecube<float> environment [[texture(0)]]) {
+  constexpr sampler cubeSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
+  return half4(environment.sample(cubeSampler, input.normal));
+  //return half4(1.0, 0.0 ,0.0, 1.0);
+}
+
 fragment half4 basic_fragment(FragmentInput      input    [[ stage_in  ]],
                               constant Light    *lights   [[ buffer(0) ]],
                               constant Material *material [[ buffer(1) ]]) {

@@ -67,6 +67,7 @@ void Camera::update(float dt) {
   for (auto pass = _renderPasses.begin(); pass != _renderPasses.end(); ++pass) {
     vec2 frameSize = (*pass)->getFrameSize();
     (*pass)->getUniformMap()["camera"] = properties(frameSize);
+    (*pass)->getTextureMap()["environment"] = _environmentTexture;
   }
 }
 

@@ -38,6 +38,7 @@
   
   // Add and initalize ARKit
   fx::ARKitTracker *tracker = new fx::ARKitTracker();
+  tracker->enableEnvironmentMapping();
   tracker->initalize(graphics);
   self.arTrackerApp->setTrackerSystem(tracker);
   

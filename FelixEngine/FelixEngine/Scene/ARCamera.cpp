@@ -26,6 +26,7 @@ ARCamera::~ARCamera() {
 
 void ARCamera::update(float td) {
   TrackerSystem *tracker = &TrackerSystem::getInstance();
+  _environmentTexture.buffer = tracker->getEnvironmentMap();
   if (tracker != nullptr) {
     setView(tracker->getCameraView());
     setProjection(tracker->getCameraProjection());

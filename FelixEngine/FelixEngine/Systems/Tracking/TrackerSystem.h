@@ -30,6 +30,7 @@ namespace fx {
     FEATURE_TRACKING_PLANES_HORIZONTAL = 0x02,
     FEATURE_TRACKING_PLANES_VERTICAL   = 0x04,
     FEATURE_TRACKING_GEOMETRY          = 0x08,
+    FEATURE_TRACKING_ENVIRONMENT_MAP   = 0x10,
   };
   
   struct ARPlane {
@@ -95,6 +96,7 @@ namespace fx {
     
     virtual TextureBufferPtr getCameraImageY() = 0;
     virtual TextureBufferPtr getCameraImageCbCr() = 0;
+    virtual TextureBufferPtr getEnvironmentMap() = 0;
     
     void setDelegate(TrackerDelegate *delegate) {_delegate = delegate;}
     
@@ -102,6 +104,9 @@ namespace fx {
     
     virtual void enableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags |= featureFlags;}
     virtual void disableFeatureTracking(unsigned int featureFlags) {_freatureTrackingFlags &= ~featureFlags;}
+    
+    void enableEnvironmentMapping() {enableFeatureTracking(FEATURE_TRACKING_ENVIRONMENT_MAP);}
+    void disableEnvironmentMapping() {disableFeatureTracking(FEATURE_TRACKING_ENVIRONMENT_MAP);}
     
     void enablePointCloud() {enableFeatureTracking(FEATURE_TRACKING_POINTS);}
     void disablePointCloud() {disableFeatureTracking(FEATURE_TRACKING_POINTS);}

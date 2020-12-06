@@ -46,6 +46,10 @@
   if (@available(iOS 11.3, *))
     self.configuration.planeDetection |= flags & fx::FEATURE_TRACKING_PLANES_VERTICAL ? ARPlaneDetectionVertical : ARPlaneDetectionNone;
   
+  // Set Environment Mapping
+  self.configuration.environmentTexturing = flags & fx::FEATURE_TRACKING_ENVIRONMENT_MAP ? AREnvironmentTexturingAutomatic : AREnvironmentTexturingNone;
+  //self.configuration.environmentTexturing = flags & fx::FEATURE_TRACKING_ENVIRONMENT_MAP ? AREnvironmentTexturingManual : AREnvironmentTexturingNone;
+  
   // Update ARSession if Running
   if (self.sessionRunning)
     [_arSession runWithConfiguration:self.configuration];
@@ -117,6 +121,8 @@
   for (ARAnchor *anchor : anchors) {
     if ([anchor isKindOfClass:[ARPlaneAnchor class]])
       self.tracker->planeAnchorAdded((ARPlaneAnchor*)anchor);
+    else if ([anchor isKindOfClass:[AREnvironmentProbeAnchor class]])
+      self.tracker->environmentProbeAdded((AREnvironmentProbeAnchor*)anchor);
   }
 }
 
@@ -124,6 +130,8 @@
   for (ARAnchor *anchor : anchors) {
     if ([anchor isKindOfClass:[ARPlaneAnchor class]])
       self.tracker->planeAnchorUpdated((ARPlaneAnchor*)anchor);
+    else if ([anchor isKindOfClass:[AREnvironmentProbeAnchor class]])
+      self.tracker->environmentProbeUpdated((AREnvironmentProbeAnchor*)anchor);
   }
 }
 
@@ -131,6 +139,8 @@
   for (ARAnchor *anchor : anchors) {
     if ([anchor isKindOfClass:[ARPlaneAnchor class]])
       self.tracker->planeAnchorRemoved((ARPlaneAnchor*)anchor);
+    else if ([anchor isKindOfClass:[AREnvironmentProbeAnchor class]])
+      self.tracker->environmentProbeRemoved((AREnvironmentProbeAnchor*)anchor);
   }
 }
 
@@ -168,6 +178,8 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   
   _cameraImageY = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
+  _environmentMap = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
+  //_environmentMap->loadColor(RGBA(0, 0, 0, 255));
   
   [_arDelegate startSession];
   return true;
@@ -205,6 +217,10 @@ TextureBufferPtr ARKitTracker::getCameraImageY() {
 
 TextureBufferPtr ARKitTracker::getCameraImageCbCr() {
   return _cameraImageCbCr;
+}
+
+TextureBufferPtr ARKitTracker::getEnvironmentMap() {
+  return _environmentMap;
 }
 
 ARHitResults ARKitTracker::hitTest(const Touch &touch) {
@@ -305,6 +321,19 @@ void ARKitTracker::planeAnchorRemoved(ARPlaneAnchor *anchor) {
   updateTrackedPlane(plane);
   if (_delegate != nullptr)
     _delegate->trackedPlaneRemoved(plane);
+}
+
+void ARKitTracker::environmentProbeAdded(AREnvironmentProbeAnchor *anchor) {
+  //std::cout << "Add Environment Probe Anchor: " std::endl;
+}
+
+void ARKitTracker::environmentProbeUpdated(AREnvironmentProbeAnchor *anchor) {
+  _environmentMap->setMetalTexture(anchor.environmentTexture);
+  std::cout << "Update Environment Probe Anchor: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+}
+
+void ARKitTracker::environmentProbeRemoved(AREnvironmentProbeAnchor *anchor) {
+  //std::cout << "Remove Environment Probe Anchor" << std::endl;
 }
 
 ARPlane ARKitTracker::planeForAnchor(ARPlaneAnchor *anchor) {

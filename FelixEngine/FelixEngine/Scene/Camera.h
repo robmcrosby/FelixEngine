@@ -30,6 +30,7 @@ namespace fx {
 
   protected:
     TransformPtr _transform;
+    Texture _environmentTexture;
 
     PROJECTION_TYPE _projectionType;
     float _near;
