@@ -46,8 +46,8 @@ void HelloTexture::initalize() {
   sampler.setMinFilter(fx::FILTER_LINEAR);
   //sampler.setMipFilter(fx::FILTER_LINEAR);
   
-  //renderItem.setTextureFile("texture2D", "test.png", sampler);
-  renderItem.setTextureFile("texture2D", "colorGrid.png", sampler);
+  renderItem.setTextureFile("texture2D", "test.png", sampler);
+  //renderItem.setTextureFile("texture2D", "colorGrid.png", sampler);
   //renderItem.setTextureFile("texture2D", "environment.hdr");
   //renderItem.setTextureFile("texture2D", "environment2.jpeg", sampler);
   //renderItem.setTexture("texture2D", fx::RGBA(255, 0, 0, 255));

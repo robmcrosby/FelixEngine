@@ -113,6 +113,7 @@ void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {
   _texture = texture;
   _width = (int)_texture.width;
   _height = (int)_texture.height;
+  _loaded = true;
 }
 
 void MetalTextureBuffer::encodeGenerateMipMap() {

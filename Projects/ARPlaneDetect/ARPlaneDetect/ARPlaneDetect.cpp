@@ -9,7 +9,7 @@
 #include "ARPlaneDetect.h"
 #include <FelixEngine/Camera.h>
 #include <FelixEngine/Model.h>
-#include <FelixEngine/Material.h>
+#include <FelixEngine/PhongMaterial.h>
 #include <FelixEngine/MeshBuilder.h>
 #import <FelixEngine/Graphics.h>
 
@@ -29,7 +29,7 @@ void ARPlaneDetect::initalize() {
   _scene.loadXMLFile("Scene.xml");
   
   fx::TextureBufferPtr dotTexture = _scene.getTextureBuffer("DotTexture");
-  dotTexture->loadFile("dot.png");
+  dotTexture->loadImageFile("dot.png", false);
   
   fx::SamplerState dotTextureSampler;
   dotTextureSampler.setMinFilter(fx::FILTER_LINEAR);
@@ -39,17 +39,18 @@ void ARPlaneDetect::initalize() {
   dotTextureSampler.setRCoord(fx::COORD_REPEAT);
   
   // Define a Material
-  fx::MaterialPtr material = _scene.get<fx::Material>("Material");
+  fx::PhongMaterialPtr material = _scene.get<fx::PhongMaterial>("Material");
   material->loadShader("v_texture", "f_texture_shadeless");
   material->enableDepthTesting();
   material->setAmbiant(fx::vec3(1.0, 1.0, 1.0), 0.6);
   material->setTexture("texture2D", dotTexture, dotTextureSampler);
   material->blendState().enableDefaultBlending();
+  fx::MaterialPtr mat(std::static_pointer_cast<fx::Material>(material));
   
   fx::VertexMeshPtr planeMesh = fx::MeshBuilder::createPlane();
   _planes = _scene.get<fx::Model>("Planes");
   _planes->setMesh(planeMesh);
-  _planes->setMaterial(material);
+  _planes->setMaterial(mat);
   _planes->setToRenderPass("MainPass");
   //_planes->setFaceCulling(fx::CULL_FRONT);
   _planes->setInstances(0);

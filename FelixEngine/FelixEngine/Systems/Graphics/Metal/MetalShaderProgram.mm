@@ -165,6 +165,8 @@ void MetalShaderProgram::extractIndexMaps() {
   for (MTLArgument *arg in reflection.fragmentArguments) {
     if (arg.type == MTLArgumentTypeTexture)
       _textureIndexMap[[arg.name UTF8String]] = arg.index;
+    else if (arg.type == MTLArgumentTypeSampler)
+      cout << "Found Sampler: " << [arg.name UTF8String] << " " << arg.index << endl;
     else
       _fragmentIndexMap[[arg.name UTF8String]] = arg.index;
   }
