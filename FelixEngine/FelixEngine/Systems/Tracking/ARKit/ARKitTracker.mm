@@ -38,6 +38,12 @@
 - (void)startSession {
   [self.arSession runWithConfiguration:self.configuration];
   self.sessionRunning = YES;
+  if (self.configuration.environmentTexturing == AREnvironmentTexturingManual) {
+    //AREnvironmentProbeAnchor *anchor = [[AREnvironmentProbeAnchor alloc] initWithTransform:matrix_identity_float4x4];
+    simd_quatf quat = simd_quaternion(M_PI/2.0f, (simd_float3){0.0f, 1.0f, 0.0f});
+    AREnvironmentProbeAnchor *anchor = [[AREnvironmentProbeAnchor alloc] initWithTransform:simd_matrix4x4(quat)];
+    [self.arSession addAnchor:anchor];
+  }
 }
 
 - (void)setFeatureTracking:(u_int32_t)flags {
@@ -47,8 +53,7 @@
     self.configuration.planeDetection |= flags & fx::FEATURE_TRACKING_PLANES_VERTICAL ? ARPlaneDetectionVertical : ARPlaneDetectionNone;
   
   // Set Environment Mapping
-  self.configuration.environmentTexturing = flags & fx::FEATURE_TRACKING_ENVIRONMENT_MAP ? AREnvironmentTexturingAutomatic : AREnvironmentTexturingNone;
-  //self.configuration.environmentTexturing = flags & fx::FEATURE_TRACKING_ENVIRONMENT_MAP ? AREnvironmentTexturingManual : AREnvironmentTexturingNone;
+  self.configuration.environmentTexturing = flags & fx::FEATURE_TRACKING_ENVIRONMENT_MAP ? AREnvironmentTexturingManual : AREnvironmentTexturingNone;
   
   // Update ARSession if Running
   if (self.sessionRunning)
@@ -179,7 +184,7 @@ bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _cameraImageY = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   _cameraImageCbCr = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
   _environmentMap = dynamic_pointer_cast<MetalTextureBuffer>(graphics->createTextureBuffer());
-  //_environmentMap->loadColor(RGBA(0, 0, 0, 255));
+  _environmentMap->loadCubeColor(RGBA(0, 0, 0, 255));
   
   [_arDelegate startSession];
   return true;
@@ -328,8 +333,9 @@ void ARKitTracker::environmentProbeAdded(AREnvironmentProbeAnchor *anchor) {
 }
 
 void ARKitTracker::environmentProbeUpdated(AREnvironmentProbeAnchor *anchor) {
-  _environmentMap->setMetalTexture(anchor.environmentTexture);
-  std::cout << "Update Environment Probe Anchor: " << [[anchor.identifier UUIDString] UTF8String] << endl;
+  if (anchor.environmentTexture.allocatedSize > 0)
+    _environmentMap->setMetalTexture(anchor.environmentTexture);
+  //std::cout << "Update Environment Probe Anchor" << endl;
 }
 
 void ARKitTracker::environmentProbeRemoved(AREnvironmentProbeAnchor *anchor) {

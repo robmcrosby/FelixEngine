@@ -100,10 +100,13 @@ namespace fx {
     virtual void setScene(Scene *scene) {}
     virtual void update(float dt) {}
     virtual bool load(const XMLTree::Node &node);
+    
     virtual bool loadImageFile(const std::string &file, bool generateMipMap);
+    virtual bool loadColor(const RGBA &color);
+    
     virtual bool loadCubeMapFile(const std::string &file, bool generateMipMap);
     virtual bool loadCubeMapFiles(const std::vector<std::string> &files, bool generateMipMap);
-    virtual bool loadColor(const RGBA &color);
+    virtual bool loadCubeColor(const RGBA &color);
     
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap) = 0;

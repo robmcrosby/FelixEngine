@@ -85,14 +85,15 @@ vertex VertexOutput basic_vertex(const device packed_float4 *Position [[ buffer(
   output.position = camera->projection * camera->view * location;
   output.location = location.xyz;
   output.normal = rotate_quat(model->rotation, float4(Normal[vid]).xyz);
-  output.view   = camera->position.xyz - output.position.xyz;
+  output.view   = normalize(camera->position.xyz - output.position.xyz);
   return output;
 }
 
 fragment half4 cube_fragment(FragmentInput      input       [[ stage_in  ]],
                              texturecube<float> environment [[texture(0)]]) {
   constexpr sampler cubeSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
-  return half4(environment.sample(cubeSampler, input.normal));
+  return half4(environment.sample(cubeSampler, input.view * float3(1.0, 1.0, -1.0)));
+  //return half4(environment.sample(cubeSampler, input.normal * float3(1.0, 1.0, -1.0)));
   //return half4(1.0, 0.0 ,0.0, 1.0);
 }
 

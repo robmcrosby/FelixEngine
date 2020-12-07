@@ -91,6 +91,15 @@ bool TextureBuffer::loadColor(const RGBA &color) {
   return loadImage(image, false);
 }
 
+bool TextureBuffer::loadCubeColor(const RGBA &color) {
+  vector<ImageBufferData> images(6);
+  for (auto &image : images) {
+    image.resize(1, 1);
+    image[0] = color;
+  }
+  return loadCubeMap(images, false);
+}
+
 
 bool FrameBuffer::load(const XMLTree::Node &node) {
   bool success = true;
