@@ -68,10 +68,29 @@ void CubeMap::update(float td) {
   fx::quat rotation = motionSystem().getOrientation().inverse() * fx::quat::RotX(M_PI/2.0f);
   _mvpUniform.view = fx::mat4::Trans3d(fx::vec3(0.0f, 0.0f, -4.0)) * rotation.toMat4();
   _mvpUniform.camera = fx::vec4(rotation.inverse() * fx::vec3(0.0f, 0.0f, -4.0), 1.0);
-  _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.5f, 0.5f, 0.5f)) * fx::mat4::Trans3d(fx::vec3(0.0, 0.0, 1.0f));
+  
+  _mvpUniform.rotation = fx::quat::RotX(M_PI/2.0f) * _modelRotation;
+  _mvpUniform.model =  _mvpUniform.rotation.toMat4() * fx::mat4::Scale(fx::vec3(0.5f, 0.5f, 0.5f)) * fx::mat4::Trans3d(fx::vec3(0.0, 0.0, 1.0));
 
   _renderPass->getUniformMap()["MVP"] = _mvpUniform;
   _renderPass->getUniformMap().update();
   
   _renderPass->render();
+}
+
+void CubeMap::handle(const fx::Event &event) {
+  if (event.catagory == fx::EVENT_INPUT) {
+    if (event.type == fx::INPUT_TOUCH_MOVE) {
+      handleTouchMove(event);
+    }
+  }
+}
+
+void CubeMap::handleTouchMove(const fx::Event &event) {
+  if (event.message.size() > 0) {
+    const fx::Touch &touch = (const fx::Touch&)event.message[0];
+    fx::vec2 diff = touch.pevious - touch.location;
+    
+    _modelRotation *= fx::quat::RotZ(diff.x);
+  }
 }

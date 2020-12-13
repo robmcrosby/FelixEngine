@@ -25,6 +25,7 @@ class CubeMap: public fx::Application {
 private:
   fx::RenderPassPtr _renderPass;
   MVPUniform _mvpUniform;
+  fx::quat _modelRotation;
   
 public:
   CubeMap();
@@ -32,6 +33,9 @@ public:
   
   virtual void initalize();
   virtual void update(float td);
+  virtual void handle(const fx::Event &event);
+  
+  void handleTouchMove(const fx::Event &event);
 };
 
 #endif /* CubeMap_h */
