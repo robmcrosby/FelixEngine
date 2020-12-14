@@ -90,7 +90,8 @@ void CubeMap::handleTouchMove(const fx::Event &event) {
   if (event.message.size() > 0) {
     const fx::Touch &touch = (const fx::Touch&)event.message[0];
     fx::vec2 diff = touch.pevious - touch.location;
-    
-    _modelRotation *= fx::quat::RotZ(diff.x);
+    fx::vec3 up = _mvpUniform.view * fx::vec3(0.0, 1.0, 0.0);
+    float dot = up.dot(fx::vec3(diff.y, diff.x, 0.0));
+    _modelRotation *= fx::quat::RotZ(dot * 2.0);
   }
 }
