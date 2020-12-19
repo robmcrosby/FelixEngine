@@ -9,16 +9,21 @@
 #ifndef XMLScene_h
 #define XMLScene_h
 
-#import <FelixEngine/Application.h>
-#import <FelixEngine/Scene.h>
-#import <FelixEngine/Graphics.h>
-#import <FelixEngine/RenderPass.h>
-#import <FelixEngine/Transform.h>
+#include <FelixEngine/Application.h>
+#include <FelixEngine/Scene.h>
+#include <FelixEngine/Graphics.h>
+#include <FelixEngine/RenderPass.h>
+#include <FelixEngine/Camera.h>
+#include <FelixEngine/Model.h>
+#include <FelixEngine/Transform.h>
 
 class XMLScene: public fx::Application {
 private:
   fx::Scene _scene;
   fx::TransformPtr _transform;
+  
+  fx::ModelPtr _model;
+  fx::CameraPtr _camera;
   
 public:
   XMLScene();
@@ -26,6 +31,9 @@ public:
   
   virtual void initalize();
   virtual void update(float td);
+  virtual void handle(const fx::Event &event);
+  
+  void handleTouchMove(const fx::Event &event);
 };
 
 #endif /* XMLScene_h */
