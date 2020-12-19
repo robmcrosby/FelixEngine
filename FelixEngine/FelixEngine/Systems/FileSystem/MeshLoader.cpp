@@ -57,11 +57,10 @@ void addVertex(VertexMeshData &mesh, IndexMap &indexMap, int index, Vec3Set &fac
     for (auto &uv : uvs) {
       vec2 &coord = uv.second.buffer[uv.second.indices[index]];
       mesh.buffers[uv.first].push_back(coord.x);
-      mesh.buffers[uv.first].push_back(coord.y);
+      mesh.buffers[uv.first].push_back(1.0 - coord.y);
     }
   }
 }
-
 
 
 bool MeshLoader::loadFromBinaryFile(VertexMeshData &mesh, const string &file) {
