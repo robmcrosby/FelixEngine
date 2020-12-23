@@ -25,7 +25,6 @@
     </Light>
     <Light energy="0.500000" name="LightB" pass="MainPass" type="point">
       <Color>0.098603, 0.068963, 1.000000</Color>
-      <Falloff/>
       <Transform>
         <Scale>1.000000, 1.000000, 1.000000</Scale>
         <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>

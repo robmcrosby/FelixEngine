@@ -15,6 +15,7 @@
 #include <FelixEngine/Transform.h>
 #include <FelixEngine/GraphicStructures.h>
 #include <FelixEngine/Light.h>
+#include <FelixEngine/TextureMap.h>
 
 
 namespace fx {
@@ -26,6 +27,7 @@ namespace fx {
     
   protected:
     std::vector<LightPtr> _lights;
+    Texture _environmentMap;
     
   public:
     LightRig();
@@ -35,11 +37,12 @@ namespace fx {
     virtual void update(float dt);
     
     bool loadXMLItem(const XMLTree::Node &node);
-    bool addLight(const XMLTree::Node &node);
     
+    bool setEnvironmentMap(const XMLTree::Node &node);
+    
+    bool addLight(const XMLTree::Node &node);
     void addDirectionalLight(vec3 direction, vec3 color, float energy);
     void addPointLight(vec3 location, vec3 color, float energy);
-    
     void addLight(LightPtr light);
     LightPtr getLight(int index);
     void clearLights();

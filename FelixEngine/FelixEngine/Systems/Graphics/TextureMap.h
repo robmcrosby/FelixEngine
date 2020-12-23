@@ -11,6 +11,7 @@
 
 #include <FelixEngine/Graphics.h>
 #include <FelixEngine/GraphicResources.h>
+#include <FelixEngine/FileSystem.h>
 #include <vector>
 
 
@@ -22,6 +23,65 @@ namespace fx {
     Texture() {}
     Texture(const Texture &that): buffer(that.buffer), sampler(that.sampler) {}
     Texture(TextureBufferPtr b, SamplerState s): buffer(b), sampler(s) {}
+    
+    void createBuffer() {buffer = Graphics::getInstance().createTextureBuffer();}
+    void setBuffer(const std::string &name) {
+      if (name == "")
+        createBuffer();
+      else
+        buffer = Graphics::getInstance().getTextureBuffer(name);
+    }
+    
+    bool loadTexture(const XMLTree::Node &node) {
+      if (node.hasAttribute("file"))
+        return loadTexture(node.attribute("file"), node, node.attribute("texture"));
+      sampler = node;
+      setBuffer(node.attribute("texture"));
+      return true;
+    }
+    
+    bool loadTexture(const std::string &file, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      setBuffer(name);
+      return buffer->loadImageFile(file, sampler.mipMappingEnabled());
+    }
+    
+    bool loadTexture(const ImageBufferData &image, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      return buffer->loadImage(image, sampler.mipMappingEnabled());
+    }
+    
+    bool loadCubeMap(const XMLTree::Node &node) {
+      if (node.hasAttribute("file"))
+        return loadCubeMap(node.attribute("file"), node, node.attribute("texture"));
+      sampler = node;
+      setBuffer(node.attribute("texture"));
+      return true;
+    }
+    
+    bool loadCubeMap(const std::string &file, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      setBuffer(name);
+      return buffer->loadCubeMapFile(file, sampler.mipMappingEnabled());
+    }
+    
+    bool loadCubeMap(const std::vector<std::string> &files, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      setBuffer(name);
+      return buffer->loadCubeMapFiles(files, sampler.mipMappingEnabled());
+    }
+    
+    bool loadCubeMap(const ImageBufferSet &images, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      setBuffer(name);
+      return buffer->loadCubeMap(images, sampler.mipMappingEnabled());
+    }
+    
+    bool loadCubeMap(const ImageBufferData &image, SamplerState sampler = SamplerState(), const std::string &name = "") {
+      this->sampler = sampler;
+      setBuffer(name);
+      return buffer->loadCubeMap(image, sampler.mipMappingEnabled());
+    }
   };
   
   class TextureMap;
@@ -60,45 +120,45 @@ namespace fx {
     }
     
     bool setTexture(const XMLTree::Node &node) {
-      bool success = true;
-      if (node.hasAttribute("name")) {
-        Texture texture;
-        texture.sampler = node;
-        if (node.hasAttribute("texture"))
-          texture.buffer = Graphics::getInstance().getTextureBuffer(node.attribute("texture"));
-        else
-          texture.buffer = Graphics::getInstance().createTextureBuffer();
-        if (node.hasAttribute("file"))
-          success = texture.buffer->loadImageFile(node.attribute("file"), texture.sampler.mipMappingEnabled());
-        _map[node.attribute("name")] = texture;
-      }
-      else {
-        std::cerr << "Texture Needs Name" << std::endl;
-        success = false;
-      }
-      return success;
-    }
-    
-    bool setTexture2D(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
-      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
-      _map[name] = texture;
-      return texture.buffer->loadImage(image, sampler.mipMappingEnabled());
-    }
-    
-    bool setTextureCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {
-      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
-      _map[name] = texture;
-      return texture.buffer->loadCubeMap(images, sampler.mipMappingEnabled());
-    }
-    
-    bool setTextureCubeMap(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
-      Texture texture = Texture(Graphics::getInstance().createTextureBuffer(), sampler);
-      _map[name] = texture;
-      return texture.buffer->loadCubeMap(image, sampler.mipMappingEnabled());
+      if (node.hasAttribute("name"))
+        return _map[node.attribute("name")].loadTexture(node);
+      std::cerr << "Texture Needs Name" << std::endl;
+      return false;
     }
     
     void setTexture(const std::string &name, TextureBufferPtr buffer, SamplerState sampler = SamplerState()) {
       _map[name] = Texture(buffer, sampler);
+    }
+    
+    bool setTexture(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
+      return _map[name].loadTexture(image, sampler);
+    }
+    
+    bool setTexture(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
+      return _map[name].loadTexture(file, sampler);
+    }
+    
+    bool setCubeMap(const XMLTree::Node &node) {
+      if (node.hasAttribute("name"))
+        return _map[node.attribute("name")].loadCubeMap(node);
+      std::cerr << "CubeMap Needs Name" << std::endl;
+      return false;
+    }
+    
+    bool setCubeMap(const std::string &name, const std::vector<std::string> &files, SamplerState sampler = SamplerState()) {
+      return _map[name].loadCubeMap(files, sampler);
+    }
+    
+    bool setCubeMap(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
+      return _map[name].loadCubeMap(file, sampler);
+    }
+    
+    bool setCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {
+      return _map[name].loadCubeMap(images, sampler);
+    }
+    
+    bool setCubeMap(const std::string &name, const ImageBufferData &image, SamplerState sampler = SamplerState()) {
+      return _map[name].loadCubeMap(image, sampler);
     }
     
     bool loaded() const {

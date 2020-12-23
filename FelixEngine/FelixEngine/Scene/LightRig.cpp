@@ -16,7 +16,10 @@ LightRigBuilder LightRig::lightRigBuilder = LightRigBuilder();
 
 
 LightRig::LightRig() {
-  
+  _environmentMap.sampler.enableMipMapping();
+  _environmentMap.sampler.setMinFilter(FILTER_LINEAR);
+  _environmentMap.sampler.setMagFilter(FILTER_LINEAR);
+  _environmentMap.sampler.setMipFilter(FILTER_LINEAR);
 }
 
 LightRig::~LightRig() {
@@ -38,9 +41,13 @@ void LightRig::update(float dt) {
   for (auto &light : _lights)
     parameters.push_back(light->peramaters());
   
-  // Set the Light Parameters to Each Render Pass
-  for (auto &pass : _renderPasses)
-    pass->getUniformMap()["lights"] = parameters;
+  // Set the Light Parameters to Environment Mapp to Each Render Pass
+  for (auto &pass : _renderPasses) {
+    if (parameters.size() > 0)
+      pass->getUniformMap()["lights"] = parameters;
+    if (_environmentMap.buffer)
+      pass->getTextureMap()["environmentMap"] = _environmentMap;
+  }
 }
 
 bool LightRig::loadXMLItem(const XMLTree::Node &node) {
@@ -48,8 +55,14 @@ bool LightRig::loadXMLItem(const XMLTree::Node &node) {
     return addLight(node);
   if (node == "RenderPass")
     return setToRenderPass(node);
+  if (node == "EnvironmentMap")
+    return setEnvironmentMap(node);
   cerr << "Unknown XML Node in LightRig: " << endl << node << endl;
   return false;
+}
+
+bool LightRig::setEnvironmentMap(const XMLTree::Node &node) {
+  return _environmentMap.loadCubeMap(node);
 }
 
 bool LightRig::addLight(const XMLTree::Node &node) {
