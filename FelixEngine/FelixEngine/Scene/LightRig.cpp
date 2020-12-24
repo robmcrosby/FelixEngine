@@ -57,12 +57,20 @@ bool LightRig::loadXMLItem(const XMLTree::Node &node) {
     return setToRenderPass(node);
   if (node == "EnvironmentMap")
     return setEnvironmentMap(node);
+  if (node == "Shader")
+    return addShader(node);
   cerr << "Unknown XML Node in LightRig: " << endl << node << endl;
   return false;
 }
 
 bool LightRig::setEnvironmentMap(const XMLTree::Node &node) {
   return _environmentMap.loadCubeMap(node);
+}
+
+bool LightRig::addShader(const XMLTree::Node &node) {
+  string name = node.attribute("name");
+  _shaderMap[name] = Graphics::getInstance().getShaderProgram(name);
+  return _shaderMap[name]->load(node);
 }
 
 bool LightRig::addLight(const XMLTree::Node &node) {

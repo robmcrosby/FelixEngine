@@ -28,6 +28,7 @@ namespace fx {
   protected:
     std::vector<LightPtr> _lights;
     Texture _environmentMap;
+    std::map<std::string, ShaderProgramPtr> _shaderMap;
     
   public:
     LightRig();
@@ -39,6 +40,8 @@ namespace fx {
     bool loadXMLItem(const XMLTree::Node &node);
     
     bool setEnvironmentMap(const XMLTree::Node &node);
+    
+    bool addShader(const XMLTree::Node &node);
     
     bool addLight(const XMLTree::Node &node);
     void addDirectionalLight(vec3 direction, vec3 color, float energy);

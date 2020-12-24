@@ -15,6 +15,7 @@
     </Transform>
   </Camera>
   <LightRig name="LightRig" pass="MainPass">
+    <Shader name="UsdPreviewSurface" vertex="v_texture_normal" fragment="f_pbr_shadeless"/>
     <EnvironmentMap file="Environment.hdr"/>
     <Light energy="1.000000" type="directional">
       <Color>1.000000, 1.000000, 1.000000</Color>

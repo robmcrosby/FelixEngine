@@ -43,7 +43,7 @@ namespace fx {
     bool loadTexture(const std::string &file, SamplerState sampler = SamplerState(), const std::string &name = "") {
       this->sampler = sampler;
       setBuffer(name);
-      return buffer->loadImageFile(file, sampler.mipMappingEnabled());
+      return buffer->loaded() || buffer->loadImageFile(file, sampler.mipMappingEnabled());
     }
     
     bool loadTexture(const ImageBufferData &image, SamplerState sampler = SamplerState(), const std::string &name = "") {
@@ -135,7 +135,7 @@ namespace fx {
     }
     
     bool setTexture(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
-      return _map[name].loadTexture(file, sampler);
+      return _map[name].loadTexture(file, sampler, file);
     }
     
     bool setCubeMap(const XMLTree::Node &node) {
@@ -150,7 +150,7 @@ namespace fx {
     }
     
     bool setCubeMap(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
-      return _map[name].loadCubeMap(file, sampler);
+      return _map[name].loadCubeMap(file, sampler, file);
     }
     
     bool setCubeMap(const std::string &name, const ImageBufferSet &images, SamplerState sampler = SamplerState()) {

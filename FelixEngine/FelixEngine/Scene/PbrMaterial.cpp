@@ -66,13 +66,12 @@ bool PbrMaterial::load(const USDItem &item) {
   //cout << "Load Material Item" << endl;
   //cout << item << endl;
   
-  _shader = Graphics::getInstance().getShaderProgram("TestShader");
-  _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
-  
   const USDItem *shaderItem = item.getConnectedItem("outputs:surface");
   if (shaderItem) {
     //cout << "Shader Item" << endl;
     //cout << *shaderItem << endl;
+    
+    setShader(shaderItem->stringValue("info:id"));
     
     addTexture("diffuseColor", shaderItem->getAttribute("inputs:diffuseColor"), RGBA(0, 0, 0, 255));
     //addTexture("diffuseColor", shaderItem->getAttribute("inputs:normal"), RGBA(127, 255, 127, 255));

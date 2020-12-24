@@ -15,6 +15,8 @@
     </Transform>
   </Camera>
   <LightRig name="LightRig" pass="MainPass">
+    <Shader name="PhongShader" vertex="v_normal" fragment="f_lambert_phong_2"/>
+    <Shader name="UsdPreviewSurface" vertex="v_texture_normal" fragment="f_pbr_shadeless"/>
     <Light energy="1.000000" type="directional">
       <Color>1.000000, 1.000000, 1.000000</Color>
       <Transform>
@@ -25,7 +27,6 @@
     </Light>
     <Light energy="0.500000" type="point">
       <Color>0.098603, 0.068963, 1.000000</Color>
-      <Falloff/>
       <Transform>
         <Scale>1.000000, 1.000000, 1.000000</Scale>
         <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
@@ -35,8 +36,7 @@
   </LightRig>
   <Model name="Model" pass="MainPass">
     <Mesh file="Mesh.mesh"/>
-    <PhongMaterial>
-      <Shader vertex="v_normal" fragment="f_lambert_phong_2"/>
+    <PhongMaterial shader="PhongShader">
       <Ambiant color="0.800000, 0.800000, 0.800000" factor="0.000000"/>
       <Diffuse color="0.800000, 0.800000, 0.800000" factor="0.800000"/>
       <Specular color="1.000000, 1.000000, 1.000000" factor="0.500000" hardness="50"/>
