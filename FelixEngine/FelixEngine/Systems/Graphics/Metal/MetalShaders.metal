@@ -375,7 +375,9 @@ LIGHT_TEXTURE_FUNCS(minnaert, toon_s)
 
 
 fragment half4 f_pbr_shadeless(InputTextureNormal input [[stage_in]],
-                               texture2d<float> diffuseColor [[texture(0)]], sampler diffuseSampler [[sampler(0)]]) {
+                               texture2d<float>   diffuseColor [[texture(0)]],   sampler diffuseSampler [[sampler(0)]],
+                               texturecube<float> environmentMap [[texture(1)]], sampler cubeSampler    [[sampler(1)]]) {
   float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate);
+  diffuse += environmentMap.sample(cubeSampler, input.normal);
   return half4(diffuse);
 }

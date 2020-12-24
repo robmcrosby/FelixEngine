@@ -17,6 +17,7 @@
   <LightRig name="LightRig" pass="MainPass">
     <Shader name="PhongShader" vertex="v_normal" fragment="f_lambert_phong_2"/>
     <Shader name="UsdPreviewSurface" vertex="v_texture_normal" fragment="f_pbr_shadeless"/>
+    <EnvironmentMap file="Environment.hdr" min="linear" mag="linear" mip="linear"/>
     <Light energy="1.000000" type="directional">
       <Color>1.000000, 1.000000, 1.000000</Color>
       <Transform>

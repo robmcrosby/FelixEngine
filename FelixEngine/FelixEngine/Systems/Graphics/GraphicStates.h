@@ -380,6 +380,9 @@ namespace fx {
       setTCoord(parseCoord(node.attribute("tCoord")));
       setRCoord(parseCoord(node.attribute("rCoord")));
       
+      if (node.hasAttribute("mip"))
+        enableMipMapping();
+      
       setMinFilter(parseFilter(node.attribute("min")));
       setMagFilter(parseFilter(node.attribute("mag")));
       setMipFilter(parseFilter(node.attribute("mip")));
