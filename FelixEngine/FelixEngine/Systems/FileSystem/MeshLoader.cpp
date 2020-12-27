@@ -32,35 +32,96 @@ struct Vec2Set {
 };
 typedef map<string, Vec2Set> Vec2SetMap;
 
-void addVertex(VertexMeshData &mesh, IndexMap &indexMap, int index, Vec3Set &faces, Vec3Set &normals, Vec2SetMap &uvs) {
-  long key = faces.indices[index];
-  key |= normals.indices[index] << normals.offset;
-  for (auto &uv : uvs)
-    key |= uv.second.indices[index] << uv.second.offset;
+struct MeshBuffers {
+  IntVector faceCounts;
+  IndexMap  indexMap;
+  Vec3Set   faces;
+  Vec3Set   normals;
+  Vec2SetMap uvs;
   
-  if (indexMap.count(key) > 0)
-    mesh.indices.push_back(indexMap.at(key));
-  else {
-    mesh.indices.push_back((int)mesh.buffers["position"].size()/3);
-    indexMap[key] = mesh.indices.back();
-    
-    vec3 &pos = faces.buffer[faces.indices[index]];
-    mesh.buffers["position"].push_back(pos.x);
-    mesh.buffers["position"].push_back(pos.y);
-    mesh.buffers["position"].push_back(pos.z);
-    
-    vec3 &normal = normals.buffer[normals.indices[index]];
-    mesh.buffers["normal"].push_back(normal.x);
-    mesh.buffers["normal"].push_back(normal.y);
-    mesh.buffers["normal"].push_back(normal.z);
-    
-    for (auto &uv : uvs) {
-      vec2 &coord = uv.second.buffer[uv.second.indices[index]];
-      mesh.buffers[uv.first].push_back(coord.x);
-      mesh.buffers[uv.first].push_back(1.0 - coord.y);
+  void createFlatNormals() {
+    int i = 0;
+    for (int faceCount : faceCounts) {
+      for (int j = 0; j < faceCount; ++j)
+        normals.indices.push_back((int)normals.buffer.size());
+      vec3 v1 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+1));
+      vec3 v2 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+2));
+      normals.buffer.push_back(v1.cross(v2).normalized());
+      i += faceCount;
     }
   }
-}
+  
+  void createUVs(const std::string &name) {
+    Vec2Set &uv = uvs[name];
+    uv.buffer.push_back(vec2(0.0f, 0.0f));
+    uv.buffer.push_back(vec2(1.0f, 0.0f));
+    uv.buffer.push_back(vec2(1.0f, 1.0f));
+    uv.buffer.push_back(vec2(0.0f, 1.0f));
+    
+    for (int faceCount : faceCounts) {
+      uv.indices.push_back(0);
+      for (int j = 0; j < faceCount-1; ++j)
+        uv.indices.push_back(j%3+1);
+    }
+  }
+  
+  void addVertex(VertexMeshData &mesh, int index) {
+    long key = faces.indices[index];
+    key |= normals.indices[index] << normals.offset;
+    for (auto &uv : uvs)
+      key |= uv.second.indices[index] << uv.second.offset;
+    
+    if (indexMap.count(key) > 0)
+      mesh.indices.push_back(indexMap.at(key));
+    else {
+      mesh.indices.push_back((int)mesh.buffers["position"].size()/3);
+      indexMap[key] = mesh.indices.back();
+      
+      vec3 &pos = faces.buffer[faces.indices[index]];
+      mesh.buffers["position"].push_back(pos.x);
+      mesh.buffers["position"].push_back(pos.y);
+      mesh.buffers["position"].push_back(pos.z);
+      
+      vec3 &normal = normals.buffer[normals.indices[index]];
+      mesh.buffers["normal"].push_back(normal.x);
+      mesh.buffers["normal"].push_back(normal.y);
+      mesh.buffers["normal"].push_back(normal.z);
+      
+      for (auto &uv : uvs) {
+        vec2 &coord = uv.second.buffer[uv.second.indices[index]];
+        mesh.buffers[uv.first].push_back(coord.x);
+        mesh.buffers[uv.first].push_back(1.0 - coord.y);
+      }
+    }
+  }
+  
+  void addPolygon(VertexMeshData &mesh, ivec3 indices) {
+    addVertex(mesh, indices.x);
+    addVertex(mesh, indices.y);
+    addVertex(mesh, indices.z);
+  }
+  
+  void addFace(VertexMeshData &mesh, int index, int faceCount) {
+    for (int j = index+1; j < index+faceCount-1; ++j)
+      addPolygon(mesh, ivec3(index, j, j+1));
+  }
+  
+  void addToMesh(VertexMeshData &mesh) {
+    ivec2 range((int)mesh.indices.size(), 0);
+    int index = 0;
+    
+    mesh.primitiveType = VERTEX_TRIANGLES;
+    
+    for (int faceCount : faceCounts) {
+      addFace(mesh, index, faceCount);
+      index += faceCount;
+    }
+    range.end = (int)mesh.indices.size();
+    mesh.subMeshes.push_back(range);
+
+    mesh.totalVertices = (int)mesh.buffers["position"].size()/3;
+  }
+};
 
 
 bool MeshLoader::loadFromBinaryFile(VertexMeshData &mesh, const string &file) {
@@ -156,74 +217,41 @@ bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDCrate &crate) 
 
 bool MeshLoader::loadFromCrateFile(VertexMeshData &mesh, const USDItem &item) {
   if (item.openCrate()) {
-    mesh.primitiveType = VERTEX_TRIANGLES;
+    MeshBuffers buffers;
     
     // Get Face Counts
-    IntVector faceCounts;
-    item.getAttributeArray(faceCounts, "faceVertexCounts");
+    item.getAttributeArray(buffers.faceCounts, "faceVertexCounts");
     
     // Get Face Vertices
-    Vec3Set faces;
-    item.getAttributeArray(faces.indices, "faceVertexIndices");
-    item.getAttributeArray(faces.buffer, "points");
-    faces.offset = 0;
+    item.getAttributeArray(buffers.faces.indices, "faceVertexIndices");
+    item.getAttributeArray(buffers.faces.buffer, "points");
+    buffers.faces.offset = 0;
     
     // Get Normals
-    Vec3Set normals;
-    if (item.getAttributeArray(normals.indices, "primvars:normals:indices"))
-      item.getAttributeArray(normals.buffer, "primvars:normals");
-    else {
-      // Create Normals if Not Avalible
-      int i = 0;
-      for (int faceCount : faceCounts) {
-        for (int j = 0; j < faceCount; ++j)
-          normals.indices.push_back((int)normals.buffer.size());
-        vec3 v1 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+1));
-        vec3 v2 = faces.buffer.at(faces.indices.at(i)) - faces.buffer.at(faces.indices.at(i+2));
-        normals.buffer.push_back(v1.cross(v2).normalized());
-        i += faceCount;
-      }
-    }
-    normals.offset = (int)ceil(log2((double)faces.buffer.size()));
+    if (item.getAttributeArray(buffers.normals.indices, "primvars:normals:indices"))
+      item.getAttributeArray(buffers.normals.buffer, "primvars:normals");
+    else
+      buffers.createFlatNormals();
+    buffers.normals.offset = (int)ceil(log2((double)buffers.faces.buffer.size()));
     
     // Get UVs
-    int offset = normals.offset + (int)ceil(log2((double)normals.buffer.size()));
+    int offset = buffers.normals.offset + (int)ceil(log2((double)buffers.normals.buffer.size()));
     StringVector uvNames = item.getUVNames();
-    Vec2SetMap uvMap;
     for (int i = 0; i < uvNames.size(); ++i) {
       stringstream ss;
       ss << "uv" << i;
-      Vec2Set &uv = uvMap[ss.str()];
+      Vec2Set &uv = buffers.uvs[ss.str()];
       item.getAttributeArray(uv.indices, "primvars:" + uvNames[i] + ":indices");
       item.getAttributeArray(uv.buffer, "primvars:" + uvNames[i]);
       uv.offset = offset;
       offset += (int)ceil(log2((double)uv.buffer.size()));
     }
-    if (uvMap.size() == 0) {
-      // Create UVs if None Found
-      Vec2Set &uv = uvMap["uv0"];
-      uv.indices.resize(faces.indices.size(), 0);
-      uv.buffer.push_back(vec2(0.0f, 0.0f));
-      uv.offset = 0;
+    if (buffers.uvs.size() == 0) {
+      buffers.createUVs("uv0");
+      buffers.uvs["uv0"].offset = offset;
     }
     
-    int i = 0;
-    IndexMap indexMap;
-    ivec2 range((int)mesh.indices.size(), 0);
-
-    for (int faceCount : faceCounts) {
-      for (int j = i+1; j < i+faceCount-1;) {
-        addVertex(mesh, indexMap, i, faces, normals, uvMap);
-        addVertex(mesh, indexMap, j, faces, normals, uvMap);
-        addVertex(mesh, indexMap, ++j, faces, normals, uvMap);
-      }
-      i += faceCount;
-    }
-    range.end = (int)mesh.indices.size();
-    mesh.subMeshes.push_back(range);
-
-    mesh.totalVertices = (int)mesh.buffers["position"].size()/3;
-    
+    buffers.addToMesh(mesh);
     item.closeCrate();
     return true;
   }
