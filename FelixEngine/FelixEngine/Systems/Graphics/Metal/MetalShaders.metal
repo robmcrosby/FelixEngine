@@ -420,13 +420,14 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
 
 fragment half4 f_pbr_shadeless(InputTextureBasis  input [[stage_in]],
                                texture2d<float>   diffuseColor [[texture(0)]],   sampler diffuseSampler [[sampler(0)]],
-                               texturecube<float> environmentMap [[texture(1)]], sampler cubeSampler    [[sampler(1)]]) {
+                               texture2d<float>   normals      [[texture(1)]],   sampler normalSampler  [[sampler(1)]],
+                               texturecube<float> environmentMap [[texture(2)]], sampler cubeSampler    [[sampler(2)]]) {
   float3x3 basis(input.cotangent, input.bitangent, input.normal);
-  float3 normal = normalize(basis * float3(0.0, 0.0, 1.0));
+  float3 normal = normalize(basis * ((normals.sample(normalSampler, input.coordinate).xyz - float3(0.5, 0.5, 0.5)) * 2.0));
   
   float d = dot(normal, float3(0.0, 1.0, 0.0));
   float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate) * float4(d, d, d, 1.0);
-  
-  //diffuse += environmentMap.sample(cubeSampler, normal);
+  //float4 diffuse = normals.sample(normalSampler, input.coordinate);
+  diffuse += environmentMap.sample(cubeSampler, normal);
   return half4(diffuse);
 }

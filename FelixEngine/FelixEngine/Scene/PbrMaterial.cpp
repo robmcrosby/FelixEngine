@@ -74,7 +74,7 @@ bool PbrMaterial::load(const USDItem &item) {
     setShader(shaderItem->stringValue("info:id"));
     
     addTexture("diffuseColor", shaderItem->getAttribute("inputs:diffuseColor"), RGBA(0, 0, 0, 255));
-    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:normal"), RGBA(127, 255, 127, 255));
+    addTexture("normals", shaderItem->getAttribute("inputs:normal"), RGBA(127, 127, 255, 255));
     //addTexture("diffuseColor", shaderItem->getAttribute("inputs:metallic"), RGBA(0, 0, 0, 255));
     //addTexture("diffuseColor", shaderItem->getAttribute("inputs:specularColor"), RGBA(0, 0, 0, 255));
   }
