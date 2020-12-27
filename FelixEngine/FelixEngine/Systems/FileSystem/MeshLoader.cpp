@@ -65,7 +65,7 @@ struct MeshBuffers {
     }
   }
   
-  void addVertex(VertexMeshData &mesh, int index) {
+  void addVertex(VertexMeshData &mesh, int index, const vec3 &tan1, const vec3 &tan2) {
     long key = faces.indices[index];
     key |= normals.indices[index] << normals.offset;
     for (auto &uv : uvs)
@@ -87,6 +87,13 @@ struct MeshBuffers {
       mesh.buffers["normal"].push_back(normal.y);
       mesh.buffers["normal"].push_back(normal.z);
       
+      //(t - n * Dot(n, t)).Normalize();
+      vec3 tangent = ((tan1 - normal) * normal.dot(tan1)).normalized();
+      mesh.buffers["tangent"].push_back(tangent.x);
+      mesh.buffers["tangent"].push_back(tangent.y);
+      mesh.buffers["tangent"].push_back(tangent.z);
+      mesh.buffers["tangent"].push_back(normal.cross(tan1).dot(tan2) < 0.0f ? -1.0f : 1.0f);
+      
       for (auto &uv : uvs) {
         vec2 &coord = uv.second.buffer[uv.second.indices[index]];
         mesh.buffers[uv.first].push_back(coord.x);
@@ -96,9 +103,34 @@ struct MeshBuffers {
   }
   
   void addPolygon(VertexMeshData &mesh, ivec3 indices) {
-    addVertex(mesh, indices.x);
-    addVertex(mesh, indices.y);
-    addVertex(mesh, indices.z);
+    vec3 v1 = faces.buffer[faces.indices[indices.x]];
+    vec3 v2 = faces.buffer[faces.indices[indices.y]];
+    vec3 v3 = faces.buffer[faces.indices[indices.z]];
+    
+    vec2 w1 = uvs["uv0"].buffer[uvs["uv0"].indices[indices.x]];
+    vec2 w2 = uvs["uv0"].buffer[uvs["uv0"].indices[indices.y]];
+    vec2 w3 = uvs["uv0"].buffer[uvs["uv0"].indices[indices.z]];
+    
+    float x1 = v2.x - v1.x;
+    float x2 = v3.x - v1.x;
+    float y1 = v2.y - v1.y;
+    float y2 = v3.y - v1.y;
+    float z1 = v2.z - v1.z;
+    float z2 = v3.z - v1.z;
+    
+    float s1 = w2.x - w1.x;
+    float s2 = w3.x - w1.x;
+    float t1 = w2.y - w1.y;
+    float t2 = w3.y - w1.y;
+    
+    float r = 1.0f / (s1 * t2 - s2 * t1);
+    
+    vec3 tan1((t2 * x1 - t1 * x2) * r, (t2 * y1 - t1 * y2) * r, (t2 * z1 - t1 * z2) * r);
+    vec3 tan2((s1 * x2 - s2 * x1) * r, (s1 * y2 - s2 * y1) * r, (s1 * z2 - s2 * z1) * r);
+    
+    addVertex(mesh, indices.x, tan1, tan2);
+    addVertex(mesh, indices.y, tan1, tan2);
+    addVertex(mesh, indices.z, tan1, tan2);
   }
   
   void addFace(VertexMeshData &mesh, int index, int faceCount) {

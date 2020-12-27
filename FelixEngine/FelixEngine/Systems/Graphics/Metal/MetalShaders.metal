@@ -374,10 +374,59 @@ LIGHT_TEXTURE_FUNCS(minnaert, cooktorr)
 LIGHT_TEXTURE_FUNCS(minnaert, toon_s)
 
 
-fragment half4 f_pbr_shadeless(InputTextureNormal input [[stage_in]],
+
+struct VertexTextureBasis {
+  float3 position [[ attribute(0) ]];
+  float3 normal   [[ attribute(1) ]];
+  float4 tangent  [[ attribute(2) ]];
+  float2 uv0      [[ attribute(3) ]];
+};
+
+struct OutputTextureBasis {
+  float4   position   [[ position   ]];
+  float3   location   [[ user(loc)  ]];
+  float3   normal     [[ user(norm) ]];
+  float3   bitangent  [[ user(btan) ]];
+  float3   cotangent  [[ user(ctan) ]];
+  float3   view       [[ user(view) ]];
+  float2   coordinate [[ user(uv)   ]];
+};
+
+struct InputTextureBasis {
+  float3   location   [[ user(loc)  ]];
+  float3   normal     [[ user(norm) ]];
+  float3   bitangent  [[ user(btan) ]];
+  float3   cotangent  [[ user(ctan) ]];
+  float3   view       [[ user(view) ]];
+  float2   coordinate [[ user(uv)   ]];
+};
+
+vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_in    ]],
+                                          constant  STR_Camera &camera [[ buffer(4)   ]],
+                                          constant  STR_Model  *model  [[ buffer(5)   ]],
+                                          unsigned  int         iid    [[ instance_id ]]) {
+  OutputTextureBasis output;
+  float4 location = model[iid].model * float4(input.position, 1.0);
+  output.position = camera.projection * camera.view * location;
+  output.location = location.xyz;
+  output.normal = rotate_quat(model[iid].rotation, input.normal);
+  output.bitangent = rotate_quat(model[iid].rotation, input.tangent.xyz);
+  output.cotangent = cross(output.normal, output.bitangent) * input.tangent.w;
+  output.view = camera.position.xyz - output.position.xyz;
+  output.coordinate = transform_coordinate(model->texture, input.uv0);
+  return output;
+}
+
+
+fragment half4 f_pbr_shadeless(InputTextureBasis  input [[stage_in]],
                                texture2d<float>   diffuseColor [[texture(0)]],   sampler diffuseSampler [[sampler(0)]],
                                texturecube<float> environmentMap [[texture(1)]], sampler cubeSampler    [[sampler(1)]]) {
-  float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate);
-  diffuse += environmentMap.sample(cubeSampler, input.normal);
+  float3x3 basis(input.cotangent, input.bitangent, input.normal);
+  float3 normal = normalize(basis * float3(0.0, 0.0, 1.0));
+  
+  float d = dot(normal, float3(0.0, 1.0, 0.0));
+  float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate) * float4(d, d, d, 1.0);
+  
+  //diffuse += environmentMap.sample(cubeSampler, normal);
   return half4(diffuse);
 }
