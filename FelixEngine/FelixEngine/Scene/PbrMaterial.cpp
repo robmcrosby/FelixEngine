@@ -73,10 +73,13 @@ bool PbrMaterial::load(const USDItem &item) {
     
     setShader(shaderItem->stringValue("info:id"));
     
-    addTexture("diffuseColor", shaderItem->getAttribute("inputs:diffuseColor"), RGBA(0, 0, 0, 255));
+    addTexture("diffuse", shaderItem->getAttribute("inputs:diffuseColor"));
+    addTexture("specular", shaderItem->getAttribute("inputs:specularColor"));
+    addTexture("roughness", shaderItem->getAttribute("inputs:roughness"));
+    addTexture("metalness", shaderItem->getAttribute("inputs:metallic"));
+    addTexture("emissive", shaderItem->getAttribute("inputs:emissiveColor"));
+    addTexture("occlusion", shaderItem->getAttribute("inputs:occlusion"), RGBA(255, 255, 255, 255));
     addTexture("normals", shaderItem->getAttribute("inputs:normal"), RGBA(127, 127, 255, 255));
-    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:metallic"), RGBA(0, 0, 0, 255));
-    //addTexture("diffuseColor", shaderItem->getAttribute("inputs:specularColor"), RGBA(0, 0, 0, 255));
   }
   else {
     _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
@@ -92,6 +95,10 @@ void PbrMaterial::update(float dt) {
 }
 
 void PbrMaterial::addTexture(const string &name, const USDItem *input, RGBA def) {
+  addTexture(name, input, &def);
+}
+
+void PbrMaterial::addTexture(const string &name, const USDItem *input, RGBA *def) {
   if (input) {
     const USDItem *textureItem = input->getConnectedItem();
     if (textureItem) {
@@ -106,11 +113,11 @@ void PbrMaterial::addTexture(const string &name, const USDItem *input, RGBA def)
         _textures->setTexture(name, texture, sampler);
       }
       else
-        _textures->setColor(name, textureItem->getColorValue("inputs:fallback", def));
+        _textures->setColor(name, textureItem->getColorValue("inputs:fallback", def ? *def : RGBA(0, 0, 0, 255)));
     }
     else
-      _textures->setColor(name, input->getColorValue(def));
+      _textures->setColor(name, def ? *def : input->getColorValue(RGBA(0, 0, 0, 255)));
   }
   else
-    _textures->setColor(name, def);
+    _textures->setColor(name, def ? *def : RGBA(0, 0, 0, 255));
 }

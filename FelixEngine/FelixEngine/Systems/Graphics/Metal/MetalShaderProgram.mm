@@ -93,7 +93,7 @@ void MetalShaderProgram::setUniform(id <MTLRenderCommandEncoder> encoder, const 
 }
 
 void MetalShaderProgram::setTexture(id <MTLRenderCommandEncoder> encoder, const string &name, const Texture &texture, MetalTextureSampler *samplers) {
-  if (_textureIndexMap.count(name) > 0) {
+  if (_textureIndexMap.count(name) > 0 && texture.buffer) {
     id <MTLSamplerState> sampler = [samplers samplerStateForFlags:texture.sampler.flags];
     MetalTextureBuffer *mtlTextureBuffer = static_cast<MetalTextureBuffer*>(texture.buffer.get());
     mtlTextureBuffer->encode(encoder, sampler, _textureIndexMap.at(name));

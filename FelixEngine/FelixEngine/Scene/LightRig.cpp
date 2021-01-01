@@ -46,7 +46,7 @@ void LightRig::update(float dt) {
     if (parameters.size() > 0)
       pass->getUniformMap()["lights"] = parameters;
     if (_environmentMap.buffer)
-      pass->getTextureMap()["environmentMap"] = _environmentMap;
+      pass->getTextureMap()["environment"] = _environmentMap;
   }
 }
 

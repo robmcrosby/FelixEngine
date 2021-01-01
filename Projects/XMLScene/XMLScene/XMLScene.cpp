@@ -21,7 +21,7 @@ XMLScene::~XMLScene() {
 }
 
 void XMLScene::initalize() {
-  _scene.loadXMLFile("Scene.xml");
+  _scene.loadXMLFile("SceneB.xml");
   //_model = _scene.get<fx::Model>("Model");
   _model = _scene.get<fx::Model>("BakeObject");
   _model->transform()->setParrent(_transform);

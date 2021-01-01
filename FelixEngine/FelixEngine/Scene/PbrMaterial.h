@@ -30,6 +30,7 @@ namespace fx {
     
   private:
     void addTexture(const std::string &name, const USDItem *input, RGBA def);
+    void addTexture(const std::string &name, const USDItem *input, RGBA *def = NULL);
   };
 }
 

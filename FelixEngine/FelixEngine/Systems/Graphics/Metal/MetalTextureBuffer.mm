@@ -105,8 +105,10 @@ ivec2 MetalTextureBuffer::size() const {
 }
 
 void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, unsigned long index) {
-  [encoder setFragmentTexture:_texture atIndex:index];
-  [encoder setFragmentSamplerState:sampler atIndex:index];
+  if (_texture) {
+    [encoder setFragmentTexture:_texture atIndex:index];
+    [encoder setFragmentSamplerState:sampler atIndex:index];
+  }
 }
 
 void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {

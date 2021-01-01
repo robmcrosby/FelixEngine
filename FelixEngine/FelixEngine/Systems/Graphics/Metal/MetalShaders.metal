@@ -419,15 +419,28 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
 
 
 fragment half4 f_pbr_shadeless(InputTextureBasis  input [[stage_in]],
-                               texture2d<float>   diffuseColor [[texture(0)]],   sampler diffuseSampler [[sampler(0)]],
-                               texture2d<float>   normals      [[texture(1)]],   sampler normalSampler  [[sampler(1)]],
-                               texturecube<float> environmentMap [[texture(2)]], sampler cubeSampler    [[sampler(2)]]) {
-  float3x3 basis(input.cotangent, input.bitangent, input.normal);
-  float3 normal = normalize(basis * ((normals.sample(normalSampler, input.coordinate).xyz - float3(0.5, 0.5, 0.5)) * 2.0));
+                               texture2d<float>   diffuse     [[texture(0)]], sampler diffuseSampler   [[sampler(0)]],
+                               texture2d<float>   specular    [[texture(1)]], sampler specularSampler  [[sampler(1)]],
+                               texture2d<float>   roughness   [[texture(2)]], sampler roughnessSampler [[sampler(2)]],
+                               texture2d<float>   metalness   [[texture(3)]], sampler metalnessSampler [[sampler(3)]],
+                               texture2d<float>   emissive    [[texture(4)]], sampler emissiveSampler  [[sampler(4)]],
+                               texture2d<float>   occlusion   [[texture(5)]], sampler occlusionSampler [[sampler(5)]],
+                               texture2d<float>   normals     [[texture(6)]], sampler normalSampler    [[sampler(6)]],
+                               texturecube<float> environment [[texture(7)]], sampler cubeSampler      [[sampler(7)]]) {
+  //return half4(diffuse.sample(diffuseSampler, input.coordinate));
+  //return half4(specular.sample(specularSampler, input.coordinate));
+  //return half4(normals.sample(normalSampler, input.coordinate));
+  //return half4(roughness.sample(roughnessSampler, input.coordinate));
+  //return half4(metalness.sample(metalnessSampler, input.coordinate));
+  //return half4(emissive.sample(emissiveSampler, input.coordinate));
+  //return half4(occlusion.sample(occlusionSampler, input.coordinate));
   
+  // Determine Normal
+  float3x3 basis(input.bitangent, input.cotangent, input.normal);
+  float3 normal = normalize(basis * normalize(2.0 * normals.sample(normalSampler, input.coordinate).xyz - 1.0));
+
   float d = dot(normal, float3(0.0, 1.0, 0.0));
-  float4 diffuse = diffuseColor.sample(diffuseSampler, input.coordinate) * float4(d, d, d, 1.0);
-  //float4 diffuse = normals.sample(normalSampler, input.coordinate);
-  diffuse += environmentMap.sample(cubeSampler, normal);
-  return half4(diffuse);
+  float4 collect = diffuse.sample(diffuseSampler, input.coordinate) * float4(d, d, d, 1.0);
+  collect += environment.sample(cubeSampler, normal);
+  return half4(collect);
 }
