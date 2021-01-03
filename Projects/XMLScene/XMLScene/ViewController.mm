@@ -11,6 +11,8 @@
 
 #import <FelixEngine/iOSFileSystem.h>
 #import <FelixEngine/MetalGraphics.h>
+#import <FelixEngine/iOSMotionSystem.h>
+
 
 @interface ViewController ()
 @property XMLScene *xmlSceneApp;
@@ -33,6 +35,11 @@
   fx::MetalGraphics *graphics = new fx::MetalGraphics();
   graphics->initalize(self.view);
   self.xmlSceneApp->setGraphics(graphics);
+  
+  // Add and initalize iOS Motion
+  fx::iOSMotionSystem *motion = new fx::iOSMotionSystem();
+  motion->initalize(1.0/60.0);
+  self.xmlSceneApp->setMotionSystem(motion);
   
   // Set the Application
   [self setApplication: self.xmlSceneApp];

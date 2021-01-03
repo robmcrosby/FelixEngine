@@ -13,8 +13,11 @@ using namespace std;
 using namespace fx;
 
 
+MotionSystem* MotionSystem::instance = nullptr;
+
+
 iOSMotionSystem::iOSMotionSystem() {
-  //instance = this;
+  MotionSystem::instance = this;
   _motionManager = nil;
 }
 

@@ -13,7 +13,7 @@ using namespace std;
 
 XMLScene::XMLScene() {
   _transform = fx::Transform::make();
-  _transform->setScale(2.0f);
+  //_transform->setScale(2.0f);
 }
 
 XMLScene::~XMLScene() {

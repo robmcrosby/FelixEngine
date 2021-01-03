@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD09756F25A249BD00BA485A /* MotionCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD09756D25A249BD00BA485A /* MotionCamera.cpp */; };
+		AD09757025A249BD00BA485A /* MotionCamera.h in Headers */ = {isa = PBXBuildFile; fileRef = AD09756E25A249BD00BA485A /* MotionCamera.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5048B7256F698000A1E2C0 /* MotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5048B6256F697500A1E2C0 /* MotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5048B9256F6B4000A1E2C0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5048B8256F6B4000A1E2C0 /* CoreMotion.framework */; };
 		AD5048BC256F6D5100A1E2C0 /* iOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -138,6 +140,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AD09756D25A249BD00BA485A /* MotionCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MotionCamera.cpp; sourceTree = "<group>"; };
+		AD09756E25A249BD00BA485A /* MotionCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MotionCamera.h; sourceTree = "<group>"; };
 		AD5048B6256F697500A1E2C0 /* MotionSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MotionSystem.h; path = Systems/MotionSystem/MotionSystem.h; sourceTree = "<group>"; };
 		AD5048B8256F6B4000A1E2C0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iOSMotionSystem.h; path = Systems/MotionSystem/iOSMotionSystem.h; sourceTree = "<group>"; };
@@ -490,6 +494,8 @@
 				C1EC49DF2103E6650067E842 /* LightRig.cpp */,
 				C1707B0B20F4372800A77FAC /* Camera.h */,
 				C1707B0A20F4372800A77FAC /* Camera.cpp */,
+				AD09756E25A249BD00BA485A /* MotionCamera.h */,
+				AD09756D25A249BD00BA485A /* MotionCamera.cpp */,
 				C1707B1120F4372800A77FAC /* ARCamera.h */,
 				C1707B1020F4372800A77FAC /* ARCamera.cpp */,
 				C1E7554C210CCF9800808F41 /* ARVideo.h */,
@@ -561,6 +567,7 @@
 				C15C16C31F695E8B007E2C1E /* EventSubject.h in Headers */,
 				C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */,
 				C1401C981EF8054200BE9958 /* GraphicStates.h in Headers */,
+				AD09757025A249BD00BA485A /* MotionCamera.h in Headers */,
 				C1401CF71EFD430400BE9958 /* Variant.h in Headers */,
 				C1443AED1EF345570059BA9D /* Matrix.h in Headers */,
 				C160E0901F353ECD00212AAA /* ARKitTracker.h in Headers */,
@@ -709,6 +716,7 @@
 				C1443B041EF49A2A0059BA9D /* MetalShaderProgram.mm in Sources */,
 				C1401D091F01E26E00BE9958 /* MetalUniformBuffer.mm in Sources */,
 				C1443B001EF49A100059BA9D /* MetalFrameBuffer.mm in Sources */,
+				AD09756F25A249BD00BA485A /* MotionCamera.cpp in Sources */,
 				C1E7554D210CCF9800808F41 /* ARVideo.cpp in Sources */,
 				C1707B2220F4372800A77FAC /* ARCamera.cpp in Sources */,
 				C1707B1F20F4372800A77FAC /* Light.cpp in Sources */,

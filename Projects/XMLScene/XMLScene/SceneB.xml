@@ -6,14 +6,14 @@
     </Frame>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </RenderPass>
-  <Camera name="Camera" pass="MainPass">
+  <MotionCamera name="Camera" pass="MainPass">
     <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
     <Transform>
       <Scale>1.000000, 1.000000, 1.000000</Scale>
       <Rotation>-0.240452, 0.395910, 0.141601, 0.874864</Rotation>
       <Location>6.186304, 5.972611, 6.016000</Location>
     </Transform>
-  </Camera>
+  </MotionCamera>
   <LightRig name="LightRig" pass="MainPass">
     <Shader name="UsdPreviewSurface" vertex="v_texture_basis" fragment="f_pbr_shadeless"/>
     <EnvironmentMap file="Environment.hdr" min="linear" mag="linear" mip="linear"/>
