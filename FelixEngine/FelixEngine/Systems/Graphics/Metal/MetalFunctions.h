@@ -206,5 +206,10 @@ float3 shade_toon_s(LightingParams light, MaterialParams material) {
 }
 
 
+// Shlick's approximation of the Fresnel factor.
+float3 fresnel_schlick(float3 F0, float cosTheta) {
+  return F0 + (float3(1.0) - F0) * pow(1.0 - cosTheta, 5.0);
+}
+
 
 #endif /* MetalFunctions_h */

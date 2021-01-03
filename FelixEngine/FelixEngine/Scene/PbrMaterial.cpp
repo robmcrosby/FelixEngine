@@ -73,13 +73,13 @@ bool PbrMaterial::load(const USDItem &item) {
     
     setShader(shaderItem->stringValue("info:id"));
     
-    addTexture("diffuse", shaderItem->getAttribute("inputs:diffuseColor"));
-    addTexture("specular", shaderItem->getAttribute("inputs:specularColor"));
-    addTexture("roughness", shaderItem->getAttribute("inputs:roughness"));
-    addTexture("metalness", shaderItem->getAttribute("inputs:metallic"));
-    addTexture("emissive", shaderItem->getAttribute("inputs:emissiveColor"));
-    addTexture("occlusion", shaderItem->getAttribute("inputs:occlusion"), RGBA(255, 255, 255, 255));
-    addTexture("normals", shaderItem->getAttribute("inputs:normal"), RGBA(127, 127, 255, 255));
+    addTexture("albedoTexture", shaderItem->getAttribute("inputs:diffuseColor"));
+    addTexture("specularTexture", shaderItem->getAttribute("inputs:specularColor"));
+    addTexture("roughnessTexture", shaderItem->getAttribute("inputs:roughness"));
+    addTexture("metalnessTexture", shaderItem->getAttribute("inputs:metallic"));
+    addTexture("emissiveTexture", shaderItem->getAttribute("inputs:emissiveColor"));
+    addTexture("occlusionTexture", shaderItem->getAttribute("inputs:occlusion"), RGBA(255, 255, 255, 255));
+    addTexture("normalsTexture", shaderItem->getAttribute("inputs:normal"), RGBA(127, 127, 255, 255));
   }
   else {
     _textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));

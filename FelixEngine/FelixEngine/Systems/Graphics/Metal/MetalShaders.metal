@@ -418,29 +418,83 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
 }
 
 
-fragment half4 f_pbr_shadeless(InputTextureBasis  input [[stage_in]],
-                               texture2d<float>   diffuse     [[texture(0)]], sampler diffuseSampler   [[sampler(0)]],
-                               texture2d<float>   specular    [[texture(1)]], sampler specularSampler  [[sampler(1)]],
-                               texture2d<float>   roughness   [[texture(2)]], sampler roughnessSampler [[sampler(2)]],
-                               texture2d<float>   metalness   [[texture(3)]], sampler metalnessSampler [[sampler(3)]],
-                               texture2d<float>   emissive    [[texture(4)]], sampler emissiveSampler  [[sampler(4)]],
-                               texture2d<float>   occlusion   [[texture(5)]], sampler occlusionSampler [[sampler(5)]],
-                               texture2d<float>   normals     [[texture(6)]], sampler normalSampler    [[sampler(6)]],
-                               texturecube<float> environment [[texture(7)]], sampler cubeSampler      [[sampler(7)]]) {
-  //return half4(diffuse.sample(diffuseSampler, input.coordinate));
-  //return half4(specular.sample(specularSampler, input.coordinate));
-  //return half4(normals.sample(normalSampler, input.coordinate));
-  //return half4(roughness.sample(roughnessSampler, input.coordinate));
-  //return half4(metalness.sample(metalnessSampler, input.coordinate));
-  //return half4(emissive.sample(emissiveSampler, input.coordinate));
-  //return half4(occlusion.sample(occlusionSampler, input.coordinate));
+fragment half4 f_pbr_shadeless(InputTextureBasis  input       [[stage_in]],
+                               texture2d<float>   albedoTexture      [[texture(0)]],
+                               texture2d<float>   specularTexture    [[texture(1)]],
+                               texture2d<float>   roughnessTexture   [[texture(2)]],
+                               texture2d<float>   metalnessTexture   [[texture(3)]],
+                               texture2d<float>   emissiveTexture    [[texture(4)]],
+                               texture2d<float>   occlusionTexture   [[texture(5)]],
+                               texture2d<float>   normalsTexture     [[texture(6)]],
+                               texturecube<float> environmentCubeMap [[texture(7)]]) {
+  constexpr sampler defSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
+  uint envLevels = environmentCubeMap.get_num_mip_levels();
   
-  // Determine Normal
+  //return half4(albedoTexture.sample(defSampler, input.coordinate));
+  //return half4(specularTexture.sample(defSampler, input.coordinate));
+  //return half4(normalsTexture.sample(defSampler, input.coordinate));
+  //return half4(roughnessTexture.sample(defSampler, input.coordinate));
+  //return half4(metalnessTexture.sample(defSampler, input.coordinate));
+  //return half4(emissiveTexture.sample(defSampler, input.coordinate));
+  //return half4(occlusionTexture.sample(defSampler, input.coordinate));
+  
+  float3 albedo = albedoTexture.sample(defSampler, input.coordinate).rgb;
+  float metalness = metalnessTexture.sample(defSampler, input.coordinate).r;
+  float roughness = roughnessTexture.sample(defSampler, input.coordinate).r;
+  
+  // Outgoing light direction
+  float3 Lo = normalize(input.view);
+  
+  // Determine normal
   float3x3 basis(input.bitangent, input.cotangent, input.normal);
-  float3 normal = normalize(basis * normalize(2.0 * normals.sample(normalSampler, input.coordinate).xyz - 1.0));
+  float3 N = normalize(basis * normalize(2.0 * normalsTexture.sample(defSampler, input.coordinate).xyz - 1.0));
+  
+  // Angle between surface normal and outgoing light direction.
+  float cosLo = max(0.0, dot(N, Lo));
+  
+  // Specular reflection vector.
+  float3 Lr = 2.0 * cosLo * N - Lo;
+  
+  // Fresnel reflectance at normal incidence
+  float3 F0 = mix(float3(0.04), albedo, metalness);
+  
+  
+  // Ambient lighting (IBL)
+  
+  // Sample diffuse irradiance at normal direction
+  float3 irradiance = environmentCubeMap.sample(defSampler, N, level(0.8 * envLevels)).rgb;
+  
+  // Calculate Fresnel term for ambient lighting
+  float3 F = fresnel_schlick(F0, cosLo);
+  
+  // Get diffuse contribution factor (as with direct lighting).
+  float3 kd = mix(float3(1.0) - F, float3(0.0), metalness);
+  
+  float3 diffuseIBL = kd * albedo * irradiance;
+  
+  float3 specularIrradiance = environmentCubeMap.sample(defSampler, Lr, level(0.8 * roughness * envLevels)).rgb;
+  
+  // Split-sum approximation factors for Cook-Torrance specular BRDF.
+  //float2 specularBRDF = specularBRDF_LUT.sample(defSampler, float2(cosLo, roughness));
 
-  float d = dot(normal, float3(0.0, 1.0, 0.0));
-  float4 collect = diffuse.sample(diffuseSampler, input.coordinate) * float4(d, d, d, 1.0);
-  collect += environment.sample(cubeSampler, normal);
-  return half4(collect);
+  // Total specular IBL contribution.
+  //float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+  float3 specularIBL = F0 * specularIrradiance;
+
+      // Total ambient lighting contribution.
+  float3 ambientLighting = diffuseIBL + specularIBL;
+  
+  
+  return half4(ambientLighting.r, ambientLighting.g, ambientLighting.b, 1.0);
+  
+//
+//  //float d = dot(normal, float3(0.0, 1.0, 0.0));
+//
+//  // Light Out Direction
+//  float3 Lo = normalize(input.view);
+//
+  
+  //float4 collect = diffuse.sample(defSampler, input.coordinate) * float4(d, d, d, 1.0);
+  //collect += environment.sample(defSampler, normal);
+  //return half4(collect);
 }
