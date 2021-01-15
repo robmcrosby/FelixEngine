@@ -9,6 +9,10 @@
 #include "GraphicResources.h"
 #include <map>
 
+
+#ifndef MetalUniformBuffer_h
+#define MetalUniformBuffer_h
+
 #define MAX_BUFFERS 3
 
 @protocol MTLDevice;
@@ -45,3 +49,5 @@ namespace fx {
     void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader, int buffer);
   };
 }
+
+#endif /* MetalUniformBuffer_h */

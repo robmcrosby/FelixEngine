@@ -7,7 +7,12 @@
 //
 
 #include "GraphicResources.h"
+#include "MetalTextureBuffer.h"
 #include <vector>
+
+
+#ifndef MetalFrameBuffer_h
+#define MetalFrameBuffer_h
 
 @protocol MTLDevice;
 @protocol MTLTexture;
@@ -70,3 +75,5 @@ namespace fx {
     int metalBlendOperation(int operation) const;
   };
 }
+
+#endif /* MetalFrameBuffer_h */

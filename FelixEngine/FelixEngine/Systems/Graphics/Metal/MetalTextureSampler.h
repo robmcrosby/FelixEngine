@@ -9,9 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 
+
+#ifndef MetalTextureSampler_h
+#define MetalTextureSampler_h
+
 @interface MetalTextureSampler : NSObject
 
 -(id)initWithDevice:(id <MTLDevice>)device;
 -(id <MTLSamplerState>)samplerStateForFlags:(int)flags;
 
 @end
+
+#endif /* MetalTextureSampler_h */

@@ -11,6 +11,10 @@
 #include "TextureMap.h"
 #include <map>
 
+
+#ifndef MetalShaderProgram_h
+#define MetalShaderProgram_h
+
 @protocol MTLDevice;
 @protocol MTLFunction;
 @protocol MTLRenderPipelineState;
@@ -64,3 +68,5 @@ namespace fx {
     void extractIndexMaps();
   };
 }
+
+#endif /* MetalShaderProgram_h */

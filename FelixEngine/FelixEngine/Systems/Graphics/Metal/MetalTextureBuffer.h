@@ -8,6 +8,10 @@
 
 #include "GraphicResources.h"
 
+
+#ifndef MetalTextureBuffer_h
+#define MetalTextureBuffer_h
+
 @protocol MTLDevice;
 @protocol MTLTexture;
 @protocol MTLCommandQueue;
@@ -48,3 +52,5 @@ namespace fx {
     void encodeGenerateCubeMap(const ImageBufferData &image, bool generateMipMap);
   };
 }
+
+#endif /* MetalTextureBuffer_h */

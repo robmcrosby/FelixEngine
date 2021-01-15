@@ -9,6 +9,10 @@
 #include "GraphicResources.h"
 #include <map>
 
+
+#ifndef MetalVertexMesh_h
+#define MetalVertexMesh_h
+
 @protocol MTLDevice;
 @protocol MTLBuffer;
 @protocol MTLRenderCommandEncoder;
@@ -46,3 +50,5 @@ namespace fx {
     void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
   };
 }
+
+#endif /* MetalVertexMesh_h */
