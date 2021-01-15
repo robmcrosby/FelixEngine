@@ -40,6 +40,20 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
   }
 }
 
+MTLPixelFormat getMetalPixelFormat(TEXTURE_FORMAT format) {
+  switch (format) {
+    case TEXTURE_RGBA8:
+      return MTLPixelFormatRGBA8Unorm;
+    case TEXTURE_RGBA16F:
+      return MTLPixelFormatRGBA16Float;
+    case TEXTURE_DEPTH32F:
+      return MTLPixelFormatDepth32Float;
+    case TEXTURE_DEPTH32F_STENCIL8:
+      return MTLPixelFormatDepth32Float_Stencil8;
+  }
+  cerr << "Unknown Texture Format: " << format << endl;
+  return MTLPixelFormatRGBA8Unorm;
+}
 
 MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue):
     _device(device), _queue(queue), _depthAttachment(nil), _stencilAttachment(nil) {
@@ -102,23 +116,19 @@ ivec2 MetalFrameBuffer::size() const {
   return _size;
 }
 
-bool MetalFrameBuffer::addDepthBuffer() {
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
+bool MetalFrameBuffer::addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access) {
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:getMetalPixelFormat(format)
                                                                                         width:(NSUInteger)_size.w
                                                                                        height:(NSUInteger)_size.h
                                                                                     mipmapped:NO];
   descriptor.usage = MTLTextureUsageRenderTarget;
+  if (access == TEXTURE_READ_WRITE)
+    descriptor.usage |= MTLTextureUsageShaderRead;
   
-  _depthAttachment = [_device newTextureWithDescriptor:descriptor];
-  return _depthAttachment != nil;
-}
-
-bool MetalFrameBuffer::addColorTexture() {
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
-                                                                                        width:(NSUInteger)_size.w
-                                                                                       height:(NSUInteger)_size.h
-                                                                                    mipmapped:NO];
-  descriptor.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
+  if (format == TEXTURE_DEPTH32F || format == TEXTURE_DEPTH32F_STENCIL8) {
+    _depthAttachment = [_device newTextureWithDescriptor:descriptor];
+    return _depthAttachment != nil;
+  }
   _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
   return _colorAttachments.back() != nil;
 }

@@ -48,10 +48,10 @@ void CubeMap::initalize() {
   _renderPass->addDepthBuffer();
   //_renderPass->setClearColor(fx::vec4(0.4f, 0.4f, 0.4f, 1.0f));
   _renderPass->setClearDepthStencil();
-  _renderPass->setCubeMap("cubeMap", cubeMapFiles, sampler);
+  //_renderPass->setCubeMap("cubeMap", cubeMapFiles, sampler);
   //_renderPass->setCubeMap("cubeMap", "colorGrid.png", sampler);
   //_renderPass->setCubeMap("cubeMap", "environment.hdr", sampler);
-  //_renderPass->setCubeMap("cubeMap", "environment2.jpeg", sampler);
+  _renderPass->setCubeMap("cubeMap", "environment2.jpeg", sampler);
   _renderPass->addRenderItem(skybox);
   _renderPass->addRenderItem(object);
   

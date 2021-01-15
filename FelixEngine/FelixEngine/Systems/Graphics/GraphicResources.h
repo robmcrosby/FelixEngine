@@ -35,6 +35,18 @@ namespace fx {
     VERTEX_TRIANGLE_STRIP,
   };
   
+  enum TEXTURE_FORMAT {
+    TEXTURE_RGBA8,
+    TEXTURE_RGBA16F,
+    TEXTURE_DEPTH32F,
+    TEXTURE_DEPTH32F_STENCIL8,
+  };
+
+  enum TEXTURE_ACCESS {
+    TEXTURE_READ_ONLY  = 1,
+    TEXTURE_WRITE_ONLY = 2,
+    TEXTURE_READ_WRITE = 3,
+  };
   
   struct ShaderProgram: iObject {
     virtual ~ShaderProgram() {}
@@ -130,8 +142,10 @@ namespace fx {
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
     
-    virtual bool addDepthBuffer() = 0;
-    virtual bool addColorTexture() = 0;
+    virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access) = 0;
+    
+    bool addColorTexture();
+    bool addDepthBuffer();
     
     virtual TextureBufferPtr getColorTexture(int index) = 0;
   };

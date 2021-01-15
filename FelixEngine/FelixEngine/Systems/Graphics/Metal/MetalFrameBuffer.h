@@ -49,8 +49,7 @@ namespace fx {
     virtual bool resize(int width, int height);
     virtual ivec2 size() const;
     
-    virtual bool addDepthBuffer();
-    virtual bool addColorTexture();
+    virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access);
     
     virtual TextureBufferPtr getColorTexture(int index);
     
@@ -63,6 +62,8 @@ namespace fx {
     MTLRenderPipelineDescriptor* createPipelineDescriptor(const BlendState &blending) const;
     
   private:
+    bool addBuffer(TEXTURE_FORMAT format, bool readable);
+    
     id <MTLTexture> resizeTexture(id <MTLTexture> texture, ivec2 size);
     void getNextDrawable();
     int metalBlendFactor(int factor) const;

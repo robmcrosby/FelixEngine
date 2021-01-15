@@ -114,3 +114,11 @@ bool FrameBuffer::load(const XMLTree::Node &node) {
   }
   return success;
 }
+
+bool FrameBuffer::addColorTexture() {
+  return addRenderBuffer(TEXTURE_RGBA8, TEXTURE_READ_WRITE);
+}
+
+bool FrameBuffer::addDepthBuffer() {
+  return addRenderBuffer(TEXTURE_DEPTH32F, TEXTURE_WRITE_ONLY);
+}
