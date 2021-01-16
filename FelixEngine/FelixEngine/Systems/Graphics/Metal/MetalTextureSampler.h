@@ -6,12 +6,12 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalTextureSampler_h
+#define MetalTextureSampler_h
+
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 
-
-#ifndef MetalTextureSampler_h
-#define MetalTextureSampler_h
 
 @interface MetalTextureSampler : NSObject
 

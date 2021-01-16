@@ -6,11 +6,12 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalDepthStencil_h
+#define MetalDepthStencil_h
+
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 
-#ifndef MetalDepthStencil_h
-#define MetalDepthStencil_h
 
 @interface MetalDepthStencil : NSObject
 

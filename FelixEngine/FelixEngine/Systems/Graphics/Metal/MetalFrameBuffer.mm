@@ -40,23 +40,7 @@ MTLStoreAction getMetalStoreAction(STORE_ACTION action) {
   }
 }
 
-MTLPixelFormat getMetalPixelFormat(TEXTURE_FORMAT format) {
-  switch (format) {
-    case TEXTURE_RGBA8:
-      return MTLPixelFormatRGBA8Unorm;
-    case TEXTURE_RGBA16F:
-      return MTLPixelFormatRGBA16Float;
-    case TEXTURE_DEPTH32F:
-      return MTLPixelFormatDepth32Float;
-    case TEXTURE_DEPTH32F_STENCIL8:
-      return MTLPixelFormatDepth32Float_Stencil8;
-  }
-  cerr << "Unknown Texture Format: " << format << endl;
-  return MTLPixelFormatRGBA8Unorm;
-}
-
-MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue):
-    _device(device), _queue(queue), _depthAttachment(nil), _stencilAttachment(nil) {
+MetalFrameBuffer::MetalFrameBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue): _device(device), _queue(queue) {
   static int bufferCount = 1;
   _idFlag = bufferCount++ << ID_FLAG_OFFSET;
   
@@ -82,23 +66,23 @@ bool MetalFrameBuffer::resize(int width, int height) {
   if (_metalLayer == nil && (width != _size.w || height != _size.h)) {
     _size = ivec2(width, height);
     
-    // Resize the Color Attachments
-    for (auto attachment : _colorAttachments) {
-      attachment = resizeTexture(attachment, _size);
-      success &= attachment != nil;
-    }
-    
-    // Resize the Depth Atacment
-    if (_depthAttachment != nil) {
-      _depthAttachment = resizeTexture(_depthAttachment, _size);
-      success &= _depthAttachment != nil;
-    }
-    
-    // Resize the Stencil Atacment
-    if (_stencilAttachment != nil) {
-      _stencilAttachment = resizeTexture(_stencilAttachment, _size);
-      success &= _stencilAttachment != nil;
-    }
+//    // Resize the Color Attachments
+//    for (auto attachment : _colorAttachments) {
+//      attachment = resizeTexture(attachment, _size);
+//      success &= attachment != nil;
+//    }
+//
+//    // Resize the Depth Atacment
+//    if (_depthAttachment != nil) {
+//      _depthAttachment = resizeTexture(_depthAttachment, _size);
+//      success &= _depthAttachment != nil;
+//    }
+//
+//    // Resize the Stencil Atacment
+//    if (_stencilAttachment != nil) {
+//      _stencilAttachment = resizeTexture(_stencilAttachment, _size);
+//      success &= _stencilAttachment != nil;
+//    }
   }
   return success;
 }
@@ -117,24 +101,19 @@ ivec2 MetalFrameBuffer::size() const {
 }
 
 bool MetalFrameBuffer::addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access) {
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:getMetalPixelFormat(format)
-                                                                                        width:(NSUInteger)_size.w
-                                                                                       height:(NSUInteger)_size.h
-                                                                                    mipmapped:NO];
-  descriptor.usage = MTLTextureUsageRenderTarget;
-  if (access == TEXTURE_READ_WRITE)
-    descriptor.usage |= MTLTextureUsageShaderRead;
+  MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_device, _queue);
+  texture->loadBuffer(_size, format, access);
   
-  if (format == TEXTURE_DEPTH32F || format == TEXTURE_DEPTH32F_STENCIL8) {
-    _depthAttachment = [_device newTextureWithDescriptor:descriptor];
-    return _depthAttachment != nil;
-  }
-  _colorAttachments.push_back([_device newTextureWithDescriptor:descriptor]);
-  return _colorAttachments.back() != nil;
+  if (format == TEXTURE_DEPTH32F || format == TEXTURE_DEPTH32F_STENCIL8)
+    _depthAttachment = texture;
+  else
+    _colorAttachments.push_back(texture);
+  
+  return texture->loaded();
 }
 
 TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
-  return make_shared<MetalTextureBuffer>(_device, _queue, _colorAttachments.at(index));
+  return _colorAttachments.at(index);
 }
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {
@@ -147,53 +126,56 @@ id <MTLRenderCommandEncoder> MetalFrameBuffer::createEncoder(id<MTLCommandBuffer
   
   MTLRenderPassDescriptor *descriptor = [[MTLRenderPassDescriptor alloc] init];
   int index = 0;
-  for (id <MTLTexture> colorAttachment : _colorAttachments) {
+  for (MetalTextureBufferPtr attachment : _colorAttachments) {
     MTLLoadAction loadAction = getMetalLoadAction(colorActions[index].loadAction);
     MTLStoreAction storeAction = getMetalStoreAction(colorActions[index].storeAction);
     vec4 color = colorActions[index].clearColor;
     
-    descriptor.colorAttachments[index].texture     = colorAttachment;
+    descriptor.colorAttachments[index].texture     = attachment->getMetalTexture();
     descriptor.colorAttachments[index].loadAction  = loadAction;
     descriptor.colorAttachments[index].storeAction = storeAction;
     descriptor.colorAttachments[index].clearColor  = MTLClearColorMake(color.r, color.g, color.b, color.a);
     ++index;
   }
   
-  if (_depthAttachment != nil) {
+  if (_depthAttachment) {
     MTLLoadAction loadAction = getMetalLoadAction(depthStencilAction.loadAction);
     MTLStoreAction storeAction = getMetalStoreAction(depthStencilAction.storeAction);
     
-    descriptor.depthAttachment.texture     = _depthAttachment;
+    descriptor.depthAttachment.texture     = _depthAttachment->getMetalTexture();
     descriptor.depthAttachment.loadAction  = loadAction;
     descriptor.depthAttachment.storeAction = storeAction;
     descriptor.depthAttachment.clearDepth  = (double)depthStencilAction.clearColor.r;
   }
   
-  if (_stencilAttachment != nil) {
-    MTLLoadAction loadAction = getMetalLoadAction(depthStencilAction.loadAction);
-    MTLStoreAction storeAction = getMetalStoreAction(depthStencilAction.storeAction);
-    
-    descriptor.stencilAttachment.texture      = _stencilAttachment;
-    descriptor.stencilAttachment.loadAction   = loadAction;
-    descriptor.stencilAttachment.storeAction  = storeAction;
-    descriptor.stencilAttachment.clearStencil = (uint32_t)depthStencilAction.clearColor.g;
-  }
+//  if (_stencilAttachment != nil) {
+//    MTLLoadAction loadAction = getMetalLoadAction(depthStencilAction.loadAction);
+//    MTLStoreAction storeAction = getMetalStoreAction(depthStencilAction.storeAction);
+//
+//    descriptor.stencilAttachment.texture      = _stencilAttachment;
+//    descriptor.stencilAttachment.loadAction   = loadAction;
+//    descriptor.stencilAttachment.storeAction  = storeAction;
+//    descriptor.stencilAttachment.clearStencil = (uint32_t)depthStencilAction.clearColor.g;
+//  }
   
   return [buffer renderCommandEncoderWithDescriptor:descriptor];
 }
 
 void MetalFrameBuffer::setMetalLayer(CAMetalLayer *layer) {
   _metalLayer = layer;
-  
-  _colorAttachments.push_back(nil);
   _size.w = (int)(_metalLayer.bounds.size.width * _metalLayer.contentsScale);
   _size.h = (int)(_metalLayer.bounds.size.height * _metalLayer.contentsScale);
+  
+  if (_colorAttachments.size() == 0) {
+    MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_device, _queue);
+    _colorAttachments.push_back(texture);
+  }
 }
 
 void MetalFrameBuffer::present(id <MTLCommandBuffer> buffer) {
   if (_metalLayer != nil && _drawable != nil) {
     [buffer presentDrawable:_drawable];
-    _colorAttachments.at(0) = nil;
+    _colorAttachments.front()->setMetalTexture(nil);
     _drawable = nil;
   }
 }
@@ -202,9 +184,9 @@ MTLRenderPipelineDescriptor* MetalFrameBuffer::createPipelineDescriptor(const Bl
   MTLRenderPipelineDescriptor *descriptor = [[MTLRenderPipelineDescriptor alloc] init];
   
   int index = 0;
-  for (id <MTLTexture> attachment : _colorAttachments) {
+  for (MetalTextureBufferPtr attachment : _colorAttachments) {
     MTLRenderPipelineColorAttachmentDescriptor *color = descriptor.colorAttachments[index];
-    color.pixelFormat = attachment.pixelFormat;
+    color.pixelFormat = attachment->getMetalTexture().pixelFormat;
     if (blending.enabled()) {
       color.blendingEnabled = YES;
       color.rgbBlendOperation = (MTLBlendOperation)metalBlendOperation(blending.equation());
@@ -218,12 +200,12 @@ MTLRenderPipelineDescriptor* MetalFrameBuffer::createPipelineDescriptor(const Bl
     }
   }
   
-  if (_depthAttachment != nil) {
-    descriptor.depthAttachmentPixelFormat = _depthAttachment.pixelFormat;
+  if (_depthAttachment) {
+    descriptor.depthAttachmentPixelFormat = _depthAttachment->getMetalTexture().pixelFormat;
   }
-  if (_stencilAttachment != nil) {
-    descriptor.stencilAttachmentPixelFormat = _stencilAttachment.pixelFormat;
-  }
+//  if (_stencilAttachment != nil) {
+//    descriptor.stencilAttachmentPixelFormat = _stencilAttachment.pixelFormat;
+//  }
   
   return descriptor;
 }
@@ -233,7 +215,7 @@ void MetalFrameBuffer::getNextDrawable() {
   _size.h = _metalLayer.bounds.size.height;
   
   _drawable = [_metalLayer nextDrawable];
-  _colorAttachments.at(0) = _drawable.texture;
+  _colorAttachments.front()->setMetalTexture(_drawable.texture);
 }
 
 int MetalFrameBuffer::metalBlendFactor(int factor) const {

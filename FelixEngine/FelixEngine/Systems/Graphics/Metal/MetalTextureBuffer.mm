@@ -16,6 +16,22 @@ using namespace fx;
 using namespace std;
 
 
+MTLPixelFormat getMetalPixelFormat(TEXTURE_FORMAT format) {
+  switch (format) {
+    case TEXTURE_RGBA8:
+      return MTLPixelFormatRGBA8Unorm;
+    case TEXTURE_RGBA16F:
+      return MTLPixelFormatRGBA16Float;
+    case TEXTURE_DEPTH32F:
+      return MTLPixelFormatDepth32Float;
+    case TEXTURE_DEPTH32F_STENCIL8:
+      return MTLPixelFormatDepth32Float_Stencil8;
+  }
+  cerr << "Unknown Texture Format: " << format << endl;
+  return MTLPixelFormatRGBA8Unorm;
+}
+
+
 MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue):
     _device(device), _queue(queue), _texture(nil), _loaded(false) {
   _width = 0;
@@ -32,6 +48,25 @@ MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueu
 
 MetalTextureBuffer::~MetalTextureBuffer() {
   _texture = nil;
+}
+
+bool MetalTextureBuffer::loadBuffer(ivec2 size, TEXTURE_FORMAT format, TEXTURE_ACCESS access) {
+  _width = size.width;
+  _height = size.height;
+  
+  MTLPixelFormat pixelFormat = getMetalPixelFormat(format);
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
+                                                                                        width:_width
+                                                                                       height:_height
+                                                                                    mipmapped:NO];
+  descriptor.usage = MTLTextureUsageRenderTarget;
+  if (access == TEXTURE_READ_WRITE)
+    descriptor.usage |= MTLTextureUsageShaderRead;
+  
+  _texture = [_device newTextureWithDescriptor:descriptor];
+  _loaded = _texture != nil;
+  
+  return _loaded;
 }
 
 bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool generateMipMap) {
@@ -113,9 +148,11 @@ void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSam
 
 void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {
   _texture = texture;
-  _width = (int)_texture.width;
-  _height = (int)_texture.height;
-  _loaded = true;
+  _loaded = texture != nil;
+  if (_loaded) {
+    _width = (int)_texture.width;
+    _height = (int)_texture.height;
+  }
 }
 
 void MetalTextureBuffer::encodeGenerateMipMap() {

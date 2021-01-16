@@ -6,11 +6,11 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
-#include "GraphicResources.h"
-
-
 #ifndef MetalTextureBuffer_h
 #define MetalTextureBuffer_h
+
+#include "GraphicResources.h"
+
 
 @protocol MTLDevice;
 @protocol MTLTexture;
@@ -20,6 +20,7 @@
 
 
 namespace fx {
+
   class MetalTextureBuffer: public TextureBuffer {
   public:
     id <MTLDevice> _device;
@@ -35,6 +36,7 @@ namespace fx {
     MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue, id <MTLTexture> texture);
     virtual ~MetalTextureBuffer();
     
+    virtual bool loadBuffer(ivec2 size, TEXTURE_FORMAT format, TEXTURE_ACCESS access);
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap);
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap);
     virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap);
@@ -46,6 +48,8 @@ namespace fx {
     
     void encode(id <MTLRenderCommandEncoder> encoder, id <MTLSamplerState> sampler, unsigned long index);
     void setMetalTexture(id <MTLTexture> texture);
+    
+    id <MTLTexture> getMetalTexture() const {return _texture;}
     
   private:
     void encodeGenerateMipMap();

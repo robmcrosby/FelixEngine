@@ -6,12 +6,12 @@
 //  Copyright © 2018 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalRenderPass_h
+#define MetalRenderPass_h
+
 #include "RenderPass.h"
 #include "Macros.h"
 
-
-#ifndef MetalRenderPass_h
-#define MetalRenderPass_h
 
 @protocol MTLDevice;
 @protocol MTLCommandBuffer;

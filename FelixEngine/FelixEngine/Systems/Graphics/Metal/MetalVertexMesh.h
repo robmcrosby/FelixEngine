@@ -6,12 +6,12 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalVertexMesh_h
+#define MetalVertexMesh_h
+
 #include "GraphicResources.h"
 #include <map>
 
-
-#ifndef MetalVertexMesh_h
-#define MetalVertexMesh_h
 
 @protocol MTLDevice;
 @protocol MTLBuffer;

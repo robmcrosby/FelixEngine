@@ -6,12 +6,12 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalUniformBuffer_h
+#define MetalUniformBuffer_h
+
 #include "GraphicResources.h"
 #include <map>
 
-
-#ifndef MetalUniformBuffer_h
-#define MetalUniformBuffer_h
 
 #define MAX_BUFFERS 3
 

@@ -6,11 +6,12 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalGraphics_h
+#define MetalGraphics_h
+
 #include <FelixEngine/Graphics.h>
 #include <FelixEngine/Macros.h>
 
-#ifndef MetalGraphics_h
-#define MetalGraphics_h
 
 OBJC_CLASS(UIView)
 

@@ -6,14 +6,14 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalShaderProgram_h
+#define MetalShaderProgram_h
+
 #include "GraphicResources.h"
 #include "UniformMap.h"
 #include "TextureMap.h"
 #include <map>
 
-
-#ifndef MetalShaderProgram_h
-#define MetalShaderProgram_h
 
 @protocol MTLDevice;
 @protocol MTLFunction;

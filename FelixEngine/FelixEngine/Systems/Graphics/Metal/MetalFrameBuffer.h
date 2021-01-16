@@ -6,13 +6,13 @@
 //  Copyright © 2017 Robert Crosby. All rights reserved.
 //
 
+#ifndef MetalFrameBuffer_h
+#define MetalFrameBuffer_h
+
 #include "GraphicResources.h"
 #include "MetalTextureBuffer.h"
 #include <vector>
 
-
-#ifndef MetalFrameBuffer_h
-#define MetalFrameBuffer_h
 
 @protocol MTLDevice;
 @protocol MTLTexture;
@@ -28,16 +28,24 @@
 
 
 namespace fx {
-  typedef std::vector<id <MTLTexture> > attachmentsList;
   class BlendState;
+
+  typedef std::shared_ptr<MetalTextureBuffer> MetalTextureBufferPtr;
+  typedef std::vector<MetalTextureBufferPtr> MetalTextureBuffers;
+
+  typedef std::vector<id <MTLTexture> > attachmentsList;
   
   class MetalFrameBuffer: public FrameBuffer {
   public:
     id <MTLDevice> _device;
     id <MTLCommandQueue> _queue;
-    id <MTLTexture> _depthAttachment;
-    id <MTLTexture> _stencilAttachment;
-    attachmentsList _colorAttachments;
+    
+    MetalTextureBuffers   _colorAttachments;
+    MetalTextureBufferPtr _depthAttachment;
+    
+    //id <MTLTexture> _depthAttachment;
+    //id <MTLTexture> _stencilAttachment;
+    //attachmentsList _colorAttachments;
     
     CAMetalLayer *_metalLayer;
     id <CAMetalDrawable> _drawable;
