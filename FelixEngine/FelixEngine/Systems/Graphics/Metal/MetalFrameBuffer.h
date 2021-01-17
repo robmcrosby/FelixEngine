@@ -62,7 +62,8 @@ namespace fx {
     virtual bool resize(int width, int height);
     virtual ivec2 size() const;
     
-    virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access);
+    virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags);
+    //virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access);
     
     virtual TextureBufferPtr getColorTexture(int index);
     

@@ -42,10 +42,10 @@ namespace fx {
     TEXTURE_DEPTH32F_STENCIL8,
   };
 
-  enum TEXTURE_ACCESS {
-    TEXTURE_READ_ONLY  = 1,
-    TEXTURE_WRITE_ONLY = 2,
-    TEXTURE_READ_WRITE = 3,
+  enum TEXTURE_USAGE_FLAGS {
+    TEXTURE_SHADER_READ   = 1,
+    TEXTURE_SHADER_WRITE  = 2,
+    TEXTURE_RENDER_TARGET = 4,
   };
   
   struct ShaderProgram: iObject {
@@ -113,6 +113,8 @@ namespace fx {
     virtual void update(float dt) {}
     virtual bool load(const XMLTree::Node &node);
     
+    virtual bool loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usageFlags) = 0;
+    
     virtual bool loadImageFile(const std::string &file, bool generateMipMap);
     virtual bool loadColor(const RGBA &color);
     
@@ -123,8 +125,12 @@ namespace fx {
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap) = 0;
+    
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;
+    
+    virtual int usageFlags() const = 0;
+    virtual TEXTURE_FORMAT format() const = 0;
     
     virtual void setDefaultSampler(SamplerState state) = 0;
     virtual SamplerState defaultSampler() const = 0;
@@ -142,7 +148,8 @@ namespace fx {
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
     
-    virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access) = 0;
+    virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0) = 0;
+    //virtual void addRenderTarget(TextureBufferPtr texture) = 0;
     
     bool addColorTexture();
     bool addDepthBuffer();

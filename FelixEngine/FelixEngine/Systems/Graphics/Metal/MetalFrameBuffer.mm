@@ -100,9 +100,9 @@ ivec2 MetalFrameBuffer::size() const {
   return _size;
 }
 
-bool MetalFrameBuffer::addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access) {
+bool MetalFrameBuffer::addRenderTarget(TEXTURE_FORMAT format, int usageFlags) {
   MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_device, _queue);
-  texture->loadBuffer(_size, format, access);
+  texture->loadBuffer(_size, format, usageFlags | TEXTURE_RENDER_TARGET);
   
   if (format == TEXTURE_DEPTH32F || format == TEXTURE_DEPTH32F_STENCIL8)
     _depthAttachment = texture;
