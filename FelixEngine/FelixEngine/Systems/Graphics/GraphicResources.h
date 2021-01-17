@@ -148,11 +148,11 @@ namespace fx {
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
     
-    virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0) = 0;
+    TextureBufferPtr addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0);
     virtual void addRenderTarget(TextureBufferPtr texture) = 0;
     
-    bool addColorTexture();
-    bool addDepthBuffer();
+    TextureBufferPtr addColorTexture();
+    TextureBufferPtr addDepthBuffer();
     
     virtual TextureBufferPtr getColorTexture(int index) const = 0;
     virtual TextureBufferPtr getDepthTexture() const = 0;

@@ -67,8 +67,8 @@ namespace fx {
     }
     bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
     bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
-    bool addColorTexture() {return getFrame()->addColorTexture();}
-    bool addDepthBuffer() {return getFrame()->addDepthBuffer();}
+    TextureBufferPtr addColorTexture() {return getFrame()->addColorTexture();}
+    TextureBufferPtr addDepthBuffer() {return getFrame()->addDepthBuffer();}
     TextureBufferPtr getColorTexture(int index = 0) {return getFrame()->getColorTexture(0);}
     TextureBufferPtr getDepthTexture() {return getFrame()->getDepthTexture();}
     

@@ -43,10 +43,6 @@ namespace fx {
     MetalTextureBuffers   _colorAttachments;
     MetalTextureBufferPtr _depthAttachment;
     
-    //id <MTLTexture> _depthAttachment;
-    //id <MTLTexture> _stencilAttachment;
-    //attachmentsList _colorAttachments;
-    
     CAMetalLayer *_metalLayer;
     id <CAMetalDrawable> _drawable;
     
@@ -62,9 +58,7 @@ namespace fx {
     virtual bool resize(int width, int height);
     virtual ivec2 size() const;
     
-    virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags);
     virtual void addRenderTarget(TextureBufferPtr texture);
-    
     virtual TextureBufferPtr getColorTexture(int index) const;
     virtual TextureBufferPtr getDepthTexture() const;
     

@@ -115,10 +115,17 @@ bool FrameBuffer::load(const XMLTree::Node &node) {
   return success;
 }
 
-bool FrameBuffer::addColorTexture() {
+TextureBufferPtr FrameBuffer::addRenderTarget(TEXTURE_FORMAT format, int usageFlags) {
+  TextureBufferPtr texture = Graphics::getInstance().createTextureBuffer();
+  texture->loadBuffer(size(), format, usageFlags | TEXTURE_RENDER_TARGET);
+  addRenderTarget(texture);
+  return texture;
+}
+
+TextureBufferPtr FrameBuffer::addColorTexture() {
   return addRenderTarget(TEXTURE_RGBA8, TEXTURE_SHADER_READ);
 }
 
-bool FrameBuffer::addDepthBuffer() {
+TextureBufferPtr FrameBuffer::addDepthBuffer() {
   return addRenderTarget(TEXTURE_DEPTH32F);
 }
