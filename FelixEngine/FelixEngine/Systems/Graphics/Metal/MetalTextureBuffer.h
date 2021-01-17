@@ -26,9 +26,8 @@ namespace fx {
     id <MTLDevice> _device;
     id <MTLTexture> _texture;
     id <MTLCommandQueue> _queue;
-    int _width, _height, _mipLevels, _usageFlags;
-    bool _loaded;
     SamplerState _samplerState;
+    bool _loaded;
     vec4 _default;
  
   public:

@@ -34,18 +34,10 @@ MTLPixelFormat getMetalPixelFormat(TEXTURE_FORMAT format) {
 
 MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue):
     _device(device), _queue(queue), _texture(nil), _loaded(false) {
-  _width = 0;
-  _height = 0;
-  _mipLevels = 0;
-  _usageFlags = 0;
 }
 
 MetalTextureBuffer::MetalTextureBuffer(id <MTLDevice> device, id <MTLCommandQueue> queue, id <MTLTexture> texture):
     _device(device), _queue(queue), _texture(texture), _loaded(false) {
-  _width = (int)_texture.width;
-  _height = (int)_texture.height;
-  _mipLevels = 1;
-  _usageFlags = 0;
 }
 
 MetalTextureBuffer::~MetalTextureBuffer() {
@@ -54,14 +46,10 @@ MetalTextureBuffer::~MetalTextureBuffer() {
 
 bool MetalTextureBuffer::loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usageFlags) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(format);
-  _width = size.width;
-  _height = size.height;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
-                                                                                        width:_width
-                                                                                       height:_height
+                                                                                        width:size.width
+                                                                                       height:size.height
                                                                                     mipmapped:NO];
-  
-  _usageFlags = usageFlags;
   descriptor.usage |= usageFlags & TEXTURE_SHADER_READ ? MTLTextureUsageShaderRead : 0;
   descriptor.usage |= usageFlags & TEXTURE_SHADER_WRITE ? MTLTextureUsageShaderWrite : 0;
   descriptor.usage |= usageFlags & TEXTURE_RENDER_TARGET ? MTLTextureUsageRenderTarget : 0;
@@ -72,21 +60,16 @@ bool MetalTextureBuffer::loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usage
 
 bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool generateMipMap) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(image.pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
-  _width = image.size.width;
-  _height = image.size.height;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
-                                                                                        width:_width
-                                                                                       height:_height
+                                                                                        width:image.size.width
+                                                                                       height:image.size.height
                                                                                     mipmapped:generateMipMap];
-  
-  _usageFlags = TEXTURE_SHADER_READ;
   descriptor.usage = MTLTextureUsageShaderRead;
-  _mipLevels = (int)descriptor.mipmapLevelCount;
   
   _texture = [_device newTextureWithDescriptor:descriptor];
   if (_texture != nil) {
-    MTLRegion region = MTLRegionMake2D(0, 0, _width, _height);
-    NSUInteger bytesPerRow = _width * image.pixelBytes;
+    MTLRegion region = MTLRegionMake2D(0, 0, image.size.width, image.size.height);
+    NSUInteger bytesPerRow = image.size.width * image.pixelBytes;
     [_texture replaceRegion:region mipmapLevel:0 withBytes:image.ptr() bytesPerRow:bytesPerRow];
     _loaded = !generateMipMap;
     if (generateMipMap)
@@ -99,19 +82,17 @@ bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool generateMi
 
 bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images, bool generateMipMap) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(images.front().pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
-  _width = _height = images.front().size.height;
+  int size = images.front().size.height;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
-                                                                                           size:_width
+                                                                                           size:size
                                                                                       mipmapped:generateMipMap];
-  
-  _usageFlags = TEXTURE_SHADER_READ;
   [descriptor setUsage:MTLTextureUsageShaderRead];
-  _mipLevels = (int)descriptor.mipmapLevelCount;
+  
   _texture = [_device newTextureWithDescriptor:descriptor];
   if (_texture != nil) {
-    MTLRegion region = MTLRegionMake2D(0, 0, _width, _height);
-    NSUInteger bytesPerRow = _width * images.front().pixelBytes;
-    NSUInteger bytesPerImage = bytesPerRow * _height;
+    MTLRegion region = MTLRegionMake2D(0, 0, size, size);
+    NSUInteger bytesPerRow = size * images.front().pixelBytes;
+    NSUInteger bytesPerImage = bytesPerRow * size;
     for (int i = 0; i < images.size(); ++i)
       [_texture replaceRegion:region mipmapLevel:0 slice:i withBytes:images.at(i).ptr() bytesPerRow:bytesPerRow bytesPerImage:bytesPerImage];
     _loaded = !generateMipMap;
@@ -124,13 +105,12 @@ bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images, bool generate
 }
 
 bool MetalTextureBuffer::loadCubeMap(const ImageBufferData &image, bool generateMipMap) {
-  MTLPixelFormat pixelFormat = image.pixelBytes == 4 ? MTLPixelFormatRGBA8Unorm : MTLPixelFormatRGBA16Float;
-  _width = _height = image.size.height/2;
+  MTLPixelFormat pixelFormat = getMetalPixelFormat(image.pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
+  int size = image.size.height/2;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
-                                                                                           size:_width
+                                                                                           size:size
                                                                                       mipmapped:generateMipMap];
   [descriptor setUsage:MTLTextureUsageShaderRead];
-  _mipLevels = (int)descriptor.mipmapLevelCount;
   _texture = [_device newTextureWithDescriptor:descriptor];
   encodeGenerateCubeMap(image, generateMipMap);
   return true;
@@ -141,11 +121,19 @@ bool MetalTextureBuffer::loaded() const {
 }
 
 ivec2 MetalTextureBuffer::size() const {
-  return ivec2(_width, _height);
+  if (_texture != nil)
+    return ivec2((int)_texture.width, (int)_texture.height);
+  return ivec2(0, 0);
 }
 
 int MetalTextureBuffer::usageFlags() const {
-  return _usageFlags;
+  int flags = 0;
+  if (_texture != nil) {
+    flags = _texture.usage & MTLTextureUsageShaderRead ? TEXTURE_SHADER_READ : 0;
+    flags = _texture.usage & MTLTextureUsageShaderWrite ? TEXTURE_SHADER_WRITE : 0;
+    flags = _texture.usage & MTLTextureUsageRenderTarget ? TEXTURE_RENDER_TARGET : 0;
+  }
+  return flags;
 }
 
 TEXTURE_FORMAT MetalTextureBuffer::format() const {
@@ -172,10 +160,6 @@ void MetalTextureBuffer::encode(id <MTLRenderCommandEncoder> encoder, id <MTLSam
 void MetalTextureBuffer::setMetalTexture(id <MTLTexture> texture) {
   _texture = texture;
   _loaded = texture != nil;
-  if (_loaded) {
-    _width = (int)_texture.width;
-    _height = (int)_texture.height;
-  }
 }
 
 void MetalTextureBuffer::encodeGenerateMipMap() {
@@ -190,17 +174,16 @@ void MetalTextureBuffer::encodeGenerateMipMap() {
 }
 
 void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, bool generateMipMap) {
-  MTLPixelFormat pixelFormat = srcImage.pixelBytes == 4 ? MTLPixelFormatRGBA8Unorm : MTLPixelFormatRGBA16Float;
   // Setup Render Target
-  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
-                                                                                        width:_width
-                                                                                       height:_height
+  MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:_texture.pixelFormat
+                                                                                        width:_texture.width
+                                                                                       height:_texture.height
                                                                                     mipmapped:NO];
   descriptor.usage = MTLTextureUsageRenderTarget | MTLTextureUsageShaderRead;
   id <MTLTexture> renderTarget = [_device newTextureWithDescriptor:descriptor];
   
   // Setup the Source Texture
-  descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
+  descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:_texture.pixelFormat
                                                                   width:srcImage.size.width
                                                                  height:srcImage.size.height
                                                               mipmapped:NO];
@@ -220,7 +203,7 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   
   // Setup Pipeline Descriptor
   MTLRenderPipelineDescriptor *pipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-  pipelineDescriptor.colorAttachments[0].pixelFormat = pixelFormat;
+  pipelineDescriptor.colorAttachments[0].pixelFormat = _texture.pixelFormat;
   pipelineDescriptor.vertexDescriptor.attributes[0].bufferIndex = 0;
   pipelineDescriptor.vertexDescriptor.attributes[0].offset = 0;
   pipelineDescriptor.vertexDescriptor.attributes[0].format = MTLVertexFormatFloat2;
