@@ -63,9 +63,10 @@ namespace fx {
     virtual ivec2 size() const;
     
     virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags);
-    //virtual bool addRenderBuffer(TEXTURE_FORMAT format, TEXTURE_ACCESS access);
+    virtual void addRenderTarget(TextureBufferPtr texture);
     
-    virtual TextureBufferPtr getColorTexture(int index);
+    virtual TextureBufferPtr getColorTexture(int index) const;
+    virtual TextureBufferPtr getDepthTexture() const;
     
     void setMetalLayer(CAMetalLayer *layer);
     void present(id <MTLCommandBuffer> buffer);

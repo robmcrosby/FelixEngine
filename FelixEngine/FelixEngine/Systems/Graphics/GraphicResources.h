@@ -149,12 +149,13 @@ namespace fx {
     virtual ivec2 size() const = 0;
     
     virtual bool addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0) = 0;
-    //virtual void addRenderTarget(TextureBufferPtr texture) = 0;
+    virtual void addRenderTarget(TextureBufferPtr texture) = 0;
     
     bool addColorTexture();
     bool addDepthBuffer();
     
-    virtual TextureBufferPtr getColorTexture(int index) = 0;
+    virtual TextureBufferPtr getColorTexture(int index) const = 0;
+    virtual TextureBufferPtr getDepthTexture() const = 0;
   };
   
   struct BufferPool {

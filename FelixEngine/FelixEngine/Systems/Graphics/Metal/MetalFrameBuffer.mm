@@ -104,16 +104,23 @@ bool MetalFrameBuffer::addRenderTarget(TEXTURE_FORMAT format, int usageFlags) {
   MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_device, _queue);
   texture->loadBuffer(_size, format, usageFlags | TEXTURE_RENDER_TARGET);
   
-  if (format == TEXTURE_DEPTH32F || format == TEXTURE_DEPTH32F_STENCIL8)
-    _depthAttachment = texture;
-  else
-    _colorAttachments.push_back(texture);
-  
+  addRenderTarget(texture);
   return texture->loaded();
 }
 
-TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) {
+void MetalFrameBuffer::addRenderTarget(TextureBufferPtr texture) {
+  if (texture->format() == TEXTURE_DEPTH32F || texture->format() == TEXTURE_DEPTH32F)
+    _depthAttachment = static_pointer_cast<MetalTextureBuffer>(texture);
+  else
+    _colorAttachments.push_back(static_pointer_cast<MetalTextureBuffer>(texture));
+}
+
+TextureBufferPtr MetalFrameBuffer::getColorTexture(int index) const {
   return _colorAttachments.at(index);
+}
+
+TextureBufferPtr MetalFrameBuffer::getDepthTexture() const {
+  return _depthAttachment;
 }
 
 int MetalFrameBuffer::pipelineId(const BlendState &blending) const {

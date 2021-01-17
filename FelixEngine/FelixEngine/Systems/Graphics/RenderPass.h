@@ -70,6 +70,7 @@ namespace fx {
     bool addColorTexture() {return getFrame()->addColorTexture();}
     bool addDepthBuffer() {return getFrame()->addDepthBuffer();}
     TextureBufferPtr getColorTexture(int index = 0) {return getFrame()->getColorTexture(0);}
+    TextureBufferPtr getDepthTexture() {return getFrame()->getDepthTexture();}
     
     bool setClearSettings(const XMLTree::Node &node) {
       if (node.hasAttribute("color"))
