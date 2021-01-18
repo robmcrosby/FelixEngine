@@ -23,6 +23,7 @@ namespace fx {
   class TextureBuffer;
   class BufferPool;
   class RenderPass;
+  class CommandBuffer;
   
   typedef std::shared_ptr<FrameBuffer>   FrameBufferPtr;
   typedef std::shared_ptr<ShaderProgram> ShaderProgramPtr;
@@ -31,6 +32,7 @@ namespace fx {
   typedef std::shared_ptr<TextureBuffer> TextureBufferPtr;
   typedef std::shared_ptr<BufferPool>    BufferPoolPtr;
   typedef std::shared_ptr<RenderPass>    RenderPassPtr;
+  typedef std::shared_ptr<CommandBuffer> CommandBufferPtr;
   
   class Graphics {
   protected:
@@ -57,6 +59,7 @@ namespace fx {
     virtual TextureBufferPtr createTextureBuffer() = 0;
     virtual BufferPoolPtr    createBufferPool()    = 0;
     virtual RenderPassPtr    createRenderPass()    = 0;
+    virtual CommandBufferPtr createCommandBuffer() = 0;
     
     virtual void nextFrame() = 0;
     virtual void presentFrame() = 0;

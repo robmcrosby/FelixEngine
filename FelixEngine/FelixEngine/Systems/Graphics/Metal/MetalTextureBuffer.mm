@@ -219,27 +219,20 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   renderItem.setMeshVertexBuffer("vertices", 2, 4, buffer);
   renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
   renderItem.setTexture("srcTexture", srcImage, srcSampler);
-
-  MetalRenderPass renderPass(_device);
-  renderPass.addRenderItem(renderItem);
-  renderPass.resizeFrame((int)_texture.width, (int)_texture.height);
-  MetalTextureBufferPtr target = static_pointer_cast<MetalTextureBuffer>(renderPass.addRenderTarget(format(), TEXTURE_SHADER_READ));
-
-  id<MTLCommandBuffer> commandBuffer = [_queue commandBuffer];
-  renderPass.setCommandBuffer(commandBuffer);
   
+  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+  renderPass->addRenderItem(renderItem);
+  renderPass->resizeFrame((int)_texture.width, (int)_texture.height);
+  TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
+
+  CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
   for (int i = 0; i < 6; ++i) {
-    renderPass.getUniformMap()["rotation"] = rotationData[i];
-    renderPass.render();
-    target->encodeBlitToTexture(commandBuffer, _texture, i, 0);
+    renderPass->getUniformMap()["rotation"] = rotationData[i];
+    commandBuffer->encodeRenderPass(renderPass);
+    commandBuffer->encodeBlitTexture(target.get(), this, i);
   }
-  
   if (generateMipMap) {
-    encodeGenerateMipMap(commandBuffer);
+    commandBuffer->encodeGenerateMipmap(this);
   }
-  
-  [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer) {
-    _loaded = true;
-  }];
-  [commandBuffer commit];
+  commandBuffer->commit();
 }

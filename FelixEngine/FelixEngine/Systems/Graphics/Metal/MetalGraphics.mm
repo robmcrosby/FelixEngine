@@ -23,6 +23,7 @@
 #include "MetalDepthStencil.h"
 #include "MetalTextureSampler.h"
 #include "MetalRenderPass.h"
+#include "MetalCommandBuffer.h"
 
 #define MAX_INFLIGHT_FRAMES 3
 
@@ -147,6 +148,12 @@ RenderPassPtr MetalGraphics::createRenderPass() {
   shared_ptr<MetalRenderPass> renderPass = make_shared<MetalRenderPass>(_data->device);
   _data->renderPasses.push_back(renderPass.get());
   return renderPass;
+}
+
+CommandBufferPtr MetalGraphics::createCommandBuffer() {
+  id<MTLCommandBuffer> buffer = [_data->queue commandBuffer];
+  shared_ptr<MetalCommandBuffer> commandBuffer = make_shared<MetalCommandBuffer>(buffer);
+  return commandBuffer;
 }
 
 void MetalGraphics::nextFrame() {

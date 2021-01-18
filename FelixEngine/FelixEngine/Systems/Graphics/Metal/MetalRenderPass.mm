@@ -31,10 +31,14 @@ MetalRenderPass::~MetalRenderPass() {
 }
 
 void MetalRenderPass::render() {
+  encodeRender(_buffer);
+}
+
+void MetalRenderPass::encodeRender(id <MTLCommandBuffer> buffer) {
   MetalFrameBuffer *mtlFrame  = static_cast<MetalFrameBuffer*>(frame.get());
 
   // Create Render Encoder
-  id <MTLRenderCommandEncoder> encoder = mtlFrame->createEncoder(_buffer, depthStencilAction, colorActions);
+  id <MTLRenderCommandEncoder> encoder = mtlFrame->createEncoder(buffer, depthStencilAction, colorActions);
   
   sortRenderItems();
   for (auto &item : renderItems) {

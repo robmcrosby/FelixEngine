@@ -25,6 +25,8 @@
 		ADEA77B4255CA5350026DC39 /* PhongMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEA77B2255CA5350026DC39 /* PhongMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADEA77B7256198E10026DC39 /* PbrMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADEA77B5256198E10026DC39 /* PbrMaterial.cpp */; };
 		ADEA77B8256198E10026DC39 /* PbrMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEA77B6256198E10026DC39 /* PbrMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ADFDD28625B6025B008E662C /* MetalCommandBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = ADFDD28425B6025B008E662C /* MetalCommandBuffer.h */; };
+		ADFDD28725B6025B008E662C /* MetalCommandBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADFDD28525B6025B008E662C /* MetalCommandBuffer.mm */; };
 		C1136C351EF0BB6E00BA1322 /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C331EF0BB6E00BA1322 /* Application.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C391EF0BCC600BA1322 /* iOSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C1136C371EF0BCC600BA1322 /* iOSViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C1136C3E1EF0DFB200BA1322 /* iOSViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1136C3D1EF0DFB200BA1322 /* iOSViewController.mm */; };
@@ -158,6 +160,8 @@
 		ADEA77B2255CA5350026DC39 /* PhongMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhongMaterial.h; sourceTree = "<group>"; };
 		ADEA77B5256198E10026DC39 /* PbrMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PbrMaterial.cpp; sourceTree = "<group>"; };
 		ADEA77B6256198E10026DC39 /* PbrMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PbrMaterial.h; sourceTree = "<group>"; };
+		ADFDD28425B6025B008E662C /* MetalCommandBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalCommandBuffer.h; path = Systems/Graphics/Metal/MetalCommandBuffer.h; sourceTree = "<group>"; };
+		ADFDD28525B6025B008E662C /* MetalCommandBuffer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MetalCommandBuffer.mm; path = Systems/Graphics/Metal/MetalCommandBuffer.mm; sourceTree = "<group>"; };
 		C1136C321EF0BB6E00BA1322 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		C1136C331EF0BB6E00BA1322 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		C1136C371EF0BCC600BA1322 /* iOSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iOSViewController.h; path = iOS/iOSViewController.h; sourceTree = "<group>"; };
@@ -412,6 +416,8 @@
 				C1D1D7E7209B33AF000EB92C /* MetalView.m */,
 				C191F66520F1905500714F8B /* MetalRenderPass.h */,
 				C191F66620F1905500714F8B /* MetalRenderPass.mm */,
+				ADFDD28425B6025B008E662C /* MetalCommandBuffer.h */,
+				ADFDD28525B6025B008E662C /* MetalCommandBuffer.mm */,
 			);
 			name = MetalGraphics;
 			sourceTree = "<group>";
@@ -584,6 +590,7 @@
 				C191F66720F1905500714F8B /* MetalRenderPass.h in Headers */,
 				AD5048BC256F6D5100A1E2C0 /* iOSMotionSystem.h in Headers */,
 				C1401D601F0BEB1600BE9958 /* TextureMap.h in Headers */,
+				ADFDD28625B6025B008E662C /* MetalCommandBuffer.h in Headers */,
 				C1D1D7FD209BB712000EB92C /* VulkanTextureBuffer.h in Headers */,
 				C1136C4E1EF2229400BA1322 /* FileSystem.h in Headers */,
 				C1707B1D20F4372800A77FAC /* Camera.h in Headers */,
@@ -722,6 +729,7 @@
 				C1707B1F20F4372800A77FAC /* Light.cpp in Sources */,
 				AD5048BD256F6D5100A1E2C0 /* iOSMotionSystem.mm in Sources */,
 				AD56824025320366005B3CFB /* USDArchive.cpp in Sources */,
+				ADFDD28725B6025B008E662C /* MetalCommandBuffer.mm in Sources */,
 				C160E0911F353ECD00212AAA /* ARKitTracker.mm in Sources */,
 				C1401CFC1EFF2BF800BE9958 /* MeshLoader.cpp in Sources */,
 				C1401D031F00122500BE9958 /* FileSystem.cpp in Sources */,

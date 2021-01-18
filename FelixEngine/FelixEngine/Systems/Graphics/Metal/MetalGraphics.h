@@ -40,6 +40,7 @@ namespace fx {
     virtual TextureBufferPtr createTextureBuffer();
     virtual BufferPoolPtr    createBufferPool();
     virtual RenderPassPtr    createRenderPass();
+    virtual CommandBufferPtr createCommandBuffer();
     
     virtual void nextFrame();
     virtual void presentFrame();

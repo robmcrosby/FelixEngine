@@ -37,8 +37,12 @@ namespace fx {
     virtual ~MetalRenderPass();
     
     virtual void render();
+    void encodeRender(id <MTLCommandBuffer> buffer);
     void setCommandBuffer(id <MTLCommandBuffer> buffer);
   };
+
+  typedef std::shared_ptr<MetalRenderPass> MetalRenderPassPtr;
+
 }
 
 #endif /* MetalRenderPass_h */
