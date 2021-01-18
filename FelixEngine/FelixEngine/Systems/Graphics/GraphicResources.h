@@ -168,8 +168,8 @@ namespace fx {
   struct CommandBuffer {
     virtual ~CommandBuffer() {}
     virtual void encodeRenderPass(RenderPassPtr pass) = 0;
-    virtual void encodeBlitTexture(TextureBuffer *src, TextureBuffer *dst, int slice = 0, int level = 0) = 0;
-    virtual void encodeGenerateMipmap(TextureBuffer *texture) = 0;
+    virtual void encodeBlitTexture(TextureBufferPtr src, TextureBufferPtr dst, int slice = 0, int level = 0) = 0;
+    virtual void encodeGenerateMipmap(TextureBufferPtr texture) = 0;
     virtual void commit() = 0;
   };
 

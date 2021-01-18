@@ -30,20 +30,20 @@ void MetalCommandBuffer::encodeRenderPass(RenderPassPtr pass) {
   }
 }
 
-void MetalCommandBuffer::encodeBlitTexture(TextureBuffer *src, TextureBuffer *dst, int slice, int level) {
+void MetalCommandBuffer::encodeBlitTexture(TextureBufferPtr src, TextureBufferPtr dst, int slice, int level) {
   if (_buffer != nil) {
-//    MetalTextureBufferPtr srcTexture = static_pointer_cast<MetalTextureBuffer>(src);
-//    MetalTextureBufferPtr dstTexture = static_pointer_cast<MetalTextureBuffer>(dst);
-    MetalTextureBuffer *srcTexture = (MetalTextureBuffer*)src;
-    MetalTextureBuffer *dstTexture = (MetalTextureBuffer*)dst;
+    MetalTextureBufferPtr srcTexture = static_pointer_cast<MetalTextureBuffer>(src);
+    MetalTextureBufferPtr dstTexture = static_pointer_cast<MetalTextureBuffer>(dst);
+//    MetalTextureBuffer *srcTexture = (MetalTextureBuffer*)src;
+//    MetalTextureBuffer *dstTexture = (MetalTextureBuffer*)dst;
     srcTexture->encodeBlitToTexture(_buffer, dstTexture->_texture, slice, level);
   }
 }
 
-void MetalCommandBuffer::encodeGenerateMipmap(TextureBuffer *texture) {
+void MetalCommandBuffer::encodeGenerateMipmap(TextureBufferPtr texture) {
   if (_buffer != nil) {
-    //MetalTextureBufferPtr mtlTexture = static_pointer_cast<MetalTextureBuffer>(texture);
-    MetalTextureBuffer *mtlTexture = (MetalTextureBuffer*)texture;
+    MetalTextureBufferPtr mtlTexture = static_pointer_cast<MetalTextureBuffer>(texture);
+    //MetalTextureBuffer *mtlTexture = (MetalTextureBuffer*)texture;
     mtlTexture->encodeGenerateMipMap(_buffer);
   }
 }

@@ -22,7 +22,7 @@
 
 namespace fx {
 
-  class MetalTextureBuffer: public TextureBuffer {
+  class MetalTextureBuffer: public TextureBuffer, public std::enable_shared_from_this<MetalTextureBuffer> {
   public:
     id <MTLDevice> _device;
     id <MTLTexture> _texture;

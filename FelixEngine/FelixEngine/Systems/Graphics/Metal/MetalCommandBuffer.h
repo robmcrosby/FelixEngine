@@ -33,8 +33,8 @@ namespace fx {
     virtual ~MetalCommandBuffer();
     
     virtual void encodeRenderPass(RenderPassPtr pass);
-    virtual void encodeBlitTexture(TextureBuffer *src, TextureBuffer *dst, int slice, int level);
-    virtual void encodeGenerateMipmap(TextureBuffer *texture);
+    virtual void encodeBlitTexture(TextureBufferPtr src, TextureBufferPtr dst, int slice, int level);
+    virtual void encodeGenerateMipmap(TextureBufferPtr texture);
     virtual void commit();
   };
 }

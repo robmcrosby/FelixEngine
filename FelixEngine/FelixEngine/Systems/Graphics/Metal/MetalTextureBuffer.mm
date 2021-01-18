@@ -208,31 +208,32 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   rotationData.push_back(quat::RotZ(0.0f));       // Front
   rotationData.push_back(quat::RotZ(M_PI));       // Back
   
-  SamplerState srcSampler;
-  srcSampler.setSCoord(COORD_REPEAT);
-  srcSampler.setTCoord(COORD_REPEAT);
-  srcSampler.setMinFilter(FILTER_LINEAR);
-  srcSampler.setMagFilter(FILTER_LINEAR);
+  SamplerState sampler;
+  sampler.setSCoord(COORD_REPEAT);
+  sampler.setTCoord(COORD_REPEAT);
+  sampler.setMinFilter(FILTER_LINEAR);
+  sampler.setMagFilter(FILTER_LINEAR);
   
   RenderItem renderItem;
   renderItem.loadShaderFunctions("v_cube_gen", "f_cube_gen");
   renderItem.setMeshVertexBuffer("vertices", 2, 4, buffer);
   renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
-  renderItem.setTexture("srcTexture", srcImage, srcSampler);
+  renderItem.setTexture("srcTexture", srcImage, sampler);
   
-  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+  RenderPassPtr renderPass = make_shared<MetalRenderPass>(_device); //Graphics::getInstance().createRenderPass();
   renderPass->addRenderItem(renderItem);
   renderPass->resizeFrame((int)_texture.width, (int)_texture.height);
   TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
 
+  MetalTextureBufferPtr thisTexture = shared_from_this();
   CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
   for (int i = 0; i < 6; ++i) {
     renderPass->getUniformMap()["rotation"] = rotationData[i];
     commandBuffer->encodeRenderPass(renderPass);
-    commandBuffer->encodeBlitTexture(target.get(), this, i);
+    commandBuffer->encodeBlitTexture(target, thisTexture, i);
   }
   if (generateMipMap) {
-    commandBuffer->encodeGenerateMipmap(this);
+    commandBuffer->encodeGenerateMipmap(thisTexture);
   }
   commandBuffer->commit();
 }
