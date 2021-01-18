@@ -30,9 +30,6 @@
 namespace fx {
   class BlendState;
 
-  typedef std::shared_ptr<MetalTextureBuffer> MetalTextureBufferPtr;
-  typedef std::vector<MetalTextureBufferPtr> MetalTextureBuffers;
-
   typedef std::vector<id <MTLTexture> > attachmentsList;
   
   class MetalFrameBuffer: public FrameBuffer {

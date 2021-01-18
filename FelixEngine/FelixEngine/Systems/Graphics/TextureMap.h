@@ -48,6 +48,7 @@ namespace fx {
     
     bool loadTexture(const ImageBufferData &image, SamplerState sampler = SamplerState(), const std::string &name = "") {
       this->sampler = sampler;
+      setBuffer(name);
       return buffer->loadImage(image, sampler.mipMappingEnabled());
     }
     

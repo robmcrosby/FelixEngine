@@ -14,6 +14,7 @@
 
 @protocol MTLDevice;
 @protocol MTLTexture;
+@protocol MTLCommandBuffer;
 @protocol MTLCommandQueue;
 @protocol MTLRenderCommandEncoder;
 @protocol MTLSamplerState;
@@ -40,6 +41,9 @@ namespace fx {
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap);
     virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap);
     
+//    virtual void blitToTexture(TextureBufferPtr texture, int slice, int level);
+//    virtual void generateMipMap();
+    
     virtual bool loaded() const;
     virtual ivec2 size() const;
     
@@ -54,10 +58,17 @@ namespace fx {
     
     id <MTLTexture> getMetalTexture() const {return _texture;}
     
+    void encodeBlitToTexture(id <MTLCommandBuffer> commandBuffer, id <MTLTexture> dst, int slice, int level);
+    void encodeGenerateMipMap(id <MTLCommandBuffer> commandBuffer);
+    
   private:
     void encodeGenerateMipMap();
     void encodeGenerateCubeMap(const ImageBufferData &image, bool generateMipMap);
   };
+
+  typedef std::shared_ptr<MetalTextureBuffer> MetalTextureBufferPtr;
+  typedef std::vector<MetalTextureBufferPtr> MetalTextureBuffers;
+
 }
 
 #endif /* MetalTextureBuffer_h */

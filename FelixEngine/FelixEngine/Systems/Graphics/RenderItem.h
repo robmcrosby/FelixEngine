@@ -85,7 +85,7 @@ namespace fx {
     void setTexture(const std::string &name, TextureBufferPtr texture, SamplerState sampler = SamplerState()) {
       getTextureMap().setTexture(name, texture, sampler);
     }
-    void setTexture(const std::string &name, ImageBufferData &imageData, SamplerState sampler = SamplerState()) {
+    void setTexture(const std::string &name, const ImageBufferData &imageData, SamplerState sampler = SamplerState()) {
       getTextureMap().setTexture(name, imageData, sampler);
     }
     bool setTexture(const std::string &name, const std::string &file, SamplerState sampler = SamplerState()) {
