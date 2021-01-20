@@ -106,7 +106,7 @@ namespace fx {
     }
   };
   
-  struct TextureBuffer: iObject {
+  struct TextureBuffer: iObject, public std::enable_shared_from_this<TextureBuffer> {
     virtual ~TextureBuffer() {}
     
     virtual void setScene(Scene *scene) {}
@@ -126,8 +126,8 @@ namespace fx {
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap) = 0;
     
-//    virtual void blitToTexture(TextureBufferPtr texture, int slice = 0, int level = 0) = 0;
-//    virtual void generateMipMap() = 0;
+    void generateMipMap();
+    void generateCubeMap(const ImageBufferData &image, bool mipmapped);
     
     virtual bool loaded() const = 0;
     virtual ivec2 size() const = 0;

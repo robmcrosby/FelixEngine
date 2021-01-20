@@ -22,7 +22,7 @@
 
 namespace fx {
 
-  class MetalTextureBuffer: public TextureBuffer, public std::enable_shared_from_this<MetalTextureBuffer> {
+  class MetalTextureBuffer: public TextureBuffer {
   public:
     id <MTLDevice> _device;
     id <MTLTexture> _texture;
@@ -57,10 +57,6 @@ namespace fx {
     
     void encodeBlitToTexture(id <MTLCommandBuffer> commandBuffer, id <MTLTexture> dst, int slice, int level);
     void encodeGenerateMipMap(id <MTLCommandBuffer> commandBuffer);
-    
-  private:
-    void generateMipMap();
-    void generateCubeMap(const ImageBufferData &image, bool mipmapped);
   };
 
   typedef std::shared_ptr<MetalTextureBuffer> MetalTextureBufferPtr;

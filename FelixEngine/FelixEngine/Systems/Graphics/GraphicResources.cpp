@@ -10,6 +10,8 @@
 #include "FileSystem.h"
 #include "MeshLoader.h"
 #include "USDCrate.h"
+#include "Quaternion.h"
+#include "RenderPass.h"
 
 
 using namespace fx;
@@ -98,6 +100,55 @@ bool TextureBuffer::loadCubeColor(const RGBA &color) {
     image[0] = color;
   }
   return loadCubeMap(images, false);
+}
+
+void TextureBuffer::generateMipMap() {
+  TextureBufferPtr thisTexture = shared_from_this();
+  CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
+  commandBuffer->encodeGenerateMipmap(thisTexture);
+  commandBuffer->commit();
+}
+
+void TextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmapped) {
+  float buffer[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+  
+  // Rotations
+  vector<quat> rotationData;
+  rotationData.push_back(quat::RotZ(M_PI/2.0f));  // Right
+  rotationData.push_back(quat::RotZ(-M_PI/2.0f)); // Left
+  rotationData.push_back(quat::RotY(-M_PI/2.0f)); // Up
+  rotationData.push_back(quat::RotY(M_PI/2.0f));  // Down
+  rotationData.push_back(quat::RotZ(0.0f));       // Front
+  rotationData.push_back(quat::RotZ(M_PI));       // Back
+  
+  SamplerState sampler;
+  sampler.setSCoord(COORD_REPEAT);
+  sampler.setTCoord(COORD_REPEAT);
+  sampler.setMinFilter(FILTER_LINEAR);
+  sampler.setMagFilter(FILTER_LINEAR);
+  
+  RenderItem renderItem;
+  renderItem.loadShaderFunctions("v_cube_gen", "f_cube_gen");
+  renderItem.setMeshVertexBuffer("vertices", 2, 4, buffer);
+  renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
+  renderItem.setTexture("srcTexture", srcImage, sampler);
+  
+  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+  renderPass->addRenderItem(renderItem);
+  renderPass->resizeFrame(size().width, size().height);
+  TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
+
+  TextureBufferPtr thisTexture = shared_from_this();
+  CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
+  for (int i = 0; i < 6; ++i) {
+    renderPass->getUniformMap()["rotation"] = rotationData[i];
+    commandBuffer->encodeRenderPass(renderPass);
+    commandBuffer->encodeBlitTexture(target, thisTexture, i);
+  }
+  if (mipmapped) {
+    commandBuffer->encodeGenerateMipmap(thisTexture);
+  }
+  commandBuffer->commit();
 }
 
 
