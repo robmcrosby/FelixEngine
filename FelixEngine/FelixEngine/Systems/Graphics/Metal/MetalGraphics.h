@@ -45,7 +45,7 @@ namespace fx {
     virtual void nextFrame();
     virtual void presentFrame();
     
-    //virtual void setRenderPassToWindow(RenderPassPtr pass, int window);
+    virtual void setRenderPassToWindow(RenderPassPtr pass, int window);
   };
   
 }

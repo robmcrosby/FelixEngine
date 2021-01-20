@@ -26,7 +26,7 @@ namespace fx {
   /**
    *
    */
-  struct RenderPass: public iObject {
+  struct RenderPass: public iObject, public std::enable_shared_from_this<RenderPass> {
     FrameBufferPtr frame;
     
     ActionState colorActions[MAX_COLOR_ATTACHEMENTS];
@@ -65,7 +65,11 @@ namespace fx {
         setFrame(node.attribute("name"));
       return getFrame()->load(node);
     }
-    bool setFrameToWindow(int index) {return getFrame()->setToWindow(index);}
+    bool setFrameToWindow(int index) {
+      RenderPassPtr thisPass = shared_from_this();
+      Graphics::getInstance().setRenderPassToWindow(thisPass, index);
+      return getFrame()->setToWindow(index);
+    }
     bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
     TextureBufferPtr addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0) {
       return getFrame()->addRenderTarget(format, usageFlags);

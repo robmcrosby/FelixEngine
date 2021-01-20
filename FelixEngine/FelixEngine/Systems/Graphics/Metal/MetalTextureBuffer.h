@@ -37,12 +37,9 @@ namespace fx {
     virtual ~MetalTextureBuffer();
     
     virtual bool loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usageFlags);
-    virtual bool loadImage(const ImageBufferData &image, bool generateMipMap);
-    virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap);
-    virtual bool loadCubeMap(const ImageBufferData &image, bool generateMipMap);
-    
-//    virtual void blitToTexture(TextureBufferPtr texture, int slice, int level);
-//    virtual void generateMipMap();
+    virtual bool loadImage(const ImageBufferData &image, bool mipmapped);
+    virtual bool loadCubeMap(const ImageBufferSet &images, bool mipmapped);
+    virtual bool loadCubeMap(const ImageBufferData &image, bool mipmapped);
     
     virtual bool loaded() const;
     virtual ivec2 size() const;
@@ -62,8 +59,8 @@ namespace fx {
     void encodeGenerateMipMap(id <MTLCommandBuffer> commandBuffer);
     
   private:
-    void encodeGenerateMipMap();
-    void encodeGenerateCubeMap(const ImageBufferData &image, bool generateMipMap);
+    void generateMipMap();
+    void generateCubeMap(const ImageBufferData &image, bool mipmapped);
   };
 
   typedef std::shared_ptr<MetalTextureBuffer> MetalTextureBufferPtr;

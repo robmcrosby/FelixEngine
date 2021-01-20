@@ -60,12 +60,12 @@ bool MetalTextureBuffer::loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usage
   return _loaded = _texture != nil;
 }
 
-bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool generateMipMap) {
+bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool mipmapped) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(image.pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:pixelFormat
                                                                                         width:image.size.width
                                                                                        height:image.size.height
-                                                                                    mipmapped:generateMipMap];
+                                                                                    mipmapped:mipmapped];
   descriptor.usage = MTLTextureUsageShaderRead;
   
   _texture = [_device newTextureWithDescriptor:descriptor];
@@ -73,21 +73,21 @@ bool MetalTextureBuffer::loadImage(const ImageBufferData &image, bool generateMi
     MTLRegion region = MTLRegionMake2D(0, 0, image.size.width, image.size.height);
     NSUInteger bytesPerRow = image.size.width * image.pixelBytes;
     [_texture replaceRegion:region mipmapLevel:0 withBytes:image.ptr() bytesPerRow:bytesPerRow];
-    _loaded = !generateMipMap;
-    if (generateMipMap)
-      encodeGenerateMipMap();
+    _loaded = !mipmapped;
+    if (mipmapped)
+      generateMipMap();
     return true;
   }
   cerr << "Error Creating Metal Texture" << endl;
   return false;
 }
 
-bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images, bool generateMipMap) {
+bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images, bool mipmapped) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(images.front().pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
   int size = images.front().size.height;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
                                                                                            size:size
-                                                                                      mipmapped:generateMipMap];
+                                                                                      mipmapped:mipmapped];
   [descriptor setUsage:MTLTextureUsageShaderRead];
   
   _texture = [_device newTextureWithDescriptor:descriptor];
@@ -97,37 +97,26 @@ bool MetalTextureBuffer::loadCubeMap(const ImageBufferSet &images, bool generate
     NSUInteger bytesPerImage = bytesPerRow * size;
     for (int i = 0; i < images.size(); ++i)
       [_texture replaceRegion:region mipmapLevel:0 slice:i withBytes:images.at(i).ptr() bytesPerRow:bytesPerRow bytesPerImage:bytesPerImage];
-    _loaded = !generateMipMap;
-    if (generateMipMap)
-      encodeGenerateMipMap();
+    _loaded = !mipmapped;
+    if (mipmapped)
+      generateMipMap();
     return true;
   }
   cerr << "Error Creating Metal Cube Map" << endl;
   return false;
 }
 
-bool MetalTextureBuffer::loadCubeMap(const ImageBufferData &image, bool generateMipMap) {
+bool MetalTextureBuffer::loadCubeMap(const ImageBufferData &image, bool mipmapped) {
   MTLPixelFormat pixelFormat = getMetalPixelFormat(image.pixelBytes == 4 ? TEXTURE_RGBA8 : TEXTURE_RGBA16F);
   int size = image.size.height/2;
   MTLTextureDescriptor *descriptor = [MTLTextureDescriptor textureCubeDescriptorWithPixelFormat:pixelFormat
                                                                                            size:size
-                                                                                      mipmapped:generateMipMap];
+                                                                                      mipmapped:mipmapped];
   [descriptor setUsage:MTLTextureUsageShaderRead];
   _texture = [_device newTextureWithDescriptor:descriptor];
-  encodeGenerateCubeMap(image, generateMipMap);
+  generateCubeMap(image, mipmapped);
   return true;
 }
-
-//void MetalTextureBuffer::blitToTexture(TextureBufferPtr texture, int slice, int level) {
-//
-//  id<MTLBlitCommandEncoder> blitEncoder = [commandBuffer blitCommandEncoder];
-//  [blitEncoder copyFromTexture:renderTarget sourceSlice:0 sourceLevel:0 toTexture:_texture destinationSlice:i destinationLevel:0 sliceCount:1 levelCount:1];
-//  [blitEncoder endEncoding];
-//}
-//
-//void MetalTextureBuffer::generateMipMap() {
-//
-//}
 
 bool MetalTextureBuffer::loaded() const {
   return _loaded;
@@ -187,16 +176,14 @@ void MetalTextureBuffer::encodeGenerateMipMap(id <MTLCommandBuffer> commandBuffe
   [blitEncoder endEncoding];
 }
 
-void MetalTextureBuffer::encodeGenerateMipMap() {
-  id<MTLCommandBuffer> commandBuffer = [_queue commandBuffer];
-  encodeGenerateMipMap(commandBuffer);
-  [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer> buffer) {
-    _loaded = true;
-  }];
-  [commandBuffer commit];
+void MetalTextureBuffer::generateMipMap() {
+  TextureBufferPtr thisTexture = shared_from_this();
+  CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
+  commandBuffer->encodeGenerateMipmap(thisTexture);
+  commandBuffer->commit();
 }
 
-void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, bool generateMipMap) {
+void MetalTextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmapped) {
   float buffer[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
   
   // Rotations
@@ -220,7 +207,7 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
   renderItem.setTexture("srcTexture", srcImage, sampler);
   
-  RenderPassPtr renderPass = make_shared<MetalRenderPass>(_device); //Graphics::getInstance().createRenderPass();
+  RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
   renderPass->addRenderItem(renderItem);
   renderPass->resizeFrame((int)_texture.width, (int)_texture.height);
   TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
@@ -232,7 +219,7 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
     commandBuffer->encodeRenderPass(renderPass);
     commandBuffer->encodeBlitTexture(target, thisTexture, i);
   }
-  if (generateMipMap) {
+  if (mipmapped) {
     commandBuffer->encodeGenerateMipmap(thisTexture);
   }
   commandBuffer->commit();

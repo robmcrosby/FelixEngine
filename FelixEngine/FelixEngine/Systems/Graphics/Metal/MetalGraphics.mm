@@ -40,8 +40,7 @@ namespace fx {
     
     dispatch_semaphore_t frameBoundarySemaphore;
     
-    // TODO: Put in Better Structure
-    std::vector<MetalRenderPass*> renderPasses;
+    std::vector<MetalRenderPassPtr> renderPasses;
     
     ~MTLGraphicsData() {}
   };
@@ -146,7 +145,6 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
 
 RenderPassPtr MetalGraphics::createRenderPass() {
   shared_ptr<MetalRenderPass> renderPass = make_shared<MetalRenderPass>(_data->device);
-  _data->renderPasses.push_back(renderPass.get());
   return renderPass;
 }
 
@@ -183,7 +181,7 @@ void MetalGraphics::presentFrame() {
   _data->buffer = nil;
 }
 
-//void MetalGraphics::setRenderPassToWindow(RenderPassPtr pass, int window) {
-//  MetalRenderPassPtr renderPass = static_pointer_cast<MetalRenderPass>(pass->getFrame());
-//  _data->renderPasses.push_back(renderPass.get());
-//}
+void MetalGraphics::setRenderPassToWindow(RenderPassPtr pass, int window) {
+  MetalRenderPassPtr renderPass = static_pointer_cast<MetalRenderPass>(pass);
+  _data->renderPasses.push_back(renderPass);
+}
