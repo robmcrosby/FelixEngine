@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <Scene name="test">
-  <RenderPass name="MainPass">
+  <RenderPass name="MainPass" window="0">
     <Frame name="MainFrame" window="0">
       <Buffer type="depth"/>
     </Frame>

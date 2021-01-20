@@ -148,6 +148,8 @@ namespace fx {
         setFrame(node.attribute("frame"));
       if (node.hasAttribute("sorted"))
         sortItems = node.attributeAsBoolean("sorted");
+      if (node.hasAttribute("window"))
+        setFrameToWindow(node.attributeAsInt("window"));
       for (auto subNode : node)
         success &= loadXMLItem(*subNode);
       return success;
