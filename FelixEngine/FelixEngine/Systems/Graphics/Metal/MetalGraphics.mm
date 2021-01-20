@@ -182,3 +182,8 @@ void MetalGraphics::presentFrame() {
   }
   _data->buffer = nil;
 }
+
+//void MetalGraphics::setRenderPassToWindow(RenderPassPtr pass, int window) {
+//  MetalRenderPassPtr renderPass = static_pointer_cast<MetalRenderPass>(pass->getFrame());
+//  _data->renderPasses.push_back(renderPass.get());
+//}

@@ -64,6 +64,8 @@ namespace fx {
     virtual void nextFrame() = 0;
     virtual void presentFrame() = 0;
     
+    //virtual void setRenderPassToWindow(RenderPassPtr pass, int window) = 0;
+    
     FrameBufferPtr getFrameBuffer(const std::string &name) {
       FrameBufferPtr frame = frameMap[name].lock();
       if (!frame) {

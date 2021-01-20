@@ -225,7 +225,7 @@ void MetalTextureBuffer::encodeGenerateCubeMap(const ImageBufferData &srcImage, 
   renderPass->resizeFrame((int)_texture.width, (int)_texture.height);
   TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
 
-  MetalTextureBufferPtr thisTexture = shared_from_this();
+  TextureBufferPtr thisTexture = shared_from_this();
   CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
   for (int i = 0; i < 6; ++i) {
     renderPass->getUniformMap()["rotation"] = rotationData[i];

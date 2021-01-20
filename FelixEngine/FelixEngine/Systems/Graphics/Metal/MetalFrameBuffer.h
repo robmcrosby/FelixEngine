@@ -75,6 +75,9 @@ namespace fx {
     int metalBlendFactor(int factor) const;
     int metalBlendOperation(int operation) const;
   };
+
+  typedef std::shared_ptr<MetalFrameBuffer> MetalFrameBufferPtr;
+
 }
 
 #endif /* MetalFrameBuffer_h */

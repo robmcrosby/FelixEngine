@@ -37,6 +37,7 @@ namespace fx {
     virtual ~MetalRenderPass();
     
     virtual void render();
+    
     void encodeRender(id <MTLCommandBuffer> buffer);
     void setCommandBuffer(id <MTLCommandBuffer> buffer);
   };
