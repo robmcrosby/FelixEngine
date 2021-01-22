@@ -7,7 +7,6 @@
 //
 
 #include "MetalVertexMesh.h"
-#include "MetalShaderProgram.h"
 #include "VertexMeshData.h"
 #include <Metal/Metal.h>
 
@@ -87,7 +86,7 @@ unsigned int MetalVertexMesh::getMeshId() const {
   return _meshId;
 }
 
-void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances) {
+void MetalVertexMesh::encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgramPtr shader, int instances) {
   for (auto buffer : _buffers) {
     if (shader->_vertexIndexMap.count(buffer.first)) {
       NSUInteger index = shader->_vertexIndexMap.at(buffer.first);

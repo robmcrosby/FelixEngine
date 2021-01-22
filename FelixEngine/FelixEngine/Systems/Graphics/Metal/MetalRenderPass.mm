@@ -32,7 +32,6 @@ MetalRenderPass::~MetalRenderPass() {
 }
 
 void MetalRenderPass::encodeRender(id <MTLCommandBuffer> buffer) {
-  //MetalFrameBuffer *mtlFrame  = static_cast<MetalFrameBuffer*>(frame.get());
   MetalFrameBufferPtr mtlFrame = static_pointer_cast<MetalFrameBuffer>(frame);
 
   // Create Render Encoder
@@ -40,8 +39,8 @@ void MetalRenderPass::encodeRender(id <MTLCommandBuffer> buffer) {
   
   sortRenderItems();
   for (auto &item : renderItems) {
-    MetalShaderProgram *shader = static_cast<MetalShaderProgram*>(item.shader.get());
-    MetalVertexMesh    *mesh   = static_cast<MetalVertexMesh*>(item.mesh.get());
+    MetalShaderProgramPtr shader = static_pointer_cast<MetalShaderProgram>(item.shader);
+    MetalVertexMeshPtr mesh = static_pointer_cast<MetalVertexMesh>(item.mesh);
 
     // Encode the Shader Program, Render Pipeline
     shader->encode(encoder, mtlFrame, item.blendState);

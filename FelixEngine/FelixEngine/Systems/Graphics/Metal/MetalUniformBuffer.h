@@ -48,6 +48,8 @@ namespace fx {
     void encodeLast(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader);
     void encode(id <MTLRenderCommandEncoder> encoder, const std::string &name, MetalShaderProgram *shader, int buffer);
   };
+
+  typedef std::shared_ptr<MetalUniformBuffer> MetalUniformBufferPtr;
 }
 
 #endif /* MetalUniformBuffer_h */

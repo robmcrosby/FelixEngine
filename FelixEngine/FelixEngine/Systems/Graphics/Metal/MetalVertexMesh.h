@@ -10,6 +10,7 @@
 #define MetalVertexMesh_h
 
 #include "GraphicResources.h"
+#include "MetalShaderProgram.h"
 #include <map>
 
 
@@ -19,7 +20,6 @@
 
 
 namespace fx {
-  class MetalShaderProgram;
   typedef std::map<std::string, id <MTLBuffer> > MetalBufferMap;
   
   class MetalVertexMesh: public VertexMesh {
@@ -47,8 +47,10 @@ namespace fx {
     
     virtual unsigned int getMeshId() const;
     
-    void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgram *shader, int instances);
+    void encode(id <MTLRenderCommandEncoder> encoder, MetalShaderProgramPtr shader, int instances);
   };
+
+  typedef std::shared_ptr<MetalVertexMesh> MetalVertexMeshPtr;
 }
 
 #endif /* MetalVertexMesh_h */

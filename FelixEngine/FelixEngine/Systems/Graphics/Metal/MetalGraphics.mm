@@ -108,27 +108,27 @@ bool MetalGraphics::initalize(UIView *view) {
 }
 
 FrameBufferPtr MetalGraphics::createFrameBuffer() {
-  shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device, _data->queue);
+  MetalFrameBufferPtr frame = make_shared<MetalFrameBuffer>(_data->device, _data->queue);
   return frame;
 }
 
 ShaderProgramPtr MetalGraphics::createShaderProgram() {
-  shared_ptr<MetalShaderProgram> shader = make_shared<MetalShaderProgram>(_data->device);
+  MetalShaderProgramPtr shader = make_shared<MetalShaderProgram>(_data->device);
   return shader;
 }
 
 VertexMeshPtr MetalGraphics::createVertexMesh() {
-  shared_ptr<MetalVertexMesh> mesh = make_shared<MetalVertexMesh>(_data->device);
+  MetalVertexMeshPtr mesh = make_shared<MetalVertexMesh>(_data->device);
   return mesh;
 }
 
 UniformBufferPtr MetalGraphics::createUniformBuffer() {
-  shared_ptr<MetalUniformBuffer> buffer = make_shared<MetalUniformBuffer>(_data->device);
+  MetalUniformBufferPtr buffer = make_shared<MetalUniformBuffer>(_data->device);
   return buffer;
 }
 
 TextureBufferPtr MetalGraphics::createTextureBuffer() {
-  shared_ptr<MetalTextureBuffer> texture = make_shared<MetalTextureBuffer>(_data->device, _data->queue);
+  MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_data->device, _data->queue);
   return texture;
 }
 
@@ -138,13 +138,12 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
 }
 
 RenderPassPtr MetalGraphics::createRenderPass() {
-  shared_ptr<MetalRenderPass> renderPass = make_shared<MetalRenderPass>(_data->device);
+  MetalRenderPassPtr renderPass = make_shared<MetalRenderPass>(_data->device);
   return renderPass;
 }
 
 CommandBufferPtr MetalGraphics::createCommandBuffer() {
-  id<MTLCommandBuffer> buffer = [_data->queue commandBuffer];
-  shared_ptr<MetalCommandBuffer> commandBuffer = make_shared<MetalCommandBuffer>(buffer);
+  MetalCommandBufferPtr commandBuffer = make_shared<MetalCommandBuffer>([_data->queue commandBuffer]);
   return commandBuffer;
 }
 

@@ -68,6 +68,8 @@ namespace fx {
     void setDescriptorAttributes(MTLRenderPipelineDescriptor *descriptor);
     void extractIndexMaps();
   };
+
+  typedef std::shared_ptr<MetalShaderProgram> MetalShaderProgramPtr;
 }
 
 #endif /* MetalShaderProgram_h */
