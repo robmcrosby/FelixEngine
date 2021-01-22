@@ -12,6 +12,7 @@
 #include "GraphicResources.h"
 
 #include "MetalFrameBuffer.h"
+#include "MetalCommandBuffer.h"
 #include "MetalShaderProgram.h"
 #include "MetalVertexMesh.h"
 #include "MetalDepthStencil.h"
@@ -30,12 +31,9 @@ MetalRenderPass::~MetalRenderPass() {
 
 }
 
-void MetalRenderPass::render() {
-  encodeRender(_buffer);
-}
-
 void MetalRenderPass::encodeRender(id <MTLCommandBuffer> buffer) {
-  MetalFrameBuffer *mtlFrame  = static_cast<MetalFrameBuffer*>(frame.get());
+  //MetalFrameBuffer *mtlFrame  = static_cast<MetalFrameBuffer*>(frame.get());
+  MetalFrameBufferPtr mtlFrame = static_pointer_cast<MetalFrameBuffer>(frame);
 
   // Create Render Encoder
   id <MTLRenderCommandEncoder> encoder = mtlFrame->createEncoder(buffer, depthStencilAction, colorActions);
@@ -80,8 +78,4 @@ void MetalRenderPass::encodeRender(id <MTLCommandBuffer> buffer) {
   }
   // End Encoding
   [encoder endEncoding];
-}
-
-void MetalRenderPass::setCommandBuffer(id <MTLCommandBuffer> buffer) {
-  _buffer = buffer;
 }

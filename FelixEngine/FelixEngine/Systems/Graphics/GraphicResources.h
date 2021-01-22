@@ -146,8 +146,6 @@ namespace fx {
     virtual void update(float dt) {}
     virtual bool load(const XMLTree::Node &node);
     
-    virtual bool setToWindow(int index) = 0;
-    
     virtual bool resize(int width, int height) = 0;
     virtual ivec2 size() const = 0;
     

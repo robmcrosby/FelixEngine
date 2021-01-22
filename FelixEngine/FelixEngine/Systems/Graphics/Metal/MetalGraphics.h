@@ -18,20 +18,18 @@ OBJC_CLASS(UIView)
 namespace fx {
   
   class MTLGraphicsData;
-  class MetalFrameBuffer;
   
   /** iOS File System */
   class MetalGraphics: public Graphics {
   private:
     MTLGraphicsData  *_data;
-    MetalFrameBuffer *_windowBuffer;
+    CommandBufferPtr _frameCommandBuffer;
     
   public:
     MetalGraphics();
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
-    bool setWindowBuffer(MetalFrameBuffer *buffer, int index = 0);
     
     virtual FrameBufferPtr   createFrameBuffer();
     virtual ShaderProgramPtr createShaderProgram();
@@ -44,6 +42,7 @@ namespace fx {
     
     virtual void nextFrame();
     virtual void presentFrame();
+    virtual CommandBufferPtr getFrameCommandBuffer();
     
     virtual void setRenderPassToWindow(RenderPassPtr pass, int window);
   };

@@ -154,9 +154,6 @@ void TextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmap
 
 bool FrameBuffer::load(const XMLTree::Node &node) {
   bool success = true;
-  if (node.hasAttribute("window"))
-    success &= setToWindow(node.attributeAsInt("window"));
-  
   for (auto subnode : node) {
     if (subnode->attribute("type") == "depth")
       addDepthBuffer();

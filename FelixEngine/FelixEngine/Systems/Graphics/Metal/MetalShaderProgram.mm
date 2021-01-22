@@ -54,7 +54,7 @@ bool MetalShaderProgram::loadShaderFunctions(const string &vertex, const string 
   return false;
 }
 
-void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame, BlendState blendState) {
+void MetalShaderProgram::encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBufferPtr frame, BlendState blendState) {
   int pipelineId = frame->pipelineId(blendState);
   if (!_pipelines.count(pipelineId))
     addPipeline(frame, blendState);
@@ -127,7 +127,7 @@ void MetalShaderProgram::setDescriptorAttributes(MTLRenderPipelineDescriptor *de
   }
 }
 
-void MetalShaderProgram::addPipeline(MetalFrameBuffer *frame, const BlendState &blending) {
+void MetalShaderProgram::addPipeline(MetalFrameBufferPtr frame, const BlendState &blending) {
   MTLRenderPipelineDescriptor *descriptor = frame->createPipelineDescriptor(blending);
   descriptor.vertexFunction = _vertex;
   descriptor.fragmentFunction = _fragment;

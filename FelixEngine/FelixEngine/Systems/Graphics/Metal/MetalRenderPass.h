@@ -27,7 +27,6 @@ namespace fx {
   class MetalRenderPass: public RenderPass {
     public:
     id <MTLDevice>        _device;
-    id <MTLCommandBuffer> _buffer;
     
     MetalDepthStencil   *_depthStencilStates;
     MetalTextureSampler *_samplerStates;
@@ -36,10 +35,7 @@ namespace fx {
     MetalRenderPass(id <MTLDevice> device);
     virtual ~MetalRenderPass();
     
-    virtual void render();
-    
     void encodeRender(id <MTLCommandBuffer> buffer);
-    void setCommandBuffer(id <MTLCommandBuffer> buffer);
   };
 
   typedef std::shared_ptr<MetalRenderPass> MetalRenderPassPtr;

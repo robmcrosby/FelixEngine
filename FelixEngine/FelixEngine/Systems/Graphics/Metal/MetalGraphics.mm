@@ -31,7 +31,6 @@ namespace fx {
   struct MTLGraphicsData {
     id <MTLDevice>        device;
     id <MTLCommandQueue>  queue;
-    id <MTLCommandBuffer> buffer;
     
     UIView *view;
     CAMetalLayer *metalLayer;
@@ -41,6 +40,7 @@ namespace fx {
     dispatch_semaphore_t frameBoundarySemaphore;
     
     std::vector<MetalRenderPassPtr> renderPasses;
+    MetalFrameBufferPtr windowBuffer;
     
     ~MTLGraphicsData() {}
   };
@@ -51,7 +51,7 @@ using namespace std;
 using namespace fx;
 
 
-MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()), _windowBuffer(nullptr) {
+MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()) {
   Graphics::instance = this;
 }
 
@@ -107,12 +107,6 @@ bool MetalGraphics::initalize(UIView *view) {
   return true;
 }
 
-bool MetalGraphics::setWindowBuffer(MetalFrameBuffer *buffer, int index) {
-  _windowBuffer = buffer;
-  _windowBuffer->setMetalLayer(_data->metalLayer);
-  return false;
-}
-
 FrameBufferPtr MetalGraphics::createFrameBuffer() {
   shared_ptr<MetalFrameBuffer> frame = make_shared<MetalFrameBuffer>(_data->device, _data->queue);
   return frame;
@@ -162,26 +156,31 @@ void MetalGraphics::nextFrame() {
   if (_data->metalLayer.frame.size.width != width || _data->metalLayer.frame.size.height != height) {
     _data->metalLayer.frame = CGRectMake(0, 0, width, height);
   }
-  
-  _data->buffer = [_data->queue commandBuffer];
-  for (auto &renderPass : _data->renderPasses)
-    renderPass->setCommandBuffer(_data->buffer);
 }
 
 void MetalGraphics::presentFrame() {
-  if (_windowBuffer != nullptr) {
-    _windowBuffer->present(_data->buffer);
+  if (_data->windowBuffer && _frameCommandBuffer) {
+    MetalCommandBufferPtr commandBuffer = static_pointer_cast<MetalCommandBuffer>(_frameCommandBuffer);
+    _data->windowBuffer->present(commandBuffer->_buffer);
   
     __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
-    [_data->buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
+    [commandBuffer->_buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
       dispatch_semaphore_signal(semaphore);
     }];
-    [_data->buffer commit];
+    commandBuffer->commit();
   }
-  _data->buffer = nil;
+  _frameCommandBuffer = nullptr;
+}
+
+CommandBufferPtr MetalGraphics::getFrameCommandBuffer() {
+  if (!_frameCommandBuffer)
+    _frameCommandBuffer = createCommandBuffer();
+  return _frameCommandBuffer;
 }
 
 void MetalGraphics::setRenderPassToWindow(RenderPassPtr pass, int window) {
   MetalRenderPassPtr renderPass = static_pointer_cast<MetalRenderPass>(pass);
+  _data->windowBuffer = static_pointer_cast<MetalFrameBuffer>(renderPass->getFrame());
+  _data->windowBuffer->setMetalLayer(_data->metalLayer);
   _data->renderPasses.push_back(renderPass);
 }

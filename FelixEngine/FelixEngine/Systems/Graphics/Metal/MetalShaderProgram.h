@@ -10,6 +10,7 @@
 #define MetalShaderProgram_h
 
 #include "GraphicResources.h"
+#include "MetalFrameBuffer.h"
 #include "UniformMap.h"
 #include "TextureMap.h"
 #include <map>
@@ -54,14 +55,14 @@ namespace fx {
     virtual ~MetalShaderProgram();
     
     virtual bool loadShaderFunctions(const std::string &vertex, const std::string &fragment);
-    void encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBuffer *frame, BlendState blendState);
+    void encode(id <MTLRenderCommandEncoder> encoder, MetalFrameBufferPtr frame, BlendState blendState);
     void encode(id <MTLRenderCommandEncoder> encoder, UniformsPtr uniforms);
     void encode(id <MTLRenderCommandEncoder> encoder, TexturesPtr textures, MetalTextureSampler *samplers);
     
     virtual unsigned int getShaderId() const;
     
   private:
-    void addPipeline(MetalFrameBuffer *frame, const BlendState &blending);
+    void addPipeline(MetalFrameBufferPtr frame, const BlendState &blending);
     void setUniform(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Uniform &uniform);
     void setTexture(id <MTLRenderCommandEncoder> encoder, const std::string &name, const Texture &texture, MetalTextureSampler *samplers);
     void setDescriptorAttributes(MTLRenderPipelineDescriptor *descriptor);

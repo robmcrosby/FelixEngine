@@ -11,13 +11,9 @@
 
 #include "GraphicResources.h"
 #include "Macros.h"
-//#include "RenderPass.h"
 
 
 @protocol MTLCommandBuffer;
-
-//OBJC_CLASS(MetalDepthStencil)
-//OBJC_CLASS(MetalTextureSampler)
 
 namespace fx {
   
@@ -37,6 +33,8 @@ namespace fx {
     virtual void encodeGenerateMipmap(TextureBufferPtr texture);
     virtual void commit();
   };
+
+  typedef std::shared_ptr<MetalCommandBuffer> MetalCommandBufferPtr;
 }
 
 #endif /* MetalCommandBuffer_h */

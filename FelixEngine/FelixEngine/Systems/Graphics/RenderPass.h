@@ -51,7 +51,9 @@ namespace fx {
       renderItems.clear();
     }
     
-    virtual void render() = 0;
+    void render() {
+      Graphics::getInstance().getFrameCommandBuffer()->encodeRenderPass(shared_from_this());
+    }
     
     FrameBufferPtr getFrame() {
       if (!frame)
@@ -65,10 +67,9 @@ namespace fx {
         setFrame(node.attribute("name"));
       return getFrame()->load(node);
     }
-    bool setFrameToWindow(int index) {
+    void setFrameToWindow(int index) {
       RenderPassPtr thisPass = shared_from_this();
       Graphics::getInstance().setRenderPassToWindow(thisPass, index);
-      return getFrame()->setToWindow(index);
     }
     bool resizeFrame(int width, int height) {return getFrame()->resize(width, height);}
     TextureBufferPtr addRenderTarget(TEXTURE_FORMAT format, int usageFlags = 0) {

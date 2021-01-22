@@ -55,11 +55,6 @@ MetalFrameBuffer::~MetalFrameBuffer() {
   
 }
 
-bool MetalFrameBuffer::setToWindow(int index) {
-  MetalGraphics &graphics = static_cast<MetalGraphics&>(Graphics::getInstance());
-  return graphics.setWindowBuffer(this, index);
-}
-
 bool MetalFrameBuffer::resize(int width, int height) {
   bool success = true;
   
