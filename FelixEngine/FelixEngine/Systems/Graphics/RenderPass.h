@@ -52,7 +52,8 @@ namespace fx {
     }
     
     void render() {
-      Graphics::getInstance().getFrameCommandBuffer()->encodeRenderPass(shared_from_this());
+      CommandBufferPtr commandBuffer = Graphics::getInstance().getFrameCommandBuffer();
+      commandBuffer->encodeRenderPass(shared_from_this());
     }
     
     FrameBufferPtr getFrame() {
@@ -149,10 +150,10 @@ namespace fx {
         setFrame(node.attribute("frame"));
       if (node.hasAttribute("sorted"))
         sortItems = node.attributeAsBoolean("sorted");
-      if (node.hasAttribute("window"))
-        setFrameToWindow(node.attributeAsInt("window"));
       for (auto subNode : node)
         success &= loadXMLItem(*subNode);
+      if (node.hasAttribute("window"))
+        setFrameToWindow(node.attributeAsInt("window"));
       return success;
     }
     
