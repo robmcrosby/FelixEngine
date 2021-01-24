@@ -33,7 +33,7 @@
   self.lastTimeStamp = 0.0;
   
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
   
   [self.view setMultipleTouchEnabled:YES];
@@ -97,8 +97,8 @@
   self.cppApplication->willEnterBackground();
 }
 
-- (void)appWillEnterForeground:(NSNotification*)note {
-  self.cppApplication->willEnterForeground();
+- (void)appDidBecomeActive:(NSNotification*)note {
+  self.cppApplication->didBecomeActive();
   [self.displayLink setPaused:NO];
 }
 

@@ -33,7 +33,7 @@ namespace fx {
     virtual void update(float td);
     
     virtual void willEnterBackground();
-    virtual void willEnterForeground();
+    virtual void didBecomeActive();
     virtual void willTerminate();
     
     void processFrame(float td);

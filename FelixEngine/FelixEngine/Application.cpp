@@ -47,7 +47,7 @@ void Application::willEnterBackground() {
   
 }
 
-void Application::willEnterForeground() {
+void Application::didBecomeActive() {
   
 }
 
