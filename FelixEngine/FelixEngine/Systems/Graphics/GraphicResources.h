@@ -115,12 +115,13 @@ namespace fx {
     
     virtual bool loadBuffer(ivec2 size, TEXTURE_FORMAT format, int usageFlags) = 0;
     
-    virtual bool loadImageFile(const std::string &file, bool generateMipMap);
-    virtual bool loadColor(const RGBA &color);
+    bool loadImageFile(const std::string &file, bool generateMipMap);
+    bool loadColor(const RGBA &color);
+    bool loadSpbrdfLut(int size = 512);
     
-    virtual bool loadCubeMapFile(const std::string &file, bool generateMipMap);
-    virtual bool loadCubeMapFiles(const std::vector<std::string> &files, bool generateMipMap);
-    virtual bool loadCubeColor(const RGBA &color);
+    bool loadCubeMapFile(const std::string &file, bool generateMipMap);
+    bool loadCubeMapFiles(const std::vector<std::string> &files, bool generateMipMap);
+    bool loadCubeColor(const RGBA &color);
     
     virtual bool loadImage(const ImageBufferData &image, bool generateMipMap) = 0;
     virtual bool loadCubeMap(const ImageBufferSet &images, bool generateMipMap) = 0;

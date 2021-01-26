@@ -102,6 +102,31 @@ bool TextureBuffer::loadCubeColor(const RGBA &color) {
   return loadCubeMap(images, false);
 }
 
+bool TextureBuffer::loadSpbrdfLut(int size) {
+  if (loadBuffer(ivec2(size, size), TEXTURE_RGBA8, TEXTURE_SHADER_READ)) {
+    float vertexBuffer[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+    
+    RenderItem renderItem;
+    renderItem.loadShaderFunctions("v_spdrdf_lut_gen", "f_spdrdf_lut_gen");
+    renderItem.setMeshVertexBuffer("vertices", 2, 4, vertexBuffer);
+    renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
+    
+    RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
+    renderPass->addRenderItem(renderItem);
+    renderPass->resizeFrame(size, size);
+    TextureBufferPtr target = renderPass->addRenderTarget(format(), TEXTURE_SHADER_READ);
+    
+    TextureBufferPtr thisTexture = shared_from_this();
+    CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
+    commandBuffer->encodeRenderPass(renderPass);
+    commandBuffer->encodeBlitTexture(target, thisTexture);
+    commandBuffer->commit();
+    
+    return true;
+  }
+  return false;
+}
+
 void TextureBuffer::generateMipMap() {
   TextureBufferPtr thisTexture = shared_from_this();
   CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
@@ -110,7 +135,7 @@ void TextureBuffer::generateMipMap() {
 }
 
 void TextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmapped) {
-  float buffer[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+  float vertexBuffer[] = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
   
   // Rotations
   vector<quat> rotationData;
@@ -121,17 +146,11 @@ void TextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmap
   rotationData.push_back(quat::RotZ(0.0f));       // Front
   rotationData.push_back(quat::RotZ(M_PI));       // Back
   
-  SamplerState sampler;
-  sampler.setSCoord(COORD_REPEAT);
-  sampler.setTCoord(COORD_REPEAT);
-  sampler.setMinFilter(FILTER_LINEAR);
-  sampler.setMagFilter(FILTER_LINEAR);
-  
   RenderItem renderItem;
   renderItem.loadShaderFunctions("v_cube_gen", "f_cube_gen");
-  renderItem.setMeshVertexBuffer("vertices", 2, 4, buffer);
+  renderItem.setMeshVertexBuffer("vertices", 2, 4, vertexBuffer);
   renderItem.setMeshPrimativeType(VERTEX_TRIANGLE_STRIP);
-  renderItem.setTexture("srcTexture", srcImage, sampler);
+  renderItem.setTexture("srcTexture", srcImage);
   
   RenderPassPtr renderPass = Graphics::getInstance().createRenderPass();
   renderPass->addRenderItem(renderItem);
