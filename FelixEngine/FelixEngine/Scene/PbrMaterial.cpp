@@ -15,11 +15,16 @@ using namespace std;
 
 
 PbrMaterialBuilder PbrMaterial::materialBuilder = PbrMaterialBuilder();
+TextureBufferPtr PbrMaterial::spbrdfLut = TextureBufferPtr();
 
 
 PbrMaterial::PbrMaterial(): Material() {
-  if (!_textures)
-    _textures = TextureMap::make();
+  _textures = TextureMap::make();
+  if (!spbrdfLut) {
+    spbrdfLut = Graphics::getInstance().createTextureBuffer();
+    spbrdfLut->loadSpbrdfLut();
+  }
+  _textures->setTexture("spbrdfLut", spbrdfLut);
 }
 
 PbrMaterial::~PbrMaterial() {
@@ -35,32 +40,6 @@ bool PbrMaterial::load(const XMLTree::Node &node) {
   //  success &= loadXMLItem(*subNode);
   return success;
 }
-
-//bool PbrMaterial::load(const USDCrate &crate, const string &path) {
-//  //cout << "Load Crate: " << path;
-//  //cout << crate << endl;
-//
-//  _shader = Graphics::getInstance().getShaderProgram("TestShader");
-//  _shader->loadShaderFunctions("v_texture_normal", "f_pbr_shadeless");
-//
-//  string shaderPath = crate.getShaderPath(path);
-//
-//  if (crate.isTextureInput(shaderPath, "diffuseColor")) {
-//    string textureFile = crate.getTextureFile(shaderPath, "diffuseColor");
-//    TextureBufferPtr texture = _scene->getTextureBuffer(textureFile);
-//    _textures->setTexture("diffuseColor", texture);
-//  }
-//  else {
-//    RGBA color = crate.getColorInput(shaderPath, "diffuseColor");
-//    _textures->setColor("diffuseColor", color);
-//  }
-//
-//  //_textures->setColor("diffuseColor", RGBA(0, 0, 255, 255));
-//
-//  _depthState.enableDefaultTesting();
-//
-//  return true;
-//}
 
 bool PbrMaterial::load(const USDItem &item) {
   //cout << "Load Material Item" << endl;

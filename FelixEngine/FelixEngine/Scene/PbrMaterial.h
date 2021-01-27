@@ -19,6 +19,7 @@ namespace fx {
   class PbrMaterial: public Material {
   private:
     static PbrMaterialBuilder materialBuilder;
+    static TextureBufferPtr   spbrdfLut;
 
   public:
     PbrMaterial();

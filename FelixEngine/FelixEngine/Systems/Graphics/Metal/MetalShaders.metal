@@ -487,7 +487,8 @@ fragment half4 f_pbr_shadeless(InputTextureBasis  input       [[stage_in]],
                                texture2d<float>   emissiveTexture    [[texture(4)]],
                                texture2d<float>   occlusionTexture   [[texture(5)]],
                                texture2d<float>   normalsTexture     [[texture(6)]],
-                               texturecube<float> environmentCubeMap [[texture(7)]]) {
+                               texture2d<float>   spbrdfLut          [[texture(7)]],
+                               texturecube<float> environmentCubeMap [[texture(8)]]) {
   constexpr sampler defSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
   uint envLevels = environmentCubeMap.get_num_mip_levels();
   
@@ -536,11 +537,10 @@ fragment half4 f_pbr_shadeless(InputTextureBasis  input       [[stage_in]],
   float3 specularIrradiance = environmentCubeMap.sample(defSampler, Lr, level(0.8 * roughness * envLevels)).rgb;
   
   // Split-sum approximation factors for Cook-Torrance specular BRDF.
-  //float2 specularBRDF = specularBRDF_LUT.sample(defSampler, float2(cosLo, roughness));
+  float2 specularBRDF = spbrdfLut.sample(defSampler, float2(cosLo, roughness)).xy;
 
   // Total specular IBL contribution.
-  //float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
-  float3 specularIBL = F0 * specularIrradiance;
+  float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
 
       // Total ambient lighting contribution.
   float3 ambientLighting = diffuseIBL + specularIBL;
