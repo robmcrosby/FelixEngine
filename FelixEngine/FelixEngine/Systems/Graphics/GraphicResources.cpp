@@ -120,6 +120,7 @@ bool TextureBuffer::loadSpbrdfLut(int size) {
     CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
     commandBuffer->encodeRenderPass(renderPass);
     commandBuffer->encodeBlitTexture(target, thisTexture);
+    commandBuffer->addTextureCompletion(thisTexture);
     commandBuffer->commit();
     
     return true;
@@ -131,6 +132,7 @@ void TextureBuffer::generateMipMap() {
   TextureBufferPtr thisTexture = shared_from_this();
   CommandBufferPtr commandBuffer = Graphics::getInstance().createCommandBuffer();
   commandBuffer->encodeGenerateMipmap(thisTexture);
+  commandBuffer->addTextureCompletion(thisTexture);
   commandBuffer->commit();
 }
 
@@ -167,6 +169,7 @@ void TextureBuffer::generateCubeMap(const ImageBufferData &srcImage, bool mipmap
   if (mipmapped) {
     commandBuffer->encodeGenerateMipmap(thisTexture);
   }
+  commandBuffer->addTextureCompletion(thisTexture);
   commandBuffer->commit();
 }
 

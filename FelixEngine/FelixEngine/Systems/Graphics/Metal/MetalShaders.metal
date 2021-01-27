@@ -65,7 +65,43 @@ vertex OutputSpdrdf v_spdrdf_lut_gen(const device packed_float2 *vertices [[ buf
 }
 
 fragment half4 f_spdrdf_lut_gen(InputSpdrdf input [[ stage_in ]]) {
-  return half4(input.uv.x, input.uv.y, 0.0, 1.0);
+  // Get integration parameters.
+  float cosLo = max(input.uv.x, 0.001);
+  float roughness = input.uv.y;
+  
+  // Derive tangent-space viewing vector from angle to normal (pointing towards +Z in this reference frame).
+  float3 Lo = float3(sqrt(1.0 - cosLo*cosLo), 0.0, cosLo);
+  
+  // We will now pre-integrate Cook-Torrance BRDF for a solid white environment and save results into a 2D LUT.
+  // DFG1 & DFG2 are terms of split-sum approximation of the reflectance integral.
+  float DFG1 = 0;
+  float DFG2 = 0;
+  
+  for (uint i = 0; i < 1024; ++i) {
+    float2 u = float2(i/1024.0, radicalInverse_VdC(i));
+    
+    // Sample directly in tangent/shading space since we don't care about reference frame as long as it's consistent.
+    float3 Lh = sampleGGX(u.x, u.y, roughness);
+    
+    // Compute incident direction (Li) by reflecting viewing direction (Lo) around half-vector (Lh).
+    float3 Li = 2.0 * dot(Lo, Lh) * Lh - Lo;
+    
+    float cosLi = Li.z;
+    float cosLh = Lh.z;
+    float cosLoLh = max(dot(Lo, Lh), 0.0);
+    
+    if(cosLi > 0.0) {
+      float G  = gaSchlickGGX_IBL(cosLi, cosLo, roughness);
+      float Gv = G * cosLoLh / (cosLh * cosLo);
+      float Fc = pow(1.0 - cosLoLh, 5);
+
+      DFG1 += (1 - Fc) * Gv;
+      DFG2 += Fc * Gv;
+    }
+  }
+  
+  return half4(DFG1/1024.0, DFG2/1024.0, 0.0, 0.0);
+  //return half4(input.uv.x, input.uv.y, 0.0, 0.0);
 }
 
 

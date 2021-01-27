@@ -46,11 +46,11 @@ void HelloTexture::initalize() {
   sampler.setMinFilter(fx::FILTER_LINEAR);
   sampler.setMipFilter(fx::FILTER_LINEAR);
   
-  fx::TextureBufferPtr texture = _graphics->createTextureBuffer();
-  texture->loadSpbrdfLut();
-  renderItem.setTexture("texture2D", texture, sampler);
+  //fx::TextureBufferPtr texture = _graphics->createTextureBuffer();
+  //texture->loadSpbrdfLut();
+  //renderItem.setTexture("texture2D", texture, sampler);
   
-  //renderItem.setTexture("texture2D", "test.png", sampler);
+  renderItem.setTexture("texture2D", "test.png", sampler);
   //renderItem.setTexture("texture2D", "colorGrid.png", sampler);
   //renderItem.setTexture("texture2D", "environment.hdr");
   //renderItem.setTexture("texture2D", "environment2.jpeg", sampler);

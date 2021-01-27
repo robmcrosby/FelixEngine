@@ -31,6 +31,7 @@ namespace fx {
     virtual void encodeRenderPass(RenderPassPtr pass);
     virtual void encodeBlitTexture(TextureBufferPtr src, TextureBufferPtr dst, int slice, int level);
     virtual void encodeGenerateMipmap(TextureBufferPtr texture);
+    virtual void addTextureCompletion(TextureBufferPtr texture);
     virtual void commit();
   };
 
