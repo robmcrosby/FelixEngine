@@ -219,6 +219,55 @@ namespace fx
       return rotation;
     }
   };
+  typedef std::shared_ptr<TransformOps> TransformOpsPtr;
+
+
+
+  class TransformB;
+  typedef std::shared_ptr<TransformB> TransformPtrB;
+  typedef std::vector<TransformPtrB> TransformsB;
+
+  class TransformB {
+  private:
+    TransformOps   _transformOps;
+    ScaleOpPtr     _scale;
+    OrientOpPtr    _orientation;
+    TranslateOpPtr _translation;
+    
+  public:
+    static TransformPtrB make() {return std::make_shared<TransformB>();}
+    
+    TransformB() {
+      _scale = _transformOps.addScale();
+      _orientation = _transformOps.addOrientation();
+      _translation = _transformOps.addTranslation();
+    }
+    
+    bool load(const XMLTree::Node &node) {
+      return true;
+    }
+    
+    mat4 transform() const {return _transformOps.transform();}
+    quat rotation() const {return _transformOps.rotation();}
+    
+    ScaleOpPtr setScale(vec3 s = vec3(1.0f)) {
+      _scale->scale = s;
+      return _scale;
+    }
+    vec3 scale() const {return _scale->scale;}
+    
+    OrientOpPtr setOrientation(quat orientation = quat()) {
+      _orientation->orientation = orientation;
+      return _orientation;
+    }
+    quat orientation() const {return _orientation->orientation;}
+    
+    TranslateOpPtr setLocation(vec3 location = vec3()) {
+      _translation->translation = location;
+      return _translation;
+    }
+    vec3 location() const {return _translation->translation;}
+  };
 
 
 

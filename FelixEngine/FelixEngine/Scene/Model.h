@@ -28,7 +28,7 @@ namespace fx {
     
     MaterialPtr _material;
     UniformsPtr _uniforms;
-    Transforms  _transforms;
+    TransformsB  _transforms;
     RenderItem  _renderItem;
     
     std::vector<mat4> _modelTransforms;
@@ -67,27 +67,35 @@ namespace fx {
     VertexMeshPtr mesh() const {return _renderItem.mesh;}
     void loadMesh(const std::string &file);
     
-    void setScale(float scale, int index = 0);
-    void setScale(const vec3 &scale, int index = 0);
-    vec3 localScale(int index = 0) const;
+    ScaleOpPtr setScale(vec3 scale, int index = 0);
+    vec3 scale(int index = 0) const;
     
-    void setRotation(const quat &orientation, int index = 0);
-    quat localRotation(int index = 0) const;
+    OrientOpPtr setOrientation(quat orientation, int index = 0);
+    quat orientation(int index = 0) const;
     
-    void setLocation(const vec3 &location, int index = 0);
-    vec3 localLocation(int index = 0) const;
+    TranslateOpPtr setLocation(vec3 location, int index = 0);
+    vec3 location(int index = 0) const;
     
-    TransformPtr transform(int index = 0);
+    //void setScale(const vec3 &scale, int index = 0);
+    //vec3 localScale(int index = 0) const;
     
-    void setModelTransform(const mat4 &transform, int index = 0);
-    mat4 modelTransform(int index = 0);
+    //void setRotation(const quat &orientation, int index = 0);
+    //quat localRotation(int index = 0) const;
     
-    void setTextureTransform(const mat4 &transform, int index = 0);
-    void setTextureTransform(const mat3 &transform, int index = 0) {setTextureTransform(mat4(transform), index);}
-    mat4 textureTransform(int index = 0);
+    //void setLocation(const vec3 &location, int index = 0);
+    //vec3 localLocation(int index = 0) const;
     
-    mat4 globalModelTransform(int index = 0);
-    mat4 localModelTransform(int index = 0);
+    //TransformPtr transform(int index = 0);
+    
+    //void setModelTransform(const mat4 &transform, int index = 0);
+    //mat4 modelTransform(int index = 0);
+    
+    //void setTextureTransform(const mat4 &transform, int index = 0);
+    //void setTextureTransform(const mat3 &transform, int index = 0) {setTextureTransform(mat4(transform), index);}
+    //mat4 textureTransform(int index = 0);
+    
+    //mat4 globalModelTransform(int index = 0);
+    //mat4 localModelTransform(int index = 0);
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);

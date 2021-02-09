@@ -62,9 +62,13 @@ void ExampleScene::initalize() {
   //_model->loadMesh("Mesh.mesh");
   _model->loadMesh("Suzanne.usdz");
   _model->setMaterial(mat);
-  _model->setScale(0.4f);
-  _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
+  _model->setScale(0.6f);
+  _model->setScale(fx::vec3(0.5f, 0.5f, 1.0f));
+  _model->setOrientation(fx::quat::RotX(-M_PI/2.0f));
   _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
+  
+//  _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
+//  _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
   _model->setFaceCulling(fx::CULL_FRONT);
   _model->setToRenderPass(_renderPass);
   
@@ -76,6 +80,7 @@ void ExampleScene::initalize() {
 }
 
 void ExampleScene::update(float td) {
-  _model->setRotation(_model->localRotation() * fx::quat::RotZ(td));
+  _model->setOrientation(_model->orientation() * fx::quat::RotZ(td));
+  //_model->setRotation(_model->localRotation() * fx::quat::RotZ(td));
   _scene->update(td);
 }

@@ -18,7 +18,7 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 
 Model::Model(): _hidden(0) {
   _scene = nullptr;
-  _transforms.push_back(Transform::make());
+  _transforms.push_back(TransformB::make());
   _modelTransforms.push_back(mat4());
   _textureTransforms.push_back(mat4());
   
@@ -63,7 +63,7 @@ bool Model::load(const USDItem &item, const std::string &pass) {
       setMaterial(crate.getName(materialPath));
   }
   
-  _transforms.front()->setRotation(quat::RotX(-1.5f));
+//  _transforms.front()->setRotation(quat::RotX(-1.5f));
   
 //  const USDItem *transformItem = item.getAttribute("xformOp:transform");
 //  if (transformItem) {
@@ -103,9 +103,11 @@ void Model::update(float dt) {
   models.resize(_transforms.size());
   for (int i = 0; i < _transforms.size(); ++i) {
     STR_Model &model = (STR_Model&)models[i];
-    model.model = globalModelTransform(i);
-    model.texture = textureTransform(i);
-    model.rotation = _transforms.at(i)->globalRotation().toVec4();
+    model.model = _transforms.at(i)->transform();
+    model.rotation = _transforms.at(i)->rotation().toVec4();
+    //model.model = globalModelTransform(i);
+    //model.texture = textureTransform(i);
+    //model.rotation = _transforms.at(i)->globalRotation().toVec4();
   }
   _uniforms->update();
   
@@ -139,7 +141,7 @@ bool Model::renderable() const {
 
 void Model::setInstances(unsigned int instances) {
   while (instances > _transforms.size()) {
-    _transforms.push_back(Transform::make());
+    _transforms.push_back(TransformB::make());
     _modelTransforms.push_back(mat4());
     _textureTransforms.push_back(mat4());
   }
@@ -173,85 +175,105 @@ void Model::loadMesh(const std::string &file) {
   _renderItem.mesh = MeshBuilder::createFromFile(file);
 }
 
-void Model::setScale(float scale, int index) {
-  if (index < _transforms.size())
-    _transforms[index]->setScale(scale);
+ScaleOpPtr Model::setScale(vec3 scale, int index) {
+  return _transforms.at(index)->setScale(scale);
 }
 
-void Model::setScale(const vec3 &scale, int index) {
-  if (index < _transforms.size())
-    _transforms[index]->setScale(scale);
+vec3 Model::scale(int index) const {
+  return _transforms.at(index)->scale();
 }
 
-vec3 Model::localScale(int index) const {
-  if (index < _transforms.size())
-    return _transforms[index]->localScale();
-  return vec3(1.0f, 1.0f, 1.0f);
+OrientOpPtr Model::setOrientation(quat orientation, int index) {
+  return _transforms.at(index)->setOrientation(orientation);
 }
 
-void Model::setRotation(const quat &orientation, int index) {
-  if (index < _transforms.size())
-    _transforms[index]->setRotation(orientation);
+quat Model::orientation(int index) const {
+  return _transforms.at(index)->orientation();
 }
 
-quat Model::localRotation(int index) const {
-  if (index < _transforms.size())
-    return _transforms[index]->localRotation();
-  return quat();
+TranslateOpPtr Model::setLocation(vec3 location, int index) {
+  return _transforms.at(index)->setLocation(location);
 }
 
-void Model::setLocation(const vec3 &location, int index) {
-  if (index < _transforms.size())
-    _transforms[index]->setLocation(location);
-}
-vec3 Model::localLocation(int index) const {
-  if (index < _transforms.size())
-    return _transforms[index]->localLocation();
-  return vec3();
+vec3 Model::location(int index) const {
+  return _transforms.at(index)->location();
 }
 
-TransformPtr Model::transform(int index) {
-  if (index < _transforms.size())
-    return _transforms[index];
-  return Transform::make();
-}
+//void Model::setScale(const vec3 &scale, int index) {
+//  if (index < _transforms.size())
+//    _transforms[index]->setScale(scale);
+//}
 
-void Model::setModelTransform(const mat4 &transform, int index) {
-  if (index < _modelTransforms.size())
-    _modelTransforms[index] = transform;
-}
+//vec3 Model::localScale(int index) const {
+//  if (index < _transforms.size())
+//    return _transforms[index]->localScale();
+//  return vec3(1.0f, 1.0f, 1.0f);
+//}
 
-mat4 Model::modelTransform(int index) {
-  if (index < _modelTransforms.size())
-    return _modelTransforms.at(index);
-  return mat4();
-}
+//void Model::setRotation(const quat &orientation, int index) {
+//  if (index < _transforms.size())
+//    _transforms[index]->setRotation(orientation);
+//}
 
-void Model::setTextureTransform(const mat4 &transform, int index) {
-  if (index < _textureTransforms.size())
-    _textureTransforms[index] = transform;
-}
+//quat Model::localRotation(int index) const {
+//  if (index < _transforms.size())
+//    return _transforms[index]->localRotation();
+//  return quat();
+//}
 
-mat4 Model::textureTransform(int index) {
-  if (index < _textureTransforms.size())
-    return _textureTransforms.at(index);
-  return mat4();
-}
+//void Model::setLocation(const vec3 &location, int index) {
+//  if (index < _transforms.size())
+//    _transforms[index]->setLocation(location);
+//}
 
-mat4 Model::globalModelTransform(int index) {
-  if (index < _transforms.size()) {
-    if (index < _modelTransforms.size())
-      return _modelTransforms.at(index) * _transforms.at(index)->globalTransform();
-    return _transforms.at(index)->globalTransform();
-  }
-  return mat4();
-}
+//vec3 Model::localLocation(int index) const {
+//  if (index < _transforms.size())
+//    return _transforms[index]->localLocation();
+//  return vec3();
+//}
 
-mat4 Model::localModelTransform(int index) {
-  if (index < _transforms.size()) {
-    if (index < _modelTransforms.size())
-      return _transforms.at(index)->localTransform() * _modelTransforms.at(index);
-    return _transforms.at(index)->localTransform();
-  }
-  return mat4();
-}
+//TransformPtr Model::transform(int index) {
+//  if (index < _transforms.size())
+//    return _transforms[index];
+//  return Transform::make();
+//}
+
+//void Model::setModelTransform(const mat4 &transform, int index) {
+//  if (index < _modelTransforms.size())
+//    _modelTransforms[index] = transform;
+//}
+
+//mat4 Model::modelTransform(int index) {
+//  if (index < _modelTransforms.size())
+//    return _modelTransforms.at(index);
+//  return mat4();
+//}
+
+//void Model::setTextureTransform(const mat4 &transform, int index) {
+//  if (index < _textureTransforms.size())
+//    _textureTransforms[index] = transform;
+//}
+
+//mat4 Model::textureTransform(int index) {
+//  if (index < _textureTransforms.size())
+//    return _textureTransforms.at(index);
+//  return mat4();
+//}
+
+//mat4 Model::globalModelTransform(int index) {
+//  if (index < _transforms.size()) {
+//    if (index < _modelTransforms.size())
+//      return _modelTransforms.at(index) * _transforms.at(index)->globalTransform();
+//    return _transforms.at(index)->globalTransform();
+//  }
+//  return mat4();
+//}
+
+//mat4 Model::localModelTransform(int index) {
+//  if (index < _transforms.size()) {
+//    if (index < _modelTransforms.size())
+//      return _transforms.at(index)->localTransform() * _modelTransforms.at(index);
+//    return _transforms.at(index)->localTransform();
+//  }
+//  return mat4();
+//}
