@@ -63,9 +63,9 @@ void ExampleScene::initalize() {
   _model->loadMesh("Suzanne.usdz");
   _model->setMaterial(mat);
   _model->setScale(0.6f);
-  _model->setScale(fx::vec3(0.5f, 0.5f, 1.0f));
+  //_model->setScale(fx::vec3(0.5f, 0.5f, 1.0f));
   _model->setOrientation(fx::quat::RotX(-M_PI/2.0f));
-  _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));
+  _model->setTranslation(fx::vec3(0.0f, -0.5f, 0.0f));
   
 //  _model->setRotation(fx::quat::RotX(-M_PI/2.0f) * fx::quat::RotZ(-M_PI/2.0f));
 //  _model->setLocation(fx::vec3(0.0f, -0.5f, 0.0f));

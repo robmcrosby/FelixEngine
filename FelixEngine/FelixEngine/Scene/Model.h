@@ -67,14 +67,14 @@ namespace fx {
     VertexMeshPtr mesh() const {return _renderItem.mesh;}
     void loadMesh(const std::string &file);
     
-    ScaleOpPtr setScale(vec3 scale, int index = 0);
+    void setScale(vec3 scale, int index = 0);
     vec3 scale(int index = 0) const;
     
-    OrientOpPtr setOrientation(quat orientation, int index = 0);
+    void setOrientation(quat orientation, int index = 0);
     quat orientation(int index = 0) const;
     
-    TranslateOpPtr setLocation(vec3 location, int index = 0);
-    vec3 location(int index = 0) const;
+    void setTranslation(vec3 translation, int index = 0);
+    vec3 translation(int index = 0) const;
     
     //void setScale(const vec3 &scale, int index = 0);
     //vec3 localScale(int index = 0) const;

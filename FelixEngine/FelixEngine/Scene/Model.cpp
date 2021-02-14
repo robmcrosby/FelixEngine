@@ -175,28 +175,28 @@ void Model::loadMesh(const std::string &file) {
   _renderItem.mesh = MeshBuilder::createFromFile(file);
 }
 
-ScaleOpPtr Model::setScale(vec3 scale, int index) {
-  return _transforms.at(index)->setScale(scale);
+void Model::setScale(vec3 scale, int index) {
+  _transforms.at(index)->setScale(scale);
 }
 
 vec3 Model::scale(int index) const {
   return _transforms.at(index)->scale();
 }
 
-OrientOpPtr Model::setOrientation(quat orientation, int index) {
-  return _transforms.at(index)->setOrientation(orientation);
+void Model::setOrientation(quat orientation, int index) {
+  _transforms.at(index)->setOrientation(orientation);
 }
 
 quat Model::orientation(int index) const {
   return _transforms.at(index)->orientation();
 }
 
-TranslateOpPtr Model::setLocation(vec3 location, int index) {
-  return _transforms.at(index)->setLocation(location);
+void Model::setTranslation(vec3 location, int index) {
+  _transforms.at(index)->setTranslation(location);
 }
 
-vec3 Model::location(int index) const {
-  return _transforms.at(index)->location();
+vec3 Model::translation(int index) const {
+  return _transforms.at(index)->translation();
 }
 
 //void Model::setScale(const vec3 &scale, int index) {

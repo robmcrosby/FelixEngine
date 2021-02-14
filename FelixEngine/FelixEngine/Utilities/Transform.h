@@ -249,24 +249,19 @@ namespace fx
     
     mat4 transform() const {return _transformOps.transform();}
     quat rotation() const {return _transformOps.rotation();}
+    vec3 location() const {return _transformOps.transform() * vec3();}
     
-    ScaleOpPtr setScale(vec3 s = vec3(1.0f)) {
-      _scale->scale = s;
-      return _scale;
-    }
+    void setScale(vec3 s = vec3(1.0f)) {_scale->scale = s;}
     vec3 scale() const {return _scale->scale;}
+    ScaleOpPtr scaleOp() const {return _scale;}
     
-    OrientOpPtr setOrientation(quat orientation = quat()) {
-      _orientation->orientation = orientation;
-      return _orientation;
-    }
+    void setOrientation(quat o = quat()) {_orientation->orientation = o;}
     quat orientation() const {return _orientation->orientation;}
+    OrientOpPtr orientationOp() const {return _orientation;}
     
-    TranslateOpPtr setLocation(vec3 location = vec3()) {
-      _translation->translation = location;
-      return _translation;
-    }
-    vec3 location() const {return _translation->translation;}
+    void setTranslation(vec3 t = vec3()) {_translation->translation = t;}
+    vec3 translation() const {return _translation->translation;}
+    TranslateOpPtr translationOp() const {return _translation;}
   };
 
 
