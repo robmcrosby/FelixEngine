@@ -243,7 +243,27 @@ namespace fx
       _translation = _transformOps.addTranslation();
     }
     
+    bool loadXMLItem(const XMLTree::Node &node) {
+      if (node == "Scale") {
+        setScale(node.contents());
+        return true;
+      }
+      if (node == "Rotation") {
+        setOrientation(node.contents());
+        return true;
+      }
+      if (node == "Location") {
+        setTranslation(node.contents());
+        return true;
+      }
+      std::cerr << "Unknown XML " << node.element() << " in Transform" << std::endl;
+      return false;
+    }
+    
     bool load(const XMLTree::Node &node) {
+      bool success = true;
+      for (auto &subNode : node)
+        success &= loadXMLItem(*subNode);
       return true;
     }
     
