@@ -11,6 +11,7 @@
 
 #include <FelixEngine/Quaternion.h>
 #include <FelixEngine/XMLTree.h>
+#include <FelixEngine/USDCrate.h>
 #include <memory>
 
 namespace fx
@@ -264,6 +265,22 @@ namespace fx
       bool success = true;
       for (auto &subNode : node)
         success &= loadXMLItem(*subNode);
+      return true;
+    }
+    
+    bool load(const USDItem &item) {
+//      const USDItem *orderItem = item.getAttribute("xformOpOrder");
+//      if (orderItem) {
+//        StringVector ops = orderItem->tokenValues();
+//        for (auto op : ops) {
+//          std::cout << op << std::endl;
+//        }
+//      }
+      const USDItem *matrixOp = item.getAttribute("xformOp:transform");
+      if (matrixOp) {
+        setScale(0.05);
+        _transformOps.addMatrix(matrixOp->double4x4Value());
+      }
       return true;
     }
     

@@ -144,6 +144,8 @@ namespace fx {
     void setTokenValue(const std::string &token);
     std::string tokenValue() const;
     
+    StringVector tokenValues() const;
+    
     void setAssetValue(const std::string &asset);
     std::string assetValue() const;
     

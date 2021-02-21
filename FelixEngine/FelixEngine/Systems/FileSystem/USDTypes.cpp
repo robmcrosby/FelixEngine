@@ -267,6 +267,13 @@ string USDItem::tokenValue() const {
   return &data[0];
 }
 
+StringVector USDItem::tokenValues() const {
+  StringVector tokens;
+  //IntVector indices;
+  //getArray(indices);
+  return tokens;
+}
+
 void USDItem::setAssetValue(const string &asset) {
   setValue(asset);
   isArray = false;

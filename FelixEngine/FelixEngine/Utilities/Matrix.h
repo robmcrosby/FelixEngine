@@ -313,7 +313,7 @@ namespace fx
     template <typename I>
     Matrix4(const Matrix3<I> &m): x(m.x, 0), y(m.y, 0), z(m.z, 0), w(0, 0, 0, 1) {}
     template <typename I>
-    Matrix4(const Matrix4<I> &m): x(m.x), y(m.y), z(m.z) {}
+    Matrix4(const Matrix4<I> &m): x(m.x), y(m.y), z(m.z), w(m.w) {}
     
     Matrix4 transposed() const
     {

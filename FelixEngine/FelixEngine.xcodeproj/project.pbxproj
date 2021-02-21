@@ -14,12 +14,12 @@
 		AD5048BC256F6D5100A1E2C0 /* iOSMotionSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5048BA256F6D5100A1E2C0 /* iOSMotionSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5048BD256F6D5100A1E2C0 /* iOSMotionSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5048BB256F6D5100A1E2C0 /* iOSMotionSystem.mm */; };
 		AD56824025320366005B3CFB /* USDArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56823E25320366005B3CFB /* USDArchive.cpp */; };
-		AD56824125320366005B3CFB /* USDArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56823F25320366005B3CFB /* USDArchive.h */; };
+		AD56824125320366005B3CFB /* USDArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56823F25320366005B3CFB /* USDArchive.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD5682442533C37B005B3CFB /* USDCrate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5682422533C37B005B3CFB /* USDCrate.cpp */; };
-		AD5682452533C37B005B3CFB /* USDCrate.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5682432533C37B005B3CFB /* USDCrate.h */; };
+		AD5682452533C37B005B3CFB /* USDCrate.h in Headers */ = {isa = PBXBuildFile; fileRef = AD5682432533C37B005B3CFB /* USDCrate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD56824C2538C092005B3CFB /* CompressionUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD56824A2538C092005B3CFB /* CompressionUtils.cpp */; };
 		AD56824D2538C092005B3CFB /* CompressionUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824B2538C092005B3CFB /* CompressionUtils.h */; };
-		AD56824F253C155F005B3CFB /* USDTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824E253C14D9005B3CFB /* USDTypes.h */; };
+		AD56824F253C155F005B3CFB /* USDTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = AD56824E253C14D9005B3CFB /* USDTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AD568251253CBC0C005B3CFB /* USDTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD568250253CBC0C005B3CFB /* USDTypes.cpp */; };
 		ADEA77B3255CA5350026DC39 /* PhongMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ADEA77B1255CA5350026DC39 /* PhongMaterial.cpp */; };
 		ADEA77B4255CA5350026DC39 /* PhongMaterial.h in Headers */ = {isa = PBXBuildFile; fileRef = ADEA77B2255CA5350026DC39 /* PhongMaterial.h */; settings = {ATTRIBUTES = (Public, ); }; };
