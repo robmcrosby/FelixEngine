@@ -18,7 +18,7 @@ CameraBuilder Camera::cameraBuilder = CameraBuilder();
 
 Camera::Camera() {
   _scene = nullptr;
-  _transform = Transform::make();
+  _transform = TransformB::make();
   
   _projectionType = PROJECTION_ORTHO;
   _near = 1.0;
@@ -83,8 +83,9 @@ bool Camera::setView(const XMLTree::Node &node) {
 }
 
 void Camera::setView(const mat4 &view) {
-  setRotation(view);
-  setLocation(view * vec3());
+  _transform->setMatrix(view);
+  //setRotation(view);
+  //setLocation(view * vec3());
 }
 
 mat4 Camera::view() const {

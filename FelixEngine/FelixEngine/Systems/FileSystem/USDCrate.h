@@ -9,7 +9,7 @@
 #ifndef USDCrate_h
 #define USDCrate_h
 
-#include "USDTypes.h"
+#include <FelixEngine/USDTypes.h>
 #include <sstream>
 
 

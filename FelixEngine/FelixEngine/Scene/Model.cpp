@@ -241,27 +241,29 @@ vec3 Model::translation(int index) const {
 //  return Transform::make();
 //}
 
-//void Model::setModelTransform(const mat4 &transform, int index) {
-//  if (index < _modelTransforms.size())
-//    _modelTransforms[index] = transform;
-//}
+void Model::setModelMatrix(const mat4 &matrix, int index) {
+  if (index < _transforms.size())
+    _transforms[index]->setMatrix(matrix);
+  //if (index < _modelTransforms.size())
+  //  _modelTransforms[index] = transform;
+}
 
-//mat4 Model::modelTransform(int index) {
-//  if (index < _modelTransforms.size())
-//    return _modelTransforms.at(index);
-//  return mat4();
-//}
+mat4 Model::modelMatrix(int index) const {
+  if (index < _transforms.size())
+    return _transforms.at(index)->matrix();
+  return mat4();
+}
 
-//void Model::setTextureTransform(const mat4 &transform, int index) {
-//  if (index < _textureTransforms.size())
-//    _textureTransforms[index] = transform;
-//}
+void Model::setTextureTransform(const mat4 &transform, int index) {
+  if (index < _textureTransforms.size())
+    _textureTransforms[index] = transform;
+}
 
-//mat4 Model::textureTransform(int index) {
-//  if (index < _textureTransforms.size())
-//    return _textureTransforms.at(index);
-//  return mat4();
-//}
+mat4 Model::textureTransform(int index) {
+  if (index < _textureTransforms.size())
+    return _textureTransforms.at(index);
+  return mat4();
+}
 
 //mat4 Model::globalModelTransform(int index) {
 //  if (index < _transforms.size()) {

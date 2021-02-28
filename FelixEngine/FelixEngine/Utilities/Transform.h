@@ -290,6 +290,10 @@ namespace fx
     quat rotation() const {return _transformOps.rotation();}
     vec3 location() const {return _transformOps.transform() * vec3();}
     
+    void setMatrix(mat4 m = mat4()) {_matrix->matrix = m;}
+    mat4 matrix() const {return _matrix->matrix;}
+    MatrixOpPtr matrixOp() const {return _matrix;}
+    
     void setScale(vec3 s = vec3(1.0f)) {_scale->scale = s;}
     vec3 scale() const {return _scale->scale;}
     ScaleOpPtr scaleOp() const {return _scale;}

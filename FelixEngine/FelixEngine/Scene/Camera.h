@@ -29,7 +29,8 @@ namespace fx {
     static CameraBuilder cameraBuilder;
 
   protected:
-    TransformPtr _transform;
+    //TransformPtr _transform;
+    TransformPtrB _transform;
     Texture _environmentTexture;
 
     PROJECTION_TYPE _projectionType;
@@ -54,13 +55,13 @@ namespace fx {
     }
     mat4 view() const;
 
-    void setRotation(const quat &rotation) {_transform->setRotation(rotation);}
-    quat localRotation() const {return _transform->localRotation();}
-    quat globalRotation() const {return _transform->globalRotation();}
+    void setRotation(const quat &rotation) {_transform->setOrientation(rotation);}
+    quat localRotation() const {return _transform->orientation();}
+    quat globalRotation() const {return _transform->orientation();}
 
-    void setLocation(const vec3 &location) {_transform->setLocation(location);}
-    vec3 localLocation() const {return _transform->localLocation();}
-    vec3 globalLocation() const {return _transform->globalLocation();}
+    void setLocation(const vec3 &location) {_transform->setTranslation(location);}
+    vec3 localLocation() const {return _transform->translation();}
+    vec3 globalLocation() const {return _transform->translation();}
 
     void addDepthBuffer();
 

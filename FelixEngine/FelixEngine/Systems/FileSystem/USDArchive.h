@@ -9,8 +9,8 @@
 #ifndef USDArchive_h
 #define USDArchive_h
 
-#include "FileSystem.h"
-#include "USDCrate.h"
+#include <FileSystem.h>
+#include <USDCrate.h>
 #include <sstream>
 
 
