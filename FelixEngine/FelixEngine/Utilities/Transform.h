@@ -231,6 +231,7 @@ namespace fx
   class TransformB {
   private:
     TransformOps   _transformOps;
+    MatrixOpPtr    _matrix;
     ScaleOpPtr     _scale;
     OrientOpPtr    _orientation;
     TranslateOpPtr _translation;
@@ -239,6 +240,7 @@ namespace fx
     static TransformPtrB make() {return std::make_shared<TransformB>();}
     
     TransformB() {
+      _matrix = _transformOps.addMatrix();
       _scale = _transformOps.addScale();
       _orientation = _transformOps.addOrientation();
       _translation = _transformOps.addTranslation();
@@ -278,8 +280,8 @@ namespace fx
 //      }
       const USDItem *matrixOp = item.getAttribute("xformOp:transform");
       if (matrixOp) {
+        _matrix->matrix = matrixOp->double4x4Value();
         setScale(0.05);
-        _transformOps.addMatrix(matrixOp->double4x4Value());
       }
       return true;
     }
