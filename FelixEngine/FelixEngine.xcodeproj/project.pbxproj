@@ -156,6 +156,7 @@
 		AD56824B2538C092005B3CFB /* CompressionUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CompressionUtils.h; path = Systems/FileSystem/CompressionUtils.h; sourceTree = "<group>"; };
 		AD56824E253C14D9005B3CFB /* USDTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = USDTypes.h; path = Systems/FileSystem/USDTypes.h; sourceTree = "<group>"; };
 		AD568250253CBC0C005B3CFB /* USDTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = USDTypes.cpp; path = Systems/FileSystem/USDTypes.cpp; sourceTree = "<group>"; };
+		AD6551A725EEC2F40068AF3E /* MetalContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalContext.h; path = Systems/Graphics/Metal/MetalContext.h; sourceTree = "<group>"; };
 		ADEA77B1255CA5350026DC39 /* PhongMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhongMaterial.cpp; sourceTree = "<group>"; };
 		ADEA77B2255CA5350026DC39 /* PhongMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhongMaterial.h; sourceTree = "<group>"; };
 		ADEA77B5256198E10026DC39 /* PbrMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PbrMaterial.cpp; sourceTree = "<group>"; };
@@ -394,6 +395,7 @@
 		C1136C551EF224AA00BA1322 /* MetalGraphics */ = {
 			isa = PBXGroup;
 			children = (
+				AD6551A725EEC2F40068AF3E /* MetalContext.h */,
 				C1136C561EF224F700BA1322 /* MetalGraphics.h */,
 				C1136C571EF224F700BA1322 /* MetalGraphics.mm */,
 				C1443AFD1EF49A100059BA9D /* MetalFrameBuffer.h */,

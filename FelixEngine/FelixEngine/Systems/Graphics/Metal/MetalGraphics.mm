@@ -9,11 +9,7 @@
 #include <iostream>
 
 #include "MetalGraphics.h"
-#include <Metal/Metal.h>
-#include <UIKit/UIKit.h>
-#include <QuartzCore/CAMetalLayer.h>
-
-#include "GraphicResources.h"
+#include "MetalContext.h"
 
 #include "MetalFrameBuffer.h"
 #include "MetalShaderProgram.h"
@@ -27,100 +23,83 @@
 
 #define MAX_INFLIGHT_FRAMES 3
 
-namespace fx {
-  struct MTLGraphicsData {
-    id <MTLDevice>        device;
-    id <MTLCommandQueue>  queue;
-    
-    UIView *view;
-    CAMetalLayer *metalLayer;
-    
-    dispatch_semaphore_t frameBoundarySemaphore;
-    
-    std::vector<MetalRenderPassPtr> renderPasses;
-    MetalFrameBufferPtr windowBuffer;
-    
-    ~MTLGraphicsData() {}
-  };
-}
-
 
 using namespace std;
 using namespace fx;
 
 
-MetalGraphics::MetalGraphics(): _data(new MTLGraphicsData()) {
+MetalGraphics::MetalGraphics(): _context(new MetalContext()) {
   Graphics::instance = this;
 }
 
 MetalGraphics::~MetalGraphics() {
-  delete _data;
+  delete _context;
 }
 
 bool MetalGraphics::initalize(UIView *view) {
   // Get the Metal Device
-  _data->device = MTLCreateSystemDefaultDevice();
-  if (_data->device == nil) {
+  _context->device = MTLCreateSystemDefaultDevice();
+  if (_context->device == nil) {
     cerr << "Error Creating Metal Device" << endl;
     return false;
   }
   
   // Create a Command Queue
-  _data->queue = [_data->device newCommandQueue];
-  if (_data->queue == nil) {
+  _context->queue = [_context->device newCommandQueue];
+  if (_context->queue == nil) {
     cerr << "Error Creating Metal Queue" << endl;
-    _data->device = nil;
+    _context->device = nil;
     return false;
   }
   
-  _data->view = view;
+  _context->view = view;
   
   CGFloat width = view.bounds.size.width;
   CGFloat height = view.bounds.size.height;
   
   // Setup the Metal Layer
-  _data->metalLayer = [[CAMetalLayer alloc] init];
-  if (_data->metalLayer == nil) {
+  _context->metalLayer = [[CAMetalLayer alloc] init];
+  if (_context->metalLayer == nil) {
     cerr << "Error Creating Metal Layer" << endl;
-    _data->device = nil;
-    _data->queue  = nil;
+    _context->device = nil;
+    _context->queue  = nil;
     return false;
   }
-  _data->metalLayer.device = _data->device;
-  _data->metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-  _data->metalLayer.framebufferOnly = YES;
-  _data->metalLayer.frame = CGRectMake(0, 0, width, height);
-  _data->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
-  [view.layer addSublayer: _data->metalLayer];
+  _context->metalLayer.device = _context->device;
+  _context->metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+  _context->metalLayer.framebufferOnly = YES;
+  _context->metalLayer.frame = CGRectMake(0, 0, width, height);
+  _context->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
+  [view.layer addSublayer: _context->metalLayer];
   
   // setup the Frame Boundry Semaphore
-  _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
+  _context->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
   
   return true;
 }
 
 FrameBufferPtr MetalGraphics::createFrameBuffer() {
-  MetalFrameBufferPtr frame = make_shared<MetalFrameBuffer>(_data->device, _data->queue);
+  MetalFrameBufferPtr frame = make_shared<MetalFrameBuffer>(_context->device, _context->queue);
   return frame;
 }
 
 ShaderProgramPtr MetalGraphics::createShaderProgram() {
-  MetalShaderProgramPtr shader = make_shared<MetalShaderProgram>(_data->device);
+  MetalShaderProgramPtr shader = make_shared<MetalShaderProgram>(_context->device);
   return shader;
 }
 
 VertexMeshPtr MetalGraphics::createVertexMesh() {
-  MetalVertexMeshPtr mesh = make_shared<MetalVertexMesh>(_data->device);
+  MetalVertexMeshPtr mesh = make_shared<MetalVertexMesh>(_context->device);
   return mesh;
 }
 
 UniformBufferPtr MetalGraphics::createUniformBuffer() {
-  MetalUniformBufferPtr buffer = make_shared<MetalUniformBuffer>(_data->device);
+  MetalUniformBufferPtr buffer = make_shared<MetalUniformBuffer>(_context->device);
   return buffer;
 }
 
 TextureBufferPtr MetalGraphics::createTextureBuffer() {
-  MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_data->device, _data->queue);
+  MetalTextureBufferPtr texture = make_shared<MetalTextureBuffer>(_context->device, _context->queue);
   return texture;
 }
 
@@ -130,31 +109,31 @@ BufferPoolPtr MetalGraphics::createBufferPool() {
 }
 
 RenderPassPtr MetalGraphics::createRenderPass() {
-  MetalRenderPassPtr renderPass = make_shared<MetalRenderPass>(_data->device);
+  MetalRenderPassPtr renderPass = make_shared<MetalRenderPass>(_context->device);
   return renderPass;
 }
 
 CommandBufferPtr MetalGraphics::createCommandBuffer() {
-  MetalCommandBufferPtr commandBuffer = make_shared<MetalCommandBuffer>([_data->queue commandBuffer]);
+  MetalCommandBufferPtr commandBuffer = make_shared<MetalCommandBuffer>([_context->queue commandBuffer]);
   return commandBuffer;
 }
 
 void MetalGraphics::nextFrame() {
-  dispatch_semaphore_wait(_data->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
+  dispatch_semaphore_wait(_context->frameBoundarySemaphore, DISPATCH_TIME_FOREVER);
   
-  CGFloat width = _data->view.bounds.size.width;
-  CGFloat height = _data->view.bounds.size.height;
-  if (_data->metalLayer.frame.size.width != width || _data->metalLayer.frame.size.height != height) {
-    _data->metalLayer.frame = CGRectMake(0, 0, width, height);
+  CGFloat width = _context->view.bounds.size.width;
+  CGFloat height = _context->view.bounds.size.height;
+  if (_context->metalLayer.frame.size.width != width || _context->metalLayer.frame.size.height != height) {
+    _context->metalLayer.frame = CGRectMake(0, 0, width, height);
   }
 }
 
 void MetalGraphics::presentFrame() {
-  if (_data->windowBuffer && _frameCommandBuffer) {
+  if (_context->windowBuffer && _frameCommandBuffer) {
     MetalCommandBufferPtr commandBuffer = static_pointer_cast<MetalCommandBuffer>(_frameCommandBuffer);
-    _data->windowBuffer->present(commandBuffer->_buffer);
+    _context->windowBuffer->present(commandBuffer->_buffer);
   
-    __weak dispatch_semaphore_t semaphore = _data->frameBoundarySemaphore;
+    __weak dispatch_semaphore_t semaphore = _context->frameBoundarySemaphore;
     [commandBuffer->_buffer addCompletedHandler:^(id<MTLCommandBuffer> commandBuffer) {
       dispatch_semaphore_signal(semaphore);
     }];
@@ -171,7 +150,7 @@ CommandBufferPtr MetalGraphics::getFrameCommandBuffer() {
 
 void MetalGraphics::setRenderPassToWindow(RenderPassPtr pass, int window) {
   MetalRenderPassPtr renderPass = static_pointer_cast<MetalRenderPass>(pass);
-  _data->windowBuffer = static_pointer_cast<MetalFrameBuffer>(renderPass->getFrame());
-  _data->windowBuffer->setMetalLayer(_data->metalLayer);
-  _data->renderPasses.push_back(renderPass);
+  _context->windowBuffer = static_pointer_cast<MetalFrameBuffer>(renderPass->getFrame());
+  _context->windowBuffer->setMetalLayer(_context->metalLayer);
+  _context->renderPasses.push_back(renderPass);
 }

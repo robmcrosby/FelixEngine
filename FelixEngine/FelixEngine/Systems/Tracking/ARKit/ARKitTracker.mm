@@ -8,6 +8,7 @@
 
 #include "ARKitTracker.h"
 #include "MetalGraphics.h"
+#include "MetalContext.h"
 #include "MetalTextureBuffer.h"
 #include "Event.h"
 #include <iostream>
@@ -176,7 +177,7 @@ ARKitTracker::~ARKitTracker() {
 bool ARKitTracker::initalize(MetalGraphics *graphics) {
   _graphics = graphics;
   
-  id <MTLDevice> device = MTLCreateSystemDefaultDevice();
+  id <MTLDevice> device = graphics->getMetalContext()->device;
   CVMetalTextureCacheRef textureCache;
   CVMetalTextureCacheCreate(NULL, NULL, device, NULL, &textureCache);
   _arDelegate.textureCache = textureCache;

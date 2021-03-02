@@ -16,13 +16,12 @@
 OBJC_CLASS(UIView)
 
 namespace fx {
+  class MetalContext;
   
-  class MTLGraphicsData;
-  
-  /** iOS File System */
+  /** Metal Graphics System */
   class MetalGraphics: public Graphics {
   private:
-    MTLGraphicsData  *_data;
+    MetalContext *_context;
     CommandBufferPtr _frameCommandBuffer;
     
   public:
@@ -30,6 +29,7 @@ namespace fx {
     virtual ~MetalGraphics();
     
     bool initalize(UIView *view);
+    MetalContext* getMetalContext() const {return _context;}
     
     virtual FrameBufferPtr   createFrameBuffer();
     virtual ShaderProgramPtr createShaderProgram();
