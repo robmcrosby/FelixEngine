@@ -34,8 +34,6 @@ namespace fx {
     
     UIView *view;
     CAMetalLayer *metalLayer;
-    MetalDepthStencil *depthStencilStates;
-    MetalTextureSampler *samplerStates;
     
     dispatch_semaphore_t frameBoundarySemaphore;
     
@@ -94,12 +92,6 @@ bool MetalGraphics::initalize(UIView *view) {
   _data->metalLayer.frame = CGRectMake(0, 0, width, height);
   _data->metalLayer.contentsScale = [UIScreen mainScreen].nativeScale;
   [view.layer addSublayer: _data->metalLayer];
-  
-  // Create an instance of MetalDepthStencil
-  _data->depthStencilStates = [[MetalDepthStencil alloc] initWithDevice:_data->device];
-  
-  // Create an instance of MetalTextureSampler
-  _data->samplerStates = [[MetalTextureSampler alloc] initWithDevice:_data->device];
   
   // setup the Frame Boundry Semaphore
   _data->frameBoundarySemaphore = dispatch_semaphore_create(MAX_INFLIGHT_FRAMES);
