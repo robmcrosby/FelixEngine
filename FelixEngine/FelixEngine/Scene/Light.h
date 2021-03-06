@@ -21,7 +21,7 @@ namespace fx {
     static LightBuilder lightBuilder;
     
   private:
-    TransformPtr _transform;
+    TransformPtrB _transform;
     
     vec3 _color;
     float _energy;
@@ -54,19 +54,19 @@ namespace fx {
       return peramaters;
     }
     
-    void setLocation(vec3 location) {_transform->setLocation(location);}
-    vec3 localLocation() const {return _transform->localLocation();}
-    vec3 globalLocation() const {return _transform->globalLocation();}
+    void setLocation(vec3 location) {_transform->setTranslation(location);}
+    vec3 localLocation() const {return _transform->location();}
+    vec3 globalLocation() const {return _transform->location();}
     
-    void setRotation(quat rotation) {_transform->setRotation(rotation);}
-    quat localRotation() const {return _transform->localRotation();}
-    quat globalRotation() const {return _transform->globalRotation();}
+    void setRotation(quat rotation) {_transform->setOrientation(rotation);}
+    quat localRotation() const {return _transform->rotation();}
+    quat globalRotation() const {return _transform->rotation();}
     
     void setDirection(vec3 dir) {
-      _transform->setRotation(quat(vec3(0.0f, 0.0f, -1.0f), dir));
+      _transform->setOrientation(quat(vec3(0.0f, 0.0f, -1.0f), dir));
     }
-    vec3 localDirection() const {return _transform->localRotation() * vec3(0.0f, 0.0f, -1.0f);}
-    vec3 globalDirection() const {return _transform->globalRotation() * vec3(0.0f, 0.0f, -1.0f);}
+    vec3 localDirection() const {return _transform->rotation() * vec3(0.0f, 0.0f, -1.0f);}
+    vec3 globalDirection() const {return _transform->rotation() * vec3(0.0f, 0.0f, -1.0f);}
     
     void setColor(vec3 color) {_color = color;}
     vec3 color() const {return _color;}
@@ -109,7 +109,7 @@ namespace fx {
       setEnergy(energy);
     }
     
-    TransformPtr transform() {return _transform;}
+    TransformPtrB transform() {return _transform;}
   };
 }
 

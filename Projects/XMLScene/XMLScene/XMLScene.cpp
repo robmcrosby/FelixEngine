@@ -12,7 +12,7 @@
 using namespace std;
 
 XMLScene::XMLScene() {
-  _transform = fx::Transform::make();
+  _transform = fx::TransformB::make();
   //_transform->setScale(2.0f);
 }
 
@@ -49,6 +49,6 @@ void XMLScene::handleTouchMove(const fx::Event &event) {
     fx::vec2 diff = touch.pevious - touch.location;
     fx::vec3 up = _camera->view() * fx::vec3(0.0, 0.0, 1.0);
     float dot = up.dot(fx::vec3(diff.x, diff.y, 0.0));
-    _transform->setRotation(_transform->localRotation() * fx::quat::RotY(dot * 4.0));
+    _transform->setOrientation(_transform->rotation() * fx::quat::RotY(dot * 4.0));
   }
 }
