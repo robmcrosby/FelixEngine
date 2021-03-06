@@ -31,7 +31,7 @@
   if (self != nil) {
     self.configuration = [ARWorldTrackingConfiguration new];
     self.arSession = [ARSession new];
-    [self.arSession setDelegate:self];
+    self.arSession.delegate = self;
   }
   return self;
 }

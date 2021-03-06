@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Scene name="scene">
-  <RenderPass name="MainPass" sorted="true">
-    <Frame name="MainFrame" window="0">
+  <RenderPass name="MainPass" sorted="true" window="0">
+    <Frame name="MainFrame">
       <Buffer type="depth"/>
     </Frame>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
