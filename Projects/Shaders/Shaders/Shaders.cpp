@@ -30,13 +30,14 @@ void Shaders::initalize() {
   _models.push_back(_scene.get<fx::Model>("ModelH"));
   _models.push_back(_scene.get<fx::Model>("ModelI"));
   
-  _rotation = _models.front()->transform()->localRotation();
+  _rotation = _models.front()->orientation(); //_models.front()->transform()->localRotation();
 }
 
 void Shaders::update(float td) {
   _rotation = _rotation * fx::quat::RotZ(-td);
   for (auto &model : _models)
-    model->transform()->setRotation(_rotation);
+    model->setOrientation(_rotation);
+    //model->transform()->setRotation(_rotation);
   
   _scene.update(td);
 }

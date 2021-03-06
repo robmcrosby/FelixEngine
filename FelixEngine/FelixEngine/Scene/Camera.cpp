@@ -89,7 +89,7 @@ void Camera::setView(const mat4 &view) {
 }
 
 mat4 Camera::view() const {
-  return (mat4::Trans3d(globalLocation()) * globalRotation().toMat4()).inverse();
+  return _transform->transform().inverse();
 }
 
 bool Camera::setProjection(const XMLTree::Node &node) {
