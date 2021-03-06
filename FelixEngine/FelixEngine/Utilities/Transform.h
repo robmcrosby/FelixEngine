@@ -29,6 +29,7 @@ namespace fx
     TranslateOp(vec3 t = vec3()): translation(t) {}
     virtual ~TranslateOp() {}
     virtual mat4 transform() const {return mat4::Trans3d(translation);}
+    vec3& operator=(const vec3 &t) {return translation = t;}
   };
   typedef std::shared_ptr<TranslateOp> TranslateOpPtr;
 
@@ -37,6 +38,7 @@ namespace fx
     ScaleOp(vec3 s = vec3(1.0f)): scale(s) {}
     virtual ~ScaleOp() {}
     virtual mat4 transform() const {return mat4::Scale(scale);}
+    vec3& operator=(const vec3 &s) {return scale = s;}
   };
   typedef std::shared_ptr<ScaleOp> ScaleOpPtr;
 
@@ -46,6 +48,7 @@ namespace fx
     virtual ~MatrixOp() {}
     virtual mat4 transform() const {return matrix;}
     virtual quat rotation() const {return matrix;}
+    mat4& operator=(const mat4 &m) {return matrix = m;}
   };
   typedef std::shared_ptr<MatrixOp> MatrixOpPtr;
 
@@ -55,6 +58,7 @@ namespace fx
     virtual ~OrientOp() {}
     virtual mat4 transform() const {return orientation.toMat4();}
     virtual quat rotation() const {return orientation;}
+    quat& operator=(const quat &o) {return orientation = o;}
   };
   typedef std::shared_ptr<OrientOp> OrientOpPtr;
 
@@ -65,6 +69,7 @@ namespace fx
     virtual ~AngleAxisOp() {}
     virtual mat4 transform() const {return quat(axis, angle).toMat4();}
     virtual quat rotation() const {return quat(axis, angle);}
+    float& operator=(const float &a) {return angle = a;}
   };
   typedef std::shared_ptr<AngleAxisOp> AngleAxisOpPtr;
 
@@ -292,18 +297,22 @@ namespace fx
     
     void setMatrix(mat4 m = mat4()) {_matrix->matrix = m;}
     mat4 matrix() const {return _matrix->matrix;}
+    mat4& matrix() {return _matrix->matrix;}
     MatrixOpPtr matrixOp() const {return _matrix;}
     
     void setScale(vec3 s = vec3(1.0f)) {_scale->scale = s;}
     vec3 scale() const {return _scale->scale;}
+    vec3& scale() {return _scale->scale;}
     ScaleOpPtr scaleOp() const {return _scale;}
     
     void setOrientation(quat o = quat()) {_orientation->orientation = o;}
     quat orientation() const {return _orientation->orientation;}
+    quat& orientation() {return _orientation->orientation;}
     OrientOpPtr orientationOp() const {return _orientation;}
     
     void setTranslation(vec3 t = vec3()) {_translation->translation = t;}
     vec3 translation() const {return _translation->translation;}
+    vec3& translation() {return _translation->translation;}
     TranslateOpPtr translationOp() const {return _translation;}
   };
 }
