@@ -21,7 +21,7 @@ namespace fx {
     static LightBuilder lightBuilder;
     
   private:
-    TransformPtrB _transform;
+    TransformPtr _transform;
     
     vec3 _color;
     float _energy;
@@ -109,7 +109,7 @@ namespace fx {
       setEnergy(energy);
     }
     
-    TransformPtrB transform() {return _transform;}
+    TransformPtr transform() {return _transform;}
   };
 }
 

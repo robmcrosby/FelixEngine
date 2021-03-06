@@ -18,7 +18,7 @@ ModelBuilder Model::modelBuilder = ModelBuilder();
 
 Model::Model(): _hidden(0) {
   _scene = nullptr;
-  _transforms.push_back(TransformB::make());
+  _transforms.push_back(Transform::make());
   _modelTransforms.push_back(mat4());
   _textureTransforms.push_back(mat4());
   
@@ -144,7 +144,7 @@ bool Model::renderable() const {
 
 void Model::setInstances(unsigned int instances) {
   while (instances > _transforms.size()) {
-    _transforms.push_back(TransformB::make());
+    _transforms.push_back(Transform::make());
     _modelTransforms.push_back(mat4());
     _textureTransforms.push_back(mat4());
   }

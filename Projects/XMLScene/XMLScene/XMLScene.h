@@ -20,7 +20,7 @@
 class XMLScene: public fx::Application {
 private:
   fx::Scene _scene;
-  fx::TransformPtrB _transform;
+  fx::TransformPtr _transform;
   
   fx::ModelPtr _model;
   fx::CameraPtr _camera;

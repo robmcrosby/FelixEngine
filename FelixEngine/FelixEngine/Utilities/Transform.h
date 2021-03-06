@@ -224,11 +224,11 @@ namespace fx
 
 
 
-  class TransformB;
-  typedef std::shared_ptr<TransformB> TransformPtrB;
-  typedef std::vector<TransformPtrB> TransformsB;
+  class Transform;
+  typedef std::shared_ptr<Transform> TransformPtr;
+  typedef std::vector<TransformPtr> Transforms;
 
-  class TransformB {
+  class Transform {
   private:
     TransformOps   _transformOps;
     MatrixOpPtr    _matrix;
@@ -237,9 +237,9 @@ namespace fx
     TranslateOpPtr _translation;
     
   public:
-    static TransformPtrB make() {return std::make_shared<TransformB>();}
+    static TransformPtr make() {return std::make_shared<Transform>();}
     
-    TransformB() {
+    Transform() {
       _matrix = _transformOps.addMatrix();
       _scale = _transformOps.addScale();
       _orientation = _transformOps.addOrientation();

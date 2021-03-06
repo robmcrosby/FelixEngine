@@ -30,7 +30,7 @@ namespace fx {
 
   protected:
     //TransformPtr _transform;
-    TransformPtrB _transform;
+    TransformPtr _transform;
     Texture _environmentTexture;
 
     PROJECTION_TYPE _projectionType;

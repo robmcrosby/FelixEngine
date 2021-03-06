@@ -18,7 +18,7 @@ CameraBuilder Camera::cameraBuilder = CameraBuilder();
 
 Camera::Camera() {
   _scene = nullptr;
-  _transform = TransformB::make();
+  _transform = Transform::make();
   
   _projectionType = PROJECTION_ORTHO;
   _near = 1.0;

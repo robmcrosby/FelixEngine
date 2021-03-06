@@ -12,7 +12,7 @@
 using namespace std;
 
 XMLScene::XMLScene() {
-  _transform = fx::TransformB::make();
+  _transform = fx::Transform::make();
   //_transform->setScale(2.0f);
 }
 

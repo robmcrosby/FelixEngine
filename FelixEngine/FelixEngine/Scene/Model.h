@@ -28,7 +28,7 @@ namespace fx {
     
     MaterialPtr _material;
     UniformsPtr _uniforms;
-    TransformsB  _transforms;
+    Transforms  _transforms;
     RenderItem  _renderItem;
     
     std::vector<mat4> _modelTransforms;

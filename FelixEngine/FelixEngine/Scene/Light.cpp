@@ -15,7 +15,7 @@ using namespace std;
 LightBuilder Light::lightBuilder = LightBuilder();
 
 Light::Light() {
-  _transform = TransformB::make();
+  _transform = Transform::make();
   _energy = 0.0f;
   _distance = 0.0f;
   
