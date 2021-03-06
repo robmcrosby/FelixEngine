@@ -29,7 +29,6 @@ namespace fx {
     static CameraBuilder cameraBuilder;
 
   protected:
-    //TransformPtr _transform;
     TransformPtr _transform;
     Texture _environmentTexture;
 

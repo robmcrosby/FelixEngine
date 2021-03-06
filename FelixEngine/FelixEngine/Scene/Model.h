@@ -31,7 +31,6 @@ namespace fx {
     Transforms  _transforms;
     RenderItem  _renderItem;
     
-    std::vector<mat4> _modelTransforms;
     std::vector<mat4> _textureTransforms;
     
   public:
@@ -67,35 +66,26 @@ namespace fx {
     VertexMeshPtr mesh() const {return _renderItem.mesh;}
     void loadMesh(const std::string &file);
     
-    void setScale(vec3 scale, int index = 0);
-    vec3 scale(int index = 0) const;
+    void setModelMatrix(const mat4 &matrix, int index = 0) {_transforms.at(index)->setMatrix(matrix);}
+    mat4 modelMatrix(int index = 0) const {return _transforms.at(index)->matrix();}
+    mat4& modelMatrix(int index = 0) {return _transforms.at(index)->matrix();}
     
-    void setOrientation(quat orientation, int index = 0);
-    quat orientation(int index = 0) const;
+    void setScale(vec3 scale, int index = 0) {_transforms.at(index)->setScale(scale);}
+    vec3 scale(int index = 0) const {return _transforms.at(index)->scale();}
+    vec3& scale(int index = 0) {return _transforms.at(index)->scale();}
     
-    void setTranslation(vec3 translation, int index = 0);
-    vec3 translation(int index = 0) const;
+    void setOrientation(quat orientation, int index = 0) {_transforms.at(index)->setOrientation(orientation);}
+    quat orientation(int index = 0) const {return _transforms.at(index)->orientation();}
+    quat& orientation(int index = 0) {return _transforms.at(index)->orientation();}
     
-    //void setScale(const vec3 &scale, int index = 0);
-    //vec3 localScale(int index = 0) const;
+    void setTranslation(vec3 translation, int index = 0) {_transforms.at(index)->setTranslation(translation);}
+    vec3 translation(int index = 0) const {return _transforms.at(index)->translation();}
+    vec3& translation(int index = 0) {return _transforms.at(index)->translation();}
     
-    //void setRotation(const quat &orientation, int index = 0);
-    //quat localRotation(int index = 0) const;
-    
-    //void setLocation(const vec3 &location, int index = 0);
-    //vec3 localLocation(int index = 0) const;
-    
-    //TransformPtr transform(int index = 0);
-    
-    void setModelMatrix(const mat4 &matrix, int index = 0);
-    mat4 modelMatrix(int index = 0) const;
-    
-    void setTextureTransform(const mat4 &transform, int index = 0);
+    void setTextureTransform(const mat4 &transform, int index = 0) {_textureTransforms.at(index) = transform;}
     void setTextureTransform(const mat3 &transform, int index = 0) {setTextureTransform(mat4(transform), index);}
-    mat4 textureTransform(int index = 0);
-    
-    //mat4 globalModelTransform(int index = 0);
-    //mat4 localModelTransform(int index = 0);
+    mat4 textureTransform(int index = 0) const {return _textureTransforms.at(index);}
+    mat4& textureTransform(int index = 0) {return _textureTransforms.at(index);}
     
   private:
     virtual bool loadXMLItem(const XMLTree::Node &node);
