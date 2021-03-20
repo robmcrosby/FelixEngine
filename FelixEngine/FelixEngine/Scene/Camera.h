@@ -49,9 +49,7 @@ namespace fx {
 
     bool setView(const XMLTree::Node &node);
     void setView(const mat4 &view);
-    void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
-      setView(mat4::LookAt(eye, center, up).inverse());
-    }
+    void lookAt(const vec3 &eye, const vec3 &center, const vec3 &up);
     mat4 view() const;
 
     void setRotation(const quat &rotation) {_transform->setOrientation(rotation);}

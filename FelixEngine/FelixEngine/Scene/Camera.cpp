@@ -84,8 +84,10 @@ bool Camera::setView(const XMLTree::Node &node) {
 
 void Camera::setView(const mat4 &view) {
   _transform->setMatrix(view);
-  //setRotation(view);
-  //setLocation(view * vec3());
+}
+
+void Camera::lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
+  _transform->setMatrix(mat4::LookAt(eye, center, up).inverse());
 }
 
 mat4 Camera::view() const {
