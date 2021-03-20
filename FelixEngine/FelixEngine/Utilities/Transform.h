@@ -314,6 +314,10 @@ namespace fx
     vec3 translation() const {return _translation->translation;}
     vec3& translation() {return _translation->translation;}
     TranslateOpPtr translationOp() const {return _translation;}
+    
+    ScaleOpPtr addScale() {return _transformOps.addScale();}
+    OrientOpPtr addOrientation() {return _transformOps.addOrientation();}
+    TranslateOpPtr addTranslation() {return _transformOps.addTranslation();}
   };
 }
 

@@ -17,22 +17,20 @@ using namespace std;
 MotionCameraBuilder MotionCamera::motionCameraBuilder = MotionCameraBuilder();
 
 MotionCamera::MotionCamera() {
-  cout << "MotionCamera Created" << endl;
+  _motionLocation = _transform->addTranslation();
 }
 
 MotionCamera::~MotionCamera() {
-  
+  _motionLocation = nullptr;
 }
 
 void MotionCamera::update(float td) {
   MotionSystem *motionSystem = &MotionSystem::getInstance();
-  quat rotation = motionSystem->getOrientation().inverse() * quat::RotX(M_PI/2.0f);
   
-  rotation = rotation.inverse();
-  vec3 location = rotation * vec3(0.0f, 0.0f, 1.0f);
-  
+  quat rotation = (motionSystem->getOrientation().inverse() * quat::RotX(M_PI/2.0f)).inverse();
   setRotation(rotation);
-  setLocation(location * 8.0f);
+  
+  *_motionLocation = rotation * vec3(0.0f, 0.0f, 1.0f) * 20.0f;
   
   Camera::update(td);
 }

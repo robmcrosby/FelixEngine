@@ -18,6 +18,9 @@ namespace fx {
   protected:
     static MotionCameraBuilder motionCameraBuilder;
     
+  private:
+    TranslateOpPtr _motionLocation;
+    
   public:
     MotionCamera();
     virtual ~MotionCamera();
