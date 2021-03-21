@@ -20,12 +20,17 @@ namespace fx {
     
   private:
     TranslateOpPtr _motionLocation;
+    float _distance;
     
   public:
     MotionCamera();
     virtual ~MotionCamera();
     
+    virtual bool load(const XMLTree::Node &node);
     virtual void update(float td);
+    
+    void setDistance(float distance) {_distance = distance;}
+    float distance() const {return _distance;}
   };
 }
 

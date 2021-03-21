@@ -6,7 +6,7 @@
     </Frame>
     <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
   </RenderPass>
-  <MotionCamera name="Camera" pass="MainPass">
+  <MotionCamera name="Camera" pass="MainPass" distance="12.0">
     <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
     <Transform>
       <Scale>1.0, 1.0, 1.0</Scale>
