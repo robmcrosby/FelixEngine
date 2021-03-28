@@ -473,10 +473,31 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
   output.normal = rotate_quat(model[iid].rotation, input.normal);
   output.bitangent = rotate_quat(model[iid].rotation, input.tangent.xyz);
   output.cotangent = cross(output.normal, output.bitangent) * input.tangent.w;
-  output.view = camera.position.xyz - output.position.xyz;
+  output.view = location.xyz - camera.position.xyz;
   output.coordinate = transform_coordinate(model->texture, input.uv0);
   return output;
 }
+
+
+
+
+fragment half4 f_phong(InputTextureBasis input [[stage_in]],
+                       texture2d<float>   normalsTexture     [[texture(0)]],
+                       texturecube<float> environmentCubeMap [[texture(1)]]) {
+  constexpr sampler defSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
+  
+  // Determine normal
+  float3x3 basis(input.bitangent, input.cotangent, input.normal);
+  float3 N = normalize(basis * normalize(2.0 * normalsTexture.sample(defSampler, input.coordinate).xyz - 1.0));
+  
+  // Determine reflection
+  float3 view = normalize(input.view);
+  float3 R = reflect(view, N);
+  
+  float3 env = environmentCubeMap.sample(defSampler, R).rgb;
+  return half4(env.r, env.g, env.b, 1.0);
+}
+
 
 
 fragment half4 f_pbr_shadeless(InputTextureBasis  input       [[stage_in]],

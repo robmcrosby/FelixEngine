@@ -59,7 +59,7 @@ STR_Camera Camera::properties(vec2 frameSize) {
   STR_Camera properties;
   properties.projection = projection(frameSize);
   properties.view = view();
-  properties.position = vec4(globalLocation(), 1.0f);
+  properties.position = vec4(position(), 1.0f);
   return properties;
 }
 
@@ -88,10 +88,6 @@ void Camera::setView(const mat4 &view) {
 
 void Camera::lookAt(const vec3 &eye, const vec3 &center, const vec3 &up) {
   _transform->setMatrix(mat4::LookAt(eye, center, up).inverse());
-}
-
-mat4 Camera::view() const {
-  return _transform->transform().inverse();
 }
 
 bool Camera::setProjection(const XMLTree::Node &node) {
