@@ -481,21 +481,50 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
 
 
 
-fragment half4 f_phong(InputTextureBasis input [[stage_in]],
-                       texture2d<float>   normalsTexture     [[texture(0)]],
-                       texturecube<float> environmentCubeMap [[texture(1)]]) {
+fragment half4 f_phong(InputTextureBasis  input              [[stage_in]],
+                       constant STR_Light *lights            [[buffer(0)]],
+                       texture2d<float>   albedoTexture      [[texture(0)]],
+                       texture2d<float>   roughnessTexture   [[texture(1)]],
+                       texture2d<float>   occlusionTexture   [[texture(2)]],
+                       texture2d<float>   normalsTexture     [[texture(3)]],
+                       texturecube<float> environmentCubeMap [[texture(4)]]) {
   constexpr sampler defSampler(mip_filter::linear, mag_filter::linear, min_filter::linear);
+  uint envLevels = environmentCubeMap.get_num_mip_levels();
+  
+  float3 albedo = albedoTexture.sample(defSampler, input.coordinate).rgb;
+  float roughness = roughnessTexture.sample(defSampler, input.coordinate).r;
+  float occlusion = occlusionTexture.sample(defSampler, input.coordinate).r;
   
   // Determine normal
   float3x3 basis(input.bitangent, input.cotangent, input.normal);
   float3 N = normalize(basis * normalize(2.0 * normalsTexture.sample(defSampler, input.coordinate).xyz - 1.0));
   
-  // Determine reflection
+  // Determine reflection direction
   float3 view = normalize(input.view);
   float3 R = reflect(view, N);
   
-  float3 env = environmentCubeMap.sample(defSampler, R).rgb;
-  return half4(env.r, env.g, env.b, 1.0);
+  float3 color = float3(0.0, 0.0, 0.0);
+  
+  MaterialParams material;
+  material.ambiantColor = float3(0.0, 0.0, 0.0);
+  material.diffuseColor = albedo;
+  material.specularColor = float3(0.5, 0.5, 0.5);
+  material.factors.x = (1.0 - roughness) * 50.0 + 10.0;
+  
+  LightingParams light;
+  setupLightingParams(&light, N, -view);
+  
+  for (int i = 0; i < 2; ++i) {
+    setLightToParams(&light, input.location, lights[i]);
+    color += shade_lambert(light, material);
+    color += shade_phong(light, material);
+  }
+
+  // Enviroment light
+  float3 env = environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb;
+  color += env * 0.5;
+  
+  return half4(color.r, color.g, color.b, 1.0);
 }
 
 
