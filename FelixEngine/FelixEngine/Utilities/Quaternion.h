@@ -65,10 +65,10 @@ namespace fx
     
     void setTo(const mat4 &m) {setTo(m.toMat3());}
     void setTo(const mat3 &m) {
-      w = sqrt(1.0 + m.x.x + m.y.y + m.z.z)/2.0;
-      x = (m.y.z - m.z.y)/(4.0*w);
-      y = (m.z.x - m.x.z)/(4.0*w);
-      z = (m.x.y - m.y.x)/(4.0*w);
+      w = sqrt(std::max(0.0, 1.0 + m.x.x + m.y.y + m.z.z))/2.0;
+      x = std::copysign(sqrt(std::max(0.0, 1.0 + m.x.x - m.y.y - m.z.z))/2.0, m.y.z - m.z.y);
+      y = std::copysign(sqrt(std::max(0.0, 1.0 - m.x.x + m.y.y - m.z.z))/2.0, m.z.x - m.x.z);
+      z = std::copysign(sqrt(std::max(0.0, 1.0 - m.x.x - m.y.y + m.x.x))/2.0, m.x.y - m.y.x);
       normalize();
     }
     
@@ -86,7 +86,7 @@ namespace fx
       ret.x = w * q.x + x * q.w + y * q.z - z * q.y;
       ret.y = w * q.y + y * q.w + z * q.x - x * q.z;
       ret.z = w * q.z + z * q.w + x * q.y - y * q.x;
-      ret.normalize();
+      //ret.normalize();
       return ret;
     }
     Quaternion operator*(T s) const {return Quaternion(x*s, y*s, z*s, w*s);}

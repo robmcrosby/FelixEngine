@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<Scene name="test">
+  <RenderPass name="MainPass" window="0">
+    <Frame name="MainFrame" window="0">
+      <Buffer type="depth"/>
+    </Frame>
+    <Clear color="0.2, 0.2, 0.2, 1.0" depth="1.0"/>
+  </RenderPass>
+  <MotionCamera name="Camera" pass="MainPass" distance="40.0">
+    <Projection angle="0.927295" far="100.000000" near="0.100000" type="frustum"/>
+    <Transform>
+      <Scale>1.0, 1.0, 1.0</Scale>
+      <Rotation>0.0, 0.0, 0.0, 1.0</Rotation>
+      <Location>0.0, 0.0, 0.0</Location>
+    </Transform>
+  </MotionCamera>
+  <LightRig name="LightRig" pass="MainPass">
+    <Shader name="UsdPreviewSurface" vertex="v_texture_basis" fragment="f_phong"/>
+    <EnvironmentMap file="environment2.jpeg" min="linear" mag="linear" mip="linear"/>
+    <Light energy="1.000000" type="directional">
+      <Color>1.000000, 1.000000, 1.000000</Color>
+      <Transform>
+        <Scale>1.000000, 1.000000, 1.000000</Scale>
+        <Rotation>-0.284166, 0.726942, 0.342034, 0.523275</Rotation>
+        <Location>4.076245, 5.903862, -1.005454</Location>
+      </Transform>
+    </Light>
+    <Light energy="0.500000" type="point">
+      <Color>0.098603, 0.068963, 1.000000</Color>
+      <Transform>
+        <Scale>1.000000, 1.000000, 1.000000</Scale>
+        <Rotation>-0.707107, 0.000000, 0.000000, 0.707107</Rotation>
+        <Location>-2.271056, -0.135679, 4.769545</Location>
+      </Transform>
+    </Light>
+  </LightRig>
+  <External file="Sphere.usdz" pass="MainPass"/>
+</Scene>

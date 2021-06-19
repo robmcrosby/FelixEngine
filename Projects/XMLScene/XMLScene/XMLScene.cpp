@@ -22,7 +22,8 @@ XMLScene::~XMLScene() {
 void XMLScene::initalize() {
   //_scene.loadXMLFile("Scene.xml");
   //_scene.loadXMLFile("SceneB.xml");
-  _scene.loadXMLFile("SceneC.xml");
+  //_scene.loadXMLFile("SceneC.xml");
+  _scene.loadXMLFile("SceneD.xml");
   //_model = _scene.get<fx::Model>("Model");
   _model = _scene.get<fx::Model>("BakeObject");
   

@@ -128,6 +128,13 @@ namespace fx
       det -=  y.x * x.y * z.z;
       return det;
     }
+    Matrix3 orthogonalized() const {
+      Matrix3 m, t = this->transposed();
+      m.x = t.x.normalized();
+      m.y = m.x.cross(t.z).normalized();
+      m.z = m.x.cross(m.y);
+      return m.transposed();
+    }
     Matrix3 inverse() const
     {
       Matrix3 m = *this;

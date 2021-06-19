@@ -470,7 +470,9 @@ vertex OutputTextureBasis v_texture_basis(VertexTextureBasis    input  [[ stage_
   float4 location = model[iid].model * float4(input.position, 1.0);
   output.position = camera.projection * camera.view * location;
   output.location = location.xyz;
+  //output.normal = (model[iid].model * float4(input.normal, 1.0)).xyz;
   output.normal = rotate_quat(model[iid].rotation, input.normal);
+  //output.normal = quat_mult(model[iid].rotation, input.normal);
   output.bitangent = rotate_quat(model[iid].rotation, input.tangent.xyz);
   output.cotangent = cross(output.normal, output.bitangent) * input.tangent.w;
   output.view = location.xyz - camera.position.xyz;
@@ -516,13 +518,32 @@ fragment half4 f_phong(InputTextureBasis  input              [[stage_in]],
   
   for (int i = 0; i < 2; ++i) {
     setLightToParams(&light, input.location, lights[i]);
-    color += shade_lambert(light, material);
-    color += shade_phong(light, material);
+    //color += shade_lambert(light, material);
+    //color += shade_phong(light, material);
   }
 
   // Enviroment light
-  float3 env = environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb;
-  color += env * 0.5;
+  //float f = 1.0 + clamp(dot(input.normal, view), -1.0, 0.0); // fresnel(N, view, 0.5);
+  //f = pow(f, 10.0);
+  //float f = clamp(dot(normalize(input.normal), -view), 0.0, 1.0);
+  float f = clamp(dot(N, -view), 0.0, 1.0);
+  
+  //float f = fresnel(N, -view, 1.3);
+  color += float3(f, f, f);
+  
+  //float3 v = input.normal; //0.5*input.normal + 0.5;
+  //color += float3(v.x, v.y, v.z);
+  //color += float3(N.x, N.y, N.z);
+  //color += float3(view.x, view.y, view.z);
+  
+  //float3 env = environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb;
+  //float3 env = environmentCubeMap.sample(defSampler, R).rgb;
+  //color += env;
+  
+  //float3 env = environmentCubeMap.sample(defSampler, R).rgb * f;
+  //env += environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb * (1.0 - f);
+  //color += env;
+  //color += env * 0.5;
   
   return half4(color.r, color.g, color.b, 1.0);
 }

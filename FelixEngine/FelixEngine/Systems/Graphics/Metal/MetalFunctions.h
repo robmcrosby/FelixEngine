@@ -59,6 +59,7 @@ float minnaert(float3 normal, float3 light, float3 view, float darkness);
 // Specular Shaders
 float phong(float3 normal, float3 light, float3 view, float hardness);
 float cooktorr(float3 normal, float3 light, float3 view, float hardness);
+float fresnel(float3 normal, float3 view, float power);
 float toon_s(float3 normal, float3 light, float3 view, float size, float smooth);
 
 float3 shade_lambert(LightingParams light, MaterialParams material);
@@ -75,6 +76,23 @@ float3 shade_toon_s(LightingParams light, MaterialParams material);
 float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
+
+
+float4 quat_inverse(const float4 q) {
+ return float4(-q.xyz, q.w);
+}
+
+float4 quat_dot(const float4 q1, const float4 q2) {
+ float scalar = q1.w * q2.w - dot(q1.xyz, q2.xyz);
+ float3 v = cross(q1.xyz, q2.xyz) + q1.w * q2.xyz + q2.w * q1.xyz;
+ return float4(v, scalar);
+}
+
+float3 quat_mult(const float4 q, const float3 v) {
+ float4 r = quat_dot(q, quat_dot(float4(v, 0), quat_inverse(q)));
+ return r.xyz;
+}
+
 
 float2 transform_coordinate(float4x4 transform, float2 coordinate) {
   return (transform * float4(coordinate, 0.0, 1.0)).xy;
@@ -190,6 +208,36 @@ float3 shade_cooktorr(LightingParams light, MaterialParams material) {
   float specular = cooktorr(light.normal, light.direction, light.view, material.factors.x);
   return material.specularColor * light.color * specular * light.energy * light.attenuation;
 }
+
+
+//float fresnel(float3 normal, float3 view, float power) {
+//  return dot(normal, -view);  //clamp(dot(normal, view), 0.0, 1.0);
+  //return 1.0 - min(pow(max(0.0, abs(dot(normal, view))), power), 1.0);
+//}
+
+
+float fresnel(float3 normal, float3 view, float ior) {
+  float cosi = clamp(dot(view, normal), -1.0, 1.0);
+  float etai = 1.0, etat = ior;
+  if (cosi > 0) {
+    etai = ior;
+    etat = 1.0;
+  }
+  
+  // Compute sini using Snell's law
+  float sint = etai / etat * sqrt(max(0.0, 1.0 - cosi * cosi));
+  
+  float ret = 1.0;
+  if (sint > 0.0) {
+    float cost = sqrt(max(0.f, 1 - sint * sint));
+    cosi = fabs(cosi);
+    float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
+    float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
+    ret = (Rs * Rs + Rp * Rp) / 2;
+  }
+  return ret;
+}
+
 
 float toon_s(float3 normal, float3 light, float3 view, float size, float smooth) {
   float3 halfAngle = normalize(view + light);

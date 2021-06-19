@@ -11,6 +11,8 @@
 		AD4B79E82593CF4500B7AE10 /* Environment.hdr in Resources */ = {isa = PBXBuildFile; fileRef = AD4B79E72593CF4500B7AE10 /* Environment.hdr */; };
 		AD5ABD8A2610E45D0055B33D /* SceneC.xml in Resources */ = {isa = PBXBuildFile; fileRef = AD5ABD892610E45D0055B33D /* SceneC.xml */; };
 		AD5ABD8C2610F82C0055B33D /* environment2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = AD5ABD8B2610F82C0055B33D /* environment2.jpeg */; };
+		AD6003D326752490003B7ECB /* Sphere.usdz in Resources */ = {isa = PBXBuildFile; fileRef = AD6003D226752490003B7ECB /* Sphere.usdz */; };
+		AD6003D52675267F003B7ECB /* SceneD.xml in Resources */ = {isa = PBXBuildFile; fileRef = AD6003D42675267F003B7ECB /* SceneD.xml */; };
 		ADF6D347255126AC003300A1 /* Suzanne.usdz in Resources */ = {isa = PBXBuildFile; fileRef = ADF6D346255126AC003300A1 /* Suzanne.usdz */; };
 		C1BB4EFD1F1C2068008FDF01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4EFC1F1C2068008FDF01 /* main.m */; };
 		C1BB4F001F1C2068008FDF01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */; };
@@ -63,6 +65,8 @@
 		AD4B79E72593CF4500B7AE10 /* Environment.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = Environment.hdr; sourceTree = "<group>"; };
 		AD5ABD892610E45D0055B33D /* SceneC.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SceneC.xml; sourceTree = "<group>"; };
 		AD5ABD8B2610F82C0055B33D /* environment2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = environment2.jpeg; sourceTree = "<group>"; };
+		AD6003D226752490003B7ECB /* Sphere.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = Sphere.usdz; sourceTree = "<group>"; };
+		AD6003D42675267F003B7ECB /* SceneD.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SceneD.xml; sourceTree = "<group>"; };
 		ADF6D346255126AC003300A1 /* Suzanne.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = Suzanne.usdz; sourceTree = "<group>"; };
 		C1BB4EF81F1C2068008FDF01 /* XMLScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XMLScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BB4EFC1F1C2068008FDF01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -123,9 +127,11 @@
 				AD5ABD8B2610F82C0055B33D /* environment2.jpeg */,
 				AD4B79E72593CF4500B7AE10 /* Environment.hdr */,
 				ADF6D346255126AC003300A1 /* Suzanne.usdz */,
+				AD6003D226752490003B7ECB /* Sphere.usdz */,
 				C1BB4F2B1F1C3049008FDF01 /* Scene.xml */,
 				AD1BF013256EE7A40003C375 /* SceneB.xml */,
 				AD5ABD892610E45D0055B33D /* SceneC.xml */,
+				AD6003D42675267F003B7ECB /* SceneD.xml */,
 				C1C1FF461FCB33330091E342 /* Mesh.mesh */,
 				C1BB4EFE1F1C2068008FDF01 /* AppDelegate.h */,
 				C1BB4EFF1F1C2068008FDF01 /* AppDelegate.m */,
@@ -248,9 +254,11 @@
 				AD4B79E82593CF4500B7AE10 /* Environment.hdr in Resources */,
 				C1BB4F0B1F1C2068008FDF01 /* LaunchScreen.storyboard in Resources */,
 				C1C1FF471FCB33330091E342 /* Mesh.mesh in Resources */,
+				AD6003D326752490003B7ECB /* Sphere.usdz in Resources */,
 				C1BB4F081F1C2068008FDF01 /* Assets.xcassets in Resources */,
 				AD5ABD8C2610F82C0055B33D /* environment2.jpeg in Resources */,
 				AD1BF014256EE7A40003C375 /* SceneB.xml in Resources */,
+				AD6003D52675267F003B7ECB /* SceneD.xml in Resources */,
 				AD5ABD8A2610E45D0055B33D /* SceneC.xml in Resources */,
 				C1BB4F2C1F1C3049008FDF01 /* Scene.xml in Resources */,
 				ADF6D347255126AC003300A1 /* Suzanne.usdz in Resources */,
