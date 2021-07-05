@@ -526,24 +526,16 @@ fragment half4 f_phong(InputTextureBasis  input              [[stage_in]],
   //float f = 1.0 + clamp(dot(input.normal, view), -1.0, 0.0); // fresnel(N, view, 0.5);
   //f = pow(f, 10.0);
   //float f = clamp(dot(normalize(input.normal), -view), 0.0, 1.0);
-  float f = clamp(dot(N, -view), 0.0, 1.0);
+  //float f = clamp(dot(N, -view), 0.0, 1.0);
   
-  //float f = fresnel(N, -view, 1.3);
-  color += float3(f, f, f);
+  float f = occlusion * fresnel(N, -view, float3(0.0, 0.2*(1.0 - roughness), 1.0 - 0.4*roughness));
+  color += environmentCubeMap.sample(defSampler, R).rgb * f;
   
-  //float3 v = input.normal; //0.5*input.normal + 0.5;
-  //color += float3(v.x, v.y, v.z);
-  //color += float3(N.x, N.y, N.z);
-  //color += float3(view.x, view.y, view.z);
+  color += environmentCubeMap.sample(defSampler, N, level(0.8 * envLevels)).rgb * albedo * occlusion * (1.0 - f);
   
-  //float3 env = environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb;
-  //float3 env = environmentCubeMap.sample(defSampler, R).rgb;
-  //color += env;
+  color += environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb * 0.5 * (1.0 - f);
   
-  //float3 env = environmentCubeMap.sample(defSampler, R).rgb * f;
-  //env += environmentCubeMap.sample(defSampler, R, level(roughness * envLevels)).rgb * (1.0 - f);
-  //color += env;
-  //color += env * 0.5;
+  //color += float3(occlusion, occlusion, occlusion);
   
   return half4(color.r, color.g, color.b, 1.0);
 }

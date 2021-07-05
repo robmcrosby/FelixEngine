@@ -73,6 +73,22 @@ float3 shade_toon_s(LightingParams light, MaterialParams material);
 
 
 
+float fresnel2(float3 normal, float3 view) {
+  float fresnel = 1.0 - saturate(dot(normal, view));
+  return fresnel * fresnel;
+}
+
+float fresnel(float3 normal, float3 view, float3 ranges) {
+  float result, f = fresnel2(normal, view);
+
+  if (f > 0.5)
+    result = mix(ranges.y, ranges.z, (2.0*f)-1.0);
+  else
+    result = mix(ranges.x, ranges.y, 2.0*f);
+  return result;
+}
+
+
 float3 rotate_quat(float4 rot, float3 v) {
   return v + cross(rot.xyz, (cross(rot.xyz, v) + v*rot.w))*2.0;
 }
@@ -207,35 +223,6 @@ float cooktorr(float3 normal, float3 light, float3 view, float hardness) {
 float3 shade_cooktorr(LightingParams light, MaterialParams material) {
   float specular = cooktorr(light.normal, light.direction, light.view, material.factors.x);
   return material.specularColor * light.color * specular * light.energy * light.attenuation;
-}
-
-
-//float fresnel(float3 normal, float3 view, float power) {
-//  return dot(normal, -view);  //clamp(dot(normal, view), 0.0, 1.0);
-  //return 1.0 - min(pow(max(0.0, abs(dot(normal, view))), power), 1.0);
-//}
-
-
-float fresnel(float3 normal, float3 view, float ior) {
-  float cosi = clamp(dot(view, normal), -1.0, 1.0);
-  float etai = 1.0, etat = ior;
-  if (cosi > 0) {
-    etai = ior;
-    etat = 1.0;
-  }
-  
-  // Compute sini using Snell's law
-  float sint = etai / etat * sqrt(max(0.0, 1.0 - cosi * cosi));
-  
-  float ret = 1.0;
-  if (sint > 0.0) {
-    float cost = sqrt(max(0.f, 1 - sint * sint));
-    cosi = fabs(cosi);
-    float Rs = ((etat * cosi) - (etai * cost)) / ((etat * cosi) + (etai * cost));
-    float Rp = ((etai * cosi) - (etat * cost)) / ((etai * cosi) + (etat * cost));
-    ret = (Rs * Rs + Rp * Rp) / 2;
-  }
-  return ret;
 }
 
 

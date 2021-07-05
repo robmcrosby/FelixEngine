@@ -34,5 +34,5 @@
       </Transform>
     </Light>
   </LightRig>
-  <External file="Suzanne.usdz" pass="MainPass"/>
+  <External file="test.usdz" pass="MainPass"/>
 </Scene>
