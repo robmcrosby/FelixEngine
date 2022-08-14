@@ -11,10 +11,13 @@ add_executable(${PROJECT_NAME}
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Windows
+
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   # Linux
   set(LDFLAGS "-lvulkan")
-  set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
+  target_link_libraries(${PROJECT_NAME} vulkan)
+
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # MacOS
   target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/include/")
@@ -24,4 +27,5 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   target_link_libraries(${PROJECT_NAME} PRIVATE ${VK_FRAMEWORK})
 
   #target_link_libraries(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/MoltenVK.xcframework/macos-arm64_x86_64/libMoltenVK.a")
+
 endif()
