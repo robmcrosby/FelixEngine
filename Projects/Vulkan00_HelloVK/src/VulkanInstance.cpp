@@ -4,7 +4,8 @@
 using namespace std;
 
 VulkanInstance::VulkanInstance():
-  mVkInstance(VK_NULL_HANDLE) {
+  mVkInstance(VK_NULL_HANDLE),
+  mValidationEnabled(false) {
   mApplicationVersion = VK_MAKE_VERSION(1, 0, 0);
   mEngineVersion = VK_MAKE_VERSION(1, 0, 0);
   mApiVersion = VK_API_VERSION_1_0;
@@ -32,12 +33,12 @@ bool VulkanInstance::init() {
   createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   createInfo.pApplicationInfo = &appInfo;
 
-  createInfo.enabledExtensionCount = 0;//(uint32_t)mExtensions.size();
-  createInfo.ppEnabledExtensionNames = nullptr;//mExtensions.data();
+  createInfo.enabledExtensionCount = (uint32_t)mExtensions.size();
+  createInfo.ppEnabledExtensionNames = mExtensions.data();
 
   VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
-  createInfo.enabledLayerCount = 0; //(uint32_t)mValidationLayers.size();
-  createInfo.ppEnabledLayerNames = nullptr; //mValidationLayers.data();
+  createInfo.enabledLayerCount = (uint32_t)mValidationLayers.size();
+  createInfo.ppEnabledLayerNames = mValidationLayers.data();
   createInfo.pNext = nullptr;
   // if (mValidationEnabled) {
   //   populateDebugMessengerCreateInfo(debugCreateInfo);
@@ -73,4 +74,18 @@ void VulkanInstance::setApplicationVersion(int major, int minor, int patch) {
 void VulkanInstance::setEngineVersion(int major, int minor, int patch) {
   if (mVkInstance == VK_NULL_HANDLE)
     mEngineVersion = VK_MAKE_VERSION(major, minor, patch);
+}
+
+void VulkanInstance::enableValidation() {
+  if (mVkInstance == VK_NULL_HANDLE && !mValidationEnabled) {
+    #ifndef __APPLE__
+      mValidationEnabled = true;
+      mValidationLayers.push_back("VK_EXT_debug_utils");
+    #endif
+  }
+}
+
+void VulkanInstance::addExtension(CString extension) {
+  if (mVkInstance == VK_NULL_HANDLE)
+    mExtensions.push_back(extension);
 }
