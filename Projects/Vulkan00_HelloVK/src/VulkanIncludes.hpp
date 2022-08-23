@@ -47,6 +47,9 @@ public:
 
   void enableValidation();
   void addExtension(CString extension);
+
+private:
+  void initDebugMessenger(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 };
 
 
