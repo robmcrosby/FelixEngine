@@ -17,6 +17,7 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 
 VulkanInstance::VulkanInstance():
   mVkInstance(VK_NULL_HANDLE),
+  mDebugMessenger(VK_NULL_HANDLE),
   mValidationEnabled(false) {
   mApplicationVersion = VK_MAKE_VERSION(1, 0, 0);
   mEngineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -33,35 +34,16 @@ VulkanInstance& VulkanInstance::Get() {
 }
 
 bool VulkanInstance::init() {
-  VkApplicationInfo appInfo{};
-  appInfo.sType               = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-  appInfo.pApplicationName    = mApplicationName.c_str();
-  appInfo.applicationVersion  = mApplicationVersion;
-  appInfo.pEngineName         = mEngineName.c_str();
-  appInfo.engineVersion       = mEngineVersion;
-  appInfo.apiVersion          = mApiVersion;
-
-  VkInstanceCreateInfo createInfo{};
-  createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-  createInfo.pApplicationInfo = &appInfo;
-
-  createInfo.enabledExtensionCount = (uint32_t)mExtensions.size();
-  createInfo.ppEnabledExtensionNames = mExtensions.data();
-
-  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
-  createInfo.enabledLayerCount = (uint32_t)mValidationLayers.size();
-  createInfo.ppEnabledLayerNames = mValidationLayers.data();
-  createInfo.pNext = nullptr;
-  if (mValidationEnabled) {
-    initDebugMessenger(debugCreateInfo);
-    createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+  bool initalized = createVkInstance();
+  if (initalized) {
+    initalized = !mValidationEnabled || setupDebugMessenger();
   }
-
-  return vkCreateInstance(&createInfo, nullptr, &mVkInstance) == VK_SUCCESS;
+  return initalized;
 }
 
 void VulkanInstance::destroy() {
   if (mVkInstance != VK_NULL_HANDLE) {
+    destroyDebugMessenger();
     vkDestroyInstance(mVkInstance, nullptr);
     mVkInstance = VK_NULL_HANDLE;
   }
@@ -101,7 +83,59 @@ void VulkanInstance::addExtension(CString extension) {
     mExtensions.push_back(extension);
 }
 
-void VulkanInstance::initDebugMessenger(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+bool VulkanInstance::createVkInstance() {
+  VkApplicationInfo appInfo{};
+  appInfo.sType               = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+  appInfo.pApplicationName    = mApplicationName.c_str();
+  appInfo.applicationVersion  = mApplicationVersion;
+  appInfo.pEngineName         = mEngineName.c_str();
+  appInfo.engineVersion       = mEngineVersion;
+  appInfo.apiVersion          = mApiVersion;
+
+  VkInstanceCreateInfo createInfo{};
+  createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+  createInfo.pApplicationInfo = &appInfo;
+
+  createInfo.enabledExtensionCount = (uint32_t)mExtensions.size();
+  createInfo.ppEnabledExtensionNames = mExtensions.data();
+
+  VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
+  createInfo.enabledLayerCount = (uint32_t)mValidationLayers.size();
+  createInfo.ppEnabledLayerNames = mValidationLayers.data();
+  createInfo.pNext = nullptr;
+  if (mValidationEnabled) {
+    initDebugMessengerInfo(debugCreateInfo);
+    createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+  }
+
+  bool err = vkCreateInstance(&createInfo, nullptr, &mVkInstance) != VK_SUCCESS;
+
+  if (err)
+    cerr << "Failed to create Vulkan Instance" << endl;
+  return !err;
+}
+
+bool VulkanInstance::setupDebugMessenger() {
+  VkDebugUtilsMessengerCreateInfoEXT createInfo;
+  initDebugMessengerInfo(createInfo);
+
+  auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(mVkInstance, "vkCreateDebugUtilsMessengerEXT");
+  bool err = func == nullptr || func(mVkInstance, &createInfo, nullptr, &mDebugMessenger) != VK_SUCCESS;
+
+  if (err)
+    cerr << "Failed to set up Debug Messenger Callback" << endl;
+  return !err;
+}
+
+void VulkanInstance::destroyDebugMessenger() {
+  if (mVkInstance != VK_NULL_HANDLE && mDebugMessenger != VK_NULL_HANDLE) {
+    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(mVkInstance, "vkDestroyDebugUtilsMessengerEXT");
+    func(mVkInstance, mDebugMessenger, nullptr);
+    mDebugMessenger = VK_NULL_HANDLE;
+  }
+}
+
+void VulkanInstance::initDebugMessengerInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
   createInfo = {};
   createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
   createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |

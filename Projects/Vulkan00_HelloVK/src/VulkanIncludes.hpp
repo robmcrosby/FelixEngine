@@ -15,6 +15,7 @@ typedef const std::string& StringRef;
 class VulkanInstance {
 private:
   VkInstance mVkInstance;
+  VkDebugUtilsMessengerEXT mDebugMessenger;
 
   std::string mApplicationName;
   std::string mEngineName;
@@ -49,7 +50,11 @@ public:
   void addExtension(CString extension);
 
 private:
-  void initDebugMessenger(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+  bool createVkInstance();
+  bool setupDebugMessenger();
+
+  void destroyDebugMessenger();
+  void initDebugMessengerInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
 };
 
 
