@@ -51,10 +51,13 @@ public:
 
 private:
   bool createVkInstance();
-  bool setupDebugMessenger();
 
+  bool setupDebugMessenger();
   void destroyDebugMessenger();
   void initDebugMessengerInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
+
+  bool loadDevices();
+  void clearDevices();
 };
 
 

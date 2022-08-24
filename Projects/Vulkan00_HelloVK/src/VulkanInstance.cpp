@@ -37,12 +37,17 @@ bool VulkanInstance::init() {
   bool initalized = createVkInstance();
   if (initalized) {
     initalized = !mValidationEnabled || setupDebugMessenger();
+    initalized = initalized && loadDevices();
+
+    if (!initalized)
+      destroy();
   }
   return initalized;
 }
 
 void VulkanInstance::destroy() {
   if (mVkInstance != VK_NULL_HANDLE) {
+    clearDevices();
     destroyDebugMessenger();
     vkDestroyInstance(mVkInstance, nullptr);
     mVkInstance = VK_NULL_HANDLE;
@@ -145,4 +150,30 @@ void VulkanInstance::initDebugMessengerInfo(VkDebugUtilsMessengerCreateInfoEXT& 
                            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
                            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
   createInfo.pfnUserCallback = debugCallback;
+}
+
+bool VulkanInstance::loadDevices() {
+  uint32_t deviceCount = 0;
+  vkEnumeratePhysicalDevices(mVkInstance, &deviceCount, nullptr);
+
+  bool err = deviceCount == 0;
+  if (!err) {
+    vector<VkPhysicalDevice> devices(deviceCount);
+    vkEnumeratePhysicalDevices(mVkInstance, &deviceCount, devices.data());
+    for (auto physicalDevice : devices) {
+      cout << "Device: " << physicalDevice << endl;
+      // auto device = make_shared<VulkanDevice>(this, physicalDevice);
+      // mDevices.push_back(device);
+    }
+  }
+
+  if (err)
+    cerr << "Failed to find Devices with Vulkan support" << endl;
+  return !err;
+}
+
+void VulkanInstance::clearDevices() {
+  // for (auto device : mDevices)
+  //   device->cleanup();
+  // mDevices.clear();
 }
