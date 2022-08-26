@@ -78,25 +78,15 @@ void VulkanInstance::enableValidation() {
   if (mVkInstance == VK_NULL_HANDLE && !mValidationEnabled) {
     #ifndef __APPLE__
       mValidationEnabled = true;
-      //mValidationLayers.push_back("VK_EXT_debug_utils");
-      mValidationLayers.push_back("VK_LAYER_KHRONOS_validation");
-      mExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-
-      cout << "Avalible Layers:" << endl;
-      vector<VkLayerProperties> layers;
-      getAvailableLayers(layers);
-      for (const auto& properties : layers) {
-        cout << "  " << properties.layerName << endl;
-      }
-
-      cout << "Avalible Extensions:" << endl;
-      vector<VkExtensionProperties> extensions;
-      getAvailableExtensions(extensions);
-      for (const auto& extension : extensions) {
-        cout << "  " << extension.extensionName << endl;
-      }
+      addValidationLayer("VK_LAYER_KHRONOS_validation");
+      addExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     #endif
   }
+}
+
+void VulkanInstance::addValidationLayer(CString layer) {
+  if (mVkInstance == VK_NULL_HANDLE)
+    mValidationLayers.push_back(layer);
 }
 
 void VulkanInstance::addExtension(CString extension) {
@@ -104,7 +94,7 @@ void VulkanInstance::addExtension(CString extension) {
     mExtensions.push_back(extension);
 }
 
-void VulkanInstance::getAvailableLayers(vector<VkLayerProperties> &layers) {
+void VulkanInstance::getAvailableLayers(vector<VkLayerProperties> &layers) const {
   uint32_t count;
   vkEnumerateInstanceLayerProperties(&count, nullptr);
 
@@ -112,12 +102,28 @@ void VulkanInstance::getAvailableLayers(vector<VkLayerProperties> &layers) {
   vkEnumerateInstanceLayerProperties(&count, layers.data());
 }
 
-void VulkanInstance::getAvailableExtensions(vector<VkExtensionProperties> &extensions) {
+void VulkanInstance::getAvailableExtensions(vector<VkExtensionProperties> &extensions) const {
   uint32_t count;
   vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr);
 
   extensions.resize(count);
   vkEnumerateInstanceExtensionProperties(nullptr, &count, extensions.data());
+}
+
+ostream& operator<<(ostream &os, const VulkanInstance &instance) {
+  os << "Avalible Layers:" << endl;
+  vector<VkLayerProperties> layers;
+  instance.getAvailableLayers(layers);
+  for (const auto& properties : layers)
+    os << "  " << properties.layerName << endl;
+
+  os << "Avalible Extensions:" << endl;
+  vector<VkExtensionProperties> extensions;
+  instance.getAvailableExtensions(extensions);
+  for (const auto& extension : extensions)
+    os << "  " << extension.extensionName << endl;
+
+  return os;
 }
 
 bool VulkanInstance::createVkInstance() {

@@ -28,8 +28,6 @@ private:
   CStrings mValidationLayers;
   CStrings mExtensions;
 
-  //VkDebugUtilsMessengerEXT mDebugMessenger;
-
 private:
   VulkanInstance();
   ~VulkanInstance();
@@ -47,10 +45,13 @@ public:
   void setEngineVersion(int major, int minor, int patch);
 
   void enableValidation();
+  void addValidationLayer(CString layer);
   void addExtension(CString extension);
 
-  void getAvailableLayers(std::vector<VkLayerProperties> &layers);
-  void getAvailableExtensions(std::vector<VkExtensionProperties> &extensions);
+  void getAvailableLayers(std::vector<VkLayerProperties> &layers) const;
+  void getAvailableExtensions(std::vector<VkExtensionProperties> &extensions) const;
+
+  friend std::ostream &operator<<(std::ostream &os, const VulkanInstance &instance);
 
 private:
   bool createVkInstance();
