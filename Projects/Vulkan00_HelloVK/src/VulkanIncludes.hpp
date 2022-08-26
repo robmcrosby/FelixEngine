@@ -49,6 +49,9 @@ public:
   void enableValidation();
   void addExtension(CString extension);
 
+  void getAvailableLayers(std::vector<VkLayerProperties> &layers);
+  void getAvailableExtensions(std::vector<VkExtensionProperties> &extensions);
+
 private:
   bool createVkInstance();
 

@@ -78,7 +78,23 @@ void VulkanInstance::enableValidation() {
   if (mVkInstance == VK_NULL_HANDLE && !mValidationEnabled) {
     #ifndef __APPLE__
       mValidationEnabled = true;
-      mValidationLayers.push_back("VK_EXT_debug_utils");
+      //mValidationLayers.push_back("VK_EXT_debug_utils");
+      mValidationLayers.push_back("VK_LAYER_KHRONOS_validation");
+      mExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+      cout << "Avalible Layers:" << endl;
+      vector<VkLayerProperties> layers;
+      getAvailableLayers(layers);
+      for (const auto& properties : layers) {
+        cout << "  " << properties.layerName << endl;
+      }
+
+      cout << "Avalible Extensions:" << endl;
+      vector<VkExtensionProperties> extensions;
+      getAvailableExtensions(extensions);
+      for (const auto& extension : extensions) {
+        cout << "  " << extension.extensionName << endl;
+      }
     #endif
   }
 }
@@ -86,6 +102,22 @@ void VulkanInstance::enableValidation() {
 void VulkanInstance::addExtension(CString extension) {
   if (mVkInstance == VK_NULL_HANDLE)
     mExtensions.push_back(extension);
+}
+
+void VulkanInstance::getAvailableLayers(vector<VkLayerProperties> &layers) {
+  uint32_t count;
+  vkEnumerateInstanceLayerProperties(&count, nullptr);
+
+  layers.resize(count);
+  vkEnumerateInstanceLayerProperties(&count, layers.data());
+}
+
+void VulkanInstance::getAvailableExtensions(vector<VkExtensionProperties> &extensions) {
+  uint32_t count;
+  vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr);
+
+  extensions.resize(count);
+  vkEnumerateInstanceExtensionProperties(nullptr, &count, extensions.data());
 }
 
 bool VulkanInstance::createVkInstance() {
