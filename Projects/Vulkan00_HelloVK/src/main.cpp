@@ -9,9 +9,7 @@ int main() {
   instance.setEngineName("No Engine");
   instance.enableValidation();
   if (instance.init()) {
-    cout << "It Works!" << endl;
     cout << instance << endl;
   }
-
   return 0;
 }

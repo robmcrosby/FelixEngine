@@ -141,6 +141,11 @@ ostream& VulkanInstance::print(ostream& os) const {
   os << "Avalible Extensions:" << endl;
   for (const auto& extension : mAvailableExentions)
     os << "  " << extension.extensionName << endl;
+
+  os << "Devices:" << endl;
+  for (auto device : mDevices)
+    os << "  " << device << endl;
+
   return os;
 }
 
@@ -217,9 +222,8 @@ bool VulkanInstance::loadDevices() {
     vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(mVkInstance, &deviceCount, devices.data());
     for (auto physicalDevice : devices) {
-      cout << "Device: " << physicalDevice << endl;
-      // auto device = make_shared<VulkanDevice>(this, physicalDevice);
-      // mDevices.push_back(device);
+      auto device = make_shared<VulkanDevice>(physicalDevice);
+      mDevices.push_back(device);
     }
   }
 
@@ -229,7 +233,7 @@ bool VulkanInstance::loadDevices() {
 }
 
 void VulkanInstance::clearDevices() {
-  // for (auto device : mDevices)
-  //   device->cleanup();
-  // mDevices.clear();
+  for (auto device : mDevices)
+    device->destroy();
+  mDevices.clear();
 }
