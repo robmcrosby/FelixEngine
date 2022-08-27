@@ -12,10 +12,12 @@ typedef std::vector<CString> CStrings;
 typedef std::vector<std::string> Strings;
 typedef const std::string& StringRef;
 
+typedef std::vector<VkLayerProperties> VulkanLayerProperties;
+typedef std::vector<VkExtensionProperties> VulkanExtensionProperties;
+
 class VulkanInstance {
 private:
   VkInstance mVkInstance;
-  VkDebugUtilsMessengerEXT mDebugMessenger;
 
   std::string mApplicationName;
   std::string mEngineName;
@@ -24,9 +26,15 @@ private:
   uint32_t mEngineVersion;
   uint32_t mApiVersion;
 
+  VulkanLayerProperties     mAvailableLayers;
+  VulkanExtensionProperties mAvailableExentions;
+
   bool mValidationEnabled;
-  CStrings mValidationLayers;
-  CStrings mExtensions;
+  CStrings mEnabledLayers;
+  CStrings mEnabledExtensions;
+
+  bool mDebugMessengerEnabled;
+  VkDebugUtilsMessengerEXT mDebugMessenger;
 
 private:
   VulkanInstance();
@@ -45,13 +53,11 @@ public:
   void setEngineVersion(int major, int minor, int patch);
 
   void enableValidation();
-  void addValidationLayer(CString layer);
-  void addExtension(CString extension);
+  bool addValidationLayer(StringRef layer);
+  bool addExtension(StringRef extension);
 
-  void getAvailableLayers(std::vector<VkLayerProperties> &layers) const;
-  void getAvailableExtensions(std::vector<VkExtensionProperties> &extensions) const;
-
-  friend std::ostream &operator<<(std::ostream &os, const VulkanInstance &instance);
+  friend std::ostream& operator<<(std::ostream& os, const VulkanInstance &instance);
+  std::ostream& print(std::ostream& os) const;
 
 private:
   bool createVkInstance();

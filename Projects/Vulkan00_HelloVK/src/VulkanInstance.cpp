@@ -18,10 +18,21 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 VulkanInstance::VulkanInstance():
   mVkInstance(VK_NULL_HANDLE),
   mDebugMessenger(VK_NULL_HANDLE),
-  mValidationEnabled(false) {
+  mValidationEnabled(false),
+  mDebugMessengerEnabled(false),
+  mApiVersion(VK_API_VERSION_1_0) {
   mApplicationVersion = VK_MAKE_VERSION(1, 0, 0);
   mEngineVersion = VK_MAKE_VERSION(1, 0, 0);
-  mApiVersion = VK_API_VERSION_1_0;
+
+  uint32_t count;
+
+  vkEnumerateInstanceLayerProperties(&count, nullptr);
+  mAvailableLayers.resize(count);
+  vkEnumerateInstanceLayerProperties(&count, mAvailableLayers.data());
+
+  vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr);
+  mAvailableExentions.resize(count);
+  vkEnumerateInstanceExtensionProperties(nullptr, &count, mAvailableExentions.data());
 }
 
 VulkanInstance::~VulkanInstance() {
@@ -36,7 +47,7 @@ VulkanInstance& VulkanInstance::Get() {
 bool VulkanInstance::init() {
   bool initalized = createVkInstance();
   if (initalized) {
-    initalized = !mValidationEnabled || setupDebugMessenger();
+    initalized = !mDebugMessengerEnabled || setupDebugMessenger();
     initalized = initalized && loadDevices();
 
     if (!initalized)
@@ -76,53 +87,60 @@ void VulkanInstance::setEngineVersion(int major, int minor, int patch) {
 
 void VulkanInstance::enableValidation() {
   if (mVkInstance == VK_NULL_HANDLE && !mValidationEnabled) {
-    #ifndef __APPLE__
-      mValidationEnabled = true;
-      addValidationLayer("VK_LAYER_KHRONOS_validation");
-      addExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-    #endif
+    mValidationEnabled = true;
+    addValidationLayer("VK_LAYER_KHRONOS_validation");
+    mDebugMessengerEnabled = addExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
   }
 }
 
-void VulkanInstance::addValidationLayer(CString layer) {
-  if (mVkInstance == VK_NULL_HANDLE)
-    mValidationLayers.push_back(layer);
+bool VulkanInstance::addValidationLayer(StringRef layer) {
+  if (mVkInstance == VK_NULL_HANDLE) {
+    for (const auto& layerProperties : mAvailableLayers) {
+      if (layer == layerProperties.layerName) {
+        mEnabledLayers.push_back(layerProperties.layerName);
+        return true;
+      }
+    }
+    cerr << "Warning: Validation Layer " << layer;
+    cerr << " not avalible for this version of Vulkan" << endl;
+  }
+  else {
+    cerr << "Warning: Validation Layer " << layer;
+    cerr << " must be added before VulkanInstance initalization" << endl;
+  }
+  return false;
 }
 
-void VulkanInstance::addExtension(CString extension) {
-  if (mVkInstance == VK_NULL_HANDLE)
-    mExtensions.push_back(extension);
+bool VulkanInstance::addExtension(StringRef extension) {
+  if (mVkInstance == VK_NULL_HANDLE) {
+    for (const auto& extensionProperties : mAvailableExentions) {
+      if (extension == extensionProperties.extensionName) {
+        mEnabledExtensions.push_back(extensionProperties.extensionName);
+        return true;
+      }
+    }
+    cerr << "Warning: Extension " << extension;
+    cerr << " not avalible for this version of Vulkan" << endl;
+  }
+  else {
+    cerr << "Warning: Extension " << extension;
+    cerr << " must be added before VulkanInstance initalization" << endl;
+  }
+  return false;
 }
 
-void VulkanInstance::getAvailableLayers(vector<VkLayerProperties> &layers) const {
-  uint32_t count;
-  vkEnumerateInstanceLayerProperties(&count, nullptr);
-
-  layers.resize(count);
-  vkEnumerateInstanceLayerProperties(&count, layers.data());
+ostream& operator<<(ostream& os, const VulkanInstance& instance) {
+  return instance.print(os);
 }
 
-void VulkanInstance::getAvailableExtensions(vector<VkExtensionProperties> &extensions) const {
-  uint32_t count;
-  vkEnumerateInstanceExtensionProperties(nullptr, &count, nullptr);
-
-  extensions.resize(count);
-  vkEnumerateInstanceExtensionProperties(nullptr, &count, extensions.data());
-}
-
-ostream& operator<<(ostream &os, const VulkanInstance &instance) {
+ostream& VulkanInstance::print(ostream& os) const {
   os << "Avalible Layers:" << endl;
-  vector<VkLayerProperties> layers;
-  instance.getAvailableLayers(layers);
-  for (const auto& properties : layers)
-    os << "  " << properties.layerName << endl;
+  for (const auto& layer : mAvailableLayers)
+    os << "  " << layer.layerName << endl;
 
   os << "Avalible Extensions:" << endl;
-  vector<VkExtensionProperties> extensions;
-  instance.getAvailableExtensions(extensions);
-  for (const auto& extension : extensions)
+  for (const auto& extension : mAvailableExentions)
     os << "  " << extension.extensionName << endl;
-
   return os;
 }
 
@@ -139,14 +157,14 @@ bool VulkanInstance::createVkInstance() {
   createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
   createInfo.pApplicationInfo = &appInfo;
 
-  createInfo.enabledExtensionCount = (uint32_t)mExtensions.size();
-  createInfo.ppEnabledExtensionNames = mExtensions.data();
+  createInfo.enabledExtensionCount = (uint32_t)mEnabledExtensions.size();
+  createInfo.ppEnabledExtensionNames = mEnabledExtensions.data();
 
   VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo{};
-  createInfo.enabledLayerCount = (uint32_t)mValidationLayers.size();
-  createInfo.ppEnabledLayerNames = mValidationLayers.data();
+  createInfo.enabledLayerCount = (uint32_t)mEnabledLayers.size();
+  createInfo.ppEnabledLayerNames = mEnabledLayers.data();
   createInfo.pNext = nullptr;
-  if (mValidationEnabled) {
+  if (mDebugMessengerEnabled) {
     initDebugMessengerInfo(debugCreateInfo);
     createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
   }
