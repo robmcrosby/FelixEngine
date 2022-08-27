@@ -70,5 +70,14 @@ private:
   void clearDevices();
 };
 
+class VulkanDevice {
+private:
+  VkPhysicalDevice mPhysicalDevice;
+
+public:
+  VulkanDevice(VkPhysicalDevice device);
+  ~VulkanDevice();
+};
+
 
 #endif /* VulkanIncludes_hpp */
