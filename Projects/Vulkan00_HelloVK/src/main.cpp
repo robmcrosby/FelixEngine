@@ -10,6 +10,11 @@ int main() {
   instance.enableValidation();
   if (instance.init()) {
     cout << instance << endl;
+
+    auto device = instance.pickDevice();
+    if (device) {
+      cout << "Picked Device: " << device << endl;
+    }
   }
   return 0;
 }

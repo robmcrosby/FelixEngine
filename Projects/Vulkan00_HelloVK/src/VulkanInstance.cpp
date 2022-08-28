@@ -129,6 +129,18 @@ bool VulkanInstance::addExtension(StringRef extension) {
   return false;
 }
 
+VulkanDevicePtr VulkanInstance::pickDevice() const {
+  for (auto device : mDevices) {
+    if (device->deviceType() == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+      return device;
+  }
+  for (auto device : mDevices) {
+    if (device->deviceType() == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU)
+      return device;
+  }
+  return nullptr;
+}
+
 ostream& operator<<(ostream& os, const VulkanInstance& instance) {
   return instance.print(os);
 }
@@ -144,7 +156,7 @@ ostream& VulkanInstance::print(ostream& os) const {
 
   os << "Devices:" << endl;
   for (auto device : mDevices)
-    os << "  " << device << endl;
+    os << "  " << device->name() << " [" << device->type() << "]" << endl;
 
   return os;
 }

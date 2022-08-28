@@ -64,6 +64,8 @@ public:
   bool addValidationLayer(StringRef layer);
   bool addExtension(StringRef extension);
 
+  VulkanDevicePtr pickDevice() const;
+
   friend std::ostream& operator<<(std::ostream& os, const VulkanInstance& instance);
   std::ostream& print(std::ostream& os) const;
 
@@ -94,6 +96,9 @@ public:
   void destroy();
 
   std::string name() const;
+  std::string type() const;
+
+  VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
