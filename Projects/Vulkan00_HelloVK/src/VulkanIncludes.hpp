@@ -13,8 +13,9 @@ typedef std::vector<CString> CStrings;
 typedef std::vector<std::string> Strings;
 typedef const std::string& StringRef;
 
-typedef std::vector<VkLayerProperties> VulkanLayerProperties;
-typedef std::vector<VkExtensionProperties> VulkanExtensionProperties;
+typedef std::vector<VkLayerProperties>       VulkanLayerProperties;
+typedef std::vector<VkExtensionProperties>   VulkanExtensionProperties;
+typedef std::vector<VkQueueFamilyProperties> VulkanQueueFamilies;
 
 class VulkanDevice;
 typedef std::shared_ptr<VulkanDevice> VulkanDevicePtr;
@@ -84,10 +85,10 @@ private:
 class VulkanDevice {
 private:
   VkPhysicalDevice mVkPhysicalDevice;
-  VkDevice         mVkDevice;
 
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
+  VulkanQueueFamilies        mQueueFamilies;
 
 public:
   VulkanDevice(VkPhysicalDevice device);
