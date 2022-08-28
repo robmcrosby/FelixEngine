@@ -13,7 +13,9 @@ int main() {
 
     auto device = instance.pickDevice();
     if (device) {
-      cout << "Picked Device: " << device << endl;
+      cout << device << endl;
+
+      auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
     }
   }
   return 0;

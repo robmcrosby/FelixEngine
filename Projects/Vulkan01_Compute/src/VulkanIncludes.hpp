@@ -21,6 +21,10 @@ class VulkanDevice;
 typedef std::shared_ptr<VulkanDevice> VulkanDevicePtr;
 typedef std::vector<VulkanDevicePtr> VulkanDevices;
 
+class VulkanQueue;
+typedef std::shared_ptr<VulkanQueue> VulkanQueuePtr;
+typedef std::vector<VulkanQueuePtr> VulkanQueues;
+
 
 class VulkanInstance {
 private:
@@ -90,6 +94,8 @@ private:
   VkPhysicalDeviceFeatures   mFeatures;
   VulkanQueueFamilies        mQueueFamilies;
 
+  VulkanQueues mQueues;
+
 public:
   VulkanDevice(VkPhysicalDevice device);
   ~VulkanDevice();
@@ -101,8 +107,26 @@ public:
 
   VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
 
+  VulkanQueuePtr createQueue(VkQueueFlags flags);
+
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
+
+private:
+  void clearQueues();
+};
+
+
+class VulkanQueue {
+private:
+  VulkanDevice* mDevice;
+  VkQueueFlags mVkQueueFlags;
+
+public:
+  VulkanQueue(VulkanDevice* device, VkQueueFlags flags);
+  ~VulkanQueue();
+
+  void destroy();
 };
 
 

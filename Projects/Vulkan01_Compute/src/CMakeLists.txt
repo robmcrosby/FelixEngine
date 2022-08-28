@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
   main.cpp
   VulkanInstance.cpp
   VulkanDevice.cpp
+  VulkanQueue.cpp
 )
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")

@@ -22,7 +22,7 @@ VulkanDevice::~VulkanDevice() {
 }
 
 void VulkanDevice::destroy() {
-
+  clearQueues();
 }
 
 string VulkanDevice::name() const {
@@ -44,6 +44,12 @@ string VulkanDevice::type() const {
       return "Other";
   }
   return "Unknown Device";
+}
+
+VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
+  VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags);
+  mQueues.push_back(queue);
+  return queue;
 }
 
 ostream& operator<<(ostream& os, const VulkanDevicePtr& device) {
@@ -69,4 +75,10 @@ ostream& VulkanDevice::print(std::ostream& os) const {
     os << "]" << endl;
   }
   return os;
+}
+
+void VulkanDevice::clearQueues() {
+  for (auto queue : mQueues)
+    queue->destroy();
+  mQueues.clear();
 }
