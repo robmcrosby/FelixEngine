@@ -89,6 +89,7 @@ private:
 class VulkanDevice {
 private:
   VkPhysicalDevice mVkPhysicalDevice;
+  VkDevice         mVkDevice;
 
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
@@ -101,6 +102,7 @@ public:
   VulkanDevice(VkPhysicalDevice device);
   ~VulkanDevice();
 
+  bool init();
   void destroy();
 
   std::string name() const;

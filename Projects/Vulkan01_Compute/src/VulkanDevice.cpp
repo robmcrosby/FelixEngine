@@ -6,7 +6,8 @@ using namespace std;
 
 
 VulkanDevice::VulkanDevice(VkPhysicalDevice device):
-  mVkPhysicalDevice(device) {
+  mVkPhysicalDevice(device),
+  mVkDevice(VK_NULL_HANDLE) {
   vkGetPhysicalDeviceProperties(mVkPhysicalDevice, &mProperties);
   vkGetPhysicalDeviceFeatures(mVkPhysicalDevice, &mFeatures);
 
@@ -23,8 +24,16 @@ VulkanDevice::~VulkanDevice() {
   destroy();
 }
 
+bool VulkanDevice::init() {
+  return false;
+}
+
 void VulkanDevice::destroy() {
   clearQueues();
+  if (mVkDevice != VK_NULL_HANDLE) {
+    vkDestroyDevice(mVkDevice, nullptr);
+    mVkDevice = VK_NULL_HANDLE;
+  }
 }
 
 string VulkanDevice::name() const {
@@ -49,11 +58,16 @@ string VulkanDevice::type() const {
 }
 
 VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
-  uint32_t familyIndex, queueIndex;
-  if (pickQueueFamily(flags, familyIndex, queueIndex)) {
-    VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags, familyIndex, queueIndex);
-    mQueues.push_back(queue);
-    return queue;
+  if (mVkDevice == VK_NULL_HANDLE) {
+    uint32_t familyIndex, queueIndex;
+    if (pickQueueFamily(flags, familyIndex, queueIndex)) {
+      VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags, familyIndex, queueIndex);
+      mQueues.push_back(queue);
+      return queue;
+    }
+  }
+  else {
+    cerr << "Error: Queue can not be created after device initalization" << endl;
   }
   return nullptr;
 }
@@ -72,22 +86,12 @@ ostream& VulkanDevice::print(ostream& os) const {
     os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " ";
     printQueueFlags(os, family.queueFlags);
     os << endl;
-    // os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " [";
-    // if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-    //   os << "Graphics ";
-    // if (family.queueFlags & VK_QUEUE_COMPUTE_BIT)
-    //   os << "Compute ";
-    // if (family.queueFlags & VK_QUEUE_TRANSFER_BIT)
-    //   os << "Transfer ";
-    // if (family.queueFlags & VK_QUEUE_SPARSE_BINDING_BIT)
-    //   os << "Sparse ";
-    // os << "]" << endl;
   }
   return os;
 }
 
 ostream& VulkanDevice::printQueueFlags(ostream& os, VkQueueFlags flags) const {
-  os << "[";
+  os << "[ ";
   if (flags & VK_QUEUE_GRAPHICS_BIT)
     os << "Graphics ";
   if (flags & VK_QUEUE_COMPUTE_BIT)
