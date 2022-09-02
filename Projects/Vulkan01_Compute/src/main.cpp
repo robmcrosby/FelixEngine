@@ -16,6 +16,9 @@ int main() {
       cout << device << endl;
 
       auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
+      if (device->init()) {
+        cout << "It Works!" << endl;
+      }
     }
   }
   return 0;

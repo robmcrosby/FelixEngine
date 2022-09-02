@@ -69,6 +69,9 @@ public:
   bool addValidationLayer(StringRef layer);
   bool addExtension(StringRef extension);
 
+  const CStrings& enabledLayers() const {return mEnabledLayers;}
+  const CStrings& enabledExtensions() const {return mEnabledExtensions;}
+
   VulkanDevicePtr pickDevice() const;
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanInstance& instance);
@@ -93,6 +96,7 @@ private:
 
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
+  CStrings                   mEnabledExtensions;
   VulkanQueueFamilies        mQueueFamilies;
   std::vector<uint32_t>      mQueueFamilyCounts;
 
@@ -109,6 +113,9 @@ public:
   std::string type() const;
 
   VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
+
+  bool addExtension(StringRef extension);
+  const CStrings& enabledExtensions() const {return mEnabledExtensions;}
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
 

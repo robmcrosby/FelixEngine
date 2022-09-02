@@ -25,6 +25,41 @@ VulkanDevice::~VulkanDevice() {
 }
 
 bool VulkanDevice::init() {
+  auto& instance = VulkanInstance::Get();
+
+  float queuePriority = 1.0f;
+  vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+  for (uint32_t family = 0; family < mQueueFamilies.size(); ++family) {
+    uint32_t count = mQueueFamilies[family].queueCount - mQueueFamilyCounts[family];
+    if (count > 0) {
+      VkDeviceQueueCreateInfo queueCreateInfo{};
+      queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+      queueCreateInfo.queueFamilyIndex = family;
+      queueCreateInfo.queueCount = count;
+      queueCreateInfo.pQueuePriorities = &queuePriority;
+      queueCreateInfos.push_back(queueCreateInfo);
+    }
+  }
+
+  const CStrings& layers = instance.enabledLayers();
+  const CStrings& extensions = enabledExtensions();
+
+  VkDeviceCreateInfo createInfo{};
+  createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+  createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+  createInfo.pQueueCreateInfos = queueCreateInfos.data();
+  createInfo.pEnabledFeatures = &mFeatures;
+  createInfo.enabledLayerCount = static_cast<uint32_t>(layers.size());
+  createInfo.ppEnabledLayerNames = layers.data();
+  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+  createInfo.ppEnabledExtensionNames = extensions.data();
+
+  if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &mVkDevice) == VK_SUCCESS) {
+
+    return true;
+  }
+
+  cerr << "Error: Unable to create logical device with queues" << endl;
   return false;
 }
 
@@ -55,6 +90,25 @@ string VulkanDevice::type() const {
       return "Other";
   }
   return "Unknown Device";
+}
+
+bool VulkanDevice::addExtension(StringRef extension) {
+  if (mVkDevice == VK_NULL_HANDLE) {
+    const CStrings& extensions = VulkanInstance::Get().enabledExtensions();
+    for (const auto& avalible : extensions) {
+      if (extension == avalible) {
+        mEnabledExtensions.push_back(avalible);
+        return true;
+      }
+    }
+    cerr << "Warning: Extension " << extension;
+    cerr << " not enabled for VulkanDevice" << endl;
+  }
+  else {
+    cerr << "Warning: Extension " << extension;
+    cerr << " must be added before VulkanDevice initalization" << endl;
+  }
+  return false;
 }
 
 VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
