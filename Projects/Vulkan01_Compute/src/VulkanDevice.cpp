@@ -15,6 +15,8 @@ VulkanDevice::VulkanDevice(VkPhysicalDevice device):
   vkGetPhysicalDeviceQueueFamilyProperties(mVkPhysicalDevice, &count, nullptr);
   mQueueFamilies.resize(count);
   vkGetPhysicalDeviceQueueFamilyProperties(mVkPhysicalDevice, &count, mQueueFamilies.data());
+  for (auto family : mQueueFamilies)
+    mQueueFamilyCounts.push_back(family.queueCount);
 }
 
 VulkanDevice::~VulkanDevice() {
@@ -47,34 +49,76 @@ string VulkanDevice::type() const {
 }
 
 VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
-  VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags);
-  mQueues.push_back(queue);
-  return queue;
+  uint32_t familyIndex, queueIndex;
+  if (pickQueueFamily(flags, familyIndex, queueIndex)) {
+    VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags, familyIndex, queueIndex);
+    mQueues.push_back(queue);
+    return queue;
+  }
+  return nullptr;
 }
 
 ostream& operator<<(ostream& os, const VulkanDevicePtr& device) {
   return device->print(os);
 }
 
-ostream& VulkanDevice::print(std::ostream& os) const {
+ostream& VulkanDevice::print(ostream& os) const {
   os << name() << endl;
   os << type() << endl;
   os << "Queue Families:" << endl;
 
   int queueIndex = 0;
   for (auto family : mQueueFamilies) {
-    os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " ["; // << family.queueFlags << endl;
-    if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-      os << "Graphics ";
-    if (family.queueFlags & VK_QUEUE_COMPUTE_BIT)
-      os << "Compute ";
-    if (family.queueFlags & VK_QUEUE_TRANSFER_BIT)
-      os << "Transfer ";
-    if (family.queueFlags & VK_QUEUE_SPARSE_BINDING_BIT)
-      os << "Sparse ";
-    os << "]" << endl;
+    os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " ";
+    printQueueFlags(os, family.queueFlags);
+    os << endl;
+    // os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " [";
+    // if (family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+    //   os << "Graphics ";
+    // if (family.queueFlags & VK_QUEUE_COMPUTE_BIT)
+    //   os << "Compute ";
+    // if (family.queueFlags & VK_QUEUE_TRANSFER_BIT)
+    //   os << "Transfer ";
+    // if (family.queueFlags & VK_QUEUE_SPARSE_BINDING_BIT)
+    //   os << "Sparse ";
+    // os << "]" << endl;
   }
   return os;
+}
+
+ostream& VulkanDevice::printQueueFlags(ostream& os, VkQueueFlags flags) const {
+  os << "[";
+  if (flags & VK_QUEUE_GRAPHICS_BIT)
+    os << "Graphics ";
+  if (flags & VK_QUEUE_COMPUTE_BIT)
+    os << "Compute ";
+  if (flags & VK_QUEUE_TRANSFER_BIT)
+    os << "Transfer ";
+  if (flags & VK_QUEUE_SPARSE_BINDING_BIT)
+    os << "Sparse ";
+  os << "]";
+  return os;
+}
+
+bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex) {
+  bool found = false;
+  for (uint32_t i = 0; i < mQueueFamilies.size(); ++i) {
+    if ((mQueueFamilies[i].queueFlags & flags) == flags && mQueueFamilyCounts[i] > 0) {
+      familyIndex = i;
+      found = true;
+    }
+  }
+
+  if (found) {
+    queueIndex = mQueueFamilies[familyIndex].queueCount - mQueueFamilyCounts[familyIndex];
+    mQueueFamilyCounts[familyIndex] -= 1;
+    cout << "Found family: " << familyIndex << " at queue index: " << queueIndex << endl;
+  }
+  else {
+    cerr << "Error: No queue family avalible with flags: ";
+    printQueueFlags(cerr, flags);
+  }
+  return found;
 }
 
 void VulkanDevice::clearQueues() {

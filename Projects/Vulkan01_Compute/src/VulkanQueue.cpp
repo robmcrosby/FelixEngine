@@ -4,9 +4,11 @@
 using namespace std;
 
 
-VulkanQueue::VulkanQueue(VulkanDevice* device, VkQueueFlags flags):
+VulkanQueue::VulkanQueue(VulkanDevice* device, VkQueueFlags flags, uint32_t familyIndex, uint32_t queueIndex):
   mDevice(device),
-  mVkQueueFlags(flags) {
+  mVkQueueFlags(flags),
+  mFamilyIndex(familyIndex),
+  mQueueIndex(queueIndex) {
   cout << "Created Queue" << endl;
 }
 

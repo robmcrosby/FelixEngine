@@ -93,6 +93,7 @@ private:
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
   VulkanQueueFamilies        mQueueFamilies;
+  std::vector<uint32_t>      mQueueFamilyCounts;
 
   VulkanQueues mQueues;
 
@@ -111,8 +112,10 @@ public:
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
+  std::ostream& printQueueFlags(std::ostream& os, VkQueueFlags flags) const;
 
 private:
+  bool pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex);
   void clearQueues();
 };
 
@@ -120,11 +123,16 @@ private:
 class VulkanQueue {
 private:
   VulkanDevice* mDevice;
-  VkQueueFlags mVkQueueFlags;
+  VkQueueFlags  mVkQueueFlags;
+  uint32_t      mFamilyIndex;
+  uint32_t      mQueueIndex;
 
 public:
-  VulkanQueue(VulkanDevice* device, VkQueueFlags flags);
+  VulkanQueue(VulkanDevice* device, VkQueueFlags flags, uint32_t familyIndex, uint32_t queueIndex);
   ~VulkanQueue();
+
+  uint32_t familyIndex() const {return mFamilyIndex;}
+  uint32_t queueIndex() const {return mQueueIndex;}
 
   void destroy();
 };
