@@ -20,6 +20,8 @@ int main() {
         cout << "It Works!" << endl;
       }
     }
+
+    instance.destroy();
   }
   return 0;
 }
