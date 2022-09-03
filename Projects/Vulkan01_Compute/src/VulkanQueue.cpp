@@ -8,14 +8,19 @@ VulkanQueue::VulkanQueue(VulkanDevice* device, VkQueueFlags flags, uint32_t fami
   mDevice(device),
   mVkQueueFlags(flags),
   mFamilyIndex(familyIndex),
-  mQueueIndex(queueIndex) {
-  cout << "Created Queue" << endl;
+  mQueueIndex(queueIndex),
+  mVkQueue(VK_NULL_HANDLE) {
+
 }
 
 VulkanQueue::~VulkanQueue() {
   destroy();
 }
 
+void VulkanQueue::init() {
+  vkGetDeviceQueue(mDevice->getVkDevice(), mFamilyIndex, mQueueIndex, &mVkQueue);
+}
+
 void VulkanQueue::destroy() {
-  cout << "Queue Destroyed" << endl;
+  mVkQueue = VK_NULL_HANDLE;
 }

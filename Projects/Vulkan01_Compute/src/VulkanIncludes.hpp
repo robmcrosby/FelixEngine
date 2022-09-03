@@ -69,8 +69,8 @@ public:
   bool addValidationLayer(StringRef layer);
   bool addExtension(StringRef extension);
 
-  const CStrings& enabledLayers() const {return mEnabledLayers;}
-  const CStrings& enabledExtensions() const {return mEnabledExtensions;}
+  const CStrings& getEnabledLayers() const {return mEnabledLayers;}
+  const CStrings& getEnabledExtensions() const {return mEnabledExtensions;}
 
   VulkanDevicePtr pickDevice() const;
 
@@ -113,6 +113,7 @@ public:
   std::string type() const;
 
   VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
+  VkDevice getVkDevice() const {return mVkDevice;}
 
   bool addExtension(StringRef extension);
   const CStrings& enabledExtensions() const {return mEnabledExtensions;}
@@ -135,6 +136,7 @@ private:
   VkQueueFlags  mVkQueueFlags;
   uint32_t      mFamilyIndex;
   uint32_t      mQueueIndex;
+  VkQueue       mVkQueue;
 
 public:
   VulkanQueue(VulkanDevice* device, VkQueueFlags flags, uint32_t familyIndex, uint32_t queueIndex);
@@ -143,6 +145,7 @@ public:
   uint32_t familyIndex() const {return mFamilyIndex;}
   uint32_t queueIndex() const {return mQueueIndex;}
 
+  void init();
   void destroy();
 };
 

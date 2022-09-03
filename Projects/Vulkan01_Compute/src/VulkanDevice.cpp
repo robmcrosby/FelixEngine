@@ -41,7 +41,7 @@ bool VulkanDevice::init() {
     }
   }
 
-  const CStrings& layers = instance.enabledLayers();
+  const CStrings& layers = instance.getEnabledLayers();
   const CStrings& extensions = enabledExtensions();
 
   VkDeviceCreateInfo createInfo{};
@@ -55,7 +55,8 @@ bool VulkanDevice::init() {
   createInfo.ppEnabledExtensionNames = extensions.data();
 
   if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &mVkDevice) == VK_SUCCESS) {
-
+    for (auto queue : mQueues)
+      queue->init();
     return true;
   }
 
@@ -94,7 +95,7 @@ string VulkanDevice::type() const {
 
 bool VulkanDevice::addExtension(StringRef extension) {
   if (mVkDevice == VK_NULL_HANDLE) {
-    const CStrings& extensions = VulkanInstance::Get().enabledExtensions();
+    const CStrings& extensions = VulkanInstance::Get().getEnabledExtensions();
     for (const auto& avalible : extensions) {
       if (extension == avalible) {
         mEnabledExtensions.push_back(avalible);
