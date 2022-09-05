@@ -129,6 +129,8 @@ public:
   VulkanQueuePtr createQueue(VkQueueFlags flags);
   VulkanMemoryPtr allocate(VkDeviceSize size, VkMemoryPropertyFlags properties);
 
+  bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
+
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
   std::ostream& printQueueFlags(std::ostream& os, VkQueueFlags flags) const;
@@ -164,9 +166,10 @@ public:
 class VulkanMemory {
 private:
   VulkanDevice*  mDevice;
-  VkDeviceMemory mMemory;
-  VkDeviceSize   mSize;
-  VkMemoryType   mType;
+  VkDeviceMemory mDeviceMemory;
+  VkDeviceSize   mMemorySize;
+  VkMemoryType   mMemoryType;
+  uint32_t       mTypeIndex;
 
 public:
   VulkanMemory(VulkanDevice* device);
@@ -174,6 +177,8 @@ public:
 
   bool allocate(VkDeviceSize size, VkMemoryPropertyFlags properties);
   void deallocate();
+
+  VkDeviceMemory getVkDeviceMemory() const {return mDeviceMemory;}
 };
 
 

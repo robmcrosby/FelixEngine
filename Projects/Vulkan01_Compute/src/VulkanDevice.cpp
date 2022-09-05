@@ -141,6 +141,17 @@ VulkanMemoryPtr VulkanDevice::allocate(VkDeviceSize size, VkMemoryPropertyFlags 
   return nullptr;
 }
 
+bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {
+  for (int i = 0; i < mMemoryProperties.memoryTypeCount; ++i) {
+    if ((mMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+      index = i;
+      type = mMemoryProperties.memoryTypes[i];
+      return true;
+    }
+  }
+  return false;
+}
+
 ostream& operator<<(ostream& os, const VulkanDevicePtr& device) {
   return device->print(os);
 }

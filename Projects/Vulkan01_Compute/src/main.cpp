@@ -17,6 +17,8 @@ int main() {
 
       auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
       if (device->init()) {
+        auto memory = device->allocate(1024,
+          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
         //auto buffer = device->createBuffer();
 
         cout << "It Works!" << endl;
