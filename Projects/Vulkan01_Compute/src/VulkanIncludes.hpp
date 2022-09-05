@@ -103,6 +103,8 @@ private:
   VulkanQueueFamilies        mQueueFamilies;
   std::vector<uint32_t>      mQueueFamilyCounts;
 
+  VkPhysicalDeviceMemoryProperties mMemoryProperties;
+
   VulkanQueues mQueues;
 
 public:
@@ -122,10 +124,13 @@ public:
   const CStrings& enabledExtensions() const {return mEnabledExtensions;}
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
+  VulkanBufferPtr createBuffer();
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
   std::ostream& printQueueFlags(std::ostream& os, VkQueueFlags flags) const;
+  std::ostream& printHeapFlags(std::ostream& os, VkMemoryHeapFlags flags) const;
+  std::ostream& printMemoryFlags(std::ostream& os, VkMemoryPropertyFlags flags) const;
 
 private:
   bool pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex);

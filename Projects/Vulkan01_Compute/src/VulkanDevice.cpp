@@ -8,14 +8,18 @@ using namespace std;
 VulkanDevice::VulkanDevice(VkPhysicalDevice device):
   mVkPhysicalDevice(device),
   mVkDevice(VK_NULL_HANDLE) {
+  // Query Physical Device Properties and Features
   vkGetPhysicalDeviceProperties(mVkPhysicalDevice, &mProperties);
   vkGetPhysicalDeviceFeatures(mVkPhysicalDevice, &mFeatures);
+  vkGetPhysicalDeviceMemoryProperties(mVkPhysicalDevice, &mMemoryProperties);
 
   // Query the avalible Queue Families for the Device
   uint32_t count = 0;
   vkGetPhysicalDeviceQueueFamilyProperties(mVkPhysicalDevice, &count, nullptr);
   mQueueFamilies.resize(count);
   vkGetPhysicalDeviceQueueFamilyProperties(mVkPhysicalDevice, &count, mQueueFamilies.data());
+
+  // Setup Queue Counts
   for (auto family : mQueueFamilies)
     mQueueFamilyCounts.push_back(family.queueCount);
 }
@@ -127,6 +131,15 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
   return nullptr;
 }
 
+VulkanBufferPtr VulkanDevice::createBuffer() {
+  if (mVkDevice != VK_NULL_HANDLE) {
+    VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
+    return buffer;
+  }
+  cerr << "Error: Buffer can not be created before device initalization" << endl;
+  return nullptr;
+}
+
 ostream& operator<<(ostream& os, const VulkanDevicePtr& device) {
   return device->print(os);
 }
@@ -134,14 +147,31 @@ ostream& operator<<(ostream& os, const VulkanDevicePtr& device) {
 ostream& VulkanDevice::print(ostream& os) const {
   os << name() << endl;
   os << type() << endl;
-  os << "Queue Families:" << endl;
 
+  os << "Queue Families:" << endl;
   int queueIndex = 0;
   for (auto family : mQueueFamilies) {
-    os << "  Queue[" << queueIndex++ << "] count: " << family.queueCount << " ";
+    os << "  Queue[" << queueIndex++ << "] count:" << family.queueCount << " ";
     printQueueFlags(os, family.queueFlags);
     os << endl;
   }
+
+  os << "Memory Heaps:" << endl;
+  for (int i = 0; i < mMemoryProperties.memoryHeapCount; ++i) {
+    os << "  Heap[" << i << "] ";
+    os << "Size:" << mMemoryProperties.memoryHeaps[i].size << " bytes ";
+    printHeapFlags(os, mMemoryProperties.memoryHeaps[i].flags);
+    os << endl;
+  }
+
+  os << "Memory Types:" << endl;
+  for (int i = 0; i < mMemoryProperties.memoryTypeCount; ++i) {
+    os << "  Type Index:" << i;
+    os << " Heap Index:" << mMemoryProperties.memoryTypes[i].heapIndex << " ";
+    printMemoryFlags(os, mMemoryProperties.memoryTypes[i].propertyFlags);
+    os << endl;
+  }
+
   return os;
 }
 
@@ -155,6 +185,40 @@ ostream& VulkanDevice::printQueueFlags(ostream& os, VkQueueFlags flags) const {
     os << "Transfer ";
   if (flags & VK_QUEUE_SPARSE_BINDING_BIT)
     os << "Sparse ";
+  os << "]";
+  return os;
+}
+
+ostream& VulkanDevice::printHeapFlags(ostream& os, VkMemoryHeapFlags flags) const {
+  os << "[ ";
+  if (flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+    os << "Device ";
+  if (flags & VK_MEMORY_HEAP_MULTI_INSTANCE_BIT)
+    os << "Multi ";
+  os << "]";
+  return os;
+}
+
+ostream& VulkanDevice::printMemoryFlags(ostream& os, VkMemoryPropertyFlags flags) const {
+  os << "[ ";
+  if (flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+    os << "Device ";
+  if (flags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+    os << "Visible ";
+  if (flags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+    os << "Coherent ";
+  if (flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+    os << "Cached ";
+  if (flags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT)
+    os << "Lazy ";
+  if (flags & VK_MEMORY_PROPERTY_PROTECTED_BIT)
+    os << "!Protected ";
+  if (flags & VK_MEMORY_PROPERTY_DEVICE_COHERENT_BIT_AMD)
+    os << "!AMD_Coherent ";
+  if (flags & VK_MEMORY_PROPERTY_DEVICE_UNCACHED_BIT_AMD)
+    os << "!AMD_Uncached ";
+  if (flags & VK_MEMORY_PROPERTY_RDMA_CAPABLE_BIT_NV)
+    os << "!RDMA ";
   os << "]";
   return os;
 }

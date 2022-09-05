@@ -17,6 +17,8 @@ int main() {
 
       auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
       if (device->init()) {
+        //auto buffer = device->createBuffer();
+
         cout << "It Works!" << endl;
       }
     }
