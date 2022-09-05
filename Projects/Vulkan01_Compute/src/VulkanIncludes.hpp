@@ -25,6 +25,9 @@ class VulkanQueue;
 typedef std::shared_ptr<VulkanQueue> VulkanQueuePtr;
 typedef std::vector<VulkanQueuePtr> VulkanQueues;
 
+class VulkanMemory;
+typedef std::shared_ptr<VulkanMemory> VulkanMemoryPtr;
+
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
@@ -124,7 +127,7 @@ public:
   const CStrings& enabledExtensions() const {return mEnabledExtensions;}
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
-  VulkanBufferPtr createBuffer();
+  VulkanMemoryPtr allocate(VkDeviceSize size, VkMemoryPropertyFlags properties);
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
@@ -155,6 +158,22 @@ public:
 
   void init();
   void destroy();
+};
+
+
+class VulkanMemory {
+private:
+  VulkanDevice*  mDevice;
+  VkDeviceMemory mMemory;
+  VkDeviceSize   mSize;
+  VkMemoryType   mType;
+
+public:
+  VulkanMemory(VulkanDevice* device);
+  ~VulkanMemory();
+
+  bool allocate(VkDeviceSize size, VkMemoryPropertyFlags properties);
+  void deallocate();
 };
 
 
