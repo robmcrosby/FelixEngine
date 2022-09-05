@@ -90,6 +90,8 @@ private:
   VkPhysicalDeviceFeatures   mFeatures;
   VulkanQueueFamilies        mQueueFamilies;
 
+  VkPhysicalDeviceMemoryProperties mMemoryProperties;
+
 public:
   VulkanDevice(VkPhysicalDevice device);
   ~VulkanDevice();
@@ -103,6 +105,9 @@ public:
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanDevicePtr& device);
   std::ostream& print(std::ostream& os) const;
+  std::ostream& printQueueFlags(std::ostream& os, VkQueueFlags flags) const;
+  std::ostream& printHeapFlags(std::ostream& os, VkMemoryHeapFlags flags) const;
+  std::ostream& printMemoryFlags(std::ostream& os, VkMemoryPropertyFlags flags) const;
 };
 
 
