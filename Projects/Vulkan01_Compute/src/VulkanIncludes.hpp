@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <vulkan/vulkan.h>
+#include <vk_mem_alloc.h>
+
 
 #ifndef VulkanIncludes_hpp
 #define VulkanIncludes_hpp
@@ -78,6 +79,8 @@ public:
   const CStrings& getEnabledLayers() const {return mEnabledLayers;}
   const CStrings& getEnabledExtensions() const {return mEnabledExtensions;}
 
+  VkInstance getVkInstance() const {return mVkInstance;}
+
   VulkanDevicePtr pickDevice() const;
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanInstance& instance);
@@ -99,6 +102,8 @@ class VulkanDevice {
 private:
   VkPhysicalDevice mVkPhysicalDevice;
   VkDevice         mVkDevice;
+
+  VmaAllocator mVmaAllocator;
 
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
@@ -138,6 +143,7 @@ public:
   std::ostream& printMemoryFlags(std::ostream& os, VkMemoryPropertyFlags flags) const;
 
 private:
+  bool initVmaAllocator();
   bool pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex);
   void clearQueues();
 };

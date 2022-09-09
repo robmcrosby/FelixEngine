@@ -1,5 +1,9 @@
-
+#define VMA_IMPLEMENTATION
+#define VMA_VULKAN_VERSION 1002000
+#define VMA_STATIC_VULKAN_FUNCTIONS 0
+#define VMA_DYNAMIC_VULKAN_FUNCTIONS 1
 #include "VulkanIncludes.hpp"
+
 
 
 using namespace std;
@@ -61,7 +65,7 @@ bool VulkanDevice::init() {
   if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &mVkDevice) == VK_SUCCESS) {
     for (auto queue : mQueues)
       queue->init();
-    return true;
+    return initVmaAllocator();
   }
 
   cerr << "Error: Unable to create logical device with queues" << endl;
@@ -233,6 +237,21 @@ ostream& VulkanDevice::printMemoryFlags(ostream& os, VkMemoryPropertyFlags flags
     os << "!RDMA ";
   os << "]";
   return os;
+}
+
+bool VulkanDevice::initVmaAllocator() {
+  VmaVulkanFunctions vulkanFunctions = {};
+  vulkanFunctions.vkGetInstanceProcAddr = &vkGetInstanceProcAddr;
+  vulkanFunctions.vkGetDeviceProcAddr = &vkGetDeviceProcAddr;
+
+  VmaAllocatorCreateInfo allocatorCreateInfo = {};
+  allocatorCreateInfo.vulkanApiVersion = VK_API_VERSION_1_2;
+  allocatorCreateInfo.physicalDevice = mVkPhysicalDevice;
+  allocatorCreateInfo.device = mVkDevice;
+  allocatorCreateInfo.instance = VulkanInstance::Get().getVkInstance();
+  allocatorCreateInfo.pVulkanFunctions = &vulkanFunctions;
+
+  return vmaCreateAllocator(&allocatorCreateInfo, &mVmaAllocator) == VK_SUCCESS;
 }
 
 bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex) {

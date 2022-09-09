@@ -1,6 +1,5 @@
 #include "VulkanIncludes.hpp"
 
-
 using namespace std;
 
 
@@ -20,7 +19,7 @@ VulkanInstance::VulkanInstance():
   mDebugMessenger(VK_NULL_HANDLE),
   mValidationEnabled(false),
   mDebugMessengerEnabled(false),
-  mApiVersion(VK_API_VERSION_1_0) {
+  mApiVersion(VK_API_VERSION_1_2) {
   mApplicationVersion = VK_MAKE_VERSION(1, 0, 0);
   mEngineVersion = VK_MAKE_VERSION(1, 0, 0);
 
