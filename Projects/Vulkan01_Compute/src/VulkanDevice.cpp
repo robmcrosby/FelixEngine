@@ -135,13 +135,13 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
   return nullptr;
 }
 
-VulkanMemoryPtr VulkanDevice::allocate(VkDeviceSize size, VkMemoryPropertyFlags properties) {
+VulkanBufferPtr VulkanDevice::createBuffer() {
   if (mVkDevice != VK_NULL_HANDLE) {
-    VulkanMemoryPtr memory = make_shared<VulkanMemory>(this);
-    return memory->allocate(size, properties) ? memory : nullptr;
+    VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
+    return buffer;
   }
   else
-    cerr << "Error: Memory can not be allocated before device initalization" << endl;
+    cerr << "Error: Buffers can not be created before device initalization" << endl;
   return nullptr;
 }
 
