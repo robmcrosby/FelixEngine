@@ -124,6 +124,7 @@ public:
 
   VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
   VkDevice getVkDevice() const {return mVkDevice;}
+  VmaAllocator getVmaAllocator() const {return mVmaAllocator;}
 
   bool addExtension(StringRef extension);
   const CStrings& enabledExtensions() const {return mEnabledExtensions;}
@@ -141,8 +142,35 @@ public:
 
 private:
   bool initVmaAllocator();
+  void destoryVmaAllocator();
+
   bool pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex);
   void clearQueues();
+};
+
+
+class VulkanBuffer {
+private:
+  VulkanDevice* mDevice;
+  VkBuffer      mVkBuffer;
+  VmaAllocation mVmaAllocation;
+
+  VkBufferUsageFlags        mVkBufferUsageFlags;
+  VmaMemoryUsage            mVmaMemoryUsage;
+  VmaAllocationCreateFlags  mVmaCreateFlags;
+
+public:
+  VulkanBuffer(VulkanDevice* device);
+  ~VulkanBuffer();
+
+  void setUsage(VkBufferUsageFlags flags);
+  void setCreateFlags(VmaAllocationCreateFlags flags);
+
+  bool alloc(VkDeviceSize size);
+  void destroy();
+
+  VmaAllocationInfo getVmaAllocationInfo() const;
+  void* data();
 };
 
 
@@ -162,18 +190,6 @@ public:
   uint32_t queueIndex() const {return mQueueIndex;}
 
   void init();
-  void destroy();
-};
-
-
-class VulkanBuffer {
-private:
-  VulkanDevice* mDevice;
-
-public:
-  VulkanBuffer(VulkanDevice* device);
-  ~VulkanBuffer();
-
   void destroy();
 };
 

@@ -11,7 +11,8 @@ using namespace std;
 
 VulkanDevice::VulkanDevice(VkPhysicalDevice device):
   mVkPhysicalDevice(device),
-  mVkDevice(VK_NULL_HANDLE) {
+  mVkDevice(VK_NULL_HANDLE),
+  mVmaAllocator(VK_NULL_HANDLE) {
   // Query Physical Device Properties and Features
   vkGetPhysicalDeviceProperties(mVkPhysicalDevice, &mProperties);
   vkGetPhysicalDeviceFeatures(mVkPhysicalDevice, &mFeatures);
@@ -73,6 +74,7 @@ bool VulkanDevice::init() {
 }
 
 void VulkanDevice::destroy() {
+  destoryVmaAllocator();
   clearQueues();
   if (mVkDevice != VK_NULL_HANDLE) {
     vkDestroyDevice(mVkDevice, nullptr);
@@ -252,6 +254,13 @@ bool VulkanDevice::initVmaAllocator() {
   allocatorCreateInfo.pVulkanFunctions = &vulkanFunctions;
 
   return vmaCreateAllocator(&allocatorCreateInfo, &mVmaAllocator) == VK_SUCCESS;
+}
+
+void VulkanDevice::destoryVmaAllocator() {
+  if (mVmaAllocator != VK_NULL_HANDLE) {
+    vmaDestroyAllocator(mVmaAllocator);
+    mVmaAllocator = VK_NULL_HANDLE;
+  }
 }
 
 bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex) {
