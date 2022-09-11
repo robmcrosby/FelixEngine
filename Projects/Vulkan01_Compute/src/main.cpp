@@ -4,15 +4,23 @@
 using namespace std;
 
 void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
-  auto buffer = device->createBuffer();
-  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  auto bufferA = device->createBuffer();
+  auto bufferB = device->createBuffer();
+
+  bufferA->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+  bufferA->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
-  if (buffer->alloc(65536)) {
+
+  bufferB->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+  bufferB->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+
+  if (bufferA->alloc(65536) && bufferB->alloc(65536)) {
+    auto command = queue->createCommand();
     cout << "It Works!" << endl;
   }
   else {
-    cerr << "Error: initalizing buffer" << endl;
+    cerr << "Error: initalizing buffers" << endl;
   }
 }
 

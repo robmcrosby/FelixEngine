@@ -9,8 +9,9 @@ add_executable(${PROJECT_NAME}
   main.cpp
   VulkanInstance.cpp
   VulkanDevice.cpp
-  VulkanQueue.cpp
   VulkanBuffer.cpp
+  VulkanQueue.cpp
+  VulkanCommand.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/VulkanMemoryAllocator/")

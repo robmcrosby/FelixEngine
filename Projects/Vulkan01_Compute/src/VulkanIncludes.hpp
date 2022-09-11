@@ -22,12 +22,16 @@ class VulkanDevice;
 typedef std::shared_ptr<VulkanDevice> VulkanDevicePtr;
 typedef std::vector<VulkanDevicePtr> VulkanDevices;
 
+class VulkanBuffer;
+typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
+
 class VulkanQueue;
 typedef std::shared_ptr<VulkanQueue> VulkanQueuePtr;
 typedef std::vector<VulkanQueuePtr> VulkanQueues;
 
-class VulkanBuffer;
-typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
+class VulkanCommand;
+typedef std::shared_ptr<VulkanCommand> VulkanCommandPtr;
+typedef std::vector<VulkanCommandPtr> VulkanCommands;
 
 
 class VulkanInstance {
@@ -190,6 +194,20 @@ public:
   uint32_t queueIndex() const {return mQueueIndex;}
 
   void init();
+  void destroy();
+
+  VulkanCommandPtr createCommand();
+};
+
+
+class VulkanCommand {
+private:
+  VulkanQueue* mQueue;
+
+public:
+  VulkanCommand(VulkanQueue* queue);
+  ~VulkanCommand();
+
   void destroy();
 };
 
