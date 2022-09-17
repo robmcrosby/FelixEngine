@@ -1,23 +1,41 @@
 #include "VulkanIncludes.hpp"
+#include <array>
 
 
 using namespace std;
 
 void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
-  auto bufferA = device->createBuffer();
-  auto bufferB = device->createBuffer();
+  // Create an Array of random floats
+  array<float, 32> bufferSrc, bufferResult;
+  for (auto& f : bufferSrc)
+    f = (rand()/(RAND_MAX/10000))/100.0f;
 
-  bufferA->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-  bufferA->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  // Create A Vulkan Buffer for writing [CPU -> GPU]
+  auto bufferIn = device->createBuffer();
+  bufferIn->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+  bufferIn->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT );
+
+  // Cerate A Vulkan Buffer to read from [GPU -> CPU]
+  auto bufferOut = device->createBuffer();
+  bufferOut->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+  bufferOut->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
-  bufferB->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-  bufferB->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  // Allocate the Vulkan Buffers
+  VkDeviceSize size = bufferSrc.size() * sizeof(bufferSrc[0]);
+  if (bufferIn->alloc(size) && bufferOut->alloc(size)) {
+    // Wirte to the device
+    memcpy(bufferIn->data(), bufferSrc.data(), size);
 
-  if (bufferA->alloc(65536) && bufferB->alloc(65536)) {
     auto command = queue->createCommand();
+
     cout << "It Works!" << endl;
+
+    // Read from the device
+    memcpy(bufferResult.data(), bufferOut->data(), size);
+    for (int i = 0; i < bufferResult.size(); ++i)
+      cout << "  " << bufferSrc[i] << "\t-> " << bufferResult[i] << endl;
   }
   else {
     cerr << "Error: initalizing buffers" << endl;
