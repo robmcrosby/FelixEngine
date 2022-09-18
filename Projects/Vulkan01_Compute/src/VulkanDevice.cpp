@@ -41,8 +41,7 @@ bool VulkanDevice::init() {
   for (uint32_t family = 0; family < mQueueFamilies.size(); ++family) {
     uint32_t count = mQueueFamilies[family].queueCount - mQueueFamilyCounts[family];
     if (count > 0) {
-      VkDeviceQueueCreateInfo queueCreateInfo{};
-      queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+      VkDeviceQueueCreateInfo queueCreateInfo = {VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO};
       queueCreateInfo.queueFamilyIndex = family;
       queueCreateInfo.queueCount = count;
       queueCreateInfo.pQueuePriorities = &queuePriority;
@@ -53,8 +52,7 @@ bool VulkanDevice::init() {
   const CStrings& layers = instance.getEnabledLayers();
   const CStrings& extensions = enabledExtensions();
 
-  VkDeviceCreateInfo createInfo{};
-  createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+  VkDeviceCreateInfo createInfo = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
   createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
   createInfo.pQueueCreateInfos = queueCreateInfos.data();
   createInfo.pEnabledFeatures = &mFeatures;

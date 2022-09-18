@@ -32,8 +32,7 @@ bool VulkanCommand::setKernal(StringRef filename, StringRef entry) {
 }
 
 bool VulkanCommand::setKernal(SPIRVCodeRef code, StringRef entry) {
-  VkShaderModuleCreateInfo createInfo{};
-  createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+  VkShaderModuleCreateInfo createInfo = {VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
   createInfo.codeSize = code.size() * sizeof(uint32_t);
   createInfo.pCode = code.data();
 
