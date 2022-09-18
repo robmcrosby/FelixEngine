@@ -1,4 +1,5 @@
 #include "VulkanIncludes.hpp"
+#include <cstring>
 #include <array>
 
 
