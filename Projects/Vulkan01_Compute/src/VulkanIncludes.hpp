@@ -14,6 +14,9 @@ typedef std::vector<CString> CStrings;
 typedef std::vector<std::string> Strings;
 typedef const std::string& StringRef;
 
+typedef std::vector<uint32_t> SPIRVCode;
+typedef const SPIRVCode& SPIRVCodeRef;
+
 typedef std::vector<VkLayerProperties>       VulkanLayerProperties;
 typedef std::vector<VkExtensionProperties>   VulkanExtensionProperties;
 typedef std::vector<VkQueueFamilyProperties> VulkanQueueFamilies;
@@ -193,6 +196,8 @@ public:
   uint32_t familyIndex() const {return mFamilyIndex;}
   uint32_t queueIndex() const {return mQueueIndex;}
 
+  VulkanDevice* getDevice() const {return mDevice;}
+
   void init();
   void destroy();
 
@@ -202,13 +207,21 @@ public:
 
 class VulkanCommand {
 private:
-  VulkanQueue* mQueue;
+  VulkanQueue*   mQueue;
+  std::string    mKernalEntry;
+  VkShaderModule mKernal;
 
 public:
   VulkanCommand(VulkanQueue* queue);
   ~VulkanCommand();
 
+  void clearShaders();
   void destroy();
+
+  bool setKernal(StringRef filename, StringRef entry = "main");
+  bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
+
+  static bool readSPIRV(SPIRVCode& code, StringRef filename);
 };
 
 

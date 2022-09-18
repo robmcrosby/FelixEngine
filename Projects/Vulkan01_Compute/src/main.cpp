@@ -29,6 +29,7 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     memcpy(inBuffer->data(), srcBuffer.data(), size);
 
     auto command = queue->createCommand();
+    command->setKernal("copy.spv");
 
     cout << "It Works!" << endl;
 
