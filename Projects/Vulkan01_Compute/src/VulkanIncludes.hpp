@@ -36,6 +36,12 @@ class VulkanCommand;
 typedef std::shared_ptr<VulkanCommand> VulkanCommandPtr;
 typedef std::vector<VulkanCommandPtr> VulkanCommands;
 
+struct LayoutBinding {
+  VulkanBufferPtr buffer;
+  VkDescriptorSetLayoutBinding binding;
+};
+typedef std::vector<LayoutBinding> LayoutBindings;
+
 
 class VulkanInstance {
 private:
@@ -210,16 +216,33 @@ private:
   VulkanQueue*   mQueue;
   std::string    mKernalEntry;
   VkShaderModule mKernal;
+  VkPipeline     mVkPipeline;
+
+  LayoutBindings        mLayoutBindings;
+  VkDescriptorSetLayout mVkDescriptorSetLayout;
+  VkPipelineLayout      mVkPipelineLayout;
 
 public:
   VulkanCommand(VulkanQueue* queue);
   ~VulkanCommand();
 
   void clearShaders();
+  void clearBindings();
+  void destroyDescriptorSetLayout();
+  void destroyPipelineLayout();
+  void destroyPipeline();
   void destroy();
 
   bool setKernal(StringRef filename, StringRef entry = "main");
   bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
+
+  void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
+
+  bool initPipeline();
+
+private:
+  bool initDescriptorSetLayout();
+  bool initPipelineLayout();
 
   static bool readSPIRV(SPIRVCode& code, StringRef filename);
 };

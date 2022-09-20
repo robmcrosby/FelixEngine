@@ -31,8 +31,12 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     auto command = queue->createCommand();
     command->setKernal("copy.spv");
+    command->setBuffer(inBuffer, 0);
+    command->setBuffer(outBuffer, 1);
 
-    cout << "It Works!" << endl;
+    if (command->initPipeline()) {
+      cout << "It Works!" << endl;
+    }
 
     // Read from the device
     memcpy(resultBuffer.data(), outBuffer->data(), size);
