@@ -138,23 +138,18 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
 }
 
 VulkanBufferPtr VulkanDevice::createBuffer() {
-  if (mVkDevice != VK_NULL_HANDLE) {
-    VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
-    return buffer;
-  }
-  else
-    cerr << "Error: Buffers can not be created before device initalization" << endl;
-  return nullptr;
+  VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
+  return buffer;
+}
+
+VulkanSetLayoutPtr VulkanDevice::createSetLayout() {
+  VulkanSetLayoutPtr layout = make_shared<VulkanSetLayout>(this);
+  return layout;
 }
 
 VulkanPipelinePtr VulkanDevice::createPipeline() {
-  if (mVkDevice != VK_NULL_HANDLE) {
-    VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
-    return pipeline;
-  }
-  else
-    cerr << "Error: Pipelines can not be created before device initalization" << endl;
-  return nullptr;
+  VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
+  return pipeline;
 }
 
 bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {

@@ -28,6 +28,9 @@ typedef std::vector<VulkanDevicePtr> VulkanDevices;
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
+class VulkanSetLayout;
+typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
+
 class VulkanPipeline;
 typedef std::shared_ptr<VulkanPipeline> VulkanPipelinePtr;
 
@@ -146,8 +149,10 @@ public:
   const CStrings& enabledExtensions() const {return mEnabledExtensions;}
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
-  VulkanBufferPtr createBuffer();
-  VulkanPipelinePtr createPipeline();
+
+  VulkanBufferPtr    createBuffer();
+  VulkanSetLayoutPtr createSetLayout();
+  VulkanPipelinePtr  createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -188,6 +193,25 @@ public:
 
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
+};
+
+
+class VulkanSetLayout {
+private:
+  VulkanDevice*         mDevice;
+  LayoutBindings        mLayoutBindings;
+  VkDescriptorSetLayout mVkDescriptorSetLayout;
+
+public:
+  VulkanSetLayout(VulkanDevice* device);
+  ~VulkanSetLayout();
+
+  void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
+
+  bool init();
+  void destroy();
+
+  VkDescriptorSetLayout getVkDescriptorSetLayout() const {return mVkDescriptorSetLayout;}
 };
 
 
