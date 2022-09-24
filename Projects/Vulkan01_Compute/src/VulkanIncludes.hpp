@@ -28,6 +28,9 @@ typedef std::vector<VulkanDevicePtr> VulkanDevices;
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
+class VulkanPipeline;
+typedef std::shared_ptr<VulkanPipeline> VulkanPipelinePtr;
+
 class VulkanQueue;
 typedef std::shared_ptr<VulkanQueue> VulkanQueuePtr;
 typedef std::vector<VulkanQueuePtr> VulkanQueues;
@@ -144,6 +147,7 @@ public:
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
   VulkanBufferPtr createBuffer();
+  VulkanPipelinePtr createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -187,6 +191,34 @@ public:
 };
 
 
+class VulkanPipeline {
+private:
+  VulkanDevice*    mDevice;
+  VkPipeline       mVkPipeline;
+  VkPipelineLayout mVkPipelineLayout;
+  std::string      mKernalEntry;
+  VkShaderModule   mKernal;
+
+public:
+  VulkanPipeline(VulkanDevice* device);
+  ~VulkanPipeline();
+
+  bool setKernal(StringRef filename, StringRef entry = "main");
+  bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
+
+  void clearShaders();
+
+  bool init();
+  void destroy();
+
+private:
+  void destroyPipelineLayout();
+  void destroyPipeline();
+
+  static bool readSPIRV(SPIRVCode& code, StringRef filename);
+};
+
+
 class VulkanQueue {
 private:
   VulkanDevice* mDevice;
@@ -221,6 +253,7 @@ private:
 class VulkanCommand {
 private:
   VulkanQueue*   mQueue;
+
   std::string    mKernalEntry;
   VkShaderModule mKernal;
   VkPipeline     mVkPipeline;

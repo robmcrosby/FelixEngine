@@ -147,6 +147,16 @@ VulkanBufferPtr VulkanDevice::createBuffer() {
   return nullptr;
 }
 
+VulkanPipelinePtr VulkanDevice::createPipeline() {
+  if (mVkDevice != VK_NULL_HANDLE) {
+    VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
+    return pipeline;
+  }
+  else
+    cerr << "Error: Pipelines can not be created before device initalization" << endl;
+  return nullptr;
+}
+
 bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {
   for (int i = 0; i < mMemoryProperties.memoryTypeCount; ++i) {
     if ((mMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
