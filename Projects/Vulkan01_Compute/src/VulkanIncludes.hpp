@@ -194,6 +194,7 @@ private:
   uint32_t      mFamilyIndex;
   uint32_t      mQueueIndex;
   VkQueue       mVkQueue;
+  VkCommandPool mVkCommandPool;
 
 public:
   VulkanQueue(VulkanDevice* device, VkQueueFlags flags, uint32_t familyIndex, uint32_t queueIndex);
@@ -204,10 +205,16 @@ public:
 
   VulkanDevice* getDevice() const {return mDevice;}
 
-  void init();
+  VkQueue getVkQueue() const {return mVkQueue;}
+  VkCommandPool getVkCommandPool() const {return mVkCommandPool;}
+
+  bool init();
   void destroy();
 
   VulkanCommandPtr createCommand();
+
+private:
+  void destroyCommandPool();
 };
 
 

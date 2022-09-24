@@ -62,8 +62,10 @@ bool VulkanDevice::init() {
   createInfo.ppEnabledExtensionNames = extensions.data();
 
   if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &mVkDevice) == VK_SUCCESS) {
-    for (auto queue : mQueues)
-      queue->init();
+    for (auto queue : mQueues) {
+      if (!queue->init())
+        return false;
+    }
     return initVmaAllocator();
   }
 
