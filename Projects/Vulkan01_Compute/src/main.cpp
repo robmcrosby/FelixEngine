@@ -32,24 +32,12 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     auto layout = device->createSetLayout();
     layout->setBuffer(inBuffer, 0);
     layout->setBuffer(outBuffer, 1);
-    if (layout->init()) {
+
+    auto pipeline = device->createPipeline();
+    pipeline->setKernal("copy.spv");
+    if (pipeline->init(layout)) {
       cout << "It Works!" << endl;
     }
-
-    // auto pipeline = device->createPipeline();
-    // pipeline->setKernal("copy.spv");
-    // if (pipeline->init()) {
-    //   cout << "It Works!" << endl;
-    // }
-
-    // auto command = queue->createCommand();
-    // command->setKernal("copy.spv");
-    // command->setBuffer(inBuffer, 0);
-    // command->setBuffer(outBuffer, 1);
-    //
-    // if (command->initPipeline()) {
-    //   cout << "It Works!" << endl;
-    // }
 
     // Read from the device
     memcpy(resultBuffer.data(), outBuffer->data(), size);

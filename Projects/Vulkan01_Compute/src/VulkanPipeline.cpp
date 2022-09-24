@@ -40,14 +40,52 @@ void VulkanPipeline::clearShaders() {
   }
 }
 
-bool VulkanPipeline::init() {
-  return false;
+bool VulkanPipeline::init(VulkanSetLayoutPtr layout) {
+  if (mVkPipeline == VK_NULL_HANDLE && initPipelineLayout(layout)) {
+    VkComputePipelineCreateInfo createInfo = {VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO, 0, 0};
+    createInfo.stage = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+    createInfo.stage.pNext = nullptr;
+    createInfo.stage.flags = 0;
+    createInfo.stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+    createInfo.stage.module = mKernal;
+    createInfo.stage.pName = mKernalEntry.c_str();
+    createInfo.stage.pSpecializationInfo = nullptr;
+    createInfo.layout = mVkPipelineLayout;
+    createInfo.basePipelineHandle = 0;
+    createInfo.basePipelineIndex = 0;
+
+    VkDevice device = mDevice->getVkDevice();
+    if (vkCreateComputePipelines(device, 0, 1, &createInfo, 0, &mVkPipeline) != VK_SUCCESS) {
+      cerr << "Error creating Pipeline";
+      mVkPipeline = VK_NULL_HANDLE;
+    }
+  }
+  return mVkPipeline != VK_NULL_HANDLE;
 }
 
 void VulkanPipeline::destroy() {
   clearShaders();
   destroyPipelineLayout();
   destroyPipeline();
+}
+
+bool VulkanPipeline::initPipelineLayout(VulkanSetLayoutPtr layout) {
+  if (mVkPipelineLayout == VK_NULL_HANDLE && layout->init()) {
+    VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
+
+    VkPipelineLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO, 0, 0};
+    createInfo.setLayoutCount = 1;
+    createInfo.pSetLayouts = &setLayout;
+    createInfo.pushConstantRangeCount = 0;
+    createInfo.pPushConstantRanges = nullptr;
+
+    VkDevice device = mDevice->getVkDevice();
+    if (vkCreatePipelineLayout(device, &createInfo, 0, &mVkPipelineLayout) != VK_SUCCESS) {
+      cerr << "Error creating Pipeline Layout" << endl;
+      mVkPipelineLayout = VK_NULL_HANDLE;
+    }
+  }
+  return mVkPipelineLayout != VK_NULL_HANDLE;
 }
 
 void VulkanPipeline::destroyPipelineLayout() {

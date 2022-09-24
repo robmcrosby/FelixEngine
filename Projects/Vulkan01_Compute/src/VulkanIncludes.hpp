@@ -232,10 +232,12 @@ public:
 
   void clearShaders();
 
-  bool init();
+  bool init(VulkanSetLayoutPtr layout);
   void destroy();
 
 private:
+  bool initPipelineLayout(VulkanSetLayoutPtr layout);
+
   void destroyPipelineLayout();
   void destroyPipeline();
 
