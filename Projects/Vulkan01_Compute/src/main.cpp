@@ -13,13 +13,15 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   // Create A Vulkan Buffer for writing [CPU -> GPU]
   auto inBuffer = device->createBuffer();
-  inBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+  inBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
   inBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT );
 
   // Cerate A Vulkan Buffer to read from [GPU -> CPU]
   auto outBuffer = device->createBuffer();
-  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
   outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 

@@ -78,7 +78,8 @@ VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
     poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     poolSize.descriptorCount = static_cast<uint32_t>(mLayoutBindings.size());
 
-    VkDescriptorPoolCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO, 0, 0};
+    VkDescriptorPoolCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO, 0};
+    createInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     createInfo.maxSets = 1;
     createInfo.poolSizeCount = 1;
     createInfo.pPoolSizes = &poolSize;
