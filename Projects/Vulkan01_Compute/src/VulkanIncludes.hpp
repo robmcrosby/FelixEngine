@@ -278,39 +278,21 @@ private:
 
 class VulkanCommand {
 private:
-  VulkanQueue*   mQueue;
-
-  std::string    mKernalEntry;
-  VkShaderModule mKernal;
-  VkPipeline     mVkPipeline;
-
-  LayoutBindings        mLayoutBindings;
-  VkDescriptorSetLayout mVkDescriptorSetLayout;
-  VkPipelineLayout      mVkPipelineLayout;
+  VulkanQueue*    mQueue;
+  VkCommandPool   mVkCommandPool;
+  VkCommandBuffer mVkCommandBuffer;
 
 public:
   VulkanCommand(VulkanQueue* queue);
   ~VulkanCommand();
 
-  void clearShaders();
-  void clearBindings();
-  void destroyDescriptorSetLayout();
-  void destroyPipelineLayout();
-  void destroyPipeline();
+  bool begin();
+  void end();
+
+  bool alloc();
+  void free();
+
   void destroy();
-
-  bool setKernal(StringRef filename, StringRef entry = "main");
-  bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
-
-  void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
-
-  bool initPipeline();
-
-private:
-  bool initDescriptorSetLayout();
-  bool initPipelineLayout();
-
-  static bool readSPIRV(SPIRVCode& code, StringRef filename);
 };
 
 

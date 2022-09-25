@@ -36,6 +36,8 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     auto pipeline = device->createPipeline();
     pipeline->setKernal("copy.spv");
     if (pipeline->init(layout)) {
+      auto command = queue->createCommand();
+
       cout << "It Works!" << endl;
     }
 
