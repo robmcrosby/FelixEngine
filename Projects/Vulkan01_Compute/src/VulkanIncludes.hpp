@@ -191,6 +191,8 @@ public:
   bool alloc(VkDeviceSize size);
   void destroy();
 
+  VkBuffer getVkBuffer() const {return mVkBuffer;}
+
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
 };
@@ -201,6 +203,7 @@ private:
   VulkanDevice*         mDevice;
   LayoutBindings        mLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
+  VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
 
 public:
@@ -208,12 +211,18 @@ public:
   ~VulkanSetLayout();
 
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
+  void update();
 
-  bool init();
+  VkDescriptorSetLayout getVkDescriptorSetLayout();
+  VkDescriptorPool getVkDescriptorPool();
+  VkDescriptorSet getVkDescriptorSet();
+
   void destroy();
 
-  VkDescriptorSetLayout getVkDescriptorSetLayout() const {return mVkDescriptorSetLayout;}
-  VkDescriptorSet getVkDescriptorSet() const {return mVkDescriptorSet;}
+private:
+  void freeDescriptorSet();
+  void destroyDescriptorPool();
+  void destroyDescriptorSetLayout();
 };
 
 

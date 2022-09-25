@@ -79,9 +79,8 @@ void VulkanPipeline::destroy() {
 }
 
 bool VulkanPipeline::initPipelineLayout(VulkanSetLayoutPtr layout) {
-  if (mVkPipelineLayout == VK_NULL_HANDLE && layout->init()) {
-    VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
-
+  VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
+  if (mVkPipelineLayout == VK_NULL_HANDLE && setLayout != VK_NULL_HANDLE) {
     VkPipelineLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO, 0, 0};
     createInfo.setLayoutCount = 1;
     createInfo.pSetLayouts = &setLayout;
