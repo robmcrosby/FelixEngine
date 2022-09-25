@@ -46,6 +46,11 @@ void VulkanCommand::end() {
     vkEndCommandBuffer(mVkCommandBuffer);
 }
 
+void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    vkCmdDispatch(mVkCommandBuffer, x, y, z);
+}
+
 void VulkanCommand::free() {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     VkDevice device = mQueue->getDevice()->getVkDevice();

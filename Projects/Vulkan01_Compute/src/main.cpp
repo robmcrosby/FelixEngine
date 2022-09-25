@@ -38,6 +38,14 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     if (pipeline->init(layout)) {
       auto command = queue->createCommand();
 
+      if (command->begin()) {
+        pipeline->bind(command, layout);
+        command->dispatch((uint32_t)srcBuffer.size());
+        command->end();
+      }
+
+      //queue->submitCommand(command);
+      queue->waitIdle();
       cout << "It Works!" << endl;
     }
 

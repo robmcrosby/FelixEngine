@@ -6,7 +6,8 @@ using namespace std;
 
 VulkanSetLayout::VulkanSetLayout(VulkanDevice* device):
   mDevice(device),
-  mVkDescriptorSetLayout(VK_NULL_HANDLE) {
+  mVkDescriptorSetLayout(VK_NULL_HANDLE),
+  mVkDescriptorSet(VK_NULL_HANDLE) {
 
 }
 

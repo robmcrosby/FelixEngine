@@ -32,6 +32,15 @@ bool VulkanPipeline::setKernal(SPIRVCodeRef code, StringRef entry) {
   return vkCreateShaderModule(device, &createInfo, nullptr, &mKernal) == VK_SUCCESS;
 }
 
+void VulkanPipeline::bind(VulkanCommandPtr cmd, VulkanSetLayoutPtr layout) {
+  VkCommandBuffer commandBuffer = cmd->getVkCommandBuffer();
+  vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, mVkPipeline);
+
+  VkDescriptorSet descriptorSet = layout->getVkDescriptorSet();
+  vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
+      mVkPipelineLayout, 0, 1, &descriptorSet, 0, 0);
+}
+
 void VulkanPipeline::clearShaders() {
   if (mKernal != VK_NULL_HANDLE) {
     VkDevice device = mDevice->getVkDevice();

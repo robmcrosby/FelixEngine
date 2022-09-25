@@ -201,6 +201,7 @@ private:
   VulkanDevice*         mDevice;
   LayoutBindings        mLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
+  VkDescriptorSet       mVkDescriptorSet;
 
 public:
   VulkanSetLayout(VulkanDevice* device);
@@ -212,6 +213,7 @@ public:
   void destroy();
 
   VkDescriptorSetLayout getVkDescriptorSetLayout() const {return mVkDescriptorSetLayout;}
+  VkDescriptorSet getVkDescriptorSet() const {return mVkDescriptorSet;}
 };
 
 
@@ -229,6 +231,8 @@ public:
 
   bool setKernal(StringRef filename, StringRef entry = "main");
   bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
+
+  void bind(VulkanCommandPtr cmd, VulkanSetLayoutPtr layout);
 
   void clearShaders();
 
@@ -271,6 +275,9 @@ public:
 
   VulkanCommandPtr createCommand();
 
+  void submitCommand(VulkanCommandPtr command);
+  void waitIdle();
+
 private:
   void destroyCommandPool();
 };
@@ -286,8 +293,12 @@ public:
   VulkanCommand(VulkanQueue* queue);
   ~VulkanCommand();
 
+  VkCommandBuffer getVkCommandBuffer() const {return mVkCommandBuffer;}
+
   bool begin();
   void end();
+
+  void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 
   bool alloc();
   void free();
