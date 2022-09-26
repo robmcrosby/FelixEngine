@@ -40,9 +40,8 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernal("copy.spv");
     if (pipeline->init(layout)) {
       auto command = queue->createCommand();
-
       if (command->begin()) {
-        pipeline->bind(command, layout);
+        command->bind(pipeline, layout);
         command->dispatch((uint32_t)srcBuffer.size());
         command->end();
       }

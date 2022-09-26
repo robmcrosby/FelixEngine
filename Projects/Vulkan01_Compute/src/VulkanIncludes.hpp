@@ -241,10 +241,10 @@ public:
 
   bool setKernal(StringRef filename, StringRef entry = "main");
   bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
-
-  void bind(VulkanCommandPtr cmd, VulkanSetLayoutPtr layout);
-
   void clearShaders();
+
+  VkPipeline getVkPipeline() {return mVkPipeline;}
+  VkPipelineLayout getVkPipelineLayout() {return mVkPipelineLayout;}
 
   bool init(VulkanSetLayoutPtr layout);
   void destroy();
@@ -308,6 +308,7 @@ public:
   bool begin();
   void end();
 
+  void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 
   bool alloc();
