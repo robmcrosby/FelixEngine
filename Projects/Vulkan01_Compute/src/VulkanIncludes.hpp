@@ -45,6 +45,7 @@ typedef std::vector<VulkanCommandPtr> VulkanCommands;
 struct LayoutBinding {
   VulkanBufferPtr buffer;
   VkDescriptorSetLayoutBinding binding;
+  VkDescriptorBufferInfo bufferInfo;
 };
 typedef std::vector<LayoutBinding> LayoutBindings;
 
