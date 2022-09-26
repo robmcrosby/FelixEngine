@@ -243,15 +243,15 @@ public:
   bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
   void clearShaders();
 
-  VkPipeline getVkPipeline() {return mVkPipeline;}
-  VkPipelineLayout getVkPipelineLayout() {return mVkPipelineLayout;}
+  VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
+  VkPipeline getVkPipeline() const {return mVkPipeline;}
 
-  bool init(VulkanSetLayoutPtr layout);
+  VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
+  VkPipelineLayout getVkPipelineLayout() const {return mVkPipelineLayout;}
+
   void destroy();
 
 private:
-  bool initPipelineLayout(VulkanSetLayoutPtr layout);
-
   void destroyPipelineLayout();
   void destroyPipeline();
 

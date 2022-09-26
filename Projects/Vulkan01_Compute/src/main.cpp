@@ -38,17 +38,15 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     auto pipeline = device->createPipeline();
     pipeline->setKernal("copy.spv");
-    if (pipeline->init(layout)) {
-      auto command = queue->createCommand();
-      if (command->begin()) {
-        command->bind(pipeline, layout);
-        command->dispatch((uint32_t)srcBuffer.size());
-        command->end();
-      }
 
-      queue->submitCommand(command);
-      queue->waitIdle();
-    }
+    auto command = queue->createCommand();
+    command->begin();
+    command->bind(pipeline, layout);
+    command->dispatch(srcBuffer.size());
+    command->end();
+
+    queue->submitCommand(command);
+    queue->waitIdle();
 
     // Read from the device
     memcpy(resultBuffer.data(), outBuffer->data(), size);
