@@ -29,13 +29,12 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
   # Compile Shaders to SPIR-V
   file(GLOB SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.comp)
-  find_package(Vulkan REQUIRED COMPONENTS glslc)
-  find_program(glslc_executable NAMES glslc HINTS Vulkan::glslc)
+  find_program(glslc_executable NAMES glslangValidator)
   foreach(source IN LISTS SHADERS)
     get_filename_component(FILENAME ${source} NAME_WLE)
     add_custom_command(
       COMMAND
-        ${glslc_executable} ${source} -o ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv
+        ${glslc_executable} -V -s -o ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv ${source}
       OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv
       DEPENDS ${source} ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Compiling ${FILENAME}.spv"
