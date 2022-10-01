@@ -142,6 +142,11 @@ VulkanBufferPtr VulkanDevice::createBuffer() {
   return buffer;
 }
 
+VulkanImagePtr VulkanDevice::createImage() {
+  VulkanImagePtr image = make_shared<VulkanImage>(this);
+  return image;
+}
+
 VulkanSetLayoutPtr VulkanDevice::createSetLayout() {
   VulkanSetLayoutPtr layout = make_shared<VulkanSetLayout>(this);
   return layout;

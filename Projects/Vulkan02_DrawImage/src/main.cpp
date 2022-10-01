@@ -20,6 +20,8 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
+  auto outImage = device->createImage();
+
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size)) {

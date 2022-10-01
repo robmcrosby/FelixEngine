@@ -28,6 +28,9 @@ typedef std::vector<VulkanDevicePtr> VulkanDevices;
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
+class VulkanImage;
+typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
+
 class VulkanSetLayout;
 typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
 
@@ -152,6 +155,7 @@ public:
   VulkanQueuePtr createQueue(VkQueueFlags flags);
 
   VulkanBufferPtr    createBuffer();
+  VulkanImagePtr     createImage();
   VulkanSetLayoutPtr createSetLayout();
   VulkanPipelinePtr  createPipeline();
 
@@ -196,6 +200,18 @@ public:
 
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
+};
+
+
+class VulkanImage {
+private:
+  VulkanDevice* mDevice;
+
+public:
+  VulkanImage(VulkanDevice* device);
+  ~VulkanImage();
+
+  void destroy();
 };
 
 
