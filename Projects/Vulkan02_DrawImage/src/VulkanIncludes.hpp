@@ -206,12 +206,27 @@ public:
 class VulkanImage {
 private:
   VulkanDevice* mDevice;
+  VkImage       mVkImage;
+  VmaAllocation mVmaAllocation;
+
+  VkImageUsageFlags         mVkImageUsageFlags;
+  VmaMemoryUsage            mVmaMemoryUsage;
+  VmaAllocationCreateFlags  mVmaCreateFlags;
 
 public:
   VulkanImage(VulkanDevice* device);
   ~VulkanImage();
 
+  void setUsage(VkImageUsageFlags flags);
+  void setCreateFlags(VmaAllocationCreateFlags flags);
+
+  bool alloc(uint32_t width, uint32_t height);
   void destroy();
+
+  VkImage getVkImage() const {return mVkImage;}
+
+  VmaAllocationInfo getVmaAllocationInfo() const;
+  void* data();
 };
 
 

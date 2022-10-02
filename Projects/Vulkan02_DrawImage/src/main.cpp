@@ -21,10 +21,13 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   auto outImage = device->createImage();
+  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  outImage->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
-  if (outBuffer->alloc(size)) {
+  if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
     auto layout = device->createSetLayout();
     layout->setBuffer(outBuffer, 0);
     layout->update();
@@ -43,6 +46,7 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     // Read from the device
     stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
+    //stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
     cout << "It Works!" << endl;
   }
   else {
