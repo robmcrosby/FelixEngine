@@ -6,7 +6,9 @@ using namespace std;
 
 VulkanImage::VulkanImage(VulkanDevice* device):
   mDevice(device),
+  mVkFormat(VK_FORMAT_R8G8B8A8_UNORM),
   mVkImage(VK_NULL_HANDLE),
+  mVkImageView(VK_NULL_HANDLE),
   mVkImageUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
   mVmaCreateFlags(0) {
@@ -36,7 +38,7 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height) {
 
   VkImageCreateInfo imageInfo = {VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, 0, 0};
   imageInfo.imageType = VK_IMAGE_TYPE_2D;
-  imageInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+  imageInfo.format = mVkFormat;
   imageInfo.extent.width = width;
   imageInfo.extent.height = height;
   imageInfo.extent.depth = 1;
@@ -56,11 +58,22 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height) {
 }
 
 void VulkanImage::destroy() {
+  if (mVkImageView != VK_NULL_HANDLE) {
+    VkDevice device = mDevice->getVkDevice();
+    vkDestroyImageView(device, mVkImageView, nullptr);
+    mVkImageView = VK_NULL_HANDLE;
+  }
   if (mVkImage != VK_NULL_HANDLE) {
     VmaAllocator allocator = mDevice->getVmaAllocator();
     vmaDestroyImage(allocator, mVkImage, mVmaAllocation);
     mVkImage = VK_NULL_HANDLE;
   }
+}
+
+VkImageView VulkanImage::getVkImageView() {
+  if (mVkImageView == VK_NULL_HANDLE && mVkImage != VK_NULL_HANDLE)
+    mVkImageView = createImageView(mVkImage, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+  return mVkImageView;
 }
 
 VmaAllocationInfo VulkanImage::getVmaAllocationInfo() const {
@@ -78,4 +91,31 @@ VmaAllocationInfo VulkanImage::getVmaAllocationInfo() const {
 void* VulkanImage::data() {
   VmaAllocationInfo info = getVmaAllocationInfo();
   return info.pMappedData;
+}
+
+VkImageView VulkanImage::createImageView(
+  VkImage image,
+  VkFormat format,
+  VkImageAspectFlags aspectFlags,
+  int32_t mipLevels
+) const {
+  VkImageViewCreateInfo viewInfo = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
+  viewInfo.image = image;
+  viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+  viewInfo.format = format;
+  viewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+  viewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+  viewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+  viewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+  viewInfo.subresourceRange.aspectMask = aspectFlags;
+  viewInfo.subresourceRange.baseMipLevel = 0;
+  viewInfo.subresourceRange.levelCount = mipLevels;
+  viewInfo.subresourceRange.baseArrayLayer = 0;
+  viewInfo.subresourceRange.layerCount = 1;
+
+  VkImageView imageView = VK_NULL_HANDLE;
+  VkDevice device = mDevice->getVkDevice();
+  if (vkCreateImageView(device, &viewInfo, nullptr, &imageView) != VK_SUCCESS)
+    cerr << "Error creating Image View" << endl;
+  return imageView;
 }

@@ -45,12 +45,19 @@ class VulkanCommand;
 typedef std::shared_ptr<VulkanCommand> VulkanCommandPtr;
 typedef std::vector<VulkanCommandPtr> VulkanCommands;
 
-struct LayoutBinding {
+struct BufferLayoutBinding {
   VulkanBufferPtr buffer;
   VkDescriptorSetLayoutBinding binding;
   VkDescriptorBufferInfo bufferInfo;
 };
-typedef std::vector<LayoutBinding> LayoutBindings;
+typedef std::vector<BufferLayoutBinding> BufferLayoutBindings;
+
+struct ImageLayoutBinding {
+  VulkanImagePtr image;
+  VkDescriptorSetLayoutBinding binding;
+  VkDescriptorImageInfo imageInfo;
+};
+typedef std::vector<ImageLayoutBinding> ImageLayoutBindings;
 
 
 class VulkanInstance {
@@ -206,7 +213,9 @@ public:
 class VulkanImage {
 private:
   VulkanDevice* mDevice;
+  VkFormat      mVkFormat;
   VkImage       mVkImage;
+  VkImageView   mVkImageView;
   VmaAllocation mVmaAllocation;
 
   VkImageUsageFlags         mVkImageUsageFlags;
@@ -224,16 +233,26 @@ public:
   void destroy();
 
   VkImage getVkImage() const {return mVkImage;}
+  VkImageView getVkImageView();
 
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
+
+private:
+  VkImageView createImageView(
+    VkImage image,
+    VkFormat format,
+    VkImageAspectFlags aspectFlags,
+    int32_t mipLevels
+  ) const;
 };
 
 
 class VulkanSetLayout {
 private:
   VulkanDevice*         mDevice;
-  LayoutBindings        mLayoutBindings;
+  BufferLayoutBindings  mBufferLayoutBindings;
+  ImageLayoutBindings   mImageLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
@@ -243,6 +262,7 @@ public:
   ~VulkanSetLayout();
 
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
+  void setTexture(VulkanImagePtr image, uint32_t binding);
   void update();
 
   VkDescriptorSetLayout getVkDescriptorSetLayout();

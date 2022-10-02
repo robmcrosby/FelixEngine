@@ -17,7 +17,7 @@ VulkanSetLayout::~VulkanSetLayout() {
 }
 
 void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
-  LayoutBinding layoutBinding;
+  BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
   layoutBinding.binding.binding = binding;
   layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
@@ -27,23 +27,37 @@ void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   layoutBinding.bufferInfo.buffer = buffer->getVkBuffer();
   layoutBinding.bufferInfo.offset = 0;
   layoutBinding.bufferInfo.range = VK_WHOLE_SIZE;
-  mLayoutBindings.push_back(layoutBinding);
+  mBufferLayoutBindings.push_back(layoutBinding);
+}
+
+void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
+  ImageLayoutBinding layoutBinding;
+  layoutBinding.image = image;
+  layoutBinding.binding.binding = binding;
+  layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+  layoutBinding.binding.descriptorCount = 1;
+  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+  layoutBinding.binding.pImmutableSamplers = nullptr;
+  layoutBinding.imageInfo.sampler = 0;
+  layoutBinding.imageInfo.imageView = image->getVkImageView();
+  layoutBinding.imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+  mImageLayoutBindings.push_back(layoutBinding);
 }
 
 void VulkanSetLayout::update() {
-  vector<VkWriteDescriptorSet> writeSets(mLayoutBindings.size());
+  vector<VkWriteDescriptorSet> writeSets(mBufferLayoutBindings.size());
   auto descriptorSet = getVkDescriptorSet();
 
-  for (int i = 0; i < mLayoutBindings.size(); ++i) {
+  for (int i = 0; i < mBufferLayoutBindings.size(); ++i) {
     writeSets[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeSets[i].pNext = 0;
     writeSets[i].dstSet = descriptorSet;
-    writeSets[i].dstBinding = mLayoutBindings[i].binding.binding;
+    writeSets[i].dstBinding = mBufferLayoutBindings[i].binding.binding;
     writeSets[i].dstArrayElement = 0;
     writeSets[i].descriptorCount = 1;
     writeSets[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     writeSets[i].pImageInfo = nullptr;
-    writeSets[i].pBufferInfo = &mLayoutBindings[i].bufferInfo;
+    writeSets[i].pBufferInfo = &mBufferLayoutBindings[i].bufferInfo;
     writeSets[i].pTexelBufferView = nullptr;
   }
 
@@ -54,7 +68,7 @@ void VulkanSetLayout::update() {
 VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
   if (mVkDescriptorSetLayout == VK_NULL_HANDLE) {
     vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto layoutBinding : mLayoutBindings)
+    for (auto layoutBinding : mBufferLayoutBindings)
       bindings.push_back(layoutBinding.binding);
 
     VkDescriptorSetLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO, 0, 0};
@@ -74,7 +88,7 @@ VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
   if (mVkDescriptorPool == VK_NULL_HANDLE) {
     VkDescriptorPoolSize poolSize = {};
     poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    poolSize.descriptorCount = static_cast<uint32_t>(mLayoutBindings.size());
+    poolSize.descriptorCount = static_cast<uint32_t>(mBufferLayoutBindings.size());
 
     VkDescriptorPoolCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO, 0};
     createInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
@@ -115,7 +129,8 @@ void VulkanSetLayout::destroy() {
   freeDescriptorSet();
   destroyDescriptorPool();
   destroyDescriptorSetLayout();
-  mLayoutBindings.clear();
+  mBufferLayoutBindings.clear();
+  mImageLayoutBindings.clear();
 }
 
 void VulkanSetLayout::freeDescriptorSet() {

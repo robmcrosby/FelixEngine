@@ -30,6 +30,7 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
     auto layout = device->createSetLayout();
     layout->setBuffer(outBuffer, 0);
+    layout->setTexture(outImage, 0);
     layout->update();
 
     auto pipeline = device->createPipeline();
