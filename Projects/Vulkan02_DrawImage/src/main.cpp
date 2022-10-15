@@ -29,25 +29,30 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
     auto layout = device->createSetLayout();
-    layout->setBuffer(outBuffer, 0);
+    //layout->setBuffer(outBuffer, 0);
     layout->setTexture(outImage, 0);
     layout->update();
 
     auto pipeline = device->createPipeline();
-    pipeline->setKernal("clear.spv");
+    //pipeline->setKernal("clearBuffer.spv");
+    pipeline->setKernal("clearTexture.spv");
 
     auto command = queue->createCommand();
     command->begin();
     command->bind(pipeline, layout);
-    command->dispatch(width * height);
+    //command->dispatch(width * height);
+    command->dispatch(width, height);
     command->end();
 
     queue->submitCommand(command);
     queue->waitIdle();
 
+    //layout->update();
+    //queue->waitIdle();
+
     // Read from the device
-    stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
-    //stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
+    //stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
+    stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
     cout << "It Works!" << endl;
   }
   else {

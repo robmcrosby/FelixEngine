@@ -52,12 +52,12 @@ struct BufferLayoutBinding {
 };
 typedef std::vector<BufferLayoutBinding> BufferLayoutBindings;
 
-struct ImageLayoutBinding {
+struct TextureLayoutBinding {
   VulkanImagePtr image;
   VkDescriptorSetLayoutBinding binding;
   VkDescriptorImageInfo imageInfo;
 };
-typedef std::vector<ImageLayoutBinding> ImageLayoutBindings;
+typedef std::vector<TextureLayoutBinding> TextureLayoutBindings;
 
 
 class VulkanInstance {
@@ -252,7 +252,7 @@ class VulkanSetLayout {
 private:
   VulkanDevice*         mDevice;
   BufferLayoutBindings  mBufferLayoutBindings;
-  ImageLayoutBindings   mImageLayoutBindings;
+  TextureLayoutBindings mTextureLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;

@@ -31,7 +31,7 @@ void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
 }
 
 void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
-  ImageLayoutBinding layoutBinding;
+  TextureLayoutBinding layoutBinding;
   layoutBinding.image = image;
   layoutBinding.binding.binding = binding;
   layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
@@ -41,24 +41,37 @@ void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   layoutBinding.imageInfo.sampler = 0;
   layoutBinding.imageInfo.imageView = image->getVkImageView();
   layoutBinding.imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-  mImageLayoutBindings.push_back(layoutBinding);
+  mTextureLayoutBindings.push_back(layoutBinding);
 }
 
 void VulkanSetLayout::update() {
-  vector<VkWriteDescriptorSet> writeSets(mBufferLayoutBindings.size());
   auto descriptorSet = getVkDescriptorSet();
+  vector<VkWriteDescriptorSet> writeSets;
 
   for (int i = 0; i < mBufferLayoutBindings.size(); ++i) {
-    writeSets[i].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeSets[i].pNext = 0;
-    writeSets[i].dstSet = descriptorSet;
-    writeSets[i].dstBinding = mBufferLayoutBindings[i].binding.binding;
-    writeSets[i].dstArrayElement = 0;
-    writeSets[i].descriptorCount = 1;
-    writeSets[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    writeSets[i].pImageInfo = nullptr;
-    writeSets[i].pBufferInfo = &mBufferLayoutBindings[i].bufferInfo;
-    writeSets[i].pTexelBufferView = nullptr;
+    VkWriteDescriptorSet writeSet = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, 0};
+    writeSet.dstSet = descriptorSet;
+    writeSet.dstBinding = mBufferLayoutBindings[i].binding.binding;
+    writeSet.dstArrayElement = 0;
+    writeSet.descriptorCount = 1;
+    writeSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeSet.pImageInfo = nullptr;
+    writeSet.pBufferInfo = &mBufferLayoutBindings[i].bufferInfo;
+    writeSet.pTexelBufferView = nullptr;
+    writeSets.push_back(writeSet);
+  }
+
+  for (int i = 0; i < mTextureLayoutBindings.size(); ++i) {
+    VkWriteDescriptorSet writeSet = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, 0};
+    writeSet.dstSet = descriptorSet;
+    writeSet.dstBinding = mTextureLayoutBindings[i].binding.binding;
+    writeSet.dstArrayElement = 0;
+    writeSet.descriptorCount = 1;
+    writeSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    writeSet.pImageInfo = &mTextureLayoutBindings[i].imageInfo;
+    writeSet.pBufferInfo = nullptr;
+    writeSet.pTexelBufferView = nullptr;
+    writeSets.push_back(writeSet);
   }
 
   VkDevice device = mDevice->getVkDevice();
@@ -68,8 +81,10 @@ void VulkanSetLayout::update() {
 VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
   if (mVkDescriptorSetLayout == VK_NULL_HANDLE) {
     vector<VkDescriptorSetLayoutBinding> bindings;
-    for (auto layoutBinding : mBufferLayoutBindings)
-      bindings.push_back(layoutBinding.binding);
+    for (auto buffer : mBufferLayoutBindings)
+      bindings.push_back(buffer.binding);
+    for (auto texture : mTextureLayoutBindings)
+      bindings.push_back(texture.binding);
 
     VkDescriptorSetLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO, 0, 0};
     createInfo.bindingCount = static_cast<uint32_t>(bindings.size());
@@ -86,15 +101,27 @@ VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
 
 VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
   if (mVkDescriptorPool == VK_NULL_HANDLE) {
-    VkDescriptorPoolSize poolSize = {};
-    poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    poolSize.descriptorCount = static_cast<uint32_t>(mBufferLayoutBindings.size());
+    vector<VkDescriptorPoolSize> poolSizes;
+
+    if (mBufferLayoutBindings.size() > 0) {
+      VkDescriptorPoolSize poolSize = {};
+      poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+      poolSize.descriptorCount = static_cast<uint32_t>(mBufferLayoutBindings.size());
+      poolSizes.push_back(poolSize);
+    }
+
+    if (mTextureLayoutBindings.size() > 0) {
+      VkDescriptorPoolSize poolSize = {};
+      poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+      poolSize.descriptorCount = static_cast<uint32_t>(mTextureLayoutBindings.size());
+      poolSizes.push_back(poolSize);
+    }
 
     VkDescriptorPoolCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO, 0};
     createInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
     createInfo.maxSets = 1;
-    createInfo.poolSizeCount = 1;
-    createInfo.pPoolSizes = &poolSize;
+    createInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+    createInfo.pPoolSizes = poolSizes.data();
 
     VkDevice device = mDevice->getVkDevice();
     if (vkCreateDescriptorPool(device, &createInfo, 0, &mVkDescriptorPool) != VK_SUCCESS) {
@@ -130,7 +157,7 @@ void VulkanSetLayout::destroy() {
   destroyDescriptorPool();
   destroyDescriptorSetLayout();
   mBufferLayoutBindings.clear();
-  mImageLayoutBindings.clear();
+  mTextureLayoutBindings.clear();
 }
 
 void VulkanSetLayout::freeDescriptorSet() {
