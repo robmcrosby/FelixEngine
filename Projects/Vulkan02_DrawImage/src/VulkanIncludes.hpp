@@ -361,9 +361,6 @@ public:
   void waitIdle();
 
 private:
-  //VkCommandBuffer beginSingleTimeCommands();
-  //void endSingleTimeCommands(VkCommandBuffer commandBuffer);
-
   void destroyCommandPool();
 };
 

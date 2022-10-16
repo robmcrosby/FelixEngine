@@ -96,15 +96,12 @@ void* VulkanImage::data() {
   return info.pMappedData;
 }
 
-void VulkanImage::transition(VkCommandBuffer commandBuffer,
-                             VkImageLayout   newImageLayout,
-                             VkAccessFlags   dstAccessMask,
-                             VkPipelineStageFlags dstStageMask) {
-  //VkAccessFlags dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
-
-  //VkPipelineStageFlags srcStageMask = mCurStageMask;
-  //VkPipelineStageFlags dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT;
-
+void VulkanImage::transition(
+  VkCommandBuffer commandBuffer,
+  VkImageLayout   newImageLayout,
+  VkAccessFlags   dstAccessMask,
+  VkPipelineStageFlags dstStageMask
+) {
   VkImageMemoryBarrier barrier = {VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
   barrier.oldLayout = mCurImageLayout;
   barrier.newLayout = newImageLayout;
@@ -118,16 +115,6 @@ void VulkanImage::transition(VkCommandBuffer commandBuffer,
   barrier.subresourceRange.layerCount = 1;
   barrier.srcAccessMask = mCurAccessMask;
   barrier.dstAccessMask = dstAccessMask;
-
-  // VkPipelineStageFlags srcStage = 0;
-  // VkPipelineStageFlags dstStage = 0;
-  // if (barrier.oldLayout == VK_IMAGE_LAYOUT_UNDEFINED) {
-  //   srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-  //   //dstStage = VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT;
-  //   dstStage = VK_PIPELINE_STAGE_ALL_COMMANDS_BIT;
-  //
-  //   barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
-  // }
 
   vkCmdPipelineBarrier(
     commandBuffer,
@@ -145,10 +132,10 @@ void VulkanImage::transition(VkCommandBuffer commandBuffer,
 }
 
 VkImageView VulkanImage::createImageView(
-  VkImage image,
+  VkImage  image,
   VkFormat format,
   VkImageAspectFlags aspectFlags,
-  int32_t mipLevels
+  int32_t  mipLevels
 ) const {
   VkImageViewCreateInfo viewInfo = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
   viewInfo.image = image;
