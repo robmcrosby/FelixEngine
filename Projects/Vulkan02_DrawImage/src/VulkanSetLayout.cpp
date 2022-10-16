@@ -39,7 +39,7 @@ void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   layoutBinding.binding.descriptorCount = 1;
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
   layoutBinding.binding.pImmutableSamplers = nullptr;
-  layoutBinding.imageInfo.sampler = getVkSampler();
+  layoutBinding.imageInfo.sampler = VK_NULL_HANDLE; //getVkSampler();
   layoutBinding.imageInfo.imageView = image->getVkImageView();
   layoutBinding.imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
   mTextureLayoutBindings.push_back(layoutBinding);

@@ -2,12 +2,9 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-//layout (binding = 0, rgba32f) uniform image2D destTex;
 layout (binding = 0, rgba8) uniform writeonly image2D destTex;
-//layout (binding = 0, rgba8ui) uniform uimage2D destTex;
 
 void main() {
   ivec2 storePos = ivec2(gl_GlobalInvocationID.xy);
   imageStore(destTex, storePos, vec4(0.0, 0.0, 1.0, 1.0));
-  //imageStore(destTex, storePos, ivec4(0, 0, 255, 255));
 }

@@ -50,12 +50,9 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     queue->submitCommand(command);
     queue->waitIdle();
 
-    //layout->update();
-    //queue->waitIdle();
-
-    int* test = (int*)outImage->data();
-    for (int i = 0; i < 10; ++i)
-      cout << "pixel: " << test[i] << endl;
+    // int* test = (int*)outImage->data();
+    // for (int i = 0; i < 10; ++i)
+    //   cout << "pixel: " << test[i] << endl;
 
     // Read from the device
     //stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
