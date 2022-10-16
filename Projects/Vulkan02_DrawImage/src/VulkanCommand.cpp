@@ -61,6 +61,13 @@ void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
     vkCmdDispatch(mVkCommandBuffer, x, y, z);
 }
 
+void VulkanCommand::transition(VulkanImagePtr image,
+                               VkImageLayout  newImageLayout,
+                               VkAccessFlags  dstAccessMask,
+                               VkPipelineStageFlags dstStageMask) {
+  image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
+}
+
 void VulkanCommand::free() {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     VkDevice device = mQueue->getDevice()->getVkDevice();

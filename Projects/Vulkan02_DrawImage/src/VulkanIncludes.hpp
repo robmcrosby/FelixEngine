@@ -242,7 +242,12 @@ public:
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
 
-  void transition(VkCommandBuffer commandBuffer, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask);
+  void transition(
+    VkCommandBuffer commandBuffer,
+    VkImageLayout newImageLayout,
+    VkAccessFlags dstAccessMask,
+    VkPipelineStageFlags dstStageMask
+  );
 
 private:
   VkImageView createImageView(
@@ -343,7 +348,12 @@ public:
   bool init();
   void destroy();
 
-  void transition(VulkanImagePtr image, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask);
+  void transition(
+    VulkanImagePtr image,
+    VkImageLayout newImageLayout,
+    VkAccessFlags dstAccessMask,
+    VkPipelineStageFlags dstStageMask
+  );
 
   VulkanCommandPtr createCommand();
 
@@ -351,8 +361,8 @@ public:
   void waitIdle();
 
 private:
-  VkCommandBuffer beginSingleTimeCommands();
-  void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+  //VkCommandBuffer beginSingleTimeCommands();
+  //void endSingleTimeCommands(VkCommandBuffer commandBuffer);
 
   void destroyCommandPool();
 };
@@ -375,6 +385,13 @@ public:
 
   void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
+
+  void transition(
+    VulkanImagePtr image,
+    VkImageLayout newImageLayout,
+    VkAccessFlags dstAccessMask,
+    VkPipelineStageFlags dstStageMask
+  );
 
   bool alloc();
   void free();

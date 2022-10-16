@@ -96,7 +96,10 @@ void* VulkanImage::data() {
   return info.pMappedData;
 }
 
-void VulkanImage::transition(VkCommandBuffer commandBuffer, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask) {
+void VulkanImage::transition(VkCommandBuffer commandBuffer,
+                             VkImageLayout   newImageLayout,
+                             VkAccessFlags   dstAccessMask,
+                             VkPipelineStageFlags dstStageMask) {
   //VkAccessFlags dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
 
   //VkPipelineStageFlags srcStageMask = mCurStageMask;

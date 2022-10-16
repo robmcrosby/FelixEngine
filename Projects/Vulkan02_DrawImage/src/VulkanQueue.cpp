@@ -36,10 +36,19 @@ void VulkanQueue::destroy() {
   mVkQueue = VK_NULL_HANDLE;
 }
 
-void VulkanQueue::transition(VulkanImagePtr image, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask) {
-  VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-  image->transition(commandBuffer, newImageLayout, dstAccessMask, dstStageMask);
-  endSingleTimeCommands(commandBuffer);
+void VulkanQueue::transition(VulkanImagePtr image,
+                             VkImageLayout  newImageLayout,
+                             VkAccessFlags  dstAccessMask,
+                             VkPipelineStageFlags dstStageMask) {
+  auto command = createCommand();
+  command->begin();
+  command->transition(image, newImageLayout, dstAccessMask, dstStageMask);
+  command->end();
+  submitCommand(command);
+  waitIdle();
+  // VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+  // image->transition(commandBuffer, newImageLayout, dstAccessMask, dstStageMask);
+  // endSingleTimeCommands(commandBuffer);
 }
 
 VulkanCommandPtr VulkanQueue::createCommand() {
@@ -73,36 +82,36 @@ void VulkanQueue::waitIdle() {
     vkQueueWaitIdle(mVkQueue);
 }
 
-VkCommandBuffer VulkanQueue::beginSingleTimeCommands() {
-  VkCommandBufferAllocateInfo allocInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
-  allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  allocInfo.commandPool = mVkCommandPool;
-  allocInfo.commandBufferCount = 1;
-
-  VkCommandBuffer commandBuffer;
-  vkAllocateCommandBuffers(mDevice->getVkDevice(), &allocInfo, &commandBuffer);
-
-  VkCommandBufferBeginInfo beginInfo{};
-  beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-  beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-  vkBeginCommandBuffer(commandBuffer, &beginInfo);
-  return commandBuffer;
-}
-
-void VulkanQueue::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
-  vkEndCommandBuffer(commandBuffer);
-
-  VkSubmitInfo submitInfo{};
-  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers = &commandBuffer;
-
-  vkQueueSubmit(mVkQueue, 1, &submitInfo, VK_NULL_HANDLE);
-  vkQueueWaitIdle(mVkQueue);
-
-  vkFreeCommandBuffers(mDevice->getVkDevice(), mVkCommandPool, 1, &commandBuffer);
-}
+// VkCommandBuffer VulkanQueue::beginSingleTimeCommands() {
+//   VkCommandBufferAllocateInfo allocInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+//   allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+//   allocInfo.commandPool = mVkCommandPool;
+//   allocInfo.commandBufferCount = 1;
+//
+//   VkCommandBuffer commandBuffer;
+//   vkAllocateCommandBuffers(mDevice->getVkDevice(), &allocInfo, &commandBuffer);
+//
+//   VkCommandBufferBeginInfo beginInfo{};
+//   beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+//   beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+//
+//   vkBeginCommandBuffer(commandBuffer, &beginInfo);
+//   return commandBuffer;
+// }
+//
+// void VulkanQueue::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+//   vkEndCommandBuffer(commandBuffer);
+//
+//   VkSubmitInfo submitInfo{};
+//   submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+//   submitInfo.commandBufferCount = 1;
+//   submitInfo.pCommandBuffers = &commandBuffer;
+//
+//   vkQueueSubmit(mVkQueue, 1, &submitInfo, VK_NULL_HANDLE);
+//   vkQueueWaitIdle(mVkQueue);
+//
+//   vkFreeCommandBuffers(mDevice->getVkDevice(), mVkCommandPool, 1, &commandBuffer);
+// }
 
 void VulkanQueue::destroyCommandPool() {
   if (mVkCommandPool != VK_NULL_HANDLE) {
