@@ -12,6 +12,8 @@ VulkanImage::VulkanImage(VulkanDevice* device):
   mVkImageUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
   mVmaCreateFlags(0),
+  mWidth(0),
+  mHeight(0),
   mCurImageLayout(VK_IMAGE_LAYOUT_UNDEFINED),
   mCurStageMask(VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT),
   mCurAccessMask(0) {
@@ -38,6 +40,9 @@ void VulkanImage::setCreateFlags(VmaAllocationCreateFlags flags) {
 
 bool VulkanImage::alloc(uint32_t width, uint32_t height) {
   VmaAllocator allocator = mDevice->getVmaAllocator();
+
+  mWidth = width;
+  mHeight = height;
 
   VkImageCreateInfo imageInfo = {VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO, 0, 0};
   imageInfo.imageType = VK_IMAGE_TYPE_2D;
@@ -129,6 +134,31 @@ void VulkanImage::transition(
   mCurImageLayout = newImageLayout;
   mCurStageMask = dstStageMask;
   mCurAccessMask = dstAccessMask;
+}
+
+void VulkanImage::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer) {
+  VkBuffer dstBuffer = buffer->getVkBuffer();
+  VkBufferImageCopy region{};
+  region.bufferOffset = 0;
+  region.bufferRowLength = 0;
+  region.bufferImageHeight = 0;
+
+  region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  region.imageSubresource.mipLevel = 0;
+  region.imageSubresource.baseArrayLayer = 0;
+  region.imageSubresource.layerCount = 1;
+
+  region.imageOffset = {0, 0, 0};
+  region.imageExtent = {mWidth, mHeight, 1};
+
+  vkCmdCopyImageToBuffer(
+    commandBuffer,
+    mVkImage,
+    mCurImageLayout,
+    dstBuffer,
+    1,
+    &region
+  );
 }
 
 VkImageView VulkanImage::createImageView(

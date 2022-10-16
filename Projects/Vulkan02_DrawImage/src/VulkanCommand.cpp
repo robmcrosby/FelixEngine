@@ -70,6 +70,10 @@ void VulkanCommand::transition(
   image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
 }
 
+void VulkanCommand::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
+  image->copyToBuffer(mVkCommandBuffer, buffer);
+}
+
 void VulkanCommand::free() {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     VkDevice device = mQueue->getDevice()->getVkDevice();

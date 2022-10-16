@@ -14,11 +14,11 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int height = 512;
   int channels = 4;
 
-  // auto outBuffer = device->createBuffer();
-  // outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-  //   VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-  // outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-  //   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  auto outBuffer = device->createBuffer();
+  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   auto outImage = device->createImage();
   outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
@@ -26,9 +26,8 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   // Allocate the Vulkan Buffers
-  //VkDeviceSize size = width * height * channels;
-  //if (outBuffer->alloc(size)) {
-  if (outImage->alloc(512, 512)) {
+  VkDeviceSize size = width * height * channels;
+  if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
     queue->transition(outImage, VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
 
     auto layout = device->createSetLayout();
@@ -50,13 +49,10 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     queue->submitCommand(command);
     queue->waitIdle();
 
-    // int* test = (int*)outImage->data();
-    // for (int i = 0; i < 10; ++i)
-    //   cout << "pixel: " << test[i] << endl;
-
     // Read from the device
-    //stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
-    stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
+    queue->copyImageToBuffer(outImage, outBuffer);
+    stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
+    //stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
     cout << "It Works!" << endl;
   }
   else {
@@ -81,18 +77,4 @@ int main() {
     instance.destroy();
   }
   return 0;
-
-  // int width = 512;
-  // int height = 512;
-  // int channels = 4;
-  // vector<uint8_t> img(width * height * channels, 0xff);
-  //
-  //
-  //
-  //
-  // stbi_write_png("result.png", width, height, channels, img.data(), width * channels);
-  // stbi_write_jpg("result.jpg", width, height, channels, img.data(), 100);
-  //
-  // cout << "It Works!" << endl;
-  // return 0;
 }

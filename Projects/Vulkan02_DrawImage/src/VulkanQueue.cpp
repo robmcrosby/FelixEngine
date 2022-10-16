@@ -50,6 +50,15 @@ void VulkanQueue::transition(
   waitIdle();
 }
 
+void VulkanQueue::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
+  auto command = createCommand();
+  command->begin();
+  command->copyImageToBuffer(image, buffer);
+  command->end();
+  submitCommand(command);
+  waitIdle();
+}
+
 VulkanCommandPtr VulkanQueue::createCommand() {
   if (mVkQueue != VK_NULL_HANDLE) {
     VulkanCommandPtr command = make_shared<VulkanCommand>(this);

@@ -217,6 +217,8 @@ private:
   VkImage       mVkImage;
   VkImageView   mVkImageView;
   VmaAllocation mVmaAllocation;
+  uint32_t      mWidth;
+  uint32_t      mHeight;
 
   VkImageUsageFlags         mVkImageUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
@@ -248,6 +250,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
 
 private:
   VkImageView createImageView(
@@ -354,6 +357,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
 
   VulkanCommandPtr createCommand();
 
@@ -389,6 +393,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
 
   bool alloc();
   void free();
