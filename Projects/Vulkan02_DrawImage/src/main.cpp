@@ -14,20 +14,23 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int height = 512;
   int channels = 4;
 
-  auto outBuffer = device->createBuffer();
-  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-  outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  // auto outBuffer = device->createBuffer();
+  // outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+  //   VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  // outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  //   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   auto outImage = device->createImage();
   outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
   outImage->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   // Allocate the Vulkan Buffers
-  VkDeviceSize size = width * height * channels;
-  if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
+  //VkDeviceSize size = width * height * channels;
+  //if (outBuffer->alloc(size)) {
+  if (outImage->alloc(512, 512)) {
+    queue->transitionImageToLayout(outImage, VK_IMAGE_LAYOUT_GENERAL);
+
     auto layout = device->createSetLayout();
     //layout->setBuffer(outBuffer, 0);
     layout->setTexture(outImage, 0);
@@ -49,6 +52,10 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     //layout->update();
     //queue->waitIdle();
+
+    int* test = (int*)outImage->data();
+    for (int i = 0; i < 10; ++i)
+      cout << "pixel: " << test[i] << endl;
 
     // Read from the device
     //stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);

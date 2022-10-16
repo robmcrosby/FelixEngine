@@ -9,6 +9,7 @@ VulkanImage::VulkanImage(VulkanDevice* device):
   mVkFormat(VK_FORMAT_R8G8B8A8_UNORM),
   mVkImage(VK_NULL_HANDLE),
   mVkImageView(VK_NULL_HANDLE),
+  mVkImageLayout(VK_IMAGE_LAYOUT_UNDEFINED),
   mVkImageUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
   mVmaCreateFlags(0) {
@@ -46,8 +47,8 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height) {
   imageInfo.arrayLayers = 1;
   imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
   imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-  imageInfo.usage = mVmaMemoryUsage;
-  imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+  imageInfo.usage = mVkImageUsageFlags;
+  imageInfo.initialLayout = mVkImageLayout;
 
   VmaAllocationCreateInfo allocInfo = {};
   allocInfo.usage = mVmaMemoryUsage;
@@ -91,6 +92,40 @@ VmaAllocationInfo VulkanImage::getVmaAllocationInfo() const {
 void* VulkanImage::data() {
   VmaAllocationInfo info = getVmaAllocationInfo();
   return info.pMappedData;
+}
+
+void VulkanImage::transitionToLayout(VkCommandBuffer commandBuffer, VkImageLayout layout) {
+  VkImageMemoryBarrier barrier = {VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER};
+  barrier.oldLayout = mVkImageLayout;
+  barrier.newLayout = layout;
+  barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+  barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+  barrier.image = mVkImage;
+  barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  barrier.subresourceRange.baseMipLevel = 0;
+  barrier.subresourceRange.levelCount = 1;
+  barrier.subresourceRange.baseArrayLayer = 0;
+  barrier.subresourceRange.layerCount = 1;
+
+  VkPipelineStageFlags srcStage = 0;
+  VkPipelineStageFlags dstStage = 0;
+  if (barrier.oldLayout == VK_IMAGE_LAYOUT_UNDEFINED) {
+    srcStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+    dstStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    barrier.srcAccessMask = 0;
+    barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+  }
+
+  vkCmdPipelineBarrier(
+    commandBuffer,
+    srcStage, dstStage,
+    0,
+    0, nullptr,
+    0, nullptr,
+    1, &barrier
+  );
+
+  mVkImageLayout = layout;
 }
 
 VkImageView VulkanImage::createImageView(

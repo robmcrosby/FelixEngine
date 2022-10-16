@@ -36,6 +36,12 @@ void VulkanQueue::destroy() {
   mVkQueue = VK_NULL_HANDLE;
 }
 
+void VulkanQueue::transitionImageToLayout(VulkanImagePtr image, VkImageLayout layout) {
+  VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+  image->transitionToLayout(commandBuffer, layout);
+  endSingleTimeCommands(commandBuffer);
+}
+
 VulkanCommandPtr VulkanQueue::createCommand() {
   if (mVkQueue != VK_NULL_HANDLE) {
     VulkanCommandPtr command = make_shared<VulkanCommand>(this);
@@ -65,6 +71,37 @@ void VulkanQueue::submitCommand(VulkanCommandPtr command) {
 void VulkanQueue::waitIdle() {
   if (mVkQueue != VK_NULL_HANDLE)
     vkQueueWaitIdle(mVkQueue);
+}
+
+VkCommandBuffer VulkanQueue::beginSingleTimeCommands() {
+  VkCommandBufferAllocateInfo allocInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+  allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  allocInfo.commandPool = mVkCommandPool;
+  allocInfo.commandBufferCount = 1;
+
+  VkCommandBuffer commandBuffer;
+  vkAllocateCommandBuffers(mDevice->getVkDevice(), &allocInfo, &commandBuffer);
+
+  VkCommandBufferBeginInfo beginInfo{};
+  beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+  beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+  vkBeginCommandBuffer(commandBuffer, &beginInfo);
+  return commandBuffer;
+}
+
+void VulkanQueue::endSingleTimeCommands(VkCommandBuffer commandBuffer) {
+  vkEndCommandBuffer(commandBuffer);
+
+  VkSubmitInfo submitInfo{};
+  submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers = &commandBuffer;
+
+  vkQueueSubmit(mVkQueue, 1, &submitInfo, VK_NULL_HANDLE);
+  vkQueueWaitIdle(mVkQueue);
+
+  vkFreeCommandBuffers(mDevice->getVkDevice(), mVkCommandPool, 1, &commandBuffer);
 }
 
 void VulkanQueue::destroyCommandPool() {

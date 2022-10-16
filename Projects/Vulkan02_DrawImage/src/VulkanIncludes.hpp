@@ -216,6 +216,7 @@ private:
   VkFormat      mVkFormat;
   VkImage       mVkImage;
   VkImageView   mVkImageView;
+  VkImageLayout mVkImageLayout;
   VmaAllocation mVmaAllocation;
 
   VkImageUsageFlags         mVkImageUsageFlags;
@@ -238,6 +239,8 @@ public:
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
 
+  void transitionToLayout(VkCommandBuffer commandBuffer, VkImageLayout layout);
+
 private:
   VkImageView createImageView(
     VkImage image,
@@ -256,6 +259,7 @@ private:
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
+  VkSampler             mVkSampler;
 
 public:
   VulkanSetLayout(VulkanDevice* device);
@@ -275,6 +279,8 @@ private:
   void freeDescriptorSet();
   void destroyDescriptorPool();
   void destroyDescriptorSetLayout();
+
+  VkSampler getVkSampler();
 };
 
 
@@ -334,12 +340,17 @@ public:
   bool init();
   void destroy();
 
+  void transitionImageToLayout(VulkanImagePtr image, VkImageLayout layout);
+
   VulkanCommandPtr createCommand();
 
   void submitCommand(VulkanCommandPtr command);
   void waitIdle();
 
 private:
+  VkCommandBuffer beginSingleTimeCommands();
+  void endSingleTimeCommands(VkCommandBuffer commandBuffer);
+
   void destroyCommandPool();
 };
 
