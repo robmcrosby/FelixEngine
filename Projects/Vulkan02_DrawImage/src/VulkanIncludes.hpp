@@ -216,12 +216,15 @@ private:
   VkFormat      mVkFormat;
   VkImage       mVkImage;
   VkImageView   mVkImageView;
-  VkImageLayout mVkImageLayout;
   VmaAllocation mVmaAllocation;
 
   VkImageUsageFlags         mVkImageUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
   VmaAllocationCreateFlags  mVmaCreateFlags;
+
+  VkImageLayout        mCurImageLayout;
+  VkPipelineStageFlags mCurStageMask;
+  VkAccessFlags        mCurAccessMask;
 
 public:
   VulkanImage(VulkanDevice* device);
@@ -239,7 +242,7 @@ public:
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
 
-  void transitionToLayout(VkCommandBuffer commandBuffer, VkImageLayout layout);
+  void transition(VkCommandBuffer commandBuffer, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask);
 
 private:
   VkImageView createImageView(
@@ -340,7 +343,7 @@ public:
   bool init();
   void destroy();
 
-  void transitionImageToLayout(VulkanImagePtr image, VkImageLayout layout);
+  void transition(VulkanImagePtr image, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask);
 
   VulkanCommandPtr createCommand();
 

@@ -36,9 +36,9 @@ void VulkanQueue::destroy() {
   mVkQueue = VK_NULL_HANDLE;
 }
 
-void VulkanQueue::transitionImageToLayout(VulkanImagePtr image, VkImageLayout layout) {
+void VulkanQueue::transition(VulkanImagePtr image, VkImageLayout newImageLayout, VkAccessFlags dstAccessMask, VkPipelineStageFlags dstStageMask) {
   VkCommandBuffer commandBuffer = beginSingleTimeCommands();
-  image->transitionToLayout(commandBuffer, layout);
+  image->transition(commandBuffer, newImageLayout, dstAccessMask, dstStageMask);
   endSingleTimeCommands(commandBuffer);
 }
 

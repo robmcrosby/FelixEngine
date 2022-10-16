@@ -29,7 +29,7 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
   //VkDeviceSize size = width * height * channels;
   //if (outBuffer->alloc(size)) {
   if (outImage->alloc(512, 512)) {
-    queue->transitionImageToLayout(outImage, VK_IMAGE_LAYOUT_GENERAL);
+    queue->transition(outImage, VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
 
     auto layout = device->createSetLayout();
     //layout->setBuffer(outBuffer, 0);
