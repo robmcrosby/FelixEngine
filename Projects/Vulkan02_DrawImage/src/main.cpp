@@ -21,14 +21,19 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   auto outImage = device->createImage();
-  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
   outImage->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size) && outImage->alloc(512, 512)) {
-    queue->transition(outImage, VK_IMAGE_LAYOUT_GENERAL, VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT);
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_GENERAL,
+      VK_ACCESS_TRANSFER_WRITE_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
 
     auto layout = device->createSetLayout();
     //layout->setBuffer(outBuffer, 0);
@@ -48,6 +53,13 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     queue->submitCommand(command);
     queue->waitIdle();
+
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+      VK_ACCESS_TRANSFER_READ_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
 
     // Read from the device
     queue->copyImageToBuffer(outImage, outBuffer);
