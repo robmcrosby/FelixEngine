@@ -9,7 +9,43 @@
 
 using namespace std;
 
-void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
+void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
+  int width = 512;
+  int height = 512;
+  int channels = 4;
+
+  auto outBuffer = device->createBuffer();
+  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+
+  VkDeviceSize size = width * height * channels;
+  if (outBuffer->alloc(size)) {
+    auto layout = device->createSetLayout();
+    layout->setBuffer(outBuffer, 0);
+    layout->update();
+
+    auto pipeline = device->createPipeline();
+    pipeline->setKernal("clearBuffer.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->bind(pipeline, layout);
+      command->dispatch(width * height);
+      command->endSingle();
+      queue->waitIdle();
+    }
+
+    // Read from the device
+    stbi_write_png("ResultClearBuffer.png", width, height, channels, outBuffer->data(), width * channels);
+    cout << "It Works!" << endl;
+  }
+  else {
+    cerr << "Error: initalizing buffer" << endl;
+  }
+}
+
+void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int width = 512;
   int height = 512;
   int channels = 4;
@@ -36,17 +72,14 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     );
 
     auto layout = device->createSetLayout();
-    //layout->setBuffer(outBuffer, 0);
     layout->setTexture(outImage, 0);
     layout->update();
 
     auto pipeline = device->createPipeline();
-    //pipeline->setKernal("clearBuffer.spv");
     pipeline->setKernal("clearTexture.spv");
 
     if (auto command = queue->beginSingleCommand()) {
       command->bind(pipeline, layout);
-      //command->dispatch(width * height);
       command->dispatch(width, height);
       command->endSingle();
       queue->waitIdle();
@@ -61,8 +94,8 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     // Read from the device
     queue->copyImageToBuffer(outImage, outBuffer);
-    stbi_write_png("result.png", width, height, channels, outBuffer->data(), width * channels);
-    //stbi_write_png("result.png", width, height, channels, outImage->data(), width * channels);
+    stbi_write_png("ResultClearTexture.png", width, height, channels, outBuffer->data(), width * channels);
+    //stbi_write_png("clearTextureResult.png", width, height, channels, outImage->data(), width * channels);
     cout << "It Works!" << endl;
   }
   else {
@@ -79,7 +112,8 @@ int main() {
     if (auto device = instance.pickDevice()) {
       auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
       if (device->init()) {
-        runDrawImageTest(device, queue);
+        testClearBuffer(device, queue);
+        testClearTexture(device, queue);
       }
     }
     instance.destroy();
