@@ -360,6 +360,7 @@ public:
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
 
   VulkanCommandPtr createCommand();
+  VulkanCommandPtr beginSingleCommand();
 
   void submitCommand(VulkanCommandPtr command);
   void waitIdle();
@@ -383,6 +384,8 @@ public:
 
   bool begin();
   void end();
+  void submit();
+  void endSingle();
 
   void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);

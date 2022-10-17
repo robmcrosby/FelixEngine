@@ -46,6 +46,27 @@ void VulkanCommand::end() {
     vkEndCommandBuffer(mVkCommandBuffer);
 }
 
+void VulkanCommand::submit() {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    VkSubmitInfo submitInfo = {VK_STRUCTURE_TYPE_SUBMIT_INFO, 0};
+    submitInfo.waitSemaphoreCount = 0;
+    submitInfo.pWaitSemaphores = nullptr;
+    submitInfo.pWaitDstStageMask = 0;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &mVkCommandBuffer,
+    submitInfo.signalSemaphoreCount = 0;
+    submitInfo.pSignalSemaphores = 0;
+
+    if (vkQueueSubmit(mQueue->getVkQueue(), 1, &submitInfo, 0) != VK_SUCCESS)
+      cerr << "Error Submiting Command to Queue" << endl;
+  }
+}
+
+void VulkanCommand::endSingle() {
+  end();
+  submit();
+}
+
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
   vkCmdBindPipeline(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
     pipeline->getVkPipeline(layout));

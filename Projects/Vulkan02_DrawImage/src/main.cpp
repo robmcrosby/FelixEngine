@@ -44,15 +44,13 @@ void runDrawImageTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     //pipeline->setKernal("clearBuffer.spv");
     pipeline->setKernal("clearTexture.spv");
 
-    auto command = queue->createCommand();
-    command->begin();
-    command->bind(pipeline, layout);
-    //command->dispatch(width * height);
-    command->dispatch(width, height);
-    command->end();
-
-    queue->submitCommand(command);
-    queue->waitIdle();
+    if (auto command = queue->beginSingleCommand()) {
+      command->bind(pipeline, layout);
+      //command->dispatch(width * height);
+      command->dispatch(width, height);
+      command->endSingle();
+      queue->waitIdle();
+    }
 
     queue->transition(
       outImage,
@@ -78,14 +76,12 @@ int main() {
   instance.setEngineName("No Engine");
   instance.enableValidation();
   if (instance.init()) {
-    auto device = instance.pickDevice();
-    if (device) {
+    if (auto device = instance.pickDevice()) {
       auto queue = device->createQueue(VK_QUEUE_COMPUTE_BIT);
       if (device->init()) {
         runDrawImageTest(device, queue);
       }
     }
-
     instance.destroy();
   }
   return 0;

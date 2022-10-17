@@ -42,21 +42,19 @@ void VulkanQueue::transition(
   VkAccessFlags  dstAccessMask,
   VkPipelineStageFlags dstStageMask
 ) {
-  auto command = createCommand();
-  command->begin();
-  command->transition(image, newImageLayout, dstAccessMask, dstStageMask);
-  command->end();
-  submitCommand(command);
-  waitIdle();
+  if (auto command = beginSingleCommand()) {
+    command->transition(image, newImageLayout, dstAccessMask, dstStageMask);
+    command->endSingle();
+    waitIdle();
+  }
 }
 
 void VulkanQueue::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
-  auto command = createCommand();
-  command->begin();
-  command->copyImageToBuffer(image, buffer);
-  command->end();
-  submitCommand(command);
-  waitIdle();
+  if (auto command = beginSingleCommand()) {
+    command->copyImageToBuffer(image, buffer);
+    command->endSingle();
+    waitIdle();
+  }
 }
 
 VulkanCommandPtr VulkanQueue::createCommand() {
@@ -65,6 +63,14 @@ VulkanCommandPtr VulkanQueue::createCommand() {
     return command;
   }
   cerr << "Error: Commands can not be created before Queue initalization" <<  endl;
+  return nullptr;
+}
+
+VulkanCommandPtr VulkanQueue::beginSingleCommand() {
+  if (auto command = createCommand()) {
+    command->begin();
+    return command;
+  }
   return nullptr;
 }
 
