@@ -103,6 +103,64 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
   }
 }
 
+void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
+  int width = 512;
+  int height = 512;
+  int channels = 4;
+
+  auto buffer = device->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+
+  auto outImage = device->createImage();
+  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  outImage->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+
+  // Allocate the Vulkan Buffers
+  VkDeviceSize size = width * height * channels;
+  if (buffer->alloc(size) && outImage->alloc(512, 512)) {
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_GENERAL,
+      VK_ACCESS_TRANSFER_WRITE_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+
+    auto layout = device->createSetLayout();
+    layout->setTexture(outImage, 0);
+    layout->update();
+
+    auto pipeline = device->createPipeline();
+    pipeline->setKernal("desaturate.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->bind(pipeline, layout);
+      command->dispatch(width, height);
+      command->endSingle();
+      queue->waitIdle();
+    }
+
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+      VK_ACCESS_TRANSFER_READ_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+
+    // Read from the device
+    queue->copyImageToBuffer(outImage, buffer);
+    stbi_write_png("ResultDesaturate.png", width, height, channels, buffer->data(), width * channels);
+    //stbi_write_png("clearTextureResult.png", width, height, channels, outImage->data(), width * channels);
+    cout << "It Works!" << endl;
+  }
+  else {
+    cerr << "Error: initalizing buffers" << endl;
+  }
+}
+
 int main() {
   auto& instance = VulkanInstance::Get();
   instance.setApplicationName("VK Draw Image");
@@ -114,6 +172,7 @@ int main() {
       if (device->init()) {
         testClearBuffer(device, queue);
         testClearTexture(device, queue);
+        testDesaturate(device, queue);
       }
     }
     instance.destroy();

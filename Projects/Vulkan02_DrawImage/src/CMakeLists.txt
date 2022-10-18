@@ -22,6 +22,21 @@ target_include_directories(${PROJECT_NAME}
   PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/VulkanMemoryAllocator/"
 )
 
+# Copy Images to Build Directory
+file(GLOB IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/*.jpg)
+foreach(source IN LISTS IMAGES)
+  get_filename_component(FILENAME ${source} NAME)
+  add_custom_command(
+    COMMAND
+      cp ${source} ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}
+    DEPENDS ${source} ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Copying ${FILENAME}"
+  )
+  list(APPEND DST_IMAGES ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME})
+endforeach()
+add_custom_target(images ALL DEPENDS ${DST_IMAGES})
+
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Windows
 
