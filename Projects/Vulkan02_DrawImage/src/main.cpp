@@ -15,10 +15,14 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int channels = 4;
 
   auto outBuffer = device->createBuffer();
-  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-  outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  outBuffer->setUsage(
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  outBuffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
 
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size)) {
@@ -51,13 +55,20 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int channels = 4;
 
   auto outBuffer = device->createBuffer();
-  outBuffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-  outBuffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  outBuffer->setUsage(
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  outBuffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
 
   auto outImage = device->createImage();
-  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  outImage->setUsage(
+    VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+    VK_IMAGE_USAGE_STORAGE_BIT
+  );
 
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
@@ -111,16 +122,27 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
   //cout << "load image: (" << width << ", " << height << ") " << channels << endl;
 
   auto buffer = device->createBuffer();
-  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+  buffer->setUsage(
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  buffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
 
   auto inImage = device->createImage();
-  inImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  inImage->setUsage(
+    VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+    VK_IMAGE_USAGE_STORAGE_BIT
+  );
 
   auto outImage = device->createImage();
-  outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+  outImage->setUsage(
+    VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+    VK_IMAGE_USAGE_STORAGE_BIT
+  );
 
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
