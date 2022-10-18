@@ -104,9 +104,14 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
 }
 
 void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
-  int width = 512;
-  int height = 512;
-  int channels = 4;
+  int width, height, channels;
+
+  stbi_uc* pixels = stbi_load("image.png", &width, &height, &channels, STBI_rgb_alpha);
+  if (!pixels) {
+    cerr << "Error reading image file" << endl;
+    return;
+  }
+  //cout << "load image: (" << width << ", " << height << ") " << channels << endl;
 
   auto buffer = device->createBuffer();
   buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
@@ -114,14 +119,24 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
   buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
+  auto inImage = device->createImage();
+  inImage->setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
+
   auto outImage = device->createImage();
   outImage->setUsage(VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT);
-  outImage->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-   VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
   // Allocate the Vulkan Buffers
   VkDeviceSize size = width * height * channels;
-  if (buffer->alloc(size) && outImage->alloc(512, 512)) {
+  if (buffer->alloc(size) && inImage->alloc(width, height) && outImage->alloc(width, height)) {
+    memcpy(buffer->data(), pixels, size);
+    queue->transition(
+      inImage,
+      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+      VK_ACCESS_TRANSFER_WRITE_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+    queue->copyBufferToImage(buffer, inImage);
+
     queue->transition(
       outImage,
       VK_IMAGE_LAYOUT_GENERAL,
@@ -130,7 +145,8 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
     );
 
     auto layout = device->createSetLayout();
-    layout->setTexture(outImage, 0);
+    layout->setTexture(inImage, 0);
+    layout->setTexture(outImage, 1);
     layout->update();
 
     auto pipeline = device->createPipeline();
@@ -159,6 +175,8 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
   else {
     cerr << "Error: initalizing buffers" << endl;
   }
+
+  stbi_image_free(pixels);
 }
 
 int main() {

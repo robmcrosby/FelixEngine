@@ -250,6 +250,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyFromBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
   void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
 
 private:
@@ -357,6 +358,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
 
   VulkanCommandPtr createCommand();
@@ -396,6 +398,7 @@ public:
     VkAccessFlags dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
+  void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
 
   bool alloc();

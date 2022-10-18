@@ -49,6 +49,14 @@ void VulkanQueue::transition(
   }
 }
 
+void VulkanQueue::copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image) {
+  if (auto command = beginSingleCommand()) {
+    command->copyBufferToImage(buffer, image);
+    command->endSingle();
+    waitIdle();
+  }
+}
+
 void VulkanQueue::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
   if (auto command = beginSingleCommand()) {
     command->copyImageToBuffer(image, buffer);

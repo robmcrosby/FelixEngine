@@ -91,6 +91,10 @@ void VulkanCommand::transition(
   image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
 }
 
+void VulkanCommand::copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image) {
+  image->copyFromBuffer(mVkCommandBuffer, buffer);
+}
+
 void VulkanCommand::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
   image->copyToBuffer(mVkCommandBuffer, buffer);
 }

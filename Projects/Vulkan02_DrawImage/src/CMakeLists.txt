@@ -23,7 +23,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 # Copy Images to Build Directory
-file(GLOB IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/*.jpg)
+file(GLOB IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/*.png)
 foreach(source IN LISTS IMAGES)
   get_filename_component(FILENAME ${source} NAME)
   add_custom_command(
