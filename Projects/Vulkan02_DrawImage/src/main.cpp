@@ -35,7 +35,7 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     if (auto command = queue->beginSingleCommand()) {
       command->bind(pipeline, layout);
-      command->dispatch(width * height);
+      command->dispatch((width * height) / 256);
       command->endSingle();
       queue->waitIdle();
     }
@@ -89,7 +89,7 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     if (auto command = queue->beginSingleCommand()) {
       command->bind(pipeline, layout);
-      command->dispatch(width, height);
+      command->dispatch(width/32, height/32);
       command->endSingle();
       queue->waitIdle();
     }
@@ -179,7 +179,7 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     if (auto command = queue->beginSingleCommand()) {
       command->bind(pipeline, layout);
-      command->dispatch(width, height);
+      command->dispatch(width/32, height/32);
       command->endSingle();
       queue->waitIdle();
     }
