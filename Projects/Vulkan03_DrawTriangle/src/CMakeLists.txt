@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
   VulkanBuffer.cpp
   VulkanImage.cpp
   VulkanSetLayout.cpp
+  VulkanFrameBuffer.cpp
   VulkanPipeline.cpp
   VulkanQueue.cpp
   VulkanCommand.cpp

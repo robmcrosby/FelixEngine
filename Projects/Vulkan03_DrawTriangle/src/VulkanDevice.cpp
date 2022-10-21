@@ -152,6 +152,11 @@ VulkanSetLayoutPtr VulkanDevice::createSetLayout() {
   return layout;
 }
 
+VulkanFrameBufferPtr VulkanDevice::createFrameBuffer() {
+  VulkanFrameBufferPtr frameBuffer = make_shared<VulkanFrameBuffer>(this);
+  return frameBuffer;
+}
+
 VulkanPipelinePtr VulkanDevice::createPipeline() {
   VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
   return pipeline;

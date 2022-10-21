@@ -10,7 +10,51 @@
 using namespace std;
 
 void testDrawTriangle(VulkanDevicePtr device, VulkanQueuePtr queue) {
-  cout << "It Works!" << endl;
+  int width = 512;
+  int height = 512;
+  int channels = 4;
+
+  auto outBuffer = device->createBuffer();
+  outBuffer->setUsage(
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  outBuffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+
+  auto outImage = device->createImage();
+  outImage->setUsage(
+    VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
+    VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+  );
+
+  // Allocate the Vulkan Buffers
+  VkDeviceSize size = width * height * channels;
+  if (outBuffer->alloc(size) && outImage->alloc(width, height)) {
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+      VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+    );
+
+    auto frameBuffer = device->createFrameBuffer();
+    frameBuffer->addColorAttachment(outImage);
+
+    queue->transition(
+      outImage,
+      VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+      VK_ACCESS_TRANSFER_READ_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+
+    // Read from the device
+    queue->copyImageToBuffer(outImage, outBuffer);
+    stbi_write_png("Result.png", width, height, channels, outBuffer->data(), width * channels);
+    cout << "It Works!" << endl;
+  }
 }
 
 int main() {

@@ -30,9 +30,13 @@ typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
 class VulkanImage;
 typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
+typedef std::vector<VulkanImagePtr> VulkanImages;
 
 class VulkanSetLayout;
 typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
+
+class VulkanFrameBuffer;
+typedef std::shared_ptr<VulkanFrameBuffer> VulkanFrameBufferPtr;
 
 class VulkanPipeline;
 typedef std::shared_ptr<VulkanPipeline> VulkanPipelinePtr;
@@ -161,10 +165,11 @@ public:
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
 
-  VulkanBufferPtr    createBuffer();
-  VulkanImagePtr     createImage();
-  VulkanSetLayoutPtr createSetLayout();
-  VulkanPipelinePtr  createPipeline();
+  VulkanBufferPtr      createBuffer();
+  VulkanImagePtr       createImage();
+  VulkanSetLayoutPtr   createSetLayout();
+  VulkanFrameBufferPtr createFrameBuffer();
+  VulkanPipelinePtr    createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -246,8 +251,8 @@ public:
 
   void transition(
     VkCommandBuffer commandBuffer,
-    VkImageLayout newImageLayout,
-    VkAccessFlags dstAccessMask,
+    VkImageLayout   newImageLayout,
+    VkAccessFlags   dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
   void copyFromBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
@@ -255,7 +260,7 @@ public:
 
 private:
   VkImageView createImageView(
-    VkImage image,
+    VkImage  image,
     VkFormat format,
     VkImageAspectFlags aspectFlags,
     int32_t mipLevels
@@ -293,6 +298,21 @@ private:
   void destroyDescriptorSetLayout();
 
   VkSampler getVkSampler();
+};
+
+
+class VulkanFrameBuffer {
+private:
+  VulkanDevice* mDevice;
+  VulkanImages  mColorAttachments;
+
+public:
+  VulkanFrameBuffer(VulkanDevice* device);
+  ~VulkanFrameBuffer();
+
+  void addColorAttachment(VulkanImagePtr image);
+
+  void destroy();
 };
 
 
