@@ -34,6 +34,9 @@ typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
 class VulkanSetLayout;
 typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
 
+class VulkanShader;
+typedef std::shared_ptr<VulkanShader> VulkanShaderPtr;
+
 class VulkanPipeline;
 typedef std::shared_ptr<VulkanPipeline> VulkanPipelinePtr;
 
@@ -164,6 +167,7 @@ public:
   VulkanBufferPtr    createBuffer();
   VulkanImagePtr     createImage();
   VulkanSetLayoutPtr createSetLayout();
+  VulkanShaderPtr    createShader();
   VulkanPipelinePtr  createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
@@ -296,20 +300,42 @@ private:
 };
 
 
+class VulkanShader {
+private:
+  VulkanDevice*  mDevice;
+  VkShaderModule mVkShaderModule;
+  std::string    mEntryFunction;
+
+public:
+  VulkanShader(VulkanDevice* device);
+  ~VulkanShader();
+
+  bool load(StringRef filename, StringRef entry = "main");
+  bool load(SPIRVCodeRef code, StringRef entry = "main");
+
+  VkShaderModule getVkShaderModule() const {return mVkShaderModule;}
+  CString getEntryFunction() const {return mEntryFunction.c_str();}
+
+  void destroy();
+
+private:
+  static bool readSPIRV(SPIRVCode& code, StringRef filename);
+};
+
+
 class VulkanPipeline {
 private:
   VulkanDevice*    mDevice;
   VkPipeline       mVkPipeline;
   VkPipelineLayout mVkPipelineLayout;
-  std::string      mKernalEntry;
-  VkShaderModule   mKernal;
+  VulkanShaderPtr  mKernal;
 
 public:
   VulkanPipeline(VulkanDevice* device);
   ~VulkanPipeline();
 
   bool setKernal(StringRef filename, StringRef entry = "main");
-  bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
+  void setKernal(VulkanShaderPtr shader);
   void clearShaders();
 
   VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
@@ -323,8 +349,6 @@ public:
 private:
   void destroyPipelineLayout();
   void destroyPipeline();
-
-  static bool readSPIRV(SPIRVCode& code, StringRef filename);
 };
 
 
