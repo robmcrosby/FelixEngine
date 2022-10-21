@@ -9,6 +9,46 @@
 
 using namespace std;
 
+void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
+  int width = 256;
+  int height = 256;
+  int channels = 4;
+
+  auto outBuffer = device->createBuffer();
+  outBuffer->setUsage(
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  outBuffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+
+  VkDeviceSize size = width * height * channels;
+  if (outBuffer->alloc(size)) {
+    auto layout = device->createSetLayout();
+    layout->setBuffer(outBuffer, 0);
+    layout->update();
+
+    auto pipeline = device->createPipeline();
+    pipeline->setKernal("clearBuffer.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->bind(pipeline, layout);
+      command->dispatch((width * height) / 256);
+      command->endSingle();
+      queue->waitIdle();
+    }
+
+    // Read from the device
+    stbi_write_png("ResultClearBuffer.png", width, height, channels, outBuffer->data(), width * channels);
+    cout << "It Works!" << endl;
+  }
+  else {
+    cerr << "Error: initalizing buffer" << endl;
+  }
+}
+
 void testDrawTriangle(VulkanDevicePtr device, VulkanQueuePtr queue) {
   int width = 512;
   int height = 512;
@@ -66,7 +106,8 @@ int main() {
     if (auto device = instance.pickDevice()) {
       auto queue = device->createQueue(VK_QUEUE_GRAPHICS_BIT);
       if (device->init()) {
-        testDrawTriangle(device, queue);
+        testClearBuffer(device, queue);
+        //testDrawTriangle(device, queue);
       }
     }
     instance.destroy();

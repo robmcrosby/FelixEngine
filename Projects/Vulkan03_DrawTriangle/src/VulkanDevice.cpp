@@ -157,6 +157,11 @@ VulkanFrameBufferPtr VulkanDevice::createFrameBuffer() {
   return frameBuffer;
 }
 
+VulkanShaderPtr VulkanDevice::createShader() {
+  VulkanShaderPtr shader = make_shared<VulkanShader>(this);
+  return shader;
+}
+
 VulkanPipelinePtr VulkanDevice::createPipeline() {
   VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
   return pipeline;
