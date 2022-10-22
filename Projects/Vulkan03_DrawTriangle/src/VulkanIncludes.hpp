@@ -348,15 +348,22 @@ private:
   VulkanDevice*    mDevice;
   VkPipeline       mVkPipeline;
   VkPipelineLayout mVkPipelineLayout;
-  VulkanShaderPtr  mKernal;
+
+  VulkanShaderPtr mKernalShader;
+  VulkanShaderPtr mVertexShader;
+  VulkanShaderPtr mFragmentShader;
 
 public:
   VulkanPipeline(VulkanDevice* device);
   ~VulkanPipeline();
 
-  bool setKernal(StringRef filename, StringRef entry = "main");
-  void setKernal(VulkanShaderPtr shader);
+  bool setKernalShader(StringRef filename, StringRef entry = "main");
+  bool setVertexShader(StringRef filename, StringRef entry = "main");
+  bool setFragmentShader(StringRef filename, StringRef entry = "main");
   void clearShaders();
+
+  bool isCompute() const {return mKernalShader != nullptr;}
+  bool isGraphics() const {return mVertexShader && mFragmentShader;}
 
   VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
   VkPipeline getVkPipeline() const {return mVkPipeline;}
@@ -367,6 +374,8 @@ public:
   void destroy();
 
 private:
+  void createComputePipeline(VulkanSetLayoutPtr layout);
+
   void destroyPipelineLayout();
   void destroyPipeline();
 };

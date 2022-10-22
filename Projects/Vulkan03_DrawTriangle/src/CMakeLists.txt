@@ -49,7 +49,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_libraries(${PROJECT_NAME} vulkan)
 
   # Compile Shaders to SPIR-V
-  file(GLOB SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.comp)
+  file(GLOB SHADERS *.comp *.vert *.frag)
   find_program(glslc_executable NAMES glslangValidator)
   foreach(source IN LISTS SHADERS)
     get_filename_component(FILENAME ${source} NAME_WLE)
@@ -71,7 +71,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   target_link_libraries(${PROJECT_NAME} PRIVATE ${VK_FRAMEWORK})
 
   # Compile Shaders to SPIR-V
-  file(GLOB SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.comp)
+  file(GLOB SHADERS *.comp *.vert *.frag)
   set(converter_executable ${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/tools/MoltenVKShaderConverter)
   foreach(source IN LISTS SHADERS)
     get_filename_component(FILENAME ${source} NAME_WLE)
