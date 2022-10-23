@@ -157,6 +157,11 @@ VulkanFrameBufferPtr VulkanDevice::createFrameBuffer() {
   return frameBuffer;
 }
 
+VulkanRenderPassPtr VulkanDevice::createRenderPass() {
+  VulkanRenderPassPtr renderPass = make_shared<VulkanRenderPass>(this);
+  return renderPass;
+}
+
 VulkanShaderPtr VulkanDevice::createShader() {
   VulkanShaderPtr shader = make_shared<VulkanShader>(this);
   return shader;

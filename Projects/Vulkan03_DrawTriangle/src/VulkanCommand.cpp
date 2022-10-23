@@ -93,9 +93,9 @@ void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
     vkCmdDispatch(mVkCommandBuffer, x, y, z);
 }
 
-void VulkanCommand::beginRenderPass(VulkanFrameBufferPtr frameBuffer) {
+void VulkanCommand::beginRenderPass(VulkanRenderPassPtr renderPass) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
-    vector<VkClearValue> clearValues(frameBuffer->getColorCount());
+    vector<VkClearValue> clearValues(renderPass->getColorCount());
     for (int i = 0; i < clearValues.size(); ++i) {
       clearValues.at(i).color.float32[0] = 0.0f;
       clearValues.at(i).color.float32[1] = 0.0f;
@@ -104,10 +104,10 @@ void VulkanCommand::beginRenderPass(VulkanFrameBufferPtr frameBuffer) {
     }
 
     VkRenderPassBeginInfo renderPassInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
-    renderPassInfo.renderPass = frameBuffer->getVkRenderPass();
-    renderPassInfo.framebuffer = frameBuffer->getVkFramebuffer();
+    renderPassInfo.renderPass = renderPass->getVkRenderPass();
+    renderPassInfo.framebuffer = renderPass->getVkFramebuffer();
     renderPassInfo.renderArea.offset = {0, 0};
-    renderPassInfo.renderArea.extent = frameBuffer->getExtent();
+    renderPassInfo.renderArea.extent = renderPass->getExtent();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
@@ -120,12 +120,12 @@ void VulkanCommand::endRenderPass() {
     vkCmdEndRenderPass(mVkCommandBuffer);
 }
 
-void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanFrameBufferPtr frameBuffer) {
+void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanRenderPassPtr renderPass) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_GRAPHICS,
-      pipeline->getVkPipeline(frameBuffer)
+      pipeline->getVkPipeline(renderPass)
     );
   }
 }

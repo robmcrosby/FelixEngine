@@ -43,9 +43,9 @@ VkPipeline VulkanPipeline::getVkPipeline(VulkanSetLayoutPtr layout) {
   return mVkPipeline;
 }
 
-VkPipeline VulkanPipeline::getVkPipeline(VulkanFrameBufferPtr frameBuffer) {
+VkPipeline VulkanPipeline::getVkPipeline(VulkanRenderPassPtr renderPass) {
   if (mVkPipeline == VK_NULL_HANDLE) {
-    createGraphicsPipeline(frameBuffer);
+    createGraphicsPipeline(renderPass);
   }
   return mVkPipeline;
 }
@@ -87,41 +87,39 @@ VkPipelineLayout VulkanPipeline::getVkPipelineLayout() {
   return mVkPipelineLayout;
 }
 
-void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
+void VulkanPipeline::createGraphicsPipeline(VulkanRenderPassPtr renderPass) {
   auto pipelineLayout = getVkPipelineLayout();
   if (pipelineLayout != VK_NULL_HANDLE) {
-    auto renderPass = frameBuffer->getVkRenderPass();
-    auto viewport   = frameBuffer->getViewport();
-    auto scissor    = frameBuffer->getScissor();
+    auto viewport = renderPass->getViewport();
+    auto scissor  = renderPass->getScissor();
 
-    VkPipelineShaderStageCreateInfo vertexStage = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+    VkPipelineShaderStageCreateInfo vertexStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
     vertexStage.stage  = VK_SHADER_STAGE_VERTEX_BIT;
     vertexStage.module = mVertexShader->getVkShaderModule();
     vertexStage.pName  = mVertexShader->getEntryFunction();
-    VkPipelineShaderStageCreateInfo fragmentStage = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+    VkPipelineShaderStageCreateInfo fragmentStage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
     fragmentStage.stage  = VK_SHADER_STAGE_FRAGMENT_BIT;
     fragmentStage.module = mFragmentShader->getVkShaderModule();
     fragmentStage.pName  = mFragmentShader->getEntryFunction();
     VkPipelineShaderStageCreateInfo shaderStages[] = {vertexStage, fragmentStage};
 
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo = {VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
+    VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
     vertexInputInfo.vertexBindingDescriptionCount = 0;
     vertexInputInfo.pVertexBindingDescriptions = nullptr;
     vertexInputInfo.vertexAttributeDescriptionCount = 0;
     vertexInputInfo.pVertexAttributeDescriptions = nullptr;
 
-    VkPipelineInputAssemblyStateCreateInfo inputAssembly = {VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};
+    VkPipelineInputAssemblyStateCreateInfo inputAssembly{VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
 
-    VkPipelineViewportStateCreateInfo viewportState = {VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO};
+    VkPipelineViewportStateCreateInfo viewportState{VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO};
     viewportState.viewportCount = 1;
     viewportState.pViewports = &viewport;
     viewportState.scissorCount = 1;
     viewportState.pScissors = &scissor;
 
-    VkPipelineRasterizationStateCreateInfo rasterizer{};
-    rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    VkPipelineRasterizationStateCreateInfo rasterizer{VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO};
     rasterizer.depthClampEnable = VK_FALSE;
     rasterizer.rasterizerDiscardEnable = VK_FALSE;
     rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
@@ -133,7 +131,7 @@ void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
     rasterizer.depthBiasClamp = 0.0f;
     rasterizer.depthBiasSlopeFactor = 0.0f;
 
-    VkPipelineMultisampleStateCreateInfo multisampling {VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO};
+    VkPipelineMultisampleStateCreateInfo multisampling{VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO};
     multisampling.sampleShadingEnable = VK_FALSE;
     multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
     multisampling.minSampleShading = 1.0f;
@@ -141,7 +139,7 @@ void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
     multisampling.alphaToCoverageEnable = VK_FALSE;
     multisampling.alphaToOneEnable = VK_FALSE;
 
-    VkPipelineDepthStencilStateCreateInfo depthStencil = {VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};
+    VkPipelineDepthStencilStateCreateInfo depthStencil{VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};
     depthStencil.depthTestEnable = VK_FALSE;
     depthStencil.depthWriteEnable = VK_FALSE;
     depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
@@ -166,7 +164,7 @@ void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
     colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
     colorBlendAttachment.alphaBlendOp        = VK_BLEND_OP_ADD;
 
-    VkPipelineColorBlendStateCreateInfo colorBlending = {VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};
+    VkPipelineColorBlendStateCreateInfo colorBlending{VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO};
     colorBlending.logicOpEnable     = VK_FALSE;
     colorBlending.logicOp           = VK_LOGIC_OP_COPY;
     colorBlending.attachmentCount   = 1;
@@ -176,8 +174,7 @@ void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
     colorBlending.blendConstants[2] = 0.0f;
     colorBlending.blendConstants[3] = 0.0f;
 
-    VkGraphicsPipelineCreateInfo pipelineInfo{};
-    pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    VkGraphicsPipelineCreateInfo pipelineInfo{VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO};
     pipelineInfo.stageCount = 2;
     pipelineInfo.pStages = shaderStages;
     pipelineInfo.pVertexInputState = &vertexInputInfo;
@@ -189,7 +186,7 @@ void VulkanPipeline::createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer) {
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = nullptr;
     pipelineInfo.layout = mVkPipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.renderPass = renderPass->getVkRenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
     pipelineInfo.basePipelineIndex = -1;

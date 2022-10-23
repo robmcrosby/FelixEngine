@@ -80,16 +80,19 @@ void testDrawTriangle(VulkanDevicePtr device, VulkanQueuePtr queue) {
       VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
     );
 
-    auto frameBuffer = device->createFrameBuffer();
-    frameBuffer->addColorAttachment(outImage);
+    auto framebuffer = device->createFrameBuffer();
+    framebuffer->addColorAttachment(outImage);
+
+    auto renderPass = device->createRenderPass();
+    renderPass->setFramebuffer(framebuffer);
 
     auto pipeline = device->createPipeline();
     pipeline->setVertexShader("triangle.spv");
     pipeline->setFragmentShader("color.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      command->beginRenderPass(frameBuffer);
-      command->bind(pipeline, frameBuffer);
+      command->beginRenderPass(renderPass);
+      command->bind(pipeline, renderPass);
       command->draw(3);
       command->endRenderPass();
       command->endSingle();

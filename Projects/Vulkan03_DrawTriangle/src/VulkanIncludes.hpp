@@ -9,6 +9,9 @@
 #define VulkanIncludes_hpp
 
 
+typedef std::vector<VkAttachmentReference> VkAttachmentReferences;
+typedef std::vector<VkAttachmentDescription> VkAttachmentDescriptions;
+
 typedef const char* CString;
 typedef std::vector<CString> CStrings;
 typedef std::vector<std::string> Strings;
@@ -37,6 +40,9 @@ typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
 
 class VulkanFrameBuffer;
 typedef std::shared_ptr<VulkanFrameBuffer> VulkanFrameBufferPtr;
+
+class VulkanRenderPass;
+typedef std::shared_ptr<VulkanRenderPass> VulkanRenderPassPtr;
 
 class VulkanShader;
 typedef std::shared_ptr<VulkanShader> VulkanShaderPtr;
@@ -172,6 +178,7 @@ public:
   VulkanImagePtr       createImage();
   VulkanSetLayoutPtr   createSetLayout();
   VulkanFrameBufferPtr createFrameBuffer();
+  VulkanRenderPassPtr  createRenderPass();
   VulkanShaderPtr      createShader();
   VulkanPipelinePtr    createPipeline();
 
@@ -315,7 +322,6 @@ private:
   VkExtent2D    mExtent;
   VulkanImages  mColorAttachments;
   VkFramebuffer mVkFramebuffer;
-  VkRenderPass  mVkRenderPass;
 
 public:
   VulkanFrameBuffer(VulkanDevice* device);
@@ -323,16 +329,45 @@ public:
 
   void addColorAttachment(VulkanImagePtr image);
 
-  VkFramebuffer getVkFramebuffer();
-  VkRenderPass getVkRenderPass();
+  VkFramebuffer getVkFramebuffer(VkRenderPass renderPass);
 
   VkExtent2D getExtent() const {return mExtent;}
-  VkViewport getViewport() const;
-  VkRect2D   getScissor()  const;
 
   uint32_t getColorCount() const {return mColorAttachments.size();}
+  void getVkAttachmentReferences(VkAttachmentReferences& references);
+  void getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions);
 
   void destroy();
+
+private:
+  VkFramebuffer createVkFramebuffer(VkRenderPass renderPass);
+};
+
+
+class VulkanRenderPass {
+private:
+  VulkanDevice*        mDevice;
+  VkRenderPass         mVkRenderPass;
+  VulkanFrameBufferPtr mFramebuffer;
+
+public:
+  VulkanRenderPass(VulkanDevice* device);
+  ~VulkanRenderPass();
+
+  void setFramebuffer(VulkanFrameBufferPtr framebuffer);
+
+  VkRenderPass  getVkRenderPass();
+  VkFramebuffer getVkFramebuffer();
+
+  VkExtent2D getExtent()     const;
+  VkViewport getViewport()   const;
+  VkRect2D   getScissor()    const;
+  uint32_t   getColorCount() const;
+
+  void destroy();
+
+private:
+  VkRenderPass createVkRenderPass();
 };
 
 
@@ -382,7 +417,7 @@ public:
   bool isGraphics() const {return mVertexShader && mFragmentShader;}
 
   VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
-  VkPipeline getVkPipeline(VulkanFrameBufferPtr frameBuffer);
+  VkPipeline getVkPipeline(VulkanRenderPassPtr renderPass);
   VkPipeline getVkPipeline() const {return mVkPipeline;}
 
   VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
@@ -392,7 +427,7 @@ public:
 
 private:
   void createComputePipeline(VulkanSetLayoutPtr layout);
-  void createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer);
+  void createGraphicsPipeline(VulkanRenderPassPtr renderPass);
 
   void destroyPipelineLayout();
   void destroyPipeline();
@@ -463,10 +498,10 @@ public:
   void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 
-  void beginRenderPass(VulkanFrameBufferPtr frameBuffer);
+  void beginRenderPass(VulkanRenderPassPtr renderPass);
   void endRenderPass();
 
-  void bind(VulkanPipelinePtr pipeline, VulkanFrameBufferPtr frameBuffer);
+  void bind(VulkanPipelinePtr pipeline, VulkanRenderPassPtr renderPass);
   void draw(uint32_t vertexCount, uint32_t instances = 1);
 
   void transition(
