@@ -39,6 +39,7 @@ void VulkanFrameBuffer::getVkAttachmentReferences(VkAttachmentReferences& refere
 void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions) {
   for (auto attachment : mColorAttachments) {
     VkAttachmentDescription description;
+    description.flags          = 0;
     description.format         = attachment->getVkFormat();
     description.samples        = VK_SAMPLE_COUNT_1_BIT;
     description.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;

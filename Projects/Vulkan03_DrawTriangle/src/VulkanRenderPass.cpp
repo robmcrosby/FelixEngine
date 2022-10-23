@@ -72,6 +72,7 @@ VkRenderPass VulkanRenderPass::createVkRenderPass() {
   mFramebuffer->getVkAttachmentDescriptions(attachments);
 
   VkSubpassDescription subpass{};
+  subpass.flags                = 0;
   subpass.pipelineBindPoint    = VK_PIPELINE_BIND_POINT_GRAPHICS;
   subpass.colorAttachmentCount = static_cast<uint32_t>(attachmentRefs.size());
   subpass.pColorAttachments    = attachmentRefs.data();
