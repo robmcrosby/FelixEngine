@@ -275,7 +275,6 @@ private:
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
-  VkSampler             mVkSampler;
 
 public:
   VulkanSetLayout(VulkanDevice* device);
@@ -295,8 +294,6 @@ private:
   void freeDescriptorSet();
   void destroyDescriptorPool();
   void destroyDescriptorSetLayout();
-
-  VkSampler getVkSampler();
 };
 
 
