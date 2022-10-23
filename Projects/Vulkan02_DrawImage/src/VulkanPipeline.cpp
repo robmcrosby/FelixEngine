@@ -24,9 +24,9 @@ void VulkanPipeline::clearShaders() {
   mKernal = nullptr;
 }
 
-VkPipeline VulkanPipeline::getVkPipeline(VulkanSetLayoutPtr layout) {
+VkPipeline VulkanPipeline::getVkPipeline(VkDescriptorSetLayout setLayout) {
   if (mVkPipeline == VK_NULL_HANDLE) {
-    auto pipelineLayout = getVkPipelineLayout(layout);
+    auto pipelineLayout = getVkPipelineLayout(setLayout);
     if (pipelineLayout != VK_NULL_HANDLE) {
       VkComputePipelineCreateInfo createInfo = {VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO, 0, 0};
       createInfo.stage = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
@@ -50,9 +50,9 @@ VkPipeline VulkanPipeline::getVkPipeline(VulkanSetLayoutPtr layout) {
   return mVkPipeline;
 }
 
-VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VulkanSetLayoutPtr layout) {
+VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VkDescriptorSetLayout setLayout) {
   if (mVkPipelineLayout == VK_NULL_HANDLE) {
-    VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
+    //VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
     if (setLayout != VK_NULL_HANDLE) {
       VkPipelineLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO, 0, 0};
       createInfo.setLayoutCount = 1;

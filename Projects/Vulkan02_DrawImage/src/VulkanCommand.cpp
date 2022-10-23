@@ -68,13 +68,22 @@ void VulkanCommand::endSingle() {
 }
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
-  vkCmdBindPipeline(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipeline->getVkPipeline(layout));
+  vkCmdBindPipeline(
+    mVkCommandBuffer,
+    VK_PIPELINE_BIND_POINT_COMPUTE,
+    pipeline->getVkPipeline(layout->getVkDescriptorSetLayout())
+  );
 
   auto descriptorSet = layout->getVkDescriptorSet();
   auto pipelineLayout = pipeline->getVkPipelineLayout();
-  vkCmdBindDescriptorSets(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipelineLayout, 0, 1, &descriptorSet, 0, 0);
+  vkCmdBindDescriptorSets(
+    mVkCommandBuffer,
+    VK_PIPELINE_BIND_POINT_COMPUTE,
+    pipelineLayout,
+    0, 1,
+    &descriptorSet,
+    0, 0
+  );
 }
 
 void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {

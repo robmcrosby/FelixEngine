@@ -335,10 +335,10 @@ public:
   void setKernal(VulkanShaderPtr shader);
   void clearShaders();
 
-  VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
+  VkPipeline getVkPipeline(VkDescriptorSetLayout setLayout);
   VkPipeline getVkPipeline() const {return mVkPipeline;}
 
-  VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
+  VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayout setLayout);
   VkPipelineLayout getVkPipelineLayout() const {return mVkPipelineLayout;}
 
   void destroy();

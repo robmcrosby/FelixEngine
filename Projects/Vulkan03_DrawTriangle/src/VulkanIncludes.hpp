@@ -9,8 +9,9 @@
 #define VulkanIncludes_hpp
 
 
-typedef std::vector<VkAttachmentReference> VkAttachmentReferences;
+typedef std::vector<VkAttachmentReference>   VkAttachmentReferences;
 typedef std::vector<VkAttachmentDescription> VkAttachmentDescriptions;
+typedef std::vector<VkDescriptorSetLayout>   VkDescriptorSetLayouts;
 
 typedef const char* CString;
 typedef std::vector<CString> CStrings;
@@ -413,18 +414,18 @@ public:
   bool isCompute() const {return mKernalShader != nullptr;}
   bool isGraphics() const {return mVertexShader && mFragmentShader;}
 
-  VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
+  VkPipeline getVkPipeline(VkDescriptorSetLayouts setLayouts);
   VkPipeline getVkPipeline(VulkanRenderPassPtr renderPass);
-  VkPipeline getVkPipeline() const {return mVkPipeline;}
 
-  VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
-  VkPipelineLayout getVkPipelineLayout();
+  VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts setLayouts);
 
   void destroy();
 
 private:
-  void createComputePipeline(VulkanSetLayoutPtr layout);
+  VkPipeline createComputePipeline(VkDescriptorSetLayouts setLayouts);
   void createGraphicsPipeline(VulkanRenderPassPtr renderPass);
+
+  VkPipelineLayout createVkPipelineLayout(const VkDescriptorSetLayouts& setLayouts);
 
   void destroyPipelineLayout();
   void destroyPipeline();
