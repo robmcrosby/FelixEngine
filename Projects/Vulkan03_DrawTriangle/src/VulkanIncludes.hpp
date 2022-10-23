@@ -248,10 +248,14 @@ public:
   void destroy();
 
   VkImage getVkImage() const {return mVkImage;}
+  VkFormat getVkFormat() const {return mVkFormat;}
   VkImageView getVkImageView();
 
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
+
+  uint32_t getWidth() const {return mWidth;}
+  uint32_t getHeight() const {return mHeight;}
 
   void transition(
     VkCommandBuffer commandBuffer,
@@ -308,13 +312,25 @@ private:
 class VulkanFrameBuffer {
 private:
   VulkanDevice* mDevice;
+  VkExtent2D    mExtent;
   VulkanImages  mColorAttachments;
+  VkFramebuffer mVkFramebuffer;
+  VkRenderPass  mVkRenderPass;
 
 public:
   VulkanFrameBuffer(VulkanDevice* device);
   ~VulkanFrameBuffer();
 
   void addColorAttachment(VulkanImagePtr image);
+
+  VkFramebuffer getVkFramebuffer();
+  VkRenderPass getVkRenderPass();
+
+  VkExtent2D getExtent() const {return mExtent;}
+  VkViewport getViewport() const;
+  VkRect2D   getScissor()  const;
+
+  uint32_t getColorCount() const {return mColorAttachments.size();}
 
   void destroy();
 };
@@ -366,15 +382,17 @@ public:
   bool isGraphics() const {return mVertexShader && mFragmentShader;}
 
   VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
+  VkPipeline getVkPipeline(VulkanFrameBufferPtr frameBuffer);
   VkPipeline getVkPipeline() const {return mVkPipeline;}
 
   VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
-  VkPipelineLayout getVkPipelineLayout() const {return mVkPipelineLayout;}
+  VkPipelineLayout getVkPipelineLayout();
 
   void destroy();
 
 private:
   void createComputePipeline(VulkanSetLayoutPtr layout);
+  void createGraphicsPipeline(VulkanFrameBufferPtr frameBuffer);
 
   void destroyPipelineLayout();
   void destroyPipeline();
@@ -444,6 +462,12 @@ public:
 
   void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
+
+  void beginRenderPass(VulkanFrameBufferPtr frameBuffer);
+  void endRenderPass();
+
+  void bind(VulkanPipelinePtr pipeline, VulkanFrameBufferPtr frameBuffer);
+  void draw(uint32_t vertexCount, uint32_t instances = 1);
 
   void transition(
     VulkanImagePtr image,

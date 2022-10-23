@@ -83,6 +83,19 @@ void testDrawTriangle(VulkanDevicePtr device, VulkanQueuePtr queue) {
     auto frameBuffer = device->createFrameBuffer();
     frameBuffer->addColorAttachment(outImage);
 
+    auto pipeline = device->createPipeline();
+    pipeline->setVertexShader("triangle.spv");
+    pipeline->setFragmentShader("color.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->beginRenderPass(frameBuffer);
+      command->bind(pipeline, frameBuffer);
+      command->draw(3);
+      command->endRenderPass();
+      command->endSingle();
+      queue->waitIdle();
+    }
+
     queue->transition(
       outImage,
       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -107,7 +120,7 @@ int main() {
       auto queue = device->createQueue(VK_QUEUE_GRAPHICS_BIT);
       if (device->init()) {
         testClearBuffer(device, queue);
-        //testDrawTriangle(device, queue);
+        testDrawTriangle(device, queue);
       }
     }
     instance.destroy();

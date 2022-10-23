@@ -68,18 +68,77 @@ void VulkanCommand::endSingle() {
 }
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
-  vkCmdBindPipeline(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipeline->getVkPipeline(layout));
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vkCmdBindPipeline(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline(layout)
+    );
 
-  auto descriptorSet = layout->getVkDescriptorSet();
-  auto pipelineLayout = pipeline->getVkPipelineLayout();
-  vkCmdBindDescriptorSets(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipelineLayout, 0, 1, &descriptorSet, 0, 0);
+    auto descriptorSet = layout->getVkDescriptorSet();
+    auto pipelineLayout = pipeline->getVkPipelineLayout();
+    vkCmdBindDescriptorSets(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipelineLayout,
+      0, 1,
+      &descriptorSet,
+      0, 0
+    );
+  }
 }
 
 void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
   if (mVkCommandBuffer != VK_NULL_HANDLE)
     vkCmdDispatch(mVkCommandBuffer, x, y, z);
+}
+
+void VulkanCommand::beginRenderPass(VulkanFrameBufferPtr frameBuffer) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vector<VkClearValue> clearValues(frameBuffer->getColorCount());
+    for (int i = 0; i < clearValues.size(); ++i) {
+      clearValues.at(i).color.float32[0] = 0.0f;
+      clearValues.at(i).color.float32[1] = 0.0f;
+      clearValues.at(i).color.float32[2] = 0.0f;
+      clearValues.at(i).color.float32[3] = 1.0f;
+    }
+
+    VkRenderPassBeginInfo renderPassInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
+    renderPassInfo.renderPass = frameBuffer->getVkRenderPass();
+    renderPassInfo.framebuffer = frameBuffer->getVkFramebuffer();
+    renderPassInfo.renderArea.offset = {0, 0};
+    renderPassInfo.renderArea.extent = frameBuffer->getExtent();
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    vkCmdBeginRenderPass(mVkCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+  }
+}
+
+void VulkanCommand::endRenderPass() {
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    vkCmdEndRenderPass(mVkCommandBuffer);
+}
+
+void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanFrameBufferPtr frameBuffer) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vkCmdBindPipeline(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_GRAPHICS,
+      pipeline->getVkPipeline(frameBuffer)
+    );
+  }
+}
+
+void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vkCmdDraw(
+      mVkCommandBuffer,
+      vertexCount,
+      instances,
+      0, 0
+    );
+  }
 }
 
 void VulkanCommand::transition(
