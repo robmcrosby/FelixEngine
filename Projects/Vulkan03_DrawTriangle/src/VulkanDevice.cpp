@@ -162,8 +162,8 @@ VulkanRenderPassPtr VulkanDevice::createRenderPass() {
   return renderPass;
 }
 
-VulkanShaderPtr VulkanDevice::createShader() {
-  VulkanShaderPtr shader = make_shared<VulkanShader>(this);
+VulkanShaderPtr VulkanDevice::createShader(VkShaderStageFlagBits stage) {
+  VulkanShaderPtr shader = make_shared<VulkanShader>(this, stage);
   return shader;
 }
 

@@ -67,23 +67,53 @@ void VulkanCommand::endSingle() {
   submit();
 }
 
-void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
-  vkCmdBindPipeline(
-    mVkCommandBuffer,
-    VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipeline->getVkPipeline(layout->getVkDescriptorSetLayout())
-  );
+void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vkCmdBindPipeline(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline()
+    );
+  }
+}
 
-  auto descriptorSet = layout->getVkDescriptorSet();
-  auto pipelineLayout = pipeline->getVkPipelineLayout();
-  vkCmdBindDescriptorSets(
-    mVkCommandBuffer,
-    VK_PIPELINE_BIND_POINT_COMPUTE,
-    pipelineLayout,
-    0, 1,
-    &descriptorSet,
-    0, 0
-  );
+void VulkanCommand::bind(VulkanSetLayoutPtr layout) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    auto descriptorSet = layout->getVkDescriptorSet();
+    auto pipelineLayout = layout->getVkPipelineLayout();
+    vkCmdBindDescriptorSets(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipelineLayout,
+      0, 1,
+      &descriptorSet,
+      0, 0
+    );
+  }
+}
+
+void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    VkDescriptorSetLayouts setLayouts;
+    setLayouts.push_back(layout->getVkDescriptorSetLayout());
+
+    vkCmdBindPipeline(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline(setLayouts)
+    );
+
+    auto descriptorSet = layout->getVkDescriptorSet();
+    auto pipelineLayout = pipeline->getVkPipelineLayout();
+    vkCmdBindDescriptorSets(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipelineLayout,
+      0, 1,
+      &descriptorSet,
+      0, 0
+    );
+  }
 }
 
 void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {

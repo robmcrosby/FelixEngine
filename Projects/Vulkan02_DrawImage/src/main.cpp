@@ -178,7 +178,9 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernal("desaturate.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      command->bind(pipeline, layout);
+      //command->bind(pipeline, layout);
+      command->bind(pipeline);
+      command->bind(layout);
       command->dispatch(width/32, height/32);
       command->endSingle();
       queue->waitIdle();

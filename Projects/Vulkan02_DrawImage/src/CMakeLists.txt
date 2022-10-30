@@ -5,6 +5,12 @@ project(VKDrawImage)
 set(CFLAGS "-std=c++17 -O2 -Wno-nullability-completeness")
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CFLAGS}")
 
+set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/")
+
+set(STB_DIR "${THIRD_PARTY_DIR}/STB/")
+set(VMA_DIR "${THIRD_PARTY_DIR}/VulkanMemoryAllocator/")
+set(SPV_DIR "${THIRD_PARTY_DIR}/SpirvReflect/")
+
 add_executable(${PROJECT_NAME}
   main.cpp
   VulkanInstance.cpp
@@ -16,11 +22,13 @@ add_executable(${PROJECT_NAME}
   VulkanPipeline.cpp
   VulkanQueue.cpp
   VulkanCommand.cpp
+  ${SPV_DIR}/spirv_reflect.c
 )
 
 target_include_directories(${PROJECT_NAME}
-  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/STB/"
-  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/VulkanMemoryAllocator/"
+  PRIVATE ${STB_DIR}
+  PRIVATE ${VMA_DIR}
+  PRIVATE ${SPV_DIR}
 )
 
 # Copy Images to Build Directory

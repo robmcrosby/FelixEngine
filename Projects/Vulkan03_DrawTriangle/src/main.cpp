@@ -34,7 +34,9 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernalShader("clearBuffer.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      command->bind(pipeline, layout);
+      //command->bind(pipeline, layout);
+      command->bind(pipeline);
+      command->bind(layout);
       command->dispatch((width * height) / 256);
       command->endSingle();
       queue->waitIdle();

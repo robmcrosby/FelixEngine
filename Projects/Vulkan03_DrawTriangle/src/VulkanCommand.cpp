@@ -67,6 +67,31 @@ void VulkanCommand::endSingle() {
   submit();
 }
 
+void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    vkCmdBindPipeline(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline()
+    );
+  }
+}
+
+void VulkanCommand::bind(VulkanSetLayoutPtr layout) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+    auto descriptorSet = layout->getVkDescriptorSet();
+    auto pipelineLayout = layout->getVkPipelineLayout();
+    vkCmdBindDescriptorSets(
+      mVkCommandBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipelineLayout,
+      0, 1,
+      &descriptorSet,
+      0, 0
+    );
+  }
+}
+
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     VkDescriptorSetLayouts setLayouts;

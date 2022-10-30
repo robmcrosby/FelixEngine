@@ -17,9 +17,20 @@ typedef const std::string& StringRef;
 typedef std::vector<uint32_t> SPIRVCode;
 typedef const SPIRVCode& SPIRVCodeRef;
 
-typedef std::vector<VkLayerProperties>       VulkanLayerProperties;
-typedef std::vector<VkExtensionProperties>   VulkanExtensionProperties;
-typedef std::vector<VkQueueFamilyProperties> VulkanQueueFamilies;
+typedef std::vector<VkLayerProperties>            VulkanLayerProperties;
+typedef std::vector<VkExtensionProperties>        VulkanExtensionProperties;
+typedef std::vector<VkQueueFamilyProperties>      VulkanQueueFamilies;
+typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
+typedef std::vector<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindings;
+
+
+struct LayoutBinding {
+  std::string name;
+  VkDescriptorSetLayoutBinding binding;
+};
+typedef std::vector<LayoutBinding>    LayoutBindingSet;
+typedef std::vector<LayoutBindingSet> LayoutBindingSets;
+
 
 class VulkanDevice;
 typedef std::shared_ptr<VulkanDevice> VulkanDevicePtr;
@@ -167,7 +178,7 @@ public:
   VulkanBufferPtr    createBuffer();
   VulkanImagePtr     createImage();
   VulkanSetLayoutPtr createSetLayout();
-  VulkanShaderPtr    createShader();
+  VulkanShaderPtr    createShader(VkShaderStageFlagBits stage);
   VulkanPipelinePtr  createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
@@ -275,6 +286,7 @@ private:
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
+  VkPipelineLayout      mVkPipelineLayout;
 
 public:
   VulkanSetLayout(VulkanDevice* device);
@@ -285,8 +297,9 @@ public:
   void update();
 
   VkDescriptorSetLayout getVkDescriptorSetLayout();
-  VkDescriptorPool getVkDescriptorPool();
-  VkDescriptorSet getVkDescriptorSet();
+  VkDescriptorPool      getVkDescriptorPool();
+  VkDescriptorSet       getVkDescriptorSet();
+  VkPipelineLayout      getVkPipelineLayout();
 
   void destroy();
 
@@ -294,17 +307,20 @@ private:
   void freeDescriptorSet();
   void destroyDescriptorPool();
   void destroyDescriptorSetLayout();
+  void destroyPipelineLayout();
 };
 
 
 class VulkanShader {
 private:
-  VulkanDevice*  mDevice;
-  VkShaderModule mVkShaderModule;
-  std::string    mEntryFunction;
+  VulkanDevice*         mDevice;
+  VkShaderModule        mVkShaderModule;
+  std::string           mEntryFunction;
+  LayoutBindingSets     mLayoutBindingSets;
+  VkShaderStageFlagBits mVkShaderStage;
 
 public:
-  VulkanShader(VulkanDevice* device);
+  VulkanShader(VulkanDevice* device, VkShaderStageFlagBits stage);
   ~VulkanShader();
 
   bool load(StringRef filename, StringRef entry = "main");
@@ -312,20 +328,26 @@ public:
 
   VkShaderModule getVkShaderModule() const {return mVkShaderModule;}
   CString getEntryFunction() const {return mEntryFunction.c_str();}
+  LayoutBindingSets& getLayoutBindingSets() {return mLayoutBindingSets;}
+
+  VkPipelineShaderStageCreateInfo getVkPipelineShaderStageCreateInfo();
 
   void destroy();
 
 private:
+  void reflect(SPIRVCodeRef code, StringRef entry);
   static bool readSPIRV(SPIRVCode& code, StringRef filename);
 };
 
 
 class VulkanPipeline {
 private:
-  VulkanDevice*    mDevice;
-  VkPipeline       mVkPipeline;
-  VkPipelineLayout mVkPipelineLayout;
-  VulkanShaderPtr  mKernal;
+  VulkanDevice*     mDevice;
+  VkPipeline        mVkPipeline;
+  VkPipelineLayout  mVkPipelineLayout;
+  VulkanShaderPtr   mKernal;
+
+  VkDescriptorSetLayouts mVkDescriptorSetLayouts;
 
 public:
   VulkanPipeline(VulkanDevice* device);
@@ -335,17 +357,25 @@ public:
   void setKernal(VulkanShaderPtr shader);
   void clearShaders();
 
-  VkPipeline getVkPipeline(VkDescriptorSetLayout setLayout);
-  VkPipeline getVkPipeline() const {return mVkPipeline;}
+  VkPipeline getVkPipeline();
+  VkPipeline getVkPipeline(VkDescriptorSetLayouts& setLayouts);
 
-  VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayout setLayout);
-  VkPipelineLayout getVkPipelineLayout() const {return mVkPipelineLayout;}
+  VkPipelineLayout getVkPipelineLayout();
+  VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts& setLayouts);
 
   void destroy();
 
 private:
   void destroyPipelineLayout();
   void destroyPipeline();
+
+  VkDescriptorSetLayouts& getVkDescriptorSetLayouts();
+  void clearVkDescriptorSetLayouts();
+
+  void getLayoutBindingSets(LayoutBindingSets& layoutBindingSets);
+
+  VkPipeline createVkPipeline(VkDescriptorSetLayouts& setLayouts);
+  VkPipelineLayout createVkPipelineLayout(VkDescriptorSetLayouts& setLayouts);
 };
 
 
@@ -375,8 +405,8 @@ public:
 
   void transition(
     VulkanImagePtr image,
-    VkImageLayout newImageLayout,
-    VkAccessFlags dstAccessMask,
+    VkImageLayout  newImageLayout,
+    VkAccessFlags  dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
   void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);
@@ -410,6 +440,8 @@ public:
   void submit();
   void endSingle();
 
+  void bind(VulkanPipelinePtr pipeline);
+  void bind(VulkanSetLayoutPtr layout);
   void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 

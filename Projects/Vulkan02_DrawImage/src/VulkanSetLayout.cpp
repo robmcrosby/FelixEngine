@@ -8,7 +8,8 @@ VulkanSetLayout::VulkanSetLayout(VulkanDevice* device):
   mDevice(device),
   mVkDescriptorSetLayout(VK_NULL_HANDLE),
   mVkDescriptorPool(VK_NULL_HANDLE),
-  mVkDescriptorSet(VK_NULL_HANDLE) {
+  mVkDescriptorSet(VK_NULL_HANDLE),
+  mVkPipelineLayout(VK_NULL_HANDLE) {
 
 }
 
@@ -80,7 +81,7 @@ void VulkanSetLayout::update() {
 
 VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
   if (mVkDescriptorSetLayout == VK_NULL_HANDLE) {
-    vector<VkDescriptorSetLayoutBinding> bindings;
+    VkDescriptorSetLayoutBindings bindings;
     for (auto buffer : mBufferLayoutBindings)
       bindings.push_back(buffer.binding);
     for (auto texture : mTextureLayoutBindings)
@@ -152,8 +153,27 @@ VkDescriptorSet VulkanSetLayout::getVkDescriptorSet() {
   return mVkDescriptorSet;
 }
 
+VkPipelineLayout VulkanSetLayout::getVkPipelineLayout() {
+  if (mVkPipelineLayout == VK_NULL_HANDLE) {
+    auto setLayout = getVkDescriptorSetLayout();
+    VkPipelineLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO, 0, 0};
+    createInfo.setLayoutCount = 1;
+    createInfo.pSetLayouts = &setLayout;
+    createInfo.pushConstantRangeCount = 0;
+    createInfo.pPushConstantRanges = nullptr;
+
+    VkDevice device = mDevice->getVkDevice();
+    if (vkCreatePipelineLayout(device, &createInfo, 0, &mVkPipelineLayout) != VK_SUCCESS) {
+      cerr << "Error creating Pipeline Layout" << endl;
+      mVkPipelineLayout = VK_NULL_HANDLE;
+    }
+  }
+  return mVkPipelineLayout;
+}
+
 void VulkanSetLayout::destroy() {
   freeDescriptorSet();
+  destroyPipelineLayout();
   destroyDescriptorPool();
   destroyDescriptorSetLayout();
   mBufferLayoutBindings.clear();
@@ -183,5 +203,13 @@ void VulkanSetLayout::destroyDescriptorSetLayout() {
     VkDevice device = mDevice->getVkDevice();
     vkDestroyDescriptorSetLayout(device, mVkDescriptorSetLayout, nullptr);
     mVkDescriptorSetLayout = VK_NULL_HANDLE;
+  }
+}
+
+void VulkanSetLayout::destroyPipelineLayout() {
+  if (mVkPipelineLayout != VK_NULL_HANDLE) {
+    VkDevice device = mDevice->getVkDevice();
+    vkDestroyPipelineLayout(device, mVkPipelineLayout, nullptr);
+    mVkPipelineLayout = VK_NULL_HANDLE;
   }
 }
