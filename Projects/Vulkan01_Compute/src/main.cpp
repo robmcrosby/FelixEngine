@@ -31,7 +31,7 @@ void runComputeTest(VulkanDevicePtr device, VulkanQueuePtr queue) {
     // Wirte to the device
     memcpy(inBuffer->data(), srcBuffer.data(), size);
 
-    auto layout = device->createSetLayout();
+    auto layout = device->createLayout();
     layout->setBuffer(inBuffer, 0);
     layout->setBuffer(outBuffer, 1);
     layout->update();

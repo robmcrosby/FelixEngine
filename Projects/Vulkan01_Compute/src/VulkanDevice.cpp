@@ -142,8 +142,8 @@ VulkanBufferPtr VulkanDevice::createBuffer() {
   return buffer;
 }
 
-VulkanSetLayoutPtr VulkanDevice::createSetLayout() {
-  VulkanSetLayoutPtr layout = make_shared<VulkanSetLayout>(this);
+VulkanLayoutPtr VulkanDevice::createLayout() {
+  VulkanLayoutPtr layout = make_shared<VulkanLayout>(this);
   return layout;
 }
 

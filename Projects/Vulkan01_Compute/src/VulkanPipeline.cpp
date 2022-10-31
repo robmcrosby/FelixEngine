@@ -40,7 +40,7 @@ void VulkanPipeline::clearShaders() {
   }
 }
 
-VkPipeline VulkanPipeline::getVkPipeline(VulkanSetLayoutPtr layout) {
+VkPipeline VulkanPipeline::getVkPipeline(VulkanLayoutPtr layout) {
   if (mVkPipeline == VK_NULL_HANDLE) {
     auto pipelineLayout = getVkPipelineLayout(layout);
     if (pipelineLayout != VK_NULL_HANDLE) {
@@ -66,7 +66,7 @@ VkPipeline VulkanPipeline::getVkPipeline(VulkanSetLayoutPtr layout) {
   return mVkPipeline;
 }
 
-VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VulkanSetLayoutPtr layout) {
+VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VulkanLayoutPtr layout) {
   if (mVkPipelineLayout == VK_NULL_HANDLE) {
     VkDescriptorSetLayout setLayout = layout->getVkDescriptorSetLayout();
     if (setLayout != VK_NULL_HANDLE) {

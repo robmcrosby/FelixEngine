@@ -46,7 +46,7 @@ void VulkanCommand::end() {
     vkEndCommandBuffer(mVkCommandBuffer);
 }
 
-void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
+void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutPtr layout) {
   vkCmdBindPipeline(mVkCommandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE,
     pipeline->getVkPipeline(layout));
 

@@ -4,7 +4,7 @@
 using namespace std;
 
 
-VulkanSetLayout::VulkanSetLayout(VulkanDevice* device):
+VulkanLayout::VulkanLayout(VulkanDevice* device):
   mDevice(device),
   mVkDescriptorSetLayout(VK_NULL_HANDLE),
   mVkDescriptorPool(VK_NULL_HANDLE),
@@ -12,11 +12,11 @@ VulkanSetLayout::VulkanSetLayout(VulkanDevice* device):
 
 }
 
-VulkanSetLayout::~VulkanSetLayout() {
+VulkanLayout::~VulkanLayout() {
   destroy();
 }
 
-void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
+void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   LayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
   layoutBinding.binding.binding = binding;
@@ -30,7 +30,7 @@ void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   mLayoutBindings.push_back(layoutBinding);
 }
 
-void VulkanSetLayout::update() {
+void VulkanLayout::update() {
   vector<VkWriteDescriptorSet> writeSets(mLayoutBindings.size());
   auto descriptorSet = getVkDescriptorSet();
 
@@ -51,7 +51,7 @@ void VulkanSetLayout::update() {
   vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeSets.size()), writeSets.data(), 0, 0);
 }
 
-VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
+VkDescriptorSetLayout VulkanLayout::getVkDescriptorSetLayout() {
   if (mVkDescriptorSetLayout == VK_NULL_HANDLE) {
     vector<VkDescriptorSetLayoutBinding> bindings;
     for (auto layoutBinding : mLayoutBindings)
@@ -70,7 +70,7 @@ VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
   return mVkDescriptorSetLayout;
 }
 
-VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
+VkDescriptorPool VulkanLayout::getVkDescriptorPool() {
   if (mVkDescriptorPool == VK_NULL_HANDLE) {
     VkDescriptorPoolSize poolSize = {};
     poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
@@ -91,7 +91,7 @@ VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
   return mVkDescriptorPool;
 }
 
-VkDescriptorSet VulkanSetLayout::getVkDescriptorSet() {
+VkDescriptorSet VulkanLayout::getVkDescriptorSet() {
   if (mVkDescriptorSet == VK_NULL_HANDLE) {
     auto layout = getVkDescriptorSetLayout();
     auto pool = getVkDescriptorPool();
@@ -111,14 +111,14 @@ VkDescriptorSet VulkanSetLayout::getVkDescriptorSet() {
   return mVkDescriptorSet;
 }
 
-void VulkanSetLayout::destroy() {
+void VulkanLayout::destroy() {
   freeDescriptorSet();
   destroyDescriptorPool();
   destroyDescriptorSetLayout();
   mLayoutBindings.clear();
 }
 
-void VulkanSetLayout::freeDescriptorSet() {
+void VulkanLayout::freeDescriptorSet() {
   if (mVkDescriptorSet != VK_NULL_HANDLE) {
     if (mVkDescriptorPool != VK_NULL_HANDLE) {
       VkDevice device = mDevice->getVkDevice();
@@ -128,7 +128,7 @@ void VulkanSetLayout::freeDescriptorSet() {
   }
 }
 
-void VulkanSetLayout::destroyDescriptorPool() {
+void VulkanLayout::destroyDescriptorPool() {
   if (mVkDescriptorPool != VK_NULL_HANDLE) {
     VkDevice device = mDevice->getVkDevice();
     vkDestroyDescriptorPool(device, mVkDescriptorPool, 0);
@@ -136,7 +136,7 @@ void VulkanSetLayout::destroyDescriptorPool() {
   }
 }
 
-void VulkanSetLayout::destroyDescriptorSetLayout() {
+void VulkanLayout::destroyDescriptorSetLayout() {
   if (mVkDescriptorSetLayout != VK_NULL_HANDLE) {
     VkDevice device = mDevice->getVkDevice();
     vkDestroyDescriptorSetLayout(device, mVkDescriptorSetLayout, nullptr);

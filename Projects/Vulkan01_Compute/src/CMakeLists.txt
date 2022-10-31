@@ -10,7 +10,7 @@ add_executable(${PROJECT_NAME}
   VulkanInstance.cpp
   VulkanDevice.cpp
   VulkanBuffer.cpp
-  VulkanSetLayout.cpp
+  VulkanLayout.cpp
   VulkanPipeline.cpp
   VulkanQueue.cpp
   VulkanCommand.cpp

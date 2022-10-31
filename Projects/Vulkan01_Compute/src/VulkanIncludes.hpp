@@ -28,8 +28,8 @@ typedef std::vector<VulkanDevicePtr> VulkanDevices;
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 
-class VulkanSetLayout;
-typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
+class VulkanLayout;
+typedef std::shared_ptr<VulkanLayout> VulkanLayoutPtr;
 
 class VulkanPipeline;
 typedef std::shared_ptr<VulkanPipeline> VulkanPipelinePtr;
@@ -151,9 +151,9 @@ public:
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
 
-  VulkanBufferPtr    createBuffer();
-  VulkanSetLayoutPtr createSetLayout();
-  VulkanPipelinePtr  createPipeline();
+  VulkanBufferPtr   createBuffer();
+  VulkanLayoutPtr   createLayout();
+  VulkanPipelinePtr createPipeline();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -199,7 +199,7 @@ public:
 };
 
 
-class VulkanSetLayout {
+class VulkanLayout {
 private:
   VulkanDevice*         mDevice;
   LayoutBindings        mLayoutBindings;
@@ -208,8 +208,8 @@ private:
   VkDescriptorSet       mVkDescriptorSet;
 
 public:
-  VulkanSetLayout(VulkanDevice* device);
-  ~VulkanSetLayout();
+  VulkanLayout(VulkanDevice* device);
+  ~VulkanLayout();
 
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
   void update();
@@ -243,10 +243,10 @@ public:
   bool setKernal(SPIRVCodeRef code, StringRef entry = "main");
   void clearShaders();
 
-  VkPipeline getVkPipeline(VulkanSetLayoutPtr layout);
+  VkPipeline getVkPipeline(VulkanLayoutPtr layout);
   VkPipeline getVkPipeline() const {return mVkPipeline;}
 
-  VkPipelineLayout getVkPipelineLayout(VulkanSetLayoutPtr layout);
+  VkPipelineLayout getVkPipelineLayout(VulkanLayoutPtr layout);
   VkPipelineLayout getVkPipelineLayout() const {return mVkPipelineLayout;}
 
   void destroy();
@@ -308,7 +308,7 @@ public:
   bool begin();
   void end();
 
-  void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
+  void bind(VulkanPipelinePtr pipeline, VulkanLayoutPtr layout);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 
   bool alloc();
