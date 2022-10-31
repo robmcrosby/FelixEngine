@@ -77,25 +77,26 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
   }
 }
 
-void VulkanCommand::bind(VulkanSetLayoutPtr layout) {
+void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
-    auto descriptorSet = layout->getVkDescriptorSet();
-    auto pipelineLayout = layout->getVkPipelineLayout();
+    VkDescriptorSets descriptorSets;
+    layoutSet->getVkDescriptorSets(descriptorSets);
     vkCmdBindDescriptorSets(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
-      pipelineLayout,
-      0, 1,
-      &descriptorSet,
+      layoutSet->getVkPipelineLayout(),
+      0,
+      static_cast<uint32_t>(descriptorSets.size()),
+      descriptorSets.data(),
       0, 0
     );
   }
 }
 
-void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) {
+void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSet) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     VkDescriptorSetLayouts setLayouts;
-    setLayouts.push_back(layout->getVkDescriptorSetLayout());
+    layoutSet->getVkDescriptorSetLayouts(setLayouts);
 
     vkCmdBindPipeline(
       mVkCommandBuffer,
@@ -103,14 +104,15 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout) 
       pipeline->getVkPipeline(setLayouts)
     );
 
-    auto descriptorSet = layout->getVkDescriptorSet();
-    auto pipelineLayout = pipeline->getVkPipelineLayout();
+    VkDescriptorSets descriptorSets;
+    layoutSet->getVkDescriptorSets(descriptorSets);
     vkCmdBindDescriptorSets(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
-      pipelineLayout,
-      0, 1,
-      &descriptorSet,
+      pipeline->getVkPipelineLayout(),
+      0,
+      static_cast<uint32_t>(descriptorSets.size()),
+      descriptorSets.data(),
       0, 0
     );
   }

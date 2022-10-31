@@ -20,6 +20,7 @@ typedef const SPIRVCode& SPIRVCodeRef;
 typedef std::vector<VkLayerProperties>            VulkanLayerProperties;
 typedef std::vector<VkExtensionProperties>        VulkanExtensionProperties;
 typedef std::vector<VkQueueFamilyProperties>      VulkanQueueFamilies;
+typedef std::vector<VkDescriptorSet>              VkDescriptorSets;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
 typedef std::vector<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindings;
 typedef std::vector<VkAttachmentReference>        VkAttachmentReferences;
@@ -46,8 +47,12 @@ class VulkanImage;
 typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
 typedef std::vector<VulkanImagePtr> VulkanImages;
 
-class VulkanSetLayout;
-typedef std::shared_ptr<VulkanSetLayout> VulkanSetLayoutPtr;
+class VulkanLayout;
+typedef std::shared_ptr<VulkanLayout> VulkanLayoutPtr;
+typedef std::vector<VulkanLayoutPtr> VulkanLayouts;
+
+class VulkanLayoutSet;
+typedef std::shared_ptr<VulkanLayoutSet> VulkanLayoutSetPtr;
 
 class VulkanFrameBuffer;
 typedef std::shared_ptr<VulkanFrameBuffer> VulkanFrameBufferPtr;
@@ -187,7 +192,8 @@ public:
 
   VulkanBufferPtr      createBuffer();
   VulkanImagePtr       createImage();
-  VulkanSetLayoutPtr   createSetLayout();
+  VulkanLayoutPtr      createLayout();
+  VulkanLayoutSetPtr   createLayoutSet();
   VulkanFrameBufferPtr createFrameBuffer();
   VulkanRenderPassPtr  createRenderPass();
   VulkanShaderPtr      createShader(VkShaderStageFlagBits stage);
@@ -294,7 +300,7 @@ private:
 };
 
 
-class VulkanSetLayout {
+class VulkanLayout {
 private:
   VulkanDevice*         mDevice;
   BufferLayoutBindings  mBufferLayoutBindings;
@@ -302,11 +308,10 @@ private:
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
   VkDescriptorSet       mVkDescriptorSet;
-  VkPipelineLayout      mVkPipelineLayout;
 
 public:
-  VulkanSetLayout(VulkanDevice* device);
-  ~VulkanSetLayout();
+  VulkanLayout(VulkanDevice* device);
+  ~VulkanLayout();
 
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
   void setTexture(VulkanImagePtr image, uint32_t binding);
@@ -315,7 +320,6 @@ public:
   VkDescriptorSetLayout getVkDescriptorSetLayout();
   VkDescriptorPool      getVkDescriptorPool();
   VkDescriptorSet       getVkDescriptorSet();
-  VkPipelineLayout      getVkPipelineLayout();
 
   void destroy();
 
@@ -323,6 +327,29 @@ private:
   void freeDescriptorSet();
   void destroyDescriptorPool();
   void destroyDescriptorSetLayout();
+};
+
+
+class VulkanLayoutSet {
+private:
+  VulkanDevice*    mDevice;
+  VulkanLayouts    mLayouts;
+  VkPipelineLayout mVkPipelineLayout;
+
+public:
+  VulkanLayoutSet(VulkanDevice* device);
+  ~VulkanLayoutSet();
+
+  VulkanLayoutPtr at(int index);
+
+  void getVkDescriptorSetLayouts(VkDescriptorSetLayouts& setLayouts);
+  void getVkDescriptorSets(VkDescriptorSets& descriptorSets);
+  VkPipelineLayout getVkPipelineLayout();
+
+  void destroy();
+
+private:
+  VkPipelineLayout createVkPipelineLayout(VkDescriptorSetLayouts& setLayouts);
   void destroyPipelineLayout();
 };
 
@@ -522,8 +549,8 @@ public:
   void endSingle();
 
   void bind(VulkanPipelinePtr pipeline);
-  void bind(VulkanSetLayoutPtr layout);
-  void bind(VulkanPipelinePtr pipeline, VulkanSetLayoutPtr layout);
+  void bind(VulkanLayoutSetPtr layoutSet);
+  void bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSet);
   void dispatch(uint32_t x, uint32_t y = 1, uint32_t z = 1);
 
   void beginRenderPass(VulkanRenderPassPtr renderPass);

@@ -26,7 +26,8 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size)) {
-    auto layout = device->createSetLayout();
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
     layout->setBuffer(outBuffer, 0);
     layout->update();
 
@@ -34,9 +35,9 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernalShader("clearBuffer.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      //command->bind(pipeline, layout);
+      //command->bind(pipeline, layoutSet);
       command->bind(pipeline);
-      command->bind(layout);
+      command->bind(layoutSet);
       command->dispatch((width * height) / 256);
       command->endSingle();
       queue->waitIdle();

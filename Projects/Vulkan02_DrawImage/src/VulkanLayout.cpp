@@ -4,20 +4,19 @@
 using namespace std;
 
 
-VulkanSetLayout::VulkanSetLayout(VulkanDevice* device):
+VulkanLayout::VulkanLayout(VulkanDevice* device):
   mDevice(device),
   mVkDescriptorSetLayout(VK_NULL_HANDLE),
   mVkDescriptorPool(VK_NULL_HANDLE),
-  mVkDescriptorSet(VK_NULL_HANDLE),
-  mVkPipelineLayout(VK_NULL_HANDLE) {
+  mVkDescriptorSet(VK_NULL_HANDLE) {
 
 }
 
-VulkanSetLayout::~VulkanSetLayout() {
+VulkanLayout::~VulkanLayout() {
   destroy();
 }
 
-void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
+void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
   layoutBinding.binding.binding = binding;
@@ -31,7 +30,7 @@ void VulkanSetLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   mBufferLayoutBindings.push_back(layoutBinding);
 }
 
-void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
+void VulkanLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   TextureLayoutBinding layoutBinding;
   layoutBinding.image = image;
   layoutBinding.binding.binding = binding;
@@ -45,7 +44,7 @@ void VulkanSetLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   mTextureLayoutBindings.push_back(layoutBinding);
 }
 
-void VulkanSetLayout::update() {
+void VulkanLayout::update() {
   auto descriptorSet = getVkDescriptorSet();
   vector<VkWriteDescriptorSet> writeSets;
 
@@ -79,7 +78,7 @@ void VulkanSetLayout::update() {
   vkUpdateDescriptorSets(device, static_cast<uint32_t>(writeSets.size()), writeSets.data(), 0, 0);
 }
 
-VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
+VkDescriptorSetLayout VulkanLayout::getVkDescriptorSetLayout() {
   if (mVkDescriptorSetLayout == VK_NULL_HANDLE) {
     VkDescriptorSetLayoutBindings bindings;
     for (auto buffer : mBufferLayoutBindings)
@@ -100,7 +99,7 @@ VkDescriptorSetLayout VulkanSetLayout::getVkDescriptorSetLayout() {
   return mVkDescriptorSetLayout;
 }
 
-VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
+VkDescriptorPool VulkanLayout::getVkDescriptorPool() {
   if (mVkDescriptorPool == VK_NULL_HANDLE) {
     vector<VkDescriptorPoolSize> poolSizes;
 
@@ -133,7 +132,7 @@ VkDescriptorPool VulkanSetLayout::getVkDescriptorPool() {
   return mVkDescriptorPool;
 }
 
-VkDescriptorSet VulkanSetLayout::getVkDescriptorSet() {
+VkDescriptorSet VulkanLayout::getVkDescriptorSet() {
   if (mVkDescriptorSet == VK_NULL_HANDLE) {
     auto layout = getVkDescriptorSetLayout();
     auto pool = getVkDescriptorPool();
@@ -153,34 +152,15 @@ VkDescriptorSet VulkanSetLayout::getVkDescriptorSet() {
   return mVkDescriptorSet;
 }
 
-VkPipelineLayout VulkanSetLayout::getVkPipelineLayout() {
-  if (mVkPipelineLayout == VK_NULL_HANDLE) {
-    auto setLayout = getVkDescriptorSetLayout();
-    VkPipelineLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO, 0, 0};
-    createInfo.setLayoutCount = 1;
-    createInfo.pSetLayouts = &setLayout;
-    createInfo.pushConstantRangeCount = 0;
-    createInfo.pPushConstantRanges = nullptr;
-
-    VkDevice device = mDevice->getVkDevice();
-    if (vkCreatePipelineLayout(device, &createInfo, 0, &mVkPipelineLayout) != VK_SUCCESS) {
-      cerr << "Error creating Pipeline Layout" << endl;
-      mVkPipelineLayout = VK_NULL_HANDLE;
-    }
-  }
-  return mVkPipelineLayout;
-}
-
-void VulkanSetLayout::destroy() {
+void VulkanLayout::destroy() {
   freeDescriptorSet();
-  destroyPipelineLayout();
   destroyDescriptorPool();
   destroyDescriptorSetLayout();
   mBufferLayoutBindings.clear();
   mTextureLayoutBindings.clear();
 }
 
-void VulkanSetLayout::freeDescriptorSet() {
+void VulkanLayout::freeDescriptorSet() {
   if (mVkDescriptorSet != VK_NULL_HANDLE) {
     if (mVkDescriptorPool != VK_NULL_HANDLE) {
       VkDevice device = mDevice->getVkDevice();
@@ -190,7 +170,7 @@ void VulkanSetLayout::freeDescriptorSet() {
   }
 }
 
-void VulkanSetLayout::destroyDescriptorPool() {
+void VulkanLayout::destroyDescriptorPool() {
   if (mVkDescriptorPool != VK_NULL_HANDLE) {
     VkDevice device = mDevice->getVkDevice();
     vkDestroyDescriptorPool(device, mVkDescriptorPool, 0);
@@ -198,18 +178,10 @@ void VulkanSetLayout::destroyDescriptorPool() {
   }
 }
 
-void VulkanSetLayout::destroyDescriptorSetLayout() {
+void VulkanLayout::destroyDescriptorSetLayout() {
   if (mVkDescriptorSetLayout != VK_NULL_HANDLE) {
     VkDevice device = mDevice->getVkDevice();
     vkDestroyDescriptorSetLayout(device, mVkDescriptorSetLayout, nullptr);
     mVkDescriptorSetLayout = VK_NULL_HANDLE;
-  }
-}
-
-void VulkanSetLayout::destroyPipelineLayout() {
-  if (mVkPipelineLayout != VK_NULL_HANDLE) {
-    VkDevice device = mDevice->getVkDevice();
-    vkDestroyPipelineLayout(device, mVkPipelineLayout, nullptr);
-    mVkPipelineLayout = VK_NULL_HANDLE;
   }
 }

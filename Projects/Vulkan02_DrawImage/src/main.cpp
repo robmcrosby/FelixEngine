@@ -26,7 +26,8 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   VkDeviceSize size = width * height * channels;
   if (outBuffer->alloc(size)) {
-    auto layout = device->createSetLayout();
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
     layout->setBuffer(outBuffer, 0);
     layout->update();
 
@@ -34,7 +35,7 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernal("clearBuffer.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      command->bind(pipeline, layout);
+      command->bind(pipeline, layoutSet);
       command->dispatch((width * height) / 256);
       command->endSingle();
       queue->waitIdle();
@@ -80,7 +81,8 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
       VK_PIPELINE_STAGE_TRANSFER_BIT
     );
 
-    auto layout = device->createSetLayout();
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
     layout->setTexture(outImage, 0);
     layout->update();
 
@@ -88,7 +90,7 @@ void testClearTexture(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernal("clearTexture.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      command->bind(pipeline, layout);
+      command->bind(pipeline, layoutSet);
       command->dispatch(width/32, height/32);
       command->endSingle();
       queue->waitIdle();
@@ -169,7 +171,8 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
       VK_PIPELINE_STAGE_TRANSFER_BIT
     );
 
-    auto layout = device->createSetLayout();
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
     layout->setTexture(inImage, 0);
     layout->setTexture(outImage, 1);
     layout->update();
@@ -178,9 +181,9 @@ void testDesaturate(VulkanDevicePtr device, VulkanQueuePtr queue) {
     pipeline->setKernal("desaturate.spv");
 
     if (auto command = queue->beginSingleCommand()) {
-      //command->bind(pipeline, layout);
+      //command->bind(pipeline, layoutSet);
       command->bind(pipeline);
-      command->bind(layout);
+      command->bind(layoutSet);
       command->dispatch(width/32, height/32);
       command->endSingle();
       queue->waitIdle();
