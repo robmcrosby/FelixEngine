@@ -46,9 +46,12 @@ VkPipeline VulkanPipeline::getVkPipeline(VkDescriptorSetLayouts setLayouts) {
   return mVkPipeline;
 }
 
-VkPipeline VulkanPipeline::getVkPipeline(VulkanRenderPassPtr renderPass) {
+VkPipeline VulkanPipeline::getVkPipeline(
+  VulkanRenderPassPtr renderPass,
+  VulkanMeshPtr mesh
+) {
   if (mVkPipeline == VK_NULL_HANDLE)
-    mVkPipeline = createGraphicsPipeline(renderPass);
+    mVkPipeline = createGraphicsPipeline(renderPass, mesh);
   return mVkPipeline;
 }
 
@@ -62,7 +65,10 @@ VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VkDescriptorSetLayouts setL
   return mVkPipelineLayout;
 }
 
-VkPipeline VulkanPipeline::createGraphicsPipeline(VulkanRenderPassPtr renderPass) {
+VkPipeline VulkanPipeline::createGraphicsPipeline(
+  VulkanRenderPassPtr renderPass,
+  VulkanMeshPtr mesh
+) {
   VkPipeline pipeline = VK_NULL_HANDLE;
   VkDescriptorSetLayouts setLayouts;
   auto pipelineLayout = getVkPipelineLayout(setLayouts);
@@ -74,14 +80,23 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(VulkanRenderPassPtr renderPass
     auto fragmentStage = mFragmentShader->getVkPipelineShaderStageCreateInfo();
     VkPipelineShaderStageCreateInfo shaderStages[] = {vertexStage, fragmentStage};
 
+    VkVertexInputBindingDescriptions   vertexBindings;
+    VkVertexInputAttributeDescriptions vertexAttributes;
+    VkPrimitiveTopology primitiveTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    if (mesh != nullptr) {
+      mesh->getVertexBindings(vertexBindings);
+      mesh->getVertexAttributes(vertexAttributes);
+      primitiveTopology = mesh->getVkPrimitiveTopology();
+    }
+
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO};
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+    vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(vertexBindings.size());
+    vertexInputInfo.pVertexBindingDescriptions = vertexBindings.data();
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(vertexAttributes.size());
+    vertexInputInfo.pVertexAttributeDescriptions = vertexAttributes.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO};
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    inputAssembly.topology = primitiveTopology;
     inputAssembly.primitiveRestartEnable = VK_FALSE;
 
     VkPipelineViewportStateCreateInfo viewportState{VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO};

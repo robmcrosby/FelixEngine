@@ -26,6 +26,11 @@ typedef std::vector<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindings;
 typedef std::vector<VkAttachmentReference>        VkAttachmentReferences;
 typedef std::vector<VkAttachmentDescription>      VkAttachmentDescriptions;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
+typedef std::vector<VkBuffer>                     VkBuffers;
+typedef std::vector<VkDeviceSize>                 VkDeviceSizes;
+
+typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
+typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;
 
 
 struct LayoutBinding {
@@ -34,6 +39,12 @@ struct LayoutBinding {
 };
 typedef std::vector<LayoutBinding>    LayoutBindingSet;
 typedef std::vector<LayoutBindingSet> LayoutBindingSets;
+
+
+struct VertexAttribute {
+  VkVertexInputAttributeDescription description;
+};
+typedef std::vector<VertexAttribute> VertexAttributes;
 
 
 class VulkanDevice;
@@ -53,6 +64,9 @@ typedef std::vector<VulkanLayoutPtr> VulkanLayouts;
 
 class VulkanLayoutSet;
 typedef std::shared_ptr<VulkanLayoutSet> VulkanLayoutSetPtr;
+
+class VulkanMesh;
+typedef std::shared_ptr<VulkanMesh> VulkanMeshPtr;
 
 class VulkanFrameBuffer;
 typedef std::shared_ptr<VulkanFrameBuffer> VulkanFrameBufferPtr;
@@ -194,6 +208,7 @@ public:
   VulkanImagePtr       createImage();
   VulkanLayoutPtr      createLayout();
   VulkanLayoutSetPtr   createLayoutSet();
+  VulkanMeshPtr        createMesh();
   VulkanFrameBufferPtr createFrameBuffer();
   VulkanRenderPassPtr  createRenderPass();
   VulkanShaderPtr      createShader(VkShaderStageFlagBits stage);
@@ -354,6 +369,45 @@ private:
 };
 
 
+struct VertexBuffer {
+  VulkanBufferPtr buffer;
+  VkDeviceSize    offset;
+  VkVertexInputBindingDescription description;
+  VkVertexInputAttributeDescriptions attributes;
+};
+typedef std::vector<VertexBuffer> VertexBuffers;
+
+
+class VulkanMesh {
+private:
+  VulkanDevice*    mDevice;
+  VertexBuffers    mVertexBuffers;
+  VertexAttributes mVertexAttributes;
+  uint32_t         mVertexCount;
+  VkPrimitiveTopology mPrimitiveTopology;
+
+public:
+  VulkanMesh(VulkanDevice* device);
+  ~VulkanMesh();
+
+  bool addBuffer(const std::vector<float>& vertices, int vertexSize);
+  void addAttribute(int buffer, int location, int size, int offset);
+  void setTopology(VkPrimitiveTopology topology) {mPrimitiveTopology = topology;}
+
+  void getVertexBindings(VkVertexInputBindingDescriptions& bindings);
+  void getVertexAttributes(VkVertexInputAttributeDescriptions& attributes);
+  VkPrimitiveTopology getVkPrimitiveTopology() const {return mPrimitiveTopology;}
+
+  void getVertexBufferOffsets(VkDeviceSizes& offsets);
+  void getVertexBuffers(VkBuffers& buffers);
+
+  void destroy();
+
+private:
+  VkFormat getVertexFormat(int size);
+};
+
+
 class VulkanFrameBuffer {
 private:
   VulkanDevice* mDevice;
@@ -464,7 +518,7 @@ public:
 
   VkPipeline getVkPipeline();
   VkPipeline getVkPipeline(VkDescriptorSetLayouts setLayouts);
-  VkPipeline getVkPipeline(VulkanRenderPassPtr renderPass);
+  VkPipeline getVkPipeline(VulkanRenderPassPtr renderPass, VulkanMeshPtr mesh);
 
   VkPipelineLayout getVkPipelineLayout();
   VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts setLayouts);
@@ -473,7 +527,7 @@ public:
 
 private:
   VkPipeline createComputePipeline(VkDescriptorSetLayouts setLayouts);
-  VkPipeline createGraphicsPipeline(VulkanRenderPassPtr renderPass);
+  VkPipeline createGraphicsPipeline(VulkanRenderPassPtr renderPass, VulkanMeshPtr mesh);
 
   VkDescriptorSetLayouts& getVkDescriptorSetLayouts();
   void clearVkDescriptorSetLayouts();
@@ -556,13 +610,17 @@ public:
   void beginRenderPass(VulkanRenderPassPtr renderPass);
   void endRenderPass();
 
-  void bind(VulkanPipelinePtr pipeline, VulkanRenderPassPtr renderPass);
+  void bind(
+    VulkanPipelinePtr   pipeline,
+    VulkanRenderPassPtr renderPass,
+    VulkanMeshPtr       mesh = nullptr
+  );
   void draw(uint32_t vertexCount, uint32_t instances = 1);
 
   void transition(
     VulkanImagePtr image,
-    VkImageLayout newImageLayout,
-    VkAccessFlags dstAccessMask,
+    VkImageLayout  newImageLayout,
+    VkAccessFlags  dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
   void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);

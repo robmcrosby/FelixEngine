@@ -157,6 +157,11 @@ VulkanLayoutSetPtr VulkanDevice::createLayoutSet() {
   return layoutSet;
 }
 
+VulkanMeshPtr VulkanDevice::createMesh() {
+  VulkanMeshPtr mesh = make_shared<VulkanMesh>(this);
+  return mesh;
+}
+
 VulkanFrameBufferPtr VulkanDevice::createFrameBuffer() {
   VulkanFrameBufferPtr frameBuffer = make_shared<VulkanFrameBuffer>(this);
   return frameBuffer;

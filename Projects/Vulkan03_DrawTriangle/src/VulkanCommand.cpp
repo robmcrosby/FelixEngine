@@ -150,13 +150,30 @@ void VulkanCommand::endRenderPass() {
     vkCmdEndRenderPass(mVkCommandBuffer);
 }
 
-void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanRenderPassPtr renderPass) {
+void VulkanCommand::bind(
+  VulkanPipelinePtr pipeline,
+  VulkanRenderPassPtr renderPass,
+  VulkanMeshPtr mesh
+) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_GRAPHICS,
-      pipeline->getVkPipeline(renderPass)
+      pipeline->getVkPipeline(renderPass, mesh)
     );
+
+    if (mesh != nullptr) {
+      VkDeviceSizes offsets;
+      VkBuffers     buffers;
+      mesh->getVertexBufferOffsets(offsets);
+      mesh->getVertexBuffers(buffers);
+
+	    vkCmdBindVertexBuffers(
+        mVkCommandBuffer,
+        0, static_cast<uint32_t>(buffers.size()),
+        buffers.data(), offsets.data()
+      );
+    }
   }
 }
 
