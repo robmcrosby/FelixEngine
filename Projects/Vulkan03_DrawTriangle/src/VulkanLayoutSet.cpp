@@ -40,6 +40,7 @@ VkPipelineLayout VulkanLayoutSet::getVkPipelineLayout() {
 }
 
 void VulkanLayoutSet::destroy() {
+  destroyPipelineLayout();
   mLayouts.clear();
 }
 
