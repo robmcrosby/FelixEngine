@@ -15,7 +15,7 @@ VulkanMesh::~VulkanMesh() {
   destroy();
 }
 
-bool VulkanMesh::addBuffer(const vector<float>& vertices, int vertexSize) {
+bool VulkanMesh::addBuffer(VulkanQueuePtr queue, const vector<float>& vertices, int vertexSize) {
   mVertexCount = static_cast<uint32_t>(vertices.size() / vertexSize);
 
   VertexBuffer vertexBuffer;
@@ -40,7 +40,20 @@ bool VulkanMesh::addBuffer(const vector<float>& vertices, int vertexSize) {
     return false;
   }
 
-  memcpy(vertexBuffer.buffer->data(), vertices.data(), size);
+  if (vertexBuffer.buffer->isHostVisible())
+   memcpy(vertexBuffer.buffer->data(), vertices.data(), size);
+  else {
+    auto staging = mDevice->createBuffer();
+    staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    staging->setCreateFlags(
+      VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+      VMA_ALLOCATION_CREATE_MAPPED_BIT
+    );
+    if (staging->alloc(size)) {
+      memcpy(staging->data(), vertices.data(), size);
+      queue->copyBufferToBuffer(staging, vertexBuffer.buffer);
+    }
+  }
 
   mVertexBuffers.push_back(vertexBuffer);
   return true;

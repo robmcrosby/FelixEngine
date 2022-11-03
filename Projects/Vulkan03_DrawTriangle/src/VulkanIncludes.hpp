@@ -41,12 +41,6 @@ typedef std::vector<LayoutBinding>    LayoutBindingSet;
 typedef std::vector<LayoutBindingSet> LayoutBindingSets;
 
 
-struct VertexAttribute {
-  VkVertexInputAttributeDescription description;
-};
-typedef std::vector<VertexAttribute> VertexAttributes;
-
-
 class VulkanDevice;
 typedef std::shared_ptr<VulkanDevice> VulkanDevicePtr;
 typedef std::vector<VulkanDevicePtr> VulkanDevices;
@@ -236,6 +230,7 @@ private:
   VulkanDevice* mDevice;
   VkBuffer      mVkBuffer;
   VmaAllocation mVmaAllocation;
+  VkDeviceSize  mSize;
 
   VkBufferUsageFlags        mVkBufferUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
@@ -251,9 +246,15 @@ public:
   bool alloc(VkDeviceSize size);
   void destroy();
 
+  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
+
   VkBuffer getVkBuffer() const {return mVkBuffer;}
 
   VmaAllocationInfo getVmaAllocationInfo() const;
+  VkMemoryPropertyFlags getVkMemoryPropertyFlags() const;
+
+  bool isHostVisible() const;
+
   void* data();
 };
 
@@ -380,17 +381,16 @@ typedef std::vector<VertexBuffer> VertexBuffers;
 
 class VulkanMesh {
 private:
-  VulkanDevice*    mDevice;
-  VertexBuffers    mVertexBuffers;
-  VertexAttributes mVertexAttributes;
-  uint32_t         mVertexCount;
+  VulkanDevice* mDevice;
+  VertexBuffers mVertexBuffers;
+  uint32_t      mVertexCount;
   VkPrimitiveTopology mPrimitiveTopology;
 
 public:
   VulkanMesh(VulkanDevice* device);
   ~VulkanMesh();
 
-  bool addBuffer(const std::vector<float>& vertices, int vertexSize);
+  bool addBuffer(VulkanQueuePtr queue, const std::vector<float>& vertices, int vertexSize);
   void addAttribute(int buffer, int location, int size, int offset);
   void setTopology(VkPrimitiveTopology topology) {mPrimitiveTopology = topology;}
 
@@ -573,6 +573,7 @@ public:
   );
   void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
+  void copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst);
 
   VulkanCommandPtr createCommand();
   VulkanCommandPtr beginSingleCommand();
@@ -625,6 +626,7 @@ public:
   );
   void copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image);
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
+  void copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst);
 
   bool alloc();
   void free();

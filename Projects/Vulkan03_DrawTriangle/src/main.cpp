@@ -161,7 +161,7 @@ void testDrawRectangle(VulkanDevicePtr device, VulkanQueuePtr queue) {
     renderPass->setFramebuffer(framebuffer);
 
     auto mesh = device->createMesh();
-    mesh->addBuffer(rectVerts, 5);
+    mesh->addBuffer(queue, rectVerts, 5);
     mesh->addAttribute(0, 0, 2, 0);
     mesh->addAttribute(0, 1, 3, 2);
     mesh->setTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);

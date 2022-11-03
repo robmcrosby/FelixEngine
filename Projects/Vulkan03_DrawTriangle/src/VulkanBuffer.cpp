@@ -42,6 +42,7 @@ bool VulkanBuffer::alloc(VkDeviceSize size) {
   allocInfo.usage = mVmaMemoryUsage;
   allocInfo.flags = mVmaCreateFlags;
 
+  mSize = size;
   VmaAllocationInfo info;
   return vmaCreateBuffer(allocator, &bufferInfo, &allocInfo, &mVkBuffer, &mVmaAllocation, &info) == VK_SUCCESS;
 }
@@ -54,16 +55,36 @@ void VulkanBuffer::destroy() {
   }
 }
 
+void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer) {
+  auto dstBuffer = buffer->getVkBuffer();
+  if (dstBuffer != VK_NULL_HANDLE && mVkBuffer != VK_NULL_HANDLE) {
+    VkBufferCopy bufferCopy = {0, 0, mSize};
+    vkCmdCopyBuffer(commandBuffer, mVkBuffer, dstBuffer, 1, &bufferCopy);
+  }
+}
+
 VmaAllocationInfo VulkanBuffer::getVmaAllocationInfo() const {
   VmaAllocationInfo info;
   if (mVkBuffer != VK_NULL_HANDLE) {
     VmaAllocator allocator = mDevice->getVmaAllocator();
     vmaGetAllocationInfo(allocator, mVmaAllocation, &info);
   }
-  else {
+  else
     cerr << "Error: VmaAllocationInfo not avalible for empty VulkanBuffer" << endl;
-  }
   return info;
+}
+
+VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags() const {
+  VkMemoryPropertyFlags flags = 0;
+  if (mVkBuffer != VK_NULL_HANDLE) {
+    VmaAllocator allocator = mDevice->getVmaAllocator();
+    vmaGetAllocationMemoryProperties(allocator, mVmaAllocation, &flags);
+  }
+  return flags;
+}
+
+bool VulkanBuffer::isHostVisible() const {
+  return getVkMemoryPropertyFlags() & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 }
 
 void* VulkanBuffer::data() {

@@ -65,6 +65,14 @@ void VulkanQueue::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer
   }
 }
 
+void VulkanQueue::copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst) {
+  if (auto command = beginSingleCommand()) {
+    command->copyBufferToBuffer(src, dst);
+    command->endSingle();
+    waitIdle();
+  }
+}
+
 VulkanCommandPtr VulkanQueue::createCommand() {
   if (mVkQueue != VK_NULL_HANDLE) {
     VulkanCommandPtr command = make_shared<VulkanCommand>(this);

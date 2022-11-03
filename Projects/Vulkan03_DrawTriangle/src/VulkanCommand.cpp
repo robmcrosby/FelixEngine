@@ -194,15 +194,23 @@ void VulkanCommand::transition(
   VkAccessFlags  dstAccessMask,
   VkPipelineStageFlags dstStageMask
 ) {
-  image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
 }
 
 void VulkanCommand::copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image) {
-  image->copyFromBuffer(mVkCommandBuffer, buffer);
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    image->copyFromBuffer(mVkCommandBuffer, buffer);
 }
 
 void VulkanCommand::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
-  image->copyToBuffer(mVkCommandBuffer, buffer);
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    image->copyToBuffer(mVkCommandBuffer, buffer);
+}
+
+void VulkanCommand::copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE)
+    src->copyToBuffer(mVkCommandBuffer, dst);
 }
 
 void VulkanCommand::free() {
