@@ -30,8 +30,6 @@ void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanBufferP
 
   if (auto command = queue->beginSingleCommand()) {
     command->bind(pipeline, layoutSet);
-    //command->bind(pipeline);
-    //command->bind(layoutSet);
     command->dispatch(buffer->size() / (4 * 256));
     command->endSingle();
     queue->waitIdle();
@@ -98,7 +96,6 @@ void testDrawRectangleIndexed(VulkanDevicePtr device, VulkanQueuePtr queue, Vulk
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 3, 2);
   mesh->setIndexBuffer(queue, rectIndices);
-  //mesh->setTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
 
   auto pipeline = device->createPipeline();
   pipeline->setVertexShader("vertexColor.spv");
@@ -108,6 +105,33 @@ void testDrawRectangleIndexed(VulkanDevicePtr device, VulkanQueuePtr queue, Vulk
     command->beginRenderPass(renderPass);
     command->bind(pipeline, renderPass, mesh);
     command->draw(mesh);
+    command->endRenderPass();
+    command->endSingle();
+    queue->waitIdle();
+  }
+}
+
+void testDrawRectangleInstanced(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
+  auto framebuffer = device->createFrameBuffer();
+  framebuffer->addColorAttachment(image);
+
+  auto renderPass = device->createRenderPass();
+  renderPass->setFramebuffer(framebuffer);
+
+  auto mesh = device->createMesh();
+  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addAttribute(0, 0, 2, 0);
+  mesh->addAttribute(0, 1, 3, 2);
+  mesh->setIndexBuffer(queue, rectIndices);
+
+  auto pipeline = device->createPipeline();
+  pipeline->setVertexShader("vertexInstanced.spv");
+  pipeline->setFragmentShader("color.spv");
+
+  if (auto command = queue->beginSingleCommand()) {
+    command->beginRenderPass(renderPass);
+    command->bind(pipeline, renderPass, mesh);
+    command->draw(mesh, 4);
     command->endRenderPass();
     command->endSingle();
     queue->waitIdle();
@@ -172,6 +196,11 @@ void runDrawTests(VulkanDevicePtr device, VulkanQueuePtr queue) {
     testDrawRectangleIndexed(device, queue, image);
     copyImageToBuffer(queue, image, buffer);
     stbi_write_png("ResultRectangleIndexed.png", width, height, channels, buffer->data(), width * channels);
+
+    transitionImageToRender(queue, image);
+    testDrawRectangleInstanced(device, queue, image);
+    copyImageToBuffer(queue, image, buffer);
+    stbi_write_png("ResultRectangleInstanced.png", width, height, channels, buffer->data(), width * channels);
   }
 }
 
