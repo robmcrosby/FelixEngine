@@ -9,7 +9,8 @@ VulkanBuffer::VulkanBuffer(VulkanDevice* device):
   mVkBuffer(VK_NULL_HANDLE),
   mVkBufferUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
-  mVmaCreateFlags(0) {
+  mVmaCreateFlags(0),
+  mSize(0) {
 
 }
 

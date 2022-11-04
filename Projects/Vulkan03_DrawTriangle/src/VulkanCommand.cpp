@@ -188,6 +188,10 @@ void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
   }
 }
 
+void VulkanCommand::draw(VulkanMeshPtr mesh, uint32_t instances) {
+  draw(mesh->getVertexCount(), instances);
+}
+
 void VulkanCommand::transition(
   VulkanImagePtr image,
   VkImageLayout  newImageLayout,

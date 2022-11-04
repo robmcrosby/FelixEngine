@@ -256,6 +256,7 @@ public:
   bool isHostVisible() const;
 
   void* data();
+  VkDeviceSize size() const {return mSize;}
 };
 
 
@@ -294,8 +295,10 @@ public:
   VmaAllocationInfo getVmaAllocationInfo() const;
   void* data();
 
-  uint32_t getWidth() const {return mWidth;}
-  uint32_t getHeight() const {return mHeight;}
+  VkDeviceSize formatSize() const;
+  VkDeviceSize size() const {return mWidth * mHeight * formatSize();}
+  uint32_t width() const {return mWidth;}
+  uint32_t height() const {return mHeight;}
 
   void transition(
     VkCommandBuffer commandBuffer,
@@ -397,6 +400,7 @@ public:
   void getVertexBindings(VkVertexInputBindingDescriptions& bindings);
   void getVertexAttributes(VkVertexInputAttributeDescriptions& attributes);
   VkPrimitiveTopology getVkPrimitiveTopology() const {return mPrimitiveTopology;}
+  uint32_t getVertexCount() const {return mVertexCount;}
 
   void getVertexBufferOffsets(VkDeviceSizes& offsets);
   void getVertexBuffers(VkBuffers& buffers);
@@ -617,6 +621,7 @@ public:
     VulkanMeshPtr       mesh = nullptr
   );
   void draw(uint32_t vertexCount, uint32_t instances = 1);
+  void draw(VulkanMeshPtr mesh, uint32_t instances = 1);
 
   void transition(
     VulkanImagePtr image,

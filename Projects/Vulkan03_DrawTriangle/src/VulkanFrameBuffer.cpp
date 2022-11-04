@@ -16,8 +16,8 @@ VulkanFrameBuffer::~VulkanFrameBuffer() {
 }
 
 void VulkanFrameBuffer::addColorAttachment(VulkanImagePtr image) {
-  mExtent.width  = image->getWidth();
-  mExtent.height = image->getHeight();
+  mExtent.width  = image->width();
+  mExtent.height = image->height();
   mColorAttachments.push_back(image);
 }
 

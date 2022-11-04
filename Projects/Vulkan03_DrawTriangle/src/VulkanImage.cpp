@@ -101,6 +101,12 @@ void* VulkanImage::data() {
   return info.pMappedData;
 }
 
+VkDeviceSize VulkanImage::formatSize() const {
+  if (mVkFormat == VK_FORMAT_R8G8B8A8_UNORM)
+    return 4;
+  return 1;
+}
+
 void VulkanImage::transition(
   VkCommandBuffer commandBuffer,
   VkImageLayout   newImageLayout,
