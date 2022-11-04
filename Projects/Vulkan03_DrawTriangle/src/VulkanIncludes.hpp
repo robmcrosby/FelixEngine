@@ -384,9 +384,11 @@ typedef std::vector<VertexBuffer> VertexBuffers;
 
 class VulkanMesh {
 private:
-  VulkanDevice* mDevice;
-  VertexBuffers mVertexBuffers;
-  uint32_t      mVertexCount;
+  VulkanDevice*   mDevice;
+  VertexBuffers   mVertexBuffers;
+  VulkanBufferPtr mIndexBuffer;
+  uint32_t        mVertexCount;
+  uint32_t        mIndexCount;
   VkPrimitiveTopology mPrimitiveTopology;
 
 public:
@@ -395,12 +397,16 @@ public:
 
   bool addBuffer(VulkanQueuePtr queue, const std::vector<float>& vertices, int vertexSize);
   void addAttribute(int buffer, int location, int size, int offset);
+  bool setIndexBuffer(VulkanQueuePtr queue, const std::vector<uint32_t>& indices);
   void setTopology(VkPrimitiveTopology topology) {mPrimitiveTopology = topology;}
 
   void getVertexBindings(VkVertexInputBindingDescriptions& bindings);
   void getVertexAttributes(VkVertexInputAttributeDescriptions& attributes);
   VkPrimitiveTopology getVkPrimitiveTopology() const {return mPrimitiveTopology;}
+
   uint32_t getVertexCount() const {return mVertexCount;}
+  uint32_t getIndexCount() const {return mIndexCount;}
+  VulkanBufferPtr getIndexBuffer() {return mIndexBuffer;}
 
   void getVertexBufferOffsets(VkDeviceSizes& offsets);
   void getVertexBuffers(VkBuffers& buffers);
@@ -621,6 +627,7 @@ public:
     VulkanMeshPtr       mesh = nullptr
   );
   void draw(uint32_t vertexCount, uint32_t instances = 1);
+  void draw(VulkanBufferPtr indexBuffer, uint32_t instances = 1);
   void draw(VulkanMeshPtr mesh, uint32_t instances = 1);
 
   void transition(

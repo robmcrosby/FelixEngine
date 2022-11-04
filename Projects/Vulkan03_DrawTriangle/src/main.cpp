@@ -15,6 +15,9 @@ const vector<float> rectVerts = {
    0.5f, -0.5f,   0.0f, 1.0f, 0.0f,
    0.5f,  0.5f,   0.0f, 0.0f, 1.0f
 };
+const vector<uint32_t> rectIndices = {
+  1, 0, 3, 2, 0, 3
+};
 
 void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanBufferPtr buffer) {
   auto layoutSet = device->createLayoutSet();
@@ -56,7 +59,7 @@ void testDrawTriangle(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImageP
   }
 }
 
-void testDrawRectangle(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
+void testDrawRectangleStrip(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
   auto framebuffer = device->createFrameBuffer();
   framebuffer->addColorAttachment(image);
 
@@ -68,6 +71,34 @@ void testDrawRectangle(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImage
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 3, 2);
   mesh->setTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
+
+  auto pipeline = device->createPipeline();
+  pipeline->setVertexShader("vertexColor.spv");
+  pipeline->setFragmentShader("color.spv");
+
+  if (auto command = queue->beginSingleCommand()) {
+    command->beginRenderPass(renderPass);
+    command->bind(pipeline, renderPass, mesh);
+    command->draw(mesh);
+    command->endRenderPass();
+    command->endSingle();
+    queue->waitIdle();
+  }
+}
+
+void testDrawRectangleIndexed(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
+  auto framebuffer = device->createFrameBuffer();
+  framebuffer->addColorAttachment(image);
+
+  auto renderPass = device->createRenderPass();
+  renderPass->setFramebuffer(framebuffer);
+
+  auto mesh = device->createMesh();
+  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addAttribute(0, 0, 2, 0);
+  mesh->addAttribute(0, 1, 3, 2);
+  mesh->setIndexBuffer(queue, rectIndices);
+  //mesh->setTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP);
 
   auto pipeline = device->createPipeline();
   pipeline->setVertexShader("vertexColor.spv");
@@ -133,9 +164,14 @@ void runDrawTests(VulkanDevicePtr device, VulkanQueuePtr queue) {
     stbi_write_png("ResultTriangle.png", width, height, channels, buffer->data(), width * channels);
 
     transitionImageToRender(queue, image);
-    testDrawRectangle(device, queue, image);
+    testDrawRectangleStrip(device, queue, image);
     copyImageToBuffer(queue, image, buffer);
-    stbi_write_png("ResultRectangle.png", width, height, channels, buffer->data(), width * channels);
+    stbi_write_png("ResultRectangleStrip.png", width, height, channels, buffer->data(), width * channels);
+
+    transitionImageToRender(queue, image);
+    testDrawRectangleIndexed(device, queue, image);
+    copyImageToBuffer(queue, image, buffer);
+    stbi_write_png("ResultRectangleIndexed.png", width, height, channels, buffer->data(), width * channels);
   }
 }
 

@@ -8,6 +8,7 @@ using namespace std;
 VulkanMesh::VulkanMesh(VulkanDevice* device):
   mDevice(device),
   mVertexCount(0),
+  mIndexCount(0),
   mPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST) {
 
 }
@@ -42,7 +43,7 @@ bool VulkanMesh::addBuffer(VulkanQueuePtr queue, const vector<float>& vertices, 
   }
 
   if (vertexBuffer.buffer->isHostVisible())
-   memcpy(vertexBuffer.buffer->data(), vertices.data(), size);
+    memcpy(vertexBuffer.buffer->data(), vertices.data(), size);
   else {
     auto staging = mDevice->createBuffer();
     staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
@@ -67,6 +68,43 @@ void VulkanMesh::addAttribute(int binding, int location, int size, int offset) {
   attribute.format   = getVertexFormat(size);
   attribute.offset   = static_cast<uint32_t>(offset * sizeof(float));
   mVertexBuffers.at(binding).attributes.push_back(attribute);
+}
+
+bool VulkanMesh::setIndexBuffer(VulkanQueuePtr queue, const vector<uint32_t>& indices) {
+  mIndexCount = static_cast<uint32_t>(indices.size());
+
+  mIndexBuffer = mDevice->createBuffer();
+  mIndexBuffer->setUsage(
+    VK_BUFFER_USAGE_INDEX_BUFFER_BIT |
+    VK_BUFFER_USAGE_TRANSFER_DST_BIT
+  );
+  mIndexBuffer->setCreateFlags(
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
+    VMA_ALLOCATION_CREATE_MAPPED_BIT
+  );
+
+  VkDeviceSize size = indices.size() * sizeof(float);
+  if (!mIndexBuffer->alloc(size)) {
+    cerr << "Error Allocating Index Buffer" << endl;
+    return false;
+  }
+
+  if (mIndexBuffer->isHostVisible())
+    memcpy(mIndexBuffer->data(), indices.data(), size);
+  else {
+    auto staging = mDevice->createBuffer();
+    staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    staging->setCreateFlags(
+      VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+      VMA_ALLOCATION_CREATE_MAPPED_BIT
+    );
+    if (staging->alloc(size)) {
+      memcpy(staging->data(), indices.data(), size);
+      queue->copyBufferToBuffer(staging, mIndexBuffer);
+    }
+  }
+  return true;
 }
 
 void VulkanMesh::getVertexBindings(VkVertexInputBindingDescriptions& bindings) {

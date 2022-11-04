@@ -188,8 +188,29 @@ void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
   }
 }
 
+void VulkanCommand::draw(VulkanBufferPtr indexBuffer, uint32_t instances) {
+  if (mVkCommandBuffer != VK_NULL_HANDLE && indexBuffer != nullptr) {
+    vkCmdBindIndexBuffer(
+      mVkCommandBuffer,
+      indexBuffer->getVkBuffer(),
+      0, VK_INDEX_TYPE_UINT32
+    );
+
+    uint32_t count  = static_cast<uint32_t>(indexBuffer->size() / sizeof(uint32_t));
+    vkCmdDrawIndexed(
+      mVkCommandBuffer,
+      count,
+      instances,
+      0, 0, 0
+    );
+  }
+}
+
 void VulkanCommand::draw(VulkanMeshPtr mesh, uint32_t instances) {
-  draw(mesh->getVertexCount(), instances);
+  if (mesh->getIndexCount() > 0)
+    draw(mesh->getIndexBuffer(), instances);
+  else
+    draw(mesh->getVertexCount(), instances);
 }
 
 void VulkanCommand::transition(
