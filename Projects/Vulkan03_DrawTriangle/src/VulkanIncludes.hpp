@@ -528,7 +528,11 @@ public:
 
   VkPipeline getVkPipeline();
   VkPipeline getVkPipeline(VkDescriptorSetLayouts setLayouts);
-  VkPipeline getVkPipeline(VulkanRenderPassPtr renderPass, VulkanMeshPtr mesh);
+  VkPipeline getVkPipeline(
+    VulkanRenderPassPtr renderPass,
+    VulkanMeshPtr       mesh,
+    VulkanLayoutSetPtr  layoutSet
+  );
 
   VkPipelineLayout getVkPipelineLayout();
   VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts setLayouts);
@@ -537,7 +541,11 @@ public:
 
 private:
   VkPipeline createComputePipeline(VkDescriptorSetLayouts setLayouts);
-  VkPipeline createGraphicsPipeline(VulkanRenderPassPtr renderPass, VulkanMeshPtr mesh);
+  VkPipeline createGraphicsPipeline(
+    VulkanRenderPassPtr renderPass,
+    VulkanMeshPtr       mesh,
+    VulkanLayoutSetPtr  layoutSet
+  );
 
   VkDescriptorSetLayouts& getVkDescriptorSetLayouts();
   void clearVkDescriptorSetLayouts();
@@ -624,7 +632,8 @@ public:
   void bind(
     VulkanPipelinePtr   pipeline,
     VulkanRenderPassPtr renderPass,
-    VulkanMeshPtr       mesh = nullptr
+    VulkanMeshPtr       mesh        = nullptr,
+    VulkanLayoutSetPtr  layoutSet   = nullptr
   );
   void draw(uint32_t vertexCount, uint32_t instances = 1);
   void draw(VulkanBufferPtr indexBuffer, uint32_t instances = 1);

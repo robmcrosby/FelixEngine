@@ -19,6 +19,28 @@ const vector<uint32_t> rectIndices = {
   1, 0, 3, 2, 0, 3
 };
 
+const vector<float> modelMatrices = {
+  0.7, 0.0, 0.0, 0.0,
+  0.0, 0.7, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+  0.5, 0.5, 0.0, 1.0,
+
+  0.5, 0.0, 0.0, 0.0,
+  0.0, 0.5, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+ -0.5, 0.5, 0.0, 1.0,
+
+  0.5, 0.0, 0.0, 0.0,
+  0.0, 0.5, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+  0.5,-0.5, 0.0, 1.0,
+
+  0.7, 0.0, 0.0, 0.0,
+  0.0, 0.7, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+ -0.5,-0.5, 0.0, 1.0
+};
+
 void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanBufferPtr buffer) {
   auto layoutSet = device->createLayoutSet();
   auto layout = layoutSet->at(0);
@@ -138,6 +160,49 @@ void testDrawRectangleInstanced(VulkanDevicePtr device, VulkanQueuePtr queue, Vu
   }
 }
 
+void testDrawRectangleLayout(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
+  auto buffer = device->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+
+  VkDeviceSize bufferSize = modelMatrices.size() * sizeof(float);
+  if (buffer->alloc(bufferSize)) {
+    memcpy(buffer->data(), modelMatrices.data(), bufferSize);
+
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
+    layout->setBuffer(buffer, 0);
+    layout->update();
+
+    auto framebuffer = device->createFrameBuffer();
+    framebuffer->addColorAttachment(image);
+
+    auto renderPass = device->createRenderPass();
+    renderPass->setFramebuffer(framebuffer);
+
+    auto mesh = device->createMesh();
+    mesh->addBuffer(queue, rectVerts, 5);
+    mesh->addAttribute(0, 0, 2, 0);
+    mesh->addAttribute(0, 1, 3, 2);
+    mesh->setIndexBuffer(queue, rectIndices);
+
+    auto pipeline = device->createPipeline();
+    pipeline->setVertexShader("vertexLayout.spv");
+    pipeline->setFragmentShader("color.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->beginRenderPass(renderPass);
+      command->bind(pipeline, renderPass, mesh, layoutSet);
+      command->draw(mesh, 4);
+      command->endRenderPass();
+      command->endSingle();
+      queue->waitIdle();
+    }
+  }
+}
+
 void transitionImageToRender(VulkanQueuePtr queue, VulkanImagePtr image) {
   queue->transition(
     image,
@@ -201,6 +266,11 @@ void runDrawTests(VulkanDevicePtr device, VulkanQueuePtr queue) {
     testDrawRectangleInstanced(device, queue, image);
     copyImageToBuffer(queue, image, buffer);
     stbi_write_png("ResultRectangleInstanced.png", width, height, channels, buffer->data(), width * channels);
+
+    transitionImageToRender(queue, image);
+    testDrawRectangleLayout(device, queue, image);
+    copyImageToBuffer(queue, image, buffer);
+    stbi_write_png("ResultRectangleLayout.png", width, height, channels, buffer->data(), width * channels);
   }
 }
 

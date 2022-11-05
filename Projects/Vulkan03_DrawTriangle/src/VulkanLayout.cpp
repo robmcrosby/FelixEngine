@@ -22,7 +22,7 @@ void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   layoutBinding.binding.binding = binding;
   layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
   layoutBinding.binding.descriptorCount = 1;
-  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
   layoutBinding.bufferInfo.buffer = buffer->getVkBuffer();
   layoutBinding.bufferInfo.offset = 0;
@@ -36,7 +36,7 @@ void VulkanLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   layoutBinding.binding.binding = binding;
   layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
   layoutBinding.binding.descriptorCount = 1;
-  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
   layoutBinding.imageInfo.sampler = VK_NULL_HANDLE;
   layoutBinding.imageInfo.imageView = image->getVkImageView();

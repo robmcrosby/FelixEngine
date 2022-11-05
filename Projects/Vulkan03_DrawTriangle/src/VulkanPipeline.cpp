@@ -48,15 +48,18 @@ VkPipeline VulkanPipeline::getVkPipeline(VkDescriptorSetLayouts setLayouts) {
 
 VkPipeline VulkanPipeline::getVkPipeline(
   VulkanRenderPassPtr renderPass,
-  VulkanMeshPtr mesh
+  VulkanMeshPtr       mesh,
+  VulkanLayoutSetPtr  layoutSet
 ) {
   if (mVkPipeline == VK_NULL_HANDLE)
-    mVkPipeline = createGraphicsPipeline(renderPass, mesh);
+    mVkPipeline = createGraphicsPipeline(renderPass, mesh, layoutSet);
   return mVkPipeline;
 }
 
 VkPipelineLayout VulkanPipeline::getVkPipelineLayout() {
-  return getVkPipelineLayout(getVkDescriptorSetLayouts());
+  if (mVkPipelineLayout == VK_NULL_HANDLE)
+    mVkPipelineLayout = getVkPipelineLayout(getVkDescriptorSetLayouts());
+  return mVkPipelineLayout;
 }
 
 VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VkDescriptorSetLayouts setLayouts) {
@@ -67,10 +70,14 @@ VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VkDescriptorSetLayouts setL
 
 VkPipeline VulkanPipeline::createGraphicsPipeline(
   VulkanRenderPassPtr renderPass,
-  VulkanMeshPtr mesh
+  VulkanMeshPtr       mesh,
+  VulkanLayoutSetPtr  layoutSet
 ) {
   VkPipeline pipeline = VK_NULL_HANDLE;
+
   VkDescriptorSetLayouts setLayouts;
+  if (layoutSet != nullptr)
+    layoutSet->getVkDescriptorSetLayouts(setLayouts);
   auto pipelineLayout = getVkPipelineLayout(setLayouts);
   if (pipelineLayout != VK_NULL_HANDLE) {
     auto viewport = renderPass->getViewport();
@@ -171,7 +178,7 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(
     pipelineInfo.pDepthStencilState = &depthStencil;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = nullptr;
-    pipelineInfo.layout = mVkPipelineLayout;
+    pipelineInfo.layout = pipelineLayout;
     pipelineInfo.renderPass = renderPass->getVkRenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;

@@ -151,15 +151,16 @@ void VulkanCommand::endRenderPass() {
 }
 
 void VulkanCommand::bind(
-  VulkanPipelinePtr pipeline,
+  VulkanPipelinePtr   pipeline,
   VulkanRenderPassPtr renderPass,
-  VulkanMeshPtr mesh
+  VulkanMeshPtr       mesh,
+  VulkanLayoutSetPtr  layoutSet
 ) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_GRAPHICS,
-      pipeline->getVkPipeline(renderPass, mesh)
+      pipeline->getVkPipeline(renderPass, mesh, layoutSet)
     );
 
     if (mesh != nullptr) {
@@ -172,6 +173,20 @@ void VulkanCommand::bind(
         mVkCommandBuffer,
         0, static_cast<uint32_t>(buffers.size()),
         buffers.data(), offsets.data()
+      );
+    }
+
+    if (layoutSet != nullptr) {
+      VkDescriptorSets descriptorSets;
+      layoutSet->getVkDescriptorSets(descriptorSets);
+      vkCmdBindDescriptorSets(
+        mVkCommandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        pipeline->getVkPipelineLayout(),
+        0,
+        static_cast<uint32_t>(descriptorSets.size()),
+        descriptorSets.data(),
+        0, 0
       );
     }
   }
