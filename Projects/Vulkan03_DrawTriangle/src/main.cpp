@@ -41,6 +41,13 @@ const vector<float> modelMatrices = {
  -0.5,-0.5, 0.0, 1.0
 };
 
+const vector<float> modelMatrix = {
+  1.7, 0.0, 0.0, 0.0,
+  0.0, 1.7, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+  0.0, 0.0, 0.0, 1.0
+};
+
 void testClearBuffer(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanBufferPtr buffer) {
   auto layoutSet = device->createLayoutSet();
   auto layout = layoutSet->at(0);
@@ -163,10 +170,12 @@ void testDrawRectangleInstanced(VulkanDevicePtr device, VulkanQueuePtr queue, Vu
 void testDrawRectangleLayout(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
   auto buffer = device->createBuffer();
   buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
   buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
 
   if (buffer->load(queue, modelMatrices)) {
     auto layoutSet = device->createLayoutSet();
@@ -194,6 +203,49 @@ void testDrawRectangleLayout(VulkanDevicePtr device, VulkanQueuePtr queue, Vulka
       command->beginRenderPass(renderPass);
       command->bind(pipeline, renderPass, mesh, layoutSet);
       command->draw(mesh, 4);
+      command->endRenderPass();
+      command->endSingle();
+      queue->waitIdle();
+    }
+  }
+}
+
+void testDrawRectangleUniform(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
+  auto buffer = device->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+  );
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+
+  if (buffer->load(queue, modelMatrix)) {
+    auto layoutSet = device->createLayoutSet();
+    auto layout = layoutSet->at(0);
+    layout->setBuffer(buffer, 0);
+    layout->update();
+
+    auto framebuffer = device->createFrameBuffer();
+    framebuffer->addColorAttachment(image);
+
+    auto renderPass = device->createRenderPass();
+    renderPass->setFramebuffer(framebuffer);
+
+    auto mesh = device->createMesh();
+    mesh->addBuffer(queue, rectVerts, 5);
+    mesh->addAttribute(0, 0, 2, 0);
+    mesh->addAttribute(0, 1, 3, 2);
+    mesh->setIndexBuffer(queue, rectIndices);
+
+    auto pipeline = device->createPipeline();
+    pipeline->setVertexShader("vertexUniform.spv");
+    pipeline->setFragmentShader("color.spv");
+
+    if (auto command = queue->beginSingleCommand()) {
+      command->beginRenderPass(renderPass);
+      command->bind(pipeline, renderPass, mesh, layoutSet);
+      command->draw(mesh);
       command->endRenderPass();
       command->endSingle();
       queue->waitIdle();
@@ -269,6 +321,11 @@ void runDrawTests(VulkanDevicePtr device, VulkanQueuePtr queue) {
     testDrawRectangleLayout(device, queue, image);
     copyImageToBuffer(queue, image, buffer);
     stbi_write_png("ResultRectangleLayout.png", width, height, channels, buffer->data(), width * channels);
+
+    transitionImageToRender(queue, image);
+    testDrawRectangleUniform(device, queue, image);
+    copyImageToBuffer(queue, image, buffer);
+    stbi_write_png("ResultRectangleUniform.png", width, height, channels, buffer->data(), width * channels);
   }
 }
 
