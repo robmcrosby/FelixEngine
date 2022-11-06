@@ -253,6 +253,7 @@ public:
 
   VmaAllocationInfo getVmaAllocationInfo() const;
   VkMemoryPropertyFlags getVkMemoryPropertyFlags() const;
+  VkDescriptorType getVkDescriptorType() const;
 
   bool isHostVisible() const;
 

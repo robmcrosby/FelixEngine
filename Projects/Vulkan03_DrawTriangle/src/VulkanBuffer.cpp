@@ -1,4 +1,5 @@
 #include "VulkanIncludes.hpp"
+#include <cstring>
 
 
 using namespace std;
@@ -85,6 +86,12 @@ VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags() const {
     vmaGetAllocationMemoryProperties(allocator, mVmaAllocation, &flags);
   }
   return flags;
+}
+
+VkDescriptorType VulkanBuffer::getVkDescriptorType() const {
+  if (mVkBufferUsageFlags & VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT)
+    return VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+  return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 }
 
 bool VulkanBuffer::isHostVisible() const {

@@ -1,4 +1,5 @@
 #include "VulkanIncludes.hpp"
+#include <map>
 
 
 using namespace std;
@@ -20,7 +21,7 @@ void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
   layoutBinding.binding.binding = binding;
-  layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+  layoutBinding.binding.descriptorType = buffer->getVkDescriptorType();
   layoutBinding.binding.descriptorCount = 1;
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
@@ -54,7 +55,7 @@ void VulkanLayout::update() {
     writeSet.dstBinding = mBufferLayoutBindings[i].binding.binding;
     writeSet.dstArrayElement = 0;
     writeSet.descriptorCount = 1;
-    writeSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeSet.descriptorType = mBufferLayoutBindings[i].binding.descriptorType;
     writeSet.pImageInfo = nullptr;
     writeSet.pBufferInfo = &mBufferLayoutBindings[i].bufferInfo;
     writeSet.pTexelBufferView = nullptr;
@@ -101,13 +102,18 @@ VkDescriptorSetLayout VulkanLayout::getVkDescriptorSetLayout() {
 
 VkDescriptorPool VulkanLayout::getVkDescriptorPool() {
   if (mVkDescriptorPool == VK_NULL_HANDLE) {
+    map<VkDescriptorType, int> typeMap;
     vector<VkDescriptorPoolSize> poolSizes;
 
-    if (mBufferLayoutBindings.size() > 0) {
-      VkDescriptorPoolSize poolSize = {};
-      poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-      poolSize.descriptorCount = static_cast<uint32_t>(mBufferLayoutBindings.size());
-      poolSizes.push_back(poolSize);
+    for (auto binding : mBufferLayoutBindings) {
+      if (typeMap.count(binding.binding.descriptorType) == 0) {
+        typeMap[binding.binding.descriptorType] = poolSizes.size();
+        VkDescriptorPoolSize poolSize = {};
+        poolSize.type = binding.binding.descriptorType;
+        poolSize.descriptorCount = 0;
+        poolSizes.push_back(poolSize);
+      }
+      poolSizes[typeMap[binding.binding.descriptorType]].descriptorCount += 1;
     }
 
     if (mTextureLayoutBindings.size() > 0) {
