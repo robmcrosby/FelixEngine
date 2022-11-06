@@ -247,6 +247,7 @@ public:
   void destroy();
 
   void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
+  void copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst);
 
   VkBuffer getVkBuffer() const {return mVkBuffer;}
 
@@ -257,6 +258,13 @@ public:
 
   void* data();
   VkDeviceSize size() const {return mSize;}
+
+  bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size);
+
+  template <typename T>
+  bool load(VulkanQueuePtr queue, const std::vector<T>& src) {
+    return load(queue, src.data(), src.size() * sizeof(T));
+  }
 };
 
 
@@ -527,6 +535,7 @@ public:
   bool isGraphics() const {return mVertexShader && mFragmentShader;}
 
   VkPipeline getVkPipeline();
+  VkPipeline getVkPipeline(VulkanLayoutSetPtr layoutSet);
   VkPipeline getVkPipeline(VkDescriptorSetLayouts setLayouts);
   VkPipeline getVkPipeline(
     VulkanRenderPassPtr renderPass,
@@ -535,11 +544,13 @@ public:
   );
 
   VkPipelineLayout getVkPipelineLayout();
+  VkPipelineLayout getVkPipelineLayout(VulkanLayoutSetPtr layoutSet);
   VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts setLayouts);
 
   void destroy();
 
 private:
+  VkPipeline createComputePipeline(VulkanLayoutSetPtr layoutSet);
   VkPipeline createComputePipeline(VkDescriptorSetLayouts setLayouts);
   VkPipeline createGraphicsPipeline(
     VulkanRenderPassPtr renderPass,

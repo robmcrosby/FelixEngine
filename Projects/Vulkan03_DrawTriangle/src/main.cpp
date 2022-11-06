@@ -165,12 +165,10 @@ void testDrawRectangleLayout(VulkanDevicePtr device, VulkanQueuePtr queue, Vulka
   buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
     VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
   buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT);
 
-  VkDeviceSize bufferSize = modelMatrices.size() * sizeof(float);
-  if (buffer->alloc(bufferSize)) {
-    memcpy(buffer->data(), modelMatrices.data(), bufferSize);
-
+  if (buffer->load(queue, modelMatrices)) {
     auto layoutSet = device->createLayoutSet();
     auto layout = layoutSet->at(0);
     layout->setBuffer(buffer, 0);

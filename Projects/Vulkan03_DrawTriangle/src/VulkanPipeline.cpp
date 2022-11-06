@@ -40,6 +40,12 @@ VkPipeline VulkanPipeline::getVkPipeline() {
   return getVkPipeline(getVkDescriptorSetLayouts());
 }
 
+VkPipeline VulkanPipeline::getVkPipeline(VulkanLayoutSetPtr layoutSet) {
+  if (mVkPipeline == VK_NULL_HANDLE)
+    mVkPipeline = createComputePipeline(layoutSet);
+  return mVkPipeline;
+}
+
 VkPipeline VulkanPipeline::getVkPipeline(VkDescriptorSetLayouts setLayouts) {
   if (mVkPipeline == VK_NULL_HANDLE)
     mVkPipeline = createComputePipeline(setLayouts);
@@ -58,7 +64,17 @@ VkPipeline VulkanPipeline::getVkPipeline(
 
 VkPipelineLayout VulkanPipeline::getVkPipelineLayout() {
   if (mVkPipelineLayout == VK_NULL_HANDLE)
-    mVkPipelineLayout = getVkPipelineLayout(getVkDescriptorSetLayouts());
+    mVkPipelineLayout = createVkPipelineLayout(getVkDescriptorSetLayouts());
+  return mVkPipelineLayout;
+}
+
+VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VulkanLayoutSetPtr layoutSet) {
+  if (mVkPipelineLayout == VK_NULL_HANDLE) {
+    VkDescriptorSetLayouts setLayouts;
+    if (layoutSet != nullptr)
+      layoutSet->getVkDescriptorSetLayouts(setLayouts);
+    mVkPipelineLayout = createVkPipelineLayout(setLayouts);
+  }
   return mVkPipelineLayout;
 }
 
@@ -74,11 +90,7 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(
   VulkanLayoutSetPtr  layoutSet
 ) {
   VkPipeline pipeline = VK_NULL_HANDLE;
-
-  VkDescriptorSetLayouts setLayouts;
-  if (layoutSet != nullptr)
-    layoutSet->getVkDescriptorSetLayouts(setLayouts);
-  auto pipelineLayout = getVkPipelineLayout(setLayouts);
+  auto pipelineLayout = getVkPipelineLayout(layoutSet);
   if (pipelineLayout != VK_NULL_HANDLE) {
     auto viewport = renderPass->getViewport();
     auto scissor  = renderPass->getScissor();
@@ -189,6 +201,13 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(
       cerr << "Error creating graphics pipeline";
   }
   return pipeline;
+}
+
+VkPipeline VulkanPipeline::createComputePipeline(VulkanLayoutSetPtr layoutSet) {
+  VkDescriptorSetLayouts setLayouts;
+  if (layoutSet != nullptr)
+    layoutSet->getVkDescriptorSetLayouts(setLayouts);
+  return createComputePipeline(setLayouts);
 }
 
 VkPipeline VulkanPipeline::createComputePipeline(VkDescriptorSetLayouts setLayouts) {

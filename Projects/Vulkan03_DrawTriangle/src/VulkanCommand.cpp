@@ -95,13 +95,10 @@ void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSet) {
   if (mVkCommandBuffer != VK_NULL_HANDLE) {
-    VkDescriptorSetLayouts setLayouts;
-    layoutSet->getVkDescriptorSetLayouts(setLayouts);
-
     vkCmdBindPipeline(
       mVkCommandBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
-      pipeline->getVkPipeline(setLayouts)
+      pipeline->getVkPipeline(layoutSet)
     );
 
     VkDescriptorSets descriptorSets;

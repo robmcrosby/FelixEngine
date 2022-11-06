@@ -57,10 +57,13 @@ void VulkanBuffer::destroy() {
 }
 
 void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer) {
-  auto dstBuffer = buffer->getVkBuffer();
-  if (dstBuffer != VK_NULL_HANDLE && mVkBuffer != VK_NULL_HANDLE) {
+  copyToBuffer(commandBuffer, buffer->getVkBuffer());
+}
+
+void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst) {
+  if (dst != VK_NULL_HANDLE && mVkBuffer != VK_NULL_HANDLE) {
     VkBufferCopy bufferCopy = {0, 0, mSize};
-    vkCmdCopyBuffer(commandBuffer, mVkBuffer, dstBuffer, 1, &bufferCopy);
+    vkCmdCopyBuffer(commandBuffer, mVkBuffer, dst, 1, &bufferCopy);
   }
 }
 
@@ -91,4 +94,38 @@ bool VulkanBuffer::isHostVisible() const {
 void* VulkanBuffer::data() {
   VmaAllocationInfo info = getVmaAllocationInfo();
   return info.pMappedData;
+}
+
+bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize size) {
+  if (mSize < size) {
+    destroy();
+    if (!alloc(size)) {
+      cerr << "Error Allocating Vulkan Buffer" << endl;
+      return false;
+    }
+  }
+
+  if (isHostVisible()) {
+    memcpy(this->data(), data, size);
+    return true;
+  }
+  else {
+    auto staging = mDevice->createBuffer();
+    staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    staging->setCreateFlags(
+      VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+      VMA_ALLOCATION_CREATE_MAPPED_BIT
+    );
+    if (staging->alloc(size)) {
+      memcpy(staging->data(), data, size);
+      if (auto command = queue->beginSingleCommand()) {
+        staging->copyToBuffer(command->getVkCommandBuffer(), getVkBuffer());
+        command->endSingle();
+        queue->waitIdle();
+      }
+      return true;
+    }
+  }
+  cerr << "Error Uploading data to VulkanBuffer";
+  return false;
 }
