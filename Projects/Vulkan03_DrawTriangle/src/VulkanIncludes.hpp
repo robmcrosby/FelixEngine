@@ -341,6 +341,37 @@ public:
   VulkanLayout(VulkanDevice* device);
   ~VulkanLayout();
 
+  bool setStorage(
+    VulkanQueuePtr queue,
+    uint32_t binding,
+    const void* data,
+    VkDeviceSize size
+  );
+  bool setUniform(
+    VulkanQueuePtr queue,
+    uint32_t binding,
+    const void* data,
+    VkDeviceSize size
+  );
+
+  template <typename T>
+  bool setStorage(
+    VulkanQueuePtr queue,
+    uint32_t binding,
+    const std::vector<T>& src
+  ) {
+    return setStorage(queue, binding, src.data(), src.size() * sizeof(T));
+  }
+
+  template <typename T>
+  bool setUniform(
+    VulkanQueuePtr queue,
+    uint32_t binding,
+    const std::vector<T>& src
+  ) {
+    return setUniform(queue, binding, src.data(), src.size() * sizeof(T));
+  }
+
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
   void setTexture(VulkanImagePtr image, uint32_t binding);
   void update();

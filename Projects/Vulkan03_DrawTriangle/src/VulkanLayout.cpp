@@ -17,6 +17,44 @@ VulkanLayout::~VulkanLayout() {
   destroy();
 }
 
+bool VulkanLayout::setStorage(
+  VulkanQueuePtr queue,
+  uint32_t binding,
+  const void* data,
+  VkDeviceSize size
+) {
+  auto buffer = mDevice->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+  bool loaded = buffer->load(queue, data, size);
+  setBuffer(buffer, binding);
+  return loaded;
+}
+
+bool VulkanLayout::setUniform(
+  VulkanQueuePtr queue,
+  uint32_t binding,
+  const void* data,
+  VkDeviceSize size
+) {
+  auto buffer = mDevice->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+  );
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+  bool loaded = buffer->load(queue, data, size);
+  setBuffer(buffer, binding);
+  return loaded;
+}
+
 void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;

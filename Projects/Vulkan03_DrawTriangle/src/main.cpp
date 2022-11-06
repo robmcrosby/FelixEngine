@@ -168,88 +168,66 @@ void testDrawRectangleInstanced(VulkanDevicePtr device, VulkanQueuePtr queue, Vu
 }
 
 void testDrawRectangleLayout(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
-  auto buffer = device->createBuffer();
-  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-  );
-  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
-  );
+  auto layoutSet = device->createLayoutSet();
+  auto layout = layoutSet->at(0);
+  layout->setStorage(queue, 0, modelMatrices);
+  layout->update();
 
-  if (buffer->load(queue, modelMatrices)) {
-    auto layoutSet = device->createLayoutSet();
-    auto layout = layoutSet->at(0);
-    layout->setBuffer(buffer, 0);
-    layout->update();
+  auto framebuffer = device->createFrameBuffer();
+  framebuffer->addColorAttachment(image);
 
-    auto framebuffer = device->createFrameBuffer();
-    framebuffer->addColorAttachment(image);
+  auto renderPass = device->createRenderPass();
+  renderPass->setFramebuffer(framebuffer);
 
-    auto renderPass = device->createRenderPass();
-    renderPass->setFramebuffer(framebuffer);
+  auto mesh = device->createMesh();
+  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addAttribute(0, 0, 2, 0);
+  mesh->addAttribute(0, 1, 3, 2);
+  mesh->setIndexBuffer(queue, rectIndices);
 
-    auto mesh = device->createMesh();
-    mesh->addBuffer(queue, rectVerts, 5);
-    mesh->addAttribute(0, 0, 2, 0);
-    mesh->addAttribute(0, 1, 3, 2);
-    mesh->setIndexBuffer(queue, rectIndices);
+  auto pipeline = device->createPipeline();
+  pipeline->setVertexShader("vertexLayout.spv");
+  pipeline->setFragmentShader("color.spv");
 
-    auto pipeline = device->createPipeline();
-    pipeline->setVertexShader("vertexLayout.spv");
-    pipeline->setFragmentShader("color.spv");
-
-    if (auto command = queue->beginSingleCommand()) {
-      command->beginRenderPass(renderPass);
-      command->bind(pipeline, renderPass, mesh, layoutSet);
-      command->draw(mesh, 4);
-      command->endRenderPass();
-      command->endSingle();
-      queue->waitIdle();
-    }
+  if (auto command = queue->beginSingleCommand()) {
+    command->beginRenderPass(renderPass);
+    command->bind(pipeline, renderPass, mesh, layoutSet);
+    command->draw(mesh, 4);
+    command->endRenderPass();
+    command->endSingle();
+    queue->waitIdle();
   }
 }
 
 void testDrawRectangleUniform(VulkanDevicePtr device, VulkanQueuePtr queue, VulkanImagePtr image) {
-  auto buffer = device->createBuffer();
-  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
-    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
-  );
-  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
-    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
-  );
+  auto layoutSet = device->createLayoutSet();
+  auto layout = layoutSet->at(0);
+  layout->setUniform(queue, 0, modelMatrix);
+  layout->update();
 
-  if (buffer->load(queue, modelMatrix)) {
-    auto layoutSet = device->createLayoutSet();
-    auto layout = layoutSet->at(0);
-    layout->setBuffer(buffer, 0);
-    layout->update();
+  auto framebuffer = device->createFrameBuffer();
+  framebuffer->addColorAttachment(image);
 
-    auto framebuffer = device->createFrameBuffer();
-    framebuffer->addColorAttachment(image);
+  auto renderPass = device->createRenderPass();
+  renderPass->setFramebuffer(framebuffer);
 
-    auto renderPass = device->createRenderPass();
-    renderPass->setFramebuffer(framebuffer);
+  auto mesh = device->createMesh();
+  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addAttribute(0, 0, 2, 0);
+  mesh->addAttribute(0, 1, 3, 2);
+  mesh->setIndexBuffer(queue, rectIndices);
 
-    auto mesh = device->createMesh();
-    mesh->addBuffer(queue, rectVerts, 5);
-    mesh->addAttribute(0, 0, 2, 0);
-    mesh->addAttribute(0, 1, 3, 2);
-    mesh->setIndexBuffer(queue, rectIndices);
+  auto pipeline = device->createPipeline();
+  pipeline->setVertexShader("vertexUniform.spv");
+  pipeline->setFragmentShader("color.spv");
 
-    auto pipeline = device->createPipeline();
-    pipeline->setVertexShader("vertexUniform.spv");
-    pipeline->setFragmentShader("color.spv");
-
-    if (auto command = queue->beginSingleCommand()) {
-      command->beginRenderPass(renderPass);
-      command->bind(pipeline, renderPass, mesh, layoutSet);
-      command->draw(mesh);
-      command->endRenderPass();
-      command->endSingle();
-      queue->waitIdle();
-    }
+  if (auto command = queue->beginSingleCommand()) {
+    command->beginRenderPass(renderPass);
+    command->bind(pipeline, renderPass, mesh, layoutSet);
+    command->draw(mesh);
+    command->endRenderPass();
+    command->endSingle();
+    queue->waitIdle();
   }
 }
 
