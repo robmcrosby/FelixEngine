@@ -77,9 +77,14 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # MacOS
-  target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/include/")
-  find_library(VK_FRAMEWORK MoltenVK "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/macOS/")
-  target_link_libraries(${PROJECT_NAME} PRIVATE ${VK_FRAMEWORK})
+  find_library(VK_FRAMEWORK MoltenVK "${THIRD_PARTY_DIR}/MoltenVK/macOS/")
+  find_library(SDL2_FRAMEWORK SDL2 "${THIRD_PARTY_DIR}/SDL2/macOS/")
+
+  set(VK_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/include/")
+  set(SDL2_INCLUDES "${SDL2_FRAMEWORK}/Headers/")
+
+  target_include_directories(${PROJECT_NAME} PRIVATE ${VK_INCLUDES} ${SDL2_INCLUDES})
+  target_link_libraries(${PROJECT_NAME} PRIVATE ${VK_FRAMEWORK} ${SDL2_FRAMEWORK})
 
   # Compile Shaders to SPIR-V
   file(GLOB SHADERS *.comp *.vert *.frag)
