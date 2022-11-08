@@ -57,7 +57,10 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   # Linux
   set(LDFLAGS "-lvulkan")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
-  target_link_libraries(${PROJECT_NAME} vulkan)
+
+  find_package(SDL2 REQUIRED)
+  target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+  target_link_libraries(${PROJECT_NAME} vulkan ${SDL2_LIBRARIES})
 
   # Compile Shaders to SPIR-V
   file(GLOB SHADERS *.comp *.vert *.frag)
