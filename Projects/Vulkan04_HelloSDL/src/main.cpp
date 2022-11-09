@@ -1,29 +1,13 @@
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_Vulkan.h>
 #include "VulkanIncludes.hpp"
-#include "SDL.h"
+#include <vulkan/vulkan.h>
 
 
 using namespace std;
 
 
-int main(int argc, char *argv[])
-{
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    cerr << "Error Initalizing SDL" << endl;
-    return 1;
-  }
-
-  SDL_Window *window = SDL_CreateWindow(
-    "Hello SDL",
-    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-    640, 480,
-    0
-  );
-
-  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderClear(renderer);
-  SDL_RenderPresent(renderer);
-
+void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
   SDL_Event e;
   while (!quit) {
@@ -32,6 +16,48 @@ int main(int argc, char *argv[])
         quit = true;
       }
     }
+  }
+}
+
+void getSDL2Extenstions(SDL_Window* window, CStrings& extensions) {
+  unsigned int count;
+  SDL_Vulkan_GetInstanceExtensions(window, &count, NULL);
+  extensions.resize(count);
+  SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data());
+}
+
+int main(int argc, char *argv[])
+{
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    cerr << "Error Initalizing SDL" << endl;
+    return 1;
+  }
+
+  SDL_Window* window = SDL_CreateWindow(
+    "Hello SDL",
+    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+    640, 480,
+    SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN
+  );
+
+  CStrings sdlExtensions;
+  getSDL2Extenstions(window, sdlExtensions);
+
+  auto& instance = VulkanInstance::Get();
+  instance.setApplicationName("VK Hello SDL");
+  instance.setEngineName("No Engine");
+  instance.enableValidation();
+  for (string extension : sdlExtensions)
+    instance.addExtension(extension);
+
+  if (instance.init()) {
+    if (auto device = instance.pickDevice()) {
+      auto queue = device->createQueue(VK_QUEUE_GRAPHICS_BIT);
+      if (device->init()) {
+        runLoop(window, device, queue);
+      }
+    }
+    instance.destroy();
   }
 
   SDL_DestroyWindow(window);
