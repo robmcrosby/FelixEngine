@@ -26,6 +26,7 @@ add_executable(${PROJECT_NAME}
   VulkanPipeline.cpp
   VulkanQueue.cpp
   VulkanCommand.cpp
+  VulkanSwapChain.cpp
   ${SPV_DIR}/spirv_reflect.c
 )
 

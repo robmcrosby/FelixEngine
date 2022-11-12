@@ -82,6 +82,9 @@ class VulkanCommand;
 typedef std::shared_ptr<VulkanCommand> VulkanCommandPtr;
 typedef std::vector<VulkanCommandPtr> VulkanCommands;
 
+class VulkanSwapChain;
+typedef std::shared_ptr<VulkanSwapChain> VulkanSwapChainPtr;
+
 struct BufferLayoutBinding {
   VulkanBufferPtr buffer;
   VkDescriptorSetLayoutBinding binding;
@@ -207,6 +210,7 @@ public:
   VulkanRenderPassPtr  createRenderPass();
   VulkanShaderPtr      createShader(VkShaderStageFlagBits stage);
   VulkanPipelinePtr    createPipeline();
+  VulkanSwapChainPtr   createSwapChain();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -694,6 +698,18 @@ public:
 
   bool alloc();
   void free();
+
+  void destroy();
+};
+
+
+class VulkanSwapChain {
+private:
+  VulkanDevice*     mDevice;
+
+public:
+  VulkanSwapChain(VulkanDevice* device);
+  ~VulkanSwapChain();
 
   void destroy();
 };

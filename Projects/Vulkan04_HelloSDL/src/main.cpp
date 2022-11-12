@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_Vulkan.h>
+#include <SDL2/SDL_vulkan.h>
 #include "VulkanIncludes.hpp"
 #include <vulkan/vulkan.h>
 
@@ -9,6 +9,9 @@ using namespace std;
 
 void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
+
+  auto swap = device->createSwapChain();
+
   SDL_Event e;
   while (!quit) {
     while (SDL_PollEvent(&e)) {

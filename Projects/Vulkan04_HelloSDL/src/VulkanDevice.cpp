@@ -182,6 +182,11 @@ VulkanPipelinePtr VulkanDevice::createPipeline() {
   return pipeline;
 }
 
+VulkanSwapChainPtr VulkanDevice::createSwapChain() {
+  VulkanSwapChainPtr swapChain = make_shared<VulkanSwapChain>(this);
+  return swapChain;
+}
+
 bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {
   for (int i = 0; i < mMemoryProperties.memoryTypeCount; ++i) {
     if ((mMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {
