@@ -8,6 +8,7 @@
 #ifndef VulkanIncludes_hpp
 #define VulkanIncludes_hpp
 
+class SDL_Window;
 
 typedef const char* CString;
 typedef std::vector<CString> CStrings;
@@ -28,6 +29,8 @@ typedef std::vector<VkAttachmentDescription>      VkAttachmentDescriptions;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
 typedef std::vector<VkBuffer>                     VkBuffers;
 typedef std::vector<VkDeviceSize>                 VkDeviceSizes;
+typedef std::vector<VkSurfaceFormatKHR>           VkSurfaceFormats;
+typedef std::vector<VkPresentModeKHR>             VkPresentModes;
 
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
 typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;
@@ -192,6 +195,8 @@ public:
   std::string name() const;
   std::string type() const;
 
+  VkInstance getVkInstance() const {return VulkanInstance::Get().getVkInstance();}
+  VkPhysicalDevice getVkPhysicalDevice() const {return mVkPhysicalDevice;}
   VkPhysicalDeviceType deviceType() const {return mProperties.deviceType;}
   VkDevice getVkDevice() const {return mVkDevice;}
   VmaAllocator getVmaAllocator() const {return mVmaAllocator;}
@@ -705,13 +710,20 @@ public:
 
 class VulkanSwapChain {
 private:
-  VulkanDevice*     mDevice;
+  VulkanDevice* mDevice;
+  SDL_Window*   mSdlWindow;
+  VkSurfaceKHR  mSurface;
 
 public:
   VulkanSwapChain(VulkanDevice* device);
   ~VulkanSwapChain();
 
+  void setToWindow(SDL_Window *window);
+
   void destroy();
+
+private:
+  void destroySurface();
 };
 
 

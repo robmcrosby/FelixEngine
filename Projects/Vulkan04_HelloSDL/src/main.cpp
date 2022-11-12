@@ -11,6 +11,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
 
   auto swap = device->createSwapChain();
+  swap->setToWindow(window);
 
   SDL_Event e;
   while (!quit) {
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
   instance.enableValidation();
   for (string extension : sdlExtensions)
     instance.addExtension(extension);
+  instance.addExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
   if (instance.init()) {
     if (auto device = instance.pickDevice()) {
