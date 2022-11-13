@@ -15,6 +15,26 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   auto image = swap->getPresentImage();
 
+  auto framebuffer = device->createFrameBuffer();
+  framebuffer->addColorAttachment(image);
+
+  auto renderPass = device->createRenderPass();
+  renderPass->setFramebuffer(framebuffer);
+
+  auto pipeline = device->createPipeline();
+  pipeline->setVertexShader("triangle.spv");
+  pipeline->setFragmentShader("color.spv");
+
+  auto command = queue->createCommand(image->frames());
+  for (int frame = 0; frame < image->frames(); ++frame) {
+    command->begin(frame);
+    command->beginRenderPass(renderPass);
+    command->bind(pipeline, renderPass);
+    command->draw(3);
+    command->endRenderPass();
+    command->end();
+  }
+
   SDL_Event e;
   while (!quit) {
     while (SDL_PollEvent(&e)) {

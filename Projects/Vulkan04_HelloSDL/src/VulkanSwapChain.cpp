@@ -128,6 +128,7 @@ void VulkanSwapChain::createSwapChain() {
   vkGetSwapchainImagesKHR(device, mVkSwapChain, &mImageCount, swapChainImages.data());
 
   mPresentImage = mDevice->createImage();
+  mPresentImage->setSwapImages(swapChainImages, mVkSurfaceFormat.format, extent.width, extent.height);
 }
 
 VkSwapchainKHR VulkanSwapChain::createVkSwapChain(

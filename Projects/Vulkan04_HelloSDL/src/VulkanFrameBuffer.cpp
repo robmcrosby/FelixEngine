@@ -4,9 +4,7 @@
 using namespace std;
 
 
-VulkanFrameBuffer::VulkanFrameBuffer(VulkanDevice* device):
-  mDevice(device),
-  mVkFramebuffer(VK_NULL_HANDLE) {
+VulkanFrameBuffer::VulkanFrameBuffer(VulkanDevice* device): mDevice(device) {
   mExtent.width = 0;
   mExtent.height = 0;
 }
@@ -21,10 +19,12 @@ void VulkanFrameBuffer::addColorAttachment(VulkanImagePtr image) {
   mColorAttachments.push_back(image);
 }
 
-VkFramebuffer VulkanFrameBuffer::getVkFramebuffer(VkRenderPass renderPass) {
-  if (mVkFramebuffer == VK_NULL_HANDLE)
-    mVkFramebuffer = createVkFramebuffer(renderPass);
-  return mVkFramebuffer;
+VkFramebuffer VulkanFrameBuffer::getVkFramebuffer(VkRenderPass renderPass, int frame) {
+  while (mVkFramebuffers.size() <= frame)
+    mVkFramebuffers.push_back(VK_NULL_HANDLE);
+  if (mVkFramebuffers.at(frame) == VK_NULL_HANDLE)
+    mVkFramebuffers.at(frame) = createVkFramebuffer(renderPass, frame);
+  return mVkFramebuffers.at(frame);
 }
 
 void VulkanFrameBuffer::getVkAttachmentReferences(VkAttachmentReferences& references) {
@@ -53,18 +53,25 @@ void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& de
 }
 
 void VulkanFrameBuffer::destroy() {
-  if (mVkFramebuffer != VK_NULL_HANDLE) {
-    VkDevice device = mDevice->getVkDevice();
-    vkDestroyFramebuffer(device, mVkFramebuffer, nullptr);
-    mVkFramebuffer = VK_NULL_HANDLE;
-  }
+  clearVkFramebuffers();
   mColorAttachments.clear();
 }
 
-VkFramebuffer VulkanFrameBuffer::createVkFramebuffer(VkRenderPass renderPass) {
+void VulkanFrameBuffer::clearVkFramebuffers() {
+  VkDevice device = mDevice->getVkDevice();
+  for (auto framebuffer : mVkFramebuffers) {
+    if (framebuffer != VK_NULL_HANDLE)
+      vkDestroyFramebuffer(device, framebuffer, nullptr);
+  }
+  mVkFramebuffers.clear();
+}
+
+VkFramebuffer VulkanFrameBuffer::createVkFramebuffer(VkRenderPass renderPass, int frame) {
   vector<VkImageView> attachments;
-  for (auto attachment : mColorAttachments)
-    attachments.push_back(attachment->getVkImageView());
+  for (auto attachment : mColorAttachments) {
+    int index = frame % attachment->frames();
+    attachments.push_back(attachment->getVkImageView(index));
+  }
 
   VkFramebufferCreateInfo framebufferInfo = {VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO};
   framebufferInfo.renderPass = renderPass;

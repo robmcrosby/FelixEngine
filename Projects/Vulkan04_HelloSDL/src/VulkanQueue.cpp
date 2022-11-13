@@ -73,9 +73,9 @@ void VulkanQueue::copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst) {
   }
 }
 
-VulkanCommandPtr VulkanQueue::createCommand() {
+VulkanCommandPtr VulkanQueue::createCommand(int frames) {
   if (mVkQueue != VK_NULL_HANDLE) {
-    VulkanCommandPtr command = make_shared<VulkanCommand>(this);
+    VulkanCommandPtr command = make_shared<VulkanCommand>(this, frames);
     return command;
   }
   cerr << "Error: Commands can not be created before Queue initalization" <<  endl;

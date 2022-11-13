@@ -4,56 +4,64 @@
 using namespace std;
 
 
-VulkanCommand::VulkanCommand(VulkanQueue* queue):
+VulkanCommand::VulkanCommand(VulkanQueue* queue, int frames):
   mQueue(queue),
   mVkCommandPool(VK_NULL_HANDLE),
-  mVkCommandBuffer(VK_NULL_HANDLE) {
-  alloc();
+  mRecordingBuffer(VK_NULL_HANDLE),
+  mRecordingFrame(0) {
+  alloc(static_cast<uint32_t>(frames));
 }
 
 VulkanCommand::~VulkanCommand() {
   destroy();
 }
 
-bool VulkanCommand::alloc() {
-  if (mVkCommandBuffer == VK_NULL_HANDLE) {
-    mVkCommandPool = mQueue->getVkCommandPool();
+bool VulkanCommand::alloc(uint32_t frames) {
+  mVkCommandPool = mQueue->getVkCommandPool();
+  mVkCommandBuffers.resize(frames);
 
-    VkCommandBufferAllocateInfo allocInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO, 0};
-    allocInfo.commandPool = mVkCommandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
-    allocInfo.commandBufferCount = 1;
+  VkCommandBufferAllocateInfo allocInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO, 0};
+  allocInfo.commandPool = mVkCommandPool;
+  allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+  allocInfo.commandBufferCount = frames;
 
-    VkDevice device = mQueue->getDevice()->getVkDevice();
-    if (vkAllocateCommandBuffers(device, &allocInfo, &mVkCommandBuffer) != VK_SUCCESS) {
-      cerr << "Error Allocating Command Buffer" << endl;
-      mVkCommandBuffer = VK_NULL_HANDLE;
-    }
+  VkDevice device = mQueue->getDevice()->getVkDevice();
+  if (vkAllocateCommandBuffers(device, &allocInfo, mVkCommandBuffers.data()) != VK_SUCCESS) {
+    cerr << "Error Allocating Command Buffer" << endl;
+    mVkCommandBuffers.clear();
   }
-  return mVkCommandBuffer != VK_NULL_HANDLE;
+  return !mVkCommandBuffers.empty();
 }
 
-bool VulkanCommand::begin() {
+bool VulkanCommand::begin(int frame) {
+  mRecordingBuffer = mVkCommandBuffers.at(frame);
+  mRecordingFrame = frame;
+
   VkCommandBufferBeginInfo beginInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO, 0};
   beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
   beginInfo.pInheritanceInfo = 0;
 
-  return mVkCommandBuffer != VK_NULL_HANDLE && vkBeginCommandBuffer(mVkCommandBuffer, &beginInfo) == VK_SUCCESS;
+  return mRecordingBuffer != VK_NULL_HANDLE && vkBeginCommandBuffer(mRecordingBuffer, &beginInfo) == VK_SUCCESS;
 }
 
 void VulkanCommand::end() {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    vkEndCommandBuffer(mVkCommandBuffer);
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
+    vkEndCommandBuffer(mRecordingBuffer);
+    mRecordingBuffer = VK_NULL_HANDLE;
+    mRecordingFrame = 0;
+  }
 }
 
-void VulkanCommand::submit() {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+void VulkanCommand::submit(int frame) {
+  auto commandBuffer = mVkCommandBuffers.at(frame);
+
+  if (commandBuffer != VK_NULL_HANDLE) {
     VkSubmitInfo submitInfo = {VK_STRUCTURE_TYPE_SUBMIT_INFO, 0};
     submitInfo.waitSemaphoreCount = 0;
     submitInfo.pWaitSemaphores = nullptr;
     submitInfo.pWaitDstStageMask = 0;
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &mVkCommandBuffer,
+    submitInfo.pCommandBuffers = &commandBuffer,
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores = 0;
 
@@ -68,9 +76,9 @@ void VulkanCommand::endSingle() {
 }
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
       pipeline->getVkPipeline()
     );
@@ -78,11 +86,11 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
 }
 
 void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     VkDescriptorSets descriptorSets;
     layoutSet->getVkDescriptorSets(descriptorSets);
     vkCmdBindDescriptorSets(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
       layoutSet->getVkPipelineLayout(),
       0,
@@ -94,9 +102,9 @@ void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
 }
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSet) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
       pipeline->getVkPipeline(layoutSet)
     );
@@ -104,7 +112,7 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSe
     VkDescriptorSets descriptorSets;
     layoutSet->getVkDescriptorSets(descriptorSets);
     vkCmdBindDescriptorSets(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
       pipeline->getVkPipelineLayout(),
       0,
@@ -116,12 +124,12 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSe
 }
 
 void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    vkCmdDispatch(mVkCommandBuffer, x, y, z);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    vkCmdDispatch(mRecordingBuffer, x, y, z);
 }
 
 void VulkanCommand::beginRenderPass(VulkanRenderPassPtr renderPass) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     vector<VkClearValue> clearValues(renderPass->getColorCount());
     for (int i = 0; i < clearValues.size(); ++i) {
       clearValues.at(i).color.float32[0] = 0.0f;
@@ -131,20 +139,20 @@ void VulkanCommand::beginRenderPass(VulkanRenderPassPtr renderPass) {
     }
 
     VkRenderPassBeginInfo renderPassInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
-    renderPassInfo.renderPass = renderPass->getVkRenderPass();
-    renderPassInfo.framebuffer = renderPass->getVkFramebuffer();
+    renderPassInfo.renderPass = renderPass->getVkRenderPass(mRecordingFrame);
+    renderPassInfo.framebuffer = renderPass->getVkFramebuffer(mRecordingFrame);
     renderPassInfo.renderArea.offset = {0, 0};
     renderPassInfo.renderArea.extent = renderPass->getExtent();
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
 
-    vkCmdBeginRenderPass(mVkCommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass(mRecordingBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
   }
 }
 
 void VulkanCommand::endRenderPass() {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    vkCmdEndRenderPass(mVkCommandBuffer);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    vkCmdEndRenderPass(mRecordingBuffer);
 }
 
 void VulkanCommand::bind(
@@ -153,9 +161,9 @@ void VulkanCommand::bind(
   VulkanMeshPtr       mesh,
   VulkanLayoutSetPtr  layoutSet
 ) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_GRAPHICS,
       pipeline->getVkPipeline(renderPass, mesh, layoutSet)
     );
@@ -167,7 +175,7 @@ void VulkanCommand::bind(
       mesh->getVertexBuffers(buffers);
 
 	    vkCmdBindVertexBuffers(
-        mVkCommandBuffer,
+        mRecordingBuffer,
         0, static_cast<uint32_t>(buffers.size()),
         buffers.data(), offsets.data()
       );
@@ -177,7 +185,7 @@ void VulkanCommand::bind(
       VkDescriptorSets descriptorSets;
       layoutSet->getVkDescriptorSets(descriptorSets);
       vkCmdBindDescriptorSets(
-        mVkCommandBuffer,
+        mRecordingBuffer,
         VK_PIPELINE_BIND_POINT_GRAPHICS,
         pipeline->getVkPipelineLayout(),
         0,
@@ -190,9 +198,9 @@ void VulkanCommand::bind(
 }
 
 void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdDraw(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       vertexCount,
       instances,
       0, 0
@@ -201,16 +209,16 @@ void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
 }
 
 void VulkanCommand::draw(VulkanBufferPtr indexBuffer, uint32_t instances) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE && indexBuffer != nullptr) {
+  if (mRecordingBuffer != VK_NULL_HANDLE && indexBuffer != nullptr) {
     vkCmdBindIndexBuffer(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       indexBuffer->getVkBuffer(),
       0, VK_INDEX_TYPE_UINT32
     );
 
     uint32_t count  = static_cast<uint32_t>(indexBuffer->size() / sizeof(uint32_t));
     vkCmdDrawIndexed(
-      mVkCommandBuffer,
+      mRecordingBuffer,
       count,
       instances,
       0, 0, 0
@@ -231,31 +239,31 @@ void VulkanCommand::transition(
   VkAccessFlags  dstAccessMask,
   VkPipelineStageFlags dstStageMask
 ) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    image->transition(mVkCommandBuffer, newImageLayout, dstAccessMask, dstStageMask);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    image->transition(mRecordingBuffer, newImageLayout, dstAccessMask, dstStageMask);
 }
 
 void VulkanCommand::copyBufferToImage(VulkanBufferPtr buffer, VulkanImagePtr image) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    image->copyFromBuffer(mVkCommandBuffer, buffer);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    image->copyFromBuffer(mRecordingBuffer, buffer);
 }
 
 void VulkanCommand::copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    image->copyToBuffer(mVkCommandBuffer, buffer);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    image->copyToBuffer(mRecordingBuffer, buffer);
 }
 
 void VulkanCommand::copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst) {
-  if (mVkCommandBuffer != VK_NULL_HANDLE)
-    src->copyToBuffer(mVkCommandBuffer, dst);
+  if (mRecordingBuffer != VK_NULL_HANDLE)
+    src->copyToBuffer(mRecordingBuffer, dst);
 }
 
 void VulkanCommand::free() {
-  if (mVkCommandBuffer != VK_NULL_HANDLE) {
+  if (!mVkCommandBuffers.empty()) {
     VkDevice device = mQueue->getDevice()->getVkDevice();
-    vkFreeCommandBuffers(device, mVkCommandPool, 1, &mVkCommandBuffer);
+    vkFreeCommandBuffers(device, mVkCommandPool, 1, mVkCommandBuffers.data());
+    mVkCommandBuffers.clear();
     mVkCommandPool = VK_NULL_HANDLE;
-    mVkCommandBuffer = VK_NULL_HANDLE;
   }
 }
 

@@ -27,12 +27,17 @@ typedef std::vector<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindings;
 typedef std::vector<VkAttachmentReference>        VkAttachmentReferences;
 typedef std::vector<VkAttachmentDescription>      VkAttachmentDescriptions;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
+typedef std::vector<VkImageMemoryBarrier>         VkImageMemoryBarriers;
 typedef std::vector<VkBuffer>                     VkBuffers;
 typedef std::vector<VkImage>                      VkImages;
 typedef std::vector<VkImageView>                  VkImageViews;
+typedef std::vector<VkFramebuffer>                VkFramebuffers;
+typedef std::vector<VkRenderPass>                 VkRenderPasses;
 typedef std::vector<VkDeviceSize>                 VkDeviceSizes;
 typedef std::vector<VkSurfaceFormatKHR>           VkSurfaceFormats;
 typedef std::vector<VkPresentModeKHR>             VkPresentModes;
+typedef std::vector<VkCommandBuffer>              VkCommandBuffers;
+typedef std::vector<VmaAllocation>                VmaAllocations;
 
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
 typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;
@@ -282,13 +287,13 @@ public:
 
 class VulkanImage {
 private:
-  VulkanDevice* mDevice;
-  VkFormat      mVkFormat;
-  VkImage       mVkImage;
-  VkImageView   mVkImageView;
-  VmaAllocation mVmaAllocation;
-  uint32_t      mWidth;
-  uint32_t      mHeight;
+  VulkanDevice*  mDevice;
+  VkFormat       mVkFormat;
+  VkImages       mVkImages;
+  VmaAllocations mVmaAllocations;
+  VkImageViews   mVkImageViews;
+  uint32_t       mWidth;
+  uint32_t       mHeight;
 
   VkImageUsageFlags         mVkImageUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
@@ -298,6 +303,8 @@ private:
   VkPipelineStageFlags mCurStageMask;
   VkAccessFlags        mCurAccessMask;
 
+  VkImageMemoryBarriers mActiveBerriers;
+
 public:
   VulkanImage(VulkanDevice* device);
   ~VulkanImage();
@@ -305,36 +312,46 @@ public:
   void setUsage(VkImageUsageFlags flags);
   void setCreateFlags(VmaAllocationCreateFlags flags);
 
-  bool alloc(uint32_t width, uint32_t height);
+  bool alloc(uint32_t width, uint32_t height, int frames = 1);
   void destroy();
+  void clearImages();
 
-  VkImage getVkImage() const {return mVkImage;}
-  VkFormat getVkFormat() const {return mVkFormat;}
-  VkImageView getVkImageView();
+  void setSwapImages(const VkImages& images, VkFormat format, uint32_t width, uint32_t height);
 
-  VmaAllocationInfo getVmaAllocationInfo() const;
-  void* data();
+  VkImage     getVkImage(int index = 0) const {return mVkImages.at(index);}
+  VkImageView getVkImageView(int index = 0) const {return mVkImageViews.at(index);}
+  VkFormat    getVkFormat() const {return mVkFormat;}
+
+  VmaAllocationInfo getVmaAllocationInfo(int index = 0) const;
+  void* data(int index = 0);
 
   VkDeviceSize formatSize() const;
   VkDeviceSize size() const {return mWidth * mHeight * formatSize();}
   uint32_t width() const {return mWidth;}
   uint32_t height() const {return mHeight;}
+  uint32_t frames() const {return static_cast<uint32_t>(mVkImages.size());}
 
   void transition(
-    VkCommandBuffer commandBuffer,
-    VkImageLayout   newImageLayout,
-    VkAccessFlags   dstAccessMask,
+    VkCommandBuffer      commandBuffer,
+    VkImageLayout        newImageLayout,
+    VkAccessFlags        dstAccessMask,
     VkPipelineStageFlags dstStageMask
   );
-  void copyFromBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
-  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
+  void copyFromBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame = 0);
+  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame = 0);
 
 private:
+  bool allocVkImage(
+    VkImage&       image,
+    VmaAllocation& allocation,
+    uint32_t       width,
+    uint32_t       height
+  ) const;
   VkImageView createImageView(
-    VkImage  image,
-    VkFormat format,
+    VkImage            image,
+    VkFormat           format,
     VkImageAspectFlags aspectFlags,
-    int32_t mipLevels
+    int32_t            mipLevels
   ) const;
 };
 
@@ -471,10 +488,10 @@ private:
 
 class VulkanFrameBuffer {
 private:
-  VulkanDevice* mDevice;
-  VkExtent2D    mExtent;
-  VulkanImages  mColorAttachments;
-  VkFramebuffer mVkFramebuffer;
+  VulkanDevice*  mDevice;
+  VkExtent2D     mExtent;
+  VulkanImages   mColorAttachments;
+  VkFramebuffers mVkFramebuffers;
 
 public:
   VulkanFrameBuffer(VulkanDevice* device);
@@ -482,7 +499,7 @@ public:
 
   void addColorAttachment(VulkanImagePtr image);
 
-  VkFramebuffer getVkFramebuffer(VkRenderPass renderPass);
+  VkFramebuffer getVkFramebuffer(VkRenderPass renderPass, int frame);
 
   VkExtent2D getExtent() const {return mExtent;}
 
@@ -491,16 +508,17 @@ public:
   void getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions);
 
   void destroy();
+  void clearVkFramebuffers();
 
 private:
-  VkFramebuffer createVkFramebuffer(VkRenderPass renderPass);
+  VkFramebuffer createVkFramebuffer(VkRenderPass renderPass, int frame);
 };
 
 
 class VulkanRenderPass {
 private:
   VulkanDevice*        mDevice;
-  VkRenderPass         mVkRenderPass;
+  VkRenderPasses       mVkRenderPasses;
   VulkanFrameBufferPtr mFramebuffer;
 
 public:
@@ -509,8 +527,8 @@ public:
 
   void setFramebuffer(VulkanFrameBufferPtr framebuffer);
 
-  VkRenderPass  getVkRenderPass();
-  VkFramebuffer getVkFramebuffer();
+  VkRenderPass  getVkRenderPass(int frame = 0);
+  VkFramebuffer getVkFramebuffer(int frame = 0);
 
   VkExtent2D getExtent()     const;
   VkViewport getViewport()   const;
@@ -518,6 +536,7 @@ public:
   uint32_t   getColorCount() const;
 
   void destroy();
+  void clearVkRenderPasses();
 
 private:
   VkRenderPass createVkRenderPass();
@@ -647,7 +666,7 @@ public:
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
   void copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst);
 
-  VulkanCommandPtr createCommand();
+  VulkanCommandPtr createCommand(int frames = 0);
   VulkanCommandPtr beginSingleCommand();
 
   void submitCommand(VulkanCommandPtr command);
@@ -660,19 +679,23 @@ private:
 
 class VulkanCommand {
 private:
-  VulkanQueue*    mQueue;
-  VkCommandPool   mVkCommandPool;
-  VkCommandBuffer mVkCommandBuffer;
+  VulkanQueue*     mQueue;
+  VkCommandPool    mVkCommandPool;
+  VkCommandBuffers mVkCommandBuffers;
+  VkCommandBuffer  mRecordingBuffer;
+  int              mRecordingFrame;
 
 public:
-  VulkanCommand(VulkanQueue* queue);
+  VulkanCommand(VulkanQueue* queue, int frames);
   ~VulkanCommand();
 
-  VkCommandBuffer getVkCommandBuffer() const {return mVkCommandBuffer;}
+  VkCommandBuffer getVkCommandBuffer(int frame = 0) const {
+    return mVkCommandBuffers.at(frame);
+  }
 
-  bool begin();
+  bool begin(int frame = 0);
   void end();
-  void submit();
+  void submit(int frame = 0);
   void endSingle();
 
   void bind(VulkanPipelinePtr pipeline);
@@ -703,7 +726,7 @@ public:
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
   void copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst);
 
-  bool alloc();
+  bool alloc(uint32_t frames);
   void free();
 
   void destroy();

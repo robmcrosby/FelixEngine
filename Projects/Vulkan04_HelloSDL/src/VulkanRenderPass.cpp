@@ -5,8 +5,7 @@ using namespace std;
 
 
 VulkanRenderPass::VulkanRenderPass(VulkanDevice* device):
-  mDevice(device),
-  mVkRenderPass(VK_NULL_HANDLE) {
+  mDevice(device) {
 
 }
 
@@ -18,14 +17,16 @@ void VulkanRenderPass::setFramebuffer(VulkanFrameBufferPtr framebuffer) {
   mFramebuffer = framebuffer;
 }
 
-VkRenderPass VulkanRenderPass::getVkRenderPass() {
-  if (mVkRenderPass == VK_NULL_HANDLE && mFramebuffer)
-    mVkRenderPass = createVkRenderPass();
-  return mVkRenderPass;
+VkRenderPass VulkanRenderPass::getVkRenderPass(int frame) {
+  while (mVkRenderPasses.size() <= frame)
+    mVkRenderPasses.push_back(VK_NULL_HANDLE);
+  if (mVkRenderPasses.at(frame) == VK_NULL_HANDLE)
+    mVkRenderPasses.at(frame) = createVkRenderPass();
+  return mVkRenderPasses.at(frame);
 }
 
-VkFramebuffer VulkanRenderPass::getVkFramebuffer() {
-  return mFramebuffer ? mFramebuffer->getVkFramebuffer(getVkRenderPass()) : nullptr;
+VkFramebuffer VulkanRenderPass::getVkFramebuffer(int frame) {
+  return mFramebuffer->getVkFramebuffer(getVkRenderPass(frame), frame);
 }
 
 VkExtent2D VulkanRenderPass::getExtent() const {
@@ -56,12 +57,17 @@ uint32_t VulkanRenderPass::getColorCount() const {
 }
 
 void VulkanRenderPass::destroy() {
-  if (mVkRenderPass != VK_NULL_HANDLE) {
-    VkDevice device = mDevice->getVkDevice();
-    vkDestroyRenderPass(device, mVkRenderPass, nullptr);
-    mVkRenderPass = VK_NULL_HANDLE;
-  }
+  clearVkRenderPasses();
   mFramebuffer = nullptr;
+}
+
+void VulkanRenderPass::clearVkRenderPasses() {
+  VkDevice device = mDevice->getVkDevice();
+  for (auto renderPass : mVkRenderPasses) {
+    if (renderPass != VK_NULL_HANDLE)
+      vkDestroyRenderPass(device, renderPass, nullptr);
+  }
+  mVkRenderPasses.clear();
 }
 
 VkRenderPass VulkanRenderPass::createVkRenderPass() {
