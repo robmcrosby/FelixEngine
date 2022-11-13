@@ -24,6 +24,11 @@ VulkanDevice::VulkanDevice(VkPhysicalDevice device):
   mQueueFamilies.resize(count);
   vkGetPhysicalDeviceQueueFamilyProperties(mVkPhysicalDevice, &count, mQueueFamilies.data());
 
+  // Query the avalible Device Extensions
+  vkEnumerateDeviceExtensionProperties(mVkPhysicalDevice, nullptr, &count, nullptr);
+  mAvailableExtensions.resize(count);
+  vkEnumerateDeviceExtensionProperties(mVkPhysicalDevice, nullptr, &count, mAvailableExtensions.data());
+
   // Setup Queue Counts
   for (auto family : mQueueFamilies)
     mQueueFamilyCounts.push_back(family.queueCount);
@@ -105,10 +110,9 @@ string VulkanDevice::type() const {
 
 bool VulkanDevice::addExtension(StringRef extension) {
   if (mVkDevice == VK_NULL_HANDLE) {
-    const CStrings& extensions = VulkanInstance::Get().getEnabledExtensions();
-    for (const auto& avalible : extensions) {
-      if (extension == avalible) {
-        mEnabledExtensions.push_back(avalible);
+    for (const auto& extensionProperties : mAvailableExtensions) {
+      if (extension == extensionProperties.extensionName) {
+        mEnabledExtensions.push_back(extensionProperties.extensionName);
         return true;
       }
     }

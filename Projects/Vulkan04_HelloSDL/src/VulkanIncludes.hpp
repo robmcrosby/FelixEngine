@@ -179,6 +179,7 @@ private:
 
   VkPhysicalDeviceProperties mProperties;
   VkPhysicalDeviceFeatures   mFeatures;
+  VulkanExtensionProperties  mAvailableExtensions;
   CStrings                   mEnabledExtensions;
   VulkanQueueFamilies        mQueueFamilies;
   std::vector<uint32_t>      mQueueFamilyCounts;
