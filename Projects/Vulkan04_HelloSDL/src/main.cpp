@@ -75,10 +75,10 @@ int main(int argc, char *argv[])
   instance.enableValidation();
   for (string extension : sdlExtensions)
     instance.addExtension(extension);
-  instance.addExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
   if (instance.init()) {
     if (auto device = instance.pickDevice()) {
+      device->addExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
       auto queue = device->createQueue(VK_QUEUE_GRAPHICS_BIT);
       if (device->init()) {
         runLoop(window, device, queue);
