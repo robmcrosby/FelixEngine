@@ -28,6 +28,8 @@ typedef std::vector<VkAttachmentReference>        VkAttachmentReferences;
 typedef std::vector<VkAttachmentDescription>      VkAttachmentDescriptions;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
 typedef std::vector<VkBuffer>                     VkBuffers;
+typedef std::vector<VkImage>                      VkImages;
+typedef std::vector<VkImageView>                  VkImageViews;
 typedef std::vector<VkDeviceSize>                 VkDeviceSizes;
 typedef std::vector<VkSurfaceFormatKHR>           VkSurfaceFormats;
 typedef std::vector<VkPresentModeKHR>             VkPresentModes;
@@ -710,9 +712,15 @@ public:
 
 class VulkanSwapChain {
 private:
-  VulkanDevice* mDevice;
-  SDL_Window*   mSdlWindow;
-  VkSurfaceKHR  mSurface;
+  VulkanDevice*  mDevice;
+  SDL_Window*    mSdlWindow;
+  VkSurfaceKHR   mVkSurface;
+  VkSwapchainKHR mVkSwapChain;
+  uint32_t       mImageCount;
+  VulkanImagePtr mPresentImage;
+
+  VkSurfaceFormatKHR mVkSurfaceFormat;
+  VkPresentModeKHR   mVkPrsentMode;
 
 public:
   VulkanSwapChain(VulkanDevice* device);
@@ -720,9 +728,30 @@ public:
 
   void setToWindow(SDL_Window *window);
 
+  VkSurfaceCapabilitiesKHR getVkSurfaceCapabilities() const;
+  VkSurfaceFormats         getVkSurfaceFormats() const;
+  VkPresentModes           getVkPresentModes() const;
+
+  VkSurfaceFormatKHR pickSurfaceFormat() const;
+  VkPresentModeKHR   pickPresentMode() const;
+  uint32_t           pickImageCount() const;
+
+  VkExtent2D getExtent() const;
+
+  VulkanImagePtr getPresentImage();
+
   void destroy();
 
 private:
+  void createSwapChain();
+  VkSwapchainKHR createVkSwapChain(
+    VkSurfaceFormatKHR surfaceFormat,
+    VkPresentModeKHR   presentMode,
+    uint32_t           imageCount,
+    VkExtent2D         extent
+  ) const;
+
+  void destroySwapChain();
   void destroySurface();
 };
 

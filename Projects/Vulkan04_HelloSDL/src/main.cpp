@@ -13,6 +13,8 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto swap = device->createSwapChain();
   swap->setToWindow(window);
 
+  auto image = swap->getPresentImage();
+
   SDL_Event e;
   while (!quit) {
     while (SDL_PollEvent(&e)) {
