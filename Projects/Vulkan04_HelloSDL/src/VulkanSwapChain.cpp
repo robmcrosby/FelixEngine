@@ -12,7 +12,8 @@ VulkanSwapChain::VulkanSwapChain(VulkanDevice* device):
   mSdlWindow(nullptr),
   mVkSurface(VK_NULL_HANDLE),
   mVkSwapChain(VK_NULL_HANDLE),
-  mImageCount(0) {
+  mImageCount(0),
+  mCurrentFrame(0) {
 
 }
 
@@ -100,9 +101,72 @@ VkExtent2D VulkanSwapChain::getExtent() const {
 }
 
 VulkanImagePtr VulkanSwapChain::getPresentImage() {
-  if (mPresentImage == nullptr)
+  if (!mPresentImage)
     createSwapChain();
   return mPresentImage;
+}
+
+VulkanFrameSyncPtr VulkanSwapChain::getFrameSync() {
+  if (!mFrameSync) {
+    auto image = getPresentImage();
+    mFrameSync = mDevice->createFrameSync();
+    mFrameSync->setup(image->frames(), MAX_FRAMES_IN_FLIGHT);
+  }
+  return mFrameSync;
+}
+
+int VulkanSwapChain::getNextFrame() {
+  return getNextFrame(getFrameSync());
+}
+
+void VulkanSwapChain::presentFrame(VulkanQueuePtr queue) {
+  return presentFrame(getFrameSync(), queue);
+}
+
+int VulkanSwapChain::getNextFrame(VkSemaphore semaphore) {
+  uint32_t frame;
+  VkResult result = vkAcquireNextImageKHR(
+    mDevice->getVkDevice(),
+    mVkSwapChain,
+    UINT64_MAX,
+    semaphore,
+    VK_NULL_HANDLE,
+    &frame
+  );
+  if (result != VK_SUCCESS)
+    throw runtime_error("failed to get next swap frame");
+
+  mCurrentFrame = frame;
+  return mCurrentFrame;
+}
+
+int VulkanSwapChain::getNextFrame(VulkanFrameSyncPtr frameSync) {
+  frameSync->waitForInFlight();
+  int frame = getNextFrame(frameSync->availableSemaphore());
+  frameSync->assignInFlight(frame);
+  return frame;
+}
+
+void VulkanSwapChain::presentFrame(uint32_t frame, VkSemaphore semaphore, VulkanQueuePtr queue) {
+  VkQueue presentQueue = queue->getVkQueue();
+
+  VkSemaphore signalSemaphores[] = {semaphore};
+  VkSwapchainKHR swapChains[] = {mVkSwapChain};
+
+  VkPresentInfoKHR presentInfo{};
+  presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+  presentInfo.waitSemaphoreCount = 1;
+  presentInfo.pWaitSemaphores = signalSemaphores;
+  presentInfo.swapchainCount = 1;
+  presentInfo.pSwapchains = swapChains;
+  presentInfo.pImageIndices = &frame;
+  presentInfo.pResults = nullptr;
+  vkQueuePresentKHR(presentQueue, &presentInfo);
+}
+
+void VulkanSwapChain::presentFrame(VulkanFrameSyncPtr frameSync, VulkanQueuePtr queue) {
+  presentFrame(mCurrentFrame, frameSync->finishedSemaphore(), queue);
+  frameSync->nextInFlight();
 }
 
 void VulkanSwapChain::destroy() {

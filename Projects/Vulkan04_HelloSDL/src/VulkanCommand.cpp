@@ -33,12 +33,12 @@ bool VulkanCommand::alloc(uint32_t frames) {
   return !mVkCommandBuffers.empty();
 }
 
-bool VulkanCommand::begin(int frame) {
+bool VulkanCommand::begin(int frame, VkCommandBufferUsageFlags usageFlags) {
   mRecordingBuffer = mVkCommandBuffers.at(frame);
   mRecordingFrame = frame;
 
   VkCommandBufferBeginInfo beginInfo = {VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO, 0};
-  beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  beginInfo.flags = usageFlags;
   beginInfo.pInheritanceInfo = 0;
 
   return mRecordingBuffer != VK_NULL_HANDLE && vkBeginCommandBuffer(mRecordingBuffer, &beginInfo) == VK_SUCCESS;

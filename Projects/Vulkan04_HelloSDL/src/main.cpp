@@ -10,13 +10,13 @@ using namespace std;
 void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
 
-  auto swap = device->createSwapChain();
-  swap->setToWindow(window);
-
-  auto image = swap->getPresentImage();
+  auto swapChain = device->createSwapChain();
+  swapChain->setToWindow(window);
 
   auto framebuffer = device->createFrameBuffer();
-  framebuffer->addColorAttachment(image);
+  framebuffer->addColorAttachment(swapChain->getPresentImage());
+
+  auto frameSync = swapChain->getFrameSync();
 
   auto renderPass = device->createRenderPass();
   renderPass->setFramebuffer(framebuffer);
@@ -25,8 +25,8 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   pipeline->setVertexShader("triangle.spv");
   pipeline->setFragmentShader("color.spv");
 
-  auto command = queue->createCommand(image->frames());
-  for (int frame = 0; frame < image->frames(); ++frame) {
+  auto command = queue->createCommand(swapChain->frames());
+  for (int frame = 0; frame < swapChain->frames(); ++frame) {
     command->begin(frame);
     command->beginRenderPass(renderPass);
     command->bind(pipeline, renderPass);
@@ -42,7 +42,14 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
         quit = true;
       }
     }
+
+    int frame = swapChain->getNextFrame();
+    queue->submitCommand(command, frameSync);
+    swapChain->presentFrame(queue);
+
+    SDL_Delay(10);
   }
+  queue->waitIdle();
 }
 
 void getSDL2Extenstions(SDL_Window* window, CStrings& extensions) {
@@ -75,10 +82,10 @@ int main(int argc, char *argv[])
   instance.enableValidation();
   for (string extension : sdlExtensions)
     instance.addExtension(extension);
+  instance.addExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 
   if (instance.init()) {
     if (auto device = instance.pickDevice()) {
-      device->addExtension(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
       auto queue = device->createQueue(VK_QUEUE_GRAPHICS_BIT);
       if (device->init()) {
         runLoop(window, device, queue);

@@ -84,7 +84,7 @@ VulkanCommandPtr VulkanQueue::createCommand(int frames) {
 
 VulkanCommandPtr VulkanQueue::beginSingleCommand() {
   if (auto command = createCommand()) {
-    command->begin();
+    command->begin(0, VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     return command;
   }
   return nullptr;
@@ -103,7 +103,29 @@ void VulkanQueue::submitCommand(VulkanCommandPtr command) {
     submitInfo.pSignalSemaphores = 0;
 
     if (vkQueueSubmit(mVkQueue, 1, &submitInfo, 0) != VK_SUCCESS)
-      cerr << "Error Submiting Command to Queue" << endl;
+      throw runtime_error("failed to submit command buffer!");
+  }
+}
+
+void VulkanQueue::submitCommand(VulkanCommandPtr command, VulkanFrameSyncPtr frameSync) {
+  if (mVkQueue != VK_NULL_HANDLE) {
+    VkSemaphore waitSemaphores[] = {frameSync->availableSemaphore()};
+    VkSemaphore signalSemaphores[] = {frameSync->finishedSemaphore()};
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+
+    VkCommandBuffer commandBuffer = command->getVkCommandBuffer(frameSync->currentFrame());
+    VkSubmitInfo submitInfo = {VK_STRUCTURE_TYPE_SUBMIT_INFO, 0};
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffer,
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+
+    frameSync->resetInFlight();
+    if (vkQueueSubmit(mVkQueue, 1, &submitInfo, frameSync->inFlightFence()) != VK_SUCCESS)
+      throw runtime_error("failed to submit draw command buffer!");
   }
 }
 

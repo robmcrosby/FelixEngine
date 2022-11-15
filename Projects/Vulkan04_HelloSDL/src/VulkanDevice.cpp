@@ -191,6 +191,11 @@ VulkanSwapChainPtr VulkanDevice::createSwapChain() {
   return swapChain;
 }
 
+VulkanFrameSyncPtr VulkanDevice::createFrameSync() {
+  VulkanFrameSyncPtr frameSync = make_shared<VulkanFrameSync>(this);
+  return frameSync;
+}
+
 bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {
   for (int i = 0; i < mMemoryProperties.memoryTypeCount; ++i) {
     if ((mMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties) {

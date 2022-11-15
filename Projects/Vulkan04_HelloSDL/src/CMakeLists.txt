@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
   VulkanQueue.cpp
   VulkanCommand.cpp
   VulkanSwapChain.cpp
+  VulkanFrameSync.cpp
   ${SPV_DIR}/spirv_reflect.c
 )
 

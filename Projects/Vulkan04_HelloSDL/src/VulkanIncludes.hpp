@@ -8,6 +8,9 @@
 #ifndef VulkanIncludes_hpp
 #define VulkanIncludes_hpp
 
+#define MAX_FRAMES_IN_FLIGHT 2
+
+
 class SDL_Window;
 
 typedef const char* CString;
@@ -37,6 +40,8 @@ typedef std::vector<VkDeviceSize>                 VkDeviceSizes;
 typedef std::vector<VkSurfaceFormatKHR>           VkSurfaceFormats;
 typedef std::vector<VkPresentModeKHR>             VkPresentModes;
 typedef std::vector<VkCommandBuffer>              VkCommandBuffers;
+typedef std::vector<VkSemaphore>                  VkSemaphores;
+typedef std::vector<VkFence>                      VkFences;
 typedef std::vector<VmaAllocation>                VmaAllocations;
 
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
@@ -94,6 +99,9 @@ typedef std::vector<VulkanCommandPtr> VulkanCommands;
 
 class VulkanSwapChain;
 typedef std::shared_ptr<VulkanSwapChain> VulkanSwapChainPtr;
+
+class VulkanFrameSync;
+typedef std::shared_ptr<VulkanFrameSync> VulkanFrameSyncPtr;
 
 struct BufferLayoutBinding {
   VulkanBufferPtr buffer;
@@ -224,6 +232,7 @@ public:
   VulkanShaderPtr      createShader(VkShaderStageFlagBits stage);
   VulkanPipelinePtr    createPipeline();
   VulkanSwapChainPtr   createSwapChain();
+  VulkanFrameSyncPtr   createFrameSync();
 
   bool getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties);
 
@@ -671,6 +680,7 @@ public:
   VulkanCommandPtr beginSingleCommand();
 
   void submitCommand(VulkanCommandPtr command);
+  void submitCommand(VulkanCommandPtr command, VulkanFrameSyncPtr frameSync);
   void waitIdle();
 
 private:
@@ -694,7 +704,7 @@ public:
     return mVkCommandBuffers.at(frame);
   }
 
-  bool begin(int frame = 0);
+  bool begin(int frame = 0, VkCommandBufferUsageFlags usageFlags = 0);
   void end();
   void submit(int frame = 0);
   void endSingle();
@@ -741,10 +751,12 @@ private:
   VkSurfaceKHR   mVkSurface;
   VkSwapchainKHR mVkSwapChain;
   uint32_t       mImageCount;
+  uint32_t       mCurrentFrame;
   VulkanImagePtr mPresentImage;
 
   VkSurfaceFormatKHR mVkSurfaceFormat;
   VkPresentModeKHR   mVkPrsentMode;
+  VulkanFrameSyncPtr mFrameSync;
 
 public:
   VulkanSwapChain(VulkanDevice* device);
@@ -761,8 +773,18 @@ public:
   uint32_t           pickImageCount() const;
 
   VkExtent2D getExtent() const;
+  uint32_t frames() const {return !mPresentImage ? 0 : mPresentImage->frames();}
 
   VulkanImagePtr getPresentImage();
+  VulkanFrameSyncPtr getFrameSync();
+
+  int getNextFrame();
+  void presentFrame(VulkanQueuePtr queue);
+
+  int getNextFrame(VkSemaphore semaphore);
+  int getNextFrame(VulkanFrameSyncPtr frameSync);
+  void presentFrame(uint32_t frame, VkSemaphore semaphore, VulkanQueuePtr queue);
+  void presentFrame(VulkanFrameSyncPtr frameSync, VulkanQueuePtr queue);
 
   void destroy();
 
@@ -777,6 +799,36 @@ private:
 
   void destroySwapChain();
   void destroySurface();
+};
+
+
+class VulkanFrameSync {
+  VulkanDevice* mDevice;
+  VkSemaphores  mAvailableSemaphores;
+  VkSemaphores  mFinishedSemaphores;
+  VkFences      mInFlightFences;
+  VkFences      mImagesInFlight;
+  int           mFrameInFlight;
+  int           mCurrentFrame;
+
+
+public:
+  VulkanFrameSync(VulkanDevice* device);
+  ~VulkanFrameSync();
+
+  void setup(int frames, int framesInflight);
+  void destroy();
+
+  void waitForInFlight();
+  void resetInFlight();
+  void assignInFlight(int frame);
+  int nextInFlight();
+
+  int currentFrame() const {return mCurrentFrame;}
+  int currentInFlight() const {return mFrameInFlight;}
+  VkSemaphore availableSemaphore() {return mAvailableSemaphores.at(mFrameInFlight);}
+  VkSemaphore finishedSemaphore() {return mFinishedSemaphores.at(mFrameInFlight);}
+  VkFence inFlightFence() {return mInFlightFences.at(mFrameInFlight);}
 };
 
 
