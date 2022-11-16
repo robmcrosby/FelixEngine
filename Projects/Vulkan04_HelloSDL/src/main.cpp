@@ -16,7 +16,8 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto framebuffer = device->createFrameBuffer();
   framebuffer->addColorAttachment(swapChain->getPresentImage());
 
-  auto frameSync = swapChain->getFrameSync();
+  auto frameSync = device->createFrameSync();
+  frameSync->setup(swapChain->frames(), 2);
 
   auto renderPass = device->createRenderPass();
   renderPass->setFramebuffer(framebuffer);
@@ -43,9 +44,9 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       }
     }
 
-    int frame = swapChain->getNextFrame();
+    int frame = swapChain->getNextFrame(frameSync);
     queue->submitCommand(command, frameSync);
-    swapChain->presentFrame(queue);
+    swapChain->presentFrame(frameSync, queue);
 
     SDL_Delay(10);
   }

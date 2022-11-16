@@ -106,23 +106,6 @@ VulkanImagePtr VulkanSwapChain::getPresentImage() {
   return mPresentImage;
 }
 
-VulkanFrameSyncPtr VulkanSwapChain::getFrameSync() {
-  if (!mFrameSync) {
-    auto image = getPresentImage();
-    mFrameSync = mDevice->createFrameSync();
-    mFrameSync->setup(image->frames(), MAX_FRAMES_IN_FLIGHT);
-  }
-  return mFrameSync;
-}
-
-int VulkanSwapChain::getNextFrame() {
-  return getNextFrame(getFrameSync());
-}
-
-void VulkanSwapChain::presentFrame(VulkanQueuePtr queue) {
-  return presentFrame(getFrameSync(), queue);
-}
-
 int VulkanSwapChain::getNextFrame(VkSemaphore semaphore) {
   uint32_t frame;
   VkResult result = vkAcquireNextImageKHR(

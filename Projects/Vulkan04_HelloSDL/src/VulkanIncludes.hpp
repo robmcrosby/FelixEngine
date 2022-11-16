@@ -757,7 +757,6 @@ private:
 
   VkSurfaceFormatKHR mVkSurfaceFormat;
   VkPresentModeKHR   mVkPrsentMode;
-  VulkanFrameSyncPtr mFrameSync;
 
 public:
   VulkanSwapChain(VulkanDevice* device);
@@ -777,10 +776,6 @@ public:
   uint32_t frames() const {return !mPresentImage ? 0 : mPresentImage->frames();}
 
   VulkanImagePtr getPresentImage();
-  VulkanFrameSyncPtr getFrameSync();
-
-  int getNextFrame();
-  void presentFrame(VulkanQueuePtr queue);
 
   int getNextFrame(VkSemaphore semaphore);
   int getNextFrame(VulkanFrameSyncPtr frameSync);
