@@ -340,6 +340,7 @@ public:
   uint32_t width() const {return mWidth;}
   uint32_t height() const {return mHeight;}
   uint32_t frames() const {return static_cast<uint32_t>(mVkImages.size());}
+  bool isSwapImage() const {return mVmaAllocations.empty() && !mVkImages.empty();}
 
   void transition(
     VkCommandBuffer      commandBuffer,

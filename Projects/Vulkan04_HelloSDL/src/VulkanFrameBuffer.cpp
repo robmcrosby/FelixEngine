@@ -48,6 +48,8 @@ void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& de
     description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     description.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
     description.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    if (attachment->isSwapImage())
+      description.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     descriptions.push_back(description);
   }
 }
