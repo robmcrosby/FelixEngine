@@ -7,7 +7,6 @@ using namespace std;
 
 VulkanBuffer::VulkanBuffer(VulkanDevice* device):
   mDevice(device),
-  mVkBuffer(VK_NULL_HANDLE),
   mVkBufferUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
   mVmaCreateFlags(0),
@@ -20,20 +19,20 @@ VulkanBuffer::~VulkanBuffer() {
 }
 
 void VulkanBuffer::setUsage(VkBufferUsageFlags flags) {
-  if (mVkBuffer == VK_NULL_HANDLE)
+  if (mVkBuffers.empty())
     mVkBufferUsageFlags = flags;
   else
     cerr << "Warning: VulkanBuffer usage flags must be set before allocation" << endl;
 }
 
 void VulkanBuffer::setCreateFlags(VmaAllocationCreateFlags flags) {
-  if (mVkBuffer == VK_NULL_HANDLE)
+  if (mVkBuffers.empty())
     mVmaCreateFlags = flags;
   else
     cerr << "Warning: VmaCreate flags must be set before allocation" << endl;
 }
 
-bool VulkanBuffer::alloc(VkDeviceSize size) {
+bool VulkanBuffer::alloc(VkDeviceSize size, int frames) {
   VmaAllocator allocator = mDevice->getVmaAllocator();
 
   VkBufferCreateInfo bufferInfo = { VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
@@ -46,45 +45,63 @@ bool VulkanBuffer::alloc(VkDeviceSize size) {
 
   mSize = size;
   VmaAllocationInfo info;
-  return vmaCreateBuffer(allocator, &bufferInfo, &allocInfo, &mVkBuffer, &mVmaAllocation, &info) == VK_SUCCESS;
+
+  clearBuffers();
+  for (int i = 0; i < frames; ++i) {
+    VkBuffer buffer;
+    VmaAllocation allocation;
+    if (vmaCreateBuffer(allocator, &bufferInfo, &allocInfo, &buffer, &allocation, &info) != VK_SUCCESS) {
+      cerr << "Error allocating VulkanBuffer!" << endl;
+      clearBuffers();
+      return false;
+    }
+    mVkBuffers.push_back(buffer);
+    mVmaAllocations.push_back(allocation);
+  }
+  return true;
 }
 
 void VulkanBuffer::destroy() {
-  if (mVkBuffer != VK_NULL_HANDLE) {
-    VmaAllocator allocator = mDevice->getVmaAllocator();
-    vmaDestroyBuffer(allocator, mVkBuffer, mVmaAllocation);
-    mVkBuffer = VK_NULL_HANDLE;
+  clearBuffers();
+}
+
+void VulkanBuffer::clearBuffers() {
+  VmaAllocator allocator = mDevice->getVmaAllocator();
+  for (int i = 0; i < mVkBuffers.size(); ++i) {
+    vmaDestroyBuffer(allocator, mVkBuffers.at(i), mVmaAllocations.at(i));
   }
 }
 
-void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer) {
-  copyToBuffer(commandBuffer, buffer->getVkBuffer());
+void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame) {
+  copyToBuffer(commandBuffer, buffer->getVkBuffer(), frame);
 }
 
-void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst) {
-  if (dst != VK_NULL_HANDLE && mVkBuffer != VK_NULL_HANDLE) {
+void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst, int frame) {
+  if (dst != VK_NULL_HANDLE && !mVkBuffers.empty()) {
     VkBufferCopy bufferCopy = {0, 0, mSize};
-    vkCmdCopyBuffer(commandBuffer, mVkBuffer, dst, 1, &bufferCopy);
+    vkCmdCopyBuffer(commandBuffer, mVkBuffers.at(frame), dst, 1, &bufferCopy);
   }
 }
 
-VmaAllocationInfo VulkanBuffer::getVmaAllocationInfo() const {
+VmaAllocationInfo VulkanBuffer::getVmaAllocationInfo(int frame) const {
   VmaAllocationInfo info;
-  if (mVkBuffer != VK_NULL_HANDLE) {
+  if (!mVmaAllocations.empty()) {
     VmaAllocator allocator = mDevice->getVmaAllocator();
-    vmaGetAllocationInfo(allocator, mVmaAllocation, &info);
+    vmaGetAllocationInfo(allocator, mVmaAllocations.at(frame), &info);
   }
   else
-    cerr << "Error: VmaAllocationInfo not avalible for empty VulkanBuffer" << endl;
+    throw runtime_error("Error getting VmaAllocationInfo, empty VulkanBuffer");
   return info;
 }
 
-VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags() const {
+VkMemoryPropertyFlags VulkanBuffer::getVkMemoryPropertyFlags(int frame) const {
   VkMemoryPropertyFlags flags = 0;
-  if (mVkBuffer != VK_NULL_HANDLE) {
+  if (!mVmaAllocations.empty()) {
     VmaAllocator allocator = mDevice->getVmaAllocator();
-    vmaGetAllocationMemoryProperties(allocator, mVmaAllocation, &flags);
+    vmaGetAllocationMemoryProperties(allocator, mVmaAllocations.at(frame), &flags);
   }
+  else
+    throw runtime_error("Error getting VkMemoryPropertyFlags, empty VulkanBuffer");
   return flags;
 }
 
@@ -94,45 +111,53 @@ VkDescriptorType VulkanBuffer::getVkDescriptorType() const {
   return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 }
 
-bool VulkanBuffer::isHostVisible() const {
-  return getVkMemoryPropertyFlags() & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+bool VulkanBuffer::isHostVisible(int frame) const {
+  return getVkMemoryPropertyFlags(frame) & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 }
 
-void* VulkanBuffer::data() {
-  VmaAllocationInfo info = getVmaAllocationInfo();
+void* VulkanBuffer::data(int frame) {
+  VmaAllocationInfo info = getVmaAllocationInfo(frame);
   return info.pMappedData;
 }
 
-bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize size) {
-  if (mSize < size) {
-    destroy();
-    if (!alloc(size)) {
-      cerr << "Error Allocating Vulkan Buffer" << endl;
+bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames) {
+  // Determine the number of Frames
+  frames = frames > 0 ? frames : mVkBuffers.empty() ? 1 : (int)mVkBuffers.size();
+
+  if (mSize < size || frames != mVkBuffers.size()) {
+    clearBuffers();
+    if (!alloc(size, frames))
       return false;
-    }
   }
 
   if (isHostVisible()) {
-    memcpy(this->data(), data, size);
+    // Copy directly to the buffers
+    for (int i = 0; i < frames; i++)
+      memcpy(this->data(i), data, size);
     return true;
   }
   else {
+    // Create staging buffer
     auto staging = mDevice->createBuffer();
     staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
     staging->setCreateFlags(
       VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
       VMA_ALLOCATION_CREATE_MAPPED_BIT
     );
-    if (staging->alloc(size)) {
-      memcpy(staging->data(), data, size);
-      if (auto command = queue->beginSingleCommand()) {
-        staging->copyToBuffer(command->getVkCommandBuffer(), getVkBuffer());
-        command->endSingle();
-        queue->waitIdle();
-      }
+
+    // Load staging buffer
+    if (!staging->alloc(size))
+      return false;
+    memcpy(staging->data(), data, size);
+
+    // Copy staging buffer to each buffer
+    if (auto command = queue->beginSingleCommand()) {
+      for (int i = 0; i < frames; i++)
+        staging->copyToBuffer(command->getVkCommandBuffer(), getVkBuffer(i));
+      command->endSingle();
+      queue->waitIdle();
       return true;
     }
   }
-  cerr << "Error Uploading data to VulkanBuffer";
   return false;
 }

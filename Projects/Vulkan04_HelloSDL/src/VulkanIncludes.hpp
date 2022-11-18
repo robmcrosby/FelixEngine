@@ -253,10 +253,10 @@ private:
 
 class VulkanBuffer {
 private:
-  VulkanDevice* mDevice;
-  VkBuffer      mVkBuffer;
-  VmaAllocation mVmaAllocation;
-  VkDeviceSize  mSize;
+  VulkanDevice*  mDevice;
+  VkBuffers      mVkBuffers;
+  VmaAllocations mVmaAllocations;
+  VkDeviceSize   mSize;
 
   VkBufferUsageFlags        mVkBufferUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
@@ -269,28 +269,30 @@ public:
   void setUsage(VkBufferUsageFlags flags);
   void setCreateFlags(VmaAllocationCreateFlags flags);
 
-  bool alloc(VkDeviceSize size);
+  bool alloc(VkDeviceSize size, int frames = 1);
   void destroy();
+  void clearBuffers();
 
-  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer);
-  void copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst);
+  void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame = 0);
+  void copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst, int frame = 0);
 
-  VkBuffer getVkBuffer() const {return mVkBuffer;}
+  VkBuffer getVkBuffer(int frame = 0) const {return mVkBuffers.at(frame);}
 
-  VmaAllocationInfo getVmaAllocationInfo() const;
-  VkMemoryPropertyFlags getVkMemoryPropertyFlags() const;
+  VmaAllocationInfo getVmaAllocationInfo(int frame = 0) const;
+  VkMemoryPropertyFlags getVkMemoryPropertyFlags(int frame = 0) const;
   VkDescriptorType getVkDescriptorType() const;
 
-  bool isHostVisible() const;
+  bool isHostVisible(int frame = 0) const;
 
-  void* data();
+  void* data(int frame = 0);
   VkDeviceSize size() const {return mSize;}
+  uint32_t frames() const {return static_cast<uint32_t>(mVkBuffers.size());}
 
-  bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size);
+  bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames = 0);
 
   template <typename T>
-  bool load(VulkanQueuePtr queue, const std::vector<T>& src) {
-    return load(queue, src.data(), src.size() * sizeof(T));
+  bool load(VulkanQueuePtr queue, const std::vector<T>& src, int frames = 0) {
+    return load(queue, src.data(), src.size() * sizeof(T), frames);
   }
 };
 
