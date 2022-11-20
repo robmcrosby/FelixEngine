@@ -30,6 +30,7 @@ typedef std::vector<VkDescriptorSetLayoutBinding> VkDescriptorSetLayoutBindings;
 typedef std::vector<VkAttachmentReference>        VkAttachmentReferences;
 typedef std::vector<VkAttachmentDescription>      VkAttachmentDescriptions;
 typedef std::vector<VkDescriptorSetLayout>        VkDescriptorSetLayouts;
+typedef std::vector<VkDescriptorSet>              VkDescriptorSets;
 typedef std::vector<VkImageMemoryBarrier>         VkImageMemoryBarriers;
 typedef std::vector<VkBuffer>                     VkBuffers;
 typedef std::vector<VkImage>                      VkImages;
@@ -224,8 +225,8 @@ public:
 
   VulkanBufferPtr      createBuffer();
   VulkanImagePtr       createImage();
-  VulkanLayoutPtr      createLayout();
-  VulkanLayoutSetPtr   createLayoutSet();
+  VulkanLayoutPtr      createLayout(int frames = 1);
+  VulkanLayoutSetPtr   createLayoutSet(int frames = 1);
   VulkanMeshPtr        createMesh();
   VulkanFrameBufferPtr createFrameBuffer();
   VulkanRenderPassPtr  createRenderPass();
@@ -382,14 +383,15 @@ private:
 class VulkanLayout {
 private:
   VulkanDevice*         mDevice;
+  int                   mFrames;
   BufferLayoutBindings  mBufferLayoutBindings;
   TextureLayoutBindings mTextureLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
   VkDescriptorPool      mVkDescriptorPool;
-  VkDescriptorSet       mVkDescriptorSet;
+  VkDescriptorSets      mVkDescriptorSets;
 
 public:
-  VulkanLayout(VulkanDevice* device);
+  VulkanLayout(VulkanDevice* device, int frames);
   ~VulkanLayout();
 
   bool setStorage(
@@ -397,14 +399,14 @@ public:
     uint32_t binding,
     const void* data,
     VkDeviceSize size,
-    int frames = 1
+    int frames = 0
   );
   bool setUniform(
     VulkanQueuePtr queue,
     uint32_t binding,
     const void* data,
     VkDeviceSize size,
-    int frames = 1
+    int frames = 0
   );
 
   template <typename T>
@@ -433,12 +435,15 @@ public:
 
   VkDescriptorSetLayout getVkDescriptorSetLayout();
   VkDescriptorPool      getVkDescriptorPool();
-  VkDescriptorSet       getVkDescriptorSet();
+  VkDescriptorSet       getVkDescriptorSet(int frame);
+
+  int frames() const {return mFrames;}
 
   void destroy();
 
 private:
-  void freeDescriptorSet();
+  void createDescriptorSets();
+  void clearDescriptorSets();
   void destroyDescriptorPool();
   void destroyDescriptorSetLayout();
 };
@@ -447,17 +452,18 @@ private:
 class VulkanLayoutSet {
 private:
   VulkanDevice*    mDevice;
+  int              mFrames;
   VulkanLayouts    mLayouts;
   VkPipelineLayout mVkPipelineLayout;
 
 public:
-  VulkanLayoutSet(VulkanDevice* device);
+  VulkanLayoutSet(VulkanDevice* device, int frames);
   ~VulkanLayoutSet();
 
   VulkanLayoutPtr at(int index);
 
   void getVkDescriptorSetLayouts(VkDescriptorSetLayouts& setLayouts);
-  void getVkDescriptorSets(VkDescriptorSets& descriptorSets);
+  void getVkDescriptorSets(VkDescriptorSets& descriptorSets, int frame);
   VkPipelineLayout getVkPipelineLayout();
 
   void destroy();

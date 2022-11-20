@@ -4,9 +4,9 @@
 using namespace std;
 
 
-VulkanLayoutSet::VulkanLayoutSet(VulkanDevice* device):
+VulkanLayoutSet::VulkanLayoutSet(VulkanDevice* device, int frames):
   mDevice(device),
-  mVkPipelineLayout(VK_NULL_HANDLE) {
+  mFrames(frames) {
 
 }
 
@@ -16,7 +16,7 @@ VulkanLayoutSet::~VulkanLayoutSet() {
 
 VulkanLayoutPtr VulkanLayoutSet::at(int index) {
   while (mLayouts.size() <= index)
-    mLayouts.push_back(mDevice->createLayout());
+    mLayouts.push_back(mDevice->createLayout(mFrames));
   return mLayouts.at(index);
 }
 
@@ -25,9 +25,9 @@ void VulkanLayoutSet::getVkDescriptorSetLayouts(VkDescriptorSetLayouts& setLayou
     setLayouts.push_back(layout->getVkDescriptorSetLayout());
 }
 
-void VulkanLayoutSet::getVkDescriptorSets(VkDescriptorSets& descriptorSets) {
+void VulkanLayoutSet::getVkDescriptorSets(VkDescriptorSets& descriptorSets, int frame) {
   for (auto layout : mLayouts)
-    descriptorSets.push_back(layout->getVkDescriptorSet());
+    descriptorSets.push_back(layout->getVkDescriptorSet(frame));
 }
 
 VkPipelineLayout VulkanLayoutSet::getVkPipelineLayout() {

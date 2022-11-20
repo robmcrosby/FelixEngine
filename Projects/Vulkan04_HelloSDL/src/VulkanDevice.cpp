@@ -151,13 +151,13 @@ VulkanImagePtr VulkanDevice::createImage() {
   return image;
 }
 
-VulkanLayoutPtr VulkanDevice::createLayout() {
-  VulkanLayoutPtr layout = make_shared<VulkanLayout>(this);
+VulkanLayoutPtr VulkanDevice::createLayout(int frames) {
+  VulkanLayoutPtr layout = make_shared<VulkanLayout>(this, frames);
   return layout;
 }
 
-VulkanLayoutSetPtr VulkanDevice::createLayoutSet() {
-  VulkanLayoutSetPtr layoutSet = make_shared<VulkanLayoutSet>(this);
+VulkanLayoutSetPtr VulkanDevice::createLayoutSet(int frames) {
+  VulkanLayoutSetPtr layoutSet = make_shared<VulkanLayoutSet>(this, frames);
   return layoutSet;
 }
 

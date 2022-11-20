@@ -37,9 +37,9 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto frameSync = device->createFrameSync();
   frameSync->setup(swapChain->frames(), 2);
 
-  auto layoutSet = device->createLayoutSet();
+  auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
-  layout->setUniform(queue, 0, modelMatrix, swapChain->frames());
+  layout->setUniform(queue, 0, modelMatrix);
   layout->update();
 
   auto mesh = device->createMesh();

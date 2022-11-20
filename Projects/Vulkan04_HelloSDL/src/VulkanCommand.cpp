@@ -88,7 +88,7 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
 void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
     VkDescriptorSets descriptorSets;
-    layoutSet->getVkDescriptorSets(descriptorSets);
+    layoutSet->getVkDescriptorSets(descriptorSets, 0);
     vkCmdBindDescriptorSets(
       mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
@@ -110,7 +110,7 @@ void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSe
     );
 
     VkDescriptorSets descriptorSets;
-    layoutSet->getVkDescriptorSets(descriptorSets);
+    layoutSet->getVkDescriptorSets(descriptorSets, 0);
     vkCmdBindDescriptorSets(
       mRecordingBuffer,
       VK_PIPELINE_BIND_POINT_COMPUTE,
@@ -183,7 +183,7 @@ void VulkanCommand::bind(
 
     if (layoutSet != nullptr) {
       VkDescriptorSets descriptorSets;
-      layoutSet->getVkDescriptorSets(descriptorSets);
+      layoutSet->getVkDescriptorSets(descriptorSets, mRecordingFrame);
       vkCmdBindDescriptorSets(
         mRecordingBuffer,
         VK_PIPELINE_BIND_POINT_GRAPHICS,
