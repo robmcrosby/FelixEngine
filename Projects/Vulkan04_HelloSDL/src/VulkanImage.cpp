@@ -49,9 +49,15 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height, int frames) {
     }
     mVkImages.push_back(image);
     mVmaAllocations.push_back(allocation);
-    mVkImageViews.push_back(
-      createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1)
-    );
+
+    auto imageView = createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+    mVkImageViews.push_back(imageView);
+
+    VkDescriptorImageInfo imageInfo;
+    imageInfo.sampler = VK_NULL_HANDLE;
+    imageInfo.imageView = imageView;
+    imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+    mVkDescriptorImageInfos.push_back(imageInfo);
   }
   return mVkImages.size() == frames;
 }
@@ -66,6 +72,7 @@ void VulkanImage::clearImages() {
   for (auto imageView : mVkImageViews)
     vkDestroyImageView(device, imageView, nullptr);
   mVkImageViews.clear();
+  mVkDescriptorImageInfos.clear();
 
   // Destroy VkImages
   VmaAllocator allocator = mDevice->getVmaAllocator();
@@ -87,9 +94,15 @@ void VulkanImage::setSwapImages(const VkImages& images, VkFormat format, uint32_
 
   for (auto image : images) {
     mVkImages.push_back(image);
-    mVkImageViews.push_back(
-      createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1)
-    );
+
+    auto imageView = createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+    mVkImageViews.push_back(imageView);
+
+    VkDescriptorImageInfo imageInfo;
+    imageInfo.sampler = VK_NULL_HANDLE;
+    imageInfo.imageView = imageView;
+    imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+    mVkDescriptorImageInfos.push_back(imageInfo);
   }
 
   mCurImageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;

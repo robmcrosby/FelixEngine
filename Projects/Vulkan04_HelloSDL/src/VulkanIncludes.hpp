@@ -42,6 +42,8 @@ typedef std::vector<VkPresentModeKHR>             VkPresentModes;
 typedef std::vector<VkCommandBuffer>              VkCommandBuffers;
 typedef std::vector<VkSemaphore>                  VkSemaphores;
 typedef std::vector<VkFence>                      VkFences;
+typedef std::vector<VkDescriptorBufferInfo>       VkDescriptorBufferInfos;
+typedef std::vector<VkDescriptorImageInfo>        VkDescriptorImageInfos;
 typedef std::vector<VmaAllocation>                VmaAllocations;
 
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
@@ -106,14 +108,12 @@ typedef std::shared_ptr<VulkanFrameSync> VulkanFrameSyncPtr;
 struct BufferLayoutBinding {
   VulkanBufferPtr buffer;
   VkDescriptorSetLayoutBinding binding;
-  VkDescriptorBufferInfo bufferInfo;
 };
 typedef std::vector<BufferLayoutBinding> BufferLayoutBindings;
 
 struct TextureLayoutBinding {
   VulkanImagePtr image;
   VkDescriptorSetLayoutBinding binding;
-  VkDescriptorImageInfo imageInfo;
 };
 typedef std::vector<TextureLayoutBinding> TextureLayoutBindings;
 
@@ -261,6 +261,7 @@ private:
   VkBufferUsageFlags        mVkBufferUsageFlags;
   VmaMemoryUsage            mVmaMemoryUsage;
   VmaAllocationCreateFlags  mVmaCreateFlags;
+  VkDescriptorBufferInfos   mVkDescriptorBufferInfos;
 
 public:
   VulkanBuffer(VulkanDevice* device);
@@ -288,6 +289,10 @@ public:
   VkDeviceSize size() const {return mSize;}
   uint32_t frames() const {return static_cast<uint32_t>(mVkBuffers.size());}
 
+  const VkDescriptorBufferInfo* getVkDescriptorBufferInfo(int index = 0) const {
+    return &mVkDescriptorBufferInfos.at(index % frames());
+  }
+
   bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames = 0);
 
   template <typename T>
@@ -307,9 +312,10 @@ private:
   uint32_t       mWidth;
   uint32_t       mHeight;
 
-  VkImageUsageFlags         mVkImageUsageFlags;
-  VmaMemoryUsage            mVmaMemoryUsage;
-  VmaAllocationCreateFlags  mVmaCreateFlags;
+  VkImageUsageFlags        mVkImageUsageFlags;
+  VmaMemoryUsage           mVmaMemoryUsage;
+  VmaAllocationCreateFlags mVmaCreateFlags;
+  VkDescriptorImageInfos   mVkDescriptorImageInfos;
 
   VkImageLayout        mCurImageLayout;
   VkPipelineStageFlags mCurStageMask;
@@ -343,6 +349,10 @@ public:
   uint32_t height() const {return mHeight;}
   uint32_t frames() const {return static_cast<uint32_t>(mVkImages.size());}
   bool isSwapImage() const {return mVmaAllocations.empty() && !mVkImages.empty();}
+
+  const VkDescriptorImageInfo* getVkDescriptorImageInfo(int index = 0) const {
+    return &mVkDescriptorImageInfos.at(index % frames());
+  }
 
   void transition(
     VkCommandBuffer      commandBuffer,
@@ -386,31 +396,35 @@ public:
     VulkanQueuePtr queue,
     uint32_t binding,
     const void* data,
-    VkDeviceSize size
+    VkDeviceSize size,
+    int frames = 1
   );
   bool setUniform(
     VulkanQueuePtr queue,
     uint32_t binding,
     const void* data,
-    VkDeviceSize size
+    VkDeviceSize size,
+    int frames = 1
   );
 
   template <typename T>
   bool setStorage(
     VulkanQueuePtr queue,
     uint32_t binding,
-    const std::vector<T>& src
+    const std::vector<T>& src,
+    int frames = 1
   ) {
-    return setStorage(queue, binding, src.data(), src.size() * sizeof(T));
+    return setStorage(queue, binding, src.data(), src.size() * sizeof(T), frames);
   }
 
   template <typename T>
   bool setUniform(
     VulkanQueuePtr queue,
     uint32_t binding,
-    const std::vector<T>& src
+    const std::vector<T>& src,
+    int frames = 1
   ) {
-    return setUniform(queue, binding, src.data(), src.size() * sizeof(T));
+    return setUniform(queue, binding, src.data(), src.size() * sizeof(T), frames);
   }
 
   void setBuffer(VulkanBufferPtr buffer, uint32_t binding);

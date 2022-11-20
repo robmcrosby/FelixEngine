@@ -21,7 +21,8 @@ bool VulkanLayout::setStorage(
   VulkanQueuePtr queue,
   uint32_t binding,
   const void* data,
-  VkDeviceSize size
+  VkDeviceSize size,
+  int frames
 ) {
   auto buffer = mDevice->createBuffer();
   buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
@@ -31,7 +32,7 @@ bool VulkanLayout::setStorage(
     VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
-  bool loaded = buffer->load(queue, data, size);
+  bool loaded = buffer->load(queue, data, size, frames);
   setBuffer(buffer, binding);
   return loaded;
 }
@@ -40,7 +41,8 @@ bool VulkanLayout::setUniform(
   VulkanQueuePtr queue,
   uint32_t binding,
   const void* data,
-  VkDeviceSize size
+  VkDeviceSize size,
+  int frames
 ) {
   auto buffer = mDevice->createBuffer();
   buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
@@ -50,7 +52,7 @@ bool VulkanLayout::setUniform(
     VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
-  bool loaded = buffer->load(queue, data, size);
+  bool loaded = buffer->load(queue, data, size, frames);
   setBuffer(buffer, binding);
   return loaded;
 }
@@ -63,9 +65,6 @@ void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   layoutBinding.binding.descriptorCount = 1;
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
-  layoutBinding.bufferInfo.buffer = buffer->getVkBuffer();
-  layoutBinding.bufferInfo.offset = 0;
-  layoutBinding.bufferInfo.range = VK_WHOLE_SIZE;
   mBufferLayoutBindings.push_back(layoutBinding);
 }
 
@@ -77,9 +76,6 @@ void VulkanLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
   layoutBinding.binding.descriptorCount = 1;
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
-  layoutBinding.imageInfo.sampler = VK_NULL_HANDLE;
-  layoutBinding.imageInfo.imageView = image->getVkImageView();
-  layoutBinding.imageInfo.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
   mTextureLayoutBindings.push_back(layoutBinding);
 }
 
@@ -95,7 +91,7 @@ void VulkanLayout::update() {
     writeSet.descriptorCount = 1;
     writeSet.descriptorType = mBufferLayoutBindings[i].binding.descriptorType;
     writeSet.pImageInfo = nullptr;
-    writeSet.pBufferInfo = &mBufferLayoutBindings[i].bufferInfo;
+    writeSet.pBufferInfo = mBufferLayoutBindings.at(i).buffer->getVkDescriptorBufferInfo();
     writeSet.pTexelBufferView = nullptr;
     writeSets.push_back(writeSet);
   }
@@ -107,7 +103,7 @@ void VulkanLayout::update() {
     writeSet.dstArrayElement = 0;
     writeSet.descriptorCount = 1;
     writeSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-    writeSet.pImageInfo = &mTextureLayoutBindings[i].imageInfo;
+    writeSet.pImageInfo = mTextureLayoutBindings.at(i).image->getVkDescriptorImageInfo();
     writeSet.pBufferInfo = nullptr;
     writeSet.pTexelBufferView = nullptr;
     writeSets.push_back(writeSet);

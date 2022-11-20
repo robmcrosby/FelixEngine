@@ -57,6 +57,12 @@ bool VulkanBuffer::alloc(VkDeviceSize size, int frames) {
     }
     mVkBuffers.push_back(buffer);
     mVmaAllocations.push_back(allocation);
+
+    VkDescriptorBufferInfo bufferInfo;
+    bufferInfo.buffer = buffer;
+    bufferInfo.offset = 0;
+    bufferInfo.range  = VK_WHOLE_SIZE;
+    mVkDescriptorBufferInfos.push_back(bufferInfo);
   }
   return true;
 }
@@ -70,6 +76,10 @@ void VulkanBuffer::clearBuffers() {
   for (int i = 0; i < mVkBuffers.size(); ++i) {
     vmaDestroyBuffer(allocator, mVkBuffers.at(i), mVmaAllocations.at(i));
   }
+
+  mVkBuffers.clear();
+  mVmaAllocations.clear();
+  mVkDescriptorBufferInfos.clear();
 }
 
 void VulkanBuffer::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame) {

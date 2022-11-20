@@ -7,6 +7,24 @@
 using namespace std;
 
 
+const vector<float> rectVerts = {
+  -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,
+  -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,
+   0.5f, -0.5f,   0.0f, 1.0f, 0.0f,
+   0.5f,  0.5f,   0.0f, 0.0f, 1.0f
+};
+const vector<uint32_t> rectIndices = {
+  1, 0, 3, 2, 0, 3
+};
+
+const vector<float> modelMatrix = {
+  1.7, 0.0, 0.0, 0.0,
+  0.0, 1.7, 0.0, 0.0,
+  0.0, 0.0, 1.0, 0.0,
+  0.0, 0.0, 0.0, 1.0
+};
+
+
 void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
 
@@ -19,19 +37,30 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto frameSync = device->createFrameSync();
   frameSync->setup(swapChain->frames(), 2);
 
+  auto layoutSet = device->createLayoutSet();
+  auto layout = layoutSet->at(0);
+  layout->setUniform(queue, 0, modelMatrix, swapChain->frames());
+  layout->update();
+
+  auto mesh = device->createMesh();
+  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addAttribute(0, 0, 2, 0);
+  mesh->addAttribute(0, 1, 3, 2);
+  mesh->setIndexBuffer(queue, rectIndices);
+
   auto renderPass = device->createRenderPass();
   renderPass->setFramebuffer(framebuffer);
 
   auto pipeline = device->createPipeline();
-  pipeline->setVertexShader("triangle.spv");
+  pipeline->setVertexShader("vertexUniform.spv");
   pipeline->setFragmentShader("color.spv");
 
   auto command = queue->createCommand(swapChain->frames());
   for (int frame = 0; frame < swapChain->frames(); ++frame) {
     command->begin(frame);
     command->beginRenderPass(renderPass);
-    command->bind(pipeline, renderPass);
-    command->draw(3);
+    command->bind(pipeline, renderPass, mesh, layoutSet);
+    command->draw(mesh);
     command->endRenderPass();
     command->end();
   }
