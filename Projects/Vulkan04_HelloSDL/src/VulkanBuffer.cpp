@@ -130,6 +130,25 @@ void* VulkanBuffer::data(int frame) {
   return info.pMappedData;
 }
 
+bool VulkanBuffer::load(const void* data, VkDeviceSize size, int frames) {
+  // Determine the number of Frames
+  frames = frames > 0 ? frames : mVkBuffers.empty() ? 1 : (int)mVkBuffers.size();
+
+  if (mSize < size || frames != mVkBuffers.size()) {
+    clearBuffers();
+    if (!alloc(size, frames))
+      return false;
+  }
+
+  if (isHostVisible()) {
+    // Copy directly to the buffers
+    for (int frame = 0; frame < frames; frame++)
+      update(data, size, frame);
+    return true;
+  }
+  return false;
+}
+
 bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames) {
   // Determine the number of Frames
   frames = frames > 0 ? frames : mVkBuffers.empty() ? 1 : (int)mVkBuffers.size();
@@ -142,8 +161,8 @@ bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize siz
 
   if (isHostVisible()) {
     // Copy directly to the buffers
-    for (int i = 0; i < frames; i++)
-      memcpy(this->data(i), data, size);
+    for (int frame = 0; frame < frames; frame++)
+      update(data, size, frame);
     return true;
   }
   else {
@@ -156,18 +175,22 @@ bool VulkanBuffer::load(VulkanQueuePtr queue, const void* data, VkDeviceSize siz
     );
 
     // Load staging buffer
-    if (!staging->alloc(size))
+    if (!staging->load(data, size))
       return false;
-    memcpy(staging->data(), data, size);
 
     // Copy staging buffer to each buffer
     if (auto command = queue->beginSingleCommand()) {
-      for (int i = 0; i < frames; i++)
-        staging->copyToBuffer(command->getVkCommandBuffer(), getVkBuffer(i));
+      for (int frame = 0; frame < frames; frame++)
+        staging->copyToBuffer(command->getVkCommandBuffer(), getVkBuffer(frame));
       command->endSingle();
       queue->waitIdle();
       return true;
     }
   }
   return false;
+}
+
+void VulkanBuffer::update(const void* data, VkDeviceSize size, int frame) {
+  size = min(mSize, size);
+  memcpy(this->data(frame), data, size);
 }

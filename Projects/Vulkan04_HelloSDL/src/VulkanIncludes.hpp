@@ -67,6 +67,7 @@ typedef std::vector<VulkanDevicePtr> VulkanDevices;
 
 class VulkanBuffer;
 typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
+typedef std::map<uint32_t, VulkanBufferPtr> VulkanBufferMap;
 
 class VulkanImage;
 typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
@@ -306,7 +307,10 @@ public:
     return &mVkDescriptorBufferInfos.at(index % frames());
   }
 
+  bool load(const void* data, VkDeviceSize size, int frames = 0);
   bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames = 0);
+
+  void update(const void* data, VkDeviceSize size, int frame = 0);
 
   template <typename T>
   bool load(VulkanQueuePtr queue, const std::vector<T>& src, int frames = 0) {
@@ -422,6 +426,7 @@ class VulkanLayout {
 private:
   VulkanDevice*         mDevice;
   int                   mFrames;
+  VulkanBufferMap       mBufferMap;
   BufferLayoutBindings  mBufferLayoutBindings;
   TextureLayoutBindings mTextureLayoutBindings;
   VkDescriptorSetLayout mVkDescriptorSetLayout;
@@ -452,7 +457,7 @@ public:
     VulkanQueuePtr queue,
     uint32_t binding,
     const std::vector<T>& src,
-    int frames = 1
+    int frames = 0
   ) {
     return setStorage(queue, binding, src.data(), src.size() * sizeof(T), frames);
   }
@@ -462,9 +467,56 @@ public:
     VulkanQueuePtr queue,
     uint32_t binding,
     const std::vector<T>& src,
-    int frames = 1
+    int frames = 0
   ) {
     return setUniform(queue, binding, src.data(), src.size() * sizeof(T), frames);
+  }
+
+  bool setStorage(
+    uint32_t binding,
+    const void* data,
+    VkDeviceSize size,
+    int frames = 0
+  );
+  bool setUniform(
+    uint32_t binding,
+    const void* data,
+    VkDeviceSize size,
+    int frames = 0
+  );
+
+  template <typename T>
+  bool setStorage(
+    uint32_t binding,
+    const std::vector<T>& src,
+    int frames = 0
+  ) {
+    return setStorage(binding, src.data(), src.size() * sizeof(T), frames);
+  }
+
+  template <typename T>
+  bool setUniform(
+    uint32_t binding,
+    const std::vector<T>& src,
+    int frames = 0
+  ) {
+    return setUniform(binding, src.data(), src.size() * sizeof(T), frames);
+  }
+
+  void update(
+    uint32_t binding,
+    const void* data,
+    VkDeviceSize size,
+    int frame = 0
+  );
+
+  template <typename T>
+  void update(
+    uint32_t binding,
+    const std::vector<T>& src,
+    int frame = 0
+  ) {
+    update(binding, src.data(), src.size() * sizeof(T), frame);
   }
 
   void setBuffer(uint32_t binding, VulkanBufferPtr buffer);

@@ -61,6 +61,57 @@ bool VulkanLayout::setUniform(
   return loaded;
 }
 
+bool VulkanLayout::setStorage(
+  uint32_t binding,
+  const void* data,
+  VkDeviceSize size,
+  int frames
+) {
+  frames = frames > 0 ? frames : mFrames;
+
+  auto buffer = mDevice->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+  );
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+  bool loaded = buffer->load(data, size, frames);
+  setBuffer(binding, buffer);
+  return loaded;
+}
+
+bool VulkanLayout::setUniform(
+  uint32_t binding,
+  const void* data,
+  VkDeviceSize size,
+  int frames
+) {
+  frames = frames > 0 ? frames : mFrames;
+
+  auto buffer = mDevice->createBuffer();
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+    VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
+  );
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
+  );
+  bool loaded = buffer->load(data, size, frames);
+  setBuffer(binding, buffer);
+  return loaded;
+}
+
+void VulkanLayout::update(
+  uint32_t binding,
+  const void* data,
+  VkDeviceSize size,
+  int frame
+) {
+  auto itr = mBufferMap.find(binding);
+  if (itr != mBufferMap.end())
+    itr->second->update(data, size, frame);
+}
+
 void VulkanLayout::setBuffer(uint32_t binding, VulkanBufferPtr buffer) {
   BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
@@ -70,6 +121,7 @@ void VulkanLayout::setBuffer(uint32_t binding, VulkanBufferPtr buffer) {
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
   layoutBinding.binding.pImmutableSamplers = nullptr;
   mBufferLayoutBindings.push_back(layoutBinding);
+  mBufferMap[binding] = buffer;
 }
 
 void VulkanLayout::setTexture(uint32_t binding, VulkanImagePtr image) {

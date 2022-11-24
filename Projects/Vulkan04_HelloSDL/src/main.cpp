@@ -8,25 +8,24 @@ using namespace std;
 
 
 const vector<float> rectVerts = {
-  -0.5f, -0.5f,   0.0f, 1.0f,
-  -0.5f,  0.5f,   0.0f, 0.0f,
-   0.5f, -0.5f,   1.0f, 1.0f,
-   0.5f,  0.5f,   1.0f, 0.0f
+  -0.5f, -0.5f,   0.0f, 0.0f,
+  -0.5f,  0.5f,   0.0f, 1.0f,
+   0.5f, -0.5f,   1.0f, 0.0f,
+   0.5f,  0.5f,   1.0f, 1.0f
 };
 const vector<uint32_t> rectIndices = {
   1, 0, 3, 2, 0, 3
 };
 
-const vector<float> modelMatrix = {
-  1.7, 0.0, 0.0, 0.0,
-  0.0, 1.7, 0.0, 0.0,
-  0.0, 0.0, 1.0, 0.0,
-  0.0, 0.0, 0.0, 1.0
-};
-
-
 void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
+
+  vector<float> modelMatrix = {
+    1.7, 0.0, 0.0, 0.0,
+    0.0, 1.7, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0
+  };
 
   auto swapChain = device->createSwapChain();
   swapChain->setToWindow(window);
@@ -45,7 +44,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
-  layout->setUniform(queue, 0, modelMatrix);
+  layout->setUniform(0, modelMatrix);
   layout->setTexture(1, image, sampler);
   layout->update();
 
@@ -72,15 +71,24 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
     command->end();
   }
 
+  float size = 1.0;
   SDL_Event e;
   while (!quit) {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT) {
         quit = true;
       }
+      else if (e.type == SDL_KEYDOWN) {
+        size += 0.1;
+      }
     }
 
     int frame = swapChain->getNextFrame(frameSync);
+
+    modelMatrix[0] = size;
+    modelMatrix[5] = size;
+    layout->update(0, modelMatrix, frame);
+
     queue->submitCommand(command, frameSync);
     swapChain->presentFrame(frameSync, queue);
 
@@ -106,7 +114,7 @@ int main(int argc, char *argv[])
   SDL_Window* window = SDL_CreateWindow(
     "Hello SDL",
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-    640, 480,
+    512, 512,
     SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN
   );
 
