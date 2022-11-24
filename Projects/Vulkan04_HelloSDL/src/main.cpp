@@ -46,7 +46,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
   layout->setUniform(queue, 0, modelMatrix);
-  layout->setTexture(0, image, sampler);
+  layout->setTexture(1, image, sampler);
   layout->update();
 
   auto mesh = device->createMesh();
