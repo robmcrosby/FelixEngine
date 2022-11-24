@@ -8,10 +8,10 @@ using namespace std;
 
 
 const vector<float> rectVerts = {
-  -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,
-  -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,
-   0.5f, -0.5f,   0.0f, 1.0f, 0.0f,
-   0.5f,  0.5f,   0.0f, 0.0f, 1.0f
+  -0.5f, -0.5f,   0.0f, 1.0f,
+  -0.5f,  0.5f,   0.0f, 0.0f,
+   0.5f, -0.5f,   1.0f, 1.0f,
+   0.5f,  0.5f,   1.0f, 0.0f
 };
 const vector<uint32_t> rectIndices = {
   1, 0, 3, 2, 0, 3
@@ -37,23 +37,30 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   auto frameSync = device->createFrameSync();
   frameSync->setup(swapChain->frames(), 2);
 
+  auto image = device->createImage();
+  image->load(queue, "image.png");
+
+  auto sampler = device->createSampler();
+  sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
+
   auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
   layout->setUniform(queue, 0, modelMatrix);
+  layout->setTexture(0, image, sampler);
   layout->update();
 
   auto mesh = device->createMesh();
-  mesh->addBuffer(queue, rectVerts, 5);
+  mesh->addBuffer(queue, rectVerts, 4);
   mesh->addAttribute(0, 0, 2, 0);
-  mesh->addAttribute(0, 1, 3, 2);
+  mesh->addAttribute(0, 1, 2, 2);
   mesh->setIndexBuffer(queue, rectIndices);
 
   auto renderPass = device->createRenderPass();
   renderPass->setFramebuffer(framebuffer);
 
   auto pipeline = device->createPipeline();
-  pipeline->setVertexShader("vertexUniform.spv");
-  pipeline->setFragmentShader("color.spv");
+  pipeline->setVertexShader("vertexUV.spv");
+  pipeline->setFragmentShader("texture.spv");
 
   auto command = queue->createCommand(swapChain->frames());
   for (int frame = 0; frame < swapChain->frames(); ++frame) {

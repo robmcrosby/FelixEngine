@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <memory>
 #include <vk_mem_alloc.h>
 
@@ -50,6 +51,7 @@ typedef std::vector<VmaAllocation>                VmaAllocations;
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
 typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;
 
+typedef std::map<uint32_t, VkSampler> VkSamplerMap;
 
 struct LayoutBinding {
   std::string name;
@@ -69,6 +71,10 @@ typedef std::shared_ptr<VulkanBuffer> VulkanBufferPtr;
 class VulkanImage;
 typedef std::shared_ptr<VulkanImage> VulkanImagePtr;
 typedef std::vector<VulkanImagePtr> VulkanImages;
+
+class VulkanSampler;
+typedef std::shared_ptr<VulkanSampler> VulkanSamplerPtr;
+typedef std::vector<VulkanSamplerPtr> VulkanSamplers;
 
 class VulkanLayout;
 typedef std::shared_ptr<VulkanLayout> VulkanLayoutPtr;
@@ -114,6 +120,7 @@ typedef std::vector<BufferLayoutBinding> BufferLayoutBindings;
 
 struct TextureLayoutBinding {
   VulkanImagePtr image;
+  VulkanSamplerPtr sampler;
   VkDescriptorSetLayoutBinding binding;
 };
 typedef std::vector<TextureLayoutBinding> TextureLayoutBindings;
@@ -201,6 +208,7 @@ private:
   VkPhysicalDeviceMemoryProperties mMemoryProperties;
 
   VulkanQueues mQueues;
+  VkSamplerMap mVkSamplerMap;
 
 public:
   VulkanDevice(VkPhysicalDevice device);
@@ -225,6 +233,7 @@ public:
 
   VulkanBufferPtr      createBuffer();
   VulkanImagePtr       createImage();
+  VulkanSamplerPtr     createSampler();
   VulkanLayoutPtr      createLayout(int frames = 1);
   VulkanLayoutSetPtr   createLayoutSet(int frames = 1);
   VulkanMeshPtr        createMesh();
@@ -242,6 +251,9 @@ public:
   std::ostream& printQueueFlags(std::ostream& os, VkQueueFlags flags) const;
   std::ostream& printHeapFlags(std::ostream& os, VkMemoryHeapFlags flags) const;
   std::ostream& printMemoryFlags(std::ostream& os, VkMemoryPropertyFlags flags) const;
+
+  VkSamplerMap& getVkSamplerMap() {return mVkSamplerMap;}
+  void clearVkSamplerMap();
 
 private:
   bool initVmaAllocator();
@@ -337,6 +349,9 @@ public:
 
   void setSwapImages(const VkImages& images, VkFormat format, uint32_t width, uint32_t height);
 
+  bool load(VulkanQueuePtr queue, StringRef filepath);
+  bool load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format);
+
   VkImage     getVkImage(int index = 0) const {return mVkImages.at(index);}
   VkImageView getVkImageView(int index = 0) const {return mVkImageViews.at(index);}
   VkFormat    getVkFormat() const {return mVkFormat;}
@@ -351,7 +366,7 @@ public:
   uint32_t frames() const {return static_cast<uint32_t>(mVkImages.size());}
   bool isSwapImage() const {return mVmaAllocations.empty() && !mVkImages.empty();}
 
-  const VkDescriptorImageInfo* getVkDescriptorImageInfo(int index = 0) const {
+  VkDescriptorImageInfo* getVkDescriptorImageInfo(int index = 0) {
     return &mVkDescriptorImageInfos.at(index % frames());
   }
 
@@ -377,6 +392,29 @@ private:
     VkImageAspectFlags aspectFlags,
     int32_t            mipLevels
   ) const;
+};
+
+
+class VulkanSampler {
+private:
+  VulkanDevice* mDevice;
+  VkSampler mVkSampler;
+  VkFilter  mMinFilter;
+  VkFilter  mMagFilter;
+  VkFilter  mMipFilter;
+  uint32_t  mMipLevels;
+
+public:
+  VulkanSampler(VulkanDevice* device);
+  ~VulkanSampler();
+
+  void setFilters(VkFilter min, VkFilter mag, VkFilter mip = VK_FILTER_NEAREST);
+
+  VkSampler getVkSampler();
+
+private:
+  VkSampler createVkSampler() const;
+  uint32_t getKey() const;
 };
 
 
@@ -429,8 +467,9 @@ public:
     return setUniform(queue, binding, src.data(), src.size() * sizeof(T), frames);
   }
 
-  void setBuffer(VulkanBufferPtr buffer, uint32_t binding);
-  void setTexture(VulkanImagePtr image, uint32_t binding);
+  void setBuffer(uint32_t binding, VulkanBufferPtr buffer);
+  void setTexture(uint32_t binding, VulkanImagePtr image);
+  void setTexture(uint32_t binding, VulkanImagePtr image, VulkanSamplerPtr sampler);
   void update();
 
   VkDescriptorSetLayout getVkDescriptorSetLayout();
@@ -699,7 +738,7 @@ public:
   void copyImageToBuffer(VulkanImagePtr image, VulkanBufferPtr buffer);
   void copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst);
 
-  VulkanCommandPtr createCommand(int frames = 0);
+  VulkanCommandPtr createCommand(int frames = 1);
   VulkanCommandPtr beginSingleCommand();
 
   void submitCommand(VulkanCommandPtr command);

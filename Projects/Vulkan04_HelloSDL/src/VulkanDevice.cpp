@@ -79,6 +79,7 @@ bool VulkanDevice::init() {
 }
 
 void VulkanDevice::destroy() {
+  clearVkSamplerMap();
   destoryVmaAllocator();
   clearQueues();
   if (mVkDevice != VK_NULL_HANDLE) {
@@ -149,6 +150,11 @@ VulkanBufferPtr VulkanDevice::createBuffer() {
 VulkanImagePtr VulkanDevice::createImage() {
   VulkanImagePtr image = make_shared<VulkanImage>(this);
   return image;
+}
+
+VulkanSamplerPtr VulkanDevice::createSampler() {
+  VulkanSamplerPtr sampler = make_shared<VulkanSampler>(this);
+  return sampler;
 }
 
 VulkanLayoutPtr VulkanDevice::createLayout(int frames) {
@@ -303,6 +309,14 @@ bool VulkanDevice::initVmaAllocator() {
   allocatorCreateInfo.pVulkanFunctions = &vulkanFunctions;
 
   return vmaCreateAllocator(&allocatorCreateInfo, &mVmaAllocator) == VK_SUCCESS;
+}
+
+void VulkanDevice::clearVkSamplerMap() {
+  if (mVkDevice != VK_NULL_HANDLE) {
+    for (auto itr : mVkSamplerMap)
+      vkDestroySampler(mVkDevice, itr.second, nullptr);
+  }
+  mVkSamplerMap.clear();
 }
 
 void VulkanDevice::destoryVmaAllocator() {

@@ -1,5 +1,10 @@
 #include "VulkanIncludes.hpp"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
+
 
 using namespace std;
 
@@ -23,14 +28,14 @@ VulkanImage::~VulkanImage() {
 }
 
 void VulkanImage::setUsage(VkImageUsageFlags flags) {
-  if (!mVkImages.empty())
+  if (mVkImages.empty())
     mVkImageUsageFlags = flags;
   else
     cerr << "Warning: VulkanImage usage flags must be set before allocation" << endl;
 }
 
 void VulkanImage::setCreateFlags(VmaAllocationCreateFlags flags) {
-  if (!mVkImages.empty())
+  if (mVkImages.empty())
     mVmaCreateFlags = flags;
   else
     cerr << "Warning: VmaCreate flags must be set before allocation" << endl;
@@ -109,6 +114,64 @@ void VulkanImage::setSwapImages(const VkImages& images, VkFormat format, uint32_
   mCurAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
   mCurStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 }
+
+
+bool VulkanImage::load(VulkanQueuePtr queue, StringRef filepath) {
+  int width, height, channels;
+  stbi_uc* pixels = stbi_load("image.png", &width, &height, &channels, STBI_rgb_alpha);
+  if (!pixels) {
+    cerr << "Error reading image file" << endl;
+    return false;
+  }
+
+  setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
+  setCreateFlags(VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT);
+
+  //cout << "Read: " << filepath << "(" << width << ", " << height << ")" << channels << endl;
+  VkDeviceSize size = width * height * channels;
+
+  // Create staging buffer
+  auto staging = mDevice->createBuffer();
+  staging->setUsage(VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+  staging->setCreateFlags(
+    VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+    VMA_ALLOCATION_CREATE_MAPPED_BIT
+  );
+
+  // Load staging buffer
+  if (!staging->alloc(size) || !alloc(width, height)) {
+    stbi_image_free(pixels);
+    return false;
+  }
+  memcpy(staging->data(), (void*)pixels, size);
+  stbi_image_free(pixels);
+
+  if (auto command = queue->beginSingleCommand()) {
+    transition(
+      command->getVkCommandBuffer(),
+      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+      VK_ACCESS_TRANSFER_WRITE_BIT,
+      VK_PIPELINE_STAGE_TRANSFER_BIT
+    );
+    copyFromBuffer(command->getVkCommandBuffer(), staging);
+    transition(
+      command->getVkCommandBuffer(),
+      VK_IMAGE_LAYOUT_GENERAL,
+      VK_ACCESS_SHADER_READ_BIT,
+      VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT
+    );
+    command->endSingle();
+    queue->waitIdle();
+
+    return true;
+  }
+  return false;
+}
+
+bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format) {
+  return false;
+}
+
 
 VmaAllocationInfo VulkanImage::getVmaAllocationInfo(int index) const {
   VmaAllocationInfo info;

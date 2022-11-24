@@ -35,7 +35,7 @@ bool VulkanLayout::setStorage(
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
   bool loaded = buffer->load(queue, data, size, frames);
-  setBuffer(buffer, binding);
+  setBuffer(binding, buffer);
   return loaded;
 }
 
@@ -57,11 +57,11 @@ bool VulkanLayout::setUniform(
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
   bool loaded = buffer->load(queue, data, size, frames);
-  setBuffer(buffer, binding);
+  setBuffer(binding, buffer);
   return loaded;
 }
 
-void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
+void VulkanLayout::setBuffer(uint32_t binding, VulkanBufferPtr buffer) {
   BufferLayoutBinding layoutBinding;
   layoutBinding.buffer = buffer;
   layoutBinding.binding.binding = binding;
@@ -72,13 +72,25 @@ void VulkanLayout::setBuffer(VulkanBufferPtr buffer, uint32_t binding) {
   mBufferLayoutBindings.push_back(layoutBinding);
 }
 
-void VulkanLayout::setTexture(VulkanImagePtr image, uint32_t binding) {
+void VulkanLayout::setTexture(uint32_t binding, VulkanImagePtr image) {
   TextureLayoutBinding layoutBinding;
   layoutBinding.image = image;
   layoutBinding.binding.binding = binding;
   layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
   layoutBinding.binding.descriptorCount = 1;
   layoutBinding.binding.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT | VK_SHADER_STAGE_ALL_GRAPHICS;
+  layoutBinding.binding.pImmutableSamplers = nullptr;
+  mTextureLayoutBindings.push_back(layoutBinding);
+}
+
+void VulkanLayout::setTexture(uint32_t binding, VulkanImagePtr image, VulkanSamplerPtr sampler) {
+  TextureLayoutBinding layoutBinding;
+  layoutBinding.image = image;
+  layoutBinding.sampler = sampler;
+  layoutBinding.binding.binding = binding;
+  layoutBinding.binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+  layoutBinding.binding.descriptorCount = 1;
+  layoutBinding.binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
   layoutBinding.binding.pImmutableSamplers = nullptr;
   mTextureLayoutBindings.push_back(layoutBinding);
 }
@@ -106,13 +118,17 @@ void VulkanLayout::update() {
     }
 
     for (int i = 0; i < mTextureLayoutBindings.size(); ++i) {
+      auto imageInfo = mTextureLayoutBindings.at(i).image->getVkDescriptorImageInfo(frame);
+      if (mTextureLayoutBindings.at(i).sampler != nullptr)
+        imageInfo->sampler = mTextureLayoutBindings.at(i).sampler->getVkSampler();
+
       VkWriteDescriptorSet writeSet = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET, 0};
       writeSet.dstSet = descriptorSet;
-      writeSet.dstBinding = mTextureLayoutBindings[i].binding.binding;
+      writeSet.dstBinding = mTextureLayoutBindings.at(i).binding.binding;
       writeSet.dstArrayElement = 0;
       writeSet.descriptorCount = 1;
-      writeSet.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-      writeSet.pImageInfo = mTextureLayoutBindings.at(i).image->getVkDescriptorImageInfo(frame);
+      writeSet.descriptorType = mTextureLayoutBindings.at(i).binding.descriptorType;
+      writeSet.pImageInfo = imageInfo;
       writeSet.pBufferInfo = nullptr;
       writeSet.pTexelBufferView = nullptr;
       writeSets.push_back(writeSet);
@@ -159,11 +175,15 @@ VkDescriptorPool VulkanLayout::getVkDescriptorPool() {
       poolSizes[typeMap[binding.binding.descriptorType]].descriptorCount += mFrames;
     }
 
-    if (mTextureLayoutBindings.size() > 0) {
-      VkDescriptorPoolSize poolSize = {};
-      poolSize.type = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-      poolSize.descriptorCount = static_cast<uint32_t>(mTextureLayoutBindings.size() * mFrames);
-      poolSizes.push_back(poolSize);
+    for (auto binding : mTextureLayoutBindings) {
+      if (typeMap.count(binding.binding.descriptorType) == 0) {
+        typeMap[binding.binding.descriptorType] = poolSizes.size();
+        VkDescriptorPoolSize poolSize = {};
+        poolSize.type = binding.binding.descriptorType;
+        poolSize.descriptorCount = 0;
+        poolSizes.push_back(poolSize);
+      }
+      poolSizes[typeMap[binding.binding.descriptorType]].descriptorCount += mFrames;
     }
 
     VkDescriptorPoolCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO, 0};
