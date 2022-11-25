@@ -71,22 +71,48 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
     command->end();
   }
 
-  float size = 1.0;
-  SDL_Event e;
+  float scale = 1.0;
+  float offsetX = 0.0;
+  float offsetY = 0.0;
+  SDL_Event event;
   while (!quit) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
         quit = true;
       }
-      else if (e.type == SDL_KEYDOWN) {
-        size += 0.1;
+      else if (event.type == SDL_KEYDOWN) {
+        switch(event.key.keysym.sym) {
+          case SDLK_LEFT:
+            offsetX -= 0.1;
+            break;
+          case SDLK_RIGHT:
+            offsetX += 0.1;
+            break;
+          case SDLK_UP:
+            offsetY -= 0.1;
+            break;
+          case SDLK_DOWN:
+            offsetY += 0.1;
+            break;
+          case SDLK_SPACE:
+            scale += 0.1;
+            break;
+          case SDLK_LSHIFT:
+          case SDLK_RSHIFT:
+            scale -= 0.1;
+            break;
+          default:
+            break;
+        }
       }
     }
 
     int frame = swapChain->getNextFrame(frameSync);
 
-    modelMatrix[0] = size;
-    modelMatrix[5] = size;
+    modelMatrix[0] = scale;
+    modelMatrix[5] = scale;
+    modelMatrix[12] = offsetX;
+    modelMatrix[13] = offsetY;
     layout->update(0, modelMatrix, frame);
 
     queue->submitCommand(command, frameSync);
