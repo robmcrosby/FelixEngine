@@ -3,7 +3,6 @@
 #include "VulkanIncludes.hpp"
 #include <vulkan/vulkan.h>
 
-
 using namespace std;
 
 
@@ -62,14 +61,15 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   pipeline->setFragmentShader("texture.spv");
 
   auto command = queue->createCommand(swapChain->frames());
-  for (int frame = 0; frame < swapChain->frames(); ++frame) {
+
+  VulkanRecording recording = [=](int frame) {
     command->begin(frame);
     command->beginRenderPass(renderPass);
     command->bind(pipeline, renderPass, mesh, layoutSet);
     command->draw(mesh);
     command->endRenderPass();
     command->end();
-  }
+  };
 
   float scale = 1.0;
   float offsetX = 0.0;
@@ -107,14 +107,20 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       }
     }
 
+    // Get Next Frame from Swap Chain
     int frame = swapChain->getNextFrame(frameSync);
 
+    // Update Matrix
     modelMatrix[0] = scale;
     modelMatrix[5] = scale;
     modelMatrix[12] = offsetX;
     modelMatrix[13] = offsetY;
     layout->update(0, modelMatrix, frame);
 
+    // Update Command Buffer Recording
+    recording(frame);
+
+    // Submit Command Buffer and Present Frame
     queue->submitCommand(command, frameSync);
     swapChain->presentFrame(frameSync, queue);
 
@@ -123,12 +129,14 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   queue->waitIdle();
 }
 
+
 void getSDL2Extenstions(SDL_Window* window, CStrings& extensions) {
   unsigned int count;
   SDL_Vulkan_GetInstanceExtensions(window, &count, NULL);
   extensions.resize(count);
   SDL_Vulkan_GetInstanceExtensions(window, &count, extensions.data());
 }
+
 
 int main(int argc, char *argv[])
 {

@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <functional>
 #include <vk_mem_alloc.h>
 
 
@@ -52,6 +53,8 @@ typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescr
 typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;
 
 typedef std::map<uint32_t, VkSampler> VkSamplerMap;
+
+typedef std::function<void (int)> VulkanRecording;
 
 struct LayoutBinding {
   std::string name;
