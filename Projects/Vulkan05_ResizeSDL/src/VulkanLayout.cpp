@@ -27,12 +27,10 @@ bool VulkanLayout::setStorage(
   frames = frames > 0 ? frames : mFrames;
 
   auto buffer = mDevice->createBuffer();
-  buffer->setUsage(
-    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
     VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
   );
-  buffer->setCreateFlags(
-    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
@@ -51,12 +49,10 @@ bool VulkanLayout::setUniform(
   frames = frames > 0 ? frames : mFrames;
 
   auto buffer = mDevice->createBuffer();
-  buffer->setUsage(
-    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
     VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
   );
-  buffer->setCreateFlags(
-    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
@@ -74,12 +70,10 @@ bool VulkanLayout::setStorage(
   frames = frames > 0 ? frames : mFrames;
 
   auto buffer = mDevice->createBuffer();
-  buffer->setUsage(
-    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
     VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
   );
-  buffer->setCreateFlags(
-    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
   bool loaded = buffer->load(data, size, frames);
@@ -96,12 +90,10 @@ bool VulkanLayout::setUniform(
   frames = frames > 0 ? frames : mFrames;
 
   auto buffer = mDevice->createBuffer();
-  buffer->setUsage(
-    VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+  buffer->setUsage(VK_BUFFER_USAGE_TRANSFER_DST_BIT |
     VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT
   );
-  buffer->setCreateFlags(
-    VMA_ALLOCATION_CREATE_MAPPED_BIT |
+  buffer->setCreateFlags(VMA_ALLOCATION_CREATE_MAPPED_BIT |
     VMA_ALLOCATION_CREATE_HOST_ACCESS_RANDOM_BIT
   );
   bool loaded = buffer->load(data, size, frames);
@@ -206,9 +198,7 @@ VkDescriptorSetLayout VulkanLayout::getVkDescriptorSetLayout() {
     for (auto texture : mTextureLayoutBindings)
       bindings.push_back(texture.binding);
 
-    VkDescriptorSetLayoutCreateInfo createInfo = {
-      VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO, 0, 0
-    };
+    VkDescriptorSetLayoutCreateInfo createInfo = {VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO, 0, 0};
     createInfo.bindingCount = static_cast<uint32_t>(bindings.size());
     createInfo.pBindings = bindings.data();
 
