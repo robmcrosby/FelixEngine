@@ -22,7 +22,8 @@ bool VulkanQueue::init() {
   VkDevice device = mDevice->getVkDevice();
   vkGetDeviceQueue(device, mFamilyIndex, mQueueIndex, &mVkQueue);
 
-  VkCommandPoolCreateInfo commandPoolCreateInfo = {VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO, 0, 0};
+  VkCommandPoolCreateInfo commandPoolCreateInfo = {VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO, 0};
+  commandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
   commandPoolCreateInfo.queueFamilyIndex = mFamilyIndex;
   if (vkCreateCommandPool(device, &commandPoolCreateInfo, 0, &mVkCommandPool) != VK_SUCCESS) {
     cerr << "Error creating Command Pool" << endl;
