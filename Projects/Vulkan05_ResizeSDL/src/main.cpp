@@ -62,7 +62,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   auto command = queue->createCommand(swapChain->frames());
 
-  VulkanRecording recording = [=](int frame) {
+  VulkanRecording recording = [&](int frame) {
     command->begin(frame);
     command->beginRenderPass(renderPass);
     command->bind(pipeline, renderPass, mesh, layoutSet);
