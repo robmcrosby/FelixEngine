@@ -83,6 +83,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       else if (event.type == SDL_WINDOWEVENT) {
         if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
           cout << "Size Change" << endl;
+          queue->waitIdle();
           swapChain->rebuild();
           renderPass->rebuild();
         }
