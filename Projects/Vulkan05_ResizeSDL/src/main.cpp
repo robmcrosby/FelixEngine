@@ -80,6 +80,13 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       if (event.type == SDL_QUIT) {
         quit = true;
       }
+      else if (event.type == SDL_WINDOWEVENT) {
+        if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+          cout << "Size Change" << endl;
+          swapChain->rebuild();
+          renderPass->rebuild();
+        }
+      }
       else if (event.type == SDL_KEYDOWN) {
         switch(event.key.keysym.sym) {
           case SDLK_LEFT:
@@ -110,19 +117,21 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
     // Get Next Frame from Swap Chain
     int frame = swapChain->getNextFrame(frameSync);
 
-    // Update Matrix
-    modelMatrix[0] = scale;
-    modelMatrix[5] = scale;
-    modelMatrix[12] = offsetX;
-    modelMatrix[13] = offsetY;
-    layout->update(0, modelMatrix, frame);
+    if (frame >= 0) {
+      // Update Matrix
+      modelMatrix[0] = scale;
+      modelMatrix[5] = scale;
+      modelMatrix[12] = offsetX;
+      modelMatrix[13] = offsetY;
+      layout->update(0, modelMatrix, frame);
 
-    // Update Command Buffer Recording
-    recording(frame);
+      // Update Command Buffer Recording
+      recording(frame);
 
-    // Submit Command Buffer and Present Frame
-    queue->submitCommand(command, frameSync);
-    swapChain->presentFrame(frameSync, queue);
+      // Submit Command Buffer and Present Frame
+      queue->submitCommand(command, frameSync);
+      swapChain->presentFrame(frameSync, queue);
+    }
 
     SDL_Delay(10);
   }
@@ -149,7 +158,7 @@ int main(int argc, char *argv[])
     "Resize SDL",
     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
     512, 512,
-    SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN
+    SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
   );
 
   CStrings sdlExtensions;

@@ -6,7 +6,8 @@ using namespace std;
 
 VulkanLayoutSet::VulkanLayoutSet(VulkanDevice* device, int frames):
   mDevice(device),
-  mFrames(frames) {
+  mFrames(frames),
+  mVkPipelineLayout(VK_NULL_HANDLE) {
 
 }
 

@@ -56,6 +56,11 @@ uint32_t VulkanRenderPass::getColorCount() const {
   return mFramebuffer ? mFramebuffer->getColorCount() : 0;
 }
 
+void VulkanRenderPass::rebuild() {
+  clearVkRenderPasses();
+  mFramebuffer->clearVkFramebuffers();
+}
+
 void VulkanRenderPass::destroy() {
   clearVkRenderPasses();
   mFramebuffer = nullptr;

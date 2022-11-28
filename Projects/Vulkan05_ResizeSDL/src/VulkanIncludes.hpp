@@ -616,7 +616,6 @@ private:
 class VulkanFrameBuffer {
 private:
   VulkanDevice*  mDevice;
-  VkExtent2D     mExtent;
   VulkanImages   mColorAttachments;
   VkFramebuffers mVkFramebuffers;
 
@@ -628,7 +627,7 @@ public:
 
   VkFramebuffer getVkFramebuffer(VkRenderPass renderPass, int frame);
 
-  VkExtent2D getExtent() const {return mExtent;}
+  VkExtent2D getExtent() const;
 
   uint32_t getColorCount() const {return mColorAttachments.size();}
   void getVkAttachmentReferences(VkAttachmentReferences& references);
@@ -661,6 +660,8 @@ public:
   VkViewport getViewport()   const;
   VkRect2D   getScissor()    const;
   uint32_t   getColorCount() const;
+
+  void rebuild();
 
   void destroy();
   void clearVkRenderPasses();
@@ -898,6 +899,7 @@ public:
   void presentFrame(uint32_t frame, VkSemaphore semaphore, VulkanQueuePtr queue);
   void presentFrame(VulkanFrameSyncPtr frameSync, VulkanQueuePtr queue);
 
+  void rebuild();
   void destroy();
 
 private:
@@ -906,7 +908,8 @@ private:
     VkSurfaceFormatKHR surfaceFormat,
     VkPresentModeKHR   presentMode,
     uint32_t           imageCount,
-    VkExtent2D         extent
+    VkExtent2D         extent,
+    VkSwapchainKHR     oldSwapchain
   ) const;
 
   void destroySwapChain();

@@ -5,8 +5,7 @@ using namespace std;
 
 
 VulkanFrameBuffer::VulkanFrameBuffer(VulkanDevice* device): mDevice(device) {
-  mExtent.width = 0;
-  mExtent.height = 0;
+
 }
 
 VulkanFrameBuffer::~VulkanFrameBuffer() {
@@ -14,8 +13,6 @@ VulkanFrameBuffer::~VulkanFrameBuffer() {
 }
 
 void VulkanFrameBuffer::addColorAttachment(VulkanImagePtr image) {
-  mExtent.width  = image->width();
-  mExtent.height = image->height();
   mColorAttachments.push_back(image);
 }
 
@@ -34,6 +31,15 @@ void VulkanFrameBuffer::getVkAttachmentReferences(VkAttachmentReferences& refere
     reference.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     references.push_back(reference);
   }
+}
+
+VkExtent2D VulkanFrameBuffer::getExtent() const {
+  VkExtent2D extent = {0, 0};
+  if (!mColorAttachments.empty()) {
+    extent.width = mColorAttachments.front()->width();
+    extent.height = mColorAttachments.front()->height();
+  }
+  return extent;
 }
 
 void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions) {
@@ -69,6 +75,7 @@ void VulkanFrameBuffer::clearVkFramebuffers() {
 }
 
 VkFramebuffer VulkanFrameBuffer::createVkFramebuffer(VkRenderPass renderPass, int frame) {
+  VkExtent2D extent = getExtent();
   vector<VkImageView> attachments;
   for (auto attachment : mColorAttachments) {
     int index = frame % attachment->frames();
@@ -79,8 +86,8 @@ VkFramebuffer VulkanFrameBuffer::createVkFramebuffer(VkRenderPass renderPass, in
   framebufferInfo.renderPass = renderPass;
   framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
   framebufferInfo.pAttachments = attachments.data();
-  framebufferInfo.width = mExtent.width;
-  framebufferInfo.height = mExtent.height;
+  framebufferInfo.width = extent.width;
+  framebufferInfo.height = extent.height;
   framebufferInfo.layers = 1;
 
   VkDevice device = mDevice->getVkDevice();

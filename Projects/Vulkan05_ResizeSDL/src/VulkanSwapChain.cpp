@@ -152,7 +152,27 @@ void VulkanSwapChain::presentFrame(VulkanFrameSyncPtr frameSync, VulkanQueuePtr 
   frameSync->nextInFlight();
 }
 
+void VulkanSwapChain::rebuild() {
+  auto extent = getExtent();
+  mVkSwapChain = createVkSwapChain(
+    mVkSurfaceFormat,
+    mVkPrsentMode,
+    mImageCount,
+    extent,
+    mVkSwapChain
+  );
+
+  auto device = mDevice->getVkDevice();
+  vkGetSwapchainImagesKHR(device, mVkSwapChain, &mImageCount, nullptr);
+  //cout << mImageCount << " Swap Chain Images" << endl;
+  VkImages swapChainImages(mImageCount);
+  vkGetSwapchainImagesKHR(device, mVkSwapChain, &mImageCount, swapChainImages.data());
+
+  mPresentImage->setSwapImages(swapChainImages, mVkSurfaceFormat.format, extent.width, extent.height);
+}
+
 void VulkanSwapChain::destroy() {
+  //clearOldSwapChain();
   destroySwapChain();
   destroySurface();
 }
@@ -166,12 +186,14 @@ void VulkanSwapChain::createSwapChain() {
   mVkSwapChain = createVkSwapChain(
     mVkSurfaceFormat,
     mVkPrsentMode,
-    mImageCount, extent
+    mImageCount,
+    extent,
+    mVkSwapChain
   );
 
   auto device = mDevice->getVkDevice();
   vkGetSwapchainImagesKHR(device, mVkSwapChain, &mImageCount, nullptr);
-  cout << mImageCount << " Swap Chain Images" << endl;
+  //cout << mImageCount << " Swap Chain Images" << endl;
   VkImages swapChainImages(mImageCount);
   vkGetSwapchainImagesKHR(device, mVkSwapChain, &mImageCount, swapChainImages.data());
 
@@ -183,7 +205,8 @@ VkSwapchainKHR VulkanSwapChain::createVkSwapChain(
   VkSurfaceFormatKHR surfaceFormat,
   VkPresentModeKHR   presentMode,
   uint32_t           imageCount,
-  VkExtent2D         extent
+  VkExtent2D         extent,
+  VkSwapchainKHR     oldSwapchain
 ) const {
   auto capabilities = getVkSurfaceCapabilities();
 
@@ -199,7 +222,7 @@ VkSwapchainKHR VulkanSwapChain::createVkSwapChain(
   createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
   createInfo.presentMode = presentMode;
   createInfo.clipped = VK_TRUE;
-  createInfo.oldSwapchain = VK_NULL_HANDLE;
+  createInfo.oldSwapchain = oldSwapchain;
   createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
   createInfo.queueFamilyIndexCount = 0;
   createInfo.pQueueFamilyIndices = nullptr;
