@@ -71,6 +71,9 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
     command->end();
   };
 
+  for (int frame = 0; frame < swapChain->frames(); ++frame)
+    recording(frame);
+
   float scale = 1.0;
   float offsetX = 0.0;
   float offsetY = 0.0;
@@ -82,10 +85,14 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       }
       else if (event.type == SDL_WINDOWEVENT) {
         if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-          cout << "Size Change" << endl;
+          //cout << "Size Change" << endl;
           queue->waitIdle();
           swapChain->rebuild();
           renderPass->rebuild();
+          pipeline->rebuild();
+
+          for (int frame = 0; frame < swapChain->frames(); ++frame)
+            recording(frame);
         }
       }
       else if (event.type == SDL_KEYDOWN) {
@@ -127,7 +134,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
       layout->update(0, modelMatrix, frame);
 
       // Update Command Buffer Recording
-      recording(frame);
+      //recording(frame);
 
       // Submit Command Buffer and Present Frame
       queue->submitCommand(command, frameSync);

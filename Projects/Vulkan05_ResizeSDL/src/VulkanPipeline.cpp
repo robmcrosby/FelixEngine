@@ -274,6 +274,10 @@ void VulkanPipeline::getLayoutBindingSets(LayoutBindingSets& layoutBindingSets) 
   layoutBindingSets = mKernalShader->getLayoutBindingSets();
 }
 
+void VulkanPipeline::rebuild() {
+  destroyPipeline();
+}
+
 void VulkanPipeline::destroy() {
   clearShaders();
   destroyPipelineLayout();

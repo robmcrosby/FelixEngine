@@ -737,6 +737,7 @@ public:
   VkPipelineLayout getVkPipelineLayout(VulkanLayoutSetPtr layoutSet);
   VkPipelineLayout getVkPipelineLayout(VkDescriptorSetLayouts setLayouts);
 
+  void rebuild();
   void destroy();
 
 private:
