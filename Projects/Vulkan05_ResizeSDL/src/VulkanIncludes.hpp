@@ -498,12 +498,30 @@ public:
   }
 
   template <typename T>
+  bool setStorage(
+    uint32_t binding,
+    const T& src,
+    int frames = 0
+  ) {
+    return setStorage(binding, &src, sizeof(T), frames);
+  }
+
+  template <typename T>
   bool setUniform(
     uint32_t binding,
     const std::vector<T>& src,
     int frames = 0
   ) {
     return setUniform(binding, src.data(), src.size() * sizeof(T), frames);
+  }
+
+  template <typename T>
+  bool setUniform(
+    uint32_t binding,
+    const T& src,
+    int frames = 0
+  ) {
+    return setUniform(binding, &src, sizeof(T), frames);
   }
 
   void update(
@@ -520,6 +538,15 @@ public:
     int frame = 0
   ) {
     update(binding, src.data(), src.size() * sizeof(T), frame);
+  }
+
+  template <typename T>
+  void update(
+    uint32_t binding,
+    const T& src,
+    int frame = 0
+  ) {
+    update(binding, &src, sizeof(T), frame);
   }
 
   void setBuffer(uint32_t binding, VulkanBufferPtr buffer);
@@ -591,6 +618,12 @@ public:
   ~VulkanMesh();
 
   bool addBuffer(VulkanQueuePtr queue, const std::vector<float>& vertices, int vertexSize);
+  bool addBuffer(
+    VulkanQueuePtr queue,
+    const void* data,
+    VkDeviceSize size,
+    uint32_t stride
+  );
   void addAttribute(int buffer, int location, int size, int offset);
   bool setIndexBuffer(VulkanQueuePtr queue, const std::vector<uint32_t>& indices);
   void setTopology(VkPrimitiveTopology topology) {mPrimitiveTopology = topology;}
@@ -607,6 +640,11 @@ public:
   void getVertexBuffers(VkBuffers& buffers);
 
   void destroy();
+
+  template <typename T>
+  bool addBuffer(VulkanQueuePtr queue, const std::vector<T>& src) {
+    return addBuffer(queue, src.data(), src.size() * sizeof(T), sizeof(T));
+  }
 
 private:
   VkFormat getVertexFormat(int size);

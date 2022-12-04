@@ -1,16 +1,21 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_vulkan.h>
 #include "VulkanIncludes.hpp"
+#include "Matrix.hpp"
 #include <vulkan/vulkan.h>
 
 using namespace std;
 
+struct Vertex {
+  vec2 position;
+  vec2 uv;
+};
 
-const vector<float> rectVerts = {
-  -0.5f, -0.5f,   0.0f, 0.0f,
-  -0.5f,  0.5f,   0.0f, 1.0f,
-   0.5f, -0.5f,   1.0f, 0.0f,
-   0.5f,  0.5f,   1.0f, 1.0f
+const vector<Vertex> rectVerts = {
+  {{-0.5f, -0.5f},  {0.0f, 0.0f}},
+  {{-0.5f,  0.5f},  {0.0f, 1.0f}},
+  {{ 0.5f, -0.5f},  {1.0f, 0.0f}},
+  {{ 0.5f,  0.5f},  {1.0f, 1.0f}}
 };
 const vector<uint32_t> rectIndices = {
   1, 0, 3, 2, 0, 3
@@ -18,13 +23,6 @@ const vector<uint32_t> rectIndices = {
 
 void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   bool quit = false;
-
-  vector<float> modelMatrix = {
-    1.7, 0.0, 0.0, 0.0,
-    0.0, 1.7, 0.0, 0.0,
-    0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 1.0
-  };
 
   auto swapChain = device->createSwapChain();
   swapChain->setToWindow(window);
@@ -43,12 +41,13 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
+  mat4 modelMatrix;
   layout->setUniform(0, modelMatrix);
   layout->setTexture(1, image, sampler);
   layout->update();
 
   auto mesh = device->createMesh();
-  mesh->addBuffer(queue, rectVerts, 4);
+  mesh->addBuffer(queue, rectVerts);
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 2, 2);
   mesh->setIndexBuffer(queue, rectIndices);
@@ -127,10 +126,10 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     if (frame >= 0) {
       // Update Matrix
-      modelMatrix[0] = scale;
-      modelMatrix[5] = scale;
-      modelMatrix[12] = offsetX;
-      modelMatrix[13] = offsetY;
+      modelMatrix.x.x = scale;
+      modelMatrix.y.y = scale;
+      modelMatrix.w.x = offsetX;
+      modelMatrix.w.y = offsetY;
       layout->update(0, modelMatrix, frame);
 
       // Update Command Buffer Recording

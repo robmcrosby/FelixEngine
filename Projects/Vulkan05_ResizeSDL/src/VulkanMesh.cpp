@@ -18,11 +18,25 @@ VulkanMesh::~VulkanMesh() {
 }
 
 bool VulkanMesh::addBuffer(VulkanQueuePtr queue, const vector<float>& vertices, int vertexSize) {
-  mVertexCount = static_cast<uint32_t>(vertices.size() / vertexSize);
+  return addBuffer(
+    queue,
+    vertices.data(),
+    vertices.size() * sizeof(float),
+    vertexSize * sizeof(float)
+  );
+}
+
+bool VulkanMesh::addBuffer(
+  VulkanQueuePtr queue,
+  const void* data,
+  VkDeviceSize size,
+  uint32_t stride
+) {
+  mVertexCount = size / stride;
 
   VertexBuffer vertexBuffer;
   vertexBuffer.description.binding = static_cast<uint32_t>(mVertexBuffers.size());
-  vertexBuffer.description.stride = static_cast<uint32_t>(vertexSize * sizeof(float));
+  vertexBuffer.description.stride = stride;
   vertexBuffer.description.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
   vertexBuffer.offset = 0;
   vertexBuffer.buffer = mDevice->createBuffer();
@@ -36,7 +50,7 @@ bool VulkanMesh::addBuffer(VulkanQueuePtr queue, const vector<float>& vertices, 
     VMA_ALLOCATION_CREATE_MAPPED_BIT
   );
 
-  if (!vertexBuffer.buffer->load(queue, vertices))
+  if (!vertexBuffer.buffer->load(queue, data, size))
     return false;
 
   mVertexBuffers.push_back(vertexBuffer);
