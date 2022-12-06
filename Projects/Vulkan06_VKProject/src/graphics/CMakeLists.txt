@@ -1,0 +1,18 @@
+add_library(graphics
+  VulkanInstance.cpp
+  VulkanDevice.cpp
+  VulkanBuffer.cpp
+  VulkanImage.cpp
+  VulkanSampler.cpp
+  VulkanLayout.cpp
+  VulkanLayoutSet.cpp
+  VulkanMesh.cpp
+  VulkanFrameBuffer.cpp
+  VulkanRenderPass.cpp
+  VulkanShader.cpp
+  VulkanPipeline.cpp
+  VulkanQueue.cpp
+  VulkanCommand.cpp
+  VulkanSwapChain.cpp
+  VulkanFrameSync.cpp
+)
