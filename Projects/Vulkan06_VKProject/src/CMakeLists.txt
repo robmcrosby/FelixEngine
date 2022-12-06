@@ -77,6 +77,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
 
   find_package(SDL2 REQUIRED)
+  target_include_directories(graphics PRIVATE ${SDL2_INCLUDE_DIRS})
   target_include_directories(${PROJECT_NAME} PRIVATE graphics ${SDL2_INCLUDE_DIRS})
   target_link_libraries(${PROJECT_NAME} graphics vulkan ${SDL2_LIBRARIES})
 
