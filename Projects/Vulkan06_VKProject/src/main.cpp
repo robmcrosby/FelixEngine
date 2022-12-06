@@ -56,8 +56,8 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   renderPass->setFramebuffer(framebuffer);
 
   auto pipeline = device->createPipeline();
-  pipeline->setVertexShader("vertexUV.spv");
-  pipeline->setFragmentShader("texture.spv");
+  pipeline->setVertexShader("shaders/vertexUV.spv");
+  pipeline->setFragmentShader("shaders/texture.spv");
 
   auto command = queue->createCommand(swapChain->frames());
 

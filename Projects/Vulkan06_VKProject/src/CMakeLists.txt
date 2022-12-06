@@ -17,6 +17,7 @@ add_executable(${PROJECT_NAME}
 )
 
 add_subdirectory(graphics)
+add_subdirectory(shaders)
 
 target_link_directories(${PROJECT_NAME}
   PRIVATE graphics
@@ -50,6 +51,23 @@ foreach(source IN LISTS IMAGES)
 endforeach()
 add_custom_target(images ALL DEPENDS ${DST_IMAGES})
 
+# Define Shaders
+set(SHADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
+set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
+file(GLOB SHADER_FILES
+  ${SHADER_SOURCE_DIR}/*.comp
+  ${SHADER_SOURCE_DIR}/*.vert
+  ${SHADER_SOURCE_DIR}/*.frag
+)
+
+# Create Shader Directory
+add_custom_command(
+  COMMAND
+    ${CMAKE_COMMAND} -E make_directory ${SHADER_BINARY_DIR}
+  OUTPUT ${SHADER_BINARY_DIR}
+  COMMENT "Creating ${SHADER_BINARY_DIR}"
+)
+
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   # Windows
 
@@ -63,18 +81,17 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   target_link_libraries(${PROJECT_NAME} graphics vulkan ${SDL2_LIBRARIES})
 
   # Compile Shaders to SPIR-V
-  file(GLOB SHADERS *.comp *.vert *.frag)
   find_program(glslc_executable NAMES glslangValidator)
-  foreach(source IN LISTS SHADERS)
+  foreach(source IN LISTS SHADER_FILES)
     get_filename_component(FILENAME ${source} NAME_WLE)
     add_custom_command(
       COMMAND
-        ${glslc_executable} -V -s -o ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv ${source}
-      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv
-      DEPENDS ${source} ${CMAKE_CURRENT_BINARY_DIR}
+        ${glslc_executable} -V -s -o ${SHADER_BINARY_DIR}/${FILENAME}.spv ${source}
+      OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}.spv
+      DEPENDS ${source} ${SHADER_BINARY_DIR}
       COMMENT "Compiling ${FILENAME}.spv"
     )
-    list(APPEND SPV_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv)
+    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
   endforeach()
   add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
 
@@ -91,18 +108,17 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   target_link_libraries(${PROJECT_NAME} PRIVATE graphics ${VK_FRAMEWORK} ${SDL2_FRAMEWORK})
 
   # Compile Shaders to SPIR-V
-  file(GLOB SHADERS *.comp *.vert *.frag)
   set(converter_executable ${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/tools/MoltenVKShaderConverter)
-  foreach(source IN LISTS SHADERS)
+  foreach(source IN LISTS SHADER_FILES)
     get_filename_component(FILENAME ${source} NAME_WLE)
     add_custom_command(
       COMMAND
-        ${converter_executable} -gi ${source} -so ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv -q
-      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv
-      DEPENDS ${source} ${CMAKE_CURRENT_BINARY_DIR}
+        ${converter_executable} -gi ${source} -so ${SHADER_BINARY_DIR}/${FILENAME}.spv -q
+      OUTPUT ${SHADER_BINARY_DIR}/${FILENAME}.spv
+      DEPENDS ${source} ${SHADER_BINARY_DIR}
       COMMENT "Compiling ${FILENAME}.spv"
     )
-    list(APPEND SPV_SHADERS ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}.spv)
+    list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
   endforeach()
   add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
 
