@@ -367,6 +367,8 @@ public:
   void* data(int index = 0);
 
   VkDeviceSize formatSize() const;
+  static VkDeviceSize formatSize(VkFormat format);
+
   VkDeviceSize size() const {return mWidth * mHeight * formatSize();}
   uint32_t width() const {return mWidth;}
   uint32_t height() const {return mHeight;}

@@ -34,7 +34,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
   frameSync->setup(swapChain->frames(), 2);
 
   auto image = device->createImage();
-  image->load(queue, "image.png");
+  image->load(queue, "assets/image.png");
 
   auto sampler = device->createSampler();
   sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);

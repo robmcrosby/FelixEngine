@@ -6,7 +6,6 @@ set(CFLAGS "-std=c++17 -O2 -Wno-nullability-completeness")
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CFLAGS}")
 
 set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/")
-
 set(STB_DIR "${THIRD_PARTY_DIR}/STB/")
 set(VMA_DIR "${THIRD_PARTY_DIR}/VulkanMemoryAllocator/")
 set(SPV_DIR "${THIRD_PARTY_DIR}/SpirvReflect/")
@@ -17,7 +16,6 @@ add_executable(${PROJECT_NAME}
 )
 
 add_subdirectory(graphics)
-add_subdirectory(shaders)
 
 target_link_directories(${PROJECT_NAME}
   PRIVATE graphics
@@ -36,25 +34,35 @@ target_include_directories(${PROJECT_NAME}
   PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/graphics/"
 )
 
-# Copy Images to Build Directory
+# Create Assets Directory
+set(ASSETS_DIR "${CMAKE_CURRENT_BINARY_DIR}/assets/")
+add_custom_command(
+  COMMAND
+    mkdir -p ${ASSETS_DIR}
+  OUTPUT ${ASSETS_DIR}
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Creating ${ASSETS_DIR}"
+)
+
+# Copy Assets to the Build Directory
 file(GLOB IMAGES ${CMAKE_CURRENT_SOURCE_DIR}/assets/*.png)
 foreach(source IN LISTS IMAGES)
   get_filename_component(FILENAME ${source} NAME)
   add_custom_command(
     COMMAND
-      cp ${source} ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME}
-    DEPENDS ${source} ${CMAKE_CURRENT_BINARY_DIR}
+      cp ${source} ${ASSETS_DIR}/${FILENAME}
+    OUTPUT ${ASSETS_DIR}/${FILENAME}
+    DEPENDS ${source} ${ASSETS_DIR}
     COMMENT "Copying ${FILENAME}"
   )
-  list(APPEND DST_IMAGES ${CMAKE_CURRENT_BINARY_DIR}/${FILENAME})
+  list(APPEND DST_IMAGES ${ASSETS_DIR}/${FILENAME})
 endforeach()
 add_custom_target(images ALL DEPENDS ${DST_IMAGES})
 
 # Define Shaders
 set(SHADER_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
 set(SHADER_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/shaders)
-file(GLOB SHADER_FILES
+file(GLOB SHADERS
   ${SHADER_SOURCE_DIR}/*.comp
   ${SHADER_SOURCE_DIR}/*.vert
   ${SHADER_SOURCE_DIR}/*.frag
@@ -63,8 +71,9 @@ file(GLOB SHADER_FILES
 # Create Shader Directory
 add_custom_command(
   COMMAND
-    ${CMAKE_COMMAND} -E make_directory ${SHADER_BINARY_DIR}
+    mkdir -p ${SHADER_BINARY_DIR}
   OUTPUT ${SHADER_BINARY_DIR}
+  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}
   COMMENT "Creating ${SHADER_BINARY_DIR}"
 )
 
@@ -83,7 +92,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
   # Compile Shaders to SPIR-V
   find_program(glslc_executable NAMES glslangValidator)
-  foreach(source IN LISTS SHADER_FILES)
+  foreach(source IN LISTS SHADERS)
     get_filename_component(FILENAME ${source} NAME_WLE)
     add_custom_command(
       COMMAND
@@ -94,7 +103,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     )
     list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
   endforeach()
-  add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
+  add_custom_target(Shaders ALL DEPENDS ${SPV_SHADERS})
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # MacOS
@@ -110,7 +119,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 
   # Compile Shaders to SPIR-V
   set(converter_executable ${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/tools/MoltenVKShaderConverter)
-  foreach(source IN LISTS SHADER_FILES)
+  foreach(source IN LISTS SHADERS)
     get_filename_component(FILENAME ${source} NAME_WLE)
     add_custom_command(
       COMMAND
@@ -121,6 +130,6 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     )
     list(APPEND SPV_SHADERS ${SHADER_BINARY_DIR}/${FILENAME}.spv)
   endforeach()
-  add_custom_target(shaders ALL DEPENDS ${SPV_SHADERS})
+  add_custom_target(Shaders ALL DEPENDS ${SPV_SHADERS})
 
 endif()

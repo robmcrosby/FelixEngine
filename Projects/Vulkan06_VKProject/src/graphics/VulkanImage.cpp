@@ -118,17 +118,26 @@ void VulkanImage::setSwapImages(const VkImages& images, VkFormat format, uint32_
 
 bool VulkanImage::load(VulkanQueuePtr queue, StringRef filepath) {
   int width, height, channels;
-  stbi_uc* pixels = stbi_load("image.png", &width, &height, &channels, STBI_rgb_alpha);
+  stbi_uc* pixels = stbi_load(filepath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
   if (!pixels) {
     cerr << "Error reading image file" << endl;
     return false;
   }
 
+  bool success = load(queue, pixels, width, height, VK_FORMAT_R8G8B8A8_UNORM);
+
+  stbi_image_free(pixels);
+  return success;
+}
+
+bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format) {
+  mVkFormat = format;
+
   setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
   setCreateFlags(VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT);
 
   //cout << "Read: " << filepath << "(" << width << ", " << height << ")" << channels << endl;
-  VkDeviceSize size = width * height * channels;
+  VkDeviceSize size = width * height * formatSize(format);
 
   // Create staging buffer
   auto staging = mDevice->createBuffer();
@@ -139,12 +148,9 @@ bool VulkanImage::load(VulkanQueuePtr queue, StringRef filepath) {
   );
 
   // Load staging buffer
-  if (!staging->alloc(size) || !alloc(width, height)) {
-    stbi_image_free(pixels);
+  if (!staging->alloc(size) || !alloc(width, height))
     return false;
-  }
-  memcpy(staging->data(), (void*)pixels, size);
-  stbi_image_free(pixels);
+  memcpy(staging->data(), data, size);
 
   if (auto command = queue->beginSingleCommand()) {
     transition(
@@ -168,10 +174,6 @@ bool VulkanImage::load(VulkanQueuePtr queue, StringRef filepath) {
   return false;
 }
 
-bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format) {
-  return false;
-}
-
 
 VmaAllocationInfo VulkanImage::getVmaAllocationInfo(int index) const {
   VmaAllocationInfo info;
@@ -190,7 +192,11 @@ void* VulkanImage::data(int index) {
 }
 
 VkDeviceSize VulkanImage::formatSize() const {
-  if (mVkFormat == VK_FORMAT_R8G8B8A8_UNORM)
+  return formatSize(mVkFormat);
+}
+
+VkDeviceSize VulkanImage::formatSize(VkFormat format) {
+  if (format == VK_FORMAT_R8G8B8A8_UNORM)
     return 4;
   return 1;
 }
