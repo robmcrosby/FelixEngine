@@ -17,10 +17,23 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   find_library(VK_FRAMEWORK MoltenVK "${THIRD_PARTY_DIR}/MoltenVK/macOS/")
   find_library(SDL2_FRAMEWORK SDL2 "${THIRD_PARTY_DIR}/SDL2/macOS/")
 
-  set(VK_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../../../ThirdParty/MoltenVK/include/")
+  set(VK_INCLUDES "${THIRD_PARTY_DIR}/MoltenVK/include/")
   set(SDL2_INCLUDES "${SDL2_FRAMEWORK}/Headers/")
 
-  target_include_directories(graphics PRIVATE ${VK_INCLUDES} ${SDL2_INCLUDES})
-  target_include_directories(ResizeSDL PRIVATE graphics ${VK_INCLUDES} ${SDL2_INCLUDES})
-  target_link_libraries(ResizeSDL PRIVATE graphics ${VK_FRAMEWORK} ${SDL2_FRAMEWORK})
+  target_include_directories(graphics
+   PUBLIC
+    ${VK_INCLUDES}
+    ${SDL2_INCLUDES}
+  )
+
+  target_include_directories(ResizeSDL
+   PRIVATE
+    graphics
+  )
+  target_link_libraries(ResizeSDL
+   PRIVATE
+    graphics
+    ${VK_FRAMEWORK}
+    ${SDL2_FRAMEWORK}
+  )
 endif()

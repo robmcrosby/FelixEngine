@@ -1,6 +1,6 @@
 #! /bin/sh
 
-cmake -S . -B build
+cmake -S . -B build -DBUILD_TESTING=ON
 cd build
 make
-./ResizeSDL
+./tests/graphics_test

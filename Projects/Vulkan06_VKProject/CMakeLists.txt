@@ -104,3 +104,8 @@ add_executable(ResizeSDL
   ${SPV_DIR}/spirv_reflect.c
 )
 add_subdirectory(src)
+
+IF (BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+ENDIF(BUILD_TESTING)
