@@ -16,3 +16,11 @@ add_library(graphics
   VulkanSwapChain.cpp
   VulkanFrameSync.cpp
 )
+
+target_include_directories(graphics
+ PUBLIC
+  include
+  ${STB_DIR}
+  ${VMA_DIR}
+  ${SPV_DIR}
+)

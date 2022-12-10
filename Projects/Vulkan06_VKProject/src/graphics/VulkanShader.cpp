@@ -1,4 +1,4 @@
-#include "VulkanIncludes.hpp"
+#include <VulkanIncludes.hpp>
 #include "spirv_reflect.h"
 #include <fstream>
 
@@ -67,23 +67,23 @@ void VulkanShader::reflect(SPIRVCodeRef code, StringRef entry) {
 
       mLayoutBindingSets.resize(count);
 
-      cout << "Found " << count << " Descriptor Sets" << endl;
-      for (auto set : descriptorSets) {
-        cout << "  Set: " << set->set << " bindings: " << set->binding_count << endl;
-        auto& layoutBindings = mLayoutBindingSets.at(set->set);
-        layoutBindings.resize(set->binding_count);
-        for (int i = 0; i < set->binding_count; ++i) {
-          SpvReflectDescriptorBinding* binding = set->bindings[i];
-          auto& layout = layoutBindings.at(i);
-          layout.name = binding->name;
-          layout.binding.binding = binding->binding;
-          layout.binding.descriptorType = (VkDescriptorType)binding->descriptor_type;
-          layout.binding.descriptorCount = binding->count;
-          layout.binding.stageFlags = mVkShaderStage;
-          layout.binding.pImmutableSamplers = nullptr;
-          cout << "    " << binding->binding <<  " " << binding->name << endl;
-        }
-      }
+      // cout << "Found " << count << " Descriptor Sets" << endl;
+      // for (auto set : descriptorSets) {
+      //   cout << "  Set: " << set->set << " bindings: " << set->binding_count << endl;
+      //   auto& layoutBindings = mLayoutBindingSets.at(set->set);
+      //   layoutBindings.resize(set->binding_count);
+      //   for (int i = 0; i < set->binding_count; ++i) {
+      //     SpvReflectDescriptorBinding* binding = set->bindings[i];
+      //     auto& layout = layoutBindings.at(i);
+      //     layout.name = binding->name;
+      //     layout.binding.binding = binding->binding;
+      //     layout.binding.descriptorType = (VkDescriptorType)binding->descriptor_type;
+      //     layout.binding.descriptorCount = binding->count;
+      //     layout.binding.stageFlags = mVkShaderStage;
+      //     layout.binding.pImmutableSamplers = nullptr;
+      //     cout << "    " << binding->binding <<  " " << binding->name << endl;
+      //   }
+      // }
     }
 
     // if (spvReflectEnumerateEntryPointInputVariables(&module, entry.c_str(), &count, NULL) == SPV_REFLECT_RESULT_SUCCESS) {
