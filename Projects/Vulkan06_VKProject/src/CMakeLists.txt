@@ -9,8 +9,22 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${LDFLAGS}")
 
   find_package(SDL2 REQUIRED)
-  target_include_directories(ResizeSDL PRIVATE ${SDL2_INCLUDE_DIRS})
-  target_link_libraries(ResizeSDL vulkan ${SDL2_LIBRARIES})
+  target_include_directories(graphics
+   PUBLIC
+    ${SDL2_INCLUDE_DIRS}
+  )
+
+  target_include_directories(ResizeSDL
+   PRIVATE
+    graphics
+    ${SDL2_INCLUDE_DIRS}
+  )
+  target_link_libraries(ResizeSDL
+   PRIVATE
+    graphics
+    vulkan
+    ${SDL2_LIBRARIES}
+  )
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # MacOS

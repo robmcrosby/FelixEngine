@@ -11,7 +11,6 @@ target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 add_executable(graphics_test
   graphics_test.cpp
-  ${SPV_DIR}/spirv_reflect.c
 )
 
 
@@ -20,6 +19,19 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   # Linux
+  find_package(SDL2 REQUIRED)
+  target_include_directories(graphics_test
+   PUBLIC
+    graphics
+  )
+
+  target_link_libraries(graphics_test
+   PUBLIC
+    GTest::GTest
+    graphics
+    vulkan
+    ${SDL2_LIBRARIES}
+  )
 
 elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   # MacOS

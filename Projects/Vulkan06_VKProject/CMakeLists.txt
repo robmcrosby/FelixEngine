@@ -101,7 +101,6 @@ endif()
 
 add_executable(ResizeSDL
   src/main.cpp
-  ${SPV_DIR}/spirv_reflect.c
 )
 add_subdirectory(src)
 

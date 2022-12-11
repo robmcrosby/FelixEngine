@@ -15,6 +15,7 @@ add_library(graphics
   VulkanCommand.cpp
   VulkanSwapChain.cpp
   VulkanFrameSync.cpp
+  ${SPV_DIR}/spirv_reflect.c
 )
 
 target_include_directories(graphics
