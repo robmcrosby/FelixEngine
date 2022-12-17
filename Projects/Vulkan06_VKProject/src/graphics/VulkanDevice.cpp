@@ -338,7 +338,7 @@ bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, ui
   if (found) {
     queueIndex = mQueueFamilies[familyIndex].queueCount - mQueueFamilyCounts[familyIndex];
     mQueueFamilyCounts[familyIndex] -= 1;
-    cout << "Found family: " << familyIndex << " at queue index: " << queueIndex << endl;
+    //cout << "Found family: " << familyIndex << " at queue index: " << queueIndex << endl;
   }
   else {
     cerr << "Error: No queue family avalible with flags: ";
