@@ -47,12 +47,20 @@ public:
   bool addValidationLayer(StringRef layer);
   bool addExtension(StringRef extension);
 
+  const VulkanLayerProperties getAvailableLayers() const {
+    return mAvailableLayers;
+  }
+  const VulkanExtensionProperties getAvailableExentions() const {
+    return mAvailableExentions;
+  }
+
   const CStrings& getEnabledLayers() const {return mEnabledLayers;}
   const CStrings& getEnabledExtensions() const {return mEnabledExtensions;}
 
   VkInstance getVkInstance() const {return mVkInstance;}
 
   VulkanDevicePtr pickDevice() const;
+  const VulkanDevices& getDevices() const {return mDevices;}
 
   friend std::ostream& operator<<(std::ostream& os, const VulkanInstance& instance);
   std::ostream& print(std::ostream& os) const;

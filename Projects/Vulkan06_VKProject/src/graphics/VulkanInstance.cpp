@@ -101,8 +101,8 @@ bool VulkanInstance::addValidationLayer(StringRef layer) {
         return true;
       }
     }
-    //cerr << "Warning: Validation Layer " << layer;
-    //cerr << " not avalible for this version of Vulkan" << endl;
+    cerr << "Warning: Validation Layer " << layer;
+    cerr << " not avalible for this version of Vulkan" << endl;
   }
   else {
     cerr << "Warning: Validation Layer " << layer;

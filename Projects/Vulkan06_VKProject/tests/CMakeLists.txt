@@ -9,8 +9,11 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+add_subdirectory(graphics)
+
 add_executable(graphics_test
   graphics_test.cpp
+  graphics/TestVulkanInstance.cpp
 )
 
 
