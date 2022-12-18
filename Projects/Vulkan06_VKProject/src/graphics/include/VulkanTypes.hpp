@@ -9,7 +9,6 @@
 #ifndef VulkanTypes_hpp
 #define VulkanTypes_hpp
 
-class SDL_Window;
 
 typedef const char* CString;
 typedef std::vector<CString> CStrings;

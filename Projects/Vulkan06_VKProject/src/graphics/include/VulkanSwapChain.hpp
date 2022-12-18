@@ -1,10 +1,13 @@
 #include <VulkanTypes.hpp>
+#include <VulkanImage.hpp>
 
 #ifndef VulkanSwapChain_hpp
 #define VulkanSwapChain_hpp
 
 #define MAX_FRAMES_IN_FLIGHT 2
 
+
+class SDL_Window;
 
 class VulkanSwapChain {
 private:

@@ -1,5 +1,9 @@
-#include <VulkanIncludes.hpp>
-
+#include <VulkanPipeline.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanShader.hpp>
+#include <VulkanLayoutSet.hpp>
+#include <VulkanRenderPass.hpp>
+#include <VulkanMesh.hpp>
 
 using namespace std;
 

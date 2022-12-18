@@ -1,4 +1,9 @@
-#include <VulkanIncludes.hpp>
+#include <VulkanImage.hpp>
+#include <VulkanBuffer.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanQueue.hpp>
+#include <VulkanCommand.hpp>
+
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>

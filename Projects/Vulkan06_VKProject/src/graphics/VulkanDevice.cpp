@@ -5,7 +5,6 @@
 #include <VulkanIncludes.hpp>
 
 
-
 using namespace std;
 
 

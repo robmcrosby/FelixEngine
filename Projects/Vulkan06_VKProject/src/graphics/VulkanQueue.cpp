@@ -1,5 +1,7 @@
-#include <VulkanIncludes.hpp>
-
+#include <VulkanQueue.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanCommand.hpp>
+#include <VulkanFrameSync.hpp>
 
 using namespace std;
 

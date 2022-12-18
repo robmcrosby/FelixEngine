@@ -1,4 +1,5 @@
-#include <VulkanIncludes.hpp>
+#include <VulkanInstance.hpp>
+#include <VulkanDevice.hpp>
 
 using namespace std;
 

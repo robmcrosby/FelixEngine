@@ -1,8 +1,11 @@
 #include <SDL.h>
 #include <SDL_vulkan.h>
 #include <algorithm>
-#include <VulkanIncludes.hpp>
-
+#include <VulkanSwapChain.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanImage.hpp>
+#include <VulkanQueue.hpp>
+#include <VulkanFrameSync.hpp>
 
 using namespace std;
 

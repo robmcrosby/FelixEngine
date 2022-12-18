@@ -1,4 +1,5 @@
 #include <VulkanTypes.hpp>
+#include <VulkanInstance.hpp>
 
 #ifndef VulkanDevice_hpp
 #define VulkanDevice_hpp

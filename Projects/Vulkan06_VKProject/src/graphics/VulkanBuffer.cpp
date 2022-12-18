@@ -1,6 +1,8 @@
-#include <VulkanIncludes.hpp>
+#include <VulkanBuffer.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanQueue.hpp>
+#include <VulkanCommand.hpp>
 #include <cstring>
-
 
 using namespace std;
 

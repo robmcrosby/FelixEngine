@@ -1,4 +1,8 @@
-#include <VulkanIncludes.hpp>
+#include <VulkanLayout.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanBuffer.hpp>
+#include <VulkanImage.hpp>
+#include <VulkanSampler.hpp>
 #include <map>
 
 

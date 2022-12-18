@@ -1,4 +1,7 @@
-#include <VulkanIncludes.hpp>
+#include <VulkanMesh.hpp>
+#include <VulkanDevice.hpp>
+#include <VulkanQueue.hpp>
+#include <VulkanBuffer.hpp>
 #include <cstring>
 
 
