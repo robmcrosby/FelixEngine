@@ -101,21 +101,25 @@ TEST_F(VulkanTest, TestCompute) {
   ASSERT_TRUE(inBuffer->alloc(size) && outBuffer->alloc(size));
   memcpy(inBuffer->data(), src.data(), size);
 
+  // Assign the buffers to a Layout Set
   auto layoutSet = mDevice->createLayoutSet();
   auto layout = layoutSet->at(0);
   layout->setBuffer(0, inBuffer);
   layout->setBuffer(1, outBuffer);
   layout->update();
 
+  // Create a compute pipeline
   auto pipeline = mDevice->createPipeline();
   ASSERT_TRUE(pipeline->setKernalShader("shaders/copy.spv"));
 
+  // Record the compute command buffer
   auto command = mQueue->createCommand();
   command->begin();
   command->bind(pipeline, layoutSet);
   command->dispatch(1);
   command->end();
 
+  // Execude the compute command buffer
   mQueue->submitCommand(command);
   mQueue->waitIdle();
 
