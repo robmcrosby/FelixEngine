@@ -29,19 +29,58 @@ TEST(TestVulkanInstance, TestInitDestroy) {
 TEST(TestVulkanInstance, TestLayers) {
   auto& instance = VulkanInstance::Get();
 
-  const auto& layers = instance.getAvailableLayers();
-  for (const auto& layer :  layers)
-    cout << "Layer: " << layer.layerName << endl;
+  // Should reject an unknown layer
+  EXPECT_FALSE(instance.addValidationLayer("Non-Layer"));
 
-  EXPECT_TRUE(true);
+  const auto& layers = instance.getAvailableLayers();
+  if (layers.size() > 0) {
+    // Add the First layer
+    EXPECT_TRUE(instance.addValidationLayer(layers.front().layerName));
+    // Initalize Instance
+    ASSERT_TRUE(instance.init());
+    // Should not be able to add layers after initalization
+    EXPECT_FALSE(instance.addValidationLayer(layers.back().layerName));
+  }
+  instance.destroy();
 }
 
 TEST(TestVulkanInstance, TestExtensions) {
   auto& instance = VulkanInstance::Get();
 
-  const auto& exentions = instance.getAvailableExentions();
-  for (const auto& extension :  exentions)
-    cout << "Extension: " << extension.extensionName << endl;
+  // Should reject an unknown extension
+  EXPECT_FALSE(instance.addExtension("Non-Extension"));
 
-  EXPECT_TRUE(true);
+  const auto& exentions = instance.getAvailableExentions();
+  if (exentions.size() > 0) {
+    // Add the First Extension
+    EXPECT_TRUE(instance.addExtension(exentions.front().extensionName));
+    // Initalize Instance
+    ASSERT_TRUE(instance.init());
+    // Should not be able to add extensions after initalization
+    EXPECT_FALSE(instance.addExtension(exentions.back().extensionName));
+  }
+  instance.destroy();
+}
+
+TEST(TestVulkanInstance, TestDevices) {
+  auto& instance = VulkanInstance::Get();
+
+  // Devices should be empty
+  const auto& devices = instance.getDevices();
+  EXPECT_EQ(devices.size(), 0);
+  EXPECT_EQ(instance.pickDevice(), nullptr);
+
+  // Initalize Instance
+  ASSERT_TRUE(instance.init());
+
+  // Devices should be populated
+  EXPECT_GT(devices.size(), 0);
+  EXPECT_NE(instance.pickDevice(), nullptr);
+
+  // Destroy Instance
+  instance.destroy();
+
+  // Devices should be de-populated
+  EXPECT_EQ(devices.size(), 0);
+  EXPECT_EQ(instance.pickDevice(), nullptr);
 }
