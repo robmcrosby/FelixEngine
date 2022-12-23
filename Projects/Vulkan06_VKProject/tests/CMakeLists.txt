@@ -14,6 +14,7 @@ add_subdirectory(graphics)
 add_executable(graphics_test
   graphics_test.cpp
   graphics/TestVulkanInstance.cpp
+  graphics/TestVulkanDevice.cpp
 )
 
 
