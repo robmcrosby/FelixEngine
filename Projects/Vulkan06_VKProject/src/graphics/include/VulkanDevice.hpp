@@ -30,6 +30,7 @@ public:
 
   bool init();
   void destroy();
+  bool initalized() const {return mVkDevice != VK_NULL_HANDLE;}
 
   std::string name() const;
   std::string type() const;
@@ -40,8 +41,11 @@ public:
   VkDevice getVkDevice() const {return mVkDevice;}
   VmaAllocator getVmaAllocator() const {return mVmaAllocator;}
 
+  const VulkanExtensionProperties& getAvailableExentions() const {
+    return mAvailableExtensions;
+  }
+  const CStrings& getEnabledExtensions() const {return mEnabledExtensions;}
   bool addExtension(StringRef extension);
-  const CStrings& enabledExtensions() const {return mEnabledExtensions;}
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
 

@@ -54,7 +54,7 @@ bool VulkanDevice::init() {
   }
 
   const CStrings& layers = instance.getEnabledLayers();
-  const CStrings& extensions = enabledExtensions();
+  const CStrings& extensions = getEnabledExtensions();
 
   VkDeviceCreateInfo createInfo = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
   createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
@@ -85,6 +85,7 @@ void VulkanDevice::destroy() {
     vkDestroyDevice(mVkDevice, nullptr);
     mVkDevice = VK_NULL_HANDLE;
   }
+  mEnabledExtensions.clear();
 }
 
 string VulkanDevice::name() const {
@@ -136,69 +137,117 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
     }
   }
   else {
-    cerr << "Error: Queue can not be created after device initalization" << endl;
+    cerr << "Error: Queue can not be created after Device initalization" << endl;
   }
   return nullptr;
 }
 
 VulkanBufferPtr VulkanDevice::createBuffer() {
-  VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
-  return buffer;
+  if (initalized()) {
+    VulkanBufferPtr buffer = make_shared<VulkanBuffer>(this);
+    return buffer;
+  }
+  cerr << "Error: Can't create Buffer before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanImagePtr VulkanDevice::createImage() {
-  VulkanImagePtr image = make_shared<VulkanImage>(this);
-  return image;
+  if (initalized()) {
+    VulkanImagePtr image = make_shared<VulkanImage>(this);
+    return image;
+  }
+  cerr << "Error: Can't create Image before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanSamplerPtr VulkanDevice::createSampler() {
-  VulkanSamplerPtr sampler = make_shared<VulkanSampler>(this);
-  return sampler;
+  if (initalized()) {
+    VulkanSamplerPtr sampler = make_shared<VulkanSampler>(this);
+    return sampler;
+  }
+  cerr << "Error: Can't create Sampler before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanLayoutPtr VulkanDevice::createLayout(int frames) {
-  VulkanLayoutPtr layout = make_shared<VulkanLayout>(this, frames);
-  return layout;
+  if (initalized()) {
+    VulkanLayoutPtr layout = make_shared<VulkanLayout>(this, frames);
+    return layout;
+  }
+  cerr << "Error: Can't create Layout before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanLayoutSetPtr VulkanDevice::createLayoutSet(int frames) {
-  VulkanLayoutSetPtr layoutSet = make_shared<VulkanLayoutSet>(this, frames);
-  return layoutSet;
+  if (initalized()) {
+    VulkanLayoutSetPtr layoutSet = make_shared<VulkanLayoutSet>(this, frames);
+    return layoutSet;
+  }
+  cerr << "Error: Can't create LayoutSet before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanMeshPtr VulkanDevice::createMesh() {
-  VulkanMeshPtr mesh = make_shared<VulkanMesh>(this);
-  return mesh;
+  if (initalized()) {
+    VulkanMeshPtr mesh = make_shared<VulkanMesh>(this);
+    return mesh;
+  }
+  cerr << "Error: Can't create Mesh before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanFrameBufferPtr VulkanDevice::createFrameBuffer() {
-  VulkanFrameBufferPtr frameBuffer = make_shared<VulkanFrameBuffer>(this);
-  return frameBuffer;
+  if (initalized()) {
+    VulkanFrameBufferPtr frameBuffer = make_shared<VulkanFrameBuffer>(this);
+    return frameBuffer;
+  }
+  cerr << "Error: Can't create FrameBuffer before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanRenderPassPtr VulkanDevice::createRenderPass() {
-  VulkanRenderPassPtr renderPass = make_shared<VulkanRenderPass>(this);
-  return renderPass;
+  if (initalized()) {
+    VulkanRenderPassPtr renderPass = make_shared<VulkanRenderPass>(this);
+    return renderPass;
+  }
+  cerr << "Error: Can't create RenderPass before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanShaderPtr VulkanDevice::createShader(VkShaderStageFlagBits stage) {
-  VulkanShaderPtr shader = make_shared<VulkanShader>(this, stage);
-  return shader;
+  if (initalized()) {
+    VulkanShaderPtr shader = make_shared<VulkanShader>(this, stage);
+    return shader;
+  }
+  cerr << "Error: Can't create Shader before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanPipelinePtr VulkanDevice::createPipeline() {
-  VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
-  return pipeline;
+  if (initalized()) {
+    VulkanPipelinePtr pipeline = make_shared<VulkanPipeline>(this);
+    return pipeline;
+  }
+  cerr << "Error: Can't create Pipeline before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanSwapChainPtr VulkanDevice::createSwapChain() {
-  VulkanSwapChainPtr swapChain = make_shared<VulkanSwapChain>(this);
-  return swapChain;
+  if (initalized()) {
+    VulkanSwapChainPtr swapChain = make_shared<VulkanSwapChain>(this);
+    return swapChain;
+  }
+  cerr << "Error: Can't create SwapChain before Device initalization" << endl;
+  return nullptr;
 }
 
 VulkanFrameSyncPtr VulkanDevice::createFrameSync() {
-  VulkanFrameSyncPtr frameSync = make_shared<VulkanFrameSync>(this);
-  return frameSync;
+  if (initalized()) {
+    VulkanFrameSyncPtr frameSync = make_shared<VulkanFrameSync>(this);
+    return frameSync;
+  }
+  cerr << "Error: Can't create FrameSync before Device initalization" << endl;
+  return nullptr;
 }
 
 bool VulkanDevice::getVkMemoryType(uint32_t& index, VkMemoryType& type, VkMemoryPropertyFlags properties) {
