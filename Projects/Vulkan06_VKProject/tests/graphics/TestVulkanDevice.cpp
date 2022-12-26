@@ -123,10 +123,14 @@ TEST_F(TestVulkanDevice, TestCreateQueue) {
   for (auto queue : queues)
     EXPECT_FALSE(queue->initalized());
 
-  // Initalize device
+  // Initalize Device
   EXPECT_TRUE(mDevice->init());
   EXPECT_EQ(mDevice->createQueue(VK_QUEUE_COMPUTE_BIT), nullptr);
   EXPECT_EQ(queues.size(), 2);
   for (auto queue : queues)
     EXPECT_TRUE(queue->initalized());
+
+  // Destory Device
+  mDevice->destroy();
+  EXPECT_TRUE(queues.empty());
 }

@@ -20,6 +20,9 @@ public:
     return mVkCommandBuffers.at(frame);
   }
 
+  int frames() const {return static_cast<int>(mVkCommandBuffers.size());}
+  bool isRecording() const {return mRecordingBuffer != VK_NULL_HANDLE;}
+
   bool begin(int frame = 0, VkCommandBufferUsageFlags usageFlags = 0);
   void end();
   void submit(int frame = 0);

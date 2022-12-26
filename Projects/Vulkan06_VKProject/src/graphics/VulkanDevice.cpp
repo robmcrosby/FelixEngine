@@ -121,7 +121,6 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
   if (mVkDevice == VK_NULL_HANDLE) {
     uint32_t familyIndex, queueIndex;
     if (pickQueueFamily(flags, familyIndex, queueIndex)) {
-      cout << "familyIndex: " << familyIndex << " queueIndex: " << queueIndex << endl;
       VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags, familyIndex, queueIndex);
       mQueues.push_back(queue);
       return queue;
