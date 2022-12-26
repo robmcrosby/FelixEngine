@@ -77,7 +77,7 @@ void VulkanQueue::copyBufferToBuffer(VulkanBufferPtr src, VulkanBufferPtr dst) {
 }
 
 VulkanCommandPtr VulkanQueue::createCommand(int frames) {
-  if (mVkQueue != VK_NULL_HANDLE) {
+  if (initalized()) {
     VulkanCommandPtr command = make_shared<VulkanCommand>(this, frames);
     return command;
   }
@@ -94,7 +94,7 @@ VulkanCommandPtr VulkanQueue::beginSingleCommand() {
 }
 
 void VulkanQueue::submitCommand(VulkanCommandPtr command) {
-  if (mVkQueue != VK_NULL_HANDLE) {
+  if (initalized()) {
     VkCommandBuffer commandBuffer = command->getVkCommandBuffer();
     VkSubmitInfo submitInfo = {VK_STRUCTURE_TYPE_SUBMIT_INFO, 0};
     submitInfo.waitSemaphoreCount = 0;
@@ -111,7 +111,7 @@ void VulkanQueue::submitCommand(VulkanCommandPtr command) {
 }
 
 void VulkanQueue::submitCommand(VulkanCommandPtr command, VulkanFrameSyncPtr frameSync) {
-  if (mVkQueue != VK_NULL_HANDLE) {
+  if (initalized()) {
     VkSemaphore waitSemaphores[] = {frameSync->availableSemaphore()};
     VkSemaphore signalSemaphores[] = {frameSync->finishedSemaphore()};
     VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
@@ -133,7 +133,7 @@ void VulkanQueue::submitCommand(VulkanCommandPtr command, VulkanFrameSyncPtr fra
 }
 
 void VulkanQueue::waitIdle() {
-  if (mVkQueue != VK_NULL_HANDLE)
+  if (initalized())
     vkQueueWaitIdle(mVkQueue);
 }
 

@@ -28,6 +28,8 @@ public:
   bool init();
   void destroy();
 
+  bool initalized() const {return mVkQueue != VK_NULL_HANDLE;}
+
   void transition(
     VulkanImagePtr image,
     VkImageLayout newImageLayout,

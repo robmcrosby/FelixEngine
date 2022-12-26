@@ -45,6 +45,7 @@ TEST_F(TestVulkanDevice, TestDeviceMembers) {
   EXPECT_EQ(mDevice->getVmaAllocator(), VK_NULL_HANDLE);
 
   // Initalize and check members
+  EXPECT_NE(mDevice->createQueue(VK_QUEUE_TRANSFER_BIT), nullptr);
   EXPECT_TRUE(mDevice->init());
   EXPECT_NE(mDevice->getVkPhysicalDevice(), VK_NULL_HANDLE);
   EXPECT_NE(mDevice->getVkDevice(), VK_NULL_HANDLE);
@@ -68,6 +69,7 @@ TEST_F(TestVulkanDevice, TestExtensions) {
     EXPECT_FALSE(mDevice->getEnabledExtensions().empty());
 
     // Attempt add after Initalization
+    EXPECT_NE(mDevice->createQueue(VK_QUEUE_TRANSFER_BIT), nullptr);
     EXPECT_TRUE(mDevice->init());
     EXPECT_FALSE(mDevice->addExtension(extensions.back().extensionName));
   }
@@ -91,6 +93,7 @@ TEST_F(TestVulkanDevice, TestCreateMethods) {
   EXPECT_EQ(mDevice->createFrameSync(), nullptr);
 
   // Create items after initalization
+  EXPECT_NE(mDevice->createQueue(VK_QUEUE_TRANSFER_BIT), nullptr);
   EXPECT_TRUE(mDevice->init());
   EXPECT_NE(mDevice->createBuffer(), nullptr);
   EXPECT_NE(mDevice->createSampler(), nullptr);
@@ -106,8 +109,24 @@ TEST_F(TestVulkanDevice, TestCreateMethods) {
 }
 
 TEST_F(TestVulkanDevice, TestCreateQueue) {
-  EXPECT_NE(mDevice->createQueue(VK_QUEUE_COMPUTE_BIT), nullptr);
+  // Get device queues and check for no queues
+  const auto& queues = mDevice->getQueues();
+  EXPECT_TRUE(queues.empty());
 
+  // Should not be able to initalize device without a queue
+  EXPECT_FALSE(mDevice->init());
+
+  // Create multiple queues
+  EXPECT_NE(mDevice->createQueue(VK_QUEUE_GRAPHICS_BIT), nullptr);
+  EXPECT_NE(mDevice->createQueue(VK_QUEUE_TRANSFER_BIT), nullptr);
+  EXPECT_EQ(queues.size(), 2);
+  for (auto queue : queues)
+    EXPECT_FALSE(queue->initalized());
+
+  // Initalize device
   EXPECT_TRUE(mDevice->init());
   EXPECT_EQ(mDevice->createQueue(VK_QUEUE_COMPUTE_BIT), nullptr);
+  EXPECT_EQ(queues.size(), 2);
+  for (auto queue : queues)
+    EXPECT_TRUE(queue->initalized());
 }

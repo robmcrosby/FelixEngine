@@ -38,10 +38,8 @@ VulkanDevice::~VulkanDevice() {
 }
 
 bool VulkanDevice::init() {
-  auto& instance = VulkanInstance::Get();
-
   float queuePriority = 1.0f;
-  vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+  QueueCreateInfos queueCreateInfos;
   for (uint32_t family = 0; family < mQueueFamilies.size(); ++family) {
     uint32_t count = mQueueFamilies[family].queueCount - mQueueFamilyCounts[family];
     if (count > 0) {
@@ -53,27 +51,19 @@ bool VulkanDevice::init() {
     }
   }
 
-  const CStrings& layers = instance.getEnabledLayers();
-  const CStrings& extensions = getEnabledExtensions();
-
-  VkDeviceCreateInfo createInfo = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
-  createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
-  createInfo.pQueueCreateInfos = queueCreateInfos.data();
-  createInfo.pEnabledFeatures = &mFeatures;
-  createInfo.enabledLayerCount = static_cast<uint32_t>(layers.size());
-  createInfo.ppEnabledLayerNames = layers.data();
-  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-  createInfo.ppEnabledExtensionNames = extensions.data();
-
-  if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &mVkDevice) == VK_SUCCESS) {
-    for (auto queue : mQueues) {
-      if (!queue->init())
-        return false;
+  if (!queueCreateInfos.empty()) {
+    mVkDevice = createVkDevice(queueCreateInfos);
+    if (mVkDevice != VK_NULL_HANDLE) {
+      for (auto queue : mQueues) {
+        if (!queue->init())
+          return false;
+      }
+      return initVmaAllocator();
     }
-    return initVmaAllocator();
+    cerr << "Error: Unable to create Logical Device with Queues" << endl;
+    return false;
   }
-
-  cerr << "Error: Unable to create logical device with queues" << endl;
+  cerr << "Error: One or more Queues must be ceated before Device initalization" << endl;
   return false;
 }
 
@@ -131,6 +121,7 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
   if (mVkDevice == VK_NULL_HANDLE) {
     uint32_t familyIndex, queueIndex;
     if (pickQueueFamily(flags, familyIndex, queueIndex)) {
+      cout << "familyIndex: " << familyIndex << " queueIndex: " << queueIndex << endl;
       VulkanQueuePtr queue = make_shared<VulkanQueue>(this, flags, familyIndex, queueIndex);
       mQueues.push_back(queue);
       return queue;
@@ -342,6 +333,27 @@ ostream& VulkanDevice::printMemoryFlags(ostream& os, VkMemoryPropertyFlags flags
     os << "!RDMA ";
   os << "]";
   return os;
+}
+
+VkDevice VulkanDevice::createVkDevice(QueueCreateInfos& queueCreateInfos) const {
+  const CStrings& layers = VulkanInstance::Get().getEnabledLayers();
+  const CStrings& extensions = getEnabledExtensions();
+
+  VkDeviceCreateInfo createInfo = {VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO};
+  createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+  createInfo.pQueueCreateInfos = queueCreateInfos.data();
+  createInfo.pEnabledFeatures = &mFeatures;
+  createInfo.enabledLayerCount = static_cast<uint32_t>(layers.size());
+  createInfo.ppEnabledLayerNames = layers.data();
+  createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+  createInfo.ppEnabledExtensionNames = extensions.data();
+
+  VkDevice device = VK_NULL_HANDLE;
+  if (vkCreateDevice(mVkPhysicalDevice, &createInfo, nullptr, &device) != VK_SUCCESS) {
+    device = VK_NULL_HANDLE;
+    cerr << "Error Creating Vulkan Device" << endl;
+  }
+  return device;
 }
 
 bool VulkanDevice::initVmaAllocator() {

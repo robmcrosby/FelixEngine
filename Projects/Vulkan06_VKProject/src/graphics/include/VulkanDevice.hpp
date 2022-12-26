@@ -4,6 +4,8 @@
 #ifndef VulkanDevice_hpp
 #define VulkanDevice_hpp
 
+typedef std::vector<VkDeviceQueueCreateInfo> QueueCreateInfos;
+
 
 class VulkanDevice {
 private:
@@ -30,6 +32,7 @@ public:
 
   bool init();
   void destroy();
+
   bool initalized() const {return mVkDevice != VK_NULL_HANDLE;}
 
   std::string name() const;
@@ -48,6 +51,7 @@ public:
   bool addExtension(StringRef extension);
 
   VulkanQueuePtr createQueue(VkQueueFlags flags);
+  const VulkanQueues& getQueues() const {return mQueues;}
 
   VulkanBufferPtr      createBuffer();
   VulkanImagePtr       createImage();
@@ -74,6 +78,8 @@ public:
   void clearVkSamplerMap();
 
 private:
+  VkDevice createVkDevice(QueueCreateInfos& queueCreateInfos) const;
+
   bool initVmaAllocator();
   void destoryVmaAllocator();
 
