@@ -125,6 +125,11 @@ VulkanQueuePtr VulkanDevice::createQueue(VkQueueFlags flags) {
       mQueues.push_back(queue);
       return queue;
     }
+    for (auto queue : mQueues) {
+      if (queue->getVkQueueFlags() & flags) {
+        return queue;
+      }
+    }
   }
   else {
     cerr << "Error: Queue can not be created after Device initalization" << endl;
@@ -385,7 +390,7 @@ void VulkanDevice::destoryVmaAllocator() {
   }
 }
 
-bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex) {
+bool VulkanDevice::pickQueueFamily(VkQueueFlags& flags, uint32_t& familyIndex, uint32_t& queueIndex) {
   bool found = false;
   for (uint32_t i = 0; i < mQueueFamilies.size(); ++i) {
     if ((mQueueFamilies[i].queueFlags & flags) == flags && mQueueFamilyCounts[i] > 0) {
@@ -395,14 +400,15 @@ bool VulkanDevice::pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, ui
   }
 
   if (found) {
+    flags = mQueueFamilies[familyIndex].queueFlags;
     queueIndex = mQueueFamilies[familyIndex].queueCount - mQueueFamilyCounts[familyIndex];
     mQueueFamilyCounts[familyIndex] -= 1;
     //cout << "Found family: " << familyIndex << " at queue index: " << queueIndex << endl;
   }
-  else {
-    cerr << "Error: No queue family avalible with flags: ";
-    printQueueFlags(cerr, flags);
-  }
+  // else {
+  //   cerr << "Error: No queue family avalible with flags: ";
+  //   printQueueFlags(cerr, flags);
+  // }
   return found;
 }
 

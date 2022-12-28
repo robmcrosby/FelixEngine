@@ -24,6 +24,7 @@ public:
 
   VkQueue getVkQueue() const {return mVkQueue;}
   VkCommandPool getVkCommandPool() const {return mVkCommandPool;}
+  VkQueueFlags getVkQueueFlags() const {return mVkQueueFlags;}
 
   bool init();
   void destroy();

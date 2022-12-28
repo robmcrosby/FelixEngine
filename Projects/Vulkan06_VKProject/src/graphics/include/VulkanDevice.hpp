@@ -83,7 +83,7 @@ private:
   bool initVmaAllocator();
   void destoryVmaAllocator();
 
-  bool pickQueueFamily(VkQueueFlags flags, uint32_t& familyIndex, uint32_t& queueIndex);
+  bool pickQueueFamily(VkQueueFlags& flags, uint32_t& familyIndex, uint32_t& queueIndex);
   void clearQueues();
 };
 

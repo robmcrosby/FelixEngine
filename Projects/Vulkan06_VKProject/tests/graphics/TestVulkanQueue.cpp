@@ -33,9 +33,10 @@ protected:
 };
 
 TEST_F(TestVulkanQueue, TestQueueMembers) {
-  auto queue = mDevice->createQueue(VK_QUEUE_TRANSFER_BIT);
+  auto queue = mDevice->createQueue(VK_QUEUE_GRAPHICS_BIT);
 
   EXPECT_FALSE(queue->initalized());
+  EXPECT_TRUE(queue->getVkQueueFlags() & VK_QUEUE_GRAPHICS_BIT);
   EXPECT_EQ(queue->getVkQueue(), VK_NULL_HANDLE);
   EXPECT_EQ(queue->getVkCommandPool(), VK_NULL_HANDLE);
 
