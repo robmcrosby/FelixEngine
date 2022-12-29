@@ -16,6 +16,7 @@ add_executable(graphics_test
   graphics/TestVulkanInstance.cpp
   graphics/TestVulkanDevice.cpp
   graphics/TestVulkanQueue.cpp
+  graphics/TestVulkanBuffer.cpp
 )
 
 

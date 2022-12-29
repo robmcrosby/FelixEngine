@@ -30,7 +30,10 @@ public:
   void copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr buffer, int frame = 0);
   void copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst, int frame = 0);
 
-  VkBuffer getVkBuffer(int frame = 0) const {return mVkBuffers.at(frame);}
+  VkBuffer getVkBuffer(int frame = 0) const {
+    return frame > frames() ? mVkBuffers.at(frame) : VK_NULL_HANDLE;
+  }
+  const VkBuffers& getVkBuffers() const {return mVkBuffers;}
 
   VmaAllocationInfo getVmaAllocationInfo(int frame = 0) const;
   VkMemoryPropertyFlags getVkMemoryPropertyFlags(int frame = 0) const;
@@ -41,6 +44,7 @@ public:
   void* data(int frame = 0);
   VkDeviceSize size() const {return mSize;}
   uint32_t frames() const {return static_cast<uint32_t>(mVkBuffers.size());}
+  bool allocated() const {return frames() > 0;}
 
   const VkDescriptorBufferInfo* getVkDescriptorBufferInfo(int index = 0) const {
     return &mVkDescriptorBufferInfos.at(index % frames());

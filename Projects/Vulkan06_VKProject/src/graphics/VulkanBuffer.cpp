@@ -124,7 +124,7 @@ VkDescriptorType VulkanBuffer::getVkDescriptorType() const {
 }
 
 bool VulkanBuffer::isHostVisible(int frame) const {
-  return getVkMemoryPropertyFlags(frame) & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+  return allocated() && getVkMemoryPropertyFlags(frame) & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
 }
 
 void* VulkanBuffer::data(int frame) {
