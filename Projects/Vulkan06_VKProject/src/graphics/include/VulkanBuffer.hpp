@@ -50,8 +50,8 @@ public:
     return &mVkDescriptorBufferInfos.at(index % frames());
   }
 
-  bool load(const void* data, VkDeviceSize size, int frames = 0);
-  bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames = 0);
+  bool load(const void* data, VkDeviceSize size, int frames = 1);
+  bool load(VulkanQueuePtr queue, const void* data, VkDeviceSize size, int frames = 1);
 
   void update(const void* data, VkDeviceSize size, int frame = 0);
 
