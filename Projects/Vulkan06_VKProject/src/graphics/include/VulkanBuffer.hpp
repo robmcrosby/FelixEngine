@@ -31,7 +31,7 @@ public:
   void copyToBuffer(VkCommandBuffer commandBuffer, VkBuffer dst, int frame = 0);
 
   VkBuffer getVkBuffer(int frame = 0) const {
-    return frame > frames() ? mVkBuffers.at(frame) : VK_NULL_HANDLE;
+    return frame < frames() ? mVkBuffers.at(frame) : VK_NULL_HANDLE;
   }
   const VkBuffers& getVkBuffers() const {return mVkBuffers;}
 

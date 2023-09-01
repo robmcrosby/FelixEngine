@@ -1,10 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_vulkan.h>
 #include <VulkanIncludes.hpp>
-#include "Matrix.hpp"
 #include <vulkan/vulkan.h>
+#include <glm/glm.hpp>
+
 
 using namespace std;
+using namespace glm;
 
 struct Vertex {
   vec2 position;
@@ -41,7 +43,7 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
   auto layoutSet = device->createLayoutSet(swapChain->frames());
   auto layout = layoutSet->at(0);
-  mat4 modelMatrix;
+  mat4 modelMatrix(1);
   layout->setUniform(0, modelMatrix);
   layout->setTexture(1, image, sampler);
   layout->update();
@@ -126,10 +128,10 @@ void runLoop(SDL_Window* window, VulkanDevicePtr device, VulkanQueuePtr queue) {
 
     if (frame >= 0) {
       // Update Matrix
-      modelMatrix.x.x = scale;
-      modelMatrix.y.y = scale;
-      modelMatrix.w.x = offsetX;
-      modelMatrix.w.y = offsetY;
+      modelMatrix[0][0] = scale;
+      modelMatrix[1][1] = scale;
+      modelMatrix[3][0] = offsetX;
+      modelMatrix[3][1] = offsetY;
       layout->update(0, modelMatrix, frame);
 
       // Update Command Buffer Recording

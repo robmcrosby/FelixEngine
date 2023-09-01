@@ -1,4 +1,21 @@
 cmake_minimum_required(VERSION 3.18.4)
+include(FetchContent)
+
+
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY https://github.com/g-truc/glm.git
+	GIT_TAG		   0.9.9.2
+)
+
+FetchContent_GetProperties(glm)
+if(NOT glm_POPULATED)
+	FetchContent_Populate(glm)
+	set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
+	add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
+endif()
+message(STATUS "${Green} GLM Should Be Downloaded ${ColourReset}")
+
 
 project(VKProject)
 
@@ -10,7 +27,6 @@ set(THIRD_PARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../ThirdParty/")
 set(STB_DIR "${THIRD_PARTY_DIR}/STB/")
 set(VMA_DIR "${THIRD_PARTY_DIR}/VulkanMemoryAllocator/")
 set(SPV_DIR "${THIRD_PARTY_DIR}/SpirvReflect/")
-
 
 # Create Assets Directory
 set(ASSETS_DIR "${CMAKE_CURRENT_BINARY_DIR}/assets/")

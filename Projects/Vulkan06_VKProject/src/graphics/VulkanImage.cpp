@@ -141,7 +141,7 @@ bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int he
   setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
   setCreateFlags(VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT);
 
-  //cout << "Read: " << filepath << "(" << width << ", " << height << ")" << channels << endl;
+  //cout << "Read: (" << width << ", " << height << ") " << formatSize(format) << endl;
   VkDeviceSize size = width * height * formatSize(format);
 
   // Create staging buffer

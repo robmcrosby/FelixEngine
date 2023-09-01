@@ -43,6 +43,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
   target_include_directories(ResizeSDL
    PRIVATE
     graphics
+    ${glm_SOURCE_DIR}
   )
   target_link_libraries(ResizeSDL
    PRIVATE
