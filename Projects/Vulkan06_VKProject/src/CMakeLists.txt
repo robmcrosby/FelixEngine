@@ -18,6 +18,7 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
    PRIVATE
     graphics
     ${SDL2_INCLUDE_DIRS}
+    ${glm_SOURCE_DIR}
   )
   target_link_libraries(ResizeSDL
    PRIVATE
