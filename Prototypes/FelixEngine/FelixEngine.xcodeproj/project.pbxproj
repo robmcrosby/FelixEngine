@@ -7,48 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AD9E45022F88173800623465 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45012F88173800623465 /* SDL3.framework */; platformFilter = ios; };
-		AD9E45032F88173800623465 /* SDL3.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45012F88173800623465 /* SDL3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		AD9E45062F88173C00623465 /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45052F88173C00623465 /* MoltenVK.framework */; platformFilter = ios; };
-		AD9E45072F88173C00623465 /* MoltenVK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45052F88173C00623465 /* MoltenVK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AD9E45972F882FE300623465 /* SDL3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45962F882FE300623465 /* SDL3.framework */; };
+		AD9E45992F88357A00623465 /* MoltenVK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45982F88357A00623465 /* MoltenVK.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		AD9E45042F88173800623465 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AD9E45072F88173C00623465 /* MoltenVK.framework in Embed Frameworks */,
-				AD9E45032F88173800623465 /* SDL3.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		AD9E44252F880DB900623465 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AD9E45012F88173800623465 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../../ThirdParty/SDL3/SDL3.framework; sourceTree = "<group>"; };
-		AD9E45052F88173C00623465 /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../../ThirdParty/MoltenVK/MoltenVK.framework; sourceTree = "<group>"; };
+		AD9E45842F882C9F00623465 /* FelixEngine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FelixEngine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD9E45962F882FE300623465 /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../../ThirdParty/SDL3/SDL3.framework; sourceTree = "<group>"; };
+		AD9E45982F88357A00623465 /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../../ThirdParty/MoltenVK/MoltenVK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AD9E442A2F880DB900623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */ = {
+		AD9E45942F882E6600623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
-				FelixEngine.h,
+				Graphics/GpuContext.hpp,
 			);
-			target = AD9E44242F880DB900623465 /* FelixEngine */;
+			target = AD9E45832F882C9F00623465 /* FelixEngine */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AD9E44272F880DB900623465 /* FelixEngine */ = {
+		AD9E45862F882C9F00623465 /* FelixEngine */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AD9E442A2F880DB900623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */,
+				AD9E45942F882E6600623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */,
 			);
 			path = FelixEngine;
 			sourceTree = "<group>";
@@ -56,40 +39,40 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AD9E44222F880DB900623465 /* Frameworks */ = {
+		AD9E45812F882C9F00623465 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AD9E45062F88173C00623465 /* MoltenVK.framework in Frameworks */,
-				AD9E45022F88173800623465 /* SDL3.framework in Frameworks */,
+				AD9E45972F882FE300623465 /* SDL3.framework in Frameworks */,
+				AD9E45992F88357A00623465 /* MoltenVK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AD9E441B2F880DB900623465 = {
+		AD9E457A2F882C9F00623465 = {
 			isa = PBXGroup;
 			children = (
-				AD9E44272F880DB900623465 /* FelixEngine */,
-				AD9E45002F88173800623465 /* Frameworks */,
-				AD9E44262F880DB900623465 /* Products */,
+				AD9E45862F882C9F00623465 /* FelixEngine */,
+				AD9E45952F882FE300623465 /* Frameworks */,
+				AD9E45852F882C9F00623465 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		AD9E44262F880DB900623465 /* Products */ = {
+		AD9E45852F882C9F00623465 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AD9E44252F880DB900623465 /* FelixEngine.framework */,
+				AD9E45842F882C9F00623465 /* FelixEngine.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AD9E45002F88173800623465 /* Frameworks */ = {
+		AD9E45952F882FE300623465 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AD9E45052F88173C00623465 /* MoltenVK.framework */,
-				AD9E45012F88173800623465 /* SDL3.framework */,
+				AD9E45982F88357A00623465 /* MoltenVK.framework */,
+				AD9E45962F882FE300623465 /* SDL3.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -97,7 +80,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		AD9E44202F880DB900623465 /* Headers */ = {
+		AD9E457F2F882C9F00623465 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -107,65 +90,64 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		AD9E44242F880DB900623465 /* FelixEngine */ = {
+		AD9E45832F882C9F00623465 /* FelixEngine */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AD9E442B2F880DB900623465 /* Build configuration list for PBXNativeTarget "FelixEngine" */;
+			buildConfigurationList = AD9E458A2F882C9F00623465 /* Build configuration list for PBXNativeTarget "FelixEngine" */;
 			buildPhases = (
-				AD9E44202F880DB900623465 /* Headers */,
-				AD9E44212F880DB900623465 /* Sources */,
-				AD9E44222F880DB900623465 /* Frameworks */,
-				AD9E44232F880DB900623465 /* Resources */,
-				AD9E45042F88173800623465 /* Embed Frameworks */,
+				AD9E457F2F882C9F00623465 /* Headers */,
+				AD9E45802F882C9F00623465 /* Sources */,
+				AD9E45812F882C9F00623465 /* Frameworks */,
+				AD9E45822F882C9F00623465 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AD9E44272F880DB900623465 /* FelixEngine */,
+				AD9E45862F882C9F00623465 /* FelixEngine */,
 			);
 			name = FelixEngine;
 			packageProductDependencies = (
 			);
 			productName = FelixEngine;
-			productReference = AD9E44252F880DB900623465 /* FelixEngine.framework */;
+			productReference = AD9E45842F882C9F00623465 /* FelixEngine.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		AD9E441C2F880DB900623465 /* Project object */ = {
+		AD9E457B2F882C9F00623465 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
-					AD9E44242F880DB900623465 = {
+					AD9E45832F882C9F00623465 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
 			};
-			buildConfigurationList = AD9E441F2F880DB900623465 /* Build configuration list for PBXProject "FelixEngine" */;
+			buildConfigurationList = AD9E457E2F882C9F00623465 /* Build configuration list for PBXProject "FelixEngine" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = AD9E441B2F880DB900623465;
+			mainGroup = AD9E457A2F882C9F00623465;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = AD9E44262F880DB900623465 /* Products */;
+			productRefGroup = AD9E45852F882C9F00623465 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AD9E44242F880DB900623465 /* FelixEngine */,
+				AD9E45832F882C9F00623465 /* FelixEngine */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AD9E44232F880DB900623465 /* Resources */ = {
+		AD9E45822F882C9F00623465 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -175,7 +157,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		AD9E44212F880DB900623465 /* Sources */ = {
+		AD9E45802F882C9F00623465 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -185,9 +167,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		AD9E442C2F880DB900623465 /* Debug */ = {
+		AD9E458B2F882C9F00623465 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -198,7 +181,6 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../Thirdparty",
 					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
 				);
@@ -213,26 +195,35 @@
 				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Debug;
 		};
-		AD9E442D2F880DB900623465 /* Release */ = {
+		AD9E458C2F882C9F00623465 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -243,7 +234,6 @@
 				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../Thirdparty",
 					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
 				);
@@ -258,24 +248,32 @@
 				);
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.robmcrosby.FelixEngine;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Release;
 		};
-		AD9E442E2F880DB900623465 /* Debug */ = {
+		AD9E458D2F882C9F00623465 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -329,18 +327,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		AD9E442F2F880DB900623465 /* Release */ = {
+		AD9E458E2F882C9F00623465 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -388,12 +384,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -402,25 +395,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AD9E441F2F880DB900623465 /* Build configuration list for PBXProject "FelixEngine" */ = {
+		AD9E457E2F882C9F00623465 /* Build configuration list for PBXProject "FelixEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AD9E442E2F880DB900623465 /* Debug */,
-				AD9E442F2F880DB900623465 /* Release */,
+				AD9E458D2F882C9F00623465 /* Debug */,
+				AD9E458E2F882C9F00623465 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AD9E442B2F880DB900623465 /* Build configuration list for PBXNativeTarget "FelixEngine" */ = {
+		AD9E458A2F882C9F00623465 /* Build configuration list for PBXNativeTarget "FelixEngine" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AD9E442C2F880DB900623465 /* Debug */,
-				AD9E442D2F880DB900623465 /* Release */,
+				AD9E458B2F882C9F00623465 /* Debug */,
+				AD9E458C2F882C9F00623465 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = AD9E441C2F880DB900623465 /* Project object */;
+	rootObject = AD9E457B2F882C9F00623465 /* Project object */;
 }

@@ -8,11 +8,13 @@
 #ifndef BaseGameApp_hpp
 #define BaseGameApp_hpp
 
+#include <FelixEngine/GpuContext.hpp>
 #include <SDL3/SDL.h>
 #include <iostream>
 
 class BaseGameApp {
 private:
+  Felix::GpuContextPtr mGpuContext;
   
 public:
   BaseGameApp();

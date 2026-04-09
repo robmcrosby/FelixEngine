@@ -9,6 +9,7 @@
 
 
 using namespace std;
+using namespace Felix;
 
 BaseGameApp::BaseGameApp() {
   
@@ -22,6 +23,12 @@ SDL_AppResult BaseGameApp::init() {
   // Initalize SDL
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << endl;
+    return SDL_APP_FAILURE;
+  }
+  
+  mGpuContext = GpuContext::create();
+  if (!mGpuContext->init()) {
+    mGpuContext = nullptr;
     return SDL_APP_FAILURE;
   }
   

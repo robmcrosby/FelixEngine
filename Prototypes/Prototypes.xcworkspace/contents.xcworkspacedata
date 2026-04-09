@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BaseGame/BaseGame.xcodeproj">
+      location = "group:FelixEngine/FelixEngine.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FelixEngine/FelixEngine.xcodeproj">
+      location = "group:BaseGame/BaseGame.xcodeproj">
    </FileRef>
 </Workspace>

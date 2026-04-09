@@ -190,7 +190,6 @@
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../Thirdparty",
 					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
 				);
@@ -232,7 +231,6 @@
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../../Thirdparty",
 					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
 				);
