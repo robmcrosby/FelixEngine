@@ -22,6 +22,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
 				Graphics/GpuContext.hpp,
+				Scene/Components/Tag.hpp,
+				Scene/Components/UUID.hpp,
+				Scene/Scene.hpp,
 			);
 			target = AD9E45832F882C9F00623465 /* FelixEngine */;
 		};

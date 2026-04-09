@@ -6,7 +6,8 @@
 //
 
 #include "BaseGameApp.hpp"
-
+#include <FelixEngine/Tag.hpp>
+#include <FelixEngine/UUID.hpp>
 
 using namespace std;
 using namespace Felix;
@@ -32,6 +33,15 @@ SDL_AppResult BaseGameApp::init() {
     return SDL_APP_FAILURE;
   }
   
+  auto item = mScene.add("Test");
+  cout << "Tag: " << item.get<Tag>().tag << endl;
+  cout << "UUID: " << item.get<UUID>() << endl;
+  
+  auto child = item.addChild("Child");
+  cout << "Child: " << child.get<Tag>().tag << endl;
+  //cout << "Parent: " << child.get<Parent>().parent.get<Tag>().tag << endl;
+  cout << "Parent: " << child.parent().get<Tag>().tag << endl;
+ 
   return SDL_APP_CONTINUE;
 }
 
