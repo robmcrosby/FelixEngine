@@ -30,8 +30,8 @@
 
 /* Begin PBXFileReference section */
 		ADC49D932F673D77001F0A5E /* SDLGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SDLGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		ADC49DB92F6879E4001F0A5E /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../ThirdParty/SDL3/SDL3.framework; sourceTree = "<group>"; };
-		ADC49DE22F6A272F001F0A5E /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../ThirdParty/MoltenVK/MoltenVK.framework; sourceTree = "<group>"; };
+		ADC49DB92F6879E4001F0A5E /* SDL3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL3.framework; path = ../../ThirdParty/SDL3/SDL3.framework; sourceTree = "<group>"; };
+		ADC49DE22F6A272F001F0A5E /* MoltenVK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MoltenVK.framework; path = ../../ThirdParty/MoltenVK/MoltenVK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -289,17 +289,17 @@
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../Thirdparty/SDL3",
-					"$(PROJECT_DIR)/../Thirdparty/MoltenVK",
+					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
+					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Thirdparty/MoltenVK/MoltenVK.framework/Headers/",
-					"$(PROJECT_DIR)/../Thirdparty/VulkanMemoryAllocator/",
-					"$(PROJECT_DIR)/../Thirdparty/STB/",
-					"$(PROJECT_DIR)/../Thirdparty/SpirvReflect/",
-					"$(PROJECT_DIR)/../Thirdparty/ENTT/",
-					"$(PROJECT_DIR)/../Thirdparty/GLM/",
+					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK/MoltenVK.framework/Headers/",
+					"$(PROJECT_DIR)/../../Thirdparty/VulkanMemoryAllocator/",
+					"$(PROJECT_DIR)/../../Thirdparty/STB/",
+					"$(PROJECT_DIR)/../../Thirdparty/SpirvReflect/",
+					"$(PROJECT_DIR)/../../Thirdparty/ENTT/",
+					"$(PROJECT_DIR)/../../Thirdparty/GLM/",
 				);
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -331,17 +331,17 @@
 				DEVELOPMENT_TEAM = K62X7R9XCJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../Thirdparty/SDL3",
-					"$(PROJECT_DIR)/../Thirdparty/MoltenVK",
+					"$(PROJECT_DIR)/../../Thirdparty/SDL3",
+					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/../Thirdparty/MoltenVK/MoltenVK.framework/Headers/",
-					"$(PROJECT_DIR)/../Thirdparty/VulkanMemoryAllocator/",
-					"$(PROJECT_DIR)/../Thirdparty/STB/",
-					"$(PROJECT_DIR)/../Thirdparty/SpirvReflect/",
-					"$(PROJECT_DIR)/../Thirdparty/ENTT/",
-					"$(PROJECT_DIR)/../Thirdparty/GLM/",
+					"$(PROJECT_DIR)/../../Thirdparty/MoltenVK/MoltenVK.framework/Headers/",
+					"$(PROJECT_DIR)/../../Thirdparty/VulkanMemoryAllocator/",
+					"$(PROJECT_DIR)/../../Thirdparty/STB/",
+					"$(PROJECT_DIR)/../../Thirdparty/SpirvReflect/",
+					"$(PROJECT_DIR)/../../Thirdparty/ENTT/",
+					"$(PROJECT_DIR)/../../Thirdparty/GLM/",
 				);
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
