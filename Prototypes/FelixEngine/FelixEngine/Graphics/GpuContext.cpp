@@ -6,6 +6,7 @@
 //
 
 #include "GpuContext.hpp"
+#include "Parent.hpp"
 #include <SDL3/SDL_vulkan.h>
 
 
@@ -18,7 +19,7 @@ GpuContextPtr GpuContext::create() {
   return context;
 }
 
-GpuContext::GpuContext() {
+GpuContext::GpuContext(): mPaused(false) {
   
 }
 
@@ -80,6 +81,9 @@ bool GpuContext::init(StringRef appName) {
 }
 
 void GpuContext::draw(Scene& scene) {
+  if (mPaused)
+    return;
+  
   int frame = mSwapChain->getNextFrame(mFrameSync);
   if (frame >= 0) {
     updateLayouts(frame, scene);
@@ -92,7 +96,30 @@ void GpuContext::draw(Scene& scene) {
 }
 
 void GpuContext::resize(Scene& scene) {
+  mPaused = true;
+  mQueue->waitIdle();
   
+  // Rebuild SwapChain and Render Passes
+  mSwapChain->rebuild();
+  mRenderPass->rebuild();
+  
+  // Rebuild the Render Pipelines
+  set<VulkanPipeline*> pipelines;
+  scene.registry().view<GpuDraw>().each([&](auto entity, auto& draw) {
+    if (draw.pipeline)
+      pipelines.insert(draw.pipeline.get());
+  });
+  for (auto pipeline : pipelines)
+    pipeline->rebuild();
+  mPaused = false;
+}
+
+void GpuContext::pause() {
+  mPaused = true;
+}
+
+void GpuContext::resume(Scene& scene) {
+  resize(scene);
 }
 
 glm::vec2 GpuContext::getWindowSize() const {
@@ -165,17 +192,15 @@ void GpuContext::updateLayouts(int frame, Scene& scene) {
 
 void GpuContext::recordCommand(int frame, Scene& scene) {
   auto passes = scene.registry().view<GpuPass>();
-  auto draws = scene.registry().view<GpuDraw>();
+  auto draws = scene.registry().view<GpuDraw, Parent>();
   
   // Record the Command
   mCommand->begin(frame);
   for (auto [passItem, pass] : passes.each()) {
-    Entity passEntt{passItem, &scene};
     if (pass.pass && pass.visible) {
       mCommand->beginRenderPass(pass.pass);
-      for (auto [drawItem, draw] : draws.each()) {
-        Entity drawEntt{drawItem, &scene};
-        if (drawEntt.parent() == passEntt && draw.visible) {
+      for (auto [drawItem, draw, parent] : draws.each()) {
+        if (parent.parent == passItem && draw.visible) {
           //if (drawComp.guiContext && drawComp.visible) {
           //  drawComp.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
           //}

@@ -25,6 +25,7 @@ typedef std::shared_ptr<GpuContext> GpuContextPtr;
 class GpuContext {
 private:
   SDL_Window* mWindow;
+  bool mPaused;
   
   VulkanDevicePtr mDevice;
   VulkanQueuePtr  mQueue;
@@ -44,6 +45,8 @@ public:
   
   void draw(Scene& scene);
   void resize(Scene& scene);
+  void pause();
+  void resume(Scene& scene);
   
   glm::vec2 getWindowSize() const;
   

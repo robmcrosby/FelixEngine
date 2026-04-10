@@ -61,7 +61,11 @@ public:
   const std::string& tag() const;
   
   bool operator==(const Entity& other) const {
-    return mScene == other.mScene && mEntity == other.mEntity;
+    return mScene && mScene == other.mScene && mEntity == other.mEntity;
+  }
+  
+  bool operator==(entt::entity entity) const {
+    return mScene && mEntity == entity;
   }
   
   template<typename T>
