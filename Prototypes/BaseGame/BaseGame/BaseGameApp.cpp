@@ -28,7 +28,7 @@ SDL_AppResult BaseGameApp::init() {
   }
   
   mGpuContext = GpuContext::create();
-  if (!mGpuContext->init()) {
+  if (!mGpuContext->init("BaseGame")) {
     mGpuContext = nullptr;
     return SDL_APP_FAILURE;
   }
