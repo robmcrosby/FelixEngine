@@ -21,6 +21,43 @@ Entity Scene::add(const string& name) {
   return entity;
 }
 
+void Scene::resume() {
+  mStartTime = mLastTime = SDL_GetTicks();
+  mPaused = false;
+  
+  mRegistry.view<Binding>().each([&](auto item, auto& binding) {
+    Entity entity(item, this);
+    binding.onStart(entity);
+  });
+}
+
+void Scene::pause() {
+  mPaused = true;
+}
+
+void Scene::destory() {
+  pause();
+  
+  mRegistry.view<Binding>().each([&](auto item, auto& binding) {
+    Entity entity(item, this);
+    binding.onDestory(entity);
+  });
+}
+
+void Scene::onUpdate() {
+  if (mPaused)
+    return;
+  
+  uint64_t currentTime = SDL_GetTicks();
+  uint64_t elapsedTime = currentTime - mLastTime;
+  mLastTime = currentTime;
+  
+  float ts = elapsedTime/1000.0f;
+  mRegistry.view<Binding>().each([&](auto item, auto& binding) {
+    Entity entity(item, this);
+    binding.onUpdate(entity, ts);
+  });
+}
 
 
 Entity::Entity(): mEntity(entt::null), mScene(nullptr) {

@@ -29,6 +29,20 @@ const vector<uint32_t> rectIndices = {
 };
 
 
+class TestBinding {
+public:
+  void onCreate(const Entity& entity) {
+    cout << "onCreate(" << entity.tag() << ")" << endl;
+  }
+  void onDestory(const Entity& entity) {
+    cout << "onDestory(" << entity.tag() << ")" << endl;
+  }
+  void onUpdate(const Entity& entity, float ts) {
+    cout << "onUpdate(" << entity.tag() << ", " << ts << ")" << endl;
+  }
+};
+
+
 
 BaseGameApp::BaseGameApp() {
   
@@ -64,7 +78,7 @@ SDL_AppResult BaseGameApp::init() {
   auto sampler = device->createSampler();
   sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
   
-  auto drawItem = mGpuContext->addDrawItem(cameraItem);
+  auto drawItem = mGpuContext->addDrawItem(cameraItem, "DrawItem");
   assert(mGpuContext->setShaders(drawItem, "vertex.spv", "texture.spv"));
   
   auto layout = drawItem.get<GpuDraw>().layoutSet->at(0);
@@ -74,10 +88,15 @@ SDL_AppResult BaseGameApp::init() {
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 2, 2);
   
+  cameraItem.bind<TestBinding>();
+  drawItem.bind<TestBinding>();
+  
+  mScene.resume();
   return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult BaseGameApp::iterate() {
+  mScene.onUpdate();
   mGpuContext->draw(mScene);
   return SDL_APP_CONTINUE;
 }
@@ -87,12 +106,14 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
     case SDL_EVENT_QUIT:
       /* App was closed by the user. */
       cout << "SDL Event App Quit" << endl;
+      mScene.destory();
       return SDL_APP_SUCCESS;
     case SDL_EVENT_TERMINATING:
       /* Terminate the app.
          Shut everything down before returning from this function.
       */
       cout << "SDL Event App Terminating" << endl;
+      mScene.destory();
       return SDL_APP_CONTINUE;
     case SDL_EVENT_LOW_MEMORY:
       /* You will get this when your app is paused and iOS wants more memory.
@@ -105,6 +126,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
          This gets called when the user hits the home button, or gets a call.
       */
       cout << "SDL Event App Will Enter Background" << endl;
+      mScene.pause();
       return SDL_APP_CONTINUE;
     case SDL_EVENT_DID_ENTER_BACKGROUND:
       /* This will get called if the user accepted whatever sent your app to the background.
@@ -126,6 +148,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
          Your app is interactive and getting CPU again.
       */
       cout << "SDL Event App Did Enter Foreground" << endl;
+      mScene.resume();
       mGpuContext->resume(mScene);
       return SDL_APP_CONTINUE;
     case SDL_EVENT_WINDOW_RESIZED:

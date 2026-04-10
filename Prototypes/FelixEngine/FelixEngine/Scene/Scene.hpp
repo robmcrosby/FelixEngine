@@ -8,6 +8,8 @@
 #ifndef Scene_hpp
 #define Scene_hpp
 
+#include <FelixEngine/Binding.hpp>
+#include <SDL3/SDL.h>
 #include <iostream>
 #include <entt.hpp>
 
@@ -20,14 +22,23 @@ class Scene {
 private:
   entt::registry mRegistry;
   entt::dispatcher mDispatcher;
+  uint64_t mStartTime = 0;
+  uint64_t mLastTime = 0;
+  bool mPaused = true;
   
 public:
   Scene() = default;
   
+  bool isPaused() const { return mPaused; }
   entt::registry& registry() { return mRegistry; }
   entt::dispatcher& dispatcher() { return mDispatcher; }
   
   Entity add(const std::string& name = "");
+  
+  void resume();
+  void pause();
+  void destory();
+  void onUpdate();
   
 private:
   friend Entity;
@@ -94,6 +105,11 @@ public:
   void remove() {
     if (has<T>())
       mScene->mRegistry.remove<T>(mEntity);
+  }
+  
+  template<typename T>
+  void bind() {
+    get<Binding>().bind<T>();
   }
 };
 
