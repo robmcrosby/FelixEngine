@@ -8,11 +8,14 @@
 #ifndef GpuContext_hpp
 #define GpuContext_hpp
 
-#include <vulkan/vulkan.h>
+#include <FelixEngine/Scene.hpp>
+#include <FelixEngine/VulkanIncludes.hpp>
+#include <FelixEngine/GpuComponents.hpp>
 #include <SDL3/SDL.h>
-#include <FelixEngine/VulkanTypes.hpp>
+#include <vulkan/vulkan.h>
 #include <iostream>
 #include <memory>
+
 
 namespace Felix {
   
@@ -39,7 +42,38 @@ public:
   
   bool init(StringRef appName);
   
+  void draw(Scene& scene);
+  void resize(Scene& scene);
+  
+  glm::vec2 getWindowSize() const;
+  
+  VulkanDevicePtr getDevice() const { return mDevice; }
+  VulkanQueuePtr getQueue() const { return mQueue; }
+  
+  Entity getMainPass(Scene& scene, StringRef name = "MainPass") const;
+  Entity getMainCamera(Scene& scene) const;
+  
+  Entity addDrawItem(Entity pass, StringRef name = "") const;
+  bool setShaders(Entity item, StringRef vertexFile, StringRef fragmentFile) const;
+  
+  template <typename T>
+  VulkanMeshPtr loadMesh(const std::vector<T>& vertices, const std::vector<uint32_t>& indices) {
+    auto mesh = mDevice->createMesh();
+    assert(mesh->addBuffer(mQueue, vertices));
+    assert(mesh->setIndexBuffer(mQueue, indices));
+    return mesh;
+  }
+  
+  template <typename T>
+  VulkanMeshPtr setMesh(Entity item, const std::vector<T>& vertices, const std::vector<uint32_t>& indices) {
+    auto mesh = loadMesh(vertices, indices);
+    item.get<GpuDraw>().mesh = mesh;
+    return mesh;
+  }
+  
 private:
+  void updateLayouts(int frame, Scene& scene);
+  void recordCommand(int frame, Scene& scene);
   CStrings getSDLExtenstions() const;
   
 public:

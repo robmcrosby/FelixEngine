@@ -51,4 +51,16 @@ Entity Entity::parent() const {
   return has<Parent>() ? get<Parent>().parent : Entity();
 }
 
+uint64_t Entity::uuid() const {
+  return *this ? (uint64_t)get<UUID>() : 0;
+}
+
+string& Entity::tag() {
+  return get<Tag>().tag;
+}
+
+const string& Entity::tag() const {
+  return get<Tag>().tag;
+}
+
 } /* Felix */

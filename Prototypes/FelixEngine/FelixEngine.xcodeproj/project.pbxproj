@@ -21,6 +21,11 @@
 		AD9E45942F882E6600623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
+				Graphics/Components/Camera.hpp,
+				Graphics/Components/GpuComponents.hpp,
+				Graphics/Components/GpuDraw.hpp,
+				Graphics/Components/GpuPass.hpp,
+				Graphics/Components/Transform.hpp,
 				Graphics/GpuContext.hpp,
 				Graphics/Vulkan/VulkanBuffer.hpp,
 				Graphics/Vulkan/VulkanCommand.hpp,
@@ -28,6 +33,7 @@
 				Graphics/Vulkan/VulkanFrameBuffer.hpp,
 				Graphics/Vulkan/VulkanFrameSync.hpp,
 				Graphics/Vulkan/VulkanImage.hpp,
+				Graphics/Vulkan/VulkanIncludes.hpp,
 				Graphics/Vulkan/VulkanInstance.hpp,
 				Graphics/Vulkan/VulkanLayout.hpp,
 				Graphics/Vulkan/VulkanLayoutSet.hpp,

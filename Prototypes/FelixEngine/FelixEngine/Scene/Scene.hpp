@@ -55,6 +55,15 @@ public:
   Entity addChild(Entity child);
   Entity parent() const;
   
+  uint64_t uuid() const;
+  
+  std::string& tag();
+  const std::string& tag() const;
+  
+  bool operator==(const Entity& other) const {
+    return mScene == other.mScene && mEntity == other.mEntity;
+  }
+  
   template<typename T>
   bool has() const {
     return *this && mScene->mRegistry.all_of<T>(mEntity);
