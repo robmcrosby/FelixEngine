@@ -9,6 +9,7 @@
 #include "UUID.hpp"
 #include "Tag.hpp"
 #include "Parent.hpp"
+#include "SdlEvent.hpp"
 
 
 using namespace std;
@@ -57,6 +58,14 @@ void Scene::onUpdate() {
     Entity entity(item, this);
     binding.onUpdate(entity, ts);
   });
+}
+
+void Scene::handle(SDL_Event* event) {
+  mDispatcher.trigger<SdlEvent>(event);
+}
+
+void Scene::updateEvents() {
+  mDispatcher.update();
 }
 
 

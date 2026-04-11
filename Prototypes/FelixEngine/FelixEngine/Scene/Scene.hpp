@@ -40,6 +40,9 @@ public:
   void destory();
   void onUpdate();
   
+  void handle(SDL_Event* event);
+  void updateEvents();
+  
 private:
   friend Entity;
 };
@@ -112,7 +115,6 @@ public:
     get<Binding>().bind<T>();
   }
 };
-
 
 } /* Felix */
 

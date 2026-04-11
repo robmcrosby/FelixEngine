@@ -7,6 +7,7 @@
 
 #include "BaseGameApp.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <FelixEngine/SdlHandler.hpp>
 
 
 using namespace std;
@@ -31,14 +32,20 @@ const vector<uint32_t> rectIndices = {
 
 class TestBinding {
 public:
-  void onCreate(const Entity& entity) {
+  void onCreate(Entity& entity) {
     cout << "onCreate(" << entity.tag() << ")" << endl;
+    entity.get<SdlHandler>().connect(entity, this);
+    
   }
-  void onDestory(const Entity& entity) {
+  void onDestory(Entity& entity) {
     cout << "onDestory(" << entity.tag() << ")" << endl;
+    entity.get<SdlHandler>().disconnect();
   }
-  void onUpdate(const Entity& entity, float ts) {
-    cout << "onUpdate(" << entity.tag() << ", " << ts << ")" << endl;
+  void onUpdate(Entity& entity, float ts) {
+    //cout << "onUpdate(" << entity.tag() << ", " << ts << ")" << endl;
+  }
+  void onSdlEvent(Entity& entity, SDL_Event* event) {
+    //cout << "onSdlEvent() " << entity.tag() << endl;
   }
 };
 
@@ -88,8 +95,8 @@ SDL_AppResult BaseGameApp::init() {
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 2, 2);
   
-  cameraItem.bind<TestBinding>();
-  drawItem.bind<TestBinding>();
+  //cameraItem.bind<TestBinding>();
+  //drawItem.bind<TestBinding>();
   
   mScene.resume();
   return SDL_APP_CONTINUE;
@@ -159,6 +166,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
     default:
       /* Handle Other Events */
       //mGuiContext->handle(event);
+      mScene.handle(event);
       return SDL_APP_CONTINUE;
   }
 }
