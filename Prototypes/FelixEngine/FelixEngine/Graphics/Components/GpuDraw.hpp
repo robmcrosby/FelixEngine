@@ -25,6 +25,10 @@ struct GpuDraw {
   VulkanLayoutSetPtr layoutSet;
   
   GuiContext* guiContext = nullptr;
+  
+  bool operator<(const GpuDraw& other) const {
+    return order < other.order;
+  }
 };
 
 } /* Felix */

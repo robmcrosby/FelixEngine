@@ -40,10 +40,13 @@ public:
   void destory();
   void onUpdate();
   
-  void sortGui();
-  
   void handle(SDL_Event* event);
   void updateEvents();
+  
+  template<typename T>
+  void sort() {
+    mRegistry.sort<T>([](const T& lhs, const T& rhs) { return lhs < rhs; });
+  }
   
 private:
   friend Entity;

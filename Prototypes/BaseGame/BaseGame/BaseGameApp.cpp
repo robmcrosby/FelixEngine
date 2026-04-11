@@ -102,7 +102,7 @@ SDL_AppResult BaseGameApp::init() {
   mGuiContext = GuiContext::create();
   mGuiContext->init(*mGpuContext);
   mGuiContext->addGuiDrawToPass(cameraItem);
-  
+  mScene.sort<GpuDraw>();
   
   auto menu = mScene.add("MainMenu");
   menu.add<GuiBounds>();
@@ -129,7 +129,7 @@ SDL_AppResult BaseGameApp::init() {
   widgetButton2.type = GuiButton;
   widgetButton2.text = "Options";
   
-  mScene.sortGui();
+  mScene.sort<GuiWidget>();
   mScene.resume();
   return SDL_APP_CONTINUE;
 }

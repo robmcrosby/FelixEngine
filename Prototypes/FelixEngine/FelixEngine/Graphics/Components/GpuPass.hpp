@@ -19,6 +19,10 @@ struct GpuPass {
   
   VulkanRenderPassPtr pass;
   VulkanLayoutPtr     layout;
+  
+  bool operator<(const GpuPass& other) const {
+    return order < other.order;
+  }
 };
 
 } /* Felix */

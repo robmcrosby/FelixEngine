@@ -64,21 +64,6 @@ void Scene::onUpdate() {
   });
 }
 
-void Scene::sortGui() {
-  // Sort Widgets
-  mRegistry.sort<GuiWidget>([](const auto &lhs, const auto &rhs) {
-    return lhs.order < rhs.order;
-  });
-  // Sort Drawables
-  mRegistry.sort<GpuDraw>([](const auto &lhs, const auto &rhs) {
-    return lhs.order < rhs.order;
-  });
-  // Sort RenderPasses
-  mRegistry.sort<GpuPass>([](const auto &lhs, const auto &rhs) {
-    return lhs.order < rhs.order;
-  });
-}
-
 void Scene::handle(SDL_Event* event) {
   mDispatcher.trigger<SdlEvent>(event);
 }

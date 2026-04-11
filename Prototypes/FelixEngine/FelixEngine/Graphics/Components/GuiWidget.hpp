@@ -17,6 +17,10 @@ struct GuiWidget {
   int order = 0;
   GuiWidgetType type = GuiLabel;
   std::string text = "";
+  
+  bool operator<(const GuiWidget& other) const {
+    return order < other.order;
+  }
 };
 
 } /* Felix */
