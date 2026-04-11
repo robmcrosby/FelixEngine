@@ -7,6 +7,7 @@
 
 #include "GuiContext.hpp"
 #include "GpuContext.hpp"
+#include "GuiEventTypes.hpp"
 
 #include "VulkanIncludes.hpp"
 
@@ -263,7 +264,7 @@ void GuiContext::addWidget(Entity entity, GuiWidget& widget) const {
       break;
     case GuiButton:
       if (ImGui::Button(widget.text.c_str()))
-        //entity.enqueue(ButtonPressEvent);
+        entity.enqueue(ButtonPressEvent);
       break;
     default:
       break;

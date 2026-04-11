@@ -1,24 +1,24 @@
 //
-//  SdlHandler.hpp
+//  SdlEventHandler.hpp
 //  FelixEngine
 //
 //  Created by Robert Crosby on 4/10/26.
 //
 
-#ifndef SdlHandler_hpp
-#define SdlHandler_hpp
+#ifndef SdlEventHandler_hpp
+#define SdlEventHandler_hpp
 
 #include <FelixEngine/SdlEvent.hpp>
 #include <FelixEngine/Scene.hpp>
 
 namespace Felix {
 
-class SdlHandler {
+class SdlEventHandler {
 private:
   void* mHandler = nullptr;
   Entity mEntity;
-  
   std::function<void(const SdlEvent&)> mOnEventFunc;
+  
 public:
   void onEvent(const SdlEvent& event) {
     if (mEntity && mHandler && mOnEventFunc)
@@ -35,7 +35,7 @@ public:
     mOnEventFunc = [&](const SdlEvent& event) { ((T*)mHandler)->onSdlEvent(mEntity, (SDL_Event*)event); };
     
     auto& dispatcher = mEntity.scene().dispatcher();
-    dispatcher.sink<SdlEvent>().connect<&SdlHandler::onEvent>(this);
+    dispatcher.sink<SdlEvent>().connect<&SdlEventHandler::onEvent>(this);
   }
   
   void disconnect() {
@@ -50,4 +50,4 @@ public:
 
 } /* Felix */
 
-#endif /* SdlHandler_hpp */
+#endif /* SdlEventHandler_hpp */

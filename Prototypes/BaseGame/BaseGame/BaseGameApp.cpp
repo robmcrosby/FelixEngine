@@ -7,7 +7,8 @@
 
 #include "BaseGameApp.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <FelixEngine/SdlHandler.hpp>
+#include <FelixEngine/SdlEventHandler.hpp>
+#include <FelixEngine/GuiEventHandler.hpp>
 
 
 using namespace std;
@@ -34,19 +35,24 @@ class TestBinding {
 public:
   void onCreate(Entity& entity) {
     cout << "onCreate(" << entity.tag() << ")" << endl;
-    entity.get<SdlHandler>().connect(entity, this);
-    
+    entity.get<SdlEventHandler>().connect(entity, this);
+    entity.get<GuiEventHandler>().connect(entity, this);
   }
   void onDestory(Entity& entity) {
     cout << "onDestory(" << entity.tag() << ")" << endl;
-    entity.get<SdlHandler>().disconnect();
+    entity.get<SdlEventHandler>().disconnect();
+    entity.get<GuiEventHandler>().disconnect();
   }
   void onUpdate(Entity& entity, float ts) {
     //cout << "onUpdate(" << entity.tag() << ", " << ts << ")" << endl;
   }
   void onSdlEvent(Entity& entity, SDL_Event* event) {
     if (event->type == SDL_EVENT_FINGER_DOWN)
-      cout << "onSdlEvent() " << entity.tag() << endl;
+      cout << entity.tag() << " handled sdl finger down" << endl;
+  }
+  void onGuiEvent(Entity& entity, const GuiEvent& event) {
+    if (event.type == ButtonPressEvent)
+      cout << entity.tag() << " handled button press from " << event.sender.tag() << endl;
   }
 };
 
@@ -97,7 +103,7 @@ SDL_AppResult BaseGameApp::init() {
   mesh->addAttribute(0, 1, 2, 2);
   
   //cameraItem.bind<TestBinding>();
-  //drawItem.bind<TestBinding>();
+  drawItem.bind<TestBinding>();
   
   mGuiContext = GuiContext::create();
   mGuiContext->init(*mGpuContext);
@@ -135,6 +141,7 @@ SDL_AppResult BaseGameApp::init() {
 }
 
 SDL_AppResult BaseGameApp::iterate() {
+  mScene.updateEvents();
   mScene.onUpdate();
   mGpuContext->draw(mScene);
   return SDL_APP_CONTINUE;

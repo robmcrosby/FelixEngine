@@ -9,7 +9,9 @@
 #include "UUID.hpp"
 #include "Tag.hpp"
 #include "Parent.hpp"
+
 #include "SdlEvent.hpp"
+#include "GuiEvent.hpp"
 
 #include "GpuPass.hpp"
 #include "GpuDraw.hpp"
@@ -111,6 +113,12 @@ string& Entity::tag() {
 
 const string& Entity::tag() const {
   return get<Tag>().tag;
+}
+
+void Entity::enqueue(GuiEventType event) {
+  if (*this) {
+    mScene->dispatcher().enqueue<GuiEvent>({event, *this});
+  }
 }
 
 } /* Felix */

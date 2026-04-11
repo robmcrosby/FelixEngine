@@ -21,6 +21,11 @@
 		AD9E45942F882E6600623465 /* Exceptions for "FelixEngine" folder in "FelixEngine" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			publicHeaders = (
+				Events/EventHandlers/GuiEventHandler.hpp,
+				Events/EventHandlers/SdlEventHandler.hpp,
+				Events/GuiEvent.hpp,
+				Events/GuiEventTypes.hpp,
+				Events/SdlEvent.hpp,
 				Graphics/Components/Camera.hpp,
 				Graphics/Components/GpuComponents.hpp,
 				Graphics/Components/GpuDraw.hpp,
@@ -52,11 +57,9 @@
 				Graphics/Vulkan/VulkanSwapChain.hpp,
 				Graphics/Vulkan/VulkanTypes.hpp,
 				Scene/Components/Binding.hpp,
-				Scene/Components/SdlHandler.hpp,
 				Scene/Components/Tag.hpp,
 				Scene/Components/UUID.hpp,
 				Scene/Scene.hpp,
-				Scene/SdlEvent.hpp,
 			);
 			target = AD9E45832F882C9F00623465 /* FelixEngine */;
 		};

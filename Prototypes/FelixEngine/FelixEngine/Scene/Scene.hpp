@@ -9,6 +9,7 @@
 #define Scene_hpp
 
 #include <FelixEngine/Binding.hpp>
+#include <FelixEngine/GuiEventTypes.hpp>
 #include <SDL3/SDL.h>
 #include <iostream>
 #include <entt.hpp>
@@ -78,6 +79,8 @@ public:
   
   std::string& tag();
   const std::string& tag() const;
+  
+  void enqueue(GuiEventType event);
   
   bool operator==(const Entity& other) const {
     return mScene && mScene == other.mScene && mEntity == other.mEntity;
