@@ -133,14 +133,14 @@ Entity GpuContext::getMainPass(Scene& scene, StringRef name) const {
   // Check for an existing Main Render Pass
   auto items = scene.registry().view<GpuPass>();
   for (auto [item, pass] : items.each()) {
-    if (pass.pass == mRenderPass)
+    if (pass.renderPass == mRenderPass)
       return {item, &scene};
   }
   
   // Add the Main Render Pass
   auto item = scene.add(name);
   auto& pass = item.add<GpuPass>();
-  pass.pass = mRenderPass;
+  pass.renderPass = mRenderPass;
   pass.layout = mDevice->createLayout(mSwapChain->frames());
   return item;
 }
@@ -198,15 +198,15 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
   // Record the Command
   mCommand->begin(frame);
   for (auto [passItem, pass] : passes.each()) {
-    if (pass.pass && pass.visible) {
-      mCommand->beginRenderPass(pass.pass);
+    if (pass.renderPass && pass.visible) {
+      mCommand->beginRenderPass(pass.renderPass);
       for (auto [drawItem, draw, parent] : draws.each()) {
         if (parent.parent == passItem && draw.visible) {
           if (draw.guiContext && draw.visible) {
             draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
           }
           else if (draw.visible && draw.instances > 0) {
-            mCommand->bind(draw.pipeline, pass.pass, draw.mesh, draw.layoutSet);
+            mCommand->bind(draw.pipeline, pass.renderPass, draw.mesh, draw.layoutSet);
             mCommand->draw(draw.mesh, draw.instances);
           }
         }

@@ -17,8 +17,8 @@ struct GpuPass {
   bool visible = true;
   int order = 0;
   
-  VulkanRenderPassPtr pass;
-  VulkanLayoutPtr     layout;
+  VulkanRenderPassPtr renderPass;
+  VulkanLayoutPtr layout;
   
   bool operator<(const GpuPass& other) const {
     return order < other.order;

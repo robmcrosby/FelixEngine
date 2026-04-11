@@ -6,6 +6,7 @@
 //
 
 #include "BaseGameApp.hpp"
+#include "GameCamera.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <FelixEngine/SdlEventHandler.hpp>
 #include <FelixEngine/GuiEventHandler.hpp>
@@ -102,8 +103,8 @@ SDL_AppResult BaseGameApp::init() {
   mesh->addAttribute(0, 0, 2, 0);
   mesh->addAttribute(0, 1, 2, 2);
   
-  //cameraItem.bind<TestBinding>();
-  drawItem.bind<TestBinding>();
+  cameraItem.bind<GameCamera>();
+  //drawItem.bind<TestBinding>();
   
   mGuiContext = GuiContext::create();
   mGuiContext->init(*mGpuContext);
@@ -201,6 +202,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
       /* Window Resized */
       cout << "SDL Event Window Resized" << endl;
       mGpuContext->resize(mScene);
+      mScene.handle(event);
       return SDL_APP_CONTINUE;
     default:
       /* Handle Other Events */
