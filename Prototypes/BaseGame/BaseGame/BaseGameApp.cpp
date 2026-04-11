@@ -45,7 +45,8 @@ public:
     //cout << "onUpdate(" << entity.tag() << ", " << ts << ")" << endl;
   }
   void onSdlEvent(Entity& entity, SDL_Event* event) {
-    //cout << "onSdlEvent() " << entity.tag() << endl;
+    if (event->type == SDL_EVENT_FINGER_DOWN)
+      cout << "onSdlEvent() " << entity.tag() << endl;
   }
 };
 
@@ -98,6 +99,37 @@ SDL_AppResult BaseGameApp::init() {
   //cameraItem.bind<TestBinding>();
   //drawItem.bind<TestBinding>();
   
+  mGuiContext = GuiContext::create();
+  mGuiContext->init(*mGpuContext);
+  mGuiContext->addGuiDrawToPass(cameraItem);
+  
+  
+  auto menu = mScene.add("MainMenu");
+  menu.add<GuiBounds>();
+  auto& menuPanel = menu.get<GuiPanel>();
+  menuPanel.offset = {0.0f, 0.0f};
+  menuPanel.alignX = GuiAlignCenter;
+  menuPanel.alignY = GuiAlignCenter;
+  
+  auto label = menu.addChild();
+  auto& widgetLabel = label.get<GuiWidget>();
+  widgetLabel.order = menuPanel.widgetCount++;
+  widgetLabel.type = GuiLabel;
+  widgetLabel.text = "Select an Option";
+  
+  auto button1 = menu.addChild("button1");
+  auto& widgetButton1 = button1.get<GuiWidget>();
+  widgetButton1.order = menuPanel.widgetCount++;
+  widgetButton1.type = GuiButton;
+  widgetButton1.text = "Start Game";
+  
+  auto button2 = menu.addChild("button2");
+  auto& widgetButton2 = button2.get<GuiWidget>();
+  widgetButton2.order = menuPanel.widgetCount++;
+  widgetButton2.type = GuiButton;
+  widgetButton2.text = "Options";
+  
+  mScene.sortGui();
   mScene.resume();
   return SDL_APP_CONTINUE;
 }
@@ -165,8 +197,8 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
       return SDL_APP_CONTINUE;
     default:
       /* Handle Other Events */
-      //mGuiContext->handle(event);
-      mScene.handle(event);
+      if (!mGuiContext || !mGuiContext->handle(event))
+        mScene.handle(event);
       return SDL_APP_CONTINUE;
   }
 }

@@ -13,6 +13,8 @@
 
 namespace Felix {
 
+class GuiContext;
+
 struct GpuDraw {
   bool visible = true;
   int order = 0;
@@ -21,6 +23,8 @@ struct GpuDraw {
   VulkanMeshPtr      mesh;
   VulkanPipelinePtr  pipeline;
   VulkanLayoutSetPtr layoutSet;
+  
+  GuiContext* guiContext = nullptr;
 };
 
 } /* Felix */

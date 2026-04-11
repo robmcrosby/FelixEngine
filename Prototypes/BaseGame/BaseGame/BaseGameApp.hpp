@@ -9,6 +9,7 @@
 #define BaseGameApp_hpp
 
 #include <FelixEngine/GpuContext.hpp>
+#include <FelixEngine/GuiContext.hpp>
 #include <SDL3/SDL.h>
 #include <iostream>
 
@@ -16,6 +17,7 @@ class BaseGameApp {
 private:
   Felix::Scene mScene;
   Felix::GpuContextPtr mGpuContext;
+  Felix::GuiContextPtr mGuiContext;
   
 public:
   BaseGameApp();

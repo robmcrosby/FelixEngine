@@ -40,6 +40,8 @@ public:
   void destory();
   void onUpdate();
   
+  void sortGui();
+  
   void handle(SDL_Event* event);
   void updateEvents();
   

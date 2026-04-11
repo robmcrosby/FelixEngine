@@ -53,6 +53,9 @@ public:
   VulkanDevicePtr getDevice() const { return mDevice; }
   VulkanQueuePtr getQueue() const { return mQueue; }
   
+  VulkanRenderPassPtr getRenderPass() const { return mRenderPass; }
+  VulkanSwapChainPtr getSwapChain() const { return mSwapChain; }
+  
   Entity getMainPass(Scene& scene, StringRef name = "MainPass") const;
   Entity getMainCamera(Scene& scene) const;
   

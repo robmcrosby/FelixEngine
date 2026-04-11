@@ -11,6 +11,10 @@
 #include "Parent.hpp"
 #include "SdlEvent.hpp"
 
+#include "GpuPass.hpp"
+#include "GpuDraw.hpp"
+#include "GuiWidget.hpp"
+
 
 using namespace std;
 namespace Felix {
@@ -57,6 +61,21 @@ void Scene::onUpdate() {
   mRegistry.view<Binding>().each([&](auto item, auto& binding) {
     Entity entity(item, this);
     binding.onUpdate(entity, ts);
+  });
+}
+
+void Scene::sortGui() {
+  // Sort Widgets
+  mRegistry.sort<GuiWidget>([](const auto &lhs, const auto &rhs) {
+    return lhs.order < rhs.order;
+  });
+  // Sort Drawables
+  mRegistry.sort<GpuDraw>([](const auto &lhs, const auto &rhs) {
+    return lhs.order < rhs.order;
+  });
+  // Sort RenderPasses
+  mRegistry.sort<GpuPass>([](const auto &lhs, const auto &rhs) {
+    return lhs.order < rhs.order;
   });
 }
 

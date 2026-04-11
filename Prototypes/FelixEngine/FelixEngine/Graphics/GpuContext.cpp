@@ -6,6 +6,7 @@
 //
 
 #include "GpuContext.hpp"
+#include "GuiContext.hpp"
 #include "Parent.hpp"
 #include <SDL3/SDL_vulkan.h>
 
@@ -201,11 +202,10 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
       mCommand->beginRenderPass(pass.pass);
       for (auto [drawItem, draw, parent] : draws.each()) {
         if (parent.parent == passItem && draw.visible) {
-          //if (drawComp.guiContext && drawComp.visible) {
-          //  drawComp.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
-          //}
-          //else
-          if (draw.visible && draw.instances > 0) {
+          if (draw.guiContext && draw.visible) {
+            draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
+          }
+          else if (draw.visible && draw.instances > 0) {
             mCommand->bind(draw.pipeline, pass.pass, draw.mesh, draw.layoutSet);
             mCommand->draw(draw.mesh, draw.instances);
           }
