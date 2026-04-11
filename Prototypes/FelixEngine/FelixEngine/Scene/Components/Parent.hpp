@@ -19,6 +19,12 @@ struct Parent {
   Parent(const Parent&) = default;
   Parent(const Entity& entity): parent(entity) {}
   
+  bool operator==(const Entity& other) const {
+    return parent == other;
+  }
+  bool operator==(const entt::entity& other) const {
+    return parent.handle() == other;
+  }
   operator Entity() const { return parent; }
 };
 

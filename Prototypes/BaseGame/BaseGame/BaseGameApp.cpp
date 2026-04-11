@@ -122,18 +122,21 @@ SDL_AppResult BaseGameApp::init() {
   auto& widgetLabel = label.get<GuiWidget>();
   widgetLabel.order = menuPanel.widgetCount++;
   widgetLabel.type = GuiLabel;
+  widgetLabel.alignX = GuiAlignCenter;
   widgetLabel.text = "Select an Option";
   
   auto button1 = menu.addChild("button1");
   auto& widgetButton1 = button1.get<GuiWidget>();
   widgetButton1.order = menuPanel.widgetCount++;
   widgetButton1.type = GuiButton;
+  widgetButton1.alignX = GuiAlignCenter;
   widgetButton1.text = "Start Game";
   
   auto button2 = menu.addChild("button2");
   auto& widgetButton2 = button2.get<GuiWidget>();
   widgetButton2.order = menuPanel.widgetCount++;
   widgetButton2.type = GuiButton;
+  widgetButton2.alignX = GuiAlignCenter;
   widgetButton2.text = "Options";
   
   mScene.sort<GuiWidget>();

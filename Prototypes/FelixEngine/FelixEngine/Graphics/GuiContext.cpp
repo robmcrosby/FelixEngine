@@ -121,15 +121,15 @@ ImDrawData* GuiContext::drawUI(Scene& scene) const {
   
   auto panels = scene.registry().view<GuiPanel, GuiBounds, Tag>();
   auto widgets = scene.registry().view<GuiWidget, Parent>();
-  for (auto [panel, panelComp, boundsComp, tagComp] : panels.each()) {
-    if (panelComp.visible) {
-      beginPanel(panelComp, tagComp.tag);
-      for (auto [widget, widgetComp, widgetParent] : widgets.each()) {
-        if (widgetParent.parent == panel) {
-          addWidget({widget, &scene}, widgetComp);
+  for (auto [panelItem, panel, bounds, tag] : panels.each()) {
+    if (panel.visible) {
+      beginPanel(panel, tag.tag);
+      for (auto [widgetItem, widget, parent] : widgets.each()) {
+        if (parent == panelItem) {
+          addWidget({widgetItem, &scene}, widget, bounds);
         }
       }
-      endPanel(boundsComp);
+      endPanel(bounds);
     }
   }
   ImGui::Render();
@@ -257,17 +257,30 @@ void GuiContext::endPanel(GuiBounds& bounds) const {
   ImGui::End();
 }
 
-void GuiContext::addWidget(Entity entity, GuiWidget& widget) const {
+void GuiContext::addWidget(Entity entity, GuiWidget& widget, const GuiBounds& bounds) const {
   switch (widget.type) {
     case GuiLabel:
+      setCursor(widget, bounds);
       ImGui::Text("%s", widget.text.c_str());
       break;
     case GuiButton:
+      setCursor(widget, bounds);
       if (ImGui::Button(widget.text.c_str()))
         entity.enqueue(ButtonPressEvent);
       break;
     default:
       break;
+  }
+}
+
+void GuiContext::setCursor(const GuiWidget &widget, const GuiBounds &bounds) const {
+  if (widget.alignX == GuiAlignCenter || widget.alignX == GuiAlignRight) {
+    float panelWidth = bounds.size.x;
+    float widgetWidth = ImGui::CalcTextSize(widget.text.c_str()).x;
+    if (panelWidth > 0.0f && widgetWidth < panelWidth) {
+      float offset = panelWidth - widgetWidth;
+      ImGui::SetCursorPosX(widget.alignX == GuiAlignCenter ? offset/2.0f : offset);
+    }
   }
 }
 

@@ -16,6 +16,7 @@ namespace Felix {
 struct GuiWidget {
   int order = 0;
   GuiWidgetType type = GuiLabel;
+  GuiAlignment alignX = GuiAlignLeft;
   std::string text = "";
   
   bool operator<(const GuiWidget& other) const {

@@ -50,7 +50,8 @@ private:
   void beginPanel(GuiPanel& panel, const std::string& name) const;
   void endPanel(GuiBounds& bounds) const;
   
-  void addWidget(Entity entity, GuiWidget& widget) const;
+  void addWidget(Entity entity, GuiWidget& widget, const GuiBounds& bounds) const;
+  void setCursor(const GuiWidget& widget, const GuiBounds& bounds) const;
   
   bool setupDescriptorPool();
 };
