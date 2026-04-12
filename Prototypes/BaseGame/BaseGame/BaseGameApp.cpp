@@ -117,6 +117,7 @@ SDL_AppResult BaseGameApp::init() {
   menuPanel.offset = {0.0f, 0.0f};
   menuPanel.alignX = GuiAlignCenter;
   menuPanel.alignY = GuiAlignCenter;
+  //menuPanel.background = true;
   
   auto label = menu.addChild();
   auto& widgetLabel = label.get<GuiWidget>();
@@ -130,6 +131,11 @@ SDL_AppResult BaseGameApp::init() {
   widgetButton1.order = menuPanel.widgetCount++;
   widgetButton1.type = GuiButton;
   widgetButton1.alignX = GuiAlignCenter;
+  widgetButton1.padding = vec2(10.0f, 10.0f);
+  widgetButton1.rounding = 8.0f;
+  widgetButton1.fillColor = {0.0f, 0.5f, 0.0f, 1.0f};
+  widgetButton1.hoverColor = {0.0f, 0.5f, 0.0f, 1.0f};
+  widgetButton1.pressColor = {0.4f, 0.0f, 0.0f, 1.0f};
   widgetButton1.text = "Start Game";
   
   auto button2 = menu.addChild("button2");
@@ -137,6 +143,11 @@ SDL_AppResult BaseGameApp::init() {
   widgetButton2.order = menuPanel.widgetCount++;
   widgetButton2.type = GuiButton;
   widgetButton2.alignX = GuiAlignCenter;
+  widgetButton2.padding = vec2(10.0f, 10.0f);
+  widgetButton2.rounding = 8.0f;
+  widgetButton2.fillColor = {0.0f, 0.0f, 0.5f, 1.0f};
+  widgetButton2.hoverColor = {0.0f, 0.0f, 0.5f, 1.0f};
+  widgetButton2.pressColor = {0.4f, 0.0f, 0.0f, 1.0f};
   widgetButton2.text = "Options";
   
   mScene.sort<GuiWidget>();

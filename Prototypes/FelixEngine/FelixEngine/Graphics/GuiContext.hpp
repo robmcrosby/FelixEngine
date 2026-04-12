@@ -51,6 +51,13 @@ private:
   void endPanel(GuiBounds& bounds) const;
   
   void addWidget(Entity entity, GuiWidget& widget, const GuiBounds& bounds) const;
+  void addLabel(const GuiWidget& widget, const GuiBounds& bounds) const;
+  void addButton(Entity entity, const GuiWidget& widget, const GuiBounds& bounds) const;
+  
+  int pushStyles(const GuiWidget& widget) const;
+  void popStyles(int levels) const;
+  int pushButtonColors(const GuiWidget& widget) const;
+  void popColors(int levels) const;
   void setCursor(const GuiWidget& widget, const GuiBounds& bounds) const;
   
   bool setupDescriptorPool();

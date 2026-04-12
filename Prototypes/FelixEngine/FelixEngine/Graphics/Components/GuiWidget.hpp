@@ -16,7 +16,15 @@ namespace Felix {
 struct GuiWidget {
   int order = 0;
   GuiWidgetType type = GuiLabel;
+  
   GuiAlignment alignX = GuiAlignLeft;
+  glm::vec2 padding{0.0f, 0.0f};
+  float rounding = 0.0f;
+  
+  glm::vec4 fillColor{0.0f, 0.0f, 0.0f, 0.0f};
+  glm::vec4 hoverColor{0.0f, 0.0f, 0.0f, 0.0f};
+  glm::vec4 pressColor{0.0f, 0.0f, 0.0f, 0.0f};
+  
   std::string text = "";
   
   bool operator<(const GuiWidget& other) const {

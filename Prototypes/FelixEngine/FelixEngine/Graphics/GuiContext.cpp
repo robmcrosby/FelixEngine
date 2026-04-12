@@ -32,14 +32,17 @@ static void check_vk_result(VkResult err) {
     abort();
 }
 
-static vec2 ImVec2_to_vec2(const ImVec2& v) {
+static vec2 ImVec2ToVec2(const ImVec2& v) {
   return vec2(v.x, v.y);
 }
 
-static ImVec2 vec2_to_ImVec2(const vec2& v) {
+static ImVec2 vec2ToImVec2(const vec2& v) {
   return ImVec2(v.x, v.y);
 }
 
+static ImVec4 vec4ToImVec4(const vec4& v) {
+  return ImVec4(v.x, v.y, v.z, v.w);
+}
 
 GuiContext::GuiContext(): mDevice(VK_NULL_HANDLE), mDescriptorPool(VK_NULL_HANDLE) {}
 
@@ -228,11 +231,11 @@ void GuiContext::setNextPanel(const GuiPanel &panel) const {
   pivot.x = panel.alignX == GuiAlignCenter ? 0.5f : panel.alignX == GuiAlignRight ? 1.0f : 0.0f;
   pivot.y = panel.alignY == GuiAlignCenter ? 0.5f : panel.alignY == GuiAlignBottom ? 1.0f : 0.0f;
   
-  vec2 size = ImVec2_to_vec2(ImGui::GetMainViewport()->Size);
+  vec2 size = ImVec2ToVec2(ImGui::GetMainViewport()->Size);
   vec2 position = size * pivot + panel.offset;
   
   ImGuiCond cond = panel.moveable ? ImGuiCond_Once : ImGuiCond_Always;
-  ImGui::SetNextWindowPos(vec2_to_ImVec2(position), cond, vec2_to_ImVec2(pivot));
+  ImGui::SetNextWindowPos(vec2ToImVec2(position), cond, vec2ToImVec2(pivot));
 }
 
 void GuiContext::beginPanel(GuiPanel& panel, const string& name) const {
@@ -250,8 +253,8 @@ void GuiContext::beginPanel(GuiPanel& panel, const string& name) const {
 
 void GuiContext::endPanel(GuiBounds& bounds) const {
   // Capture Panel position and size
-  bounds.position = ImVec2_to_vec2(ImGui::GetWindowPos());
-  bounds.size = ImVec2_to_vec2(ImGui::GetWindowSize());
+  bounds.position = ImVec2ToVec2(ImGui::GetWindowPos());
+  bounds.size = ImVec2ToVec2(ImGui::GetWindowSize());
   
   // End the Panel
   ImGui::End();
@@ -260,17 +263,71 @@ void GuiContext::endPanel(GuiBounds& bounds) const {
 void GuiContext::addWidget(Entity entity, GuiWidget& widget, const GuiBounds& bounds) const {
   switch (widget.type) {
     case GuiLabel:
-      setCursor(widget, bounds);
-      ImGui::Text("%s", widget.text.c_str());
+      addLabel(widget, bounds);
       break;
     case GuiButton:
-      setCursor(widget, bounds);
-      if (ImGui::Button(widget.text.c_str()))
-        entity.enqueue(ButtonPressEvent);
+      addButton(entity, widget, bounds);
       break;
     default:
       break;
   }
+}
+
+void GuiContext::addLabel(const GuiWidget& widget, const GuiBounds& bounds) const {
+  int levels = pushStyles(widget);
+  setCursor(widget, bounds);
+  ImGui::Text("%s", widget.text.c_str());
+  popStyles(levels);
+}
+
+void GuiContext::addButton(Entity entity, const GuiWidget& widget, const GuiBounds& bounds) const {
+  int styles = pushStyles(widget);
+  int colors = pushButtonColors(widget);
+  setCursor(widget, bounds);
+  if (ImGui::Button(widget.text.c_str()))
+    entity.enqueue(ButtonPressEvent);
+  popColors(colors);
+  popStyles(styles);
+}
+
+int GuiContext::pushStyles(const GuiWidget& widget) const {
+  int levels = 0;
+  if (widget.padding != vec2(0.0f, 0.0f)) {
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, vec2ToImVec2(widget.padding));
+    ++levels;
+  }
+  if (widget.rounding > 0.0f) {
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, widget.rounding);
+    ++levels;
+  }
+  return levels;
+}
+
+void GuiContext::popStyles(int levels) const {
+  if (levels > 0)
+    ImGui::PopStyleVar(levels);
+}
+
+int GuiContext::pushButtonColors(const GuiWidget& widget) const {
+  int levels = 0;
+  if (widget.fillColor != vec4(0.0f, 0.0f, 0.0f, 0.0f)) {
+    ImGui::PushStyleColor(ImGuiCol_Button, vec4ToImVec4(widget.fillColor));
+    ++levels;
+  }
+  if (widget.hoverColor != vec4(0.0f, 0.0f, 0.0f, 0.0f)) {
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, vec4ToImVec4(widget.hoverColor));
+    ++levels;
+  }
+  if (widget.pressColor != vec4(0.0f, 0.0f, 0.0f, 0.0f)) {
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, vec4ToImVec4(widget.pressColor));
+    ++levels;
+  }
+  return levels;
+}
+
+void GuiContext::popColors(int levels) const {
+  if (levels > 0)
+    ImGui::PopStyleColor(levels);
 }
 
 void GuiContext::setCursor(const GuiWidget &widget, const GuiBounds &bounds) const {
