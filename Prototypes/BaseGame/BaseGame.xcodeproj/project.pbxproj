@@ -15,6 +15,21 @@
 		AD9E450A2F88180200623465 /* FelixEngine.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AD9E45082F8817F100623465 /* FelixEngine.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		ADE91C7F2F8C67EA001BE3F8 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.glsl;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+				"${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}.spv",
+			);
+			script = "/opt/homebrew/bin/glslc \"${INPUT_FILE_PATH}\" -o \"${DERIVED_FILE_DIR}/${INPUT_FILE_BASE}.spv\"\n";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		AD9E44F92F8815F400623465 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -113,6 +128,7 @@
 				AD9E44F92F8815F400623465 /* Embed Frameworks */,
 			);
 			buildRules = (
+				ADE91C7F2F8C67EA001BE3F8 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);

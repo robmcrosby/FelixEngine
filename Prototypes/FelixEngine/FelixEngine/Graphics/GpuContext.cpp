@@ -195,26 +195,34 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
   auto passes = scene.registry().view<GpuPass>();
   auto draws = scene.registry().view<GpuDraw, Parent>();
   
-  // Record the Command
+  // Begin recording the Command
   mCommand->begin(frame);
+  
+  // Iterate through the Passes
   for (auto [passItem, pass] : passes.each()) {
     if (pass.renderPass && pass.visible) {
       mCommand->beginRenderPass(pass.renderPass);
+      
+      // Iterate through the Draws for each Pass
       for (auto [drawItem, draw, parent] : draws.each()) {
-        if (parent.parent == passItem && draw.visible) {
-          if (draw.guiContext && draw.visible) {
+        if (parent == passItem && draw.visible) {
+          if (draw.guiContext)
             draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
-          }
-          else if (draw.visible && draw.instances > 0) {
-            mCommand->bind(draw.pipeline, pass.renderPass, draw.mesh, draw.layoutSet);
-            mCommand->draw(draw.mesh, draw.instances);
-          }
+          else
+            recordDraw(mCommand, pass, draw);
         }
       }
       mCommand->endRenderPass();
     }
   }
   mCommand->end();
+}
+
+void GpuContext::recordDraw(VulkanCommandPtr command, GpuPass& pass, GpuDraw& draw) {
+  if (draw.instances > 0) {
+    command->bind(draw.pipeline, pass.renderPass, draw.mesh, draw.layoutSet);
+    command->draw(draw.mesh, draw.instances);
+  }
 }
 
 CStrings GpuContext::getSDLExtenstions() const {

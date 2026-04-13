@@ -22,7 +22,7 @@ public:
   
   VkExtent2D getExtent() const;
   
-  uint32_t getColorCount() const {return mColorAttachments.size();}
+  uint32_t getColorCount() const {return (uint32_t)mColorAttachments.size();}
   void getVkAttachmentReferences(VkAttachmentReferences& references);
   void getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions);
   

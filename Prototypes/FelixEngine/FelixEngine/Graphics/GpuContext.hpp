@@ -80,6 +80,7 @@ public:
 private:
   void updateLayouts(int frame, Scene& scene);
   void recordCommand(int frame, Scene& scene);
+  void recordDraw(VulkanCommandPtr command, GpuPass& pass, GpuDraw& draw);
   CStrings getSDLExtenstions() const;
   
 public:
