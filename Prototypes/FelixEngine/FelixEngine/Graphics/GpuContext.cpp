@@ -7,7 +7,9 @@
 
 #include "GpuContext.hpp"
 #include "GuiContext.hpp"
+#include "VulkanMesh.hpp"
 #include "Parent.hpp"
+#include "ObjLoader.hpp"
 #include <SDL3/SDL_vulkan.h>
 
 
@@ -175,6 +177,21 @@ bool GpuContext::setShaders(Entity item, StringRef vertexFile, StringRef fragmen
   auto& draw = item.get<GpuDraw>();
   draw.pipeline = mDevice->createPipeline();
   return draw.pipeline->setVertexShader(vertexFile) && draw.pipeline->setFragmentShader(fragmentFile);
+}
+
+Entity GpuContext::loadModel(Entity pass, StringRef file) const {
+  auto drawItem = addDrawItem(pass, file);
+  assert(setShaders(drawItem, "StaticVertex.spv", "DrawNormals.spv"));
+  
+  StaticModel model;
+  assert(ObjLoader::loadStaticMesh(model, file));
+  
+  auto mesh = setMesh(drawItem, model.vertices, model.indices);
+  mesh->addAttribute(0, 0, 3, 0); // Position
+  mesh->addAttribute(0, 1, 3, 3); // Normal
+  mesh->addAttribute(0, 2, 2, 6); // Texcoord
+  
+  return drawItem;
 }
 
 void GpuContext::updateLayouts(int frame, Scene& scene) {

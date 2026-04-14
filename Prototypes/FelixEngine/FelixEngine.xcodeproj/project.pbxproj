@@ -56,6 +56,7 @@
 				Graphics/Vulkan/VulkanShader.hpp,
 				Graphics/Vulkan/VulkanSwapChain.hpp,
 				Graphics/Vulkan/VulkanTypes.hpp,
+				Loaders/Assets.hpp,
 				Scene/Components/Binding.hpp,
 				Scene/Components/Tag.hpp,
 				Scene/Components/UUID.hpp,

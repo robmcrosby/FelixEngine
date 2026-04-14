@@ -63,7 +63,7 @@ public:
   bool setShaders(Entity item, StringRef vertexFile, StringRef fragmentFile) const;
   
   template <typename T>
-  VulkanMeshPtr loadMesh(const std::vector<T>& vertices, const std::vector<uint32_t>& indices) {
+  VulkanMeshPtr loadMesh(const std::vector<T>& vertices, const std::vector<uint32_t>& indices) const {
     auto mesh = mDevice->createMesh();
     assert(mesh->addBuffer(mQueue, vertices));
     assert(mesh->setIndexBuffer(mQueue, indices));
@@ -71,11 +71,13 @@ public:
   }
   
   template <typename T>
-  VulkanMeshPtr setMesh(Entity item, const std::vector<T>& vertices, const std::vector<uint32_t>& indices) {
+  VulkanMeshPtr setMesh(Entity item, const std::vector<T>& vertices, const std::vector<uint32_t>& indices) const {
     auto mesh = loadMesh(vertices, indices);
     item.get<GpuDraw>().mesh = mesh;
     return mesh;
   }
+  
+  Entity loadModel(Entity pass, StringRef file) const;
   
 private:
   void updateLayouts(int frame, Scene& scene);
