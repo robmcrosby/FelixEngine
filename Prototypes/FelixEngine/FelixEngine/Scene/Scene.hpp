@@ -35,6 +35,7 @@ public:
   entt::dispatcher& dispatcher() { return mDispatcher; }
   
   Entity add(const std::string& name = "");
+  Entity get(const std::string& name);
   
   void resume();
   void pause();

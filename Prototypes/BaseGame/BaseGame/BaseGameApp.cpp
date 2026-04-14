@@ -7,6 +7,8 @@
 
 #include "BaseGameApp.hpp"
 #include "GameCamera.hpp"
+#include "TurnTable.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <FelixEngine/SdlEventHandler.hpp>
 #include <FelixEngine/GuiEventHandler.hpp>
@@ -84,8 +86,6 @@ SDL_AppResult BaseGameApp::init() {
   auto queue = mGpuContext->getQueue();
  
   auto cameraItem = mGpuContext->getMainCamera(mScene);
-  auto& camera = cameraItem.get<Camera>();
-  camera.projection = mat4{2.0f};
   
   //auto image = device->createImage();
   //assert(image->load(queue, "image.png"));
@@ -107,6 +107,7 @@ SDL_AppResult BaseGameApp::init() {
   model.get<Transform>().model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));
   
   cameraItem.bind<GameCamera>();
+  model.bind<TurnTable>();
   //drawItem.bind<TestBinding>();
   
   mGuiContext = GuiContext::create();
@@ -152,6 +153,26 @@ SDL_AppResult BaseGameApp::init() {
   widgetButton2.hoverColor = {0.0f, 0.0f, 0.5f, 1.0f};
   widgetButton2.pressColor = {0.4f, 0.0f, 0.0f, 1.0f};
   widgetButton2.text = "Options";
+  
+  
+  auto gamePanel = mScene.add("GameMenu");
+  gamePanel.add<GuiBounds>();
+  auto& buttonPanel = gamePanel.get<GuiPanel>();
+  buttonPanel.offset = {-40.0f, -40.0f};
+  buttonPanel.alignX = GuiAlignRight;
+  buttonPanel.alignY = GuiAlignBottom;
+  
+  auto button3 = gamePanel.addChild("button3");
+  auto& widgetButton3 = button3.get<GuiWidget>();
+  widgetButton3.order = buttonPanel.widgetCount++;
+  widgetButton3.type = GuiButton;
+  widgetButton3.alignX = GuiAlignCenter;
+  widgetButton3.padding = vec2(10.0f, 10.0f);
+  widgetButton3.rounding = 8.0f;
+  widgetButton3.fillColor = {0.0f, 0.5f, 0.0f, 1.0f};
+  widgetButton3.hoverColor = {0.0f, 0.5f, 0.0f, 1.0f};
+  widgetButton3.pressColor = {0.4f, 0.0f, 0.0f, 1.0f};
+  widgetButton3.text = "Pause";
   
   mScene.sort<GuiWidget>();
   mScene.resume();

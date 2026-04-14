@@ -41,9 +41,15 @@ void GameCamera::updateProjection(Entity entity) {
   
   vec3 aspect(1.0f);
   if (extent.width < extent.height)
-    aspect.x = (float)extent.height/(float)extent.width;
+    aspect.y = (float)extent.height/(float)extent.width;
   else
-    aspect.y = (float)extent.width/(float)extent.height;
+    aspect.x = (float)extent.width/(float)extent.height;
   
-  camera.projection = glm::scale(mat4(1.0f), aspect);
+  //aspect *= 0.5f;
+  //camera.projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y, -100.0f, 100.0f);
+  
+  aspect *= 0.04f;
+  camera.projection = glm::frustum(-aspect.x, aspect.x, -aspect.y, aspect.y, 0.1f, 100.0f);
+  
+  camera.view = lookAt(vec3(1.0f, 1.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 }

@@ -17,6 +17,8 @@ namespace Felix {
 struct GuiEvent {
   GuiEventType type = UndefinedEvent;
   Entity sender;
+  
+  bool operator==(GuiEventType t) const { return type == t;}
 };
 
 } /* Felix */

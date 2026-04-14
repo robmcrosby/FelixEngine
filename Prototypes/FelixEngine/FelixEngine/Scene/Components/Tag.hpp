@@ -18,6 +18,7 @@ struct Tag {
   
   operator std::string&() { return tag; }
   operator const std::string&() const { return tag; }
+  bool operator==(const std::string& s) const { return tag == s;}
 };
 
 } /* Felix */

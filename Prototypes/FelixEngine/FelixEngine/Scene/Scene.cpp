@@ -28,6 +28,15 @@ Entity Scene::add(const string& name) {
   return entity;
 }
 
+Entity Scene::get(const string& name) {
+  auto items = mRegistry.view<Tag>();
+  for (auto [item, tag] : items.each()) {
+    if (tag == name)
+      return {item, this};
+  }
+  return Entity();
+}
+
 void Scene::resume() {
   mStartTime = mLastTime = SDL_GetTicks();
   mPaused = false;
