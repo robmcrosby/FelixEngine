@@ -17,7 +17,10 @@ public:
   ~VulkanRenderPass();
 
   void setFramebuffer(VulkanFrameBufferPtr framebuffer);
-
+  VulkanFrameBufferPtr getFrameBuffer() const { return mFramebuffer; }
+  
+  void getVkClearValues(VkClearValues& clearValues);
+  
   VkRenderPass  getVkRenderPass(int frame = 0);
   VkFramebuffer getVkFramebuffer(int frame = 0);
 
@@ -25,6 +28,7 @@ public:
   VkViewport getViewport()   const;
   VkRect2D   getScissor()    const;
   uint32_t   getColorCount() const;
+  bool       hasDepth()      const;
 
   void rebuild();
 

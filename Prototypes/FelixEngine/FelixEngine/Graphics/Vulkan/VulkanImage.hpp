@@ -17,6 +17,7 @@ private:
   uint32_t       mHeight;
   
   VkImageUsageFlags        mVkImageUsageFlags;
+  VkImageAspectFlags       mVkImageAspectFlags;
   VmaMemoryUsage           mVmaMemoryUsage;
   VmaAllocationCreateFlags mVmaCreateFlags;
   VkDescriptorImageInfos   mVkDescriptorImageInfos;
@@ -31,7 +32,9 @@ public:
   VulkanImage(VulkanDevice* device);
   ~VulkanImage();
   
+  void setFormat(VkFormat format);
   void setUsage(VkImageUsageFlags flags);
+  void setAspect(VkImageAspectFlags flags);
   void setCreateFlags(VmaAllocationCreateFlags flags);
   
   bool alloc(uint32_t width, uint32_t height, int frames = 1);

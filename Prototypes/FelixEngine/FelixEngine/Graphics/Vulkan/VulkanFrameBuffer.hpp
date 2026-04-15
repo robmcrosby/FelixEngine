@@ -10,6 +10,7 @@ class VulkanFrameBuffer {
 private:
   VulkanDevice*  mDevice;
   VulkanImages   mColorAttachments;
+  VulkanImagePtr mDepthAttachment;
   VkFramebuffers mVkFramebuffers;
   
 public:
@@ -17,6 +18,9 @@ public:
   ~VulkanFrameBuffer();
   
   void addColorAttachment(VulkanImagePtr image);
+  
+  void setDepthStencilBuffer(VkFormat format);
+  void setDepthStencil(VulkanImagePtr buffer);
   
   VkFramebuffer getVkFramebuffer(VkRenderPass renderPass, int frame);
   
@@ -26,10 +30,14 @@ public:
   void getVkAttachmentReferences(VkAttachmentReferences& references);
   void getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions);
   
+  bool hasDepthStencil() const { return mDepthAttachment != nullptr; }
+  VkAttachmentReference getDepthVkAttachmentReference();
+  
   void destroy();
   void clearVkFramebuffers();
   
 private:
+  void updateBufferToExtent(VulkanImagePtr buffer, VkExtent2D extent) const;
   VkFramebuffer createVkFramebuffer(VkRenderPass renderPass, int frame);
 };
 

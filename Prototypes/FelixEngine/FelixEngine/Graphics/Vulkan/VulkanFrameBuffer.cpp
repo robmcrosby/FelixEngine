@@ -1,6 +1,7 @@
 #include "VulkanFrameBuffer.hpp"
 #include "VulkanDevice.hpp"
 #include "VulkanImage.hpp"
+#include <cassert>
 
 
 using namespace std;
@@ -18,6 +19,18 @@ void VulkanFrameBuffer::addColorAttachment(VulkanImagePtr image) {
   mColorAttachments.push_back(image);
 }
 
+void VulkanFrameBuffer::setDepthStencilBuffer(VkFormat format) {
+  auto buffer = mDevice->createImage();
+  buffer->setFormat(format); // VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT
+  buffer->setAspect(VK_IMAGE_TILING_OPTIMAL);
+  buffer->setUsage(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+  setDepthStencil(buffer);
+}
+
+void VulkanFrameBuffer::setDepthStencil(VulkanImagePtr buffer) {
+  mDepthAttachment = buffer;
+}
+
 VkFramebuffer VulkanFrameBuffer::getVkFramebuffer(VkRenderPass renderPass, int frame) {
   while (mVkFramebuffers.size() <= frame)
     mVkFramebuffers.push_back(VK_NULL_HANDLE);
@@ -27,11 +40,11 @@ VkFramebuffer VulkanFrameBuffer::getVkFramebuffer(VkRenderPass renderPass, int f
 }
 
 void VulkanFrameBuffer::getVkAttachmentReferences(VkAttachmentReferences& references) {
+  references.reserve(mColorAttachments.size());
   for (uint32_t index = 0; index < mColorAttachments.size(); ++index) {
-    VkAttachmentReference reference;
+    VkAttachmentReference& reference = references.emplace_back();
     reference.attachment = index;
-    reference.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    references.push_back(reference);
+    reference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
   }
 }
 
@@ -45,8 +58,9 @@ VkExtent2D VulkanFrameBuffer::getExtent() const {
 }
 
 void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& descriptions) {
+  descriptions.reserve(mColorAttachments.size()+1);
   for (auto attachment : mColorAttachments) {
-    VkAttachmentDescription description;
+    VkAttachmentDescription& description = descriptions.emplace_back();
     description.flags          = 0;
     description.format         = attachment->getVkFormat();
     description.samples        = VK_SAMPLE_COUNT_1_BIT;
@@ -58,13 +72,32 @@ void VulkanFrameBuffer::getVkAttachmentDescriptions(VkAttachmentDescriptions& de
     description.finalLayout    = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     if (attachment->isSwapImage())
       description.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-    descriptions.push_back(description);
   }
+  if (mDepthAttachment) {
+    VkAttachmentDescription& description = descriptions.emplace_back();
+    description.flags          = 0;
+    description.format         = mDepthAttachment->getVkFormat();
+    description.samples        = VK_SAMPLE_COUNT_1_BIT;
+    description.loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    description.storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    description.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    description.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    description.initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;
+    description.finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+  }
+}
+
+VkAttachmentReference VulkanFrameBuffer::getDepthVkAttachmentReference() {
+  VkAttachmentReference reference;
+  reference.attachment = 1;
+  reference.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+  return reference;
 }
 
 void VulkanFrameBuffer::destroy() {
   clearVkFramebuffers();
   mColorAttachments.clear();
+  mDepthAttachment = nullptr;
 }
 
 void VulkanFrameBuffer::clearVkFramebuffers() {
@@ -76,12 +109,25 @@ void VulkanFrameBuffer::clearVkFramebuffers() {
   mVkFramebuffers.clear();
 }
 
+void VulkanFrameBuffer::updateBufferToExtent(VulkanImagePtr buffer, VkExtent2D extent) const {
+  if (buffer->width() != extent.width || buffer->height() != extent.height) {
+    if (buffer->frames() > 0)
+      buffer->clearImages();
+    assert(buffer->alloc(extent.width, extent.height));
+  }
+}
+
 VkFramebuffer VulkanFrameBuffer::createVkFramebuffer(VkRenderPass renderPass, int frame) {
   VkExtent2D extent = getExtent();
   vector<VkImageView> attachments;
+  attachments.reserve(mColorAttachments.size()+1);
   for (auto attachment : mColorAttachments) {
     int index = frame % attachment->frames();
-    attachments.push_back(attachment->getVkImageView(index));
+    attachments.emplace_back(attachment->getVkImageView(index));
+  }
+  if (mDepthAttachment) {
+    updateBufferToExtent(mDepthAttachment, extent);
+    attachments.emplace_back(mDepthAttachment->getVkImageView());
   }
   
   VkFramebufferCreateInfo framebufferInfo = {VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO};

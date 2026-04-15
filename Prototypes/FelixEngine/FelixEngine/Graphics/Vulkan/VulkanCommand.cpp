@@ -139,13 +139,8 @@ void VulkanCommand::dispatch(uint32_t x, uint32_t y, uint32_t z) {
 
 void VulkanCommand::beginRenderPass(VulkanRenderPassPtr renderPass) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
-    vector<VkClearValue> clearValues(renderPass->getColorCount());
-    for (int i = 0; i < clearValues.size(); ++i) {
-      clearValues.at(i).color.float32[0] = 0.0f;
-      clearValues.at(i).color.float32[1] = 0.0f;
-      clearValues.at(i).color.float32[2] = 0.0f;
-      clearValues.at(i).color.float32[3] = 1.0f;
-    }
+    vector<VkClearValue> clearValues;
+    renderPass->getVkClearValues(clearValues);
     
     VkRenderPassBeginInfo renderPassInfo = {VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO};
     renderPassInfo.renderPass = renderPass->getVkRenderPass(mRecordingFrame);

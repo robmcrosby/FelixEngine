@@ -86,6 +86,8 @@ SDL_AppResult BaseGameApp::init() {
   auto queue = mGpuContext->getQueue();
  
   auto cameraItem = mGpuContext->getMainCamera(mScene);
+  auto& pass = cameraItem.get<GpuPass>();
+  pass.renderPass->getFrameBuffer()->setDepthStencilBuffer(VK_FORMAT_D32_SFLOAT);
   
   //auto image = device->createImage();
   //assert(image->load(queue, "image.png"));

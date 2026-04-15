@@ -45,6 +45,7 @@ typedef std::vector<VkFence>                      VkFences;
 typedef std::vector<VkDescriptorBufferInfo>       VkDescriptorBufferInfos;
 typedef std::vector<VkDescriptorImageInfo>        VkDescriptorImageInfos;
 typedef std::vector<VmaAllocation>                VmaAllocations;
+typedef std::vector<VkClearValue>                 VkClearValues;
 
 typedef std::vector<VkVertexInputBindingDescription>   VkVertexInputBindingDescriptions;
 typedef std::vector<VkVertexInputAttributeDescription> VkVertexInputAttributeDescriptions;

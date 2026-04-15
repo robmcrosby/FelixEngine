@@ -17,6 +17,7 @@ namespace Felix {
 VulkanImage::VulkanImage(VulkanDevice* device):
   mDevice(device),
   mVkFormat(VK_FORMAT_R8G8B8A8_UNORM),
+  mVkImageAspectFlags(VK_IMAGE_ASPECT_COLOR_BIT),
   mVkImageUsageFlags(0),
   mVmaMemoryUsage(VMA_MEMORY_USAGE_AUTO),
   mVmaCreateFlags(0),
@@ -32,11 +33,25 @@ VulkanImage::~VulkanImage() {
   destroy();
 }
 
+void VulkanImage::setFormat(VkFormat format) {
+  if (mVkImages.empty())
+    mVkFormat = format;
+  else
+    cerr << "Warning: VulkanImage format must be set before allocation" << endl;
+}
+
 void VulkanImage::setUsage(VkImageUsageFlags flags) {
   if (mVkImages.empty())
     mVkImageUsageFlags = flags;
   else
     cerr << "Warning: VulkanImage usage flags must be set before allocation" << endl;
+}
+
+void VulkanImage::setAspect(VkImageAspectFlags flags) {
+  if (mVkImages.empty())
+    mVkImageAspectFlags = flags;
+  else
+    cerr << "Warning: VulkanImage aspect flags must be set before allocation" << endl;
 }
 
 void VulkanImage::setCreateFlags(VmaAllocationCreateFlags flags) {
@@ -60,7 +75,7 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height, int frames) {
     mVkImages.push_back(image);
     mVmaAllocations.push_back(allocation);
 
-    auto imageView = createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+    auto imageView = createImageView(image, mVkFormat, mVkImageAspectFlags, 1);
     mVkImageViews.push_back(imageView);
 
     VkDescriptorImageInfo imageInfo;
@@ -105,7 +120,7 @@ void VulkanImage::setSwapImages(const VkImages& images, VkFormat format, uint32_
   for (auto image : images) {
     mVkImages.push_back(image);
 
-    auto imageView = createImageView(image, mVkFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+    auto imageView = createImageView(image, mVkFormat, mVkImageAspectFlags, 1);
     mVkImageViews.push_back(imageView);
 
     VkDescriptorImageInfo imageInfo;
@@ -221,7 +236,7 @@ void VulkanImage::transition(
     barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     barrier.image = image;
-    barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    barrier.subresourceRange.aspectMask = mVkImageAspectFlags;
     barrier.subresourceRange.baseMipLevel = 0;
     barrier.subresourceRange.levelCount = 1;
     barrier.subresourceRange.baseArrayLayer = 0;
@@ -254,7 +269,7 @@ void VulkanImage::copyFromBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr 
   region.bufferRowLength = 0;
   region.bufferImageHeight = 0;
 
-  region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  region.imageSubresource.aspectMask = mVkImageAspectFlags;
   region.imageSubresource.mipLevel = 0;
   region.imageSubresource.baseArrayLayer = 0;
   region.imageSubresource.layerCount = 1;
@@ -279,7 +294,7 @@ void VulkanImage::copyToBuffer(VkCommandBuffer commandBuffer, VulkanBufferPtr bu
   region.bufferRowLength = 0;
   region.bufferImageHeight = 0;
 
-  region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  region.imageSubresource.aspectMask = mVkImageAspectFlags;
   region.imageSubresource.mipLevel = 0;
   region.imageSubresource.baseArrayLayer = 0;
   region.imageSubresource.layerCount = 1;

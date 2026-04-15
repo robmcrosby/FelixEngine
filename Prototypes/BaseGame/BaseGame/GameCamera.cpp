@@ -51,5 +51,5 @@ void GameCamera::updateProjection(Entity entity) {
   aspect *= 0.04f;
   camera.projection = glm::frustum(-aspect.x, aspect.x, -aspect.y, aspect.y, 0.1f, 100.0f);
   
-  camera.view = lookAt(vec3(1.0f, 1.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+  camera.view = lookAt(vec3(1.0f, -1.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 }

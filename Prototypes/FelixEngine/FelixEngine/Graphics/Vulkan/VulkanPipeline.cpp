@@ -11,7 +11,9 @@ namespace Felix {
 VulkanPipeline::VulkanPipeline(VulkanDevice* device):
 mDevice(device),
 mVkPipeline(VK_NULL_HANDLE),
-mVkPipelineLayout(VK_NULL_HANDLE) {
+mVkPipelineLayout(VK_NULL_HANDLE),
+mDepthWriting(true),
+mDepthTesting(true) {
   
 }
 
@@ -57,10 +59,10 @@ VkPipeline VulkanPipeline::getVkPipeline(VkDescriptorSetLayouts setLayouts) {
 }
 
 VkPipeline VulkanPipeline::getVkPipeline(
-                                         VulkanRenderPassPtr renderPass,
-                                         VulkanMeshPtr       mesh,
-                                         VulkanLayoutSetPtr  layoutSet
-                                         ) {
+  VulkanRenderPassPtr renderPass,
+  VulkanMeshPtr       mesh,
+  VulkanLayoutSetPtr  layoutSet
+) {
   if (mVkPipeline == VK_NULL_HANDLE)
     mVkPipeline = createGraphicsPipeline(renderPass, mesh, layoutSet);
   return mVkPipeline;
@@ -89,10 +91,10 @@ VkPipelineLayout VulkanPipeline::getVkPipelineLayout(VkDescriptorSetLayouts setL
 }
 
 VkPipeline VulkanPipeline::createGraphicsPipeline(
-                                                  VulkanRenderPassPtr renderPass,
-                                                  VulkanMeshPtr       mesh,
-                                                  VulkanLayoutSetPtr  layoutSet
-                                                  ) {
+  VulkanRenderPassPtr renderPass,
+  VulkanMeshPtr       mesh,
+  VulkanLayoutSetPtr  layoutSet
+) {
   VkPipeline pipeline = VK_NULL_HANDLE;
   auto pipelineLayout = getVkPipelineLayout(layoutSet);
   if (pipelineLayout != VK_NULL_HANDLE) {
@@ -148,11 +150,14 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(
     multisampling.alphaToCoverageEnable = VK_FALSE;
     multisampling.alphaToOneEnable = VK_FALSE;
     
+    VkBool32 depthWrigting = renderPass->hasDepth() && mDepthWriting ? VK_TRUE : VK_FALSE;
+    VkBool32 depthTesting = renderPass->hasDepth() && mDepthTesting ? VK_TRUE : VK_FALSE;
+    
     VkPipelineDepthStencilStateCreateInfo depthStencil{VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO};
-    depthStencil.depthTestEnable = VK_FALSE;
-    depthStencil.depthWriteEnable = VK_FALSE;
+    depthStencil.depthTestEnable = depthTesting;
+    depthStencil.depthWriteEnable = depthWrigting;
     depthStencil.depthCompareOp = VK_COMPARE_OP_LESS;
-    depthStencil.depthBoundsTestEnable = VK_FALSE;
+    depthStencil.depthBoundsTestEnable = depthTesting;
     depthStencil.minDepthBounds = 0.0f;
     depthStencil.maxDepthBounds = 1.0f;
     depthStencil.stencilTestEnable = VK_FALSE;
