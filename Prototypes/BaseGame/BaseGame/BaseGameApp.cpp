@@ -6,6 +6,7 @@
 //
 
 #include "BaseGameApp.hpp"
+#include "CompositeCamera.hpp"
 #include "GameCamera.hpp"
 #include "TurnTable.hpp"
 
@@ -86,37 +87,51 @@ SDL_AppResult BaseGameApp::init() {
   auto device = mGpuContext->getDevice();
   auto queue = mGpuContext->getQueue();
  
-  auto cameraItem = mGpuContext->getMainCamera(mScene);
-  auto& pass = cameraItem.get<GpuPass>();
-  pass.renderPass->getFrameBuffer()->setDepthStencilBuffer(VK_FORMAT_D32_SFLOAT);
+  auto mainCamera = mGpuContext->getMainCamera(mScene);
+  auto& mainPass = mainCamera.get<GpuPass>();
+  mainPass.renderPass->getFrameBuffer()->setDepthStencilBuffer(VK_FORMAT_D32_SFLOAT);
   
-  auto image = device->createImage();
-  assert(image->load(queue, "image.png"));
+  auto fboImage = device->createImage();
+  fboImage->setFormat(VK_FORMAT_R8G8B8A8_UNORM);
+  fboImage->setUsage(VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+  assert(fboImage->alloc(1024, 1024));
+  
+  auto fboCamera = mGpuContext->createCamera(mainCamera, "fboPass");
+  auto& fboPass = fboCamera.get<GpuPass>();
+  fboPass.renderPass->getFrameBuffer()->addColorAttachment(fboImage);
+  fboPass.renderPass->getFrameBuffer()->setDepthStencilBuffer(VK_FORMAT_D32_SFLOAT);
+  fboPass.renderPass->setClearColor({0.1f, 0.1f, 0.4f, 1.0f});
+  
+  
+  //auto image = device->createImage();
+  //assert(image->load(queue, "image.png"));
   
   auto sampler = device->createSampler();
   sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
   
-  auto drawItem = mGpuContext->addDrawItem(cameraItem, "DrawItem");
+  auto drawItem = mGpuContext->addDrawItem(mainCamera, "DrawItem");
   assert(mGpuContext->setShaders(drawItem, "StaticVertex.spv", "texture.spv"));
   
   auto layout = drawItem.get<GpuDraw>().layoutSet->at(0);
-  layout->setTexture(1, image, sampler);
+  //layout->setTexture(1, image, sampler);
+  layout->setTexture(1, fboImage, sampler);
   
   auto mesh = mGpuContext->setMesh(drawItem, rectVerts, rectIndices);
   mesh->addAttribute(0, 0, 3, 0);
   mesh->addAttribute(0, 1, 3, 3);
   mesh->addAttribute(0, 2, 2, 6);
   
-  auto model = mGpuContext->loadModel(cameraItem, "LargeActionFigure.obj");
+  auto model = mGpuContext->loadModel(fboCamera, "LargeActionFigure.obj");
   model.get<Transform>().model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));
   
-  cameraItem.bind<GameCamera>();
+  mainCamera.bind<CompositeCamera>();
+  fboCamera.bind<GameCamera>();
   model.bind<TurnTable>();
   //drawItem.bind<TestBinding>();
   
   mGuiContext = GuiContext::create();
   mGuiContext->init(*mGpuContext);
-  mGuiContext->addGuiDrawToPass(cameraItem);
+  mGuiContext->addGuiDrawToPass(mainCamera);
   mScene.sort<GpuDraw>();
   
   auto menu = mScene.add("MainMenu");

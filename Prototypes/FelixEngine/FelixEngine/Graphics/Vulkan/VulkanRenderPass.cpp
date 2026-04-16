@@ -23,10 +23,10 @@ void VulkanRenderPass::getVkClearValues(VkClearValues& clearValues) {
   clearValues.reserve(getColorCount()+1);
   for (int i = 0; i < getColorCount(); ++i) {
     VkClearValue& clearValue = clearValues.emplace_back();
-    clearValue.color.float32[0] = 0.0f;
-    clearValue.color.float32[1] = 0.0f;
-    clearValue.color.float32[2] = 0.0f;
-    clearValue.color.float32[3] = 1.0f;
+    clearValue.color.float32[0] = mClearColor.r;
+    clearValue.color.float32[1] = mClearColor.g;
+    clearValue.color.float32[2] = mClearColor.b;
+    clearValue.color.float32[3] = mClearColor.a;
   }
   if (hasDepth()) {
     VkClearValue& clearValue = clearValues.emplace_back();

@@ -1,4 +1,5 @@
 #include <FelixEngine/VulkanTypes.hpp>
+#include <glm/glm.hpp>
 
 #ifndef VulkanRenderPass_hpp
 #define VulkanRenderPass_hpp
@@ -11,6 +12,7 @@ private:
   VulkanDevice*        mDevice;
   VkRenderPasses       mVkRenderPasses;
   VulkanFrameBufferPtr mFramebuffer;
+  glm::vec4            mClearColor;
 
 public:
   VulkanRenderPass(VulkanDevice* device);
@@ -19,6 +21,8 @@ public:
   void setFramebuffer(VulkanFrameBufferPtr framebuffer);
   VulkanFrameBufferPtr getFrameBuffer() const { return mFramebuffer; }
   
+  void setClearColor(const glm::vec4& color) { mClearColor = color; }
+  const glm::vec4& clearColor() const { return mClearColor; }
   void getVkClearValues(VkClearValues& clearValues);
   
   VkRenderPass  getVkRenderPass(int frame = 0);

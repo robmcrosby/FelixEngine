@@ -131,7 +131,7 @@ glm::vec2 GpuContext::getWindowSize() const {
   return vec2(width, height);
 }
 
-Entity GpuContext::getMainPass(Scene& scene, StringRef name) const {
+Entity GpuContext::getMainPass(Scene& scene) const {
   // Check for an existing Main Render Pass
   auto items = scene.registry().view<GpuPass>();
   for (auto [item, pass] : items.each()) {
@@ -140,7 +140,7 @@ Entity GpuContext::getMainPass(Scene& scene, StringRef name) const {
   }
   
   // Add the Main Render Pass
-  auto item = scene.add(name);
+  auto item = scene.add("MainPass");
   auto& pass = item.add<GpuPass>();
   pass.renderPass = mRenderPass;
   pass.layout = mDevice->createLayout(mSwapChain->frames());
@@ -148,12 +148,29 @@ Entity GpuContext::getMainPass(Scene& scene, StringRef name) const {
 }
 
 Entity GpuContext::getMainCamera(Scene& scene) const {
-  auto item = getMainPass(scene, "MainCamera");
+  auto item = getMainPass(scene);
   if (!item.has<Camera>()) {
+    auto& camera = item.add<Camera>();
     auto& pass = item.get<GpuPass>();
-    auto& camera = item.get<Camera>();
     assert(pass.layout->setStorage(0, camera));
   }
+  return item;
+}
+
+Entity GpuContext::createPass(Entity parent, StringRef name) const {
+  auto item = parent.addChild(name);
+  auto& pass = item.add<GpuPass>();
+  pass.renderPass = mDevice->createRenderPass();
+  pass.renderPass->setFramebuffer(mDevice->createFrameBuffer());
+  pass.layout = mDevice->createLayout(mSwapChain->frames());
+  return item;
+}
+
+Entity GpuContext::createCamera(Entity parent, StringRef name) const {
+  auto item = createPass(parent, name);
+  auto& camera = item.add<Camera>();
+  auto& pass = item.get<GpuPass>();
+  assert(pass.layout->setStorage(0, camera));
   return item;
 }
 
@@ -209,18 +226,18 @@ void GpuContext::updateLayouts(int frame, Scene& scene) {
 }
 
 void GpuContext::recordCommand(int frame, Scene& scene) {
-  auto passes = scene.registry().view<GpuPass>();
+  auto passes = scene.registry().view<GpuPass, Parent>();
+  auto mainCamera = getMainPass(scene);
+  auto& mainPass = mainCamera.get<GpuPass>();
   auto draws = scene.registry().view<GpuDraw, Parent>();
   
   // Begin recording the Command
   mCommand->begin(frame);
   
-  // Iterate through the Passes
-  for (auto [passItem, pass] : passes.each()) {
-    if (pass.renderPass && pass.visible) {
+  // Draw any sub-passes of the main pass
+  for (auto [passItem, pass, parent] : passes.each()) {
+    if (parent == mainCamera) {
       mCommand->beginRenderPass(pass.renderPass);
-      
-      // Iterate through the Draws for each Pass
       for (auto [drawItem, draw, parent] : draws.each()) {
         if (parent == passItem && draw.visible) {
           if (draw.guiContext)
@@ -232,6 +249,38 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
       mCommand->endRenderPass();
     }
   }
+  
+  
+  // Draw the Main Render Pass
+  mCommand->beginRenderPass(mainPass.renderPass);
+  for (auto [drawItem, draw, parent] : draws.each()) {
+    if (parent == mainCamera && draw.visible) {
+      if (draw.guiContext)
+        draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
+      else
+        recordDraw(mCommand, mainPass, draw);
+    }
+  }
+  mCommand->endRenderPass();
+  
+  
+  // Iterate through the Passes
+//  for (auto [passItem, pass] : passes.each()) {
+//    if (pass.renderPass && pass.visible) {
+//      mCommand->beginRenderPass(pass.renderPass);
+//      
+//      // Iterate through the Draws for each Pass
+//      for (auto [drawItem, draw, parent] : draws.each()) {
+//        if (parent == passItem && draw.visible) {
+//          if (draw.guiContext)
+//            draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
+//          else
+//            recordDraw(mCommand, pass, draw);
+//        }
+//      }
+//      mCommand->endRenderPass();
+//    }
+//  }
   mCommand->end();
 }
 

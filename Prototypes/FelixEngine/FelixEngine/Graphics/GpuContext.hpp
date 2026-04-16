@@ -56,8 +56,11 @@ public:
   VulkanRenderPassPtr getRenderPass() const { return mRenderPass; }
   VulkanSwapChainPtr getSwapChain() const { return mSwapChain; }
   
-  Entity getMainPass(Scene& scene, StringRef name = "MainPass") const;
+  Entity getMainPass(Scene& scene) const;
   Entity getMainCamera(Scene& scene) const;
+  
+  Entity createPass(Entity parent, StringRef name) const;
+  Entity createCamera(Entity parent, StringRef name) const;
   
   Entity addDrawItem(Entity pass, StringRef name = "") const;
   bool setShaders(Entity item, StringRef vertexFile, StringRef fragmentFile) const;
