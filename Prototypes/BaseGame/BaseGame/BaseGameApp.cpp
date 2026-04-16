@@ -20,14 +20,15 @@ using namespace Felix;
 
 
 struct Vertex {
-  vec2 position;
+  vec3 position;
+  vec3 normal;
   vec2 uv;
 };
 const vector<Vertex> rectVerts = {
-  {{-0.5f, -0.5f},  {0.0f, 0.0f}},
-  {{-0.5f,  0.5f},  {0.0f, 1.0f}},
-  {{ 0.5f, -0.5f},  {1.0f, 0.0f}},
-  {{ 0.5f,  0.5f},  {1.0f, 1.0f}}
+  {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+  {{-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+  {{ 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+  {{ 0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}}
 };
 const vector<uint32_t> rectIndices = {
   1, 0, 3, 2, 0, 3
@@ -89,21 +90,22 @@ SDL_AppResult BaseGameApp::init() {
   auto& pass = cameraItem.get<GpuPass>();
   pass.renderPass->getFrameBuffer()->setDepthStencilBuffer(VK_FORMAT_D32_SFLOAT);
   
-  //auto image = device->createImage();
-  //assert(image->load(queue, "image.png"));
+  auto image = device->createImage();
+  assert(image->load(queue, "image.png"));
   
-  //auto sampler = device->createSampler();
-  //sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
+  auto sampler = device->createSampler();
+  sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
   
-  //auto drawItem = mGpuContext->addDrawItem(cameraItem, "DrawItem");
-  //assert(mGpuContext->setShaders(drawItem, "vertex.spv", "texture.spv"));
+  auto drawItem = mGpuContext->addDrawItem(cameraItem, "DrawItem");
+  assert(mGpuContext->setShaders(drawItem, "StaticVertex.spv", "texture.spv"));
   
-  //auto layout = drawItem.get<GpuDraw>().layoutSet->at(0);
-  //layout->setTexture(1, image, sampler);
+  auto layout = drawItem.get<GpuDraw>().layoutSet->at(0);
+  layout->setTexture(1, image, sampler);
   
-  //auto mesh = mGpuContext->setMesh(drawItem, rectVerts, rectIndices);
-  //mesh->addAttribute(0, 0, 2, 0);
-  //mesh->addAttribute(0, 1, 2, 2);
+  auto mesh = mGpuContext->setMesh(drawItem, rectVerts, rectIndices);
+  mesh->addAttribute(0, 0, 3, 0);
+  mesh->addAttribute(0, 1, 3, 3);
+  mesh->addAttribute(0, 2, 2, 6);
   
   auto model = mGpuContext->loadModel(cameraItem, "LargeActionFigure.obj");
   model.get<Transform>().model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));

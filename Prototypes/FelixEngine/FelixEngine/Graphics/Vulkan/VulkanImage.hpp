@@ -37,14 +37,14 @@ public:
   void setAspect(VkImageAspectFlags flags);
   void setCreateFlags(VmaAllocationCreateFlags flags);
   
-  bool alloc(uint32_t width, uint32_t height, int frames = 1);
+  bool alloc(uint32_t width, uint32_t height, int frames = 1, bool swizzleBlueRed = false);
   void destroy();
   void clearImages();
   
   void setSwapImages(const VkImages& images, VkFormat format, uint32_t width, uint32_t height);
   
   bool load(VulkanQueuePtr queue, StringRef filepath);
-  bool load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format);
+  bool load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format, bool swizzleBlueRed = false);
   
   VkImage     getVkImage(int index = 0) const {return mVkImages.at(index);}
   VkImageView getVkImageView(int index = 0) const {return mVkImageViews.at(index);}
@@ -86,7 +86,8 @@ private:
     VkImage            image,
     VkFormat           format,
     VkImageAspectFlags aspectFlags,
-    int32_t            mipLevels
+    int32_t            mipLevels,
+    bool swizzleBlueRed = false
   ) const;
 };
 

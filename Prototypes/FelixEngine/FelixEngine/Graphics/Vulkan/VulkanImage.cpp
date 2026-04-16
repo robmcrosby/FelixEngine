@@ -61,7 +61,7 @@ void VulkanImage::setCreateFlags(VmaAllocationCreateFlags flags) {
     cerr << "Warning: VmaCreate flags must be set before allocation" << endl;
 }
 
-bool VulkanImage::alloc(uint32_t width, uint32_t height, int frames) {
+bool VulkanImage::alloc(uint32_t width, uint32_t height, int frames, bool swizzleBlueRed) {
   mWidth = width;
   mHeight = height;
   for (int frame = 0; frame < frames; ++frame) {
@@ -75,7 +75,7 @@ bool VulkanImage::alloc(uint32_t width, uint32_t height, int frames) {
     mVkImages.push_back(image);
     mVmaAllocations.push_back(allocation);
 
-    auto imageView = createImageView(image, mVkFormat, mVkImageAspectFlags, 1);
+    auto imageView = createImageView(image, mVkFormat, mVkImageAspectFlags, 1, swizzleBlueRed);
     mVkImageViews.push_back(imageView);
 
     VkDescriptorImageInfo imageInfo;
@@ -144,14 +144,14 @@ bool VulkanImage::load(VulkanQueuePtr queue, StringRef filepath) {
     cerr << "Error reading image file" << endl;
     return false;
   }
-
-  bool success = load(queue, pixels, width, height, VK_FORMAT_R8G8B8A8_UNORM);
+  
+  bool success = load(queue, pixels, width, height, VK_FORMAT_R8G8B8A8_UNORM, true);
 
   stbi_image_free(pixels);
   return success;
 }
 
-bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format) {
+bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int height, VkFormat format, bool swizzleBlueRed) {
   mVkFormat = format;
 
   setUsage(VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
@@ -169,7 +169,7 @@ bool VulkanImage::load(VulkanQueuePtr queue, const void* data, int width, int he
   );
 
   // Load staging buffer
-  if (!staging->alloc(size) || !alloc(width, height))
+  if (!staging->alloc(size) || !alloc(width, height, 1, swizzleBlueRed))
     return false;
   memcpy(staging->data(), data, size);
 
@@ -344,7 +344,8 @@ VkImageView VulkanImage::createImageView(
   VkImage            image,
   VkFormat           format,
   VkImageAspectFlags aspectFlags,
-  int32_t            mipLevels
+  int32_t            mipLevels,
+  bool               swizzleBlueRed
 ) const {
   VkImageViewCreateInfo viewInfo = {VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO};
   viewInfo.image = image;
@@ -359,6 +360,11 @@ VkImageView VulkanImage::createImageView(
   viewInfo.subresourceRange.levelCount = mipLevels;
   viewInfo.subresourceRange.baseArrayLayer = 0;
   viewInfo.subresourceRange.layerCount = 1;
+  
+  if (swizzleBlueRed) {
+    viewInfo.components.r = VK_COMPONENT_SWIZZLE_B;
+    viewInfo.components.b = VK_COMPONENT_SWIZZLE_R;
+  }
 
   VkImageView imageView = VK_NULL_HANDLE;
   VkDevice device = mDevice->getVkDevice();
