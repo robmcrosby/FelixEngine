@@ -94,7 +94,6 @@ SDL_AppResult BaseGameApp::init() {
   auto fboImage = device->createImage();
   fboImage->setFormat(VK_FORMAT_R8G8B8A8_UNORM);
   fboImage->setUsage(VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
-  assert(fboImage->alloc(1024, 1024));
   
   auto fboCamera = mGpuContext->createCamera(mainCamera, "fboPass");
   auto& fboPass = fboCamera.get<GpuPass>();
@@ -253,6 +252,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
       */
       cout << "SDL Event App Did Enter Foreground" << endl;
       mScene.resume();
+      mGpuContext->resize(mScene);
       mGpuContext->resume(mScene);
       return SDL_APP_CONTINUE;
     case SDL_EVENT_WINDOW_RESIZED:
@@ -260,6 +260,7 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
       cout << "SDL Event Window Resized" << endl;
       mGpuContext->resize(mScene);
       mScene.handle(event);
+      mGpuContext->resume(mScene);
       return SDL_APP_CONTINUE;
     default:
       /* Handle Other Events */

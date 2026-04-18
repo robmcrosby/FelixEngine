@@ -40,10 +40,10 @@ void CompositeCamera::updateProjection(Entity entity) {
   auto extent = gpuPass.renderPass->getExtent();
   
   vec3 aspect(1.0f);
-  if (extent.width < extent.height)
-    aspect.y = (float)extent.height/(float)extent.width;
-  else
-    aspect.x = (float)extent.width/(float)extent.height;
+//  if (extent.width < extent.height)
+//    aspect.y = (float)extent.height/(float)extent.width;
+//  else
+//    aspect.x = (float)extent.width/(float)extent.height;
   
   aspect *= 0.5f;
   camera.projection = glm::ortho(-aspect.x, aspect.x, -aspect.y, aspect.y, -100.0f, 100.0f);

@@ -48,6 +48,21 @@ void VulkanFrameBuffer::getVkAttachmentReferences(VkAttachmentReferences& refere
   }
 }
 
+bool VulkanFrameBuffer::resize(uint32_t width, uint32_t height) {
+  bool success = true;
+  for (auto attachment : mColorAttachments) {
+    if (attachment->size() > 0)
+      attachment->clearImages();
+    success = attachment->alloc(width, height) && success;
+  }
+  if (mDepthAttachment) {
+    if (mDepthAttachment->size() > 0)
+      mDepthAttachment->clearImages();
+    success = mDepthAttachment->alloc(width, height) && success;
+  }
+  return success;
+}
+
 VkExtent2D VulkanFrameBuffer::getExtent() const {
   VkExtent2D extent = {0, 0};
   if (!mColorAttachments.empty()) {

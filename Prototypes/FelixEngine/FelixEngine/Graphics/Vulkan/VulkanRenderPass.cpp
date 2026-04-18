@@ -83,6 +83,15 @@ void VulkanRenderPass::rebuild() {
   mFramebuffer->clearVkFramebuffers();
 }
 
+bool VulkanRenderPass::resize(uint32_t width, uint32_t height) {
+  bool success = true;
+  if (mFramebuffer) {
+    success = mFramebuffer->resize(width, height);
+    rebuild();
+  }
+  return success;
+}
+
 void VulkanRenderPass::destroy() {
   clearVkRenderPasses();
   mFramebuffer = nullptr;

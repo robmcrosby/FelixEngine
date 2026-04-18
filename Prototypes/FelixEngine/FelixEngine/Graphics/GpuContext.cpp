@@ -99,10 +99,9 @@ void GpuContext::draw(Scene& scene) {
 }
 
 void GpuContext::resize(Scene& scene) {
-  mPaused = true;
-  mQueue->waitIdle();
+  pause();
   
-  // Rebuild SwapChain and Render Passes
+  // Rebuild SwapChain and Main RenderPass
   mSwapChain->rebuild();
   mRenderPass->rebuild();
   
@@ -114,15 +113,15 @@ void GpuContext::resize(Scene& scene) {
   });
   for (auto pipeline : pipelines)
     pipeline->rebuild();
-  mPaused = false;
 }
 
 void GpuContext::pause() {
   mPaused = true;
+  mQueue->waitIdle();
 }
 
 void GpuContext::resume(Scene& scene) {
-  resize(scene);
+  mPaused = false;
 }
 
 glm::vec2 GpuContext::getWindowSize() const {
@@ -250,7 +249,6 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
     }
   }
   
-  
   // Draw the Main Render Pass
   mCommand->beginRenderPass(mainPass.renderPass);
   for (auto [drawItem, draw, parent] : draws.each()) {
@@ -262,25 +260,6 @@ void GpuContext::recordCommand(int frame, Scene& scene) {
     }
   }
   mCommand->endRenderPass();
-  
-  
-  // Iterate through the Passes
-//  for (auto [passItem, pass] : passes.each()) {
-//    if (pass.renderPass && pass.visible) {
-//      mCommand->beginRenderPass(pass.renderPass);
-//      
-//      // Iterate through the Draws for each Pass
-//      for (auto [drawItem, draw, parent] : draws.each()) {
-//        if (parent == passItem && draw.visible) {
-//          if (draw.guiContext)
-//            draw.guiContext->draw(mCommand->getVkCommandBuffer(frame), scene);
-//          else
-//            recordDraw(mCommand, pass, draw);
-//        }
-//      }
-//      mCommand->endRenderPass();
-//    }
-//  }
   mCommand->end();
 }
 

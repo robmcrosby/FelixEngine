@@ -23,6 +23,7 @@ public:
   
 private:
   void updateProjection(Felix::Entity entity);
+  void updateFboSize(Felix::Entity entity);
 };
 
 #endif /* GameCamera_hpp */

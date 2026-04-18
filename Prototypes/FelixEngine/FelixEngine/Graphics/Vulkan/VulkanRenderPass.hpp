@@ -35,6 +35,8 @@ public:
   bool       hasDepth()      const;
 
   void rebuild();
+  bool resize(uint32_t width, uint32_t height);
+  bool resize(VkExtent2D extent) { return resize(extent.width, extent.height); }
 
   void destroy();
   void clearVkRenderPasses();

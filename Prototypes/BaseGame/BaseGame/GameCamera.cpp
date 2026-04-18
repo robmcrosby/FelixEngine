@@ -30,6 +30,7 @@ void GameCamera::onUpdate(Entity& entity, float ts) {
 
 void GameCamera::onSdlEvent(Entity& entity, SDL_Event* event) {
   if (event->type == SDL_EVENT_WINDOW_RESIZED) {
+    updateFboSize(entity);
     updateProjection(entity);
   }
 }
@@ -38,6 +39,11 @@ void GameCamera::updateProjection(Entity entity) {
   auto& camera = entity.get<Camera>();
   auto& gpuPass = entity.get<GpuPass>();
   auto extent = gpuPass.renderPass->getExtent();
+  
+  if (extent.width == 0 || extent.height == 0) {
+    updateFboSize(entity);
+    extent = gpuPass.renderPass->getExtent();
+  }
   
   vec3 aspect(1.0f);
   if (extent.width < extent.height)
@@ -52,4 +58,12 @@ void GameCamera::updateProjection(Entity entity) {
   camera.projection = glm::frustum(-aspect.x, aspect.x, -aspect.y, aspect.y, 0.1f, 100.0f);
   
   camera.view = lookAt(vec3(1.0f, -1.0f, 1.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+}
+
+void GameCamera::updateFboSize(Felix::Entity entity) {
+  auto& mainPass = entity.parent().get<GpuPass>();
+  auto& fboPass = entity.get<GpuPass>();
+  
+  auto extent = mainPass.renderPass->getExtent();
+  assert(fboPass.renderPass->resize(extent));
 }
