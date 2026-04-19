@@ -48,6 +48,8 @@ public:
   void pause();
   void resume(Scene& scene);
   
+  bool isPaused() const { return mPaused; }
+  
   glm::vec2 getWindowSize() const;
   
   VulkanDevicePtr getDevice() const { return mDevice; }

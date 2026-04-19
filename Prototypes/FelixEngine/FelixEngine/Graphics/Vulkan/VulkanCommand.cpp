@@ -87,10 +87,10 @@ void VulkanCommand::endSingle() {
 void VulkanCommand::bind(VulkanPipelinePtr pipeline) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-                      mRecordingBuffer,
-                      VK_PIPELINE_BIND_POINT_COMPUTE,
-                      pipeline->getVkPipeline()
-                      );
+      mRecordingBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline()
+    );
   }
 }
 
@@ -99,36 +99,36 @@ void VulkanCommand::bind(VulkanLayoutSetPtr layoutSet) {
     VkDescriptorSets descriptorSets;
     layoutSet->getVkDescriptorSets(descriptorSets, 0);
     vkCmdBindDescriptorSets(
-                            mRecordingBuffer,
-                            VK_PIPELINE_BIND_POINT_COMPUTE,
-                            layoutSet->getVkPipelineLayout(),
-                            0,
-                            static_cast<uint32_t>(descriptorSets.size()),
-                            descriptorSets.data(),
-                            0, 0
-                            );
+      mRecordingBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      layoutSet->getVkPipelineLayout(),
+      0,
+      static_cast<uint32_t>(descriptorSets.size()),
+      descriptorSets.data(),
+      0, 0
+    );
   }
 }
 
 void VulkanCommand::bind(VulkanPipelinePtr pipeline, VulkanLayoutSetPtr layoutSet) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-                      mRecordingBuffer,
-                      VK_PIPELINE_BIND_POINT_COMPUTE,
-                      pipeline->getVkPipeline(layoutSet)
-                      );
+      mRecordingBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipeline(layoutSet)
+    );
     
     VkDescriptorSets descriptorSets;
     layoutSet->getVkDescriptorSets(descriptorSets, 0);
     vkCmdBindDescriptorSets(
-                            mRecordingBuffer,
-                            VK_PIPELINE_BIND_POINT_COMPUTE,
-                            pipeline->getVkPipelineLayout(),
-                            0,
-                            static_cast<uint32_t>(descriptorSets.size()),
-                            descriptorSets.data(),
-                            0, 0
-                            );
+      mRecordingBuffer,
+      VK_PIPELINE_BIND_POINT_COMPUTE,
+      pipeline->getVkPipelineLayout(),
+      0,
+      static_cast<uint32_t>(descriptorSets.size()),
+      descriptorSets.data(),
+      0, 0
+    );
   }
 }
 
@@ -160,17 +160,17 @@ void VulkanCommand::endRenderPass() {
 }
 
 void VulkanCommand::bind(
-                         VulkanPipelinePtr   pipeline,
-                         VulkanRenderPassPtr renderPass,
-                         VulkanMeshPtr       mesh,
-                         VulkanLayoutSetPtr  layoutSet
-                         ) {
+ VulkanPipelinePtr   pipeline,
+ VulkanRenderPassPtr renderPass,
+ VulkanMeshPtr       mesh,
+ VulkanLayoutSetPtr  layoutSet
+) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
     vkCmdBindPipeline(
-                      mRecordingBuffer,
-                      VK_PIPELINE_BIND_POINT_GRAPHICS,
-                      pipeline->getVkPipeline(renderPass, mesh, layoutSet)
-                      );
+      mRecordingBuffer,
+      VK_PIPELINE_BIND_POINT_GRAPHICS,
+      pipeline->getVkPipeline(renderPass, mesh, layoutSet)
+    );
     
     if (mesh != nullptr) {
       VkDeviceSizes offsets;
@@ -179,112 +179,58 @@ void VulkanCommand::bind(
       mesh->getVertexBuffers(buffers);
       
       vkCmdBindVertexBuffers(
-                             mRecordingBuffer,
-                             0, static_cast<uint32_t>(buffers.size()),
-                             buffers.data(), offsets.data()
-                             );
+       mRecordingBuffer,
+       0, static_cast<uint32_t>(buffers.size()),
+       buffers.data(), offsets.data()
+      );
     }
     
     if (layoutSet != nullptr) {
       VkDescriptorSets descriptorSets;
       layoutSet->getVkDescriptorSets(descriptorSets, mRecordingFrame);
       vkCmdBindDescriptorSets(
-                              mRecordingBuffer,
-                              VK_PIPELINE_BIND_POINT_GRAPHICS,
-                              pipeline->getVkPipelineLayout(),
-                              0,
-                              static_cast<uint32_t>(descriptorSets.size()),
-                              descriptorSets.data(),
-                              0, 0
-                              );
+        mRecordingBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        pipeline->getVkPipelineLayout(),
+        0,
+        static_cast<uint32_t>(descriptorSets.size()),
+        descriptorSets.data(),
+        0, 0
+      );
     }
   }
 }
 
-//void VulkanCommand::bind(
-//  VulkanPipelinePtr   pipeline,
-//  VulkanRenderPassPtr renderPass,
-//  VulkanMeshPtr       mesh,
-//  VulkanLayoutPtr     layout
-//) {
-//  if (mRecordingBuffer != VK_NULL_HANDLE) {
-//    vkCmdBindPipeline(
-//      mRecordingBuffer,
-//      VK_PIPELINE_BIND_POINT_GRAPHICS,
-//      pipeline->getVkPipeline(renderPass, mesh, layoutSet)
-//    );
-//
-//    if (mesh != nullptr) {
-//      VkDeviceSizes offsets;
-//      VkBuffers     buffers;
-//      mesh->getVertexBufferOffsets(offsets);
-//      mesh->getVertexBuffers(buffers);
-//
-//      vkCmdBindVertexBuffers(
-//        mRecordingBuffer,
-//        0, static_cast<uint32_t>(buffers.size()),
-//        buffers.data(), offsets.data()
-//      );
-//    }
-//
-//    if (layoutSet != nullptr) {
-//      VkDescriptorSets descriptorSets;
-//      layoutSet->getVkDescriptorSets(descriptorSets, mRecordingFrame);
-//      vkCmdBindDescriptorSets(
-//        mRecordingBuffer,
-//        VK_PIPELINE_BIND_POINT_GRAPHICS,
-//        pipeline->getVkPipelineLayout(),
-//        0,
-//        static_cast<uint32_t>(descriptorSets.size()),
-//        descriptorSets.data(),
-//        0, 0
-//      );
-//    }
-//  }
-//}
-
 void VulkanCommand::draw(uint32_t vertexCount, uint32_t instances) {
   if (mRecordingBuffer != VK_NULL_HANDLE) {
-    vkCmdDraw(
-              mRecordingBuffer,
-              vertexCount,
-              instances,
-              0, 0
-              );
+    vkCmdDraw(mRecordingBuffer, vertexCount, instances, 0, 0);
   }
 }
 
 void VulkanCommand::draw(VulkanBufferPtr indexBuffer, uint32_t instances) {
   if (mRecordingBuffer != VK_NULL_HANDLE && indexBuffer != nullptr) {
-    vkCmdBindIndexBuffer(
-                         mRecordingBuffer,
-                         indexBuffer->getVkBuffer(),
-                         0, VK_INDEX_TYPE_UINT32
-                         );
+    vkCmdBindIndexBuffer(mRecordingBuffer, indexBuffer->getVkBuffer(), 0, VK_INDEX_TYPE_UINT32);
     
     uint32_t count  = static_cast<uint32_t>(indexBuffer->size() / sizeof(uint32_t));
-    vkCmdDrawIndexed(
-                     mRecordingBuffer,
-                     count,
-                     instances,
-                     0, 0, 0
-                     );
+    vkCmdDrawIndexed(mRecordingBuffer, count, instances, 0, 0, 0);
   }
 }
 
 void VulkanCommand::draw(VulkanMeshPtr mesh, uint32_t instances) {
-  if (mesh->getIndexCount() > 0)
+  if (!mesh)
+    draw(4, instances);
+  else if (mesh->getIndexCount() > 0)
     draw(mesh->getIndexBuffer(), instances);
   else
     draw(mesh->getVertexCount(), instances);
 }
 
 void VulkanCommand::transition(
-                               VulkanImagePtr image,
-                               VkImageLayout  newImageLayout,
-                               VkAccessFlags  dstAccessMask,
-                               VkPipelineStageFlags dstStageMask
-                               ) {
+ VulkanImagePtr image,
+ VkImageLayout  newImageLayout,
+ VkAccessFlags  dstAccessMask,
+ VkPipelineStageFlags dstStageMask
+) {
   if (mRecordingBuffer != VK_NULL_HANDLE)
     image->transition(mRecordingBuffer, newImageLayout, dstAccessMask, dstStageMask);
 }

@@ -19,23 +19,6 @@ using namespace std;
 using namespace glm;
 using namespace Felix;
 
-
-struct Vertex {
-  vec3 position;
-  vec3 normal;
-  vec2 uv;
-};
-const vector<Vertex> rectVerts = {
-  {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
-  {{-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-  {{ 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-  {{ 0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}}
-};
-const vector<uint32_t> rectIndices = {
-  1, 0, 3, 2, 0, 3
-};
-
-
 class TestBinding {
 public:
   void onCreate(Entity& entity) {
@@ -109,16 +92,11 @@ SDL_AppResult BaseGameApp::init() {
   sampler->setFilters(VK_FILTER_LINEAR, VK_FILTER_LINEAR);
   
   auto drawItem = mGpuContext->addDrawItem(mainCamera, "DrawItem");
-  assert(mGpuContext->setShaders(drawItem, "StaticVertex.spv", "texture.spv"));
+  assert(mGpuContext->setShaders(drawItem, "StaticSprites.spv", "texture.spv"));
   
   auto layout = drawItem.get<GpuDraw>().layoutSet->at(0);
   //layout->setTexture(1, image, sampler);
   layout->setTexture(1, fboImage, sampler);
-  
-  auto mesh = mGpuContext->setMesh(drawItem, rectVerts, rectIndices);
-  mesh->addAttribute(0, 0, 3, 0);
-  mesh->addAttribute(0, 1, 3, 3);
-  mesh->addAttribute(0, 2, 2, 6);
   
   auto model = mGpuContext->loadModel(fboCamera, "LargeActionFigure.obj");
   model.get<Transform>().model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));
@@ -245,22 +223,25 @@ SDL_AppResult BaseGameApp::handle(SDL_Event *event) {
          Restore all your state here.
       */
       cout << "SDL Event App Will Enter Foreground" << endl;
+      mGpuContext->pause();
       return SDL_APP_CONTINUE;
     case SDL_EVENT_DID_ENTER_FOREGROUND:
       /* Restart your loops here.
          Your app is interactive and getting CPU again.
       */
       cout << "SDL Event App Did Enter Foreground" << endl;
-      mScene.resume();
       mGpuContext->resize(mScene);
       mGpuContext->resume(mScene);
+      mScene.resume();
       return SDL_APP_CONTINUE;
     case SDL_EVENT_WINDOW_RESIZED:
       /* Window Resized */
       cout << "SDL Event Window Resized" << endl;
-      mGpuContext->resize(mScene);
-      mScene.handle(event);
-      mGpuContext->resume(mScene);
+      if (!mGpuContext->isPaused()) {
+        mGpuContext->resize(mScene);
+        mScene.handle(event);
+        mGpuContext->resume(mScene);
+      }
       return SDL_APP_CONTINUE;
     default:
       /* Handle Other Events */
