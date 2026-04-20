@@ -98,8 +98,8 @@ SDL_AppResult BaseGameApp::init() {
   //layout->setTexture(1, image, sampler);
   layout->setTexture(1, fboImage, sampler);
   
-  auto model = mGpuContext->loadModel(fboCamera, "LargeActionFigure.obj");
-  model.get<Transform>().model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));
+  auto model = mGpuContext->loadModel(fboCamera, "LargeActionFigure.obj", 16);
+  model.get<Transforms>().at(0).model = translate(rotate(scale({1.0f}, glm::vec3(0.8f, 0.8f, 0.8f)), pi<float>(), vec3(0.0f, 0.0f, 1.0f)), vec3(0.0f, -0.5f, 0.0f));
   
   mainCamera.bind<CompositeCamera>();
   fboCamera.bind<GameCamera>();

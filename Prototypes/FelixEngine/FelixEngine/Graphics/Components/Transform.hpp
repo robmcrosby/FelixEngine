@@ -18,6 +18,8 @@ struct Transform {
   glm::mat4 atlas{1.0f};
 };
 
+typedef std::vector<Transform> Transforms;
+
 } /* Felix */
 
 #endif /* Transform_hpp */

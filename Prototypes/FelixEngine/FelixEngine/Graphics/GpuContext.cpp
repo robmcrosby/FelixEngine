@@ -173,7 +173,7 @@ Entity GpuContext::createCamera(Entity parent, StringRef name) const {
   return item;
 }
 
-Entity GpuContext::addDrawItem(Entity pass, StringRef name) const {
+Entity GpuContext::addDrawItem(Entity pass, StringRef name, int instances) const {
   auto item = pass.addChild(name);
   
   // Get Draw Component
@@ -181,8 +181,14 @@ Entity GpuContext::addDrawItem(Entity pass, StringRef name) const {
   draw.layoutSet = mDevice->createLayoutSet(mSwapChain->frames());
   
   // Add Transform Component
-  auto& transform = item.get<Transform>();
-  assert(draw.layoutSet->at(0)->setStorage(0, transform));
+  if (instances > 1) {
+    auto& transforms = item.add<Transforms>(instances);
+    assert(draw.layoutSet->at(0)->setStorage(0, transforms));
+  }
+  else {
+    auto& transform = item.get<Transform>();
+    assert(draw.layoutSet->at(0)->setStorage(0, transform));
+  }
   
   // Add Render Pass Layout
   draw.layoutSet->add(pass.get<GpuPass>().layout);
@@ -195,8 +201,8 @@ bool GpuContext::setShaders(Entity item, StringRef vertexFile, StringRef fragmen
   return draw.pipeline->setVertexShader(vertexFile) && draw.pipeline->setFragmentShader(fragmentFile);
 }
 
-Entity GpuContext::loadModel(Entity pass, StringRef file) const {
-  auto drawItem = addDrawItem(pass, file);
+Entity GpuContext::loadModel(Entity pass, StringRef file, int instances) const {
+  auto drawItem = addDrawItem(pass, file, instances);
   assert(setShaders(drawItem, "StaticVertex.spv", "DrawNormals.spv"));
   
   StaticModel model;
@@ -218,10 +224,12 @@ void GpuContext::updateLayouts(int frame, Scene& scene) {
   }
   
   // Update Object Transforms
-  auto transforms = scene.registry().view<GpuDraw, Transform>();
-  for (auto [item, draw, transform] : transforms.each()) {
+  scene.registry().view<GpuDraw, Transform>().each([&](auto entity, auto& draw, auto& transform) {
     draw.layoutSet->at(0)->update(0, transform, frame);
-  }
+  });
+  scene.registry().view<GpuDraw, Transforms>().each([&](auto entity, auto& draw, auto& transforms) {
+    draw.layoutSet->at(0)->update(0, transforms, frame);
+  });
 }
 
 void GpuContext::recordCommand(int frame, Scene& scene) {

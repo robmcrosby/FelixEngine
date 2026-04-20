@@ -218,7 +218,7 @@ void VulkanCommand::draw(VulkanBufferPtr indexBuffer, uint32_t instances) {
 
 void VulkanCommand::draw(VulkanMeshPtr mesh, uint32_t instances) {
   if (!mesh)
-    draw(4, instances);
+    draw(6, instances);
   else if (mesh->getIndexCount() > 0)
     draw(mesh->getIndexBuffer(), instances);
   else

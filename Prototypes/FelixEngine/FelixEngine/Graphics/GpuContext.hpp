@@ -64,7 +64,7 @@ public:
   Entity createPass(Entity parent, StringRef name) const;
   Entity createCamera(Entity parent, StringRef name) const;
   
-  Entity addDrawItem(Entity pass, StringRef name = "") const;
+  Entity addDrawItem(Entity pass, StringRef name = "", int instances = 1) const;
   bool setShaders(Entity item, StringRef vertexFile, StringRef fragmentFile) const;
   
   template <typename T>
@@ -82,7 +82,7 @@ public:
     return mesh;
   }
   
-  Entity loadModel(Entity pass, StringRef file) const;
+  Entity loadModel(Entity pass, StringRef file, int instances = 1) const;
   
 private:
   void updateLayouts(int frame, Scene& scene);

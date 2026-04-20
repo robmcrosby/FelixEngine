@@ -107,7 +107,7 @@ VkPipeline VulkanPipeline::createGraphicsPipeline(
     
     VkVertexInputBindingDescriptions   vertexBindings;
     VkVertexInputAttributeDescriptions vertexAttributes;
-    VkPrimitiveTopology primitiveTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+    VkPrimitiveTopology primitiveTopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     if (mesh != nullptr) {
       mesh->getVertexBindings(vertexBindings);
       mesh->getVertexAttributes(vertexAttributes);
